@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bí Quyết Sống Trường Thọ & Danh Sách Nhạc</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #ffeb3b;
+        }
+
+        /* Khung chữ chạy */
+        .marquee-box {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #4CAF50;
+            margin-bottom: 25px;
+        }
+
+        marquee {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        /* Danh sách nút bấm bài hát trực tiếp */
+        .playlist-box {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .song-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: left;
+            transition: 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .song-btn:hover {
+            background-color: #0b7dda;
+            transform: scale(1.01);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🌿 BÍ QUYẾT SỐNG TRƯỜNG THỌ & THƯ GIÃN 🌿</h1>
+        
+        <!-- Vùng chữ chạy -->
+        <div class="marquee-box">
+            <marquee behavior="scroll" direction="left" scrollamount="5">
+                🌟 CỤ BÀ 110 TUỔI YAN GUIFENG: Ngủ từ 20h đến 7h | Tắm nắng 20-30 phút mỗi ngày | Đi bộ bảo vệ tim mạch | Ăn đủ 3 bữa thanh đạm | Sống tích cực, không giữ chuyện buồn! &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                🍷 LÀNG TRƯỜNG THỌ SARDINIA (ITALY): Uống một cốc rượu vang đỏ mỗi ngày | Ăn rau, hạt, ngũ cốc hữu cơ | Vận động tự nhiên qua địa hình đồi núi!
+            </marquee>
+        </div>
+
+        <!-- Danh sách bài hát được nạp tự động từ tệp của bạn -->
+        <div style="margin-bottom: 10px; font-size: 1.1rem; color: #cfd8dc; text-align: left;">🎵 Bấm vào bài hát bên dưới để nghe ngay lập tức:</div>
+        <div class="playlist-box" id="playlist">
+            <!-- Các nút bấm phát video -->
+            <button class="song-btn" onclick="moBai('1w1rqnZjQdE')"><span>▶ Bài 01: 1w1rqnZjQdE</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('SMvMLBUfKTo')"><span>▶ Bài 02: SMvMLBUfKTo</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('eOE9IdMPTc8')"><span>▶ Bài 03: eOE9IdMPTc8</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('e8fFEmMW5EI')"><span>▶ Bài 04: e8fFEmMW5EI</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('p8CH4Y-Bsrs')"><span>▶ Bài 05: p8CH4Y-Bsrs</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('95TkHtCfFek')"><span>▶ Bài 06: 95TkHtCfFek</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('-uzFP6WEL_k')"><span>▶ Bài 07: -uzFP6WEL_k</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('N0CGQWm-sII')"><span>▶ Bài 08: N0CGQWm-sII</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('QEDmn0m4VNQ')"><span>▶ Bài 09: QEDmn0m4VNQ</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('tntu_zHVCdI')"><span>▶ Bài 10: tntu_zHVCdI</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('NxkkykOfGvI')"><span>▶ Bài 11: NxkkykOfGvI</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('s4-zUP6LAIo')"><span>▶ Bài 12: s4-zUP6LAIo</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('NG4rF289nCE')"><span>▶ Bài 13: NG4rF289nCE</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('tbicivZs0Tw')"><span>▶ Bài 14: tbicivZs0Tw</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('BArnA89Nh5U')"><span>▶ Bài 15: BArnA89Nh5U</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('MwjAF7nKm64')"><span>▶ Bài 16: MwjAF7nKm64</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('0WxCrMfH3Hw')"><span>▶ Bài 17: 0WxCrMfH3Hw</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('UY0qQ1Hr1ow')"><span>▶ Bài 18: UY0qQ1Hr1ow</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('LBSNkVNTlug')"><span>▶ Bài 19: LBSNkVNTlug</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('8MJF6T8By20')"><span>▶ Bài 20: 8MJF6T8By20</span> <span>YouTube</span></button>
+            <!-- Các bài tiếp theo từ file danh sách của bạn -->
+            <button class="song-btn" onclick="moBai('UtSosOytuHI')"><span>▶ Bài 21: UtSosOytuHI</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('cJOQ0hdE-Ho')"><span>▶ Bài 22: cJOQ0hdE-Ho</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('I6Z1W6hcWlM')"><span>▶ Bài 23: I6Z1W6hcWlM</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('WWe_pZvG93M')"><span>▶ Bài 24: WWe_pZvG93M</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('Zt95kaBrqWQ')"><span>▶ Bài 25: Zt95kaBrqWQ</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('5s0tCZg6gBg')"><span>▶ Bài 26: 5s0tCZg6gBg</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('r_hYl3kX9w4')"><span>▶ Bài 27: r_hYl3kX9w4</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('FtBg5pcNGXI')"><span>▶ Bài 28: FtBg5pcNGXI</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('Oa9ydI8P4Bg')"><span>▶ Bài 29: Oa9ydI8P4Bg</span> <span>YouTube</span></button>
+            <button class="song-btn" onclick="moBai('m2xMvsQn_8w')"><span>▶ Bài 30: m2xMvsQn_8w</span> <span>YouTube</span></button>
+        </div>
+    </div>
+
+    <script>
+        function moBai(videoId) {
+            window.open("https://www.youtube.com/watch?v=" + videoId, "_blank");
+        }
+    </script>
+
+</body>
+</html>

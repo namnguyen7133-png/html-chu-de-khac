@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Tính Tuổi & Tra Cứu 7 Bảng Màu</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+        }
+        th, td {
+            line-height: 1.45;
+            vertical-align: top;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 shrink-0 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+                    7M
+                </div>
+                <div class="min-w-0">
+                    <h1 class="text-lg sm:text-xl font-bold text-slate-900 leading-snug">Tra Cứu Tuổi & 7 Bảng Màu</h1>
+                    <p class="text-xs text-slate-500 leading-relaxed">Nhập dữ liệu TXT • Quy đổi mã tháng • Đối chiếu màu sắc & mã HEX</p>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="flex bg-slate-100 p-1 rounded-xl self-start sm:self-auto shrink-0" role="tablist">
+                <button type="button" id="btn-tab-1" onclick="switchTab('tab_1')" role="tab" aria-selected="true"
+                    class="px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-white text-indigo-600 shadow-sm flex items-center gap-2 whitespace-nowrap">
+                    <span>1. Nhập Dữ Liệu (tab_1)</span>
+                    <span id="badge-people-count" class="px-2 py-0.5 text-xs rounded-full bg-indigo-100 text-indigo-700">0</span>
+                </button>
+                <button type="button" id="btn-tab-2" onclick="switchTab('tab_2')" role="tab" aria-selected="false"
+                    class="px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:text-slate-900 flex items-center gap-2 whitespace-nowrap">
+                    <span>2. Tính Toán & Tra Màu (tab_2)</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ==================== TAB 1: NHẬP DỮ LIỆU ==================== -->
+        <section id="tab_1" class="space-y-6">
+
+            <!-- Quick Action Bar -->
+            <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="text-sm text-indigo-900 leading-relaxed">
+                    <span class="font-semibold">Hướng dẫn:</span> Bấm từng nút nhập file <code class="bg-white px-1.5 py-0.5 rounded border border-indigo-200 text-indigo-700">.txt</code> bên dưới (hỗ trợ dấu ngăn cách <code class="bg-white px-1 rounded border border-indigo-200">|</code>, <code class="bg-white px-1 rounded border border-indigo-200">Tab</code> hoặc <code class="bg-white px-1 rounded border border-indigo-200">dấu cách</code>).
+                </div>
+                <div class="flex flex-wrap gap-2 shrink-0">
+                    <button type="button" onclick="loadAllSampleData()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-xl shadow-sm transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        <span>Nạp Dữ Liệu Mẫu Tất Cả</span>
+                    </button>
+                    <button type="button" onclick="clearAllData()" class="px-3 py-2 bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 text-sm font-medium rounded-xl transition-colors whitespace-nowrap">
+                        Xóa Hết
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grid for Button 1 & Button 2 -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                <!-- NÚT 1: DANH SÁCH TÊN (7 cols) -->
+                <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col min-w-0">
+                    <div class="p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-slate-50/50">
+                        <div class="min-w-0">
+                            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2 leading-snug">
+                                <span class="w-6 h-6 shrink-0 rounded-lg bg-blue-600 text-white text-xs flex items-center justify-center">1</span>
+                                <span>Danh Sách Người (.txt)</span>
+                            </h2>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Định dạng: <code class="text-slate-700">Tên | Ngày sinh | Giờ sinh | Giới tính | Ngày mất | Giờ mất</code></p>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <label class="cursor-pointer px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-sm transition-colors inline-flex items-center gap-1.5 whitespace-nowrap">
+                                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                <span>Nút 1: Nhập TXT Tên</span>
+                                <input type="file" id="file-people" accept=".txt,text/plain" style="display:none" onchange="handlePeopleFileUpload(event)">
+                            </label>
+                            <button type="button" onclick="downloadSampleTxt('people')" title="Tải file mẫu về máy" class="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-xl border border-slate-200 transition-colors shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-5 space-y-4 flex-1 flex flex-col">
+                        <div>
+                            <div class="flex justify-between items-center gap-2 mb-1.5">
+                                <label for="raw-people" class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Dữ liệu thô (Có thể chỉnh sửa trực tiếp)</label>
+                                <span id="people-status" class="text-xs font-medium text-blue-600 shrink-0">0 dòng hợp lệ</span>
+                            </div>
+                            <textarea id="raw-people" rows="4" oninput="parsePeopleText(this.value)"
+                                placeholder="Ví dụ:&#10;Nguyễn Văn An | 15/05/1971 | 08:30 | Nam | | &#10;Trần Thị Bình | 20/10/1985 | 14:15 | Nữ | 02/03/2020 | 19:00"
+                                class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-xs sm:text-sm font-mono leading-relaxed focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"></textarea>
+                        </div>
+
+                        <div class="flex-1 overflow-x-auto max-h-64 border border-slate-200 rounded-xl">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                        <th class="py-2.5 px-3 font-semibold whitespace-nowrap">#</th>
+                                        <th class="py-2.5 px-3 font-semibold whitespace-nowrap">Cột 1: Tên</th>
+                                        <th class="py-2.5 px-3 font-semibold whitespace-nowrap">Cột 2: Ngày sinh</th>
+                                        <th class="py-2.5 px-3 font-semibold whitespace-nowrap">Cột 3: Giờ sinh</th>
+                                        <th class="py-2.5 px-3 font-semibold whitespace-nowrap">Cột 4: Giới tính</th>
+                                        <th class="py-2.5 px-3 font-semibold whitespace-nowrap">Cột 5: Ngày mất</th>
+                                        <th class="py-2.5 px-3 font-semibold whitespace-nowrap">Cột 6: Giờ mất</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="preview-people-body" class="divide-y divide-slate-100">
+                                    <tr>
+                                        <td colspan="7" class="py-8 px-4 text-center text-slate-400 text-xs">Chưa có dữ liệu. Hãy chọn file .txt hoặc nhập vào ô phía trên.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NÚT 2: BẢNG MÃ THÁNG (5 cols) -->
+                <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col min-w-0">
+                    <div class="p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-slate-50/50">
+                        <div class="min-w-0">
+                            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2 leading-snug">
+                                <span class="w-6 h-6 shrink-0 rounded-lg bg-emerald-600 text-white text-xs flex items-center justify-center">2</span>
+                                <span>Bảng Mã Tháng (.txt)</span>
+                            </h2>
+                            <p class="text-xs text-slate-500 mt-1 leading-relaxed">Định dạng: <code class="text-slate-700">Cột 1: Số | Cột 2: Số tương ứng</code></p>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <label class="cursor-pointer px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-sm transition-colors inline-flex items-center gap-1.5 whitespace-nowrap">
+                                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                <span>Nút 2: Nhập TXT Mã Tháng</span>
+                                <input type="file" id="file-month-code" accept=".txt,text/plain" style="display:none" onchange="handleMonthCodeFileUpload(event)">
+                            </label>
+                            <button type="button" onclick="downloadSampleTxt('monthCode')" title="Tải file mẫu về máy" class="p-2 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl border border-slate-200 transition-colors shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-5 space-y-4 flex-1 flex flex-col">
+                        <div>
+                            <div class="flex justify-between items-center gap-2 mb-1.5">
+                                <label for="raw-month-code" class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Dữ liệu thô (Số | Số tương ứng)</label>
+                                <span id="month-code-status" class="text-xs font-medium text-emerald-600 shrink-0">0 cặp số</span>
+                            </div>
+                            <textarea id="raw-month-code" rows="4" oninput="parseMonthCodeText(this.value)"
+                                placeholder="Ví dụ:&#10;0 | 5&#10;1 | 8&#10;2 | 3&#10;3 | 9&#10;4 | 1&#10;5 | 7&#10;6 | 2"
+                                class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-xs sm:text-sm font-mono leading-relaxed focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"></textarea>
+                        </div>
+
+                        <div class="flex-1 overflow-y-auto max-h-64 border border-slate-200 rounded-xl">
+                            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                        <th class="py-2.5 px-4 font-semibold">Cột 1: Số gốc</th>
+                                        <th class="py-2.5 px-4 font-semibold">Cột 2: Số tương ứng</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="preview-month-code-body" class="divide-y divide-slate-100">
+                                    <tr>
+                                        <td colspan="2" class="py-8 px-4 text-center text-slate-400 text-xs">Chưa có dữ liệu bảng mã tháng.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NÚT 3: 7 BẢNG MÀU (.txt) -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-slate-50/50">
+                    <div class="min-w-0">
+                        <h2 class="text-base font-bold text-slate-900 flex items-center gap-2 leading-snug">
+                            <span class="w-6 h-6 shrink-0 rounded-lg bg-purple-600 text-white text-xs flex items-center justify-center">3</span>
+                            <span>7 Bảng Màu (.txt) — Nhập Từng Bảng Riêng Biệt</span>
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                            Mỗi bảng có nút <strong>Nhập TXT</strong> riêng (Cột 1: Số | Cột 2: Màu tiếng Việt không dấu, vd: <code class="text-slate-700">1 | LAM</code> hoặc <code class="text-slate-700">1   LAM</code>).
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2 shrink-0">
+                        <span id="color-tables-status" class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-purple-100 text-purple-800 whitespace-nowrap">0/7 bảng có dữ liệu</span>
+                        <label class="cursor-pointer px-3.5 py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-sm transition-colors inline-flex items-center gap-1.5 whitespace-nowrap" title="Chọn cùng lúc nhiều file .txt (tối đa 7 file) hoặc 1 file gộp">
+                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                            <span>Nút 3: Chọn Nhiều File / File Gộp</span>
+                            <input type="file" id="file-color-tables-multi" accept=".txt,text/plain" multiple style="display:none" onchange="handleMultiColorFilesUpload(event)">
+                        </label>
+                        <button type="button" onclick="downloadSampleTxt('colors')" title="Tải file mẫu 7 bảng màu về máy" class="p-2 text-slate-500 hover:text-purple-600 hover:bg-purple-50 rounded-xl border border-slate-200 transition-colors shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-5">
+                    <div id="preview-color-tables-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <!-- Rendered dynamically via JS for all 7 tables -->
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==================== TAB 2: TÍNH TOÁN & TRA MÀU ==================== -->
+        <section id="tab_2" class="hidden space-y-6">
+
+            <!-- Calculation Control Card -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6">
+                <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-5">
+                    <div class="space-y-2.5 flex-1 max-w-2xl">
+                        <label for="target-date-input" class="block text-sm font-bold text-slate-900 leading-snug">
+                            Nhập Ngày / Số Cần Tính Tới (Ví dụ: <code class="text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">15/11/2026</code> hoặc <code class="text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">15112026</code>)
+                        </label>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <div class="relative flex-1 min-w-0">
+                                <input type="text" id="target-date-input" value="15/11/2026"
+                                    placeholder="Nhập dd/mm/yyyy hoặc ddmmyyyy..."
+                                    class="w-full rounded-xl border border-slate-300 px-4 py-3 text-base font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none shadow-sm">
+                            </div>
+                            <div class="flex items-center gap-2 shrink-0">
+                                <input type="date" id="target-date-picker" onchange="syncPickerToText(this.value)"
+                                    class="rounded-xl border border-slate-300 px-3 py-3 text-sm text-slate-700 focus:ring-2 focus:ring-indigo-500 outline-none bg-slate-50 cursor-pointer"
+                                    title="Chọn ngày từ lịch">
+                                <button type="button" onclick="setTodayDate()" class="px-3.5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors whitespace-nowrap">
+                                    Hôm nay
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Hệ thống sẽ tính khoảng cách từ <strong>Ngày sinh</strong> đến ngày nhập ở trên ra <strong>Tuổi, Tháng, Ngày</strong> → ghép thành dãy từng chữ số → tra <strong>Bảng mã tháng</strong> → đối chiếu với <strong>7 Bảng màu</strong>.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-3 shrink-0">
+                        <button type="button" onclick="calculateAndLookup()"
+                            class="w-full sm:w-auto px-6 py-3.5 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold text-sm sm:text-base rounded-xl shadow-md shadow-indigo-200 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+                            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                            <span>Tính Tuổi & Tra 7 Bảng Màu</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Container -->
+            <div id="results-wrapper" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-slate-50/70">
+                    <div class="min-w-0">
+                        <h3 class="text-base font-bold text-slate-900 leading-snug">Kết Quả Tính Toán & Đối Chiếu 7 Bảng Màu</h3>
+                        <p id="result-summary-text" class="text-xs text-slate-500 mt-1 leading-relaxed">Nhấn nút "Tính Tuổi & Tra 7 Bảng Màu" để xem kết quả.</p>
+                    </div>
+                    <button type="button" id="btn-copy-all" onclick="copyAllResults()" disabled
+                        class="px-4 py-2 bg-slate-800 hover:bg-slate-900 disabled:bg-slate-300 disabled:cursor-not-allowed text-white text-xs sm:text-sm font-semibold rounded-xl shadow-sm transition-colors flex items-center gap-2 whitespace-nowrap shrink-0">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                        <span>Copy Tất Cả Kết Quả</span>
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                <th class="py-3 px-3.5 font-bold min-w-[175px]">Họ Tên & Thông Tin</th>
+                                <th class="py-3 px-3.5 font-bold min-w-[140px]">Tuổi - Tháng - Ngày</th>
+                                <th class="py-3 px-3.5 font-bold min-w-[150px]">Dãy Ghép → Mã Tháng</th>
+                                <th class="py-3 px-3 font-bold min-w-[115px] bg-purple-50/70 text-purple-900">Bảng Màu 1</th>
+                                <th class="py-3 px-3 font-bold min-w-[115px] bg-purple-50/70 text-purple-900">Bảng Màu 2</th>
+                                <th class="py-3 px-3 font-bold min-w-[115px] bg-purple-50/70 text-purple-900">Bảng Màu 3</th>
+                                <th class="py-3 px-3 font-bold min-w-[115px] bg-purple-50/70 text-purple-900">Bảng Màu 4</th>
+                                <th class="py-3 px-3 font-bold min-w-[115px] bg-purple-50/70 text-purple-900">Bảng Màu 5</th>
+                                <th class="py-3 px-3 font-bold min-w-[115px] bg-purple-50/70 text-purple-900">Bảng Màu 6</th>
+                                <th class="py-3 px-3 font-bold min-w-[115px] bg-purple-50/70 text-purple-900">Bảng Màu 7</th>
+                                <th class="py-3 px-3 font-bold text-center min-w-[95px]">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="results-table-body" class="divide-y divide-slate-200">
+                            <tr>
+                                <td colspan="11" class="py-12 px-4 text-center text-slate-400">
+                                    Chưa có kết quả. Vui lòng đảm bảo đã nhập dữ liệu ở Tab 1 và nhấn nút Tính Toán.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
+            <span>Dữ liệu được xử lý trực tiếp trên trình duyệt của bạn (Hỗ trợ cả offline file:/// & online).</span>
+            <span>Hỗ trợ tệp tin chuẩn UTF-8 (.txt)</span>
+        </div>
+    </footer>
+
+    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+    <script>
+        const STORAGE_KEY = 'tra_cuu_7_bang_mau_v3';
+
+        const appState = {
+            people: [],
+            monthCodeMap: {},
+            colorTables: Array.from({ length: 7 }, () => ({})),
+            colorRawTexts: Array.from({ length: 7 }, () => ''),
+            colorFileNames: Array.from({ length: 7 }, () => ''),
+            computedResults: []
+        };
+
+        const VIETNAMESE_COLOR_HEX_MAP = {
+            'do': '#EF4444',
+            'do tuoi': '#DC2626',
+            'do tham': '#991B1B',
+            'do dam': '#B91C1C',
+            'do cam': '#EA580C',
+            'lam': '#0D9488',
+            'xanh lam': '#0D9488',
+            'cham': '#4338CA',
+            'tia': '#7E22CE',
+            'luc': '#10B981',
+            'xanh': '#22C55E',
+            'xanh la': '#22C55E',
+            'xanh la cay': '#16A34A',
+            'xanh luc': '#10B981',
+            'xanh duong': '#3B82F6',
+            'xanh da troi': '#0EA5E9',
+            'xanh nuoc bien': '#2563EB',
+            'xanh dam': '#1E3A8A',
+            'xanh ngoc': '#14B8A6',
+            'vang': '#EAB308',
+            'vang tuoi': '#FACC15',
+            'vang chanh': '#84CC16',
+            'vang cam': '#F59E0B',
+            'vang dat': '#B45309',
+            'cam': '#F97316',
+            'cam dat': '#C2410C',
+            'tim': '#A855F7',
+            'tim than': '#581C87',
+            'tim nhat': '#C084FC',
+            'hong': '#EC4899',
+            'hong phan': '#F9A8D4',
+            'hong nhat': '#F472B6',
+            'hong dam': '#DB2777',
+            'trang': '#FFFFFF',
+            'den': '#111827',
+            'xam': '#6B7280',
+            'xam nhat': '#9CA3AF',
+            'xam dam': '#374151',
+            'ghi': '#64748B',
+            'nau': '#78350F',
+            'nau dat': '#92400E',
+            'nau do': '#7F1D1D',
+            'bac': '#CBD5E1',
+            'kim': '#F59E0B',
+            'thuy': '#0284C7',
+            'moc': '#16A34A',
+            'hoa': '#DC2626',
+            'tho': '#A16207'
+        };
+
+        function stripBom(str) {
+            return str ? String(str).replace(/^\uFEFF/, '') : '';
+        }
+
+        function escapeHtml(str) {
+            return String(str ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function normalizeVietnameseKey(str) {
+            return String(str || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/g, 'd')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function resolveHexColor(colorName) {
+            const raw = String(colorName || '').trim();
+            if (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(raw)) {
+                return raw.toUpperCase();
+            }
+            const normalized = normalizeVietnameseKey(raw);
+            if (VIETNAMESE_COLOR_HEX_MAP[normalized]) {
+                return VIETNAMESE_COLOR_HEX_MAP[normalized];
+            }
+            for (const [key, hex] of Object.entries(VIETNAMESE_COLOR_HEX_MAP)) {
+                if (normalized === key || normalized.startsWith(key + ' ')) {
+                    return hex;
+                }
+            }
+            let hash = 0;
+            for (let i = 0; i < normalized.length; i++) {
+                hash = normalized.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const hue = Math.abs(hash) % 360;
+            return hslToHex(hue, 68, 48);
+        }
+
+        function hslToHex(h, s, l) {
+            l /= 100;
+            const a = s * Math.min(l, 1 - l) / 100;
+            const f = n => {
+                const k = (n + h / 30) % 12;
+                const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+                return Math.round(255 * color).toString(16).padStart(2, '0');
+            };
+            return `#${f(0)}${f(8)}${f(4)}`.toUpperCase();
+        }
+
+        function switchTab(tabId) {
+            const tab1 = document.getElementById('tab_1');
+            const tab2 = document.getElementById('tab_2');
+            const btn1 = document.getElementById('btn-tab-1');
+            const btn2 = document.getElementById('btn-tab-2');
+
+            if (tabId === 'tab_1') {
+                tab1.classList.remove('hidden');
+                tab2.classList.add('hidden');
+                btn1.className = 'px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-white text-indigo-600 shadow-sm flex items-center gap-2 whitespace-nowrap';
+                btn1.setAttribute('aria-selected', 'true');
+                btn2.className = 'px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:text-slate-900 flex items-center gap-2 whitespace-nowrap';
+                btn2.setAttribute('aria-selected', 'false');
+            } else {
+                tab1.classList.add('hidden');
+                tab2.classList.remove('hidden');
+                btn2.className = 'px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-white text-indigo-600 shadow-sm flex items-center gap-2 whitespace-nowrap';
+                btn2.setAttribute('aria-selected', 'true');
+                btn1.className = 'px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:text-slate-900 flex items-center gap-2 whitespace-nowrap';
+                btn1.setAttribute('aria-selected', 'false');
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            const colorClasses = type === 'error'
+                ? 'bg-rose-600 text-white border-rose-700'
+                : type === 'info'
+                    ? 'bg-slate-800 text-white border-slate-900'
+                    : 'bg-emerald-600 text-white border-emerald-700';
+
+            toast.className = `pointer-events-auto px-4 py-3 rounded-xl shadow-lg border text-xs sm:text-sm font-medium leading-snug transition-all duration-300 transform translate-y-2 opacity-0 max-w-md ${colorClasses}`;
+            toast.textContent = message;
+
+            container.appendChild(toast);
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function saveStateToStorage() {
+            try {
+                const payload = {
+                    rawPeople: document.getElementById('raw-people')?.value || '',
+                    rawMonthCode: document.getElementById('raw-month-code')?.value || '',
+                    colorRawTexts: appState.colorRawTexts,
+                    colorFileNames: appState.colorFileNames
+                };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+            } catch (e) {
+                // Bỏ qua nếu trình duyệt chặn storage
+            }
+        }
+
+        function loadStateFromStorage() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (!saved) return false;
+                const data = JSON.parse(saved);
+                if (typeof data.rawPeople === 'string') {
+                    document.getElementById('raw-people').value = data.rawPeople;
+                    parsePeopleText(data.rawPeople, false);
+                }
+                if (typeof data.rawMonthCode === 'string') {
+                    document.getElementById('raw-month-code').value = data.rawMonthCode;
+                    parseMonthCodeText(data.rawMonthCode, false);
+                }
+                if (Array.isArray(data.colorRawTexts)) {
+                    for (let i = 0; i < 7; i++) {
+                        const raw = data.colorRawTexts[i] || '';
+                        const fname = (Array.isArray(data.colorFileNames) && data.colorFileNames[i]) || '';
+                        parseSingleColorTableText(i, raw, fname, false);
+                    }
+                }
+                renderAllColorTableCards();
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // ==========================================
+        // 3. PARSERS & FILE HANDLERS
+        // ==========================================
+        function splitLineFields(line) {
+            const cleaned = stripBom(line).trim();
+            if (!cleaned) return [];
+            if (cleaned.includes('|')) {
+                return cleaned.split('|').map(s => s.trim());
+            }
+            if (cleaned.includes('\t')) {
+                return cleaned.split('\t').map(s => s.trim());
+            }
+            return cleaned.split(/\s{2,}|\s+/).map(s => s.trim());
+        }
+
+        function parseDateValue(inputStr) {
+            const s = String(inputStr || '').trim();
+            if (!s) return null;
+
+            let day, month, year;
+            const slashMatch = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+            if (slashMatch) {
+                day = parseInt(slashMatch[1], 10);
+                month = parseInt(slashMatch[2], 10);
+                year = parseInt(slashMatch[3], 10);
+            } else if (/^\d{8}$/.test(s)) {
+                day = parseInt(s.slice(0, 2), 10);
+                month = parseInt(s.slice(2, 4), 10);
+                year = parseInt(s.slice(4, 8), 10);
+            } else {
+                return null;
+            }
+
+            if (month < 1 || month > 12 || day < 1 || day > 31 || year < 1000 || year > 9999) {
+                return null;
+            }
+            const dt = new Date(year, month - 1, day);
+            if (dt.getFullYear() !== year || dt.getMonth() !== month - 1 || dt.getDate() !== day) {
+                return null;
+            }
+            return { year, month, day, dateObj: dt };
+        }
+
+        function parsePeopleText(text, shouldSave = true) {
+            const lines = stripBom(text).split(/\r?\n/);
+            const parsed = [];
+
+            for (const line of lines) {
+                if (!line.trim()) continue;
+                const parts = splitLineFields(line);
+                if (!parts.length) continue;
+
+                const name = parts[0] || '';
+                const dobStr = parts[1] || '';
+                const birthTime = parts[2] || '';
+                const gender = parts[3] || '';
+                const dodStr = parts[4] || '';
+                const deathTime = parts[5] || '';
+                const dobParsed = parseDateValue(dobStr);
+
+                parsed.push({
+                    name,
+                    dobStr,
+                    dobParsed,
+                    birthTime,
+                    gender,
+                    dodStr,
+                    deathTime
+                });
+            }
+
+            appState.people = parsed;
+            const validCount = parsed.filter(p => p.name && p.dobParsed).length;
+            document.getElementById('people-status').textContent = `${validCount}/${parsed.length} dòng hợp lệ`;
+            document.getElementById('badge-people-count').textContent = String(validCount);
+
+            const tbody = document.getElementById('preview-people-body');
+            if (!parsed.length) {
+                tbody.innerHTML = '<tr><td colspan="7" class="py-8 px-4 text-center text-slate-400 text-xs">Chưa có dữ liệu. Hãy chọn file .txt hoặc nhập vào ô phía trên.</td></tr>';
+            } else {
+                tbody.innerHTML = parsed.map((p, idx) => {
+                    const rowWarn = (!p.name || !p.dobParsed) ? 'bg-amber-50/60' : '';
+                    return `
+                        <tr class="${rowWarn}">
+                            <td class="py-2 px-3 text-slate-500 font-mono">${idx + 1}</td>
+                            <td class="py-2 px-3 font-medium text-slate-900 break-words">${escapeHtml(p.name || '(Thiếu tên)')}</td>
+                            <td class="py-2 px-3 font-mono whitespace-nowrap ${p.dobParsed ? 'text-slate-700' : 'text-rose-600 font-semibold'}">${escapeHtml(p.dobStr || '(Thiếu ngày)')}</td>
+                            <td class="py-2 px-3 font-mono text-slate-600 whitespace-nowrap">${escapeHtml(p.birthTime || '-')}</td>
+                            <td class="py-2 px-3 text-slate-700 whitespace-nowrap">${escapeHtml(p.gender || '-')}</td>
+                            <td class="py-2 px-3 font-mono text-slate-600 whitespace-nowrap">${escapeHtml(p.dodStr || '-')}</td>
+                            <td class="py-2 px-3 font-mono text-slate-600 whitespace-nowrap">${escapeHtml(p.deathTime || '-')}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            if (shouldSave) saveStateToStorage();
+        }
+
+        function parseMonthCodeText(text, shouldSave = true) {
+            const lines = stripBom(text).split(/\r?\n/);
+            const map = {};
+            const rows = [];
+
+            for (const line of lines) {
+                if (!line.trim()) continue;
+                const parts = splitLineFields(line);
+                if (parts.length >= 2) {
+                    const k = parts[0].trim();
+                    const v = parts[1].trim();
+                    if (k !== '' && v !== '') {
+                        map[k] = v;
+                        rows.push({ k, v });
+                    }
+                }
+            }
+
+            appState.monthCodeMap = map;
+            document.getElementById('month-code-status').textContent = `${rows.length} cặp số`;
+
+            const tbody = document.getElementById('preview-month-code-body');
+            if (!rows.length) {
+                tbody.innerHTML = '<tr><td colspan="2" class="py-8 px-4 text-center text-slate-400 text-xs">Chưa có dữ liệu bảng mã tháng.</td></tr>';
+            } else {
+                tbody.innerHTML = rows.map(r => `
+                    <tr>
+                        <td class="py-2 px-4 font-mono font-semibold text-slate-800">${escapeHtml(r.k)}</td>
+                        <td class="py-2 px-4 font-mono font-semibold text-emerald-700">${escapeHtml(r.v)}</td>
+                    </tr>
+                `).join('');
+            }
+
+            if (shouldSave) saveStateToStorage();
+        }
+
+        function parseSingleColorTableText(index, text, fileName = null, shouldSave = true) {
+            const raw = stripBom(text || '');
+            appState.colorRawTexts[index] = raw;
+            if (fileName !== null) {
+                appState.colorFileNames[index] = fileName;
+            }
+
+            const lines = raw.split(/\r?\n/);
+            const tableMap = {};
+
+            for (const line of lines) {
+                if (!line.trim()) continue;
+                const parts = splitLineFields(line);
+                if (parts.length >= 2) {
+                    const numKey = parts[0].trim();
+                    const colorName = parts.slice(1).join(' ').trim();
+                    if (numKey !== '' && colorName !== '') {
+                        tableMap[numKey] = {
+                            name: colorName,
+                            hex: resolveHexColor(colorName)
+                        };
+                    }
+                }
+            }
+
+            appState.colorTables[index] = tableMap;
+            updateColorTablesSummaryBadge();
+            if (shouldSave) saveStateToStorage();
+        }
+
+        function updateColorTablesSummaryBadge() {
+            const activeCount = appState.colorTables.filter(t => Object.keys(t).length > 0).length;
+            const badge = document.getElementById('color-tables-status');
+            if (badge) {
+                badge.textContent = `${activeCount}/7 bảng có dữ liệu`;
+            }
+        }
+
+        function renderAllColorTableCards() {
+            const grid = document.getElementById('preview-color-tables-grid');
+            if (!grid) return;
+
+            grid.innerHTML = Array.from({ length: 7 }, (_, idx) => {
+                const entries = Object.entries(appState.colorTables[idx] || {});
+                const fileName = appState.colorFileNames[idx];
+                const rawVal = appState.colorRawTexts[idx] || '';
+
+                const rowsHtml = entries.length
+                    ? entries.map(([num, info]) => `
+                        <div class="flex items-center justify-between gap-2 py-1.5 px-2.5 rounded-lg bg-slate-50 border border-slate-100 text-xs">
+                            <span class="font-mono font-bold text-slate-700 shrink-0">${escapeHtml(num)}</span>
+                            <div class="flex items-center gap-2 min-w-0">
+                                <span class="w-4 h-4 rounded border border-slate-300 shrink-0" style="background-color:${escapeHtml(info.hex)}"></span>
+                                <span class="font-semibold text-slate-800 truncate">${escapeHtml(info.name)}</span>
+                                <span class="font-mono text-[11px] text-slate-400 shrink-0">${escapeHtml(info.hex)}</span>
+                            </div>
+                        </div>
+                    `).join('')
+                    : `<div class="py-6 text-center text-xs text-slate-400">Chưa có dữ liệu bảng ${idx + 1}.</div>`;
+
+                return `
+                    <div class="border border-slate-200 rounded-xl p-3.5 bg-white flex flex-col gap-3 min-w-0">
+                        <div class="flex items-start justify-between gap-2">
+                            <div class="min-w-0">
+                                <div class="text-sm font-bold text-slate-900">Bảng Màu ${idx + 1}</div>
+                                <div class="text-[11px] text-slate-500 truncate">${fileName ? escapeHtml(fileName) : `${entries.length} mục màu`}</div>
+                            </div>
+                            <label class="cursor-pointer px-2.5 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 rounded-lg text-xs font-semibold transition-colors shrink-0 whitespace-nowrap">
+                                <span>Nhập TXT</span>
+                                <input type="file" accept=".txt,text/plain" style="display:none" onchange="handleSingleColorFileUpload(event, ${idx})">
+                            </label>
+                        </div>
+
+                        <textarea rows="3" placeholder="1 | LAM&#10;2 | DO"
+                            oninput="parseSingleColorTableText(${idx}, this.value, null, true); renderAllColorTableCards();"
+                            class="w-full rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-mono leading-relaxed focus:ring-2 focus:ring-purple-500 outline-none">${escapeHtml(rawVal)}</textarea>
+
+                        <div class="space-y-1.5 max-h-40 overflow-y-auto pr-0.5">
+                            ${rowsHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function readFileAsText(file, callback) {
+            const reader = new FileReader();
+            reader.onload = e => callback(stripBom(e.target.result || ''));
+            reader.onerror = () => showToast(`Không thể đọc tệp "${file.name}".`, 'error');
+            reader.readAsText(file, 'UTF-8');
+        }
+
+        function handlePeopleFileUpload(event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            readFileAsText(file, content => {
+                document.getElementById('raw-people').value = content;
+                parsePeopleText(content);
+                showToast(`Đã nhập danh sách từ "${file.name}".`);
+            });
+            event.target.value = '';
+        }
+
+        function handleMonthCodeFileUpload(event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            readFileAsText(file, content => {
+                document.getElementById('raw-month-code').value = content;
+                parseMonthCodeText(content);
+                showToast(`Đã nhập bảng mã tháng từ "${file.name}".`);
+            });
+            event.target.value = '';
+        }
+
+        function handleSingleColorFileUpload(event, index) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+            readFileAsText(file, content => {
+                parseSingleColorTableText(index, content, file.name, true);
+                renderAllColorTableCards();
+                showToast(`Đã nhập Bảng Màu ${index + 1} từ "${file.name}".`);
+            });
+            event.target.value = '';
+        }
+
+        function handleMultiColorFilesUpload(event) {
+            const files = Array.from(event.target.files || []);
+            if (!files.length) return;
+
+            files.slice(0, 7).forEach((file, idx) => {
+                readFileAsText(file, content => {
+                    parseSingleColorTableText(idx, content, file.name, true);
+                    renderAllColorTableCards();
+                });
+            });
+
+            showToast(`Đã nạp ${Math.min(files.length, 7)} tệp bảng màu.`);
+            event.target.value = '';
+        }
+
+        // ==========================================
+        // 4. SAMPLE DATA & DOWNLOAD
+        // ==========================================
+        function loadAllSampleData() {
+            const samplePeople = [
+                'Nguyễn Văn An | 15/05/1971 | 08:30 | Nam | | ',
+                'Trần Thị Bình | 20/10/1985 | 14:15 | Nữ | | ',
+                'Lê Minh Cường | 03/03/1992 | 06:00 | Nam | 12/08/2023 | 17:45'
+            ].join('\n');
+
+            const sampleMonthCode = [
+                '0 | 5',
+                '1 | 8',
+                '2 | 3',
+                '3 | 9',
+                '4 | 1',
+                '5 | 7',
+                '6 | 2',
+                '7 | 6',
+                '8 | 4',
+                '9 | 0'
+            ].join('\n');
+
+            const colorNamesPool = ['LAM', 'DO', 'VANG', 'LUC', 'CAM', 'TIM', 'HONG'];
+            const sampleColors = Array.from({ length: 7 }, (_, tIdx) => {
+                return Array.from({ length: 10 }, (_, nIdx) => {
+                    const cName = colorNamesPool[(tIdx + nIdx) % colorNamesPool.length];
+                    return `${nIdx} | ${cName}`;
+                }).join('\n');
+            });
+
+            document.getElementById('raw-people').value = samplePeople;
+            document.getElementById('raw-month-code').value = sampleMonthCode;
+            parsePeopleText(samplePeople, false);
+            parseMonthCodeText(sampleMonthCode, false);
+
+            sampleColors.forEach((txt, idx) => {
+                parseSingleColorTableText(idx, txt, `mau_${idx + 1}.txt`, false);
+            });
+            renderAllColorTableCards();
+            saveStateToStorage();
+            showToast('Đã nạp dữ liệu mẫu cho toàn bộ 3 mục.');
+        }
+
+        function clearAllData() {
+            appState.people = [];
+            appState.monthCodeMap = {};
+            appState.colorTables = Array.from({ length: 7 }, () => ({}));
+            appState.colorRawTexts = Array.from({ length: 7 }, () => '');
+            appState.colorFileNames = Array.from({ length: 7 }, () => '');
+            appState.computedResults = [];
+
+            document.getElementById('raw-people').value = '';
+            document.getElementById('raw-month-code').value = '';
+            parsePeopleText('', false);
+            parseMonthCodeText('', false);
+            renderAllColorTableCards();
+            updateColorTablesSummaryBadge();
+
+            document.getElementById('results-table-body').innerHTML = `
+                <tr>
+                    <td colspan="11" class="py-12 px-4 text-center text-slate-400">
+                        Chưa có kết quả. Vui lòng đảm bảo đã nhập dữ liệu ở Tab 1 và nhấn nút Tính Toán.
+                    </td>
+                </tr>
+            `;
+            document.getElementById('result-summary-text').textContent = 'Nhấn nút "Tính Tuổi & Tra 7 Bảng Màu" để xem kết quả.';
+            document.getElementById('btn-copy-all').disabled = true;
+
+            try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+            showToast('Đã xóa toàn bộ dữ liệu.', 'info');
+        }
+
+        function downloadSampleTxt(type) {
+            let content = '';
+            let filename = 'mau.txt';
+
+            if (type === 'people') {
+                filename = 'danh_sach_nguoi_mau.txt';
+                content = 'Nguyễn Văn An | 15/05/1971 | 08:30 | Nam | | \nTrần Thị Bình | 20/10/1985 | 14:15 | Nữ | | ';
+            } else if (type === 'monthCode') {
+                filename = 'bang_ma_thang_mau.txt';
+                content = '0 | 5\n1 | 8\n2 | 3\n3 | 9\n4 | 1\n5 | 7\n6 | 2\n7 | 6\n8 | 4\n9 | 0';
+            } else {
+                filename = '7_bang_mau_mau.txt';
+                content = Array.from({ length: 7 }, (_, i) =>
+                    `--- BANG MAU ${i + 1} ---\n0 | LAM\n1 | DO\n2 | VANG\n3 | LUC\n4 | CAM\n5 | TIM\n6 | HONG\n7 | XANH DUONG\n8 | NAU\n9 | XAM`
+                ).join('\n\n');
+            }
+
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        // ==========================================
+        // 5. CALCULATION & LOOKUP (TAB 2)
+        // ==========================================
+        function syncPickerToText(isoDate) {
+            if (!isoDate) return;
+            const [y, m, d] = isoDate.split('-');
+            if (y && m && d) {
+                document.getElementById('target-date-input').value = `${d}/${m}/${y}`;
+            }
+        }
+
+        function setTodayDate() {
+            const now = new Date();
+            const dd = String(now.getDate()).padStart(2, '0');
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const yyyy = now.getFullYear();
+            document.getElementById('target-date-input').value = `${dd}/${mm}/${yyyy}`;
+            document.getElementById('target-date-picker').value = `${yyyy}-${mm}-${dd}`;
+        }
+
+        function diffYearsMonthsDays(startObj, endObj) {
+            let y = endObj.getFullYear() - startObj.getFullYear();
+            let m = endObj.getMonth() - startObj.getMonth();
+            let d = endObj.getDate() - startObj.getDate();
+
+            if (d < 0) {
+                const prevMonthLastDay = new Date(endObj.getFullYear(), endObj.getMonth(), 0).getDate();
+                d += prevMonthLastDay;
+                m -= 1;
+            }
+            if (m < 0) {
+                m += 12;
+                y -= 1;
+            }
+            return { years: Math.max(0, y), months: Math.max(0, m), days: Math.max(0, d) };
+        }
+
+        function calculateAndLookup() {
+            const rawTarget = document.getElementById('target-date-input').value.trim();
+            const targetParsed = parseDateValue(rawTarget);
+
+            if (!targetParsed) {
+                showToast('Ngày cần tính tới không hợp lệ. Vui lòng nhập dd/mm/yyyy hoặc ddmmyyyy.', 'error');
+                return;
+            }
+
+            const validPeople = appState.people.filter(p => p.name && p.dobParsed);
+            if (!validPeople.length) {
+                showToast('Chưa có dữ liệu người hợp lệ ở Tab 1.', 'error');
+                return;
+            }
+
+            const results = validPeople.map(person => {
+                const endDateObj = person.dodStr && parseDateValue(person.dodStr)
+                    ? parseDateValue(person.dodStr).dateObj
+                    : targetParsed.dateObj;
+
+                const ageDiff = diffYearsMonthsDays(person.dobParsed.dateObj, endDateObj);
+                const combinedDigits = `${ageDiff.years}${ageDiff.months}${ageDiff.days}`;
+                const digitsArray = combinedDigits.split('');
+
+                const mappedDigits = digitsArray.map(ch => {
+                    const mapped = appState.monthCodeMap[ch];
+                    return mapped !== undefined ? mapped : ch;
+                });
+
+                const colorLookups = Array.from({ length: 7 }, (_, tIdx) => {
+                    const table = appState.colorTables[tIdx] || {};
+                    return mappedDigits.map(codeDigit => {
+                        const hit = table[codeDigit];
+                        return hit
+                            ? { code: codeDigit, name: hit.name, hex: hit.hex }
+                            : { code: codeDigit, name: '-', hex: '#E2E8F0' };
+                    });
+                });
+
+                return {
+                    person,
+                    ageDiff,
+                    combinedDigits,
+                    mappedDigitsString: mappedDigits.join(''),
+                    colorLookups
+                };
+            });
+
+            appState.computedResults = results;
+            renderResultsTable(results, rawTarget);
+            document.getElementById('btn-copy-all').disabled = results.length === 0;
+            showToast(`Đã tính toán xong cho ${results.length} người.`);
+        }
+
+        function renderResultsTable(results, rawTarget) {
+            const tbody = document.getElementById('results-table-body');
+            const summary = document.getElementById('result-summary-text');
+            summary.textContent = `Ngày tính tới: ${rawTarget} • Tổng: ${results.length} người`;
+
+            if (!results.length) {
+                tbody.innerHTML = '<tr><td colspan="11" class="py-12 px-4 text-center text-slate-400">Không có dữ liệu kết quả.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = results.map((item, idx) => {
+                const p = item.person;
+                const ageText = `${item.ageDiff.years}T - ${item.ageDiff.months}Th - ${item.ageDiff.days}Ng`;
+
+                const colorCellsHtml = item.colorLookups.map((list, tIdx) => {
+                    const itemsHtml = list.map(entry => `
+                        <div class="flex items-center gap-1.5 py-0.5 text-xs leading-snug">
+                            <span class="w-3.5 h-3.5 rounded-sm border border-slate-300 shrink-0" style="background-color:${escapeHtml(entry.hex)}"></span>
+                            <span class="font-mono text-slate-500 shrink-0">${escapeHtml(entry.code)}:</span>
+                            <span class="font-semibold text-slate-800 break-words">${escapeHtml(entry.name)}</span>
+                        </div>
+                    `).join('');
+                    return `<td class="py-2.5 px-3 bg-purple-50/30">${itemsHtml || '<span class="text-slate-400">-</span>'}</td>`;
+                }).join('');
+
+                return `
+                    <tr class="hover:bg-slate-50/80 transition-colors">
+                        <td class="py-3 px-3.5">
+                            <div class="font-bold text-slate-900 break-words">${escapeHtml(p.name)}</div>
+                            <div class="text-xs text-slate-500 mt-0.5 font-mono">SN: ${escapeHtml(p.dobStr)}${p.gender ? ` • ${escapeHtml(p.gender)}` : ''}</div>
+                            ${p.dodStr ? `<div class="text-xs text-rose-600 mt-0.5 font-mono">Mất: ${escapeHtml(p.dodStr)}</div>` : ''}
+                        </td>
+                        <td class="py-3 px-3.5 font-mono font-semibold text-slate-800 whitespace-nowrap">${escapeHtml(ageText)}</td>
+                        <td class="py-3 px-3.5 font-mono">
+                            <div class="text-xs text-slate-500">Ghép: <span class="font-bold text-slate-800">${escapeHtml(item.combinedDigits)}</span></div>
+                            <div class="text-xs text-indigo-700 mt-0.5">Mã: <span class="font-bold">${escapeHtml(item.mappedDigitsString)}</span></div>
+                        </td>
+                        ${colorCellsHtml}
+                        <td class="py-3 px-3 text-center">
+                            <button type="button" onclick="copySingleResult(${idx})"
+                                class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap">
+                                Copy
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function formatResultLine(item) {
+            const colorsSummary = item.colorLookups
+                .map((list, i) => `BM${i + 1}: [${list.map(x => `${x.code}=${x.name}`).join(', ')}]`)
+                .join(' | ');
+            return `${item.person.name} (${item.person.dobStr}) | ${item.ageDiff.years}T-${item.ageDiff.months}Th-${item.ageDiff.days}Ng | Ghép: ${item.combinedDigits} -> Mã: ${item.mappedDigitsString} | ${colorsSummary}`;
+        }
+
+        function copyToClipboard(text, successMsg) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text)
+                    .then(() => showToast(successMsg))
+                    .catch(() => fallbackCopy(text, successMsg));
+            } else {
+                fallbackCopy(text, successMsg);
+            }
+        }
+
+        function fallbackCopy(text, successMsg) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast(successMsg);
+            } catch (e) {
+                showToast('Không thể sao chép tự động.', 'error');
+            }
+            ta.remove();
+        }
+
+        function copySingleResult(index) {
+            const item = appState.computedResults[index];
+            if (!item) return;
+            copyToClipboard(formatResultLine(item), `Đã sao chép kết quả của ${item.person.name}.`);
+        }
+
+        function copyAllResults() {
+            if (!appState.computedResults.length) return;
+            const allText = appState.computedResults.map(formatResultLine).join('\n');
+            copyToClipboard(allText, `Đã sao chép toàn bộ ${appState.computedResults.length} kết quả.`);
+        }
+
+        // ==========================================
+        // 6. INITIALIZATION
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAllColorTableCards();
+            const restored = loadStateFromStorage();
+            if (!restored) {
+                loadAllSampleData();
+            }
+            setTodayDate();
+            document.getElementById('target-date-input').value = '15/11/2026';
+            calculateAndLookup();
+        });
+    </script>
+</body>
+</html>

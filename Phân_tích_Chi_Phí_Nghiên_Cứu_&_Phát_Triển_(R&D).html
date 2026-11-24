@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>43_Phân tích Chi Phí Nghiên Cứu &amp; Phát Triển (R&amp;D).html</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f7fb;
+    margin:0;
+    padding:20px;
+}
+.container{
+    max-width:1200px;
+    margin:auto;
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+h1{color:#0b5ed7;text-align:center;}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:16px;
+}
+.card{
+    border:1px solid #e5e7eb;
+    border-radius:10px;
+    padding:16px;
+    background:#fafafa;
+}
+label{font-weight:bold;display:block;margin-top:10px;}
+input,select{
+    width:100%;
+    padding:10px;
+    margin-top:6px;
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+    font-size:15px;
+    box-sizing:border-box;
+}
+button{
+    background:#0b5ed7;
+    color:#fff;
+    border:none;
+    padding:12px 18px;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+    margin-top:18px;
+}
+button:hover{background:#094db1;}
+.result{
+    margin-top:24px;
+    padding:18px;
+    border-radius:10px;
+    background:#eef4ff;
+    border-left:6px solid #0b5ed7;
+}
+.metric{
+    font-size:28px;
+    font-weight:bold;
+    color:#0b5ed7;
+}
+.good{color:#198754;font-weight:bold;}
+.warn{color:#fd7e14;font-weight:bold;}
+.bad{color:#dc3545;font-weight:bold;}
+canvas{max-width:100%;margin-top:16px;}
+.footer{
+    margin-top:30px;
+    font-size:13px;
+    color:#666;
+    text-align:center;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>43. Phân tích Chi Phí Nghiên Cứu &amp; Phát Triển (R&amp;D)</h1>
+
+<div class="grid">
+
+<div class="card">
+<h3>Dữ liệu đầu vào</h3>
+
+<label>Doanh thu năm (VNĐ)</label>
+<input type="number" id="revenue" value="100000000000">
+
+<label>Chi phí R&amp;D (VNĐ)</label>
+<input type="number" id="rd" value="6000000000">
+
+<label>Lợi nhuận sau thuế (VNĐ)</label>
+<input type="number" id="profit" value="8000000000">
+
+<label>Dòng tiền từ HĐKD - CFO (VNĐ)</label>
+<input type="number" id="cfo" value="12000000000">
+
+<label>Ngành doanh nghiệp</label>
+<select id="industry">
+    <option value="manufacturing">Sản xuất</option>
+    <option value="technology" selected>Công nghệ</option>
+    <option value="pharma">Dược phẩm</option>
+    <option value="consumer">Tiêu dùng</option>
+</select>
+
+<button onclick="calculateRD()">Phân tích R&amp;D</button>
+
+</div>
+
+<div class="card">
+<h3>Chuẩn tham chiếu theo ngành</h3>
+
+<table style="width:100%;border-collapse:collapse">
+<tr><th align="left">Ngành</th><th align="right">R&amp;D/DT</th></tr>
+<tr><td>Sản xuất</td><td align="right">1-3%</td></tr>
+<tr><td>Tiêu dùng</td><td align="right">2-5%</td></tr>
+<tr><td>Công nghệ</td><td align="right">8-15%</td></tr>
+<tr><td>Dược phẩm</td><td align="right">10-20%</td></tr>
+</table>
+
+<p style="margin-top:12px">
+R&amp;D không chỉ là chi phí. Nếu tạo ra sản phẩm mới, bằng sáng chế, công nghệ hoặc năng lực cạnh tranh dài hạn thì đây là **đầu tư tạo tài sản vô hình**.
+</p>
+
+</div>
+
+</div>
+
+<div class="result" id="result">
+<h2>Kết quả phân tích</h2>
+<p>Nhấn **"Phân tích R&amp;D"** để xem đánh giá.</p>
+</div>
+
+<canvas id="rdChart" height="120"></canvas>
+
+<div class="footer">
+CEO AI Enterprise - Module 43 - Phân tích Chi Phí Nghiên Cứu &amp; Phát Triển (R&amp;D)
+</div>
+
+</div>
+
+<script>
+let chart;
+
+function benchmark(industry){
+    switch(industry){
+        case "manufacturing": return {low:1, high:3, name:"Sản xuất"};
+        case "consumer": return {low:2, high:5, name:"Tiêu dùng"};
+        case "technology": return {low:8, high:15, name:"Công nghệ"};
+        case "pharma": return {low:10, high:20, name:"Dược phẩm"};
+    }
+}
+
+function calculateRD(){
+
+    const revenue = parseFloat(document.getElementById("revenue").value)||0;
+    const rd = parseFloat(document.getElementById("rd").value)||0;
+    const profit = parseFloat(document.getElementById("profit").value)||0;
+    const cfo = parseFloat(document.getElementById("cfo").value)||0;
+    const industry = document.getElementById("industry").value;
+
+    const b = benchmark(industry);
+
+    const rdRatio = revenue? rd/revenue*100 : 0;
+    const rdToProfit = profit? rd/profit*100 : 0;
+    const rdToCFO = cfo? rd/cfo*100 : 0;
+
+    let status="", cls="", advice="", assetView="", cashflow="";
+
+    if(rdRatio < b.low){
+        status="Đầu tư R&amp;D thấp";
+        cls="warn";
+        advice="Có nguy cơ thiếu đổi mới và mất lợi thế cạnh tranh trong 3-5 năm tới.";
+        assetView="Doanh nghiệp đang ưu tiên lợi nhuận ngắn hạn hơn tài sản vô hình.";
+    }
+    else if(rdRatio <= b.high){
+        status="Mức đầu tư hợp lý";
+        cls="good";
+        advice="Duy trì và đo lường ROI của từng dự án R&amp;D.";
+        assetView="R&amp;D đang ở vùng tạo tài sản vô hình bền vững nếu có sản phẩm mới hoặc IP.";
+    }
+    else{
+        status="Đầu tư R&amp;D rất cao";
+        cls="warn";
+        advice="Chỉ nên duy trì nếu pipeline sản phẩm, bằng sáng chế hoặc tăng trưởng tương lai đủ lớn để hoàn vốn.";
+        assetView="Có thể là đầu tư mạnh cho tương lai, nhưng cũng có nguy cơ đốt tiền nếu thương mại hóa chậm.";
+    }
+
+    if(rdToCFO < 20)
+        cashflow="Áp lực dòng tiền thấp. CFO đủ tài trợ R&amp;D.";
+    else if(rdToCFO < 40)
+        cashflow="Áp lực dòng tiền trung bình. Cần theo dõi tiến độ hoàn vốn.";
+    else
+        cashflow="Áp lực dòng tiền cao. R&amp;D đang tiêu thụ phần lớn dòng tiền hoạt động.";
+
+    document.getElementById("result").innerHTML = `
+        <h2>Kết quả phân tích</h2>
+
+        <p><strong>Tỷ lệ R&amp;D / Doanh thu:</strong></p>
+        <div class="metric">${rdRatio.toFixed(2)}%</div>
+
+        <p><strong>Đánh giá:</strong> <span class="${cls}">${status}</span></p>
+
+        <hr>
+
+        <h3>Góc nhìn CEO AI</h3>
+
+        <p><strong>Đây là tài sản hay tiêu sản?</strong><br>
+        ${assetView}</p>
+
+        <p><strong>Ảnh hưởng đến dòng tiền:</strong><br>
+        ${cashflow}</p>
+
+        <p><strong>R&amp;D / Lợi nhuận:</strong> ${rdToProfit.toFixed(1)}%<br>
+        <strong>R&amp;D / CFO:</strong> ${rdToCFO.toFixed(1)}%</p>
+
+        <hr>
+
+        <h3>Khuyến nghị AI</h3>
+        <p>${advice}</p>
+
+        <ul>
+            <li>Ưu tiên dự án có thời gian thương mại hóa &lt; 24 tháng.</li>
+            <li>Theo dõi doanh thu từ sản phẩm mới / tổng doanh thu.</li>
+            <li>Đo ROI của từng chương trình R&amp;D thay vì chỉ theo tổng ngân sách.</li>
+            <li>Nếu CFO suy giảm liên tiếp và R&amp;D &gt; 40% CFO, cần xem xét giãn tiến độ dự án.</li>
+        </ul>
+
+        <hr>
+
+        <h3>4 Câu hỏi CEO cần trả lời</h3>
+
+        <p><strong>Doanh nghiệp đang khỏe hay yếu?</strong><br>
+        ${rdToCFO &lt; 30 ? "Khỏe - dòng tiền đủ nuôi đổi mới." : "Cần theo dõi - đổi mới đang tạo áp lực lên dòng tiền."}</p>
+
+        <p><strong>Tiền đang chảy đi đâu?</strong><br>
+        ${rd.toLocaleString("vi-VN")} VNĐ đang được phân bổ cho nghiên cứu, công nghệ, sản phẩm mới và tài sản vô hình tương lai.</p>
+
+        <p><strong>Nên đầu tư hay cắt giảm?</strong><br>
+        ${rdRatio &lt; b.low ? "Nên tăng có chọn lọc." : rdRatio &lt;= b.high ? "Giữ và tối ưu hiệu quả." : "Chỉ duy trì nếu pipeline sản phẩm chứng minh được khả năng hoàn vốn."}</p>
+
+        <p><strong>Điều gì sẽ xảy ra trong tương lai?</strong><br>
+        ${rdRatio &lt; b.low ? "Nguy cơ tụt hậu về sản phẩm và công nghệ." : rdRatio &lt;= b.high ? "Có khả năng duy trì tăng trưởng bền vững." : "Có thể bứt phá mạnh nếu thương mại hóa thành công, nhưng rủi ro dòng tiền tăng nếu thất bại."}</p>
+    `;
+
+    const data = {
+        labels:["R&amp;D","Lợi nhuận","CFO"],
+        datasets:[{
+            label:"Tỷ lệ (%)",
+            data:[rdRatio, rdToProfit, rdToCFO]
+        }]
+    };
+
+    if(chart) chart.destroy();
+    chart = new Chart(document.getElementById("rdChart"),{
+        type:"bar",
+        data:data,
+        options:{
+            responsive:true,
+            plugins:{legend:{display:false}},
+            scales:{
+                y:{beginAtZero:true,title:{display:true,text:"%"}}
+            }
+        }
+    });
+}
+
+calculateRD();
+</script>
+
+</body>
+</html>

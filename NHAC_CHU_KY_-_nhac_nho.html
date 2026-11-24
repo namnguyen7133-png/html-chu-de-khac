@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>NHAC_CHU_KY - nhac_nho</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>NHAC_CHU_KY - nhac_nho</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>ngày | sắp tới | việc | số lần | chu kỳ</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>4/8/2026 | 1 | KINGDOM | HANH_QUAN | 1579 | 13</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>4/8/2026 | Tích lũy vật chất & tài chính ổn định | Ám ảnh tiền bạc, keo kiệt | TAI_SAN | Đầu tư, tiết kiệm, mua BĐS, tối ưu chi tiêu | 349 | 58</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>4/8/2026 | 1 | KINGDOM | HANH_QUAN | 1579 | 13</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>4/8/2026 | Tích lũy vật chất & tài chính ổn định | Ám ảnh tiền bạc, keo kiệt | TAI_SAN | Đầu tư, tiết kiệm, mua BĐS, tối ưu chi tiêu | 14/12/1900 | 26/2/1900</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>sheet Trang tính7</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>NGUYỄN KHẮC NĂNG | https://github.com/namnguyen7133-png/Dien_thoai/blob/main/030-thuc-on-cho-phi-cong.html | 2 | 123 | 243 | 05/08/2026 | 05/10/2026</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>sheet TietKhi</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>03/08/2026 | Hôm nay là tiết: Đại Thử | Còn 6 ngày nữa tới tiết Lập Thu</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>sheet Trang tính9</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>41 | SEA Games | Táo bón,   | uống thuốc đi ngoài</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>sheet Trang tính9</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>Kỳ tiếp: 15/06/2026</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>Chu kỳ: 27 ngày</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>Từ đêm 15/08/2026 đến hết ngày 16/08/2026</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>Từ đêm 11/09/2026 đến hết ngày 12/09/2026</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>Từ đêm 08/10/2026 đến hết ngày 09/10/2026</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>Từ đêm 04/11/2026 đến hết ngày 05/11/2026</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>Từ đêm 01/12/2026 đến hết ngày 02/12/2026</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>Từ đêm 28/12/2026 đến hết ngày 29/12/2026</td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td>Kỳ Kinh | Bắt Đầu | Hết Kinh | Rụng Trứng | Khoảng Vàng Đẻ Con Trai</td>
+            </tr>
+            <tr>
+                <td><b>22</b></td>
+                <td>Kỳ 1 | 19/05/2026 | 21/05/2026 | 31/05/2026 | Đêm 30/5 - 31/5</td>
+            </tr>
+            <tr>
+                <td><b>23</b></td>
+                <td>Kỳ 2 | 15/06/2026 | 17/06/2026 | 27/06/2026 | Đêm 26/6 - 27/6</td>
+            </tr>
+            <tr>
+                <td><b>24</b></td>
+                <td>Kỳ 3 | 12/07/2026 | 14/07/2026 | 24/07/2026 | Đêm 23/7 - 24/7</td>
+            </tr>
+            <tr>
+                <td><b>25</b></td>
+                <td>Kỳ 4 | 08/08/2026 | 10/08/2026 | 20/08/2026 | Đêm 19/8 - 20/8</td>
+            </tr>
+            <tr>
+                <td><b>26</b></td>
+                <td>Kỳ 5 | 04/09/2026 | 06/09/2026 | 16/09/2026 | Đêm 15/9 - 16/9</td>
+            </tr>
+            <tr>
+                <td><b>27</b></td>
+                <td>Kỳ 6 | 01/10/2026 | 03/10/2026 | 13/10/2026 | Đêm 12/10 - 13/10</td>
+            </tr>
+            <tr>
+                <td><b>28</b></td>
+                <td>Kỳ tiếp (Tháng 7) | 12/7/2026 | 15/7/2026 | 25/7/2026 | Đêm 24/07 -> hết ngày 25/07 | Căn chuẩn ngày rụng trứng</td>
+            </tr>
+            <tr>
+                <td><b>29</b></td>
+                <td>Kỳ 1 | 19/05/2026 | 21/05/2026 | 31/05/2026 | Đêm 30/5 - 31/5</td>
+            </tr>
+            <tr>
+                <td><b>30</b></td>
+                <td>Kỳ 2 | 15/06/2026 | 17/06/2026 | 27/06/2026 | Đêm 26/6 - 27/6</td>
+            </tr>
+            <tr>
+                <td><b>31</b></td>
+                <td>Kỳ 3 | 12/07/2026 | 14/07/2026 | 24/07/2026 | Đêm 23/7 - 24/7</td>
+            </tr>
+            <tr>
+                <td><b>32</b></td>
+                <td>Kỳ 4 | 08/08/2026 | 10/08/2026 | 20/08/2026 | Đêm 19/8 - 20/8</td>
+            </tr>
+            <tr>
+                <td><b>33</b></td>
+                <td>Kỳ 5 | 04/09/2026 | 06/09/2026 | 16/09/2026 | Đêm 15/9 - 16/9</td>
+            </tr>
+            <tr>
+                <td><b>34</b></td>
+                <td>Kỳ 6 | 01/10/2026 | 03/10/2026 | 13/10/2026 | Đêm 12/10 - 13/10</td>
+            </tr>
+            <tr>
+                <td><b>35</b></td>
+                <td>Kỳ tiếp (Tháng 7) | 12/7/2026 | 15/7/2026 | 25/7/2026 | Đêm 24/07 -> hết ngày 25/07 | Căn chuẩn ngày rụng trứng</td>
+            </tr>
+            <tr>
+                <td><b>36</b></td>
+                <td>Trang tính4</td>
+            </tr>
+            <tr>
+                <td><b>37</b></td>
+                <td>⚠️ Còn 3 ngày nữa là Lễ Thất Tịch (Âm lịch 07/07) - (Không nghỉ): Ăn mồng tơi, khoai lang, uống nhiều nước</td>
+            </tr>
+            <tr>
+                <td><b>38</b></td>
+                <td>⚠️ Còn 10 ngày nữa là Lễ Vu Lan, Rằm tháng Bảy (Âm lịch 15/07) - (Không nghỉ): Ăn mồng tơi, khoai lang, uống nhiều nước</td>
+            </tr>
+            <tr>
+                <td><b>39</b></td>
+                <td>⚠️ Còn 39 ngày nữa là Tết Trung Thu (Âm lịch 15/08) - (Không nghỉ): Ăn mồng tơi, khoai lang, uống nhiều nước</td>
+            </tr>
+            <tr>
+                <td><b>40</b></td>
+                <td>⚠️ Còn 62 ngày nữa là Tết Trùng Cửu (Âm lịch 09/09) - (Không nghỉ): Ăn mồng tơi, khoai lang, uống nhiều nước</td>
+            </tr>
+            <tr>
+                <td><b>41</b></td>
+                <td>⚠️ Còn 92 ngày nữa là Tết Thường Tân (Tết Cơm Mới) (Âm lịch 10/10) - (Không nghỉ): Ăn mồng tơi, khoai lang, uống nhiều nước</td>
+            </tr>
+            <tr>
+                <td><b>42</b></td>
+                <td>⚠️ Còn 164 ngày nữa là Ông Công Ông Táo chầu trời (Âm lịch 23/12) - (Không nghỉ): Ăn mồng tơi, khoai lang, uống nhiều nước</td>
+            </tr>
+            <tr>
+                <td><b>43</b></td>
+                <td>⚠️ Còn 35 ngày nữa là Giỗ Cụ Nhạ (Âm lịch 15/8) - (ĂN CỖ): Ăn mồng tơi, khoai lang, uống nhiều nước</td>
+            </tr>
+            <tr>
+                <td><b>44</b></td>
+                <td>KIM ANH</td>
+            </tr>
+            <tr>
+                <td><b>45</b></td>
+                <td>#VALUE!</td>
+            </tr>
+            <tr>
+                <td><b>46</b></td>
+                <td>⚠️ SỨC KHỎE 09/08 TÔ KIM HUỆ: Ăn mồng tơi, khoai lang, uống nước nhiều tránh táo bón, trĩ</td>
+            </tr>
+            <tr>
+                <td><b>47</b></td>
+                <td>⚠️ SỨC KHỎE 08/08 NGUYỄN THỊ TÂM: Ăn mồng tơi, khoai lang, uống nước nhiều tránh táo bón, trĩ</td>
+            </tr>
+            <tr>
+                <td><b>48</b></td>
+                <td>Trang tính10</td>
+            </tr>
+            <tr>
+                <td><b>49</b></td>
+                <td>03/08/2026 | THƯ GIÃN</td>
+            </tr>
+            <tr>
+                <td><b>50</b></td>
+                <td>31/12/2025 | Nguyễn Đức Cường | T | Xã ninh giang tỉnh ninh bình</td>
+            </tr>
+            <tr>
+                <td><b>51</b></td>
+                <td>215</td>
+            </tr>
+            <tr>
+                <td><b>52</b></td>
+                <td>217 | 2 | 05/08/2026</td>
+            </tr>
+            <tr>
+                <td><b>53</b></td>
+                <td>221 | 6 | 09/08/2026 | 41670</td>
+            </tr>
+            <tr>
+                <td><b>54</b></td>
+                <td>41385</td>
+            </tr>
+            <tr>
+                <td><b>55</b></td>
+                <td>21/7</td>
+            </tr>
+            <tr>
+                <td><b>56</b></td>
+                <td>21</td>
+            </tr>
+            <tr>
+                <td><b>57</b></td>
+                <td>Mon_Ngon_Hoang_Dao</td>
+            </tr>
+            <tr>
+                <td><b>58</b></td>
+                <td>03/08/2026 | Sư Tử | Hải sản cao cấp, tôm hùm sốt bơ tỏi | Sinh tố xoài vàng hoàng gia</td>
+            </tr>
+            <tr>
+                <td><b>59</b></td>
+                <td>20</td>
+            </tr>
+            <tr>
+                <td><b>60</b></td>
+                <td>23/08/2026 | Xử Nữ | Món ăn thực dưỡng Clean-eating, Salad ức gà | Nước ép cần tây mật ong</td>
+            </tr>
+            <tr>
+                <td><b>61</b></td>
+                <td>Trang tính3</td>
+            </tr>
+            <tr>
+                <td><b>62</b></td>
+                <td>03/08/2026 | Thứ Hai | 21 | 21/7</td>
+            </tr>
+            <tr>
+                <td><b>63</b></td>
+                <td>04/08/2026 | Thứ Ba | 22 | 22/7</td>
+            </tr>
+            <tr>
+                <td><b>64</b></td>
+                <td>05/08/2026 | Thứ Tư | 23 | 23/7</td>
+            </tr>
+            <tr>
+                <td><b>65</b></td>
+                <td>06/08/2026 | Thứ Năm | 24 | 24/7</td>
+            </tr>
+            <tr>
+                <td><b>66</b></td>
+                <td>07/08/2026 | Thứ Sáu | 25 | 25/7</td>
+            </tr>
+            <tr>
+                <td><b>67</b></td>
+                <td>08/08/2026 | Thứ Bảy | 26 | 26/7</td>
+            </tr>
+            <tr>
+                <td><b>68</b></td>
+                <td>09/08/2026 | Chủ Nhật | 27 | 27/7</td>
+            </tr>
+            <tr>
+                <td><b>69</b></td>
+                <td>10/08/2026 | Thứ Hai | 28 | 28/7</td>
+            </tr>
+            <tr>
+                <td><b>70</b></td>
+                <td>11/08/2026 | Thứ Ba | 29 | 29/7</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

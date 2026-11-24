@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>45 | Phân tích Biên Lợi Nhuận Gộp Theo Kênh Bán Hàng | CEO AI Enterprise</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-dark: #0d5c56;
+            --secondary: #134e4a;
+            --accent: #14b8a6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #f0fdfa;
+            --card: #ffffff;
+            --text: #134e4a;
+            --text-muted: #5eead4;
+            --border: #99f6e4;
+            --shadow: 0 4px 20px rgba(15, 118, 110, 0.12);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 50%, #99f6e4 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        .container { max-width: 1280px; margin: 0 auto; padding: 24px; }
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 28px 32px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        header h1 { font-size: 1.75rem; font-weight: 700; }
+        header .module-id {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        .card h2 {
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card h2::before {
+            content: '';
+            width: 6px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 3px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: var(--secondary);
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            background: #f8fffe;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+        }
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        button {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-success:hover { background: #059669; }
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-outline:hover { background: var(--primary); color: white; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.95rem;
+        }
+        th, td {
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background: #ccfbf1;
+            color: var(--secondary);
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+        }
+        tr:hover { background: #f0fdfa; }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        .badge-high { background: #d1fae5; color: #065f46; }
+        .badge-medium { background: #fef3c7; color: #92400e; }
+        .badge-low { background: #fee2e2; color: #991b1b; }
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .kpi-card {
+            background: linear-gradient(135deg, #f0fdfa, #ccfbf1);
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        .kpi-card .value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 6px 0;
+        }
+        .kpi-card .label {
+            font-size: 0.85rem;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        .chart-container {
+            position: relative;
+            height: 340px;
+            margin-top: 16px;
+        }
+        .ai-box {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-left: 5px solid var(--success);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-top: 16px;
+        }
+        .ai-box h3 {
+            color: #065f46;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        .ai-box ul { padding-left: 20px; }
+        .ai-box li { margin-bottom: 8px; }
+        .warning-box {
+            background: #fffbeb;
+            border-left: 5px solid var(--warning);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-top: 16px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+        .channel-row { display: flex; gap: 10px; align-items: end; margin-bottom: 12px; flex-wrap: wrap; }
+        .channel-row > div { flex: 1; min-width: 140px; }
+        .channel-row .btn-remove {
+            padding: 12px 16px;
+            background: #fee2e2;
+            color: #991b1b;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.35rem; }
+            .kpi-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <div>
+                <h1>📊 Phân tích Biên Lợi Nhuận Gộp Theo Kênh Bán Hàng</h1>
+                <p style="opacity:0.9;margin-top:6px;">Gross Profit Margin by Sales Channel • Module 45</p>
+            </div>
+            <div class="module-id">CEO AI Enterprise</div>
+        </header>
+
+        <!-- NHẬP DỮ LIỆU -->
+        <div class="card">
+            <h2>1. Nhập dữ liệu theo kênh bán hàng</h2>
+            <p style="margin-bottom:16px;color:#64748b;font-size:0.95rem;">
+                Nhập Doanh thu và Giá vốn hàng bán (COGS) cho từng kênh. Hệ thống sẽ tự tính Biên LN Gộp = (Doanh thu − COGS) / Doanh thu × 100%.
+            </p>
+
+            <div id="channelList">
+                <!-- Các dòng kênh sẽ được thêm bằng JS -->
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn-outline" onclick="addChannelRow()">＋ Thêm kênh</button>
+                <button type="button" class="btn-primary" onclick="calculate()">▶ Tính toán & Phân tích</button>
+                <button type="button" class="btn-success" onclick="exportExcel()">📥 Xuất Excel</button>
+                <button type="button" class="btn-warning" onclick="saveLocal()">💾 Lưu Local</button>
+                <button type="button" class="btn-outline" onclick="loadSample()">📋 Dữ liệu mẫu</button>
+                <button type="button" class="btn-danger" onclick="clearAll()">🗑 Xóa hết</button>
+            </div>
+        </div>
+
+        <!-- KPI TỔNG HỢP -->
+        <div class="card" id="kpiSection" style="display:none;">
+            <h2>2. Chỉ số tổng hợp</h2>
+            <div class="kpi-grid" id="kpiGrid"></div>
+        </div>
+
+        <!-- BẢNG CHI TIẾT -->
+        <div class="card" id="tableSection" style="display:none;">
+            <h2>3. Chi tiết theo kênh</h2>
+            <div style="overflow-x:auto;">
+                <table id="resultTable">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Kênh bán hàng</th>
+                            <th class="text-right">Doanh thu</th>
+                            <th class="text-right">Giá vốn (COGS)</th>
+                            <th class="text-right">Lợi nhuận gộp</th>
+                            <th class="text-right">Biên LN Gộp (%)</th>
+                            <th class="text-center">Đánh giá</th>
+                            <th class="text-right">Tỷ trọng DT</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- BIỂU ĐỒ -->
+        <div class="card" id="chartSection" style="display:none;">
+            <h2>4. Biểu đồ phân tích</h2>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+                <div>
+                    <h3 style="font-size:1rem;margin-bottom:8px;color:var(--secondary);">Biên LN Gộp theo kênh (%)</h3>
+                    <div class="chart-container">
+                        <canvas id="marginChart"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="font-size:1rem;margin-bottom:8px;color:var(--secondary);">Tỷ trọng Doanh thu theo kênh</h3>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ĐÁNH GIÁ & AI -->
+        <div class="card" id="aiSection" style="display:none;">
+            <h2>5. Đánh giá & Khuyến nghị AI</h2>
+            <div id="warningBox" class="warning-box" style="display:none;"></div>
+            <div class="ai-box" id="aiBox"></div>
+        </div>
+
+        <footer>
+            Module 45 • Phân tích Biên Lợi Nhuận Gộp Theo Kênh Bán Hàng • CEO AI Enterprise<br>
+            Công thức: Biên LN Gộp = (Doanh thu − Giá vốn hàng bán) / Doanh thu × 100%
+        </footer>
+    </div>
+
+    <script>
+        // ============================================
+        // MODULE 45: Biên Lợi Nhuận Gộp Theo Kênh
+        // CEO AI Enterprise - Standalone HTML Module
+        // ============================================
+
+        let marginChart = null;
+        let revenueChart = null;
+        let lastResults = [];
+
+        // Thêm một dòng kênh
+        function addChannelRow(name = '', revenue = '', cogs = '') {
+            const list = document.getElementById('channelList');
+            const div = document.createElement('div');
+            div.className = 'channel-row';
+            div.innerHTML = `
+                <div>
+                    <label>Tên kênh</label>
+                    <input type="text" class="ch-name" placeholder="VD: Online, Offline, Shopee..." value="${name}">
+                </div>
+                <div>
+                    <label>Doanh thu (VNĐ)</label>
+                    <input type="number" class="ch-revenue" placeholder="0" min="0" step="1000" value="${revenue}">
+                </div>
+                <div>
+                    <label>Giá vốn / COGS (VNĐ)</label>
+                    <input type="number" class="ch-cogs" placeholder="0" min="0" step="1000" value="${cogs}">
+                </div>
+                <button type="button" class="btn-remove" onclick="this.parentElement.remove()">✕</button>
+            `;
+            list.appendChild(div);
+        }
+
+        // Dữ liệu mẫu
+        function loadSample() {
+            document.getElementById('channelList').innerHTML = '';
+            const samples = [
+                { name: 'Online (Website)', revenue: 850000000, cogs: 425000000 },
+                { name: 'Shopee / Lazada', revenue: 620000000, cogs: 372000000 },
+                { name: 'Cửa hàng Offline', revenue: 980000000, cogs: 539000000 },
+                { name: 'Đại lý / Nhà phân phối', revenue: 1150000000, cogs: 805000000 },
+                { name: 'Bán buôn B2B', revenue: 740000000, cogs: 518000000 },
+                { name: 'TikTok Shop', revenue: 310000000, cogs: 201500000 }
+            ];
+            samples.forEach(s => addChannelRow(s.name, s.revenue, s.cogs));
+            calculate();
+        }
+
+        // Xóa hết
+        function clearAll() {
+            document.getElementById('channelList').innerHTML = '';
+            document.getElementById('kpiSection').style.display = 'none';
+            document.getElementById('tableSection').style.display = 'none';
+            document.getElementById('chartSection').style.display = 'none';
+            document.getElementById('aiSection').style.display = 'none';
+            lastResults = [];
+            addChannelRow();
+            addChannelRow();
+        }
+
+        // Format số tiền VN
+        function formatVND(num) {
+            return new Intl.NumberFormat('vi-VN').format(Math.round(num)) + ' ₫';
+        }
+
+        // Format phần trăm
+        function formatPct(num) {
+            return num.toFixed(1) + '%';
+        }
+
+        // Đánh giá biên LN gộp
+        function getMarginBadge(margin) {
+            if (margin >= 40) return '<span class="badge badge-high">Cao (≥40%)</span>';
+            if (margin >= 25) return '<span class="badge badge-medium">Trung bình</span>';
+            return '<span class="badge badge-low">Thấp (&lt;25%)</span>';
+        }
+
+        // Tính toán chính
+        function calculate() {
+            const rows = document.querySelectorAll('.channel-row');
+            const data = [];
+            let totalRevenue = 0;
+            let totalCogs = 0;
+            let totalGP = 0;
+
+            rows.forEach((row, idx) => {
+                const name = row.querySelector('.ch-name').value.trim() || `Kênh ${idx + 1}`;
+                const revenue = parseFloat(row.querySelector('.ch-revenue').value) || 0;
+                const cogs = parseFloat(row.querySelector('.ch-cogs').value) || 0;
+                if (revenue <= 0) return; // bỏ qua dòng trống
+
+                const gp = revenue - cogs;
+                const margin = revenue > 0 ? (gp / revenue) * 100 : 0;
+
+                data.push({ name, revenue, cogs, gp, margin });
+                totalRevenue += revenue;
+                totalCogs += cogs;
+                totalGP += gp;
+            });
+
+            if (data.length === 0) {
+                alert('Vui lòng nhập ít nhất một kênh có doanh thu > 0');
+                return;
+            }
+
+            // Sắp xếp theo biên giảm dần
+            data.sort((a, b) => b.margin - a.margin);
+
+            // Tỷ trọng
+            data.forEach(d => {
+                d.share = totalRevenue > 0 ? (d.revenue / totalRevenue) * 100 : 0;
+            });
+
+            lastResults = data;
+            const overallMargin = totalRevenue > 0 ? (totalGP / totalRevenue) * 100 : 0;
+
+            // ===== KPI =====
+            const best = data[0];
+            const worst = data[data.length - 1];
+            document.getElementById('kpiGrid').innerHTML = `
+                <div class="kpi-card">
+                    <div class="label">Tổng Doanh thu</div>
+                    <div class="value">${formatVND(totalRevenue)}</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Tổng LN Gộp</div>
+                    <div class="value">${formatVND(totalGP)}</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Biên LN Gộp TB</div>
+                    <div class="value">${formatPct(overallMargin)}</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Kênh tốt nhất</div>
+                    <div class="value" style="font-size:1.1rem;">${best.name}</div>
+                    <div style="font-size:0.9rem;color:var(--success);font-weight:700;">${formatPct(best.margin)}</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Kênh kém nhất</div>
+                    <div class="value" style="font-size:1.1rem;">${worst.name}</div>
+                    <div style="font-size:0.9rem;color:var(--danger);font-weight:700;">${formatPct(worst.margin)}</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="label">Số kênh phân tích</div>
+                    <div class="value">${data.length}</div>
+                </div>
+            `;
+            document.getElementById('kpiSection').style.display = 'block';
+
+            // ===== BẢNG =====
+            const tbody = document.getElementById('resultBody');
+            tbody.innerHTML = '';
+            data.forEach((d, i) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${i + 1}</td>
+                    <td><strong>${d.name}</strong></td>
+                    <td class="text-right">${formatVND(d.revenue)}</td>
+                    <td class="text-right">${formatVND(d.cogs)}</td>
+                    <td class="text-right">${formatVND(d.gp)}</td>
+                    <td class="text-right"><strong>${formatPct(d.margin)}</strong></td>
+                    <td class="text-center">${getMarginBadge(d.margin)}</td>
+                    <td class="text-right">${formatPct(d.share)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            // Dòng tổng
+            const totalRow = document.createElement('tr');
+            totalRow.style.fontWeight = '700';
+            totalRow.style.background = '#ccfbf1';
+            totalRow.innerHTML = `
+                <td colspan="2">TỔNG CỘNG</td>
+                <td class="text-right">${formatVND(totalRevenue)}</td>
+                <td class="text-right">${formatVND(totalCogs)}</td>
+                <td class="text-right">${formatVND(totalGP)}</td>
+                <td class="text-right">${formatPct(overallMargin)}</td>
+                <td class="text-center">—</td>
+                <td class="text-right">100%</td>
+            `;
+            tbody.appendChild(totalRow);
+            document.getElementById('tableSection').style.display = 'block';
+
+            // ===== BIỂU ĐỒ =====
+            renderCharts(data);
+            document.getElementById('chartSection').style.display = 'block';
+
+            // ===== AI ĐÁNH GIÁ =====
+            generateAIRecommendations(data, overallMargin, totalRevenue, totalGP);
+            document.getElementById('aiSection').style.display = 'block';
+
+            // Scroll
+            document.getElementById('kpiSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Vẽ biểu đồ
+        function renderCharts(data) {
+            const labels = data.map(d => d.name);
+            const margins = data.map(d => d.margin);
+            const revenues = data.map(d => d.revenue);
+
+            // Màu sắc theo biên
+            const barColors = margins.map(m => {
+                if (m >= 40) return '#10b981';
+                if (m >= 25) return '#f59e0b';
+                return '#ef4444';
+            });
+
+            if (marginChart) marginChart.destroy();
+            marginChart = new Chart(document.getElementById('marginChart'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Biên LN Gộp (%)',
+                        data: margins,
+                        backgroundColor: barColors,
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => `Biên: ${ctx.raw.toFixed(1)}%`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: '%' },
+                            grid: { color: '#e2e8f0' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            if (revenueChart) revenueChart.destroy();
+            revenueChart = new Chart(document.getElementById('revenueChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: revenues,
+                        backgroundColor: [
+                            '#0f766e', '#14b8a6', '#2dd4bf', '#5eead4',
+                            '#99f6e4', '#134e4a', '#0d9488', '#115e59'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { boxWidth: 14, font: { size: 12 } }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => {
+                                    const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                    const pct = ((ctx.raw / total) * 100).toFixed(1);
+                                    return `${ctx.label}: ${formatVND(ctx.raw)} (${pct}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // AI Khuyến nghị
+        function generateAIRecommendations(data, overallMargin, totalRevenue, totalGP) {
+            const best = data[0];
+            const worst = data[data.length - 1];
+            const lowMarginChannels = data.filter(d => d.margin < 25);
+            const highShareLowMargin = data.filter(d => d.share >= 20 && d.margin < 30);
+
+            let warnings = [];
+            let recommendations = [];
+
+            // Cảnh báo
+            if (overallMargin < 25) {
+                warnings.push(`Biên lợi nhuận gộp toàn công ty chỉ đạt <strong>${formatPct(overallMargin)}</strong> — mức thấp, cần xem xét lại cấu trúc giá vốn hoặc chiến lược giá.`);
+            }
+            if (lowMarginChannels.length > 0) {
+                warnings.push(`Có <strong>${lowMarginChannels.length}</strong> kênh biên LN gộp dưới 25%: ${lowMarginChannels.map(d => d.name).join(', ')}.`);
+            }
+            if (highShareLowMargin.length > 0) {
+                warnings.push(`Kênh chiếm tỷ trọng lớn nhưng biên thấp: ${highShareLowMargin.map(d => `${d.name} (${formatPct(d.share)} DT, biên ${formatPct(d.margin)})`).join('; ')}. Đây là điểm cần ưu tiên tối ưu.`);
+            }
+
+            // Khuyến nghị
+            recommendations.push(`<strong>Kênh hiệu quả nhất:</strong> ${best.name} đạt biên ${formatPct(best.margin)}. Nên tăng đầu tư marketing, mở rộng quy mô và ưu tiên nguồn lực cho kênh này.`);
+            recommendations.push(`<strong>Kênh cần cải thiện:</strong> ${worst.name} chỉ đạt ${formatPct(worst.margin)}. Kiểm tra lại giá vốn, chính sách chiết khấu, chi phí logistics hoặc chiến lược định giá của kênh này.`);
+
+            if (best.margin - worst.margin > 20) {
+                recommendations.push(`Chênh lệch biên giữa kênh tốt nhất và kém nhất khá lớn (${(best.margin - worst.margin).toFixed(1)} điểm %). Cân nhắc chuẩn hóa quy trình mua hàng / quản lý tồn kho để giảm chênh lệch.`);
+            }
+
+            recommendations.push(`Tổng lợi nhuận gộp hiện tại: <strong>${formatVND(totalGP)}</strong> trên doanh thu ${formatVND(totalRevenue)}. Mục tiêu đề xuất: nâng biên trung bình lên ít nhất 30-35% trong 2 quý tới bằng cách tối ưu COGS và tập trung vào các kênh biên cao.`);
+
+            // Câu trả lời 4 câu hỏi chiến lược
+            let health = overallMargin >= 35 ? 'khỏe' : (overallMargin >= 25 ? 'ổn định nhưng cần cải thiện' : 'yếu về biên lợi nhuận gộp');
+            recommendations.push(`<strong>Tổng kết chiến lược:</strong><br>
+                • Doanh nghiệp đang <em>${health}</em> về biên LN gộp.<br>
+                • Tiền (lợi nhuận gộp) đang tập trung chủ yếu ở: <strong>${best.name}</strong>.<br>
+                • Nên <strong>đầu tư thêm</strong> vào các kênh biên cao và <strong>cắt giảm / tối ưu</strong> các kênh biên thấp chiếm tỷ trọng lớn.<br>
+                • Nếu duy trì cấu trúc hiện tại, biên LN gộp sẽ tiếp tục bị kéo xuống bởi các kênh kém hiệu quả.`);
+
+            // Hiển thị
+            const warnBox = document.getElementById('warningBox');
+            if (warnings.length > 0) {
+                warnBox.style.display = 'block';
+                warnBox.innerHTML = `<strong>⚠ Cảnh báo:</strong><ul style="margin-top:8px;padding-left:20px;">${warnings.map(w => `<li>${w}</li>`).join('')}</ul>`;
+            } else {
+                warnBox.style.display = 'none';
+            }
+
+            document.getElementById('aiBox').innerHTML = `
+                <h3>🤖 Phân tích & Khuyến nghị từ AI</h3>
+                <ul>
+                    ${recommendations.map(r => `<li>${r}</li>`).join('')}
+                </ul>
+                <p style="margin-top:14px;font-size:0.9rem;color:#065f46;">
+                    <em>Ghi chú: Biên LN gộp phản ánh khả năng tạo lợi nhuận từ hoạt động kinh doanh cốt lõi trước chi phí vận hành. 
+                    Nên kết hợp với phân tích chi phí vận hành (Module 42) và biên theo sản phẩm (Module 78) để có cái nhìn toàn diện.</em>
+                </p>
+            `;
+        }
+
+        // Xuất Excel
+        function exportExcel() {
+            if (lastResults.length === 0) {
+                alert('Chưa có dữ liệu để xuất. Vui lòng tính toán trước.');
+                return;
+            }
+            const wsData = [
+                ['STT', 'Kênh bán hàng', 'Doanh thu (VNĐ)', 'Giá vốn COGS (VNĐ)', 'Lợi nhuận gộp (VNĐ)', 'Biên LN Gộp (%)', 'Tỷ trọng DT (%)']
+            ];
+            lastResults.forEach((d, i) => {
+                wsData.push([
+                    i + 1,
+                    d.name,
+                    d.revenue,
+                    d.cogs,
+                    d.gp,
+                    +d.margin.toFixed(2),
+                    +d.share.toFixed(2)
+                ]);
+            });
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            XLSX.utils.book_append_sheet(wb, ws, 'Bien LN Gop theo Kenh');
+            XLSX.writeFile(wb, '45_Bien_Loi_Nhuan_Gop_Theo_Kenh.xlsx');
+        }
+
+        // Lưu localStorage
+        function saveLocal() {
+            const rows = document.querySelectorAll('.channel-row');
+            const data = [];
+            rows.forEach(row => {
+                data.push({
+                    name: row.querySelector('.ch-name').value,
+                    revenue: row.querySelector('.ch-revenue').value,
+                    cogs: row.querySelector('.ch-cogs').value
+                });
+            });
+            localStorage.setItem('ceo_ai_module_45', JSON.stringify(data));
+            alert('Đã lưu dữ liệu vào trình duyệt (localStorage).');
+        }
+
+        // Tải lại từ localStorage
+        function loadLocal() {
+            const saved = localStorage.getItem('ceo_ai_module_45');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.getElementById('channelList').innerHTML = '';
+                data.forEach(d => addChannelRow(d.name, d.revenue, d.cogs));
+            }
+        }
+
+        // Khởi tạo
+        window.onload = function() {
+            loadLocal();
+            if (document.querySelectorAll('.channel-row').length === 0) {
+                addChannelRow();
+                addChannelRow();
+            }
+        };
+    </script>
+</body>
+</html>

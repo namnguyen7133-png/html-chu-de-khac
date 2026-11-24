@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Phân Tích Dữ Liệu Offline</title>
+    <style>
+        :root {
+            --primary: #2563eb; --primary-hover: #1d4ed8;
+            --bg: #0f172a; --card: #1e293b; --border: #334155;
+            --text: #f8fafc; --text-muted: #94a3b8; --accent: #f59e0b;
+        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 16px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        .header { background: var(--card); padding: 16px 24px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; text-align: center;}
+        .header h1 { margin: 0; font-size: 24px; color: #60a5fa; }
+        
+        .card { background: var(--card); border-radius: 12px; border: 1px solid var(--border); padding: 20px; margin-bottom: 20px; }
+        .card-title { font-size: 18px; font-weight: bold; color: #fbbf24; margin-bottom: 16px; }
+        
+        .btn { background: var(--primary); color: #fff; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 15px; margin-right: 10px; transition: 0.2s; }
+        .btn:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        .btn-accent { background: #d97706; }
+        .btn-accent:hover { background: #b45309; }
+        .btn-green { background: #10b981; }
+        .btn-green:hover { background: #059669; }
+
+        input[type="text"] { width: 100%; padding: 15px; background: #0f172a; border: 2px solid #334155; border-radius: 8px; color: #fbbf24; font-size: 20px; font-family: monospace; font-weight: bold; text-align: center; letter-spacing: 2px; }
+        input[type="text"]:focus { outline: none; border-color: var(--primary); }
+
+        .result-box { background: #0f172a; border: 1px solid #10b981; border-radius: 8px; padding: 20px; margin-top: 16px; font-family: monospace; font-size: 18px; color: #34d399; word-break: break-all; line-height: 1.8; min-height: 80px; }
+        
+        table { width: 100%; border-collapse: collapse; font-size: 15px; margin-top: 10px; }
+        th, td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left; }
+        th { color: #fbbf24; background: #0f172a; }
+        
+        .status-box { margin-top: 16px; padding: 15px; border-radius: 8px; background: #1e293b; border-left: 5px solid #60a5fa; color: #cbd5e1; }
+        .status-success { border-left-color: #10b981; color: #34d399; }
+        .status-error { border-left-color: #ef4444; color: #f87171; }
+        
+        .flex-row { display: flex; gap: 20px; flex-wrap: wrap; }
+        .flex-col { flex: 1; min-width: 300px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>⚙️ Hệ Thống Phân Tích Dữ Liệu</h1>
+        <p style="color:var(--text-muted); margin-top:8px;">Quét thư mục HTML & File CSV Offline (Không tải lên mạng)</p>
+    </div>
+
+    <!-- KHU VỰC NẠP DỮ LIỆU -->
+    <div class="flex-row">
+        <div class="flex-col card">
+            <div class="card-title">1. Nạp Thư Mục HTML (Ổ D)</div>
+            <p style="color:var(--text-muted); font-size:14px;">Chọn thư mục chứa các file HTML. Trình duyệt sẽ hỏi "Tải lên?", bạn cứ bấm <b>Đồng ý</b> (Dữ liệu chỉ xử lý offline trong máy).</p>
+            
+            <!-- webkitdirectory BẮT BUỘC để chọn thư mục -->
+            <input type="file" id="folderInput" webkitdirectory directory multiple style="display:none;" onchange="loadFolder(this)">
+            <button class="btn btn-accent" onclick="document.getElementById('folderInput').click()">📁 Chọn Thư Mục HTML</button>
+            
+            <div id="folderStatus" class="status-box">Chưa chọn thư mục.</div>
+        </div>
+
+        <div class="flex-col card">
+            <div class="card-title">2. Nạp File CSV (Google Sheet)</div>
+            <p style="color:var(--text-muted); font-size:14px;">Chọn file .csv bạn đã tải từ Google Sheet về ổ D.</p>
+            
+            <input type="file" id="csvInput" accept=".csv,text/csv" style="display:none;" onchange="loadCSV(this)">
+            <button class="btn btn-green" onclick="document.getElementById('csvInput').click()">📊 Chọn File CSV</button>
+            
+            <div id="csvStatus" class="status-box">Chưa chọn file CSV.</div>
+        </div>
+    </div>
+
+    <!-- KHU VỰC TRA CỨU -->
+    <div class="card" style="border-color: #3b82f6;">
+        <div class="card-title">3. Tra Cứu & Ghép Tổ Hợp (VD: SEN)</div>
+        <input type="text" id="searchInput" value="SEN" placeholder="Nhập từ cần tra..." oninput="processSearchText()">
+        
+        <div style="margin-top: 20px;">
+            <table id="detailTable">
+                <thead>
+                    <tr>
+                        <th>Chữ Cái</th>
+                        <th>Các Con Số Tìm Thấy (Từ HTML & CSV)</th>
+                        <th>Số Lượng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="3" style="text-align:center; color:#ef4444;">Chưa có dữ liệu. Vui lòng nạp dữ liệu ở trên.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <div class="card-title">4. Kết Quả Ghép Tổ Hợp (Mỗi Chữ Lấy 1 Số)</div>
+            <div id="finalCombinations" class="result-box">[Chưa có dữ liệu]</div>
+            <button class="btn" style="margin-top: 10px;" onclick="copyText('finalCombinations')">Copy Kết Quả</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Kho dữ liệu tổng hợp: { "S": Set(1, 3, 18), "E": Set(5, 6), ... }
+    // Dùng Set để tự động loại bỏ số trùng lặp
+    var dataStore = {}; 
+
+    // Hàm khởi tạo Set cho một chữ cái nếu chưa có
+    function addNumberToStore(char, num) {
+        char = char.toUpperCase();
+        if (!dataStore[char]) {
+            dataStore[char] = new Set();
+        }
+        dataStore[char].add(num);
+    }
+
+    // Hàm đọc file dạng Promise
+    function readFileAsText(file) {
+        return new Promise((resolve, reject) => {
+            let reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = (e) => reject(e);
+            reader.readAsText(file, "UTF-8");
+        });
+    }
+
+    // ==========================================
+    // 1. XỬ LÝ NẠP THƯ MỤC HTML
+    // ==========================================
+    async function loadFolder(input) {
+        if (!input.files || input.files.length === 0) return;
+        
+        let statusEl = document.getElementById('folderStatus');
+        statusEl.className = "status-box";
+        statusEl.innerHTML = "⏳ Đang quét dữ liệu HTML...";
+
+        let htmlFiles = [];
+        // Chỉ lấy các file .html
+        for (let i = 0; i < input.files.length; i++) {
+            if (input.files[i].name.toLowerCase().endsWith('.html')) {
+                htmlFiles.push(input.files[i]);
+            }
+        }
+
+        if (htmlFiles.length === 0) {
+            statusEl.className = "status-box status-error";
+            statusEl.innerHTML = "❌ Không tìm thấy file HTML nào trong thư mục.";
+            return;
+        }
+
+        let processedCount = 0;
+
+        // Quét từng file HTML
+        for (let file of htmlFiles) {
+            let content = await readFileAsText(file);
+            
+            // Dùng DOMParser để bóc tách văn bản thuần (loại bỏ thẻ script, style)
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(content, "text/html");
+            let textContent = doc.body ? doc.body.innerText || doc.body.textContent : doc.textContent;
+
+            // Regex tìm chữ cái in hoa (A-Z) đi kèm với số
+            // Ví dụ: "S6", "S 6", "S: 6", "S=6"
+            let regex = /([A-Z])\s*[:=]?\s*(\d+)/gi;
+            let match;
+            
+            while ((match = regex.exec(textContent)) !== null) {
+                let char = match[1].toUpperCase();
+                let num = parseInt(match[2], 10);
+                addNumberToStore(char, num);
+            }
+            processedCount++;
+        }
+
+        statusEl.className = "status-box status-success";
+        statusEl.innerHTML = `✅ Đã quét thành công <b>${processedCount}</b> file HTML.<br>Tìm thấy dữ liệu của <b>${Object.keys(dataStore).length}</b> chữ cái khác nhau.`;
+        
+        processSearchText(); // Cập nhật kết quả
+    }
+
+    // ==========================================
+    // 2. XỬ LÝ NẠP FILE CSV
+    // ==========================================
+    async function loadCSV(input) {
+        let file = input.files[0];
+        if (!file) return;
+
+        let statusEl = document.getElementById('csvStatus');
+        statusEl.className = "status-box";
+        statusEl.innerHTML = "⏳ Đang đọc file CSV...";
+
+        try {
+            let content = await readFileAsText(file);
+            let lines = content.split(/\r?\n/);
+            let processedLines = 0;
+
+            // Đọc từng dòng trong CSV
+            for (let line of lines) {
+                if (!line.trim()) continue;
+                
+                // Tách các cột trong CSV bằng dấu phẩy (hoặc dấu chấm phẩy tùy vùng)
+                let columns = line.split(/[;,]/);
+                
+                // Giả sử dữ liệu có dạng: Cột 1 là chữ cái, Cột 2 là con số
+                // (Hoặc có thể đảo ngược, bạn có thể sửa lại index cho đúng)
+                let char = columns[0] ? columns[0].trim().toUpperCase() : "";
+                let numStr = columns[1] ? columns[1].trim() : "";
+
+                // Nếu là chữ cái hợp lệ và có số
+                if (char.match(/^[A-ZÀ-Ỹ]$/) && numStr.match(/^\d+$/)) {
+                    addNumberToStore(char, parseInt(numStr, 10));
+                    processedLines++;
+                }
+            }
+
+            statusEl.className = "status-box status-success";
+            statusEl.innerHTML = `✅ Đã đọc thành công file CSV.<br>Trích xuất được <b>${processedLines}</b> dòng dữ liệu hợp lệ.`;
+            
+            processSearchText(); // Cập nhật kết quả
+        } catch (error) {
+            statusEl.className = "status-box status-error";
+            statusEl.innerHTML = "❌ Lỗi đọc file CSV.";
+        }
+    }
+
+    // ==========================================
+    // 3. XỬ LÝ TRA CỨU VÀ GHÉP TỔ HỢP
+    // ==========================================
+    function processSearchText() {
+        let rawText = document.getElementById('searchInput').value.trim().toUpperCase();
+        let detailTableBody = document.querySelector('#detailTable tbody');
+        let combosBox = document.getElementById('finalCombinations');
+        
+        detailTableBody.innerHTML = '';
+
+        if (Object.keys(dataStore).length === 0) {
+            detailTableBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#ef4444;">Chưa có dữ liệu. Vui lòng nạp Thư mục hoặc File CSV.</td></tr>';
+            combosBox.innerText = '[Chưa có dữ liệu]';
+            return;
+        }
+
+        if (!rawText) {
+            combosBox.innerText = '[Chưa có dữ liệu]';
+            return;
+        }
+
+        // Tách các ký tự duy nhất (VD: SEN -> S, E, N)
+        let uniqueChars = [];
+        for (let i = 0; i < rawText.length; i++) {
+            let char = rawText[i];
+            if (char.match(/[A-ZÀ-Ỹ]/) && !uniqueChars.includes(char)) {
+                uniqueChars.push(char);
+            }
+        }
+
+        let charNumbersArray = []; // Mảng 2 chiều: [[số của S], [số của E], [số của N]]
+
+        uniqueChars.forEach(char => {
+            // Lấy dữ liệu từ kho, chuyển Set thành Mảng và sắp xếp tăng dần
+            let numbers = dataStore[char] ? Array.from(dataStore[char]).sort((a, b) => a - b) : [];
+            charNumbersArray.push(numbers);
+
+            // Hiển thị lên bảng
+            detailTableBody.innerHTML += `
+                <tr>
+                    <td style="font-weight:bold; color:#fbbf24; font-size:20px;">${char}</td>
+                    <td style="color:#34d399; font-weight:bold; font-size:18px;">
+                        ${numbers.length > 0 ? numbers.join(' , ') : '<span style="color:#ef4444">Không tìm thấy</span>'}
+                    </td>
+                    <td style="color:#60a5fa; font-weight:bold;">${numbers.length} số</td>
+                </tr>`;
+        });
+
+        // THUẬT TOÁN GHÉP TỔ HỢP
+        if (charNumbersArray.length >= 2) {
+            let combinations = new Set();
+
+            function generateCombos(index, currentStr) {
+                if (index === charNumbersArray.length) {
+                    combinations.add(currentStr);
+                    return;
+                }
+                let currentNumbers = charNumbersArray[index];
+                
+                if (currentNumbers.length === 0) {
+                    generateCombos(index + 1, currentStr); // Bỏ qua nếu chữ không có số
+                    return;
+                }
+                
+                for (let i = 0; i < currentNumbers.length; i++) {
+                    generateCombos(index + 1, currentStr + currentNumbers[i]);
+                }
+            }
+
+            generateCombos(0, "");
+
+            if (combinations.size > 0) {
+                let sortedCombos = Array.from(combinations).sort();
+                combosBox.innerText = sortedCombos.join('  -  ');
+            } else {
+                combosBox.innerText = '[Không tìm thấy số nào để ghép]';
+            }
+        } else {
+            combosBox.innerText = '[Cần nhập ít nhất 2 chữ cái để ghép tổ hợp]';
+        }
+    }
+
+    function copyText(elementId) {
+        let text = document.getElementById(elementId).innerText;
+        if(text.includes("Chưa có") || text.includes("Không tìm")) return;
+        
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Đã copy thành công:\n' + text);
+        });
+    }
+</script>
+</body>
+</html>

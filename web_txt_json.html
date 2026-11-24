@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trung Tâm Nạp Dữ Liệu Đa Năng TXT → JSON (v3 — 23 dạng + SHA-256)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body { font-family: 'Quicksand', system-ui, sans-serif; background-color: #0f172a; color: #f1f5f9; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #1e293b; }
+  ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 3px; }
+  .drop-zone { border: 2px dashed #475569; transition: all .2s; }
+  .drop-zone.dragover { border-color: #d4af37; background-color: rgba(212,175,55,.1); }
+  .file-row { display: grid; grid-template-columns: 1fr auto auto; gap: .5rem; align-items: center; }
+  .badge { font-size: .7rem; padding: .15rem .5rem; border-radius: .375rem; }
+</style>
+</head>
+<body class="p-4 md:p-8">
+<div class="max-w-7xl mx-auto space-y-6">
+
+  <header class="text-center border-b border-amber-900/50 pb-4">
+    <h1 class="text-3xl font-bold text-amber-400 flex justify-center items-center gap-3">
+      <i data-lucide="database" class="w-8 h-8"></i>
+      TRUNG TÂM NẠP LIỆU ĐA NĂNG (v3 — 23 DẠNG + SHA-256)
+    </h1>
+    <p class="text-slate-400 mt-1">Tự động nhận diện 23 dạng TXT + truy nguyên nguồn gốc bằng hash SHA-256</p>
+  </header>
+
+  <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 shadow-lg">
+    <div id="drop-zone" class="drop-zone rounded-xl p-8 text-center cursor-pointer hover:bg-slate-750 transition">
+      <i data-lucide="upload-cloud" class="w-16 h-16 text-amber-500 mx-auto mb-3"></i>
+      <p class="text-lg font-semibold text-slate-200">Kéo thả tệp .txt vào đây</p>
+      <p class="text-sm text-slate-400">hoặc click để chọn nhiều tệp cùng lúc</p>
+      <input type="file" id="file-input" multiple accept=".txt" class="hidden">
+    </div>
+    <div id="file-list" class="mt-4 space-y-2"></div>
+  </div>
+
+  <div class="flex flex-wrap gap-3">
+    <button onclick="processAllFiles()" class="px-6 py-3 bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-slate-900 font-bold rounded-lg shadow-lg transition flex items-center gap-2">
+      <i data-lucide="cog" class="w-5 h-5"></i> Bước 1: Xử lý & Phân tích
+    </button>
+    <button onclick="downloadAllSeparately()" class="px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-bold rounded-lg shadow-lg transition flex items-center gap-2">
+      <i data-lucide="download-cloud" class="w-5 h-5"></i> Bước 2: Tải xuống TẤT CẢ
+    </button>
+    <button onclick="downloadCombined()" class="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-lg shadow-lg transition flex items-center gap-2">
+      <i data-lucide="package" class="w-5 h-5"></i> Gộp chung data.json
+    </button>
+  </div>
+
+  <div class="bg-slate-900 rounded-xl border border-slate-700 p-4">
+    <div class="flex justify-between items-center mb-2">
+      <h3 class="text-emerald-400 font-bold flex items-center gap-2">
+        <i data-lucide="code" class="w-5 h-5"></i> Xem trước JSON (tổng hợp)
+      </h3>
+      <span id="json-status" class="text-xs text-slate-400">Chưa có dữ liệu</span>
+    </div>
+    <textarea id="json-output" rows="22" class="w-full bg-slate-950 border border-slate-700 rounded p-3 text-emerald-300 font-mono text-xs" readonly placeholder="JSON sẽ xuất hiện ở đây..."></textarea>
+  </div>
+</div>
+
+<script>
+/* ============================================================================
+   BIẾN TOÀN CỤC
+   ============================================================================ */
+let loadedFiles = {};   // { tenFile: noiDungText }
+let parsedResults = {}; // { tenFile: { _meta, records } }
+
+const fileInput = document.getElementById('file-input');
+const dropZone  = document.getElementById('drop-zone');
+const fileList  = document.getElementById('file-list');
+
+/* ============================================================================
+   TIỆN ÍCH: BĂM SHA-256
+   ============================================================================ */
+async function sha256Hex(text) {
+  try {
+    const enc = new TextEncoder().encode(text);
+    const buf = await crypto.subtle.digest('SHA-256', enc);
+    return Array.from(new Uint8Array(buf))
+      .map(b => b.toString(16).padStart(2, '0')).join('');
+  } catch (e) {
+    // Môi trường không có crypto.subtle (http không bảo mật): dùng băm dự phòng
+    let h = 0x811c9dc5;
+    for (let i = 0; i < text.length; i++) {
+      h ^= text.charCodeAt(i);
+      h = Math.imul(h, 0x01000193) >>> 0;
+    }
+    return 'fnv1a_' + h.toString(16).padStart(8, '0');
+  }
+}
+
+function demSoByte(text) {
+  return new Blob([text]).size;
+}
+
+function layDongDauTien(text) {
+  const line = text.split(/\r?\n/).find(l => l.trim());
+  return line ? line.trim().slice(0, 200) : '';
+}
+
+/* ============================================================================
+   CHUẨN HÓA DÙNG CHUNG
+   ============================================================================ */
+const CAN_CHI_MAP = {
+  'ti':'Tý','tí':'Tý','tý':'Tý','chuot':'Tý','chuột':'Tý',
+  'suu':'Sửu','sửu':'Sửu','trau':'Sửu','trâu':'Sửu',
+  'dan':'Dần','dần':'Dần','ho':'Dần','hổ':'Dần',
+  'mao':'Mão','mão':'Mão','meo':'Mão','mèo':'Mão',
+  'thin':'Thìn','thìn':'Thìn','rồng':'Thìn','rong':'Thìn',
+  'ty2':'Tỵ','tỵ':'Tỵ','ran':'Tỵ','rắn':'Tỵ',
+  'ngo':'Ngọ','ngọ':'Ngọ','ngua':'Ngọ','ngựa':'Ngọ',
+  'mui':'Mùi','mùi':'Mùi','de':'Mùi','dê':'Mùi',
+  'than':'Thân','thân':'Thân','khia':'Thân','khỉ':'Thân',
+  'dau':'Dậu','dậu':'Dậu','ga':'Dậu','gà':'Dậu',
+  'tuat':'Tuất','tuất':'Tuất','cho':'Tuất','chó':'Tuất',
+  'hoi':'Hợi','hợi':'Hợi','lon':'Hợi','lợn':'Hợi'
+};
+
+function chuanHoaCanChi(raw, contextHint) {
+  if (!raw) return '';
+  const k = raw.trim().toLowerCase();
+  if (k === 'ty' && contextHint === 'ngay') return 'Tỵ';
+  if (k === 'ti') return 'Tý';
+  return CAN_CHI_MAP[k] || raw.trim();
+}
+
+const NGU_HANH_MAP = {
+  'moc':'Mộc','mộc':'Mộc',
+  'tho':'Thổ','thổ':'Thổ',
+  'kim':'Kim',
+  'thuy':'Thủy','thủy':'Thủy','thuỷ':'Thủy',
+  'hoa':'Hỏa','hỏa':'Hỏa','hoả':'Hỏa'
+};
+
+function chuanHoaNguHanh(raw) {
+  if (!raw) return '';
+  const k = raw.trim().toLowerCase();
+  return NGU_HANH_MAP[k] || raw.trim();
+}
+
+function chuanHoaAmDuong(sign) {
+  if (sign === '+') return 'Dương';
+  if (sign === '-') return 'Âm';
+  return '';
+}
+
+function parseNgayThang(s) {
+  if (!s) return { ngay:null, thang:null, nam:null };
+  const m = String(s).trim().match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?/);
+  if (!m) return { ngay:null, thang:null, nam:null };
+  let nam = m[3] ? parseInt(m[3]) : null;
+  if (nam && nam < 100) nam += 2000;
+  return { ngay: parseInt(m[1]), thang: parseInt(m[2]), nam };
+}
+
+function splitRow(row, sep = /\t+/) {
+  return row.split(sep).map(c => c.trim());
+}
+
+function readLines(text) {
+  return text.split(/\r?\n/).map(l => l.replace(/\uFEFF/g,'').trimEnd());
+}
+
+/* ============================================================================
+   BỘ NHẬN DIỆN DẠNG (DETECTOR)
+   ============================================================================ */
+function detectFormat(text) {
+  const lines = readLines(text).filter(l => l.trim() && !l.trim().startsWith('#'));
+  if (lines.length === 0) return { format: 'empty' };
+  const first = lines[0];
+  const sample = lines.slice(0, Math.min(8, lines.length)).join('\n');
+
+  if (/\|\s*Năm\s*\|\s*CAN CHI\s*\|/i.test(sample)) return { format: 16 };
+  if (/Cột\s*0[\s\S]{0,80}Cột\s*1[\s\S]{0,80}Cột\s*2/i.test(sample)) return { format: 19 };
+  if (/Thao tác\s*\t?\s*Cột 0/i.test(sample)) return { format: 19 };
+
+  if (/^Ten_Cung\s*\t/i.test(sample) || /Bạch Dương|Kim Ngưu|Song Tử|Cự Giải|Sư Tử|Xử Nữ|Thiên Bình|Bọ Cạp|Nhân Mã|Ma Kết|Bảo Bình|Song Ngư/.test(sample)) {
+    if (/Ten_Cung|Khoang_Thoi_Gian/i.test(sample)) return { format: 17 };
+    if (/Aries|Taurus|Gemini|Cancer|Leo|Virgo|Libra|Scorpio|Sagittarius|Capricorn|Aquarius|Pisces/i.test(sample)) return { format: 23 };
+    return { format: 17 };
+  }
+
+  if (/\bNGAY\b[\s\S]{0,200}\bGIO\b/i.test(sample) || /^\s*GIO\s*\t/i.test(sample)) return { format: 15 };
+
+  if (/Xuân Phân|Hạ Chí|Thu Phân|Đông Chí|Lập Xuân|Vũ Thủy|Kinh Trập|Thanh Minh/i.test(sample)) return { format: 20 };
+
+  if (/Tứ hành xung|Nhóm 1.*Dần.*Thân.*Tỵ.*Hợi/i.test(sample)) return { format: 21 };
+
+  if (/NGHỀ\s*\t?\s*YẾU MẠNH|^TI\s*\t.*LÃNH ĐẠO/im.test(sample)) return { format: 22 };
+
+  if (/\d{1,2}\/\d{1,2}\s*[–-]\s*\d{1,2}\/\d{1,2}\/\d{4}\s*\|/.test(sample)) return { format: 14 };
+
+  if (/^\d{2}\/\d{2}\s*\t?\s*\d{2}\/\d{2}\s*\t.*(ngày|Không nghỉ)/im.test(sample)) return { format: 18 };
+
+  if (/^\d{1,2}\/\d{1,2}\s*\t\s*\d{1,2}\s*\t/im.test(sample)) return { format: 13 };
+
+  if (/^\d{1,2}\/\d{1,2}\s*\t\s*\t/im.test(sample)) return { format: 9 };
+
+  if (/^\d{1,2}\s+(NGUYET|THANG)\b/i.test(first) || /NGUYET KY SUC KHOE/i.test(sample)) return { format: 10 };
+
+  if (/^\d{1,2}\s*\t\s*\t\s*(Tam Nương|TRÁNH)/i.test(first)) return { format: 12 };
+
+  if (/^\d{1,2}\s*\t\s*\d{1,2}\s+(TRÁNH|KIÊNG)/i.test(first)) return { format: 8 };
+
+  if (/^\d{1,2}\s*\t\s*\t\s*Số\s+\d+/i.test(first)) return { format: 11 };
+
+  if (/^\d{1,2}\s*\t\s*(TI|TÝ|TY|TỴ|SUU|DAN|MAO)\s*\t/i.test(first) &&
+      /(HOÀNG ĐẠO|NGÀY TỐT|MUI|MÙI)/i.test(first)) return { format: 6 };
+
+  if (/^\d{1,2}\s*\t\s*[A-Z]+\s+[A-Z]+\s+(TRÁNH|KIÊNG)/i.test(first)) return { format: 5 };
+
+  if (/^\d{1,2}\s*\t\s*\w+\s*\([Ââ]m\s*L[iị]ch\)/i.test(first)) return { format: 4 };
+
+  if (/^\d{1,2}\s*\t\s*[A-ZÀ-Ỹ]+\s+[A-ZÀ-Ỹ]+/i.test(first) && !/\t.*\t/.test(first)) {
+    const cells = splitRow(first);
+    if (cells.length <= 3 && /^[A-ZÀ-Ỹ\s]+$/.test(cells[1] || '')) return { format: 7 };
+  }
+
+  if (/^Tháng\s+\d+/i.test(first)) return { format: 3 };
+
+  if (/^[A-Z]+\s+TRANH KY HOP DONG/i.test(first)) return { format: 2 };
+
+  if (/^[A-Za-zÀ-ỹ]+\s*[+\-]\s*TRANH KY HOP DONG/i.test(first)) return { format: 1 };
+
+  return { format: 'unknown' };
+}
+
+/* ============================================================================
+   PARSER CHO TỪNG DẠNG
+   ============================================================================ */
+
+function parseFormat1(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const m = row.match(/^([A-Za-zÀ-ỹ]+)\s*([+\-])\s*(.+)$/);
+      if (!m) return;
+      records.push({
+        dong: i + 1,
+        ngu_hanh_ban_menh: chuanHoaNguHanh(m[1]),
+        am_duong: chuanHoaAmDuong(m[2]),
+        dien_giai: m[3].trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 1, format_label: 'Ngũ hành + Âm/Dương + Diễn giải', records };
+}
+
+function parseFormat2(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const m = row.match(/^([A-Za-zÀ-ỹ]+)\s+(.+)$/);
+      if (!m) return;
+      records.push({
+        dong: i + 1,
+        ngu_hanh_ban_menh: chuanHoaNguHanh(m[1]),
+        dien_giai: m[2].trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 2, format_label: 'Ngũ hành (không dấu) + Diễn giải', records };
+}
+
+function parseFormat3(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const cells = splitRow(row);
+      if (!/^Tháng\s+\d+/i.test(cells[0] || '')) return;
+      records.push({
+        dong: i + 1,
+        thang_am_lich: parseInt((cells[0].match(/\d+/) || [0])[0]),
+        tiet_khi: cells[1] || '',
+        dien_giai: cells.slice(2).join(' | ').trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 3, format_label: 'Tháng âm lịch + Tiết khí + Diễn giải', records };
+}
+
+function parseFormat4(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const cells = splitRow(row);
+      if (cells.length < 4 || !/^\d+$/.test(cells[0])) return;
+      const amMatch = cells[1].match(/^([A-Za-zÀ-ỹ]+)\s*\(/);
+      const duongMatch = cells[2].match(/^([A-Za-zÀ-ỹ]+)\s*\(/);
+      records.push({
+        dong: i + 1,
+        thang_am_lich: parseInt(cells[0]),
+        ngay_can_chi_am: chuanHoaCanChi(amMatch ? amMatch[1] : cells[1], 'ngay'),
+        ngay_can_chi_duong: chuanHoaCanChi(duongMatch ? duongMatch[1] : cells[2], 'ngay'),
+        dien_giai: cells.slice(3).join(' | ').trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 4, format_label: 'Tháng âm + Can chi âm/dương + Diễn giải', records };
+}
+
+function parseFormat5(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const cells = splitRow(row);
+      if (cells.length < 2 || !/^\d+$/.test(cells[0])) return;
+      const ccMatch = cells[1].match(/^([A-ZÀ-Ỹ]+)\s+([A-ZÀ-Ỹ]+)/i);
+      records.push({
+        dong: i + 1,
+        thang_am_lich: parseInt(cells[0]),
+        ngay_can_chi: ccMatch ? ccMatch[0].trim() : cells[1],
+        dien_giai: cells.slice(2).join(' | ').trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 5, format_label: 'Tháng âm + Can chi + Diễn giải', records };
+}
+
+function parseFormat6(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const cells = splitRow(row);
+      if (cells.length < 5 || !/^\d+$/.test(cells[0])) return;
+      records.push({
+        dong: i + 1,
+        thang_am_lich: parseInt(cells[0]),
+        ngay_can_chi_1: chuanHoaCanChi(cells[1], 'ngay'),
+        ngay_can_chi_2: chuanHoaCanChi(cells[2], 'ngay'),
+        ngay_can_chi_3: chuanHoaCanChi(cells[3], 'ngay'),
+        ngay_can_chi_4: chuanHoaCanChi(cells[4], 'ngay'),
+        dien_giai: cells.slice(5).join(' | ').trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 6, format_label: 'Tháng âm + 4 Can chi + Diễn giải (Hoàng đạo)', records };
+}
+
+function parseFormat7(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const cells = splitRow(row);
+      if (cells.length < 2 || !/^\d+$/.test(cells[0])) return;
+      const parts = cells[1].split(/\s+/);
+      const cc = chuanHoaCanChi(parts[0], 'ngay');
+      const rest = parts.slice(1).join(' ');
+      records.push({
+        dong: i + 1,
+        thang_am_lich: parseInt(cells[0]),
+        ngay_can_chi: cc,
+        dien_giai: (rest + ' ' + cells.slice(2).join(' ')).trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 7, format_label: 'Tháng âm + Can chi + Diễn giải', records };
+}
+
+function parseFormat8(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const cells = splitRow(row);
+      if (cells.length < 2 || !/^\d+$/.test(cells[0])) return;
+      const m = cells[1].match(/^(\d+)\s+(.+)$/);
+      records.push({
+        dong: i + 1,
+        thang_am_lich: parseInt(cells[0]),
+        ngay_am_lich: m ? parseInt(m[1]) : null,
+        dien_giai: m ? m[2].trim() : cells.slice(1).join(' | ').trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 8, format_label: 'Tháng + Ngày âm + Diễn giải', records };
+}
+
+function parseFormat9(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const cells = splitRow(row);
+      if (!/^\d{1,2}\/\d{1,2}/.test(cells[0])) return;
+      const d = parseNgayThang(cells[0]);
+      records.push({
+        dong: i + 1,
+        ngay_thang_am_lich: cells[0],
+        ngay: d.ngay, thang: d.thang, nam: d.nam,
+        dien_giai: cells.slice(1).join(' | ').trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 9, format_label: 'Ngày/tháng âm + Diễn giải', records };
+}
+
+function parseFormat10(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const m = row.match(/^(\d{1,2})\s+(.+)$/);
+      if (!m) return;
+      records.push({
+        dong: i + 1,
+        ngay_am_lich: parseInt(m[1]),
+        dien_giai: m[2].trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 10, format_label: 'Ngày âm + Diễn giải', records };
+}
+
+function parseFormat11(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const cells = splitRow(row);
+      if (!/^\d+$/.test(cells[0])) return;
+      records.push({
+        dong: i + 1,
+        so_ngay_thang_nam: parseInt(cells[0]),
+        dien_giai: cells.slice(1).join(' | ').trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 11, format_label: 'Số + Diễn giải', records };
+}
+
+function parseFormat12(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const cells = splitRow(row);
+      if (!/^\d+$/.test(cells[0])) return;
+      records.push({
+        dong: i + 1,
+        ngay_am_lich: parseInt(cells[0]),
+        dien_giai: cells.slice(1).join(' | ').trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 12, format_label: 'Ngày âm + Diễn giải', records };
+}
+
+function parseFormat13(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const cells = splitRow(row);
+      if (!/^\d{1,2}\/\d{1,2}/.test(cells[0])) return;
+      const d = parseNgayThang(cells[0]);
+      records.push({
+        dong: i + 1,
+        ngay_thang_am_lich: cells[0],
+        ngay: d.ngay, thang: d.thang, nam: d.nam,
+        ngay_am_lich: /^\d+$/.test(cells[1]) ? parseInt(cells[1]) : null,
+        dien_giai: cells.slice(2).join(' | ').trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 13, format_label: 'Ngày/tháng âm + Ngày âm + Diễn giải', records };
+}
+
+function parseFormat14(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const cells = row.split('|').map(c => c.trim());
+      if (cells.length < 3) return;
+      const m = cells[0].match(/^(\d{1,2}\/\d{1,2})\s*[–-]\s*(\d{1,2}\/\d{1,2}\/\d{4})/);
+      records.push({
+        dong: i + 1,
+        tu_ngay_am: m ? m[1] : cells[0],
+        den_ngay_am: m ? m[2] : '',
+        thang_cc: cells[1] || '',
+        moc_vuong: cells[2] || '',
+        ncc: cells[3] || '',
+        chung_benh: cells[4] || '',
+        do_an_nen_dung: cells[5] || '',
+        do_an_tranh: cells[6] || ''
+      });
+    } catch (e) {}
+  });
+  return { format: 14, format_label: 'Khoảng ngày âm + Tháng CC + NCC + Bệnh + Ăn uống', records };
+}
+
+function parseFormat15(text) {
+  const records = [];
+  const lines = readLines(text).filter(l => l.trim());
+  let headerIdx = -1;
+  for (let i = 0; i < lines.length; i++) {
+    if (/NGAY/i.test(lines[i]) && /Dần|Mão|Thìn|Tỵ/i.test(lines[i])) { headerIdx = i; break; }
+  }
+  if (headerIdx === -1) {
+    for (let i = 0; i < lines.length; i++) {
+      if (/Dần\s+Mão\s+Thìn\s+Tỵ/i.test(lines[i])) { headerIdx = i; break; }
+    }
+  }
+  if (headerIdx === -1) return { format: 15, format_label: 'Bảng NGÀY x GIỜ', records: [] };
+
+  let headerLine = lines[headerIdx];
+  if (!/Dần/i.test(headerLine) && headerIdx + 1 < lines.length) {
+    headerLine = lines[headerIdx + 1];
+    headerIdx++;
+  }
+  const headerCells = splitRow(headerLine.replace(/^.*?NGAY\s*/i, '').trim());
+  const conGiap = headerCells.map(c => chuanHoaCanChi(c, 'ngay')).filter(c => c);
+
+  for (let i = headerIdx + 1; i < lines.length; i++) {
+    const cells = splitRow(lines[i]);
+    if (!/^\d+$/.test(cells[0])) continue;
+    const gio = parseInt(cells[0]);
+    const gioText = cells[1] || '';
+    const dienGiaiArr = cells.slice(2);
+    const map = {};
+    conGiap.forEach((cc, idx) => {
+      if (dienGiaiArr[idx]) map[cc] = dienGiaiArr[idx];
+    });
+    records.push({
+      dong: i + 1,
+      gio,
+      gio_text: gioText,
+      chi_tiet_theo_ngay: map
+    });
+  }
+  return { format: 15, format_label: 'Bảng Giờ x Ngày Can Chi', records };
+}
+
+function parseFormat16(text) {
+  const records = [];
+  const lines = readLines(text).filter(l => l.trim());
+  let header = null;
+  lines.forEach((row, i) => {
+    try {
+      if (!row.includes('|')) return;
+      const cells = row.split('|').map(c => c.trim()).filter((c, idx, arr) => !(idx === 0 && c === '') && !(idx === arr.length - 1 && c === ''));
+      if (cells.length < 3) return;
+      const lower = cells.join(' ').toLowerCase();
+      if (!header && (lower.includes('can chi') || lower.includes('ngũ hành'))) {
+        header = cells.map(c => c.toLowerCase().normalize('NFC'));
+        return;
+      }
+      if (/^[-:\s]+$/.test(cells.join(''))) return;
+      if (!header) return;
+      if (!/^\d+$/.test(cells[0])) return;
+      const rec = { dong: i + 1 };
+      header.forEach((h, idx) => {
+        if (idx === 0) { rec.nam = parseInt(cells[idx]) || cells[idx]; return; }
+        const val = cells[idx] || '';
+        if (h.includes('can chi')) rec.can_chi = val;
+        else if (h.includes('nghĩa')) rec.nghia = val;
+        else if (h.includes('mệnh nữ')) rec.menh_nu = val;
+        else if (h.includes('mệnh nam')) rec.menh_nam = val;
+        else if (h.includes('mệnh')) rec.menh = val;
+        else if (h.includes('ngũ hành')) rec.ngu_hanh = val;
+        else if (h.includes('thiên can')) rec.thien_can = val;
+        else if (h.includes('địa chi')) rec.dia_chi = val;
+        else if (h.includes('tạng phủ') || h.includes('sinh khắc')) rec.tang_phu_sinh_khac = val;
+        else rec['cot_' + idx] = val;
+      });
+      records.push(rec);
+    } catch (e) {}
+  });
+  return { format: 16, format_label: 'Bảng Năm – Can Chi – Mệnh – Ngũ Hành', records };
+}
+
+function parseFormat17(text) {
+  const records = [];
+  const lines = readLines(text).filter(l => l.trim());
+  let header = null;
+  lines.forEach((row, i) => {
+    try {
+      const cells = splitRow(row);
+      if (!header && /Ten_Cung/i.test(cells[0])) { header = cells; return; }
+      if (!header) return;
+      if (!cells[0] || /Ten_Cung/i.test(cells[0])) return;
+      const now = new Date().getFullYear();
+      const fixDate = (s) => {
+        if (!s) return '';
+        const m = s.trim().match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?$/);
+        if (!m) return s;
+        const nam = m[3] ? (parseInt(m[3]) < 100 ? 2000 + parseInt(m[3]) : parseInt(m[3])) : now;
+        return `${m[1]}/${m[2]}/${nam}`;
+      };
+      records.push({
+        dong: i + 1,
+        ten_cung: cells[0],
+        bat_dau: fixDate(cells[1]),
+        ket_thuc: fixDate(cells[2]),
+        dien_giai: cells.slice(3).join(' | ').trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 17, format_label: 'Cung hoàng đạo + Khoảng thời gian + Diễn giải', records };
+}
+
+function parseFormat18(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const cells = splitRow(row);
+      if (!/^\d{1,2}\/\d{1,2}/.test(cells[0])) return;
+      const d1 = parseNgayThang(cells[0]);
+      const d2 = cells[1] ? parseNgayThang(cells[1]) : { ngay: null, thang: null, nam: null };
+      records.push({
+        dong: i + 1,
+        ngay_thang_duong_1: cells[0],
+        ngay_1: d1.ngay, thang_1: d1.thang,
+        ngay_thang_duong_2: cells[1] || '',
+        ngay_2: d2.ngay, thang_2: d2.thang,
+        dien_giai: cells.slice(2).join(' | ').trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 18, format_label: 'Ngày tháng dương + Tên ngày + Ghi chú', records };
+}
+
+function parseFormat19(text) {
+  const records = [];
+  const lines = readLines(text).filter(l => l.trim());
+  let header = null;
+  lines.forEach((row, i) => {
+    try {
+      const cells = splitRow(row);
+      if (!header && /Cột\s*0/i.test(cells[0])) { header = cells; return; }
+      if (!header && /Thao tác/i.test(cells[0])) { header = cells; return; }
+      if (!header) return;
+      if (/Cột\s*0/i.test(cells[0]) || /Thao tác/i.test(cells[0])) return;
+      if (!/^\d+$/.test(cells[0])) return;
+      const rec = { dong: i + 1 };
+      header.forEach((h, idx) => {
+        const val = cells[idx] || '';
+        const key = h.toLowerCase()
+          .replace(/\s+/g, '_')
+          .replace(/[()\/]/g, '')
+          .replace(/__+/g, '_')
+          .trim();
+        rec[key || ('cot_' + idx)] = val;
+      });
+      records.push(rec);
+    } catch (e) {}
+  });
+  return { format: 19, format_label: 'Bảng 17 cột (STT Phút, Ngày, Giờ, Bệnh, Thuốc...)', records };
+}
+
+function parseFormat20(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const cells = splitRow(row);
+      if (cells.length < 2) return;
+      const dateStr = cells.slice(1).find(c => /\d{1,2}\/\d{1,2}\/\d{4}/.test(c)) || '';
+      const d = parseNgayThang(dateStr);
+      records.push({
+        dong: i + 1,
+        tiet_khi: cells[0],
+        ngay_thang_duong: dateStr,
+        ngay: d.ngay, thang: d.thang, nam: d.nam,
+        dien_giai: cells.filter(c => c && c !== dateStr && c !== cells[0]).join(' | ').trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 20, format_label: 'Tiết khí + Ngày tháng dương + Diễn giải', records };
+}
+
+function parseFormat21(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim()) return;
+    try {
+      const lower = row.toLowerCase();
+      const keywords = ['xung','khắc','hợp','tương khắc','tương sinh'];
+      const hit = keywords.some(k => lower.includes(k));
+      if (!hit) return;
+      const found = [];
+      Object.keys(CAN_CHI_MAP).forEach(k => {
+        const re = new RegExp('\\b' + k + '\\b', 'i');
+        if (re.test(row)) found.push(CAN_CHI_MAP[k]);
+      });
+      const unique = [...new Set(found)];
+      records.push({
+        dong: i + 1,
+        noi_dung: row.trim(),
+        con_giap_lien_quan: unique,
+        loai: lower.includes('tương sinh') ? 'tương sinh'
+             : lower.includes('tương khắc') ? 'tương khắc'
+             : lower.includes('xung') ? 'xung'
+             : lower.includes('khắc') ? 'khắc'
+             : lower.includes('hợp') ? 'hợp' : 'khác'
+      });
+    } catch (e) {}
+  });
+  return { format: 21, format_label: 'Tứ hành xung / Hợp / Khắc', records };
+}
+
+function parseFormat22(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const cells = splitRow(row);
+      if (!cells[0]) return;
+      if (/NGHỀ|YẾU MẠNH/i.test(cells[0])) return;
+      const cc = chuanHoaCanChi(cells[0], 'ngay');
+      if (!CAN_CHI_MAP[cells[0].toLowerCase()] && !/^[A-ZÀ-Ỹ]{2,4}$/i.test(cells[0])) return;
+      records.push({
+        dong: i + 1,
+        can_chi: cc,
+        nghe_nghiep: cells[1] || '',
+        yeu: cells[2] || '',
+        manh: cells[3] || '',
+        dien_giai: cells.slice(4).join(' | ').trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 22, format_label: 'Can chi + Nghề nghiệp + Yếu/Mạnh', records };
+}
+
+function parseFormat23(text) {
+  const records = [];
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const cells = splitRow(row);
+      if (cells.length < 3) return;
+      const dateCell = cells.find(c => /\d{1,2}\/\d{1,2}\/\d{4}/.test(c));
+      if (!dateCell) return;
+      const d = parseNgayThang(dateCell);
+      records.push({
+        dong: i + 1,
+        ten_cung_en: cells[0],
+        ten_cung_vi: cells[1] || '',
+        nghe_nghiep: cells[2] || '',
+        ngay_thang: dateCell,
+        ngay: d.ngay, thang: d.thang, nam: d.nam,
+        dien_giai: cells.filter(c => c !== dateCell && c !== cells[0] && c !== cells[1] && c !== cells[2]).join(' | ').trim()
+      });
+    } catch (e) {}
+  });
+  return { format: 23, format_label: 'Cung hoàng đạo EN/VI + Nghề + Ngày', records };
+}
+
+function parseFallback(text) {
+  const records = [];
+  const result = {};
+  readLines(text).forEach((row, i) => {
+    if (!row.trim() || row.trim().startsWith('#')) return;
+    try {
+      const match = row.match(/^(\d+(?:\/\d+){0,2})\s+(.*)/);
+      if (!match) return;
+      const key = match[1].trim();
+      const dienGiai = match[2].trim();
+      const parts = key.split('/');
+      const ngay = parseInt(parts[0]) || null;
+      const thang = parts.length > 1 ? parseInt(parts[1]) : null;
+      const nam = parts.length > 2 ? parseInt(parts[2]) : null;
+      if (!result[key]) result[key] = { ngay, thang, nam, chiTiet: [] };
+      result[key].chiTiet.push({ dien_giai: dienGiai, thoi_gian: 'Cả ngày' });
+    } catch (e) {}
+  });
+  Object.keys(result).forEach(k => {
+    records.push({ key: k, ...result[k] });
+  });
+  return { format: 'fallback', format_label: 'Text tự do (vạn năng)', records };
+}
+
+/* ============================================================================
+   ĐIỀU PHỐI PARSER
+   ============================================================================ */
+const PARSER_MAP = {
+  1: parseFormat1, 2: parseFormat2, 3: parseFormat3, 4: parseFormat4,
+  5: parseFormat5, 6: parseFormat6, 7: parseFormat7, 8: parseFormat8,
+  9: parseFormat9, 10: parseFormat10, 11: parseFormat11, 12: parseFormat12,
+  13: parseFormat13, 14: parseFormat14, 15: parseFormat15, 16: parseFormat16,
+  17: parseFormat17, 18: parseFormat18, 19: parseFormat19, 20: parseFormat20,
+  21: parseFormat21, 22: parseFormat22, 23: parseFormat23
+};
+
+function parseFileByName(filename, content) {
+  const det = detectFormat(content);
+  const fmt = det.format;
+
+  if (fmt === 'empty') {
+    return {
+      _meta: {
+        nguon: filename,
+        ten_file_goc: filename,
+        format: 0,
+        format_label: 'Rỗng',
+        so_ban_ghi: 0,
+        kich_thuoc_byte: demSoByte(content),
+        dong_dau_tien: '',
+        ngay_xuat: new Date().toISOString()
+      },
+      records: []
+    };
+  }
+
+  const fn = PARSER_MAP[fmt] || parseFallback;
+  let parsed;
+  try {
+    parsed = fn(content);
+  } catch (err) {
+    console.warn('Parser lỗi, dùng fallback:', filename, err);
+    parsed = parseFallback(content);
+  }
+  if (!parsed || !Array.isArray(parsed.records)) {
+    parsed = parseFallback(content);
+  }
+
+  return {
+    _meta: {
+      nguon: filename,
+      ten_file_goc: filename,
+      format: parsed.format,
+      format_label: parsed.format_label,
+      so_ban_ghi: parsed.records.length,
+      kich_thuoc_byte: demSoByte(content),
+      dong_dau_tien: layDongDauTien(content),
+      ngay_xuat: new Date().toISOString()
+      // hash_sha256 sẽ được gắn trong processAllFiles() (async)
+    },
+    records: parsed.records
+  };
+}
+
+/* ============================================================================
+   UI: KÉO THẢ / CHỌN FILE
+   ============================================================================ */
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('dragover');
+  handleFiles(e.dataTransfer.files);
+});
+fileInput.addEventListener('change', e => handleFiles(e.target.files));
+
+function handleFiles(files) {
+  Array.from(files).forEach(file => {
+    if (!file.name.toLowerCase().endsWith('.txt')) {
+      alert(`⚠️ Bỏ qua "${file.name}": chỉ chấp nhận .txt`);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = ev => {
+      loadedFiles[file.name] = ev.target.result;
+      renderFileList();
+    };
+    reader.readAsText(file, 'UTF-8');
+  });
+}
+
+function renderFileList() {
+  if (Object.keys(loadedFiles).length === 0) { fileList.innerHTML = ''; return; }
+  fileList.innerHTML = Object.keys(loadedFiles).map(name => {
+    const parsed = parsedResults[name];
+    const statusBadge = parsed
+      ? `<span class="badge bg-emerald-900/60 text-emerald-300">✅ Dạng ${parsed._meta.format} — ${parsed._meta.format_label} (${parsed._meta.so_ban_ghi} bản ghi)</span>`
+      : `<span class="badge bg-slate-700 text-slate-400">⏳ chờ xử lý</span>`;
+    const hashBadge = parsed && parsed._meta.hash_sha256
+      ? `<span class="badge bg-sky-900/60 text-sky-300" title="${parsed._meta.hash_sha256}">🔑 ${parsed._meta.hash_sha256.slice(0,12)}…</span>`
+      : '';
+    return `
+    <div class="file-row p-2 bg-slate-900 border border-slate-700 rounded text-sm">
+      <div class="flex items-center gap-2 min-w-0 flex-wrap">
+        <i data-lucide="file-text" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
+        <span class="text-slate-200 truncate">${name}</span>
+        <span class="text-xs text-slate-500">(${loadedFiles[name].length} ký tự)</span>
+        ${statusBadge}
+        ${hashBadge}
+      </div>
+      <button onclick="downloadSingle('${name.replace(/'/g, "\\'")}')" class="text-emerald-400 hover:text-emerald-300 p-1 disabled:opacity-30" ${!parsed ? 'disabled' : ''} title="Tải JSON">
+        <i data-lucide="download" class="w-4 h-4"></i>
+      </button>
+      <button onclick="removeFile('${name.replace(/'/g, "\\'")}')" class="text-red-400 hover:text-red-300 p-1" title="Xóa">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>`;
+  }).join('');
+  if (window.lucide) lucide.createIcons();
+}
+
+function removeFile(name) {
+  delete loadedFiles[name];
+  delete parsedResults[name];
+  renderFileList();
+}
+
+/* ============================================================================
+   XỬ LÝ & XUẤT
+   ============================================================================ */
+async function processAllFiles() {
+  if (Object.keys(loadedFiles).length === 0) {
+    alert('⚠️ Chưa có file nào được nạp!');
+    return;
+  }
+  parsedResults = {};
+  let ok = 0, fail = 0;
+
+  for (const name of Object.keys(loadedFiles)) {
+    try {
+      const content = loadedFiles[name];
+      const parsed = parseFileByName(name, content);
+
+      // Gắn dấu vết nguồn gốc đầy đủ
+      parsed._meta.ten_file_goc = name;
+      parsed._meta.kich_thuoc_byte = demSoByte(content);
+      parsed._meta.hash_sha256 = await sha256Hex(content);
+      parsed._meta.dong_dau_tien = layDongDauTien(content);
+
+      parsedResults[name] = parsed;
+      ok++;
+    } catch (err) {
+      console.error(err);
+      fail++;
+      parsedResults[name] = {
+        _meta: {
+          nguon: name,
+          ten_file_goc: name,
+          format: 'error',
+          format_label: 'Lỗi xử lý',
+          loi: String(err),
+          so_ban_ghi: 0,
+          ngay_xuat: new Date().toISOString()
+        },
+        records: []
+      };
+    }
+  }
+
+  renderFileList();
+
+  const combined = {};
+  Object.keys(parsedResults).forEach(name => {
+    combined[name.replace(/\.txt$/i, '')] = parsedResults[name];
+  });
+  document.getElementById('json-output').value = JSON.stringify(combined, null, 2);
+  document.getElementById('json-status').textContent = `✅ ${ok} thành công | ❌ ${fail} lỗi`;
+}
+
+function triggerDownload(filename, content, originalFileName = '') {
+  let finalContent = content;
+  try {
+    const jsonObj = JSON.parse(content);
+    if (originalFileName && jsonObj && typeof jsonObj === 'object' && !jsonObj._meta_nguon) {
+      jsonObj._meta_nguon = originalFileName;
+      finalContent = JSON.stringify(jsonObj, null, 2);
+    }
+  } catch (e) {}
+  const blob = new Blob([finalContent], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  console.log(`%c[THÀNH CÔNG] Đã xuất: ${filename} (nguồn: ${originalFileName || 'tổng hợp'})`, 'color:#10b981;font-weight:bold;');
+}
+
+function downloadSingle(txtName) {
+  const entry = parsedResults[txtName];
+  if (!entry) { alert('⚠️ File này chưa được xử lý!'); return; }
+  const jsonName = txtName.replace(/\.txt$/i, '.json');
+  triggerDownload(jsonName, JSON.stringify(entry, null, 2), txtName);
+}
+
+function downloadAllSeparately() {
+  const keys = Object.keys(parsedResults);
+  if (keys.length === 0) { alert("⚠️ Chưa có dữ liệu. Hãy bấm 'Bước 1' trước."); return; }
+  keys.forEach((txtName, i) => setTimeout(() => downloadSingle(txtName), i * 300));
+}
+
+function downloadCombined() {
+  if (Object.keys(parsedResults).length === 0) {
+    alert("⚠️ Chưa có dữ liệu. Hãy bấm 'Bước 1' trước.");
+    return;
+  }
+  const combined = {
+    _meta: {
+      phien_ban: 'v3-23-dang-sha256',
+      ngay_xuat: new Date().toISOString(),
+      so_file: Object.keys(parsedResults).length,
+      nguon_goc: Object.keys(parsedResults).map(name => ({
+        ten_file: name,
+        kich_thuoc_byte: parsedResults[name]._meta.kich_thuoc_byte,
+        hash_sha256:    parsedResults[name]._meta.hash_sha256,
+        format:         parsedResults[name]._meta.format,
+        format_label:   parsedResults[name]._meta.format_label,
+        so_ban_ghi:     parsedResults[name]._meta.so_ban_ghi,
+        dong_dau_tien:  parsedResults[name]._meta.dong_dau_tien
+      }))
+    },
+    danh_sach_chi_tiet: {}
+  };
+  Object.keys(parsedResults).forEach(name => {
+    combined.danh_sach_chi_tiet[name.replace(/\.txt$/i, '')] = parsedResults[name];
+  });
+  triggerDownload('data.json', JSON.stringify(combined, null, 2), 'Tong_hop_nhieu_file.txt');
+}
+
+/* Cho phép HTML khác gọi lại hàm băm (kiểm tra toàn vẹn) */
+window.__sha256Hex = sha256Hex;
+
+window.onload = () => { if (window.lucide) lucide.createIcons(); };
+</script>
+</body>
+</html>

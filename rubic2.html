@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rubik 54 Ô – Bản trải rộng (Giao diện mới)</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;min-height:100vh;padding:16px;display:flex;flex-direction:column;align-items:center}
+  
+  h1{font-size:1.5rem;margin-bottom:6px;text-align:center}
+  .subtitle{opacity:.75;font-size:.95rem;margin-bottom:18px;text-align:center}
+  
+  /* Bố cục 3 cột: Trái - Giữa - Phải */
+  .app-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* Cột điều khiển bên trái và phải */
+  .control-panel {
+    background: rgba(255,255,255,.05);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 220px;
+  }
+
+  .group-title{font-size:14px;color:#00ffcc;margin-bottom:10px;font-weight:600;text-align:center;text-transform:uppercase;letter-spacing:1px}
+  .btn-row{display:flex;flex-direction:column;gap:10px;align-items:center}
+  
+  button{background:#16213e;color:#fff;border:1px solid #1abc9c;padding:12px 15px;border-radius:8px;cursor:pointer;font-weight:600;font-size:15px;width:100%;transition:.15s}
+  button:hover{background:#e94560;border-color:#e94560}
+  button:active{transform:scale(.96)}
+  
+  .reset-btn{background:#e94560;border-color:#e94560;margin-top: 10px;}
+  .reset-btn:hover{background:#c0392b}
+
+  /* Khu vực Rubik ở giữa */
+  .rubik-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .net-wrapper{width:100%;overflow-x:auto;padding-bottom:8px}
+  .net{display:grid;grid-template-areas:". up . .""left front right back"". down . .";grid-template-columns:repeat(4,1fr);gap:10px;min-width:720px;margin:0 auto}
+  
+  .net-face{background:#111;border-radius:10px;padding:6px;border:2px solid #333}
+  .net-face[data-face="up"]{grid-area:up}
+  .net-face[data-face="left"]{grid-area:left}
+  .net-face[data-face="front"]{grid-area:front}
+  .net-face[data-face="right"]{grid-area:right}
+  .net-face[data-face="back"]{grid-area:back}
+  .net-face[data-face="down"]{grid-area:down}
+  
+  .face-label{text-align:center;font-size:13px;font-weight:600;color:#00ffcc;margin-bottom:6px}
+  .face-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+  
+  .cell{background:#1e1e3f;border-radius:8px;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:.15s;border:1px solid #444;min-height:56px}
+  .cell:hover{transform:scale(1.04);filter:brightness(1.2)}
+  
+  .num-big{font-size:20px;font-weight:800;line-height:1}
+  .num-small{font-size:12px;color:#00ffcc;font-weight:600;margin-top:2px}
+  
+  .info-panel{margin-top:20px;background:rgba(255,255,255,.07);border-radius:12px;padding:16px 24px;text-align:center;max-width:400px}
+  .big-display{font-size:52px;font-weight:900;margin:6px 0}
+  .small-display{font-size:22px;color:#00ffcc;font-weight:700}
+  .note{font-size:13px;opacity:.7;margin-top:8px}
+
+  /* Responsive cho màn hình nhỏ */
+  @media (max-width: 1200px) {
+    .app-container { flex-direction: column; }
+    .control-panel { flex-direction: row; flex-wrap: wrap; width: 100%; max-width: 720px; justify-content: center; }
+    .btn-row { flex-direction: row; flex-wrap: wrap; }
+    button { width: auto; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Rubik 54 Ô – Bản trải rộng</h1>
+<p class="subtitle">6 mặt trải dài • Bấm mũi tên để quay • Có thể bấm nhiều lần</p>
+
+<div class="app-container">
+  
+  <!-- CỘT TRÁI: ĐIỀU KHIỂN CỘT DỌC -->
+  <div class="control-panel">
+    <div>
+      <div class="group-title">Cột dọc (Lên ↑ / Xuống ↓)</div>
+      <div class="btn-row">
+        <button onclick="turn('L',-1)">Cột 1 ↑</button>
+        <button onclick="turn('L',1)">Cột 1 ↓</button>
+        <button onclick="turn('M',-1)">Cột 2 ↑</button>
+        <button onclick="turn('M',1)">Cột 2 ↓</button>
+        <button onclick="turn('R',-1)">Cột 3 ↑</button>
+        <button onclick="turn('R',1)">Cột 3 ↓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- KHU VỰC GIỮA: RUBIK -->
+  <div class="rubik-area">
+    <div class="net-wrapper">
+      <div class="net" id="net">
+        <div class="net-face" data-face="up"><div class="face-label">Mặt trên (Top)</div><div class="face-grid" id="grid-top"></div></div>
+        <div class="net-face" data-face="left"><div class="face-label">Mặt trái (Left)</div><div class="face-grid" id="grid-left"></div></div>
+        <div class="net-face" data-face="front"><div class="face-label">Mặt trước (Front)</div><div class="face-grid" id="grid-front"></div></div>
+        <div class="net-face" data-face="right"><div class="face-label">Mặt phải (Right)</div><div class="face-grid" id="grid-right"></div></div>
+        <div class="net-face" data-face="back"><div class="face-label">Mặt sau (Back)</div><div class="face-grid" id="grid-back"></div></div>
+        <div class="net-face" data-face="down"><div class="face-label">Mặt dưới (Bottom)</div><div class="face-grid" id="grid-bottom"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CỘT PHẢI: ĐIỀU KHIỂN TẦNG NGANG + MẶT + RESET -->
+  <div class="control-panel">
+    <div>
+      <div class="group-title">Tầng ngang (Trái ← / Phải →)</div>
+      <div class="btn-row">
+        <button onclick="turn('U',-1)">Tầng 1 ←</button>
+        <button onclick="turn('U',1)">Tầng 1 →</button>
+        <button onclick="turn('E',-1)">Tầng 2 ←</button>
+        <button onclick="turn('E',1)">Tầng 2 →</button>
+        <button onclick="turn('D',-1)">Tầng 3 ←</button>
+        <button onclick="turn('D',1)">Tầng 3 →</button>
+      </div>
+    </div>
+    <div>
+      <div class="group-title">Mặt trước / sau + Reset</div>
+      <div class="btn-row">
+        <button onclick="turn('F',1)">F →</button>
+        <button onclick="turn('F',-1)">F ←</button>
+        <button onclick="turn('B',1)">B →</button>
+        <button onclick="turn('B',-1)">B ←</button>
+        <button class="reset-btn" onclick="resetCubeState()">↺ Reset 54 ô</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BẢNG HIỂN THỊ THÔNG TIN Ô ĐƯỢC CHỌN -->
+<div class="info-panel">
+  <div>Bấm vào ô bất kỳ</div>
+  <div class="big-display" id="bigNum">–</div>
+  <div class="small-display" id="smallNum">Số nhỏ: –</div>
+  <p class="note">Số nhỏ = (số lớn - 1) % 18 + 1</p>
+</div>
+
+<script>
+// ========== TRẠNG THÁI BAN ĐẦU ==========
+let state = {
+  front:[1,2,3,4,5,6,7,8,9],
+  right:[10,11,12,13,14,15,16,17,18],
+  back:[19,20,21,22,23,24,25,26,27],
+  left:[28,29,30,31,32,33,34,35,36],
+  top:[37,38,39,40,41,42,43,44,45],
+  bottom:[46,47,48,49,50,51,52,53,54]
+};
+
+// ========== HÀM TÍNH SỐ NHỎ ==========
+function smallOf(n){ return ((n-1)%18)+1; }
+
+// ========== HIỂN THỊ 6 MẶT ==========
+function renderAll(){
+  const map = {top:'grid-top', left:'grid-left', front:'grid-front', right:'grid-right', back:'grid-back', bottom:'grid-bottom'};
+  Object.keys(map).forEach(face=>{
+    const el = document.getElementById(map[face]);
+    el.innerHTML = '';
+    state[face].forEach(n=>{
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.innerHTML = `<div class="num-big">${n}</div><div class="num-small">${smallOf(n)}</div>`;
+      cell.onclick = () => selectCell(n);
+      el.appendChild(cell);
+    });
+  });
+}
+
+// ========== XOAY 1 MẶT ==========
+function rotateFace(arr, dir){
+  return dir === 1 
+    ? [arr[6],arr[3],arr[0],arr[7],arr[4],arr[1],arr[8],arr[5],arr[2]]
+    : [arr[2],arr[5],arr[8],arr[1],arr[4],arr[7],arr[0],arr[3],arr[6]];
+}
+
+// ========== HÀM XOAY CHÍNH (ĐÃ KIỂM TRA KỸ) ==========
+function turn(face, dir){
+  const faceMap = {U:'top', D:'bottom', F:'front', B:'back', L:'left', R:'right'};
+  
+  if(faceMap[face]) {
+    state[faceMap[face]] = rotateFace(state[faceMap[face]], dir);
+  }
+  
+  if(face==='U'){
+    const F = state.front.slice(0,3), R = state.right.slice(0,3), B = state.back.slice(0,3), L = state.left.slice(0,3);
+    if(dir===1){
+      state.front.splice(0,3,...L); state.left.splice(0,3,...B);
+      state.back.splice(0,3,...R); state.right.splice(0,3,...F);
+    } else {
+      state.front.splice(0,3,...R); state.right.splice(0,3,...B);
+      state.back.splice(0,3,...L); state.left.splice(0,3,...F);
+    }
+  } else if(face==='D'){
+    const F = state.front.slice(6,9), R = state.right.slice(6,9), B = state.back.slice(6,9), L = state.left.slice(6,9);
+    if(dir===1){
+      state.front.splice(6,3,...R); state.right.splice(6,3,...B);
+      state.back.splice(6,3,...L); state.left.splice(6,3,...F);
+    } else {
+      state.front.splice(6,3,...L); state.left.splice(6,3,...B);
+      state.back.splice(6,3,...R); state.right.splice(6,3,...F);
+    }
+  } else if(face==='E'){
+    const F = state.front.slice(3,6), R = state.right.slice(3,6), B = state.back.slice(3,6), L = state.left.slice(3,6);
+    if(dir===1){
+      state.front.splice(3,3,...R); state.right.splice(3,3,...B);
+      state.back.splice(3,3,...L); state.left.splice(3,3,...F);
+    } else {
+      state.front.splice(3,3,...L); state.left.splice(3,3,...B);
+      state.back.splice(3,3,...R); state.right.splice(3,3,...F);
+    }
+  } else if(face==='L'){
+    const U = [state.top[0],state.top[3],state.top[6]], F = [state.front[0],state.front[3],state.front[6]];
+    const D = [state.bottom[0],state.bottom[3],state.bottom[6]], B = [state.back[8],state.back[5],state.back[2]];
+    if(dir===1){
+      state.top[0]=B[0]; state.top[3]=B[1]; state.top[6]=B[2];
+      state.front[0]=U[0]; state.front[3]=U[1]; state.front[6]=U[2];
+      state.bottom[0]=F[0]; state.bottom[3]=F[1]; state.bottom[6]=F[2];
+      state.back[2]=D[2]; state.back[5]=D[1]; state.back[8]=D[0];
+    } else {
+      state.top[0]=F[0]; state.top[3]=F[1]; state.top[6]=F[2];
+      state.front[0]=D[0]; state.front[3]=D[1]; state.front[6]=D[2];
+      state.bottom[0]=B[2]; state.bottom[3]=B[1]; state.bottom[6]=B[0];
+      state.back[2]=U[0]; state.back[5]=U[1]; state.back[8]=U[2];
+    }
+  } else if(face==='R'){
+    const U = [state.top[2],state.top[5],state.top[8]], F = [state.front[2],state.front[5],state.front[8]];
+    const D = [state.bottom[2],state.bottom[5],state.bottom[8]], B = [state.back[6],state.back[3],state.back[0]];
+    if(dir===1){
+      state.top[2]=F[0]; state.top[5]=F[1]; state.top[8]=F[2];
+      state.front[2]=D[0]; state.front[5]=D[1]; state.front[8]=D[2];
+      state.bottom[2]=B[2]; state.bottom[5]=B[1]; state.bottom[8]=B[0];
+      state.back[0]=U[0]; state.back[3]=U[1]; state.back[6]=U[2];
+    } else {
+      state.top[2]=B[0]; state.top[5]=B[1]; state.top[8]=B[2];
+      state.back[0]=D[2]; state.back[3]=D[1]; state.back[6]=D[0];
+      state.bottom[2]=F[0]; state.bottom[5]=F[1]; state.bottom[8]=F[2];
+      state.front[2]=U[0]; state.front[5]=U[1]; state.front[8]=U[2];
+    }
+  } else if(face==='M'){
+    const U = [state.top[1],state.top[4],state.top[7]], F = [state.front[1],state.front[4],state.front[7]];
+    const D = [state.bottom[1],state.bottom[4],state.bottom[7]], B = [state.back[7],state.back[4],state.back[1]];
+    if(dir===1){
+      state.top[1]=B[0]; state.top[4]=B[1]; state.top[7]=B[2];
+      state.front[1]=U[0]; state.front[4]=U[1]; state.front[7]=U[2];
+      state.bottom[1]=F[0]; state.bottom[4]=F[1]; state.bottom[7]=F[2];
+      state.back[1]=D[2]; state.back[4]=D[1]; state.back[7]=D[0];
+    } else {
+      state.top[1]=F[0]; state.top[4]=F[1]; state.top[7]=F[2];
+      state.front[1]=D[0]; state.front[4]=D[1]; state.front[7]=D[2];
+      state.bottom[1]=B[2]; state.bottom[4]=B[1]; state.bottom[7]=B[0];
+      state.back[1]=U[0]; state.back[4]=U[1]; state.back[7]=U[2];
+    }
+  } else if(face==='F'){
+    const U = [state.top[6],state.top[7],state.top[8]], R = [state.right[0],state.right[3],state.right[6]];
+    const D = [state.bottom[2],state.bottom[1],state.bottom[0]], L = [state.left[8],state.left[5],state.left[2]];
+    if(dir===1){
+      state.top[6]=L[0]; state.top[7]=L[1]; state.top[8]=L[2];
+      state.right[0]=U[0]; state.right[3]=U[1]; state.right[6]=U[2];
+      state.bottom[0]=R[2]; state.bottom[1]=R[1]; state.bottom[2]=R[0];
+      state.left[2]=D[0]; state.left[5]=D[1]; state.left[8]=D[2];
+    } else {
+      state.top[6]=R[0]; state.top[7]=R[1]; state.top[8]=R[2];
+      state.right[0]=D[2]; state.right[3]=D[1]; state.right[6]=D[0];
+      state.bottom[0]=L[2]; state.bottom[1]=L[1]; state.bottom[2]=L[0];
+      state.left[2]=U[0]; state.left[5]=U[1]; state.left[8]=U[2];
+    }
+  } else if(face==='B'){
+    const U = [state.top[0],state.top[1],state.top[2]], R = [state.right[2],state.right[5],state.right[8]];
+    const D = [state.bottom[6],state.bottom[7],state.bottom[8]], L = [state.left[0],state.left[3],state.left[6]];
+    if(dir===1){
+      state.top[0]=R[0]; state.top[1]=R[1]; state.top[2]=R[2];
+      state.right[2]=D[2]; state.right[5]=D[1]; state.right[8]=D[0];
+      state.bottom[6]=L[0]; state.bottom[7]=L[1]; state.bottom[8]=L[2];
+      state.left[0]=U[2]; state.left[3]=U[1]; state.left[6]=U[0];
+    } else {
+      state.top[0]=L[2]; state.top[1]=L[1]; state.top[2]=L[0];
+      state.left[0]=D[0]; state.left[3]=D[1]; state.left[6]=D[2];
+      state.bottom[6]=R[2]; state.bottom[7]=R[1]; state.bottom[8]=R[0];
+      state.right[2]=U[0]; state.right[5]=U[1]; state.right[8]=U[2];
+    }
+  }
+  
+  renderAll();
+}
+
+// ========== RESET VỀ BAN ĐẦU ==========
+function resetCubeState(){
+  state = {
+    front:[1,2,3,4,5,6,7,8,9],
+    right:[10,11,12,13,14,15,16,17,18],
+    back:[19,20,21,22,23,24,25,26,27],
+    left:[28,29,30,31,32,33,34,35,36],
+    top:[37,38,39,40,41,42,43,44,45],
+    bottom:[46,47,48,49,50,51,52,53,54]
+  };
+  renderAll();
+  document.getElementById('bigNum').textContent = '–';
+  document.getElementById('smallNum').textContent = 'Số nhỏ: –';
+}
+
+// ========== CHỌN Ô ĐỂ XEM SỐ ==========
+function selectCell(n){
+  document.getElementById('bigNum').textContent = n;
+  document.getElementById('smallNum').textContent = `Số nhỏ: ${smallOf(n)}`;
+}
+
+// ========== KHỞI TẠO ==========
+renderAll();
+</script>
+</body>
+</html>

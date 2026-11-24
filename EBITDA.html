@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 07 - ROA | CEO AI Enterprise</title>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- SheetJS (xlsx) để xuất Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #0ea5e9;
+            --bg: #eff6ff;
+            --card: #ffffff;
+            --text: #1e3a8a;
+            --text-muted: #93c5fd;
+            --border: #bfdbfe;
+            --shadow: 0 10px 25px -5px rgba(30, 64, 175, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #eff6ff 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 28px 32px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .header-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        /* Form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .form-group label .hint {
+            font-weight: 400;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        .form-group input {
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #f8fafc;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        /* Result Cards */
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--border);
+            transition: transform 0.2s;
+        }
+
+        .result-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .result-card .label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .result-card .value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .result-card.positive .value { color: var(--success); }
+        .result-card.negative .value { color: var(--danger); }
+        .result-card.warning .value { color: var(--warning); }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        .status-healthy {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* AI Analysis */
+        .ai-section {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-left: 5px solid var(--primary);
+        }
+
+        .ai-content {
+            display: grid;
+            gap: 16px;
+        }
+
+        .ai-item {
+            background: white;
+            padding: 16px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .ai-item h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-item p {
+            color: #334155;
+            font-size: 0.95rem;
+        }
+
+        /* Chart */
+        .chart-container {
+            position: relative;
+            height: 320px;
+            margin-top: 10px;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            color: #0c4a6e;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+
+        /* Formula box */
+        .formula-box {
+            background: #f8fafc;
+            border: 1px dashed var(--primary);
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            text-align: center;
+            color: var(--primary-dark);
+        }
+
+        /* Benchmark table */
+        .benchmark-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .benchmark-table th,
+        .benchmark-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .benchmark-table th {
+            background: #eff6ff;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .benchmark-table tr:hover {
+            background: #f8fafc;
+        }
+
+        /* History table */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-table th {
+            background: #eff6ff;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .history-table tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.4rem; }
+            .result-card .value { font-size: 1.3rem; }
+            .btn { width: 100%; justify-content: center; }
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ==================== HEADER ==================== -->
+        <header class="header">
+            <div>
+                <h1>
+                    <span>🏭</span>
+                    Module 07 – ROA (Return on Assets)
+                </h1>
+                <div class="header-subtitle">Tỷ suất sinh lời trên tổng tài sản – Đo lường hiệu quả sử dụng tài sản của doanh nghiệp</div>
+            </div>
+            <div class="badge">CEO AI Enterprise • Module độc lập</div>
+        </header>
+
+        <!-- ==================== GIẢI THÍCH NHANH ==================== -->
+        <div class="card">
+            <div class="card-title">📖 ROA là gì?</div>
+            <p style="margin-bottom: 12px;">
+                <strong>ROA (Return on Assets)</strong> – Tỷ suất sinh lời trên tổng tài sản – cho biết doanh nghiệp kiếm được bao nhiêu lợi nhuận từ mỗi đồng tài sản đang sở hữu.
+            </p>
+            <p style="margin-bottom: 12px;">
+                Đây là chỉ số quan trọng để trả lời câu hỏi: <em>“Doanh nghiệp có đang sử dụng tài sản hiệu quả không?”</em>
+            </p>
+            <div class="formula-box">
+                ROA = (Lợi nhuận ròng ÷ Tổng tài sản) × 100%
+            </div>
+            <div class="alert alert-info">
+                <span>💡</span>
+                <div>
+                    <strong>Gợi ý nhập liệu:</strong> Nên dùng <strong>Tổng tài sản bình quân</strong> = (Tài sản đầu kỳ + Tài sản cuối kỳ) / 2 để chính xác hơn. 
+                    Nếu chỉ có số cuối kỳ cũng chấp nhận được.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== FORM NHẬP LIỆU ==================== -->
+        <div class="card">
+            <div class="card-title">📥 Nhập dữ liệu</div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Lợi nhuận ròng (Net Income)
+                        <span class="hint">– Lợi nhuận sau thuế</span>
+                    </label>
+                    <input type="number" id="netIncome" placeholder="Ví dụ: 1200000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Tổng tài sản (Total Assets)
+                        <span class="hint">– Hoặc Tổng tài sản bình quân</span>
+                    </label>
+                    <input type="number" id="totalAssets" placeholder="Ví dụ: 15000000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Kỳ báo cáo
+                        <span class="hint">– Tháng / Quý / Năm</span>
+                    </label>
+                    <input type="text" id="period" placeholder="Ví dụ: Năm 2025" value="Năm hiện tại">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        ROA kỳ trước (tùy chọn)
+                        <span class="hint">– Để so sánh xu hướng (%)</span>
+                    </label>
+                    <input type="number" id="prevROA" placeholder="Ví dụ: 7.5" step="any">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="calculateROA()">
+                    <span>🧮</span> Tính toán ROA
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <span>🔄</span> Làm mới
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== KẾT QUẢ ==================== -->
+        <div id="resultSection" class="hidden">
+            <!-- Kết quả số -->
+            <div class="card">
+                <div class="card-title">📊 Kết quả tính toán</div>
+                
+                <div id="statusBadge" class="status-badge"></div>
+
+                <div class="result-grid">
+                    <div class="result-card" id="roaCard">
+                        <div class="label">ROA</div>
+                        <div class="value" id="roaValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Lợi nhuận ròng</div>
+                        <div class="value" id="niValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Tổng tài sản</div>
+                        <div class="value" id="assetsValue">—</div>
+                    </div>
+                    <div class="result-card" id="changeCard">
+                        <div class="label">Thay đổi so với kỳ trước</div>
+                        <div class="value" id="changeValue">—</div>
+                    </div>
+                </div>
+
+                <div class="formula-box" id="formulaDetail">
+                    <!-- Công thức chi tiết sẽ được điền bằng JS -->
+                </div>
+
+                <!-- Bảng chuẩn ngành tham khảo -->
+                <h4 style="margin: 20px 0 10px; color: var(--primary);">📌 Tham chiếu mức ROA phổ biến</h4>
+                <table class="benchmark-table">
+                    <thead>
+                        <tr>
+                            <th>Mức ROA</th>
+                            <th>Đánh giá</th>
+                            <th>Ý nghĩa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>&gt; 10%</td>
+                            <td style="color:#059669;font-weight:600;">Rất tốt</td>
+                            <td>Sử dụng tài sản cực kỳ hiệu quả</td>
+                        </tr>
+                        <tr>
+                            <td>5% – 10%</td>
+                            <td style="color:#059669;font-weight:600;">Tốt</td>
+                            <td>Hiệu quả trên mức trung bình</td>
+                        </tr>
+                        <tr>
+                            <td>2% – 5%</td>
+                            <td style="color:#d97706;font-weight:600;">Trung bình</td>
+                            <td>Cần cải thiện hiệu quả sử dụng tài sản</td>
+                        </tr>
+                        <tr>
+                            <td>&lt; 2%</td>
+                            <td style="color:#dc2626;font-weight:600;">Yếu</td>
+                            <td>Tài sản đang sinh lời kém</td>
+                        </tr>
+                        <tr>
+                            <td>&lt; 0%</td>
+                            <td style="color:#dc2626;font-weight:600;">Nguy hiểm</td>
+                            <td>Đang lỗ – Tài sản không tạo ra lợi nhuận</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Biểu đồ -->
+            <div class="card">
+                <div class="card-title">📈 Biểu đồ ROA & So sánh</div>
+                <div class="chart-container">
+                    <canvas id="roaChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Cảnh báo -->
+            <div id="alertBox"></div>
+
+            <!-- AI Phân tích & Khuyến nghị -->
+            <div class="card ai-section">
+                <div class="card-title">🤖 Phân tích AI & Khuyến nghị</div>
+                <div class="ai-content" id="aiContent">
+                    <!-- Nội dung AI sẽ được sinh bằng JS -->
+                </div>
+            </div>
+
+            <!-- Nút hành động -->
+            <div class="card">
+                <div class="card-title">💾 Lưu trữ & Xuất dữ liệu</div>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="saveToLocalStorage()">
+                        <span>💾</span> Lưu vào SQLite (Local)
+                    </button>
+                    <button class="btn btn-info" onclick="exportToExcel()">
+                        <span>📥</span> Xuất Excel
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewHistory()">
+                        <span>📋</span> Xem lịch sử đã lưu
+                    </button>
+                </div>
+
+                <!-- Bảng lịch sử -->
+                <div id="historySection" class="hidden" style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 10px; color: var(--primary);">Lịch sử tính toán đã lưu</h4>
+                    <div style="overflow-x: auto;">
+                        <table class="history-table" id="historyTable">
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Kỳ</th>
+                                    <th>Lợi nhuận ròng</th>
+                                    <th>Tổng tài sản</th>
+                                    <th>ROA</th>
+                                    <th>Thay đổi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            CEO AI Enterprise • Module 07 – ROA • Có thể chạy độc lập • Sẵn sàng kết nối Python + SQLite
+        </div>
+    </div>
+
+    <script>
+        /**
+         * =====================================================
+         * MODULE 07 – ROA (Return on Assets)
+         * CEO AI Enterprise
+         * =====================================================
+         * 
+         * Công thức chính:
+         * ROA = (Lợi nhuận ròng / Tổng tài sản) × 100%
+         * 
+         * Ý nghĩa:
+         * - ROA cao → Doanh nghiệp sử dụng tài sản hiệu quả
+         * - ROA thấp → Tài sản đang bị lãng phí hoặc sinh lời kém
+         * 
+         * Module được thiết kế:
+         * - Chạy độc lập (standalone)
+         * - Dễ ghép vào Dashboard sau này
+         * - Có sẵn chỗ kết nối Python + SQLite thật
+         * - Lưu tạm bằng localStorage (mô phỏng SQLite)
+         * - Xuất Excel bằng SheetJS
+         */
+
+        // Biến toàn cục
+        let currentResult = null;
+        let roaChartInstance = null;
+
+        /**
+         * Định dạng số tiền Việt Nam
+         */
+        function formatCurrency(value) {
+            if (value === null || value === undefined || isNaN(value)) return '—';
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        /**
+         * Định dạng số ngắn gọn
+         */
+        function formatShort(value) {
+            if (Math.abs(value) >= 1e9) {
+                return (value / 1e9).toFixed(2) + ' tỷ';
+            } else if (Math.abs(value) >= 1e6) {
+                return (value / 1e6).toFixed(1) + ' triệu';
+            }
+            return formatCurrency(value);
+        }
+
+        /**
+         * Hàm tính toán chính
+         */
+        function calculateROA() {
+            const netIncome = parseFloat(document.getElementById('netIncome').value);
+            const totalAssets = parseFloat(document.getElementById('totalAssets').value);
+            const prevROA = parseFloat(document.getElementById('prevROA').value);
+            const period = document.getElementById('period').value.trim() || 'Kỳ hiện tại';
+
+            // Kiểm tra dữ liệu
+            if (isNaN(netIncome) || isNaN(totalAssets)) {
+                alert('⚠️ Vui lòng nhập đầy đủ Lợi nhuận ròng và Tổng tài sản!');
+                return;
+            }
+
+            if (totalAssets <= 0) {
+                alert('⚠️ Tổng tài sản phải lớn hơn 0!');
+                return;
+            }
+
+            // Tính ROA
+            const roa = (netIncome / totalAssets) * 100;
+
+            // Tính thay đổi so với kỳ trước
+            let change = null;
+            if (!isNaN(prevROA)) {
+                change = roa - prevROA;
+            }
+
+            // Lưu kết quả
+            currentResult = {
+                period: period,
+                netIncome: netIncome,
+                totalAssets: totalAssets,
+                roa: roa,
+                prevROA: isNaN(prevROA) ? null : prevROA,
+                change: change,
+                timestamp: new Date().toISOString()
+            };
+
+            // Hiển thị
+            displayResults(currentResult);
+            generateAIAnalysis(currentResult);
+            renderChart(currentResult);
+
+            document.getElementById('resultSection').classList.remove('hidden');
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        /**
+         * Hiển thị kết quả số
+         */
+        function displayResults(data) {
+            document.getElementById('roaValue').textContent = data.roa.toFixed(2) + '%';
+            document.getElementById('niValue').textContent = formatCurrency(data.netIncome);
+            document.getElementById('assetsValue').textContent = formatCurrency(data.totalAssets);
+
+            // Thay đổi
+            if (data.change !== null) {
+                const sign = data.change >= 0 ? '+' : '';
+                document.getElementById('changeValue').textContent = sign + data.change.toFixed(2) + '%';
+            } else {
+                document.getElementById('changeValue').textContent = 'N/A';
+            }
+
+            // Màu sắc ROA
+            const roaCard = document.getElementById('roaCard');
+            roaCard.classList.remove('positive', 'negative', 'warning');
+            
+            if (data.roa >= 5) {
+                roaCard.classList.add('positive');
+            } else if (data.roa >= 2) {
+                roaCard.classList.add('warning');
+            } else {
+                roaCard.classList.add('negative');
+            }
+
+            // Status badge
+            const badge = document.getElementById('statusBadge');
+            if (data.roa >= 10) {
+                badge.className = 'status-badge status-healthy';
+                badge.textContent = '🟢 ROA xuất sắc – Sử dụng tài sản rất hiệu quả';
+            } else if (data.roa >= 5) {
+                badge.className = 'status-badge status-healthy';
+                badge.textContent = '🟢 ROA tốt – Hiệu quả trên mức trung bình';
+            } else if (data.roa >= 2) {
+                badge.className = 'status-badge status-warning';
+                badge.textContent = '🟡 ROA trung bình – Cần cải thiện hiệu quả tài sản';
+            } else if (data.roa >= 0) {
+                badge.className = 'status-badge status-danger';
+                badge.textContent = '🔴 ROA thấp – Tài sản đang sinh lời kém';
+            } else {
+                badge.className = 'status-badge status-danger';
+                badge.textContent = '🔴 ROA âm – Doanh nghiệp đang lỗ';
+            }
+
+            // Công thức chi tiết
+            document.getElementById('formulaDetail').innerHTML = `
+                ROA = (${formatCurrency(data.netIncome)} ÷ ${formatCurrency(data.totalAssets)}) × 100% = <strong>${data.roa.toFixed(2)}%</strong>
+            `;
+        }
+
+        /**
+         * Sinh phân tích AI (rule-based)
+         */
+        function generateAIAnalysis(data) {
+            const container = document.getElementById('aiContent');
+            let html = '';
+
+            // 1. Doanh nghiệp đang khỏe hay yếu?
+            let healthText = '';
+            let healthIcon = '';
+            if (data.roa >= 5) {
+                healthIcon = '✅';
+                healthText = `Doanh nghiệp đang <strong>khỏe về hiệu quả sử dụng tài sản</strong>. ROA ${data.roa.toFixed(2)}% cho thấy mỗi đồng tài sản đang tạo ra lợi nhuận tốt. Đây là dấu hiệu của quản trị tài sản hiệu quả.`;
+            } else if (data.roa >= 2) {
+                healthIcon = '⚠️';
+                healthText = `Hiệu quả sử dụng tài sản đang ở mức <strong>trung bình</strong>. ROA ${data.roa.toFixed(2)}% chưa thực sự nổi bật. Doanh nghiệp cần rà soát xem tài sản nào đang bị lãng phí hoặc chưa được khai thác hết công suất.`;
+            } else if (data.roa >= 0) {
+                healthIcon = '🚨';
+                healthText = `Doanh nghiệp đang <strong>yếu về hiệu quả tài sản</strong>. ROA chỉ ${data.roa.toFixed(2)}% nghĩa là tài sản đang sinh lời rất thấp. Cần xem xét nghiêm túc việc thanh lý tài sản không hiệu quả hoặc tối ưu lại cơ cấu tài sản.`;
+            } else {
+                healthIcon = '🚨';
+                healthText = `Doanh nghiệp đang <strong>lỗ</strong> (ROA âm ${data.roa.toFixed(2)}%). Tài sản không những không tạo ra lợi nhuận mà còn đang bị bào mòn bởi khoản lỗ. Đây là tình trạng nguy hiểm cần hành động ngay.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>${healthIcon} 1. Doanh nghiệp đang khỏe hay yếu?</h4>
+                    <p>${healthText}</p>
+                </div>
+            `;
+
+            // 2. Tiền / Tài sản đang chảy đi đâu?
+            let flowText = '';
+            if (data.roa >= 5) {
+                flowText = `Tài sản đang được <strong>chuyển hóa thành lợi nhuận hiệu quả</strong>. Mỗi đồng bỏ vào nhà máy, máy móc, hàng tồn kho, công nợ… đều đang sinh lời tốt. Đây là dấu hiệu tích cực của chu trình kinh doanh.`;
+            } else {
+                flowText = `Tài sản đang <strong>bị mắc kẹt hoặc sinh lời kém</strong>. Có thể do: hàng tồn kho cao, công nợ phải thu lớn, máy móc vận hành dưới công suất, hoặc đầu tư tài sản cố định quá mức so với nhu cầu thực tế. Cần phân tích sâu hơn các thành phần tài sản.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>🏭 2. Tài sản đang được sử dụng như thế nào?</h4>
+                    <p>${flowText}</p>
+                </div>
+            `;
+
+            // 3. Nên đầu tư hay cắt giảm?
+            let actionText = '';
+            if (data.roa >= 8) {
+                actionText = `<strong>Có thể cân nhắc đầu tư mở rộng</strong> một cách chọn lọc. ROA cao chứng tỏ mô hình kinh doanh đang hiệu quả. Ưu tiên các khoản đầu tư có khả năng duy trì hoặc nâng cao ROA hiện tại.`;
+            } else if (data.roa >= 3) {
+                actionText = `<strong>Nên tập trung tối ưu tài sản hiện có</strong> trước khi mở rộng. Xem xét: giảm tồn kho, thu hồi công nợ nhanh hơn, thanh lý tài sản không sinh lời, tăng công suất máy móc hiện có.`;
+            } else {
+                actionText = `<strong>Ưu tiên cắt giảm / thanh lý tài sản kém hiệu quả</strong>. Không nên đầu tư thêm tài sản mới khi ROA đang thấp hoặc âm. Tập trung vào việc làm cho tài sản hiện tại sinh lời tốt hơn trước đã.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>🎯 3. Nên đầu tư hay cắt giảm?</h4>
+                    <p>${actionText}</p>
+                </div>
+            `;
+
+            // 4. Dự báo tương lai
+            let forecastText = '';
+            if (data.change !== null) {
+                if (data.change > 0.5) {
+                    forecastText = `ROA đang <strong>xu hướng tăng</strong> (+${data.change.toFixed(2)}% so với kỳ trước). Nếu duy trì được đà này, hiệu quả sử dụng tài sản sẽ ngày càng tốt, tạo nền tảng vững chắc cho tăng trưởng bền vững.`;
+                } else if (data.change < -0.5) {
+                    forecastText = `ROA đang <strong>xu hướng giảm</strong> (${data.change.toFixed(2)}% so với kỳ trước). Cần cảnh giác. Nếu không có biện pháp cải thiện, hiệu quả tài sản sẽ tiếp tục suy giảm, ảnh hưởng đến khả năng sinh lời dài hạn.`;
+                } else {
+                    forecastText = `ROA đang <strong>ổn định</strong> so với kỳ trước. Doanh nghiệp duy trì được mức hiệu quả hiện tại. Để tạo bước nhảy vọt, cần có các sáng kiến cải tiến rõ ràng về quản lý tài sản.`;
+                }
+            } else {
+                if (data.roa >= 5) {
+                    forecastText = `Với mức ROA hiện tại khá tốt, nếu duy trì kỷ luật quản lý tài sản, doanh nghiệp sẽ tiếp tục tạo ra lợi nhuận ổn định từ cơ sở vật chất sẵn có trong các kỳ tới.`;
+                } else {
+                    forecastText = `Nếu không có hành động cải thiện, ROA thấp có thể kéo dài. Điều này sẽ làm giảm sức hấp dẫn với nhà đầu tư và hạn chế khả năng gọi vốn hoặc mở rộng trong tương lai.`;
+                }
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>🔮 4. Điều gì sẽ xảy ra trong tương lai?</h4>
+                    <p>${forecastText}</p>
+                </div>
+            `;
+
+            // Cảnh báo bổ sung
+            let alerts = '';
+            if (data.roa < 0) {
+                alerts += `
+                    <div class="alert alert-danger">
+                        <span>🚨</span>
+                        <div><strong>Cảnh báo nghiêm trọng:</strong> ROA âm. Doanh nghiệp đang lỗ. Cần rà soát ngay toàn bộ chi phí và hiệu quả sử dụng tài sản.</div>
+                    </div>
+                `;
+            } else if (data.roa < 2) {
+                alerts += `
+                    <div class="alert alert-warning">
+                        <span>⚠️</span>
+                        <div><strong>Cảnh báo:</strong> ROA dưới 2% là mức thấp. Tài sản đang sinh lời kém hiệu quả. Nên phân tích chi tiết cơ cấu tài sản.</div>
+                    </div>
+                `;
+            } else if (data.roa >= 10) {
+                alerts += `
+                    <div class="alert alert-success">
+                        <span>🎉</span>
+                        <div><strong>Tín hiệu xuất sắc:</strong> ROA trên 10% là mức rất ấn tượng, thể hiện khả năng quản trị tài sản vượt trội.</div>
+                    </div>
+                `;
+            }
+
+            if (data.change !== null && data.change < -1) {
+                alerts += `
+                    <div class="alert alert-warning">
+                        <span>📉</span>
+                        <div><strong>Xu hướng giảm:</strong> ROA giảm hơn 1 điểm % so với kỳ trước. Cần tìm nguyên nhân ngay (lợi nhuận giảm hay tài sản tăng quá nhanh?).</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('alertBox').innerHTML = alerts;
+            container.innerHTML = html;
+        }
+
+        /**
+         * Vẽ biểu đồ
+         */
+        function renderChart(data) {
+            const ctx = document.getElementById('roaChart').getContext('2d');
+
+            if (roaChartInstance) {
+                roaChartInstance.destroy();
+            }
+
+            // Dữ liệu biểu đồ
+            const labels = ['ROA hiện tại'];
+            const values = [data.roa];
+            const colors = [data.roa >= 5 ? 'rgba(16, 185, 129, 0.8)' : data.roa >= 2 ? 'rgba(245, 158, 11, 0.8)' : 'rgba(239, 68, 68, 0.8)'];
+
+            if (data.prevROA !== null) {
+                labels.unshift('ROA kỳ trước');
+                values.unshift(data.prevROA);
+                colors.unshift('rgba(148, 163, 184, 0.7)');
+            }
+
+            // Thêm các mức chuẩn để so sánh
+            labels.push('Mức tốt (5%)', 'Mức xuất sắc (10%)');
+            values.push(5, 10);
+            colors.push('rgba(59, 130, 246, 0.4)', 'rgba(16, 185, 129, 0.4)');
+
+            roaChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'ROA (%)',
+                        data: values,
+                        backgroundColor: colors,
+                        borderColor: colors.map(c => c.replace('0.8', '1').replace('0.7', '1').replace('0.4', '0.8')),
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.toFixed(2) + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(30, 64, 175, 0.08)'
+                            }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * Lưu vào localStorage (mô phỏng SQLite)
+         */
+        function saveToLocalStorage() {
+            if (!currentResult) {
+                alert('⚠️ Chưa có dữ liệu để lưu. Hãy tính toán trước!');
+                return;
+            }
+
+            let history = JSON.parse(localStorage.getItem('ceo_ai_roa_history') || '[]');
+
+            history.unshift({
+                id: Date.now(),
+                ...currentResult
+            });
+
+            if (history.length > 50) history = history.slice(0, 50);
+
+            localStorage.setItem('ceo_ai_roa_history', JSON.stringify(history));
+
+            alert('✅ Đã lưu thành công vào bộ nhớ cục bộ (mô phỏng SQLite)!\n\nSau này khi kết nối Python backend, dữ liệu sẽ được ghi vào database SQLite thật.');
+        }
+
+        /**
+         * Xem lịch sử đã lưu
+         */
+        function viewHistory() {
+            const history = JSON.parse(localStorage.getItem('ceo_ai_roa_history') || '[]');
+            const section = document.getElementById('historySection');
+            const tbody = document.getElementById('historyBody');
+
+            if (history.length === 0) {
+                alert('📭 Chưa có dữ liệu nào được lưu.');
+                return;
+            }
+
+            tbody.innerHTML = history.map(item => `
+                <tr>
+                    <td>${new Date(item.timestamp).toLocaleString('vi-VN')}</td>
+                    <td>${item.period}</td>
+                    <td>${formatCurrency(item.netIncome)}</td>
+                    <td>${formatCurrency(item.totalAssets)}</td>
+                    <td style="color: ${item.roa >= 5 ? '#059669' : item.roa >= 2 ? '#d97706' : '#dc2626'}; font-weight: 600;">
+                        ${item.roa.toFixed(2)}%
+                    </td>
+                    <td>${item.change !== null ? (item.change >= 0 ? '+' : '') + item.change.toFixed(2) + '%' : 'N/A'}</td>
+                </tr>
+            `).join('');
+
+            section.classList.remove('hidden');
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /**
+         * Xuất Excel
+         */
+        function exportToExcel() {
+            if (!currentResult) {
+                alert('⚠️ Chưa có dữ liệu để xuất. Hãy tính toán trước!');
+                return;
+            }
+
+            const wb = XLSX.utils.book_new();
+
+            const data = [
+                ['MODULE 07 – ROA (Return on Assets)', ''],
+                ['CEO AI Enterprise', ''],
+                ['', ''],
+                ['Kỳ báo cáo', currentResult.period],
+                ['Thời gian xuất', new Date().toLocaleString('vi-VN')],
+                ['', ''],
+                ['Chỉ tiêu', 'Giá trị'],
+                ['Lợi nhuận ròng (Net Income)', currentResult.netIncome],
+                ['Tổng tài sản (Total Assets)', currentResult.totalAssets],
+                ['ROA (%)', currentResult.roa.toFixed(2)],
+                ['ROA kỳ trước (%)', currentResult.prevROA !== null ? currentResult.prevROA.toFixed(2) : 'Không nhập'],
+                ['Thay đổi (điểm %)', currentResult.change !== null ? currentResult.change.toFixed(2) : 'N/A'],
+                ['', ''],
+                ['Công thức', 'ROA = (Lợi nhuận ròng / Tổng tài sản) × 100%'],
+                ['', ''],
+                ['Ghi chú', 'File được xuất từ Module 07 – CEO AI Enterprise']
+            ];
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            ws['!cols'] = [{ wch: 35 }, { wch: 25 }];
+            XLSX.utils.book_append_sheet(wb, ws, 'ROA');
+
+            // Sheet lịch sử
+            const history = JSON.parse(localStorage.getItem('ceo_ai_roa_history') || '[]');
+            if (history.length > 0) {
+                const histData = [
+                    ['Thời gian', 'Kỳ', 'Lợi nhuận ròng', 'Tổng tài sản', 'ROA (%)', 'Thay đổi']
+                ];
+                history.forEach(item => {
+                    histData.push([
+                        new Date(item.timestamp).toLocaleString('vi-VN'),
+                        item.period,
+                        item.netIncome,
+                        item.totalAssets,
+                        item.roa.toFixed(2),
+                        item.change !== null ? item.change.toFixed(2) : 'N/A'
+                    ]);
+                });
+                const ws2 = XLSX.utils.aoa_to_sheet(histData);
+                ws2['!cols'] = [{ wch: 22 }, { wch: 15 }, { wch: 18 }, { wch: 18 }, { wch: 12 }, { wch: 12 }];
+                XLSX.utils.book_append_sheet(wb, ws2, 'Lịch sử');
+            }
+
+            const fileName = `ROA_${currentResult.period.replace(/[\/\s]/g, '_')}_${new Date().toISOString().slice(0,10)}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+        }
+
+        /**
+         * Làm mới form
+         */
+        function resetForm() {
+            document.getElementById('netIncome').value = '';
+            document.getElementById('totalAssets').value = '';
+            document.getElementById('prevROA').value = '';
+            document.getElementById('period').value = 'Năm hiện tại';
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('historySection').classList.add('hidden');
+            currentResult = null;
+
+            if (roaChartInstance) {
+                roaChartInstance.destroy();
+                roaChartInstance = null;
+            }
+        }
+
+        /**
+         * =====================================================
+         * CHỖ DÀNH CHO TƯƠNG LAI – KẾT NỐI PYTHON + SQLITE
+         * =====================================================
+         * 
+         * Khi sẵn sàng kết nối backend:
+         * 
+         * async function saveToSQLite() {
+         *     const response = await fetch('/api/roa/save', {
+         *         method: 'POST',
+         *         headers: { 'Content-Type': 'application/json' },
+         *         body: JSON.stringify(currentResult)
+         *     });
+         *     ...
+         * }
+         * 
+         * Python sẽ ghi vào bảng:
+         * CREATE TABLE roa (
+         *     id INTEGER PRIMARY KEY,
+         *     period TEXT,
+         *     net_income REAL,
+         *     total_assets REAL,
+         *     roa REAL,
+         *     prev_roa REAL,
+         *     created_at TEXT
+         * );
+         */
+    </script>
+</body>
+</html>

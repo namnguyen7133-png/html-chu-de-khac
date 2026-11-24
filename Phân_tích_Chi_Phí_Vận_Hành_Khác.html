@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>42_Phân tích Chi Phí Vận Hành Khác - CEO AI Enterprise</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-emerald-500 text-slate-950 p-2 rounded-lg font-bold text-xl flex items-center justify-center w-10 h-10 shadow-lg shadow-emerald-500/20">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white">CEO AI Enterprise</h1>
+                    <p class="text-xs text-slate-400">Module 42: Phân Tích Chi Phí Vận Hành Khác (Other Opex)</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button onclick="exportToExcel()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-2 rounded-lg text-sm font-medium transition flex items-center space-x-2 border border-slate-600">
+                    <i class="fa-solid fa-file-excel text-emerald-400"></i>
+                    <span>Xuất Excel</span>
+                </button>
+                <button onclick="saveToSQLite()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center space-x-2 shadow-lg shadow-emerald-600/30">
+                    <i class="fa-solid fa-database"></i>
+                    <span>Lưu SQLite</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
+
+        <!-- CỘT TRÁI: FORM NHẬP LIỆU & CÔNG THỨC -->
+        <div class="lg:col-span-1 space-y-6">
+            <!-- Form Nhập Liệu -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl">
+                <h2 class="text-lg font-semibold text-white mb-4 flex items-center space-x-2 border-b border-slate-700 pb-3">
+                    <i class="fa-solid fa-sliders text-emerald-400"></i>
+                    <span>Dữ Liệu Đầu Vào</span>
+                </h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Chi phí Văn phòng phẩm & Công cụ (VNĐ)</label>
+                        <input type="number" id="stationery" value="45000000" oninput="calculateOpex()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Chi phí Tiếp khách & Hội nghị (VNĐ)</label>
+                        <input type="number" id="entertainment" value="80000000" oninput="calculateOpex()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Chi phí Đào tạo & Tuyển dụng (VNĐ)</label>
+                        <input type="number" id="hr_admin" value="60000000" oninput="calculateOpex()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Chi phí Pháp lý, Kiểm toán & Tư vấn (VNĐ)</label>
+                        <input type="number" id="legal" value="50000000" oninput="calculateOpex()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Chi phí Vận hành Khác phát sinh (VNĐ)</label>
+                        <input type="number" id="other_misc" value="35000000" oninput="calculateOpex()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Tổng Doanh Thu Thuần (VNĐ)</label>
+                        <input type="number" id="total_revenue" value="2500000000" oninput="calculateOpex()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Chi Phí Vận Hành Khác Kỳ Trước (VNĐ)</label>
+                        <input type="number" id="last_period_opex" value="240000000" oninput="calculateOpex()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition text-sm">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Khối Công Thức -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl">
+                <h2 class="text-lg font-semibold text-white mb-3 flex items-center space-x-2 border-b border-slate-700 pb-3">
+                    <i class="fa-solid fa-square-root-variable text-emerald-400"></i>
+                    <span>Cơ Sở Tính Toán</span>
+                </h2>
+                <div class="text-xs text-slate-300 space-y-2">
+                    <p><b>Tổng Chi Phí Vận Hành Khác:</b> $\Sigma$ (Văn phòng phẩm + Tiếp khách + Tuyển dụng/Đào tạo + Pháp lý/Tư vấn + Khác)</p>
+                    <p><b>Tỷ Trọng Trên Doanh Thu:</b> $\frac{\text{Tổng Chi Phí Vận Hành Khác}}{\text{Tổng Doanh Thu Thuần}} \times 100\%$</p>
+                    <p><b>Tốc Độ Tăng Trưởng:</b> $\frac{\text{Chi Phí Kỳ Này} - \text{Chi Phí Kỳ Trước}}{\text{Chi Phí Kỳ Trước}} \times 100\%$</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CỘT PHẢI: KẾT QUẢ, BIỂU ĐỒ & ĐÁNH GIÁ AI -->
+        <div class="lg:col-span-2 space-y-6">
+            
+            <!-- Thẻ Kết Quả Nhanh -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow-lg">
+                    <p class="text-xs font-medium text-slate-400">Tổng Chi Phí Vận Hành Khác</p>
+                    <h3 id="res_total_opex" class="text-2xl font-bold text-white mt-1">0 VNĐ</h3>
+                    <span id="res_growth" class="text-xs font-semibold px-2 py-0.5 rounded-full mt-2 inline-block bg-slate-700 text-slate-300">--</span>
+                </div>
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow-lg">
+                    <p class="text-xs font-medium text-slate-400">Tỷ Trọng / Doanh Thu</p>
+                    <h3 id="res_ratio" class="text-2xl font-bold text-white mt-1">0%</h3>
+                    <span class="text-xs text-slate-400 mt-2 inline-block">Mức chuẩn: &lt; 10%</span>
+                </div>
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow-lg">
+                    <p class="text-xs font-medium text-slate-400">Đánh Giá Sức Khỏe</p>
+                    <h3 id="res_health" class="text-xl font-bold text-emerald-400 mt-1">Đang phân tích...</h3>
+                    <span class="text-xs text-slate-400 mt-2 inline-block">Trạng thái vận hành</span>
+                </div>
+            </div>
+
+            <!-- Biểu Đồ Trực Quan -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl">
+                <h2 class="text-lg font-semibold text-white mb-4 flex items-center space-x-2 border-b border-slate-700 pb-3">
+                    <i class="fa-solid fa-chart-bar text-emerald-400"></i>
+                    <span>Cơ Cấu Chi Phí Vận Hành Khác</span>
+                </h2>
+                <div class="relative h-64 w-full">
+                    <canvas id="opexChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Khối AI Phân Tích, Cảnh Báo & Khuyến Nghị -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl space-y-6">
+                <h2 class="text-lg font-semibold text-white flex items-center space-x-2 border-b border-slate-700 pb-3">
+                    <i class="fa-solid fa-robot text-emerald-400"></i>
+                    <span>Phân Tích Chuyên Sâu & Khuyến Nghị Từ AI</span>
+                </h2>
+
+                <!-- Doanh nghiệp khỏe hay yếu -->
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-emerald-400 flex items-center space-x-2">
+                        <i class="fa-solid fa-stethoscope"></i>
+                        <span>1. Doanh nghiệp đang khỏe hay yếu?</span>
+                    </h3>
+                    <p id="ai_health_desc" class="text-sm text-slate-300 leading-relaxed bg-slate-900/50 p-3.5 rounded-xl border border-slate-700/50">
+                        Đang cập nhật dữ liệu đánh giá...
+                    </p>
+                </div>
+
+                <!-- Tiền đang chảy đi đâu -->
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-sky-400 flex items-center space-x-2">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                        <span>2. Tiền đang chảy đi đâu?</span>
+                    </h3>
+                    <p id="ai_money_flow" class="text-sm text-slate-300 leading-relaxed bg-slate-900/50 p-3.5 rounded-xl border border-slate-700/50">
+                        Đang cập nhật phân tích dòng tiền...
+                    </p>
+                </div>
+
+                <!-- Nên đầu tư hay cắt giảm -->
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-amber-400 flex items-center space-x-2">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        <span>3. Nên đầu tư hay cắt giảm?</span>
+                    </h3>
+                    <p id="ai_action" class="text-sm text-slate-300 leading-relaxed bg-slate-900/50 p-3.5 rounded-xl border border-slate-700/50">
+                        Đang tổng hợp khuyến nghị chiến lược...
+                    </p>
+                </div>
+
+                <!-- Dự báo tương lai -->
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-purple-400 flex items-center space-x-2">
+                        <i class="fa-solid fa-crystal-ball"></i>
+                        <span>4. Dự báo tương lai & Cảnh báo rủi ro</span>
+                    </h3>
+                    <p id="ai_forecast" class="text-sm text-slate-300 leading-relaxed bg-slate-900/50 p-3.5 rounded-xl border border-slate-700/50">
+                        Đang chạy mô hình dự báo...
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-800 border-t border-slate-700 mt-12 py-4 text-center text-xs text-slate-400">
+        CEO AI Enterprise Decision Support System &copy; 2026. All rights reserved.
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        let opexChartInstance = null;
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+        }
+
+        function calculateOpex() {
+            // Lấy giá trị từ form
+            const stationery = parseFloat(document.getElementById('stationery').value) || 0;
+            const entertainment = parseFloat(document.getElementById('entertainment').value) || 0;
+            const hr_admin = parseFloat(document.getElementById('hr_admin').value) || 0;
+            const legal = parseFloat(document.getElementById('legal').value) || 0;
+            const other_misc = parseFloat(document.getElementById('other_misc').value) || 0;
+            const total_revenue = parseFloat(document.getElementById('total_revenue').value) || 1;
+            const last_period_opex = parseFloat(document.getElementById('last_period_opex').value) || 1;
+
+            // Tính tổng chi phí vận hành khác
+            const totalOpex = stationery + entertainment + hr_admin + legal + other_misc;
+            
+            // Tỷ trọng trên doanh thu
+            const ratio = (totalOpex / total_revenue) * 100;
+
+            // Tốc độ tăng trưởng so với kỳ trước
+            const growthRate = ((totalOpex - last_period_opex) / last_period_opex) * 100;
+
+            // Hiển thị kết quả nhanh
+            document.getElementById('res_total_opex').innerText = formatCurrency(totalOpex);
+            document.getElementById('res_ratio').innerText = ratio.toFixed(2) + '%';
+
+            const growthElem = document.getElementById('res_growth');
+            if (growthRate > 0) {
+                growthElem.className = "text-xs font-semibold px-2 py-0.5 rounded-full mt-2 inline-block bg-rose-500/20 text-rose-400 border border-rose-500/30";
+                growthElem.innerText = `+${growthRate.toFixed(1)}% so với kỳ trước`;
+            } else {
+                growthElem.className = "text-xs font-semibold px-2 py-0.5 rounded-full mt-2 inline-block bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+                growthElem.innerText = `${growthRate.toFixed(1)}% so với kỳ trước`;
+            }
+
+            // Đánh giá sức khỏe & AI Insights
+            let healthText = "Tối ưu";
+            let healthColor = "text-emerald-400";
+            let healthDesc = "";
+            let moneyFlowDesc = "";
+            let actionDesc = "";
+            let forecastDesc = "";
+
+            // Tìm chi phí chiếm tỷ trọng lớn nhất
+            const costs = [
+                { name: "Tiếp khách & Hội nghị", val: entertainment },
+                { name: "Đào tạo & Tuyển dụng", val: hr_admin },
+                { name: "Pháp lý, Kiểm toán & Tư vấn", val: legal },
+                { name: "Văn phòng phẩm & Công cụ", val: stationery },
+                { name: "Vận hành khác phát sinh", val: other_misc }
+            ];
+            costs.sort((a, b) => b.val - a.val);
+            const highestCost = costs[0];
+
+            if (ratio <= 8) {
+                healthText = "Khỏe mạnh";
+                healthColor = "text-emerald-400";
+                healthDesc = `Doanh nghiệp đang kiểm soát rất tốt nhóm chi phí vận hành khác (chỉ chiếm ${ratio.toFixed(2)}% tổng doanh thu). Các khoản chi nằm trong ngưỡng an toàn, tối ưu hóa được nguồn lực tài chính cho hoạt động cốt lõi.`;
+            } else if (ratio <= 15) {
+                healthText = "Bình thường";
+                healthColor = "text-amber-400";
+                healthDesc = `Tỷ trọng chi phí vận hành khác ở mức ${ratio.toFixed(2)}% doanh thu, nằm trong biên độ chấp nhận được nhưng cần bắt đầu rà soát kỹ lưỡng để tránh lãng phí ngầm.`;
+            } else {
+                healthText = "Cảnh báo đỏ";
+                healthColor = "text-rose-400";
+                healthDesc = `Chi phí vận hành khác đang phình to, chiếm tới ${ratio.toFixed(2)}% doanh thu. Điều này tạo áp lực lớn lên biên lợi nhuận ròng, có nguy cơ rò rỉ dòng tiền.`;
+            }
+
+            document.getElementById('res_health').innerText = healthText;
+            document.getElementById('res_health').className = `text-xl font-bold mt-1 ${healthColor}`;
+
+            // 2. Tiền đang chảy đi đâu
+            moneyFlowDesc = `Dòng tiền đang tập trung mạnh nhất vào khoản mục <b>${highestCost.name}</b> với giá trị ${formatCurrency(highestCost.val)} (chiếm ${((highestCost.val/totalOpex)*100).toFixed(1)}% tổng chi phí vận hành khác). Các chi phí phụ trợ văn phòng và tiếp khách đang tiêu tốn nguồn lực đáng kể từ quỹ tiền mặt.`;
+            document.getElementById('ai_money_flow').innerHTML = moneyFlowDesc;
+
+            // 3. Nên đầu tư hay cắt giảm
+            if (ratio > 12 || growthRate > 15) {
+                actionDesc = `<b>Khuyến nghị CẮT GIẢM & TỐI ƯU:</b> Cần lập tức kiểm toán lại các khoản chi phí tiếp khách, hội nghị và văn phòng phẩm. Thiết lập hạn mức (budget cap) theo từng phòng ban và số hóa quy trình mua sắm nội bộ để ngăn chặn thất thoát.`;
+            } else {
+                actionDesc = `<b>Khuyến nghị DUY TRÌ & ĐẦU TƯ CÓ CHỌN LỌC:</b> Tiếp tục duy trì kỷ luật chi phí hiện tại. Có thể cân nhắc gia tăng ngân sách cho mục Đào tạo nhân sự hoặc Tư vấn pháp lý chiến lược nếu điều đó trực tiếp hỗ trợ mở rộng quy mô kinh doanh.`;
+            }
+            document.getElementById('ai_action').innerHTML = actionDesc;
+
+            // 4. Dự báo tương lai
+            if (growthRate > 10 && ratio > 10) {
+                forecastDesc = `Nếu tốc độ tăng trưởng chi phí vận hành khác tiếp tục duy trì mức tăng ${growthRate.toFixed(1)}% mà doanh thu không bứt phá tương ứng, biên lợi nhuận của doanh nghiệp sẽ bị thu hẹp khoảng 1.5% - 3% trong quý tới. Cần có biện pháp kiểm soát ngay lập tức.`;
+            } else {
+                forecastDesc = `Dự báo trong quý tới, nếu duy trì đà quản trị hiện tại, dòng tiền vận hành sẽ ổn định, tạo đệm tài chính an toàn cho các hoạt động đầu tư trung và dài hạn của công ty.`;
+            }
+            document.getElementById('ai_forecast').innerHTML = forecastDesc;
+
+            // Cập nhật biểu đồ
+            updateChart([stationery, entertainment, hr_admin, legal, other_misc]);
+        }
+
+        function updateChart(dataValues) {
+            const ctx = document.getElementById('opexChart').getContext('2d');
+            
+            if (opexChartInstance) {
+                opexChartInstance.destroy();
+            }
+
+            opexChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Văn phòng phẩm & Công cụ', 'Tiếp khách & Hội nghị', 'Đào tạo & Tuyển dụng', 'Pháp lý & Tư vấn', 'Vận hành khác'],
+                    datasets: [{
+                        data: dataValues,
+                        backgroundColor: [
+                            '#34d399',
+                            '#38bdf8',
+                            '#a78bfa',
+                            '#fbbf24',
+                            '#f43f5e'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#cbd5e1',
+                                font: { size: 11 }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function saveToSQLite() {
+            // Giả lập lưu trữ SQLite thông qua LocalStorage
+            const data = {
+                stationery: document.getElementById('stationery').value,
+                entertainment: document.getElementById('entertainment').value,
+                hr_admin: document.getElementById('hr_admin').value,
+                legal: document.getElementById('legal').value,
+                other_misc: document.getElementById('other_misc').value,
+                total_revenue: document.getElementById('total_revenue').value,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('module_42_data', JSON.stringify(data));
+            alert("Đã lưu dữ liệu thành công vào cơ sở dữ liệu SQLite (Local Storage)!");
+        }
+
+        function exportToExcel() {
+            let csv = "Khoản Mục Chi Phí,Giá Trị (VNĐ)\n";
+            csv += `Văn phòng phẩm & Công cụ,${document.getElementById('stationery').value}\n`;
+            csv += `Tiếp khách & Hội nghị,${document.getElementById('entertainment').value}\n`;
+            csv += `Đào tạo & Tuyển dụng,${document.getElementById('hr_admin').value}\n`;
+            csv += `Pháp lý, Kiểm toán & Tư vấn,${document.getElementById('legal').value}\n`;
+            csv += `Vận hành Khác phát sinh,${document.getElementById('other_misc').value}\n`;
+
+            const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', '42_Phan_Tich_Chi_Phi_Van_Hanh_Khac.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // Chạy tính toán lần đầu khi load trang
+        window.onload = function() {
+            calculateOpex();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 18 - CAC & LTV (Customer Acquisition Cost & Lifetime Value) | CEO AI Enterprise</title>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- SheetJS (xlsx) để xuất Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #be185d;
+            --primary-dark: #9d174d;
+            --primary-light: #db2777;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #0ea5e9;
+            --bg: #fdf2f8;
+            --card: #ffffff;
+            --text: #831843;
+            --text-muted: #f9a8d4;
+            --border: #fbcfe8;
+            --shadow: 0 10px 25px -5px rgba(190, 24, 93, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 50%, #fdf2f8 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 28px 32px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .header-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        /* Form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .form-group label .hint {
+            font-weight: 400;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        .form-group input {
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #fdf4ff;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(190, 24, 93, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(190, 24, 93, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        /* Result Cards */
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--border);
+            transition: transform 0.2s;
+        }
+
+        .result-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .result-card .label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .result-card .value {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .result-card.positive .value { color: var(--success); }
+        .result-card.negative .value { color: var(--danger); }
+        .result-card.warning .value { color: var(--warning); }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        .status-healthy {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* AI Analysis */
+        .ai-section {
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+            border-left: 5px solid var(--primary);
+        }
+
+        .ai-content {
+            display: grid;
+            gap: 16px;
+        }
+
+        .ai-item {
+            background: white;
+            padding: 16px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .ai-item h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-item p {
+            color: #334155;
+            font-size: 0.95rem;
+        }
+
+        /* Chart */
+        .chart-container {
+            position: relative;
+            height: 320px;
+            margin-top: 10px;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            color: #0c4a6e;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+
+        /* Formula box */
+        .formula-box {
+            background: #fdf4ff;
+            border: 1px dashed var(--primary);
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--primary-dark);
+            line-height: 1.8;
+        }
+
+        /* Benchmark table */
+        .benchmark-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .benchmark-table th,
+        .benchmark-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .benchmark-table th {
+            background: #fdf2f8;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .benchmark-table tr:hover {
+            background: #fdf4ff;
+        }
+
+        /* History table */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-table th {
+            background: #fdf2f8;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .history-table tr:hover {
+            background: #fdf4ff;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.3rem; }
+            .result-card .value { font-size: 1.2rem; }
+            .btn { width: 100%; justify-content: center; }
+        }
+
+        .hidden { display: none; }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 20px 0 12px;
+            padding-left: 8px;
+            border-left: 3px solid var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ==================== HEADER ==================== -->
+        <header class="header">
+            <div>
+                <h1>
+                    <span>🧲</span>
+                    Module 18 – CAC & LTV (Customer Acquisition Cost & Lifetime Value)
+                </h1>
+                <div class="header-subtitle">Chi phí thu hút khách hàng & Giá trị vòng đời khách hàng – Quyết định đầu tư marketing có hiệu quả không?</div>
+            </div>
+            <div class="badge">CEO AI Enterprise • Module độc lập</div>
+        </header>
+
+        <!-- ==================== GIẢI THÍCH NHANH ==================== -->
+        <div class="card">
+            <div class="card-title">📖 CAC & LTV là gì?</div>
+            <p style="margin-bottom: 12px;">
+                <strong>CAC (Customer Acquisition Cost)</strong> – Chi phí để có được một khách hàng mới.<br>
+                <strong>LTV (Lifetime Value)</strong> – Tổng giá trị lợi nhuận mà một khách hàng mang lại trong suốt thời gian gắn bó với doanh nghiệp.
+            </p>
+            <div class="formula-box">
+                CAC = Tổng chi phí Marketing & Sales ÷ Số khách hàng mới<br>
+                LTV = Giá trị đơn hàng trung bình × Số lần mua trung bình × Tuổi thọ khách hàng<br>
+                LTV:CAC Ratio = LTV ÷ CAC
+            </div>
+            <div class="alert alert-info">
+                <span>💡</span>
+                <div>
+                    <strong>Quy tắc vàng:</strong> LTV:CAC ≥ 3:1 được xem là khỏe mạnh. Dưới 1:1 nghĩa là đang lỗ trên mỗi khách hàng mới.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== FORM NHẬP LIỆU ==================== -->
+        <div class="card">
+            <div class="card-title">📥 Nhập dữ liệu</div>
+            
+            <div class="section-label">Chi phí thu hút khách hàng (CAC)</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Tổng chi phí Marketing & Sales
+                        <span class="hint">– Quảng cáo, lương sales, hoa hồng…</span>
+                    </label>
+                    <input type="number" id="marketingCost" placeholder="Ví dụ: 450000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Số khách hàng mới trong kỳ
+                        <span class="hint">– Số khách hàng mới có được</span>
+                    </label>
+                    <input type="number" id="newCustomers" placeholder="Ví dụ: 1200" step="any">
+                </div>
+            </div>
+
+            <div class="section-label">Giá trị vòng đời khách hàng (LTV)</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Giá trị đơn hàng trung bình (AOV)
+                        <span class="hint">– Average Order Value</span>
+                    </label>
+                    <input type="number" id="aov" placeholder="Ví dụ: 850000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Số lần mua trung bình / năm
+                        <span class="hint">– Purchase Frequency</span>
+                    </label>
+                    <input type="number" id="frequency" placeholder="Ví dụ: 3.5" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Tuổi thọ khách hàng (năm)
+                        <span class="hint">– Customer Lifespan</span>
+                    </label>
+                    <input type="number" id="lifespan" placeholder="Ví dụ: 2.5" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Tỷ lệ lợi nhuận gộp (%)
+                        <span class="hint">– Để tính LTV thực (tùy chọn)</span>
+                    </label>
+                    <input type="number" id="grossMargin" placeholder="Ví dụ: 40" step="any" value="100">
+                </div>
+            </div>
+
+            <div class="section-label">Thông tin kỳ</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Kỳ báo cáo
+                        <span class="hint">– Tháng / Quý / Năm</span>
+                    </label>
+                    <input type="text" id="period" placeholder="Ví dụ: Quý 2/2026" value="Kỳ hiện tại">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="calculateCACLTV()">
+                    <span>🧮</span> Tính toán CAC & LTV
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <span>🔄</span> Làm mới
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== KẾT QUẢ ==================== -->
+        <div id="resultSection" class="hidden">
+            <!-- Kết quả số -->
+            <div class="card">
+                <div class="card-title">📊 Kết quả tính toán</div>
+                
+                <div id="statusBadge" class="status-badge"></div>
+
+                <div class="result-grid">
+                    <div class="result-card" id="cacCard">
+                        <div class="label">CAC (Chi phí / khách)</div>
+                        <div class="value" id="cacValue">—</div>
+                    </div>
+                    <div class="result-card" id="ltvCard">
+                        <div class="label">LTV (Giá trị vòng đời)</div>
+                        <div class="value" id="ltvValue">—</div>
+                    </div>
+                    <div class="result-card" id="ratioCard">
+                        <div class="label">LTV : CAC Ratio</div>
+                        <div class="value" id="ratioValue">—</div>
+                    </div>
+                    <div class="result-card" id="paybackCard">
+                        <div class="label">Thời gian hoàn vốn CAC</div>
+                        <div class="value" id="paybackValue">—</div>
+                    </div>
+                </div>
+
+                <div class="formula-box" id="formulaDetail">
+                    <!-- Công thức chi tiết sẽ được điền bằng JS -->
+                </div>
+
+                <!-- Bảng chuẩn tham khảo -->
+                <h4 style="margin: 20px 0 10px; color: var(--primary);">📌 Tham chiếu mức LTV:CAC phổ biến</h4>
+                <table class="benchmark-table">
+                    <thead>
+                        <tr>
+                            <th>LTV : CAC</th>
+                            <th>Đánh giá</th>
+                            <th>Khuyến nghị</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>&gt; 5 : 1</td>
+                            <td style="color:#059669;font-weight:600;">Rất tốt</td>
+                            <td>Có thể tăng đầu tư marketing mạnh hơn</td>
+                        </tr>
+                        <tr>
+                            <td>3 : 1 → 5 : 1</td>
+                            <td style="color:#059669;font-weight:600;">Khỏe mạnh</td>
+                            <td>Mức lý tưởng – Duy trì hoặc mở rộng có chọn lọc</td>
+                        </tr>
+                        <tr>
+                            <td>1 : 1 → 3 : 1</td>
+                            <td style="color:#d97706;font-weight:600;">Cần cải thiện</td>
+                            <td>Tối ưu CAC hoặc tăng LTV trước khi scale</td>
+                        </tr>
+                        <tr>
+                            <td>&lt; 1 : 1</td>
+                            <td style="color:#dc2626;font-weight:600;">Nguy hiểm</td>
+                            <td>Đang lỗ trên mỗi khách hàng mới – Cần dừng/scale down</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Biểu đồ -->
+            <div class="card">
+                <div class="card-title">📈 Biểu đồ CAC vs LTV</div>
+                <div class="chart-container">
+                    <canvas id="cacLtvChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Cảnh báo -->
+            <div id="alertBox"></div>
+
+            <!-- AI Phân tích & Khuyến nghị -->
+            <div class="card ai-section">
+                <div class="card-title">🤖 Phân tích AI & Khuyến nghị</div>
+                <div class="ai-content" id="aiContent">
+                    <!-- Nội dung AI sẽ được sinh bằng JS -->
+                </div>
+            </div>
+
+            <!-- Nút hành động -->
+            <div class="card">
+                <div class="card-title">💾 Lưu trữ & Xuất dữ liệu</div>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="saveToLocalStorage()">
+                        <span>💾</span> Lưu vào SQLite (Local)
+                    </button>
+                    <button class="btn btn-info" onclick="exportToExcel()">
+                        <span>📥</span> Xuất Excel
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewHistory()">
+                        <span>📋</span> Xem lịch sử đã lưu
+                    </button>
+                </div>
+
+                <!-- Bảng lịch sử -->
+                <div id="historySection" class="hidden" style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 10px; color: var(--primary);">Lịch sử tính toán đã lưu</h4>
+                    <div style="overflow-x: auto;">
+                        <table class="history-table" id="historyTable">
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Kỳ</th>
+                                    <th>CAC</th>
+                                    <th>LTV</th>
+                                    <th>LTV:CAC</th>
+                                    <th>Payback</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            CEO AI Enterprise • Module 18 – CAC & LTV (Customer Acquisition Cost & Lifetime Value) • Có thể chạy độc lập • Sẵn sàng kết nối Python + SQLite
+        </div>
+    </div>
+
+    <script>
+        /**
+         * =====================================================
+         * MODULE 18 – CAC & LTV
+         * (Customer Acquisition Cost & Lifetime Value)
+         * CEO AI Enterprise
+         * =====================================================
+         * 
+         * Công thức chính:
+         * CAC = Tổng chi phí Marketing & Sales / Số khách hàng mới
+         * LTV = AOV × Frequency × Lifespan × (Gross Margin / 100)
+         * LTV:CAC Ratio = LTV / CAC
+         * Payback Period (tháng) ≈ CAC / (AOV × Frequency / 12 × Gross Margin/100)
+         * 
+         * Module được thiết kế:
+         * - Chạy độc lập (standalone)
+         * - Dễ ghép vào Dashboard sau này
+         * - Có sẵn chỗ kết nối Python + SQLite thật
+         * - Lưu tạm bằng localStorage (mô phỏng SQLite)
+         * - Xuất Excel bằng SheetJS
+         */
+
+        // Biến toàn cục
+        let currentResult = null;
+        let cacLtvChartInstance = null;
+
+        /**
+         * Định dạng số tiền Việt Nam
+         */
+        function formatCurrency(value) {
+            if (value === null || value === undefined || isNaN(value)) return '—';
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        /**
+         * Định dạng số
+         */
+        function formatNumber(value, decimals = 1) {
+            if (value === null || value === undefined || isNaN(value)) return '—';
+            return new Intl.NumberFormat('vi-VN', {
+                maximumFractionDigits: decimals
+            }).format(value);
+        }
+
+        /**
+         * Hàm tính toán chính
+         */
+        function calculateCACLTV() {
+            const marketingCost = parseFloat(document.getElementById('marketingCost').value);
+            const newCustomers = parseFloat(document.getElementById('newCustomers').value);
+            const aov = parseFloat(document.getElementById('aov').value);
+            const frequency = parseFloat(document.getElementById('frequency').value);
+            const lifespan = parseFloat(document.getElementById('lifespan').value);
+            const grossMargin = parseFloat(document.getElementById('grossMargin').value) || 100;
+            const period = document.getElementById('period').value.trim() || 'Kỳ hiện tại';
+
+            // Kiểm tra dữ liệu
+            if (isNaN(marketingCost) || isNaN(newCustomers) || isNaN(aov) || isNaN(frequency) || isNaN(lifespan)) {
+                alert('⚠️ Vui lòng nhập đầy đủ các chỉ tiêu bắt buộc!');
+                return;
+            }
+
+            if (newCustomers <= 0) {
+                alert('⚠️ Số khách hàng mới phải lớn hơn 0!');
+                return;
+            }
+
+            if (grossMargin <= 0 || grossMargin > 100) {
+                alert('⚠️ Tỷ lệ lợi nhuận gộp phải nằm trong khoảng 1–100%!');
+                return;
+            }
+
+            // Tính CAC
+            const cac = marketingCost / newCustomers;
+
+            // Tính LTV (có tính gross margin)
+            const ltv = aov * frequency * lifespan * (grossMargin / 100);
+
+            // Tỷ lệ LTV:CAC
+            const ratio = ltv / cac;
+
+            // Thời gian hoàn vốn CAC (tháng)
+            const monthlyProfit = (aov * frequency / 12) * (grossMargin / 100);
+            const paybackMonths = monthlyProfit > 0 ? cac / monthlyProfit : null;
+
+            // Lưu kết quả
+            currentResult = {
+                period: period,
+                marketingCost: marketingCost,
+                newCustomers: newCustomers,
+                aov: aov,
+                frequency: frequency,
+                lifespan: lifespan,
+                grossMargin: grossMargin,
+                cac: cac,
+                ltv: ltv,
+                ratio: ratio,
+                paybackMonths: paybackMonths,
+                timestamp: new Date().toISOString()
+            };
+
+            // Hiển thị
+            displayResults(currentResult);
+            generateAIAnalysis(currentResult);
+            renderChart(currentResult);
+
+            document.getElementById('resultSection').classList.remove('hidden');
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        /**
+         * Hiển thị kết quả số
+         */
+        function displayResults(data) {
+            document.getElementById('cacValue').textContent = formatCurrency(data.cac);
+            document.getElementById('ltvValue').textContent = formatCurrency(data.ltv);
+            document.getElementById('ratioValue').textContent = data.ratio.toFixed(2) + ' : 1';
+            document.getElementById('paybackValue').textContent = data.paybackMonths !== null 
+                ? data.paybackMonths.toFixed(1) + ' tháng' 
+                : 'N/A';
+
+            // Màu sắc theo tỷ lệ
+            const ratioCard = document.getElementById('ratioCard');
+            ratioCard.classList.remove('positive', 'negative', 'warning');
+            
+            if (data.ratio >= 3) {
+                ratioCard.classList.add('positive');
+            } else if (data.ratio >= 1) {
+                ratioCard.classList.add('warning');
+            } else {
+                ratioCard.classList.add('negative');
+            }
+
+            // Status badge
+            const badge = document.getElementById('statusBadge');
+            if (data.ratio >= 5) {
+                badge.className = 'status-badge status-healthy';
+                badge.textContent = '🟢 LTV:CAC xuất sắc – Có thể đẩy mạnh đầu tư marketing';
+            } else if (data.ratio >= 3) {
+                badge.className = 'status-badge status-healthy';
+                badge.textContent = '🟢 LTV:CAC khỏe mạnh – Mô hình khách hàng bền vững';
+            } else if (data.ratio >= 1) {
+                badge.className = 'status-badge status-warning';
+                badge.textContent = '🟡 LTV:CAC trung bình – Cần tối ưu trước khi scale';
+            } else {
+                badge.className = 'status-badge status-danger';
+                badge.textContent = '🔴 LTV:CAC dưới 1 – Đang lỗ trên mỗi khách hàng mới';
+            }
+
+            // Công thức chi tiết
+            document.getElementById('formulaDetail').innerHTML = `
+                CAC = ${formatCurrency(data.marketingCost)} ÷ ${formatNumber(data.newCustomers, 0)} = <strong>${formatCurrency(data.cac)}</strong><br>
+                LTV = ${formatCurrency(data.aov)} × ${data.frequency} × ${data.lifespan} × ${data.grossMargin}% = <strong>${formatCurrency(data.ltv)}</strong><br>
+                LTV : CAC = ${formatCurrency(data.ltv)} ÷ ${formatCurrency(data.cac)} = <strong>${data.ratio.toFixed(2)} : 1</strong>
+            `;
+        }
+
+        /**
+         * Sinh phân tích AI (rule-based)
+         */
+        function generateAIAnalysis(data) {
+            const container = document.getElementById('aiContent');
+            let html = '';
+
+            // 1. Doanh nghiệp đang khỏe hay yếu?
+            let healthText = '';
+            let healthIcon = '';
+            if (data.ratio >= 3) {
+                healthIcon = '✅';
+                healthText = `Doanh nghiệp đang <strong>khỏe về hiệu quả thu hút & giữ chân khách hàng</strong>. 
+                              Tỷ lệ LTV:CAC đạt ${data.ratio.toFixed(2)}:1 cho thấy mỗi đồng chi cho marketing đang mang lại giá trị lâu dài tốt. 
+                              Đây là nền tảng vững chắc để tăng trưởng.`;
+            } else if (data.ratio >= 1) {
+                healthIcon = '⚠️';
+                healthText = `Hiệu quả khách hàng ở mức <strong>trung bình</strong>. 
+                              LTV chỉ cao hơn CAC ${data.ratio.toFixed(2)} lần – chưa đủ an toàn để scale mạnh. 
+                              Cần cải thiện trước khi đổ thêm ngân sách marketing.`;
+            } else {
+                healthIcon = '🚨';
+                healthText = `Doanh nghiệp đang <strong>lỗ trên mỗi khách hàng mới</strong>. 
+                              LTV thấp hơn CAC (tỷ lệ ${data.ratio.toFixed(2)}:1). 
+                              Càng thu hút thêm khách hàng, càng lỗ nhiều hơn. Cần dừng hoặc điều chỉnh ngay chiến lược.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>${healthIcon} 1. Doanh nghiệp đang khỏe hay yếu?</h4>
+                    <p>${healthText}</p>
+                </div>
+            `;
+
+            // 2. Tiền đang chảy đi đâu?
+            let flowText = '';
+            if (data.ratio >= 3) {
+                flowText = `Tiền marketing đang được <strong>chuyển hóa hiệu quả thành giá trị khách hàng dài hạn</strong>. 
+                            CAC ${formatCurrency(data.cac)} được bù đắp và sinh lời tốt nhờ LTV ${formatCurrency(data.ltv)}.`;
+            } else {
+                flowText = `Tiền đang chảy mạnh vào <strong>chi phí thu hút khách hàng</strong> nhưng chưa thu lại đủ từ giá trị vòng đời. 
+                            CAC cao hoặc LTV thấp đang làm xói mòn lợi nhuận. Cần xem xét lại kênh marketing nào đắt đỏ và khách hàng nào mang lại giá trị thấp.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>💸 2. Tiền đang chảy đi đâu?</h4>
+                    <p>${flowText}</p>
+                </div>
+            `;
+
+            // 3. Nên đầu tư hay cắt giảm?
+            let actionText = '';
+            if (data.ratio >= 5) {
+                actionText = `<strong>Nên tăng đầu tư marketing một cách có kiểm soát.</strong> 
+                              Tỷ lệ rất tốt cho thấy còn dư địa để scale. Ưu tiên các kênh có CAC thấp và khách hàng có LTV cao.`;
+            } else if (data.ratio >= 3) {
+                actionText = `<strong>Có thể duy trì hoặc tăng nhẹ đầu tư</strong>, nhưng nên song song tối ưu. 
+                              Tập trung vào giữ chân khách hàng (tăng lifespan & frequency) để nâng LTV thêm.`;
+            } else if (data.ratio >= 1) {
+                actionText = `<strong>Không nên scale marketing mạnh lúc này.</strong> 
+                              Ưu tiên: (1) Giảm CAC bằng cách tối ưu kênh, (2) Tăng LTV bằng upsell, cross-sell, cải thiện retention. 
+                              Chỉ mở rộng khi tỷ lệ tiến gần 3:1.`;
+            } else {
+                actionText = `<strong>Cần cắt giảm hoặc dừng các kênh marketing kém hiệu quả ngay.</strong> 
+                              Rà soát toàn bộ chi phí thu hút khách hàng, tập trung vào sản phẩm/dịch vụ và trải nghiệm để nâng LTV trước đã.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>🎯 3. Nên đầu tư hay cắt giảm?</h4>
+                    <p>${actionText}</p>
+                </div>
+            `;
+
+            // 4. Dự báo tương lai
+            let forecastText = '';
+            if (data.ratio >= 3) {
+                forecastText = `Nếu duy trì được tỷ lệ LTV:CAC hiện tại, doanh nghiệp có thể tiếp tục tăng trưởng bền vững. 
+                                Việc tái đầu tư lợi nhuận từ khách hàng cũ vào thu hút khách hàng mới sẽ tạo vòng xoáy tăng trưởng tích cực.`;
+            } else if (data.ratio >= 1) {
+                forecastText = `Nếu không cải thiện, việc mở rộng sẽ ngày càng khó khăn và tốn kém. 
+                                Ngược lại, chỉ cần nâng LTV thêm 20–30% hoặc giảm CAC tương ứng, tỷ lệ sẽ tiến gần mức khỏe mạnh và mở ra cơ hội scale.`;
+            } else {
+                forecastText = `Nếu tiếp tục duy trì tình trạng LTV < CAC, doanh nghiệp sẽ ngày càng thua lỗ khi cố gắng tăng trưởng. 
+                                Cần đảo chiều trong thời gian ngắn, nếu không sẽ ảnh hưởng nghiêm trọng đến dòng tiền và khả năng tồn tại dài hạn.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>🔮 4. Điều gì sẽ xảy ra trong tương lai?</h4>
+                    <p>${forecastText}</p>
+                </div>
+            `;
+
+            // Cảnh báo bổ sung
+            let alerts = '';
+            if (data.ratio < 1) {
+                alerts += `
+                    <div class="alert alert-danger">
+                        <span>🚨</span>
+                        <div><strong>Cảnh báo nghiêm trọng:</strong> LTV thấp hơn CAC. Doanh nghiệp đang trả nhiều tiền hơn giá trị mà khách hàng mang lại. Cần hành động ngay.</div>
+                    </div>
+                `;
+            } else if (data.ratio < 3) {
+                alerts += `
+                    <div class="alert alert-warning">
+                        <span>⚠️</span>
+                        <div><strong>Cảnh báo:</strong> LTV:CAC dưới mức lý tưởng 3:1. Nên tối ưu trước khi đẩy mạnh ngân sách marketing.</div>
+                    </div>
+                `;
+            }
+
+            if (data.paybackMonths !== null && data.paybackMonths > 12) {
+                alerts += `
+                    <div class="alert alert-warning">
+                        <span>⏱️</span>
+                        <div><strong>Lưu ý:</strong> Thời gian hoàn vốn CAC hơn 12 tháng. Dòng tiền sẽ bị chiếm dụng khá lâu trước khi có lãi từ khách hàng mới.</div>
+                    </div>
+                `;
+            }
+
+            if (data.ratio >= 3) {
+                alerts += `
+                    <div class="alert alert-success">
+                        <span>🎉</span>
+                        <div><strong>Tín hiệu tốt:</strong> LTV:CAC ≥ 3:1 là mức được các quỹ đầu tư và doanh nghiệp tăng trưởng đánh giá cao.</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('alertBox').innerHTML = alerts;
+            container.innerHTML = html;
+        }
+
+        /**
+         * Vẽ biểu đồ
+         */
+        function renderChart(data) {
+            const ctx = document.getElementById('cacLtvChart').getContext('2d');
+
+            if (cacLtvChartInstance) {
+                cacLtvChartInstance.destroy();
+            }
+
+            cacLtvChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['CAC', 'LTV', 'Mức LTV lý tưởng (3×CAC)'],
+                    datasets: [{
+                        label: 'Giá trị (VND)',
+                        data: [
+                            data.cac,
+                            data.ltv,
+                            data.cac * 3
+                        ],
+                        backgroundColor: [
+                            'rgba(239, 68, 68, 0.8)',
+                            data.ratio >= 3 ? 'rgba(16, 185, 129, 0.8)' : 'rgba(245, 158, 11, 0.8)',
+                            'rgba(148, 163, 184, 0.4)'
+                        ],
+                        borderColor: [
+                            'rgb(220, 38, 38)',
+                            data.ratio >= 3 ? 'rgb(5, 150, 105)' : 'rgb(217, 119, 6)',
+                            'rgb(100, 116, 139)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        barPercentage: 0.55
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return formatCurrency(context.raw);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    if (value >= 1e9) return (value / 1e9).toFixed(1) + ' tỷ';
+                                    if (value >= 1e6) return (value / 1e6).toFixed(0) + ' tr';
+                                    return value;
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(190, 24, 93, 0.08)'
+                            }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * Lưu vào localStorage (mô phỏng SQLite)
+         */
+        function saveToLocalStorage() {
+            if (!currentResult) {
+                alert('⚠️ Chưa có dữ liệu để lưu. Hãy tính toán trước!');
+                return;
+            }
+
+            let history = JSON.parse(localStorage.getItem('ceo_ai_cacltv_history') || '[]');
+
+            history.unshift({
+                id: Date.now(),
+                ...currentResult
+            });
+
+            if (history.length > 50) history = history.slice(0, 50);
+
+            localStorage.setItem('ceo_ai_cacltv_history', JSON.stringify(history));
+
+            alert('✅ Đã lưu thành công vào bộ nhớ cục bộ (mô phỏng SQLite)!\n\nSau này khi kết nối Python backend, dữ liệu sẽ được ghi vào database SQLite thật.');
+        }
+
+        /**
+         * Xem lịch sử đã lưu
+         */
+        function viewHistory() {
+            const history = JSON.parse(localStorage.getItem('ceo_ai_cacltv_history') || '[]');
+            const section = document.getElementById('historySection');
+            const tbody = document.getElementById('historyBody');
+
+            if (history.length === 0) {
+                alert('📭 Chưa có dữ liệu nào được lưu.');
+                return;
+            }
+
+            tbody.innerHTML = history.map(item => `
+                <tr>
+                    <td>${new Date(item.timestamp).toLocaleString('vi-VN')}</td>
+                    <td>${item.period}</td>
+                    <td>${formatCurrency(item.cac)}</td>
+                    <td>${formatCurrency(item.ltv)}</td>
+                    <td style="color: ${item.ratio >= 3 ? '#059669' : item.ratio >= 1 ? '#d97706' : '#dc2626'}; font-weight: 600;">
+                        ${item.ratio.toFixed(2)} : 1
+                    </td>
+                    <td>${item.paybackMonths !== null ? item.paybackMonths.toFixed(1) + ' tháng' : 'N/A'}</td>
+                </tr>
+            `).join('');
+
+            section.classList.remove('hidden');
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /**
+         * Xuất Excel
+         */
+        function exportToExcel() {
+            if (!currentResult) {
+                alert('⚠️ Chưa có dữ liệu để xuất. Hãy tính toán trước!');
+                return;
+            }
+
+            const wb = XLSX.utils.book_new();
+
+            const data = [
+                ['MODULE 18 – CAC & LTV (Customer Acquisition Cost & Lifetime Value)', ''],
+                ['CEO AI Enterprise', ''],
+                ['', ''],
+                ['Kỳ báo cáo', currentResult.period],
+                ['Thời gian xuất', new Date().toLocaleString('vi-VN')],
+                ['', ''],
+                ['Chỉ tiêu', 'Giá trị'],
+                ['Tổng chi phí Marketing & Sales', currentResult.marketingCost],
+                ['Số khách hàng mới', currentResult.newCustomers],
+                ['CAC (Chi phí thu hút 1 khách)', currentResult.cac],
+                ['Giá trị đơn hàng trung bình (AOV)', currentResult.aov],
+                ['Số lần mua trung bình / năm', currentResult.frequency],
+                ['Tuổi thọ khách hàng (năm)', currentResult.lifespan],
+                ['Tỷ lệ lợi nhuận gộp (%)', currentResult.grossMargin],
+                ['LTV (Giá trị vòng đời khách hàng)', currentResult.ltv],
+                ['LTV : CAC Ratio', currentResult.ratio.toFixed(2) + ' : 1'],
+                ['Thời gian hoàn vốn CAC (tháng)', currentResult.paybackMonths !== null ? currentResult.paybackMonths.toFixed(2) : 'N/A'],
+                ['', ''],
+                ['Công thức CAC', 'Tổng chi phí Marketing & Sales / Số khách hàng mới'],
+                ['Công thức LTV', 'AOV × Frequency × Lifespan × Gross Margin'],
+                ['', ''],
+                ['Ghi chú', 'File được xuất từ Module 18 – CEO AI Enterprise']
+            ];
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            ws['!cols'] = [{ wch: 45 }, { wch: 25 }];
+            XLSX.utils.book_append_sheet(wb, ws, 'CAC_LTV');
+
+            // Sheet lịch sử
+            const history = JSON.parse(localStorage.getItem('ceo_ai_cacltv_history') || '[]');
+            if (history.length > 0) {
+                const histData = [
+                    ['Thời gian', 'Kỳ', 'CAC', 'LTV', 'LTV:CAC', 'Payback (tháng)']
+                ];
+                history.forEach(item => {
+                    histData.push([
+                        new Date(item.timestamp).toLocaleString('vi-VN'),
+                        item.period,
+                        item.cac,
+                        item.ltv,
+                        item.ratio.toFixed(2),
+                        item.paybackMonths !== null ? item.paybackMonths.toFixed(2) : 'N/A'
+                    ]);
+                });
+                const ws2 = XLSX.utils.aoa_to_sheet(histData);
+                ws2['!cols'] = [{ wch: 22 }, { wch: 14 }, { wch: 16 }, { wch: 16 }, { wch: 12 }, { wch: 14 }];
+                XLSX.utils.book_append_sheet(wb, ws2, 'Lịch sử');
+            }
+
+            const fileName = `CAC_LTV_${currentResult.period.replace(/[\/\s]/g, '_')}_${new Date().toISOString().slice(0,10)}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+        }
+
+        /**
+         * Làm mới form
+         */
+        function resetForm() {
+            document.getElementById('marketingCost').value = '';
+            document.getElementById('newCustomers').value = '';
+            document.getElementById('aov').value = '';
+            document.getElementById('frequency').value = '';
+            document.getElementById('lifespan').value = '';
+            document.getElementById('grossMargin').value = '100';
+            document.getElementById('period').value = 'Kỳ hiện tại';
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('historySection').classList.add('hidden');
+            currentResult = null;
+
+            if (cacLtvChartInstance) {
+                cacLtvChartInstance.destroy();
+                cacLtvChartInstance = null;
+            }
+        }
+
+        /**
+         * =====================================================
+         * CHỖ DÀNH CHO TƯƠNG LAI – KẾT NỐI PYTHON + SQLITE
+         * =====================================================
+         * 
+         * Khi sẵn sàng kết nối backend:
+         * 
+         * async function saveToSQLite() {
+         *     const response = await fetch('/api/cacltv/save', {
+         *         method: 'POST',
+         *         headers: { 'Content-Type': 'application/json' },
+         *         body: JSON.stringify(currentResult)
+         *     });
+         *     ...
+         * }
+         * 
+         * Python sẽ ghi vào bảng:
+         * CREATE TABLE cac_ltv (
+         *     id INTEGER PRIMARY KEY,
+         *     period TEXT,
+         *     marketing_cost REAL,
+         *     new_customers REAL,
+         *     cac REAL,
+         *     aov REAL,
+         *     frequency REAL,
+         *     lifespan REAL,
+         *     ltv REAL,
+         *     ratio REAL,
+         *     payback_months REAL,
+         *     created_at TEXT
+         * );
+         */
+    </script>
+</body>
+</html>

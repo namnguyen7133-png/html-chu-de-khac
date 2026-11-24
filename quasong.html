@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giải Game IQ Qua Sông</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .step {
+            background: #ecf0f1;
+            padding: 12px;
+            margin-top: 10px;
+            border-left: 5px solid #3498db;
+            border-radius: 4px;
+        }
+        .rules {
+            background: #fff3cd;
+            padding: 10px 15px;
+            border: 1px solid #ffeeba;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Giải Bài Toán IQ Qua Sông</h1>
+    
+    <div class="rules">
+        <strong>Quy tắc cần nhớ:</strong>
+        <ul>
+            <li>Thuyền tối đa 2 người, ít nhất 1 người biết chèo (Bố, Mẹ, Cảnh sát).</li>
+            <li>Bố không ở cùng con gái nếu không có Mẹ.</li>
+            <li>Mẹ không ở cùng con trai nếu không có Bố.</li>
+            <li>Tội phạm không ở cùng thành viên gia đình nào nếu không có Cảnh sát.</li>
+        </ul>
+    </div>
+
+    <button onclick="solvePuzzle()">Tìm Lời Giải</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+const ALL_PEOPLE = ['F', 'M', 'S1', 'S2', 'D1', 'D2', 'P', 'T'];
+const BOAT_CAPACITY = 2;
+
+function canRow(people) {
+    return people.some(p => p === 'F' || p === 'M' || p === 'P');
+}
+
+function isValidBank(bank) {
+    const has = (p) => bank.includes(p);
+    const hasDad = has('F');
+    const hasMom = has('M');
+    const hasDaughter = has('D1') || has('D2');
+    if (hasDad && hasDaughter && !hasMom) return false;
+
+    const hasSon = has('S1') || has('S2');
+    if (hasMom && hasSon && !hasDad) return false;
+
+    const hasThief = has('T');
+    const familyMembers = ['F', 'M', 'S1', 'S2', 'D1', 'D2'];
+    const hasFamily = familyMembers.some(f => has(f));
+    const hasPolice = has('P');
+
+    if (hasThief && hasFamily && !hasPolice) return false;
+    return true;
+}
+
+function isValidState(state) {
+    if (!isValidBank(state.left) || !isValidBank(state.right)) return false;
+    return true;
+}
+
+function getCombinations(arr, k) {
+    if (k === 0) return [[]];
+    if (arr.length === 0) return [];
+    const head = arr[0];
+    const tail = arr.slice(1);
+    const withHead = getCombinations(tail, k - 1).map(c => [head, ...c]);
+    const withoutHead = getCombinations(tail, k);
+    return [...withHead, ...withoutHead];
+}
+
+function getValidBoatMoves(peopleOnBank) {
+    let moves = [];
+    for (let i = 1; i <= BOAT_CAPACITY; i++) {
+        const combs = getCombinations(peopleOnBank, i);
+        for (let comb of combs) {
+            if (canRow(comb)) {
+                moves.push(comb);
+            }
+        }
+    }
+    return moves;
+}
+
+function solvePuzzle() {
+    const initialState = {
+        left: [...ALL_PEOPLE].sort(),
+        right: [],
+        boat: 'left'
+    };
+
+    let queue = [{ state: initialState, path: [] }];
+    let visited = new Set();
+    visited.add(JSON.stringify(initialState));
+
+    let foundPath = null;
+
+    while (queue.length > 0) {
+        let { state, path } = queue.shift();
+
+        if (state.right.length === ALL_PEOPLE.length) {
+            foundPath = path;
+            break;
+        }
+
+        let currentBankName = state.boat;
+        let otherBankName = currentBankName === 'left' ? 'right' : 'left';
+        let currentBankPeople = state[currentBankName];
+
+        let possibleMoves = getValidBoatMoves(currentBankPeople);
+
+        for (let move of possibleMoves) {
+            let newCurrentBank = currentBankPeople.filter(p => !move.includes(p));
+            let newOtherBank = [...state[otherBankName], ...move];
+
+            let newState = {
+                left: currentBankName === 'left' ? newCurrentBank : newOtherBank,
+                right: currentBankName === 'right' ? newCurrentBank : newOtherBank,
+                boat: otherBankName
+            };
+
+            newState.left.sort();
+            newState.right.sort();
+
+            let stateStr = JSON.stringify(newState);
+            if (!visited.has(stateStr) && isValidState(newState)) {
+                visited.add(stateStr);
+                queue.push({
+                    state: newState,
+                    path: [...path, { move, from: currentBankName, to: otherBankName }]
+                });
+            }
+        }
+    }
+
+    displayResult(foundPath);
+}
+
+function displayResult(path) {
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = '';
+
+    if (!path) {
+        resultDiv.innerHTML = '<p style="color: red;">Không tìm thấy lời giải!</p>';
+        return;
+    }
+
+    const nameMap = {
+        'F': 'Bố', 'M': 'Mẹ', 
+        'S1': 'Con trai 1', 'S2': 'Con trai 2', 
+        'D1': 'Con gái 1', 'D2': 'Con gái 2', 
+        'P': 'Cảnh sát', 'T': 'Tội phạm'
+    };
+
+    let html = `<h3>Đã tìm thấy lời giải trong ${path.length} bước:</h3>`;
+    
+    path.forEach((step, index) => {
+        let translatedMove = step.move.map(p => nameMap[p]).join(' và ');
+        let direction = step.from === 'left' ? 'sang phải ➡️' : 'quay lại trái ⬅️';
+        html += `<div class="step"><strong>Bước ${index + 1}:</strong> Chở (${translatedMove}) ${direction}</div>`;
+    });
+
+    resultDiv.innerHTML = html;
+}
+</script>
+
+</body>
+</html>

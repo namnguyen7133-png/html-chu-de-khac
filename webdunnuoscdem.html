@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔥 Quản Lý Đun Bếp Than Tổ Ong - Linh Hoạt</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        color: #eee;
+        padding: 20px;
+        min-height: 100vh;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: rgba(0,0,0,0.4);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+    h1 {
+        text-align: center;
+        color: #ff6b35;
+        margin-bottom: 8px;
+        font-size: 26px;
+    }
+    .subtitle {
+        text-align: center;
+        color: #aaa;
+        margin-bottom: 24px;
+        font-size: 14px;
+    }
+
+    /* Grid layout */
+    .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    @media (max-width: 800px) {
+        .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* Panel */
+    .panel {
+        background: rgba(255,255,255,0.05);
+        border-radius: 12px;
+        padding: 16px;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .panel h3 {
+        color: #ff6b35;
+        font-size: 15px;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 1px solid rgba(255,107,53,0.3);
+        padding-bottom: 8px;
+    }
+
+    /* Trạng thái bếp */
+    .status-box {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        background: rgba(0,0,0,0.3);
+        border-radius: 10px;
+        margin-bottom: 12px;
+    }
+    .status-icon {
+        font-size: 48px;
+        filter: drop-shadow(0 0 10px rgba(255,107,53,0.8));
+        transition: all 0.5s;
+    }
+    .status-icon.to { animation: flicker 0.5s infinite alternate; }
+    .status-icon.nho { animation: flicker 2s infinite alternate; }
+    .status-icon.off { filter: grayscale(1); opacity: 0.5; }
+    @keyframes flicker {
+        from { transform: scale(1); }
+        to { transform: scale(1.1); filter: drop-shadow(0 0 20px rgba(255,107,53,1)); }
+    }
+    .status-info { flex: 1; }
+    .status-info .label {
+        font-size: 11px;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+    }
+    .status-info .value {
+        font-size: 24px;
+        font-weight: bold;
+        color: #ff6b35;
+    }
+    .status-info .sub {
+        font-size: 12px;
+        color: #aaa;
+        margin-top: 4px;
+    }
+
+    /* Thanh tuổi thọ than */
+    .lifespan {
+        margin: 16px 0;
+    }
+    .lifespan-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        margin-bottom: 6px;
+    }
+    .lifespan-bar {
+        height: 30px;
+        background: rgba(0,0,0,0.5);
+        border-radius: 15px;
+        overflow: hidden;
+        position: relative;
+        border: 2px solid #333;
+    }
+    .lifespan-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ff4500, #ff6b35, #ffa500);
+        transition: width 0.5s;
+        position: relative;
+    }
+    .lifespan-fill.warning { background: linear-gradient(90deg, #ffa500, #ffb84d); }
+    .lifespan-fill.critical { 
+        background: linear-gradient(90deg, #ff2222, #ff4500);
+        animation: pulse 1s infinite;
+    }
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+    }
+    .lifespan-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-weight: bold;
+        color: #fff;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        font-size: 14px;
+    }
+
+    /* Form nhập */
+    .input-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr auto;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+    .input-row input, .input-row select {
+        padding: 10px 12px;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 6px;
+        color: #eee;
+        font-size: 14px;
+    }
+    .input-row input:focus {
+        outline: none;
+        border-color: #ff6b35;
+        box-shadow: 0 0 0 2px rgba(255,107,53,0.3);
+    }
+    .input-row button {
+        padding: 10px 20px;
+        background: linear-gradient(135deg, #ff4500, #ff6b35);
+        border: none;
+        border-radius: 6px;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .input-row button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255,69,0,0.5);
+    }
+
+    /* Nút nhanh */
+    .quick-btns {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+    }
+    .quick-btn {
+        padding: 6px 12px;
+        background: rgba(255,107,53,0.15);
+        border: 1px solid rgba(255,107,53,0.4);
+        border-radius: 20px;
+        color: #ff8c5a;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .quick-btn:hover {
+        background: rgba(255,107,53,0.3);
+        color: #fff;
+    }
+
+    /* Lịch sử */
+    .history {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    .history-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 12px;
+        background: rgba(0,0,0,0.3);
+        border-radius: 6px;
+        margin-bottom: 6px;
+        font-size: 13px;
+        border-left: 3px solid #ff6b35;
+    }
+    .history-item .time {
+        color: #4da6ff;
+        font-weight: bold;
+        font-family: monospace;
+    }
+    .history-item .task {
+        flex: 1;
+        margin: 0 12px;
+    }
+    .history-item .cost {
+        color: #ff6b35;
+        font-weight: bold;
+        font-size: 12px;
+    }
+    .history-item .delete-btn {
+        background: rgba(255,50,50,0.2);
+        border: none;
+        color: #ff6b6b;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+    }
+    .history-item .delete-btn:hover {
+        background: rgba(255,50,50,0.4);
+    }
+
+    /* Nút điều khiển bếp */
+    .controls {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+    }
+    .controls button {
+        flex: 1;
+        padding: 12px;
+        border: 2px solid;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 13px;
+    }
+    .btn-to {
+        border-color: #ff4500;
+        background: transparent;
+        color: #ff4500;
+    }
+    .btn-to.active, .btn-to:hover {
+        background: #ff4500;
+        color: #fff;
+        box-shadow: 0 0 20px rgba(255,69,0,0.5);
+    }
+    .btn-nho {
+        border-color: #ffa500;
+        background: transparent;
+        color: #ffa500;
+    }
+    .btn-nho.active, .btn-nho:hover {
+        background: #ffa500;
+        color: #333;
+        box-shadow: 0 0 20px rgba(255,165,0,0.5);
+    }
+    .btn-off {
+        border-color: #888;
+        background: transparent;
+        color: #888;
+    }
+    .btn-off:hover {
+        background: #555;
+        color: #fff;
+    }
+
+    /* Cảnh báo */
+    .alert {
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-top: 12px;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .alert.warning {
+        background: rgba(255,165,0,0.15);
+        border-left: 4px solid #ffa500;
+        color: #ffb84d;
+    }
+    .alert.danger {
+        background: rgba(255,50,50,0.15);
+        border-left: 4px solid #ff2222;
+        color: #ff6b6b;
+        animation: pulse 1.5s infinite;
+    }
+    .alert.success {
+        background: rgba(107,255,107,0.1);
+        border-left: 4px solid #6bff6b;
+        color: #9aff9a;
+    }
+
+    /* Tổng kết */
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 12px;
+    }
+    .stat {
+        background: rgba(0,0,0,0.3);
+        padding: 10px;
+        border-radius: 6px;
+        text-align: center;
+    }
+    .stat .value {
+        font-size: 20px;
+        font-weight: bold;
+        color: #ff6b35;
+    }
+    .stat .label {
+        font-size: 11px;
+        color: #888;
+        margin-top: 4px;
+    }
+
+    /* Input giờ */
+    .time-setup {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    .time-setup label {
+        font-size: 12px;
+        color: #888;
+        display: block;
+        margin-bottom: 4px;
+    }
+    .time-setup input {
+        width: 100%;
+        padding: 8px;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 6px;
+        color: #eee;
+    }
+
+    /* Footer */
+    .footer {
+        text-align: center;
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        color: #666;
+        font-size: 12px;
+        line-height: 1.8;
+    }
+    .footer strong { color: #ff6b35; }
+
+    /* Scroll */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,107,53,0.3); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,107,53,0.5); }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🔥 Quản Lý Đun Bếp Than Tổ Ong</h1>
+    <p class="subtitle">Nhập linh hoạt — Tự động trừ giờ than — Báo trước khi hết</p>
+
+    <!-- Hàng 1: Trạng thái + Nhập -->
+    <div class="grid-2">
+
+        <!-- Cột trái: Trạng thái bếp -->
+        <div class="panel">
+            <h3>📊 Trạng Thái Bếp Hiện Tại</h3>
+
+            <div class="status-box">
+                <div class="status-icon off" id="statusIcon">🔥</div>
+                <div class="status-info">
+                    <div class="label">Đang đun</div>
+                    <div class="value" id="statusValue">TẮT BẾP</div>
+                    <div class="sub" id="statusSub">Bắt đầu: --:--</div>
+                </div>
+            </div>
+
+            <!-- Thanh tuổi thọ than -->
+            <div class="lifespan">
+                <div class="lifespan-label">
+                    <span>🔥 Tuổi thọ than còn lại</span>
+                    <span id="lifespanPercent">100%</span>
+                </div>
+                <div class="lifespan-bar">
+                    <div class="lifespan-fill" id="lifespanFill" style="width: 100%">
+                        <span class="lifespan-text" id="lifespanText">420 phút</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cảnh báo -->
+            <div id="alertBox"></div>
+
+            <!-- Nút điều khiển -->
+            <div class="controls">
+                <button class="btn-to" onclick="chuyenCheDo('to')">🔥 Đun TO</button>
+                <button class="btn-nho active" onclick="chuyenCheDo('nho')">🔥 Đun NHỎ</button>
+                <button class="btn-off" onclick="chuyenCheDo('off')">⏹ Tắt bếp</button>
+            </div>
+
+            <!-- Thống kê -->
+            <div class="stats">
+                <div class="stat">
+                    <div class="value" id="statTime">0</div>
+                    <div class="label">Phút đã đun</div>
+                </div>
+                <div class="stat">
+                    <div class="value" id="statTasks">0</div>
+                    <div class="label">Việc đã làm</div>
+                </div>
+                <div class="stat">
+                    <div class="value" id="statNext">--:--</div>
+                    <div class="label">Nhóm bếp tiếp</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cột phải: Nhập việc đun -->
+        <div class="panel">
+            <h3>➕ Thêm Việc Đun</h3>
+
+            <div class="input-row">
+                <input type="text" id="taskName" placeholder="VD: Đun trứng, Đun canh..." list="taskSuggestions">
+                <input type="number" id="taskMinutes" placeholder="Phút" min="1" max="300" value="10">
+                <button onclick="themViec()">➕ Thêm</button>
+            </div>
+
+            <datalist id="taskSuggestions">
+                <option value="Đun trứng">
+                <option value="Đun canh">
+                <option value="Đun nước tắm">
+                <option value="Đun nước uống">
+                <option value="Hấp bánh">
+                <option value="Nấu cơm">
+                <option value="Đun sữa">
+                <option value="Luộc rau">
+                <option value="Chiên cá">
+                <option value="Hầm thịt">
+            </datalist>
+
+            <!-- Nút nhanh -->
+            <div style="margin-top:12px">
+                <div style="font-size:12px;color:#888;margin-bottom:6px">⚡ Thêm nhanh:</div>
+                <div class="quick-btns">
+                    <button class="quick-btn" onclick="themNhanh('Đun trứng', 10)">🥚 Trứng 10'</button>
+                    <button class="quick-btn" onclick="themNhanh('Đun canh', 15)">🍲 Canh 15'</button>
+                    <button class="quick-btn" onclick="themNhanh('Nấu cơm', 20)">🍚 Cơm 20'</button>
+                    <button class="quick-btn" onclick="themNhanh('Đun nước tắm', 30)">🚿 Nước tắm 30'</button>
+                    <button class="quick-btn" onclick="themNhanh('Luộc rau', 5)">🥬 Rau 5'</button>
+                    <button class="quick-btn" onclick="themNhanh('Đun sữa', 5)">🥛 Sữa 5'</button>
+                </div>
+            </div>
+
+            <!-- Cài đặt giờ -->
+            <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1)">
+                <div style="font-size:12px;color:#888;margin-bottom:8px">⏰ Cài đặt giờ:</div>
+                <div class="time-setup">
+                    <div>
+                        <label>Giờ thức</label>
+                        <input type="time" id="gioThuc" value="05:30">
+                    </div>
+                    <div>
+                        <label>Giờ ngủ</label>
+                        <input type="time" id="gioNgu" value="22:00">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lịch sử -->
+    <div class="panel">
+        <h3>📜 Lịch Sử Việc Đã Đun <span style="font-size:12px;color:#888;font-weight:normal">(bấm 🗑 để xóa)</span></h3>
+        <div class="history" id="historyBox">
+            <div style="text-align:center;color:#666;padding:20px">Chưa có việc nào</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>💡 <strong>Cách dùng:</strong> Nhập tên việc + số phút → Bấm "Thêm" → Hệ thống tự trừ vào tuổi thọ than</p>
+        <p>🔥 <strong>Đun TO:</strong> 1 phút tốn 1 phút than | 🔥 <strong>Đun NHỎ:</strong> 1 phút tốn 0.28 phút than</p>
+        <p>⏰ <strong>Than hết:</strong> Tàn 20' + Bốc nóng 10' = chờ 30' → Nhóm bếp mới</p>
+    </div>
+</div>
+
+<script>
+// ============ CẤU HÌNH ============
+const CONFIG = {
+    to: {
+        name: 'TO',
+        maxLifespan: 120,        // 2 giờ
+        consumptionRate: 1.0,     // 1 phút thực = 1 phút than
+        icon: '🔥',
+        color: '#ff4500'
+    },
+    nho: {
+        name: 'NHỎ',
+        maxLifespan: 420,         // 7 giờ
+        consumptionRate: 0.28,    // 1 phút thực = 0.28 phút than
+        icon: '🔥',
+        color: '#ffa500'
+    },
+    cho: {
+        tan: 20,                  // Tàn than 20 phút
+        bocnong: 10               // Đợi bốc nóng 10 phút
+    }
+};
+
+// ============ STATE ============
+let state = {
+    cheDo: 'nho',                    // 'to', 'nho', 'off'
+    thanConLai: 420,                  // phút than còn lại
+    thanBanDau: 420,                  // phút than ban đầu
+    batDauLuc: null,                  // timestamp bắt đầu đun
+    lichSu: [],                       // danh sách việc đã đun
+    thoiGianBatDau: new Date(),       // thời điểm bắt đầu
+    lastTick: Date.now()
+};
+
+// ============ TIỆN ÍCH ============
+function formatTime(date) {
+    const h = String(date.getHours()).padStart(2, '0');
+    const m = String(date.getMinutes()).padStart(2, '0');
+    return `${h}:${m}`;
+}
+
+function formatTimeFromMinutes(totalMin) {
+    const h = Math.floor(totalMin / 60) % 24;
+    const m = Math.floor(totalMin % 60);
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+}
+
+// ============ ĐỒNG HỒ ĐẾM NGƯỢC ============
+function tick() {
+    const now = Date.now();
+    const elapsed = (now - state.lastTick) / 1000; // giây
+    state.lastTick = now;
+
+    if (state.cheDo !== 'off' && state.thanConLai > 0) {
+        const rate = CONFIG[state.cheDo].consumptionRate;
+        state.thanConLai -= (elapsed / 60) * rate;
+        if (state.thanConLai < 0) state.thanConLai = 0;
+    }
+
+    updateUI();
+}
+
+// ============ CẬP NHẬT UI ============
+function updateUI() {
+    // Trạng thái
+    const statusIcon = document.getElementById('statusIcon');
+    const statusValue = document.getElementById('statusValue');
+    const statusSub = document.getElementById('statusSub');
+
+    if (state.cheDo === 'off') {
+        statusIcon.className = 'status-icon off';
+        statusValue.textContent = 'TẮT BẾP';
+        statusSub.textContent = state.batDauLuc ? `Đã đun từ ${state.batDauLuc}` : 'Chưa bắt đầu';
+    } else {
+        statusIcon.className = 'status-icon ' + state.cheDo;
+        statusValue.textContent = `ĐUN ${CONFIG[state.cheDo].name}`;
+        statusSub.textContent = `Bắt đầu: ${state.batDauLuc || formatTime(new Date())}`;
+    }
+
+    // Thanh tuổi thọ
+    const phanTram = (state.thanConLai / state.thanBanDau) * 100;
+    const fill = document.getElementById('lifespanFill');
+    const text = document.getElementById('lifespanText');
+    const percent = document.getElementById('lifespanPercent');
+
+    fill.style.width = `${Math.max(0, phanTram)}%`;
+    text.textContent = `${Math.round(state.thanConLai)} phút`;
+    percent.textContent = `${Math.round(phanTram)}%`;
+
+    fill.classList.remove('warning', 'critical');
+    if (phanTram <= 10) {
+        fill.classList.add('critical');
+    } else if (phanTram <= 30) {
+        fill.classList.add('warning');
+    }
+
+    // Cảnh báo
+    const alertBox = document.getElementById('alertBox');
+    alertBox.innerHTML = '';
+
+    if (state.thanConLai <= 0) {
+        alertBox.innerHTML = `
+            <div class="alert danger">
+                🚨 <strong>THAN ĐÃ HẾT!</strong> Cần nhóm bếp mới ngay.
+                <br>→ Tàn than 20' + Bốc nóng 10' = chờ 30 phút
+            </div>`;
+    } else if (state.thanConLai <= 30) {
+        const gioHet = tinhGioHetThan();
+        alertBox.innerHTML = `
+            <div class="alert danger">
+                🚨 <strong>SẮP HẾT THAN!</strong> Còn ${Math.round(state.thanConLai)} phút.
+                <br>→ Hết lúc: <strong>${gioHet}</strong> — Chuẩn bị than mới!
+            </div>`;
+    } else if (state.thanConLai <= 60) {
+        const gioHet = tinhGioHetThan();
+        alertBox.innerHTML = `
+            <div class="alert warning">
+                ⚠️ <strong>Còn ít than:</strong> ${Math.round(state.thanConLai)} phút.
+                <br>→ Hết lúc: <strong>${gioHet}</strong>
+            </div>`;
+    }
+
+    // Thống kê
+    document.getElementById('statTime').textContent = state.lichSu.reduce((s, t) => s + t.minutes, 0);
+    document.getElementById('statTasks').textContent = state.lichSu.length;
+
+    // Giờ nhóm bếp tiếp theo
+    if (state.thanConLai > 0 && state.cheDo !== 'off') {
+        const gioHet = tinhGioHetThan();
+        // Cộng thêm 30 phút chờ
+        const gioNhom = congPhut(gioHet, 30);
+        document.getElementById('statNext').textContent = gioNhom;
+    } else if (state.thanConLai <= 0) {
+        const gioHienTai = formatTime(new Date());
+        const gioNhom = congPhut(gioHienTai, 30);
+        document.getElementById('statNext').textContent = gioNhom;
+    } else {
+        document.getElementById('statNext').textContent = '--:--';
+    }
+}
+
+// Tính giờ hết than
+function tinhGioHetThan() {
+    if (state.cheDo === 'off' || state.thanConLai <= 0) return '--:--';
+    const rate = CONFIG[state.cheDo].consumptionRate;
+    const phutConLai = state.thanConLai / rate;
+    const now = new Date();
+    const gioHet = new Date(now.getTime() + phutConLai * 60000);
+    return formatTime(gioHet);
+}
+
+// Cộng phút vào giờ
+function congPhut(gioStr, phut) {
+    const [h, m] = gioStr.split(':').map(Number);
+    const total = h * 60 + m + phut;
+    const newH = Math.floor(total / 60) % 24;
+    const newM = total % 60;
+    return `${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`;
+}
+
+// ============ THÊM VIỆC ============
+function themViec() {
+    const name = document.getElementById('taskName').value.trim();
+    const minutes = parseInt(document.getElementById('taskMinutes').value);
+
+    if (!name) {
+        alert('Vui lòng nhập tên việc!');
+        return;
+    }
+    if (!minutes || minutes <= 0) {
+        alert('Vui lòng nhập số phút hợp lệ!');
+        return;
+    }
+    if (state.cheDo === 'off') {
+        alert('Bếp đang tắt! Hãy bật bếp trước khi thêm việc.');
+        return;
+    }
+
+    const rate = CONFIG[state.cheDo].consumptionRate;
+    const chiPhi = minutes * rate;
+
+    if (chiPhi > state.thanConLai) {
+        const traLoi = confirm(
+            `⚠️ CẢNH BÁO: Việc "${name}" (${minutes} phút) cần ${chiPhi.toFixed(1)} phút than,\n` +
+            `nhưng chỉ còn ${state.thanConLai.toFixed(1)} phút than!\n\n` +
+            `Than sẽ hết trước khi xong việc.\n` +
+            `Bạn có muốn tiếp tục không?`
+        );
+        if (!traLoi) return;
+    }
+
+    const now = new Date();
+    state.lichSu.unshift({
+        id: Date.now(),
+        name: name,
+        minutes: minutes,
+        cheDo: state.cheDo,
+        chiPhi: chiPhi,
+        thoiGian: formatTime(now),
+        timestamp: now.getTime()
+    });
+
+    state.thanConLai -= chiPhi;
+    if (state.thanConLai < 0) state.thanConLai = 0;
+
+    document.getElementById('taskName').value = '';
+    document.getElementById('taskMinutes').value = 10;
+
+    renderHistory();
+    updateUI();
+}
+
+function themNhanh(name, minutes) {
+    document.getElementById('taskName').value = name;
+    document.getElementById('taskMinutes').value = minutes;
+    themViec();
+}
+
+// ============ XÓA VIỆC ============
+function xoaViec(id) {
+    const idx = state.lichSu.findIndex(t => t.id === id);
+    if (idx === -1) return;
+
+    const task = state.lichSu[idx];
+    if (!confirm(`Xóa việc "${task.name}"? Than sẽ được hoàn lại ${task.chiPhi.toFixed(1)} phút.`)) return;
+
+    state.thanConLai += task.chiPhi;
+    if (state.thanConLai > state.thanBanDau) state.thanConLai = state.thanBanDau;
+
+    state.lichSu.splice(idx, 1);
+    renderHistory();
+    updateUI();
+}
+
+// ============ RENDER LỊCH SỬ ============
+function renderHistory() {
+    const box = document.getElementById('historyBox');
+    if (state.lichSu.length === 0) {
+        box.innerHTML = '<div style="text-align:center;color:#666;padding:20px">Chưa có việc nào</div>';
+        return;
+    }
+
+    box.innerHTML = state.lichSu.map(t => `
+        <div class="history-item">
+            <span class="time">${t.thoiGian}</span>
+            <span class="task">${t.name} <span style="color:#888">(${t.minutes}')</span></span>
+            <span class="cost">-${t.chiPhi.toFixed(1)}' than</span>
+            <button class="delete-btn" onclick="xoaViec(${t.id})">🗑</button>
+        </div>
+    `).join('');
+}
+
+// ============ CHUYỂN CHẾ ĐỘ ============
+function chuyenCheDo(cheDoMoi) {
+    if (cheDoMoi === state.cheDo) return;
+
+    // Cập nhật nút active
+    document.querySelectorAll('.btn-to, .btn-nho, .btn-off').forEach(b => b.classList.remove('active'));
+    if (cheDoMoi === 'to') document.querySelector('.btn-to').classList.add('active');
+    else if (cheDoMoi === 'nho') document.querySelector('.btn-nho').classList.add('active');
+    else document.querySelector('.btn-off').classList.add('active');
+
+    // Nếu chuyển từ TO → NHỎ: cần thay than mới (reset lifespan)
+    if (state.cheDo === 'to' && cheDoMoi === 'nho') {
+        const traLoi = confirm(
+            '🔄 Chuyển từ TO → NHỎ:\n' +
+            'Than đang cháy TO, không thể chuyển trực tiếp.\n\n' +
+            'Cần: Tắt bếp → Đợi tàn 20\' → Bốc nóng 10\' → Nhóm than mới.\n\n' +
+            'Bạn đã thay than mới chưa?'
+        );
+        if (traLoi) {
+            state.thanBanDau = CONFIG.nho.maxLifespan;
+            state.thanConLai = CONFIG.nho.maxLifespan;
+            state.batDauLuc = formatTime(new Date());
+        } else {
+            return;
+        }
+    }
+
+    // Nếu chuyển từ NHỎ → TO: cũng cần thay than
+    if (state.cheDo === 'nho' && cheDoMoi === 'to') {
+        const traLoi = confirm(
+            '🔄 Chuyển từ NHỎ → TO:\n' +
+            'Than đang cháy NHỎ, không thể chuyển trực tiếp.\n\n' +
+            'Cần: Tắt bếp → Đợi tàn 20\' → Bốc nóng 10\' → Nhóm than mới.\n\n' +
+            'Bạn đã thay than mới chưa?'
+        );
+        if (traLoi) {
+            state.thanBanDau = CONFIG.to.maxLifespan;
+            state.thanConLai = CONFIG.to.maxLifespan;
+            state.batDauLuc = formatTime(new Date());
+        } else {
+            return;
+        }
+    }
+
+    // Nếu bật từ OFF → TO/NHỎ: nhóm than mới
+    if (state.cheDo === 'off' && cheDoMoi !== 'off') {
+        const traLoi = confirm(
+            `🔥 Nhóm bếp ${CONFIG[cheDoMoi].name}?\n` +
+            `Tuổi thọ than: ${CONFIG[cheDoMoi].maxLifespan} phút\n\n` +
+            `Bạn đã nhóm than mới chưa?`
+        );
+        if (traLoi) {
+            state.thanBanDau = CONFIG[cheDoMoi].maxLifespan;
+            state.thanConLai = CONFIG[cheDoMoi].maxLifespan;
+            state.batDauLuc = formatTime(new Date());
+        } else {
+            return;
+        }
+    }
+
+    // Nếu tắt bếp
+    if (cheDoMoi === 'off') {
+        state.thanConLai = 0;
+    }
+
+    state.cheDo = cheDoMoi;
+    state.lastTick = Date.now();
+    updateUI();
+}
+
+// ============ KHỞI ĐỘNG ============
+setInterval(tick, 1000); // cập nhật mỗi giây
+renderHistory();
+updateUI();
+state.batDauLuc = formatTime(new Date());
+</script>
+
+</body>
+</html>

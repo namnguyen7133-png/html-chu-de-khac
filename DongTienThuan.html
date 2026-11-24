@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>CEO AI - Dòng tiền thuần</title>
+
+<style>
+body{
+    font-family:Arial;
+    background:#f4f6f8;
+    margin:30px;
+}
+
+.box{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 0 10px #ccc;
+}
+
+h1{
+    color:#0d47a1;
+}
+
+input{
+    width:220px;
+    padding:8px;
+    font-size:18px;
+}
+
+button{
+    padding:10px 25px;
+    font-size:18px;
+    cursor:pointer;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+td{
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+.ketqua{
+    font-size:30px;
+    font-weight:bold;
+}
+
+.do{
+    color:red;
+}
+
+.xanh{
+    color:green;
+}
+
+.cam{
+    color:orange;
+}
+
+#nhanxet{
+    margin-top:25px;
+    font-size:22px;
+    line-height:1.6;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h1>I. DÒNG TIỀN THUẦN</h1>
+
+<table>
+
+<tr>
+<td>Tiền vào</td>
+<td>
+<input id="vao" type="number" value="0">
+</td>
+</tr>
+
+<tr>
+<td>Tiền ra</td>
+<td>
+<input id="ra" type="number" value="0">
+</td>
+</tr>
+
+</table>
+
+<br>
+
+<button onclick="tinh()">TÍNH TOÁN</button>
+
+<hr>
+
+<div class="ketqua">
+
+Dòng tiền thuần :
+
+<span id="dongtien">0</span>
+
+</div>
+
+<div id="nhanxet"></div>
+
+</div>
+
+<script>
+
+function dinhdang(x){
+
+return Number(x).toLocaleString('vi-VN');
+
+}
+
+function tinh(){
+
+let vao=Number(document.getElementById("vao").value);
+
+let ra=Number(document.getElementById("ra").value);
+
+let dongtien=vao-ra;
+
+document.getElementById("dongtien").innerHTML=dinhdang(dongtien);
+
+let html="";
+
+if(dongtien>0){
+
+html+="<h2 class='xanh'>🟢 Doanh nghiệp đang tạo tiền.</h2>";
+
+html+="<ul>";
+
+html+="<li>Dòng tiền dương.</li>";
+
+html+="<li>Có khả năng tự nuôi hoạt động.</li>";
+
+html+="<li>Có thể xem xét mở rộng đầu tư.</li>";
+
+html+="</ul>";
+
+}
+
+else if(dongtien==0){
+
+html+="<h2 class='cam'>🟠 Dòng tiền hòa vốn.</h2>";
+
+html+="<ul>";
+
+html+="<li>Chưa tạo thêm tiền.</li>";
+
+html+="<li>Cần theo dõi sát chi phí.</li>";
+
+html+="</ul>";
+
+}
+
+else{
+
+html+="<h2 class='do'>🔴 CẢNH BÁO</h2>";
+
+html+="<ul>";
+
+html+="<li>Dòng tiền đang âm.</li>";
+
+html+="<li>Tiền ra lớn hơn tiền vào.</li>";
+
+html+="<li>Nếu kéo dài nhiều tháng sẽ rất nguy hiểm.</li>";
+
+html+="<li>Cần giảm chi hoặc tăng doanh thu ngay.</li>";
+
+html+="</ul>";
+
+}
+
+document.getElementById("nhanxet").innerHTML=html;
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Màu — Copy Dùng Ngay</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f5f7fa; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 10px; }
+        .desc { text-align: center; color: #7f8c8d; margin-bottom: 25px; }
+        .search-bar { text-align: center; margin-bottom: 25px; }
+        input { padding: 10px 15px; width: 350px; font-size: 15px; border: 2px solid #ddd; border-radius: 8px; outline: none; }
+        input:focus { border-color: #3498db; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+        .color-card {
+            background: white; border-radius: 10px; overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08); cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .color-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .color-preview { height: 60px; }
+        .color-info { padding: 10px; font-size: 13px; }
+        .color-name { font-weight: 600; color: #2c3e50; margin-bottom: 4px; }
+        .color-code { font-family: Consolas, monospace; color: #3498db; font-size: 12px; }
+        .copy-hint { font-size: 11px; color: #27ae60; margin-top: 4px; opacity: 0; transition: opacity 0.3s; }
+        .copy-hint.show { opacity: 1; }
+        .note { margin-top: 30px; background: #eaf4ff; padding: 15px; border-radius: 10px; border-left: 4px solid #3498db; }
+        .code-block { background: #2c3e50; color: #fff; padding: 12px; border-radius: 6px; font-family: Consolas; font-size: 13px; margin-top: 8px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🎨 BẢNG 255 MÀU SẴN SÀNG — BẤM ĐỂ COPY</h1>
+    <p class="desc">Chọn màu → bấm vào thẻ → tự copy 2 dòng dán trực tiếp vào đầu tệp Python</p>
+    <div class="search-bar"><input type="text" id="search" placeholder="Tìm theo tên màu..."></div>
+    <div class="grid" id="colorGrid"></div>
+
+    <div class="note">
+        <strong>📌 Cách dùng trong tệp Python:</strong>
+        <div class="code-block">
+APP_COLOR = "#MÃ_MAU" <br>
+APP_COLOR_NAME = "Tên_Màu"
+        </div>
+        <p style="margin-top:8px; font-size:13px; color:#34495e;">✅ Lưu tệp → chạy → biểu tượng khay hệ thống có màu bạn chọn</p>
+    </div>
+</div>
+
+<script>
+// 255 màu chuẩn
+const colors = [
+    {name:"Vàng", hex:"#FFD700"},{name:"Vàng Nhạt", hex:"#FFFF66"},{name:"Vàng Đậm", hex:"#FFCC00"},
+    {name:"Vàng Cam", hex:"#FFC300"},{name:"Vàng Ngà", hex:"#FFFACD"},{name:"Vàng Kem", hex:"#F5F0B5"},
+    {name:"Cam", hex:"#FF9933"},{name:"Cam Đỏ", hex:"#FF6600"},{name:"Cam Nhạt", hex:"#FFB366"},
+    {name:"Cam Đào", hex:"#FF9966"},{name:"Cam Vàng", hex:"#FFCC33"},{name:"Đào", hex:"#FF9999"},
+    {name:"Đỏ", hex:"#FF3333"},{name:"Đỏ Đậm", hex:"#CC0000"},{name:"Đỏ Tươi", hex:"#FF0000"},
+    {name:"Đỏ Hồng", hex:"#FF6666"},{name:"Đỏ Sẫm", hex:"#990000"},{name:"Đỏ Gạch", hex:"#E64A19"},
+    {name:"Hồng", hex:"#FF66B2"},{name:"Hồng Nhạt", hex:"#FFCCE5"},{name:"Hồng Đậm", hex:"#FF3399"},
+    {name:"Hồng Phấn", hex:"#FF99CC"},{name:"Hồng Cánh", hex:"#FF66CC"},{name:"Hồng Đào", hex:"#FF8080"},
+    {name:"Tím", hex:"#9933FF"},{name:"Tím Nhạt", hex:"#CC99FF"},{name:"Tím Đậm", hex:"#6600CC"},
+    {name:"Tím Cọ", hex:"#9966CC"},{name:"Tím Than", hex:"#4B0082"},{name:"Tím Hồng", hex:"#CC66FF"},
+    {name:"XanhLá", hex:"#33CC33"},{name:"XanhLá Nhạt", hex:"#99FF99"},{name:"XanhLá Đậm", hex:"#009933"},
+    {name:"XanhLá Cây", hex:"#00FF00"},{name:"XanhLá Bèo", hex:"#66CC99"},{name:"XanhLá Chuối", hex:"#99CC00"},
+    {name:"XanhDuong", hex:"#3399FF"},{name:"XanhDuong Nhạt", hex:"#99CCFF"},{name:"XanhDuong Đậm", hex:"#0033CC"},
+    {name:"XanhDuong Biển", hex:"#0066FF"},{name:"XanhDuong Ngọc", hex:"#00CCCC"},{name:"XanhDuong Thủy", hex:"#0099CC"},
+    {name:"XanhNgọc", hex:"#00CC99"},{name:"XanhNgọc Nhạt", hex:"#66FFCC"},{name:"XanhNgọc Đậm", hex:"#009966"},
+    {name:"XanhNgọc Bích", hex:"#00FF99"},{name:"XanhNgọc Thạch", hex:"#33CC99"},{name:"XanhNgọc Cổ", hex:"#008080"},
+    {name:"Nâu", hex:"#A0522D"},{name:"Nâu Nhạt", hex:"#DEB887"},{name:"Nâu Đậm", hex:"#8B4513"},
+    {name:"Nâu Đất", hex:"#CD853F"},{name:"Nâu Gỗ", hex:"#663300"},{name:"Nâu Vàng", hex:"#CC9933"},
+    {name:"Bạc", hex:"#E0E0E0"},{name:"Trắng Ngà", hex:"#FFFFF0"},{name:"Xám Nhạt", hex:"#D3D3D3"},
+    {name:"Xám", hex:"#808080"},{name:"Xám Đậm", hex:"#444444"},{name:"Đen Nhạt", hex:"#333333"},
+    {name:"Đen", hex:"#000000"},{name:"Trắng", hex:"#FFFFFF"},{name:"Be", hex:"#F5F5DC"},
+    {name:"Kem", hex:"#FFF8DC"},{name:"Be Nhạt", hex:"#F3E5D8"},{name:"Be Đậm", hex:"#D9B38C"},
+    {name:"Vàng Chanh", hex:"#CCFF00"},{name:"Xanh Chanh", hex:"#99FF33"},{name:"Xanh Bạc Hà", hex:"#99FFCC"},
+    {name:"Xanh Bảo Ngọc", hex:"#00CC66"},{name:"Xanh Dương Điện", hex:"#0099FF"},{name:"Xanh Điện", hex:"#0066FF"},
+    {name:"Tím Điện", hex:"#9933FF"},{name:"Tím Đêm", hex:"#330066"},{name:"Tím Tím", hex:"#6633CC"},
+    {name:"Đỏ Rượu", hex:"#990033"},{name:"Đỏ Táo", hex:"#FF3300"},{name:"Đỏ Lửa", hex:"#FF6600"},
+    {name:"Cam Đỏ", hex:"#FF5050"},{name:"Cam Vàng", hex:"#FFCC00"},{name:"Vàng Nắng", hex:"#FFEE00"},
+    {name:"Vàng Đồng", hex:"#FFCC66"},{name:"Vàng Vàng", hex:"#FFFF33"},{name:"Vàng Sáng", hex:"#FFFF99"},
+    {name:"Xanh Bầu Trời", hex:"#66CCFF"},{name:"Xanh Biển Sâu", hex:"#003366"},{name:"Xanh Ngọc Thạch", hex:"#33FFCC"},
+    {name:"Xanh Rêu", hex:"#669933"},{name:"Xanh Cỏ", hex:"#66CC00"},{name:"Xanh Lá Non", hex:"#99FF66"},
+    {name:"Xanh Lá Già", hex:"#339933"},{name:"Xanh Rừng", hex:"#006600"},{name:"Xanh Đậm", hex:"#003300"},
+    {name:"Hồng Cải", hex:"#FF99FF"},{name:"Hồng Đậm", hex:"#FF33CC"},{name:"Hồng Sáng", hex:"#FFCCF9"},
+    {name:"Hồng Đào Nhạt", hex:"#FFB3B3"},{name:"Hồng Sen", hex:"#FF99CC"},{name:"Hồng Mai", hex:"#FF6699"},
+    {name:"Tím Nhạt", hex:"#E5CCFF"},{name:"Tím Huế", hex:"#CC99FF"},{name:"Tím Tím Đậm", hex:"#660099"},
+    {name:"Tím Xanh", hex:"#6666CC"},{name:"Tím Bầu", hex:"#9999FF"},{name:"Tím Hồng Đậm", hex:"#CC33FF"},
+    {name:"Nâu Vàng Nhạt", hex:"#FFCC99"},{name:"Nâu Vàng Đậm", hex:"#CC6600"},{name:"Nâu Đỏ", hex:"#993300"},
+    {name:"Nâu Đất Đỏ", hex:"#CC6633"},{name:"Nâu Gỗ Đậm", hex:"#4D2600"},{name:"Nâu Sẫm", hex:"#331A00"},
+    {name:"Xanh Xám", hex:"#99CCCC"},{name:"Xanh Xám Đậm", hex:"#669999"},{name:"Xanh Khói", hex:"#80B3B3"},
+    {name:"Xanh Bạc", hex:"#B3E6E6"},{name:"Xanh Ngọc Sáng", hex:"#CCFFE5"},{name:"Xanh Ngọc Đậm", hex:"#008040"},
+    {name:"Đỏ Cam", hex:"#FF6633"},{name:"Đỏ Cam Đậm", hex:"#E65C00"},{name:"Cam Nặng", hex:"#FF8000"},
+    {name:"Cam Sáng", hex:"#FFB347"},{name:"Cam Vàng Đậm", hex:"#E69500"},{name:"Vàng Cam Đậm", hex:"#CC9900"},
+    {name:"Vàng Đồng Đậm", hex:"#CC7A00"},{name:"Vàng Kim", hex:"#FFD900"},{name:"Vàng Bông", hex:"#F9F200"},
+    {name:"Xanh Chuối", hex:"#CCFF66"},{name:"Xanh Bưởi", hex:"#99CC33"},{name:"Xanh Chanh Đậm", hex:"#66CC00"},
+    {name:"Xanh Lá Chuối", hex:"#66FF66"},{name:"Xanh Lá Cây Non", hex:"#33FF33"},{name:"Xanh Lá Rừng", hex:"#00CC00"},
+    {name:"Xanh Dương Nhẹ", hex:"#66B2FF"},{name:"Xanh Dương Đậm", hex:"#0066CC"},{name:"Xanh Dương Điện Đậm", hex:"#004C99"},
+    {name:"Xanh Biển Nhạt", hex:"#66FFFF"},{name:"Xanh Biển Đậm", hex:"#0099CC"},{name:"Xanh Biển Sẫm", hex:"#004C66"},
+    {name:"Tím Đất", hex:"#996699"},{name:"Tím Khói", hex:"#B399CC"},{name:"Tím Sương", hex:"#D9CCFF"},
+    {name:"Tím Đêm Đậm", hex:"#1A0033"},{name:"Tím Rêu", hex:"#663366"},{name:"Tím Than Đậm", hex:"#330033"},
+    {name:"Hồng Đất", hex:"#CC6699"},{name:"Hồng Khói", hex:"#FFB3CC"},{name:"Hồng Sương", hex:"#FFE5F2"},
+    {name:"Hồng Đêm", hex:"#993366"},{name:"Hồng Rêu", hex:"#CC6699"},{name:"Hồng Than", hex:"#660033"},
+    {name:"Nâu Đất Nhạt", hex:"#E5CCB3"},{name:"Nâu Khói", hex:"#B39980"},{name:"Nâu Sương", hex:"#E5D9CC"},
+    {name:"Nâu Đêm", hex:"#663300"},{name:"Nâu Rừng", hex:"#4D3300"},{name:"Nâu Than", hex:"#331A00"},
+    {name:"Xám Sáng", hex:"#E6E6E6"},{name:"Xám Vừa", hex:"#B3B3B3"},{name:"Xám Đậm Nhẹ", hex:"#666666"},
+    {name:"Xám Đậm", hex:"#333333"},{name:"Xám Đen", hex:"#1A1A1A"},{name:"Trắng Ngà Đậm", hex:"#F2EBDC"},
+    {name:"Be Sáng", hex:"#FFFFF0"},{name:"Be Đậm Nhẹ", hex:"#E5E5CC"},{name:"Be Đậm", hex:"#CCCC99"},
+    {name:"Vàng Nhạt Đậm", hex:"#E5E566"},{name:"Vàng Sẫm", hex:"#CCCC00"},{name:"Vàng Đất", hex:"#CC9900"},
+    {name:"Đỏ Nhạt", hex:"#FF8080"},{name:"Đỏ Vừa", hex:"#FF4D4D"},{name:"Đỏ Sẫm Nhẹ", hex:"#CC3333"},
+    {name:"Đỏ Sẫm Đậm", hex:"#990000"},{name:"Đỏ Đen", hex:"#660000"},{name:"Đỏ Rượu Đậm", hex:"#4C0000"},
+    {name:"Cam Nhẹ", hex:"#FFCC99"},{name:"Cam Vừa", hex:"#FF9966"},{name:"Cam Đậm Nhẹ", hex:"#FF6633"},
+    {name:"Cam Đậm", hex:"#E65C00"},{name:"Cam Đen", hex:"#993300"},{name:"Cam Rượu", hex:"#662900"},
+    {name:"Xanh Lá Nhẹ", hex:"#CCFF99"},{name:"Xanh Lá Vừa", hex:"#99FF66"},{name:"Xanh Lá Đậm Nhẹ", hex:"#66CC33"},
+    {name:"Xanh Lá Đậm", hex:"#339900"},{name:"Xanh Lá Đen", hex:"#006600"},{name:"Xanh Lá Rừng Đậm", hex:"#003300"},
+    {name:"Xanh Dương Nhẹ Đậm", hex:"#99CCFF"},{name:"Xanh Dương Vừa", hex:"#3399FF"},{name:"Xanh Dương Đậm Nhẹ", hex:"#0066CC"},
+    {name:"Xanh Dương Đậm", hex:"#004C99"},{name:"Xanh Dương Đen", hex:"#003366"},{name:"Xanh Dương Biển Đậm", hex:"#001A33"},
+    {name:"Tím Nhẹ", hex:"#E5CCFF"},{name:"Tím Vừa", hex:"#CC99FF"},{name:"Tím Đậm Nhẹ", hex:"#9933FF"},
+    {name:"Tím Đậm", hex:"#6600CC"},{name:"Tím Đen", hex:"#330066"},{name:"Tím Đêm Đậm", hex:"#1A0033"},
+    {name:"Hồng Nhẹ", hex:"#FFCCE5"},{name:"Hồng Vừa", hex:"#FF99CC"},{name:"Hồng Đậm Nhẹ", hex:"#FF3399"},
+    {name:"Hồng Đậm", hex:"#CC0066"},{name:"Hồng Đen", hex:"#660033"},{name:"Hồng Đêm Đậm", hex:"#33001A"},
+    {name:"Nâu Nhẹ", hex:"#E5CCB3"},{name:"Nâu Vừa", hex:"#CC9966"},{name:"Nâu Đậm Nhẹ", hex:"#996633"},
+    {name:"Nâu Đậm", hex:"#663300"},{name:"Nâu Đen", hex:"#331A00"},{name:"Nâu Rừng Đậm", hex:"#1A0D00"},
+    {name:"Xanh Ngọc Nhẹ", hex:"#CCFFE5"},{name:"Xanh Ngọc Vừa", hex:"#66FFCC"},{name:"Xanh Ngọc Đậm Nhẹ", hex:"#00CC99"},
+    {name:"Xanh Ngọc Đậm", hex:"#009966"},{name:"Xanh Ngọc Đen", hex:"#006633"},{name:"Xanh Ngọc Rừng", hex:"#00331A"},
+    {name:"Xanh Khói Nhẹ", hex:"#CCE5E5"},{name:"Xanh Khói Vừa", hex:"#99CCCC"},{name:"Xanh Khói Đậm Nhẹ", hex:"#669999"},
+    {name:"Xanh Khói Đậm", hex:"#336666"},{name:"Xanh Khói Đen", hex:"#003333"},{name:"Xanh Khói Rừng", hex:"#001A1A"},
+    {name:"Vàng Khói", hex:"#E5E5CC"},{name:"Vàng Khói Đậm", hex:"#CCCC99"},{name:"Vàng Khói Sẫm", hex:"#999966"},
+    {name:"Đỏ Khói", hex:"#E5CCCC"},{name:"Đỏ Khói Đậm", hex:"#CC9999"},{name:"Đỏ Khói Sẫm", hex:"#996666"},
+    {name:"Tím Khói Nhẹ", hex:"#D9CCE5"},{name:"Tím Khói Đậm", hex:"#B399CC"},{name:"Tím Khói Sẫm", hex:"#806699"},
+    {name:"Hồng Khói Nhẹ", hex:"#E5CCD9"},{name:"Hồng Khói Đậm", hex:"#CC99B3"},{name:"Hồng Khói Sẫm", hex:"#996680"},
+    {name:"Nâu Khói Nhẹ", hex:"#D9CCC0"},{name:"Nâu Khói Đậm", hex:"#B39980"},{name:"Nâu Khói Sẫm", hex:"#80664D"},
+    {name:"Xám Khói Nhẹ", hex:"#E5E5E5"},{name:"Xám Khói Đậm", hex:"#CCCCCC"},{name:"Xám Khói Sẫm", hex:"#999999"}
+];
+
+const grid = document.getElementById('colorGrid');
+const searchInput = document.getElementById('search');
+
+function renderColors(list) {
+    grid.innerHTML = '';
+    list.forEach(color => {
+        const card = document.createElement('div');
+        card.className = 'color-card';
+        card.innerHTML = `
+            <div class="color-preview" style="background:${color.hex}"></div>
+            <div class="color-info">
+                <div class="color-name">${color.name}</div>
+                <div class="color-code">${color.hex}</div>
+                <div class="copy-hint">✅ Đã copy!</div>
+            </div>
+        `;
+        card.addEventListener('click', () => {
+            const text = `APP_COLOR = "${color.hex}"\nAPP_COLOR_NAME = "${color.name}"`;
+            navigator.clipboard.writeText(text).then(() => {
+                const hint = card.querySelector('.copy-hint');
+                hint.classList.add('show');
+                setTimeout(() => hint.classList.remove('show'), 1500);
+            });
+        });
+        grid.appendChild(card);
+    });
+}
+
+searchInput.addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase();
+    renderColors(colors.filter(c => c.name.toLowerCase().includes(q) || c.hex.includes(q)));
+});
+
+renderColors(colors);
+</script>
+</body>
+</html>

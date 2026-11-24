@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📈 THÁI SƠN - LỢI NHUẬN "KHỦNG LONG" 2026</title>
+    <!-- Font Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background: linear-gradient(145deg, #0b1120 0%, #1a253a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 60px 60px 40px 40px;
+            padding: 40px 35px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 215, 0, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        /* Phần tiêu đề giật gân */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px dashed rgba(255, 215, 0, 0.4);
+            padding-bottom: 20px;
+        }
+
+        .badge {
+            background: #ffd700;
+            color: #0b1120;
+            font-weight: 900;
+            font-size: 0.9rem;
+            padding: 6px 20px;
+            border-radius: 40px;
+            display: inline-block;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #f6e05e, #fbd38d, #f6ad55);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 200, 0, 0.2);
+            line-height: 1.1;
+        }
+
+        .subhead {
+            color: #a0aec0;
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-top: 8px;
+            letter-spacing: 0.5px;
+        }
+        .subhead span {
+            background: #2d3748;
+            padding: 2px 12px;
+            border-radius: 30px;
+            color: #ffd700;
+            font-weight: 700;
+        }
+
+        /* Grid số liệu chính */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-item {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 30px;
+            padding: 20px 15px;
+            text-align: center;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s;
+        }
+        .stat-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+            border-color: #ffd700;
+        }
+
+        .stat-label {
+            color: #cbd5e0;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin: 10px 0 5px;
+        }
+
+        .stat-desc {
+            color: #a0aec0;
+            font-size: 0.8rem;
+            background: rgba(0,0,0,0.3);
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .text-gold { color: #f6ad55; }
+        .text-green { color: #68d391; }
+        .text-red { color: #fc8181; }
+        .text-purple { color: #b794f4; }
+        .text-blue { color: #63b3ed; }
+        .text-pink { color: #f687b3; }
+
+        /* Khu vực giải thích hài hước */
+        .story-box {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 40px;
+            padding: 25px 30px;
+            margin: 25px 0;
+            border-left: 8px solid #ffd700;
+            box-shadow: inset 0 0 30px rgba(255, 215, 0, 0.05);
+        }
+
+        .story-box h2 {
+            color: #ffd700;
+            font-size: 1.8rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .story-box p {
+            color: #e2e8f0;
+            font-size: 1.2rem;
+            line-height: 1.7;
+            margin: 15px 0;
+        }
+
+        .highlight-big {
+            font-size: 1.6rem;
+            font-weight: 900;
+            padding: 0 8px;
+        }
+
+        .emoji-big {
+            font-size: 2.2rem;
+            vertical-align: middle;
+        }
+
+        .fun-fact {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .fun-fact-item {
+            background: #1a202c;
+            border-radius: 60px;
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid #2d3748;
+            flex: 1 1 auto;
+        }
+
+        .fun-fact-item .icon {
+            font-size: 2rem;
+        }
+
+        .fun-fact-item .content {
+            color: #edf2f7;
+            font-weight: 700;
+        }
+
+        .fun-fact-item .content small {
+            font-weight: 400;
+            color: #a0aec0;
+            display: block;
+            font-size: 0.8rem;
+        }
+
+        .btn-cashflow {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 60px;
+            font-weight: 900;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 10px 20px -5px rgba(229, 62, 62, 0.4);
+            transition: all 0.15s ease;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .btn-cashflow:hover {
+            background: #c53030;
+            transform: scale(1.02);
+            box-shadow: 0 15px 30px -5px rgba(229, 62, 62, 0.7);
+        }
+
+        .btn-cashflow:active {
+            transform: scale(0.97);
+        }
+
+        /* Footer */
+        .footer-note {
+            text-align: center;
+            margin-top: 30px;
+            color: #4a5568;
+            font-size: 0.8rem;
+            border-top: 1px solid #2d3748;
+            padding-top: 25px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .card { padding: 25px 15px; border-radius: 40px; }
+            h1 { font-size: 2.4rem; }
+            .stat-number { font-size: 2rem; }
+            .story-box p { font-size: 1rem; }
+            .highlight-big { font-size: 1.3rem; }
+            .fun-fact-item { padding: 10px 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card" id="app">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="badge">🚀 BẢN TIN TÀI CHÍNH "SỐC"</div>
+        <h1>THÁI SƠN: LỢI NHUẬN<br>NHẢY MÚA 1.300%</h1>
+        <div class="subhead">
+            Nửa đầu 2026 · <span>+13 lần</span> so với cùng kỳ
+        </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-label">💰 Lợi nhuận sau thuế</div>
+            <div class="stat-number text-gold">11.231 <small style="font-size:1rem;">tỷ</small></div>
+            <div class="stat-desc">📈 Gấp 13 lần</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">🏗️ Doanh thu bán hàng</div>
+            <div class="stat-number text-green">3.752 <small style="font-size:1rem;">tỷ</small></div>
+            <div class="stat-desc">📦 Gấp 7,8 lần</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">📊 Doanh thu tài chính</div>
+            <div class="stat-number text-purple">16.337 <small style="font-size:1rem;">tỷ</small></div>
+            <div class="stat-desc">💸 Gấp 3,1 lần</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">🤝 Cổ tức / Hợp tác KD</div>
+            <div class="stat-number text-pink">14.740 <small style="font-size:1rem;">tỷ</small></div>
+            <div class="stat-desc">🔥 Gấp <strong>163</strong> lần!</div>
+        </div>
+    </div>
+
+    <!-- STORY / GIẢI THÍCH HÀI HƯỚC -->
+    <div class="story-box">
+        <h2>
+            <span>🕵️‍♂️</span> Bí mật "Xây dựng" hay "Đầu tư tài chính"?
+        </h2>
+        <p>
+            <span class="emoji-big">🏦</span> Nhìn bề ngoài là công ty xây dựng, nhưng 
+            <span class="highlight-big text-gold">14.740 tỷ</span> từ cổ tức & hợp tác kinh doanh 
+            mới là "át chủ bài". Con số này gấp <strong class="text-pink">163 lần</strong> năm trước!
+            <br><br>
+            <span class="emoji-big">🤯</span> Có vẻ như Thái Sơn đã "bỏ xây nhà, sang buôn bán tiền" 
+            hoặc "hợp tác siêu lợi nhuận" với ai đó. Lợi nhuận gộp 1.261 tỷ từ bán hàng 
+            chỉ là "món khai vị", còn "món chính" là tài chính.
+        </p>
+        <div class="fun-fact">
+            <div class="fun-fact-item">
+                <span class="icon">📈</span>
+                <div class="content">
+                    Lợi nhuận 11.231 tỷ
+                    <small>Đủ mua 1.000 căn hộ penthouse</small>
+                </div>
+            </div>
+            <div class="fun-fact-item">
+                <span class="icon">💸</span>
+                <div class="content">
+                    Chi phí tài chính 3.467 tỷ
+                    <small>Tăng 6,9% - vẫn "chấp nhận được"</small>
+                </div>
+            </div>
+            <div class="fun-fact-item">
+                <span class="icon">🧐</span>
+                <div class="content">
+                    Lãi tiền gửi 1.527 tỷ
+                    <small>Gửi tiết kiệm cũng ra vài nghìn tỷ?</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DÒNG TIỀN & NÚT TƯƠNG TÁC -->
+    <div style="margin: 15px 0;">
+        <button class="btn-cashflow" id="cashflowBtn">
+            💧 DÒNG TIỀN KINH DOANH ĐANG ÂM - BẤM VÀO ĐÂY ĐỂ BIẾT SỰ THẬT
+        </button>
+        <div id="cashflowMessage" style="margin-top: 20px; font-size: 1.4rem; font-weight: 700; text-align: center; min-height: 70px; color: #fc8181; transition: all 0.3s;">
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-note">
+        ⚡ Dữ liệu BCTC hợp nhất giữa niên độ 2026 • Đầu tư Xây dựng Thái Sơn • 
+        <span style="color:#718096;">"Lợi nhuận ảo, tương lai thật?"</span>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const btn = document.getElementById('cashflowBtn');
+        const msgDiv = document.getElementById('cashflowMessage');
+        let count = 0;
+
+        const messages = [
+            "😱 Dòng tiền kinh doanh ÂM nặng! Kiểu: Lợi nhuận trên giấy là tỷ phú, nhưng tài khoản không có tiền mặt.",
+            "🤔 Tiền đang nằm ở đâu? Chắc là trong các khoản phải thu, hàng tồn kho, hoặc... trong giấc mơ?",
+            "💰 Lãi 11.231 tỷ nhưng dòng tiền âm: Điển hình của 'kinh doanh kiểu bán hàng trả chậm' hoặc 'đầu tư dài hạn chưa thu hồi'.",
+            "📉 Kết luận: Thái Sơn đang rất giàu trên sổ sách, nhưng 'đói' tiền mặt thực tế. Hãy cẩn thận với những con số biết nhảy múa!"
+        ];
+
+        btn.addEventListener('click', function() {
+            // Hiệu ứng nhấn
+            this.style.transform = 'scale(0.97)';
+            setTimeout(() => { this.style.transform = ''; }, 150);
+
+            // Hiển thị tin nhắn tuần tự
+            const msg = messages[count % messages.length];
+            msgDiv.innerHTML = `
+                <div style="background: rgba(229, 62, 62, 0.15); padding: 20px 25px; border-radius: 60px; backdrop-filter: blur(4px); border: 1px solid rgba(229, 62, 62, 0.3);">
+                    ${msg}
+                </div>
+            `;
+            count++;
+            // Nếu hết vòng thì reset (tùy thích)
+            if (count >= messages.length) count = 0;
+        });
+
+        // Tự động hiển thị lần đầu sau 1 giây để gây chú ý
+        setTimeout(() => {
+            btn.click();
+        }, 800);
+    })();
+</script>
+
+</body>
+</html>

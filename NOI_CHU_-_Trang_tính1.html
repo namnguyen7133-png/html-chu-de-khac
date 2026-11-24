@@ -1,0 +1,3864 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>NOI CHU - Trang tính1</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>NOI CHU - Trang tính1</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>03/08/2026</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>n | m | 46235</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>1.0 | 1109640</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>na_ná | nay | na_ná | nay | 0.0 | Thiếu dữ liệu tại B3 hoặc C3 | 1</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>na_uy | ngay | na_uy | ngay</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>nai | ngay bây giờ | nai | ngay bây giờ</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>nam | ngay cả | nam | ngay cả</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>nam_bộ | ngay khi | nam_bộ | ngay khi</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>nam_cao | ngay khi đến | nam_cao | ngay khi đến</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>nam_châm | ngay lúc | nam_châm | ngay lúc</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>nam_cực | ngay lúc này | nam_cực | ngay lúc này</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>nam_giới | ngay lập tức | nam_giới | ngay lập tức</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>nam_khoa | ngay thật | nam_khoa | ngay thật</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>nam_kỳ_khởi_nghĩa | ngay tức khắc | nam_kỳ_khởi_nghĩa | ngay tức khắc</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>nam_mỹ | ngay tức thì | nam_mỹ | ngay tức thì</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>nam_nữ | ngay từ | nam_nữ | ngay từ</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>nam_phi | nghe | nam_phi | nghe</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>nam_trung_bộ | nghe chừng | nam_trung_bộ | nghe chừng</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>nam_tính | nghe hiểu | nam_tính | nghe hiểu</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>nam_tư | nghe không | nam_tư | nghe không</td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td>nam_á | nghe lại | nam_á | nghe lại</td>
+            </tr>
+            <tr>
+                <td><b>22</b></td>
+                <td>nam_định | nghe nhìn | nam_định | nghe nhìn</td>
+            </tr>
+            <tr>
+                <td><b>23</b></td>
+                <td>nghe như | nghe như</td>
+            </tr>
+            <tr>
+                <td><b>24</b></td>
+                <td>nan_giải | nghe nói | nan_giải | nghe nói</td>
+            </tr>
+            <tr>
+                <td><b>25</b></td>
+                <td>nan_y | nghe ra | nan_y | nghe ra</td>
+            </tr>
+            <tr>
+                <td><b>26</b></td>
+                <td>nang | nghe rõ | nang | nghe rõ</td>
+            </tr>
+            <tr>
+                <td><b>27</b></td>
+                <td>nano | nghe thấy | nano | nghe thấy</td>
+            </tr>
+            <tr>
+                <td><b>28</b></td>
+                <td>nao | nghe tin | nao | nghe tin</td>
+            </tr>
+            <tr>
+                <td><b>29</b></td>
+                <td>narathiwat | nghe trực tiếp | narathiwat | nghe trực tiếp</td>
+            </tr>
+            <tr>
+                <td><b>30</b></td>
+                <td>nasa | nghe đâu | nasa | nghe đâu</td>
+            </tr>
+            <tr>
+                <td><b>31</b></td>
+                <td>nato | nghe đâu như | nato | nghe đâu như</td>
+            </tr>
+            <tr>
+                <td><b>32</b></td>
+                <td>natri | nghe được | natri | nghe được</td>
+            </tr>
+            <tr>
+                <td><b>33</b></td>
+                <td>nauy | nghen | nauy | nghen</td>
+            </tr>
+            <tr>
+                <td><b>34</b></td>
+                <td>nay_mai | nghiễm nhiên | nay_mai | nghiễm nhiên</td>
+            </tr>
+            <tr>
+                <td><b>35</b></td>
+                <td>nec | nghĩ | nec | nghĩ</td>
+            </tr>
+            <tr>
+                <td><b>36</b></td>
+                <td>nedved | nghĩ lại | nedved | nghĩ lại</td>
+            </tr>
+            <tr>
+                <td><b>37</b></td>
+                <td>nem | nghĩ ra | nem | nghĩ ra</td>
+            </tr>
+            <tr>
+                <td><b>38</b></td>
+                <td>nen | nghĩ tới | nen | nghĩ tới</td>
+            </tr>
+            <tr>
+                <td><b>39</b></td>
+                <td>neo | nghĩ xa | neo | nghĩ xa</td>
+            </tr>
+            <tr>
+                <td><b>40</b></td>
+                <td>nepal | nghĩ đến | nepal | nghĩ đến</td>
+            </tr>
+            <tr>
+                <td><b>41</b></td>
+                <td>nesta | nghỉm | nesta | nghỉm</td>
+            </tr>
+            <tr>
+                <td><b>42</b></td>
+                <td>net | ngoài | net | ngoài</td>
+            </tr>
+            <tr>
+                <td><b>43</b></td>
+                <td>network | ngoài này | network | ngoài này</td>
+            </tr>
+            <tr>
+                <td><b>44</b></td>
+                <td>neu | ngoài ra | neu | ngoài ra</td>
+            </tr>
+            <tr>
+                <td><b>45</b></td>
+                <td>new | ngoài xa | new | ngoài xa</td>
+            </tr>
+            <tr>
+                <td><b>46</b></td>
+                <td>new_delhi | ngoải | new_delhi | ngoải</td>
+            </tr>
+            <tr>
+                <td><b>47</b></td>
+                <td>new_jersey | nguồn | new_jersey | nguồn</td>
+            </tr>
+            <tr>
+                <td><b>48</b></td>
+                <td>new_york | ngày | new_york | ngày</td>
+            </tr>
+            <tr>
+                <td><b>49</b></td>
+                <td>new_york_times | ngày càng | new_york_times | ngày càng</td>
+            </tr>
+            <tr>
+                <td><b>50</b></td>
+                <td>new_zealand | ngày cấp | new_zealand | ngày cấp</td>
+            </tr>
+            <tr>
+                <td><b>51</b></td>
+                <td>newcastle | ngày giờ | newcastle | ngày giờ</td>
+            </tr>
+            <tr>
+                <td><b>52</b></td>
+                <td>news | ngày ngày | news | ngày ngày</td>
+            </tr>
+            <tr>
+                <td><b>53</b></td>
+                <td>ng | ngày nào | ng | ngày nào</td>
+            </tr>
+            <tr>
+                <td><b>54</b></td>
+                <td>nga | ngày này | nga | ngày này</td>
+            </tr>
+            <tr>
+                <td><b>55</b></td>
+                <td>ngan | ngày nọ | ngan | ngày nọ</td>
+            </tr>
+            <tr>
+                <td><b>56</b></td>
+                <td>ngang | ngày qua | ngang | ngày qua</td>
+            </tr>
+            <tr>
+                <td><b>57</b></td>
+                <td>ngang_hàng | ngày rày | ngang_hàng | ngày rày</td>
+            </tr>
+            <tr>
+                <td><b>58</b></td>
+                <td>ngang_nhiên | ngày tháng | ngang_nhiên | ngày tháng</td>
+            </tr>
+            <tr>
+                <td><b>59</b></td>
+                <td>ngao_ngán | ngày xưa | ngao_ngán | ngày xưa</td>
+            </tr>
+            <tr>
+                <td><b>60</b></td>
+                <td>ngay_ngắn | ngày xửa | ngay_ngắn | ngày xửa</td>
+            </tr>
+            <tr>
+                <td><b>61</b></td>
+                <td>nghe_ngóng | ngày đến | nghe_ngóng | ngày đến</td>
+            </tr>
+            <tr>
+                <td><b>62</b></td>
+                <td>nghi | ngày ấy | nghi | ngày ấy</td>
+            </tr>
+            <tr>
+                <td><b>63</b></td>
+                <td>nghi_lễ | ngôi | nghi_lễ | ngôi</td>
+            </tr>
+            <tr>
+                <td><b>64</b></td>
+                <td>nghi_ngút | ngôi nhà | nghi_ngút | ngôi nhà</td>
+            </tr>
+            <tr>
+                <td><b>65</b></td>
+                <td>nghi_ngại | ngôi thứ | nghi_ngại | ngôi thứ</td>
+            </tr>
+            <tr>
+                <td><b>66</b></td>
+                <td>nghi_ngờ | ngõ hầu | nghi_ngờ | ngõ hầu</td>
+            </tr>
+            <tr>
+                <td><b>67</b></td>
+                <td>nghi_thức | ngăn ngắt | nghi_thức | ngăn ngắt</td>
+            </tr>
+            <tr>
+                <td><b>68</b></td>
+                <td>nghi_vấn | ngươi | nghi_vấn | ngươi</td>
+            </tr>
+            <tr>
+                <td><b>69</b></td>
+                <td>nghiêm | người | nghiêm | người</td>
+            </tr>
+            <tr>
+                <td><b>70</b></td>
+                <td>nghiêm_chỉnh | người hỏi | nghiêm_chỉnh | người hỏi</td>
+            </tr>
+            <tr>
+                <td><b>71</b></td>
+                <td>nghiêm_cấm | người khác | nghiêm_cấm | người khác</td>
+            </tr>
+            <tr>
+                <td><b>72</b></td>
+                <td>nghiêm_khắc | người khách | nghiêm_khắc | người khách</td>
+            </tr>
+            <tr>
+                <td><b>73</b></td>
+                <td>nghiêm_minh | người mình | nghiêm_minh | người mình</td>
+            </tr>
+            <tr>
+                <td><b>74</b></td>
+                <td>nghiêm_ngặt | người nghe | nghiêm_ngặt | người nghe</td>
+            </tr>
+            <tr>
+                <td><b>75</b></td>
+                <td>nghiêm_trọng | người người | nghiêm_trọng | người người</td>
+            </tr>
+            <tr>
+                <td><b>76</b></td>
+                <td>nghiêm_túc | người nhận | nghiêm_túc | người nhận</td>
+            </tr>
+            <tr>
+                <td><b>77</b></td>
+                <td>nghiên_cứu | ngọn | nghiên_cứu | ngọn</td>
+            </tr>
+            <tr>
+                <td><b>78</b></td>
+                <td>nghiên_cứu_sinh | ngọn nguồn | nghiên_cứu_sinh | ngọn nguồn</td>
+            </tr>
+            <tr>
+                <td><b>79</b></td>
+                <td>nghiêng | ngọt | nghiêng | ngọt</td>
+            </tr>
+            <tr>
+                <td><b>80</b></td>
+                <td>nghiến | ngồi | nghiến | ngồi</td>
+            </tr>
+            <tr>
+                <td><b>81</b></td>
+                <td>nghiền | ngồi bệt | nghiền | ngồi bệt</td>
+            </tr>
+            <tr>
+                <td><b>82</b></td>
+                <td>nghiệm | ngồi không | nghiệm | ngồi không</td>
+            </tr>
+            <tr>
+                <td><b>83</b></td>
+                <td>nghiệm_thu | ngồi sau | nghiệm_thu | ngồi sau</td>
+            </tr>
+            <tr>
+                <td><b>84</b></td>
+                <td>nghiện | ngồi trệt | nghiện | ngồi trệt</td>
+            </tr>
+            <tr>
+                <td><b>85</b></td>
+                <td>nghiện_hút | ngộ nhỡ | nghiện_hút | ngộ nhỡ</td>
+            </tr>
+            <tr>
+                <td><b>86</b></td>
+                <td>nghiện_ngập | nhanh | nghiện_ngập | nhanh</td>
+            </tr>
+            <tr>
+                <td><b>87</b></td>
+                <td>nghiệp | nhanh lên | nghiệp | nhanh lên</td>
+            </tr>
+            <tr>
+                <td><b>88</b></td>
+                <td>nghiệp_dư | nhanh tay | nghiệp_dư | nhanh tay</td>
+            </tr>
+            <tr>
+                <td><b>89</b></td>
+                <td>nghiệp_vụ | nhau | nghiệp_vụ | nhau</td>
+            </tr>
+            <tr>
+                <td><b>90</b></td>
+                <td>nghiệt_ngã | nhiên hậu | nghiệt_ngã | nhiên hậu</td>
+            </tr>
+            <tr>
+                <td><b>91</b></td>
+                <td>nghèo | nhiều | nghèo | nhiều</td>
+            </tr>
+            <tr>
+                <td><b>92</b></td>
+                <td>nghèo_khó | nhiều ít | nghèo_khó | nhiều ít</td>
+            </tr>
+            <tr>
+                <td><b>93</b></td>
+                <td>nghèo_khổ | nhiệt liệt | nghèo_khổ | nhiệt liệt</td>
+            </tr>
+            <tr>
+                <td><b>94</b></td>
+                <td>nghèo_nàn | nhung nhăng | nghèo_nàn | nhung nhăng</td>
+            </tr>
+            <tr>
+                <td><b>95</b></td>
+                <td>nghèo_đói | nhà | nghèo_đói | nhà</td>
+            </tr>
+            <tr>
+                <td><b>96</b></td>
+                <td>nghêu | nhà chung | nghêu | nhà chung</td>
+            </tr>
+            <tr>
+                <td><b>97</b></td>
+                <td>nghìn | nhà khó | nghìn | nhà khó</td>
+            </tr>
+            <tr>
+                <td><b>98</b></td>
+                <td>nghìn_tỷ | nhà làm | nghìn_tỷ | nhà làm</td>
+            </tr>
+            <tr>
+                <td><b>99</b></td>
+                <td>nghĩ_ngợi | nhà ngoài | nghĩ_ngợi | nhà ngoài</td>
+            </tr>
+            <tr>
+                <td><b>100</b></td>
+                <td>nghĩa | nhà ngươi | nghĩa | nhà ngươi</td>
+            </tr>
+            <tr>
+                <td><b>101</b></td>
+                <td>nghĩa_là | nhà tôi | nghĩa_là | nhà tôi</td>
+            </tr>
+            <tr>
+                <td><b>102</b></td>
+                <td>nghĩa_trang | nhà việc | nghĩa_trang | nhà việc</td>
+            </tr>
+            <tr>
+                <td><b>103</b></td>
+                <td>nghĩa_vụ | nhân dịp | nghĩa_vụ | nhân dịp</td>
+            </tr>
+            <tr>
+                <td><b>104</b></td>
+                <td>nghĩa_đen | nhân tiện | nghĩa_đen | nhân tiện</td>
+            </tr>
+            <tr>
+                <td><b>105</b></td>
+                <td>nghẹn_ngào | nhé | nghẹn_ngào | nhé</td>
+            </tr>
+            <tr>
+                <td><b>106</b></td>
+                <td>nghẹt | nhìn | nghẹt | nhìn</td>
+            </tr>
+            <tr>
+                <td><b>107</b></td>
+                <td>nghẹt_thở | nhìn chung | nghẹt_thở | nhìn chung</td>
+            </tr>
+            <tr>
+                <td><b>108</b></td>
+                <td>nghẽn | nhìn lại | nghẽn | nhìn lại</td>
+            </tr>
+            <tr>
+                <td><b>109</b></td>
+                <td>nghề | nhìn nhận | nghề | nhìn nhận</td>
+            </tr>
+            <tr>
+                <td><b>110</b></td>
+                <td>nghề_nghiệp | nhìn theo | nghề_nghiệp | nhìn theo</td>
+            </tr>
+            <tr>
+                <td><b>111</b></td>
+                <td>nghệ | nhìn thấy | nghệ | nhìn thấy</td>
+            </tr>
+            <tr>
+                <td><b>112</b></td>
+                <td>nghệ_an | nhìn xuống | nghệ_an | nhìn xuống</td>
+            </tr>
+            <tr>
+                <td><b>113</b></td>
+                <td>nghệ_nhân | nhóm | nghệ_nhân | nhóm</td>
+            </tr>
+            <tr>
+                <td><b>114</b></td>
+                <td>nghệ_sĩ | nhón nhén | nghệ_sĩ | nhón nhén</td>
+            </tr>
+            <tr>
+                <td><b>115</b></td>
+                <td>nghệ_thuật | như | nghệ_thuật | như</td>
+            </tr>
+            <tr>
+                <td><b>116</b></td>
+                <td>nghỉ | như ai | nghỉ | như ai</td>
+            </tr>
+            <tr>
+                <td><b>117</b></td>
+                <td>nghỉ_dưỡng | như chơi | nghỉ_dưỡng | như chơi</td>
+            </tr>
+            <tr>
+                <td><b>118</b></td>
+                <td>nghỉ_hè | như không | nghỉ_hè | như không</td>
+            </tr>
+            <tr>
+                <td><b>119</b></td>
+                <td>nghỉ_mát | như là | nghỉ_mát | như là</td>
+            </tr>
+            <tr>
+                <td><b>120</b></td>
+                <td>nghỉ_ngơi | như nhau | nghỉ_ngơi | như nhau</td>
+            </tr>
+            <tr>
+                <td><b>121</b></td>
+                <td>nghỉ_phép | như quả | nghỉ_phép | như quả</td>
+            </tr>
+            <tr>
+                <td><b>122</b></td>
+                <td>nghỉ_việc | như sau | nghỉ_việc | như sau</td>
+            </tr>
+            <tr>
+                <td><b>123</b></td>
+                <td>nghị | như thường | nghị | như thường</td>
+            </tr>
+            <tr>
+                <td><b>124</b></td>
+                <td>nghị_lực | như thế | nghị_lực | như thế</td>
+            </tr>
+            <tr>
+                <td><b>125</b></td>
+                <td>nghị_quyết | như thế nào | nghị_quyết | như thế nào</td>
+            </tr>
+            <tr>
+                <td><b>126</b></td>
+                <td>nghị_sĩ | như thể | nghị_sĩ | như thể</td>
+            </tr>
+            <tr>
+                <td><b>127</b></td>
+                <td>nghị_sự | như trên | nghị_sự | như trên</td>
+            </tr>
+            <tr>
+                <td><b>128</b></td>
+                <td>nghị_viện | như trước | nghị_viện | như trước</td>
+            </tr>
+            <tr>
+                <td><b>129</b></td>
+                <td>nghị_định | như tuồng | nghị_định | như tuồng</td>
+            </tr>
+            <tr>
+                <td><b>130</b></td>
+                <td>nghị_định_thư | như vậy | nghị_định_thư | như vậy</td>
+            </tr>
+            <tr>
+                <td><b>131</b></td>
+                <td>nghịch | như ý | nghịch | như ý</td>
+            </tr>
+            <tr>
+                <td><b>132</b></td>
+                <td>nghịch_lý | nhưng | nghịch_lý | nhưng</td>
+            </tr>
+            <tr>
+                <td><b>133</b></td>
+                <td>nghịch_ngợm | nhưng mà | nghịch_ngợm | nhưng mà</td>
+            </tr>
+            <tr>
+                <td><b>134</b></td>
+                <td>ngo | nhược bằng | ngo | nhược bằng</td>
+            </tr>
+            <tr>
+                <td><b>135</b></td>
+                <td>ngoai | nhất | ngoai | nhất</td>
+            </tr>
+            <tr>
+                <td><b>136</b></td>
+                <td>ngoan | nhất loạt | ngoan | nhất loạt</td>
+            </tr>
+            <tr>
+                <td><b>137</b></td>
+                <td>ngoan_ngoãn | nhất luật | ngoan_ngoãn | nhất luật</td>
+            </tr>
+            <tr>
+                <td><b>138</b></td>
+                <td>ngoc | nhất là | ngoc | nhất là</td>
+            </tr>
+            <tr>
+                <td><b>139</b></td>
+                <td>ngon_giấc | nhất mực | ngon_giấc | nhất mực</td>
+            </tr>
+            <tr>
+                <td><b>140</b></td>
+                <td>ngon_lành | nhất nhất | ngon_lành | nhất nhất</td>
+            </tr>
+            <tr>
+                <td><b>141</b></td>
+                <td>ngon_miệng | nhất quyết | ngon_miệng | nhất quyết</td>
+            </tr>
+            <tr>
+                <td><b>142</b></td>
+                <td>ngon_ăn | nhất sinh | ngon_ăn | nhất sinh</td>
+            </tr>
+            <tr>
+                <td><b>143</b></td>
+                <td>ngoài_luồng | nhất thiết | ngoài_luồng | nhất thiết</td>
+            </tr>
+            <tr>
+                <td><b>144</b></td>
+                <td>ngoài_trời | nhất thì | ngoài_trời | nhất thì</td>
+            </tr>
+            <tr>
+                <td><b>145</b></td>
+                <td>ngoại | nhất tâm | ngoại | nhất tâm</td>
+            </tr>
+            <tr>
+                <td><b>146</b></td>
+                <td>ngoại_binh | nhất tề | ngoại_binh | nhất tề</td>
+            </tr>
+            <tr>
+                <td><b>147</b></td>
+                <td>ngoại_cảnh | nhất đán | ngoại_cảnh | nhất đán</td>
+            </tr>
+            <tr>
+                <td><b>148</b></td>
+                <td>ngoại_giao | nhất định | ngoại_giao | nhất định</td>
+            </tr>
+            <tr>
+                <td><b>149</b></td>
+                <td>ngoại_hình | nhận | ngoại_hình | nhận</td>
+            </tr>
+            <tr>
+                <td><b>150</b></td>
+                <td>ngoại_hạng | nhận biết | ngoại_hạng | nhận biết</td>
+            </tr>
+            <tr>
+                <td><b>151</b></td>
+                <td>ngoại_hối | nhận họ | ngoại_hối | nhận họ</td>
+            </tr>
+            <tr>
+                <td><b>152</b></td>
+                <td>ngoại_khoa | nhận làm | ngoại_khoa | nhận làm</td>
+            </tr>
+            <tr>
+                <td><b>153</b></td>
+                <td>ngoại_lệ | nhận nhau | ngoại_lệ | nhận nhau</td>
+            </tr>
+            <tr>
+                <td><b>154</b></td>
+                <td>ngoại_ngữ | nhận ra | ngoại_ngữ | nhận ra</td>
+            </tr>
+            <tr>
+                <td><b>155</b></td>
+                <td>ngoại_nhập | nhận thấy | ngoại_nhập | nhận thấy</td>
+            </tr>
+            <tr>
+                <td><b>156</b></td>
+                <td>ngoại_thành | nhận việc | ngoại_thành | nhận việc</td>
+            </tr>
+            <tr>
+                <td><b>157</b></td>
+                <td>ngoại_thương | nhận được | ngoại_thương | nhận được</td>
+            </tr>
+            <tr>
+                <td><b>158</b></td>
+                <td>ngoại_trú | nhằm | ngoại_trú | nhằm</td>
+            </tr>
+            <tr>
+                <td><b>159</b></td>
+                <td>ngoại_trưởng | nhằm khi | ngoại_trưởng | nhằm khi</td>
+            </tr>
+            <tr>
+                <td><b>160</b></td>
+                <td>ngoại_trừ | nhằm lúc | ngoại_trừ | nhằm lúc</td>
+            </tr>
+            <tr>
+                <td><b>161</b></td>
+                <td>ngoại_tình | nhằm vào | ngoại_tình | nhằm vào</td>
+            </tr>
+            <tr>
+                <td><b>162</b></td>
+                <td>ngoại_tệ | nhằm để | ngoại_tệ | nhằm để</td>
+            </tr>
+            <tr>
+                <td><b>163</b></td>
+                <td>ngoại_tỉnh | nhỉ | ngoại_tỉnh | nhỉ</td>
+            </tr>
+            <tr>
+                <td><b>164</b></td>
+                <td>ngoại_vi | nhỏ | ngoại_vi | nhỏ</td>
+            </tr>
+            <tr>
+                <td><b>165</b></td>
+                <td>ngoại_ô | nhỏ người | ngoại_ô | nhỏ người</td>
+            </tr>
+            <tr>
+                <td><b>166</b></td>
+                <td>ngoại_đạo | nhớ | ngoại_đạo | nhớ</td>
+            </tr>
+            <tr>
+                <td><b>167</b></td>
+                <td>ngoạn_mục | nhớ bập bõm | ngoạn_mục | nhớ bập bõm</td>
+            </tr>
+            <tr>
+                <td><b>168</b></td>
+                <td>ngoặc | nhớ lại | ngoặc | nhớ lại</td>
+            </tr>
+            <tr>
+                <td><b>169</b></td>
+                <td>ngu | nhớ lấy | ngu | nhớ lấy</td>
+            </tr>
+            <tr>
+                <td><b>170</b></td>
+                <td>ngu_ngốc | nhớ ra | ngu_ngốc | nhớ ra</td>
+            </tr>
+            <tr>
+                <td><b>171</b></td>
+                <td>nguoi | nhờ | nguoi | nhờ</td>
+            </tr>
+            <tr>
+                <td><b>172</b></td>
+                <td>nguy | nhờ chuyển | nguy | nhờ chuyển</td>
+            </tr>
+            <tr>
+                <td><b>173</b></td>
+                <td>nguy_cơ | nhờ có | nguy_cơ | nhờ có</td>
+            </tr>
+            <tr>
+                <td><b>174</b></td>
+                <td>nguy_cấp | nhờ nhờ | nguy_cấp | nhờ nhờ</td>
+            </tr>
+            <tr>
+                <td><b>175</b></td>
+                <td>nguy_hiểm | nhờ đó | nguy_hiểm | nhờ đó</td>
+            </tr>
+            <tr>
+                <td><b>176</b></td>
+                <td>nguy_hiểm_nhất | nhỡ ra | nguy_hiểm_nhất | nhỡ ra</td>
+            </tr>
+            <tr>
+                <td><b>177</b></td>
+                <td>nguy_hại | những | nguy_hại | những</td>
+            </tr>
+            <tr>
+                <td><b>178</b></td>
+                <td>nguy_kịch | những ai | nguy_kịch | những ai</td>
+            </tr>
+            <tr>
+                <td><b>179</b></td>
+                <td>nguyen | những khi | nguyen | những khi</td>
+            </tr>
+            <tr>
+                <td><b>180</b></td>
+                <td>nguyento | những là | nguyento | những là</td>
+            </tr>
+            <tr>
+                <td><b>181</b></td>
+                <td>nguyên | những lúc | nguyên | những lúc</td>
+            </tr>
+            <tr>
+                <td><b>182</b></td>
+                <td>nguyên_bản | những muốn | nguyên_bản | những muốn</td>
+            </tr>
+            <tr>
+                <td><b>183</b></td>
+                <td>nguyên_chất | những như | nguyên_chất | những như</td>
+            </tr>
+            <tr>
+                <td><b>184</b></td>
+                <td>nguyên_do | nào | nguyên_do | nào</td>
+            </tr>
+            <tr>
+                <td><b>185</b></td>
+                <td>nguyên_liệu | nào cũng | nguyên_liệu | nào cũng</td>
+            </tr>
+            <tr>
+                <td><b>186</b></td>
+                <td>nguyên_lý | nào hay | nguyên_lý | nào hay</td>
+            </tr>
+            <tr>
+                <td><b>187</b></td>
+                <td>nguyên_mẫu | nào là | nguyên_mẫu | nào là</td>
+            </tr>
+            <tr>
+                <td><b>188</b></td>
+                <td>nguyên_nhân | nào phải | nguyên_nhân | nào phải</td>
+            </tr>
+            <tr>
+                <td><b>189</b></td>
+                <td>nguyên_phát | nào đâu | nguyên_phát | nào đâu</td>
+            </tr>
+            <tr>
+                <td><b>190</b></td>
+                <td>nguyên_thuỷ | nào đó | nguyên_thuỷ | nào đó</td>
+            </tr>
+            <tr>
+                <td><b>191</b></td>
+                <td>nguyên_thủ | này | nguyên_thủ | này</td>
+            </tr>
+            <tr>
+                <td><b>192</b></td>
+                <td>nguyên_thủy | này nọ | nguyên_thủy | này nọ</td>
+            </tr>
+            <tr>
+                <td><b>193</b></td>
+                <td>nguyên_tắc | nên | nguyên_tắc | nên</td>
+            </tr>
+            <tr>
+                <td><b>194</b></td>
+                <td>nguyên_tố | nên chi | nguyên_tố | nên chi</td>
+            </tr>
+            <tr>
+                <td><b>195</b></td>
+                <td>nguyên_tử | nên chăng | nguyên_tử | nên chăng</td>
+            </tr>
+            <tr>
+                <td><b>196</b></td>
+                <td>nguyên_vẹn | nên làm | nguyên_vẹn | nên làm</td>
+            </tr>
+            <tr>
+                <td><b>197</b></td>
+                <td>nguyên_đơn | nên người | nguyên_đơn | nên người</td>
+            </tr>
+            <tr>
+                <td><b>198</b></td>
+                <td>nguyễn | nên tránh | nguyễn | nên tránh</td>
+            </tr>
+            <tr>
+                <td><b>199</b></td>
+                <td>nguyễn_anh | nó | nguyễn_anh | nó</td>
+            </tr>
+            <tr>
+                <td><b>200</b></td>
+                <td>nguyễn_chí_thanh | nóc | nguyễn_chí_thanh | nóc</td>
+            </tr>
+            <tr>
+                <td><b>201</b></td>
+                <td>nguyễn_cường | nói | nguyễn_cường | nói</td>
+            </tr>
+            <tr>
+                <td><b>202</b></td>
+                <td>nguyễn_du | nói bông | nguyễn_du | nói bông</td>
+            </tr>
+            <tr>
+                <td><b>203</b></td>
+                <td>nguyễn_hoàng | nói chung | nguyễn_hoàng | nói chung</td>
+            </tr>
+            <tr>
+                <td><b>204</b></td>
+                <td>nguyễn_huệ | nói khó | nguyễn_huệ | nói khó</td>
+            </tr>
+            <tr>
+                <td><b>205</b></td>
+                <td>nguyễn_hữu_cảnh | nói là | nguyễn_hữu_cảnh | nói là</td>
+            </tr>
+            <tr>
+                <td><b>206</b></td>
+                <td>nguyễn_minh_triết | nói lên | nguyễn_minh_triết | nói lên</td>
+            </tr>
+            <tr>
+                <td><b>207</b></td>
+                <td>nguyễn_mậu | nói lại | nguyễn_mậu | nói lại</td>
+            </tr>
+            <tr>
+                <td><b>208</b></td>
+                <td>nguyễn_phi_hùng | nói nhỏ | nguyễn_phi_hùng | nói nhỏ</td>
+            </tr>
+            <tr>
+                <td><b>209</b></td>
+                <td>nguyễn_thiện_nhân | nói phải | nguyễn_thiện_nhân | nói phải</td>
+            </tr>
+            <tr>
+                <td><b>210</b></td>
+                <td>nguyễn_thành | nói qua | nguyễn_thành | nói qua</td>
+            </tr>
+            <tr>
+                <td><b>211</b></td>
+                <td>nguyễn_thái_bình | nói ra | nguyễn_thái_bình | nói ra</td>
+            </tr>
+            <tr>
+                <td><b>212</b></td>
+                <td>nguyễn_thái_học | nói riêng | nguyễn_thái_học | nói riêng</td>
+            </tr>
+            <tr>
+                <td><b>213</b></td>
+                <td>nguyễn_thị | nói rõ | nguyễn_thị | nói rõ</td>
+            </tr>
+            <tr>
+                <td><b>214</b></td>
+                <td>nguyễn_thị_huyền | nói thêm | nguyễn_thị_huyền | nói thêm</td>
+            </tr>
+            <tr>
+                <td><b>215</b></td>
+                <td>nguyễn_thị_minh_khai | nói thật | nguyễn_thị_minh_khai | nói thật</td>
+            </tr>
+            <tr>
+                <td><b>216</b></td>
+                <td>nguyễn_tri_phương | nói toẹt | nguyễn_tri_phương | nói toẹt</td>
+            </tr>
+            <tr>
+                <td><b>217</b></td>
+                <td>nguyễn_trãi | nói trước | nguyễn_trãi | nói trước</td>
+            </tr>
+            <tr>
+                <td><b>218</b></td>
+                <td>nguyễn_tấn_dũng | nói tốt | nguyễn_tấn_dũng | nói tốt</td>
+            </tr>
+            <tr>
+                <td><b>219</b></td>
+                <td>nguyễn_việt_bắc | nói với | nguyễn_việt_bắc | nói với</td>
+            </tr>
+            <tr>
+                <td><b>220</b></td>
+                <td>nguyễn_việt_tiến | nói xa | nguyễn_việt_tiến | nói xa</td>
+            </tr>
+            <tr>
+                <td><b>221</b></td>
+                <td>nguyễn_văn_an | nói ý | nguyễn_văn_an | nói ý</td>
+            </tr>
+            <tr>
+                <td><b>222</b></td>
+                <td>nguyễn_văn_cừ | nói đến | nguyễn_văn_cừ | nói đến</td>
+            </tr>
+            <tr>
+                <td><b>223</b></td>
+                <td>nguyễn_văn_hùng | nói đủ | nguyễn_văn_hùng | nói đủ</td>
+            </tr>
+            <tr>
+                <td><b>224</b></td>
+                <td>nguyễn_văn_linh | năm | nguyễn_văn_linh | năm</td>
+            </tr>
+            <tr>
+                <td><b>225</b></td>
+                <td>nguyễn_văn_trỗi | năm tháng | nguyễn_văn_trỗi | năm tháng</td>
+            </tr>
+            <tr>
+                <td><b>226</b></td>
+                <td>nguyễn_văn_đua | nơi | nguyễn_văn_đua | nơi</td>
+            </tr>
+            <tr>
+                <td><b>227</b></td>
+                <td>nguyễn_đình_chiểu | nơi nơi | nguyễn_đình_chiểu | nơi nơi</td>
+            </tr>
+            <tr>
+                <td><b>228</b></td>
+                <td>nguyện | nước | nguyện | nước</td>
+            </tr>
+            <tr>
+                <td><b>229</b></td>
+                <td>nguyện_vọng | nước bài | nguyện_vọng | nước bài</td>
+            </tr>
+            <tr>
+                <td><b>230</b></td>
+                <td>nguyệt | nước cùng | nguyệt | nước cùng</td>
+            </tr>
+            <tr>
+                <td><b>231</b></td>
+                <td>nguôi | nước lên | nguôi | nước lên</td>
+            </tr>
+            <tr>
+                <td><b>232</b></td>
+                <td>nguôi_ngoai | nước nặng | nguôi_ngoai | nước nặng</td>
+            </tr>
+            <tr>
+                <td><b>233</b></td>
+                <td>nguồn_gốc | nước quả | nguồn_gốc | nước quả</td>
+            </tr>
+            <tr>
+                <td><b>234</b></td>
+                <td>nguồn_lực | nước xuống | nguồn_lực | nước xuống</td>
+            </tr>
+            <tr>
+                <td><b>235</b></td>
+                <td>nguội | nước ăn | nguội | nước ăn</td>
+            </tr>
+            <tr>
+                <td><b>236</b></td>
+                <td>nguội_lạnh | nước đến | nguội_lạnh | nước đến</td>
+            </tr>
+            <tr>
+                <td><b>237</b></td>
+                <td>nguời | nấy | nguời | nấy</td>
+            </tr>
+            <tr>
+                <td><b>238</b></td>
+                <td>ngà | nặng | ngà | nặng</td>
+            </tr>
+            <tr>
+                <td><b>239</b></td>
+                <td>ngài | nặng căn | ngài | nặng căn</td>
+            </tr>
+            <tr>
+                <td><b>240</b></td>
+                <td>ngàn | nặng mình | ngàn | nặng mình</td>
+            </tr>
+            <tr>
+                <td><b>241</b></td>
+                <td>ngành | nặng về | ngành | nặng về</td>
+            </tr>
+            <tr>
+                <td><b>242</b></td>
+                <td>ngành_hàng | nếu | ngành_hàng | nếu</td>
+            </tr>
+            <tr>
+                <td><b>243</b></td>
+                <td>ngành_nghề | nếu có | ngành_nghề | nếu có</td>
+            </tr>
+            <tr>
+                <td><b>244</b></td>
+                <td>ngày_hội | nếu cần | ngày_hội | nếu cần</td>
+            </tr>
+            <tr>
+                <td><b>245</b></td>
+                <td>ngày_kia | nếu không | ngày_kia | nếu không</td>
+            </tr>
+            <tr>
+                <td><b>246</b></td>
+                <td>ngày_mai | nếu mà | ngày_mai | nếu mà</td>
+            </tr>
+            <tr>
+                <td><b>247</b></td>
+                <td>ngày_một | nếu như | ngày_một | nếu như</td>
+            </tr>
+            <tr>
+                <td><b>248</b></td>
+                <td>ngày_nay | nếu thế | ngày_nay | nếu thế</td>
+            </tr>
+            <tr>
+                <td><b>249</b></td>
+                <td>ngày_sinh | nếu vậy | ngày_sinh | nếu vậy</td>
+            </tr>
+            <tr>
+                <td><b>250</b></td>
+                <td>ngày_sinh_nhật | nếu được | ngày_sinh_nhật | nếu được</td>
+            </tr>
+            <tr>
+                <td><b>251</b></td>
+                <td>ngày_trước | nền | ngày_trước | nền</td>
+            </tr>
+            <tr>
+                <td><b>252</b></td>
+                <td>ngày_đêm | nọ | ngày_đêm | nọ</td>
+            </tr>
+            <tr>
+                <td><b>253</b></td>
+                <td>ngán | nớ | ngán | nớ</td>
+            </tr>
+            <tr>
+                <td><b>254</b></td>
+                <td>ngán_ngẩm | nức nở | ngán_ngẩm | nức nở</td>
+            </tr>
+            <tr>
+                <td><b>255</b></td>
+                <td>ngáy | nữa | ngáy | nữa</td>
+            </tr>
+            <tr>
+                <td><b>256</b></td>
+                <td>ngâm | nữa khi | ngâm | nữa khi</td>
+            </tr>
+            <tr>
+                <td><b>257</b></td>
+                <td>ngân | nữa là | ngân | nữa là</td>
+            </tr>
+            <tr>
+                <td><b>258</b></td>
+                <td>ngân_hàng | nữa rồi | ngân_hàng | nữa rồi</td>
+            </tr>
+            <tr>
+                <td><b>259</b></td>
+                <td>ngân_sách | ngã | ngân_sách | ngã</td>
+            </tr>
+            <tr>
+                <td><b>260</b></td>
+                <td>ngây_ngất | ngụ | ngây_ngất | ngụ</td>
+            </tr>
+            <tr>
+                <td><b>261</b></td>
+                <td>ngây_thơ | núi | ngây_thơ | núi</td>
+            </tr>
+            <tr>
+                <td><b>262</b></td>
+                <td>ngã_bệnh | nàng | ngã_bệnh | nàng</td>
+            </tr>
+            <tr>
+                <td><b>263</b></td>
+                <td>ngã_ngũ | nuôi | ngã_ngũ | nuôi</td>
+            </tr>
+            <tr>
+                <td><b>264</b></td>
+                <td>ngò | nốt | ngò | nốt</td>
+            </tr>
+            <tr>
+                <td><b>265</b></td>
+                <td>ngòi | nửa | ngòi | nửa</td>
+            </tr>
+            <tr>
+                <td><b>266</b></td>
+                <td>ngòi_nổ | ngờ | ngòi_nổ | ngờ</td>
+            </tr>
+            <tr>
+                <td><b>267</b></td>
+                <td>ngó | ngon | ngó | ngon</td>
+            </tr>
+            <tr>
+                <td><b>268</b></td>
+                <td>ngóc_ngách | nhấn | ngóc_ngách | nhấn</td>
+            </tr>
+            <tr>
+                <td><b>269</b></td>
+                <td>ngói | ngả | ngói | ngả</td>
+            </tr>
+            <tr>
+                <td><b>270</b></td>
+                <td>ngón | nắn | ngón | nắn</td>
+            </tr>
+            <tr>
+                <td><b>271</b></td>
+                <td>ngót | nội | ngót | nội</td>
+            </tr>
+            <tr>
+                <td><b>272</b></td>
+                <td>ngô | nộp | ngô | nộp</td>
+            </tr>
+            <tr>
+                <td><b>273</b></td>
+                <td>ngô_quyền | n | ngô_quyền | n</td>
+            </tr>
+            <tr>
+                <td><b>274</b></td>
+                <td>ngô_thanh_vân | ngô_thanh_vân</td>
+            </tr>
+            <tr>
+                <td><b>275</b></td>
+                <td>ngôi_sao | ngôi_sao</td>
+            </tr>
+            <tr>
+                <td><b>276</b></td>
+                <td>ngôi_vị | ngôi_vị</td>
+            </tr>
+            <tr>
+                <td><b>277</b></td>
+                <td>ngôn_luận | ngôn_luận</td>
+            </tr>
+            <tr>
+                <td><b>278</b></td>
+                <td>ngôn_ngữ | ngôn_ngữ</td>
+            </tr>
+            <tr>
+                <td><b>279</b></td>
+                <td>ngôn_từ | ngôn_từ</td>
+            </tr>
+            <tr>
+                <td><b>280</b></td>
+                <td>ngõ | ngõ</td>
+            </tr>
+            <tr>
+                <td><b>281</b></td>
+                <td>ngõ_ngách | ngõ_ngách</td>
+            </tr>
+            <tr>
+                <td><b>282</b></td>
+                <td>ngăn | ngăn</td>
+            </tr>
+            <tr>
+                <td><b>283</b></td>
+                <td>ngăn_chặn | ngăn_chặn</td>
+            </tr>
+            <tr>
+                <td><b>284</b></td>
+                <td>ngăn_cách | ngăn_cách</td>
+            </tr>
+            <tr>
+                <td><b>285</b></td>
+                <td>ngăn_cản | ngăn_cản</td>
+            </tr>
+            <tr>
+                <td><b>286</b></td>
+                <td>ngăn_cấm | ngăn_cấm</td>
+            </tr>
+            <tr>
+                <td><b>287</b></td>
+                <td>ngăn_ngừa | ngăn_ngừa</td>
+            </tr>
+            <tr>
+                <td><b>288</b></td>
+                <td>ngăn_nắp | ngăn_nắp</td>
+            </tr>
+            <tr>
+                <td><b>289</b></td>
+                <td>ngũ | ngũ</td>
+            </tr>
+            <tr>
+                <td><b>290</b></td>
+                <td>ngũ_cốc | ngũ_cốc</td>
+            </tr>
+            <tr>
+                <td><b>291</b></td>
+                <td>ngũ_vị | ngũ_vị</td>
+            </tr>
+            <tr>
+                <td><b>292</b></td>
+                <td>ngơ_ngác | ngơ_ngác</td>
+            </tr>
+            <tr>
+                <td><b>293</b></td>
+                <td>ngư | ngư</td>
+            </tr>
+            <tr>
+                <td><b>294</b></td>
+                <td>ngư_dân | ngư_dân</td>
+            </tr>
+            <tr>
+                <td><b>295</b></td>
+                <td>ngưng | ngưng</td>
+            </tr>
+            <tr>
+                <td><b>296</b></td>
+                <td>ngưng_trệ | ngưng_trệ</td>
+            </tr>
+            <tr>
+                <td><b>297</b></td>
+                <td>ngước | ngước</td>
+            </tr>
+            <tr>
+                <td><b>298</b></td>
+                <td>người_bệnh | người_bệnh</td>
+            </tr>
+            <tr>
+                <td><b>299</b></td>
+                <td>người_hùng | người_hùng</td>
+            </tr>
+            <tr>
+                <td><b>300</b></td>
+                <td>người_làm | người_làm</td>
+            </tr>
+            <tr>
+                <td><b>301</b></td>
+                <td>người_lớn | người_lớn</td>
+            </tr>
+            <tr>
+                <td><b>302</b></td>
+                <td>người_mẫu | người_mẫu</td>
+            </tr>
+            <tr>
+                <td><b>303</b></td>
+                <td>người_ngoài | người_ngoài</td>
+            </tr>
+            <tr>
+                <td><b>304</b></td>
+                <td>người_nhà | người_nhà</td>
+            </tr>
+            <tr>
+                <td><b>305</b></td>
+                <td>người_phát_ngôn | người_phát_ngôn</td>
+            </tr>
+            <tr>
+                <td><b>306</b></td>
+                <td>người_ta | người_ta</td>
+            </tr>
+            <tr>
+                <td><b>307</b></td>
+                <td>người_thân | người_thân</td>
+            </tr>
+            <tr>
+                <td><b>308</b></td>
+                <td>người_thân_yêu | người_thân_yêu</td>
+            </tr>
+            <tr>
+                <td><b>309</b></td>
+                <td>người_tình | người_tình</td>
+            </tr>
+            <tr>
+                <td><b>310</b></td>
+                <td>người_xưa | người_xưa</td>
+            </tr>
+            <tr>
+                <td><b>311</b></td>
+                <td>người_yêu | người_yêu</td>
+            </tr>
+            <tr>
+                <td><b>312</b></td>
+                <td>người_đời | người_đời</td>
+            </tr>
+            <tr>
+                <td><b>313</b></td>
+                <td>ngưỡng | ngưỡng</td>
+            </tr>
+            <tr>
+                <td><b>314</b></td>
+                <td>ngưỡng_mộ | ngưỡng_mộ</td>
+            </tr>
+            <tr>
+                <td><b>315</b></td>
+                <td>ngược | ngược</td>
+            </tr>
+            <tr>
+                <td><b>316</b></td>
+                <td>ngược_lại | ngược_lại</td>
+            </tr>
+            <tr>
+                <td><b>317</b></td>
+                <td>ngược_đãi | ngược_đãi</td>
+            </tr>
+            <tr>
+                <td><b>318</b></td>
+                <td>ngượng | ngượng</td>
+            </tr>
+            <tr>
+                <td><b>319</b></td>
+                <td>ngạc_nhiên | ngạc_nhiên</td>
+            </tr>
+            <tr>
+                <td><b>320</b></td>
+                <td>ngại | ngại</td>
+            </tr>
+            <tr>
+                <td><b>321</b></td>
+                <td>ngại_ngùng | ngại_ngùng</td>
+            </tr>
+            <tr>
+                <td><b>322</b></td>
+                <td>ngạt | ngạt</td>
+            </tr>
+            <tr>
+                <td><b>323</b></td>
+                <td>ngấm | ngấm</td>
+            </tr>
+            <tr>
+                <td><b>324</b></td>
+                <td>ngấm_ngầm | ngấm_ngầm</td>
+            </tr>
+            <tr>
+                <td><b>325</b></td>
+                <td>ngất | ngất</td>
+            </tr>
+            <tr>
+                <td><b>326</b></td>
+                <td>ngất_xỉu | ngất_xỉu</td>
+            </tr>
+            <tr>
+                <td><b>327</b></td>
+                <td>ngấy | ngấy</td>
+            </tr>
+            <tr>
+                <td><b>328</b></td>
+                <td>ngầm | ngầm</td>
+            </tr>
+            <tr>
+                <td><b>329</b></td>
+                <td>ngần | ngần</td>
+            </tr>
+            <tr>
+                <td><b>330</b></td>
+                <td>ngần_ngại | ngần_ngại</td>
+            </tr>
+            <tr>
+                <td><b>331</b></td>
+                <td>ngẩng | ngẩng</td>
+            </tr>
+            <tr>
+                <td><b>332</b></td>
+                <td>ngẫm | ngẫm</td>
+            </tr>
+            <tr>
+                <td><b>333</b></td>
+                <td>ngẫu_hứng | ngẫu_hứng</td>
+            </tr>
+            <tr>
+                <td><b>334</b></td>
+                <td>ngẫu_nhiên | ngẫu_nhiên</td>
+            </tr>
+            <tr>
+                <td><b>335</b></td>
+                <td>ngậm | ngậm</td>
+            </tr>
+            <tr>
+                <td><b>336</b></td>
+                <td>ngậm_ngùi | ngậm_ngùi</td>
+            </tr>
+            <tr>
+                <td><b>337</b></td>
+                <td>ngập | ngập</td>
+            </tr>
+            <tr>
+                <td><b>338</b></td>
+                <td>ngập_lụt | ngập_lụt</td>
+            </tr>
+            <tr>
+                <td><b>339</b></td>
+                <td>ngập_ngừng | ngập_ngừng</td>
+            </tr>
+            <tr>
+                <td><b>340</b></td>
+                <td>ngập_tràn | ngập_tràn</td>
+            </tr>
+            <tr>
+                <td><b>341</b></td>
+                <td>ngậy | ngậy</td>
+            </tr>
+            <tr>
+                <td><b>342</b></td>
+                <td>ngắm | ngắm</td>
+            </tr>
+            <tr>
+                <td><b>343</b></td>
+                <td>ngắm_nghía | ngắm_nghía</td>
+            </tr>
+            <tr>
+                <td><b>344</b></td>
+                <td>ngắn | ngắn</td>
+            </tr>
+            <tr>
+                <td><b>345</b></td>
+                <td>ngắn_gọn | ngắn_gọn</td>
+            </tr>
+            <tr>
+                <td><b>346</b></td>
+                <td>ngắn_hạn | ngắn_hạn</td>
+            </tr>
+            <tr>
+                <td><b>347</b></td>
+                <td>ngắn_ngủi | ngắn_ngủi</td>
+            </tr>
+            <tr>
+                <td><b>348</b></td>
+                <td>ngắn_tỷ_số | ngắn_tỷ_số</td>
+            </tr>
+            <tr>
+                <td><b>349</b></td>
+                <td>ngắt | ngắt</td>
+            </tr>
+            <tr>
+                <td><b>350</b></td>
+                <td>ngặt_nghèo | ngặt_nghèo</td>
+            </tr>
+            <tr>
+                <td><b>351</b></td>
+                <td>ngọc | ngọc</td>
+            </tr>
+            <tr>
+                <td><b>352</b></td>
+                <td>ngọc_anh | ngọc_anh</td>
+            </tr>
+            <tr>
+                <td><b>353</b></td>
+                <td>ngọc_bích | ngọc_bích</td>
+            </tr>
+            <tr>
+                <td><b>354</b></td>
+                <td>ngọc_khuê | ngọc_khuê</td>
+            </tr>
+            <tr>
+                <td><b>355</b></td>
+                <td>ngọc_sơn | ngọc_sơn</td>
+            </tr>
+            <tr>
+                <td><b>356</b></td>
+                <td>ngọc_thanh | ngọc_thanh</td>
+            </tr>
+            <tr>
+                <td><b>357</b></td>
+                <td>ngọc_trai | ngọc_trai</td>
+            </tr>
+            <tr>
+                <td><b>358</b></td>
+                <td>ngọt_ngào | ngọt_ngào</td>
+            </tr>
+            <tr>
+                <td><b>359</b></td>
+                <td>ngỏ | ngỏ</td>
+            </tr>
+            <tr>
+                <td><b>360</b></td>
+                <td>ngốn | ngốn</td>
+            </tr>
+            <tr>
+                <td><b>361</b></td>
+                <td>ngồi_tù | ngồi_tù</td>
+            </tr>
+            <tr>
+                <td><b>362</b></td>
+                <td>ngổn_ngang | ngổn_ngang</td>
+            </tr>
+            <tr>
+                <td><b>363</b></td>
+                <td>ngỗng | ngỗng</td>
+            </tr>
+            <tr>
+                <td><b>364</b></td>
+                <td>ngộ_nghĩnh | ngộ_nghĩnh</td>
+            </tr>
+            <tr>
+                <td><b>365</b></td>
+                <td>ngộ_nhận | ngộ_nhận</td>
+            </tr>
+            <tr>
+                <td><b>366</b></td>
+                <td>ngộ_độc | ngộ_độc</td>
+            </tr>
+            <tr>
+                <td><b>367</b></td>
+                <td>ngộp | ngộp</td>
+            </tr>
+            <tr>
+                <td><b>368</b></td>
+                <td>ngột_ngạt | ngột_ngạt</td>
+            </tr>
+            <tr>
+                <td><b>369</b></td>
+                <td>ngớ_ngẩn | ngớ_ngẩn</td>
+            </tr>
+            <tr>
+                <td><b>370</b></td>
+                <td>ngớt | ngớt</td>
+            </tr>
+            <tr>
+                <td><b>371</b></td>
+                <td>ngời | ngời</td>
+            </tr>
+            <tr>
+                <td><b>372</b></td>
+                <td>ngỡ | ngỡ</td>
+            </tr>
+            <tr>
+                <td><b>373</b></td>
+                <td>ngỡ_ngàng | ngỡ_ngàng</td>
+            </tr>
+            <tr>
+                <td><b>374</b></td>
+                <td>ngụ_ý | ngụ_ý</td>
+            </tr>
+            <tr>
+                <td><b>375</b></td>
+                <td>ngụm | ngụm</td>
+            </tr>
+            <tr>
+                <td><b>376</b></td>
+                <td>ngụy_trang | ngụy_trang</td>
+            </tr>
+            <tr>
+                <td><b>377</b></td>
+                <td>ngủ | ngủ</td>
+            </tr>
+            <tr>
+                <td><b>378</b></td>
+                <td>ngứa | ngứa</td>
+            </tr>
+            <tr>
+                <td><b>379</b></td>
+                <td>ngứa_ngáy | ngứa_ngáy</td>
+            </tr>
+            <tr>
+                <td><b>380</b></td>
+                <td>ngừa | ngừa</td>
+            </tr>
+            <tr>
+                <td><b>381</b></td>
+                <td>ngừng | ngừng</td>
+            </tr>
+            <tr>
+                <td><b>382</b></td>
+                <td>ngửa | ngửa</td>
+            </tr>
+            <tr>
+                <td><b>383</b></td>
+                <td>ngửi | ngửi</td>
+            </tr>
+            <tr>
+                <td><b>384</b></td>
+                <td>ngữ | ngữ</td>
+            </tr>
+            <tr>
+                <td><b>385</b></td>
+                <td>ngự | ngự</td>
+            </tr>
+            <tr>
+                <td><b>386</b></td>
+                <td>ngự_trị | ngự_trị</td>
+            </tr>
+            <tr>
+                <td><b>387</b></td>
+                <td>ngựa | ngựa</td>
+            </tr>
+            <tr>
+                <td><b>388</b></td>
+                <td>ngực | ngực</td>
+            </tr>
+            <tr>
+                <td><b>389</b></td>
+                <td>nh | nh</td>
+            </tr>
+            <tr>
+                <td><b>390</b></td>
+                <td>nha | nha</td>
+            </tr>
+            <tr>
+                <td><b>391</b></td>
+                <td>nha_khoa | nha_khoa</td>
+            </tr>
+            <tr>
+                <td><b>392</b></td>
+                <td>nha_sĩ | nha_sĩ</td>
+            </tr>
+            <tr>
+                <td><b>393</b></td>
+                <td>nha_trang | nha_trang</td>
+            </tr>
+            <tr>
+                <td><b>394</b></td>
+                <td>nhai | nhai</td>
+            </tr>
+            <tr>
+                <td><b>395</b></td>
+                <td>nhan | nhan</td>
+            </tr>
+            <tr>
+                <td><b>396</b></td>
+                <td>nhan_nhản | nhan_nhản</td>
+            </tr>
+            <tr>
+                <td><b>397</b></td>
+                <td>nhan_sắc | nhan_sắc</td>
+            </tr>
+            <tr>
+                <td><b>398</b></td>
+                <td>nhang | nhang</td>
+            </tr>
+            <tr>
+                <td><b>399</b></td>
+                <td>nhanh_chóng | nhanh_chóng</td>
+            </tr>
+            <tr>
+                <td><b>400</b></td>
+                <td>nhanh_nhạy | nhanh_nhạy</td>
+            </tr>
+            <tr>
+                <td><b>401</b></td>
+                <td>nhanh_nhẹn | nhanh_nhẹn</td>
+            </tr>
+            <tr>
+                <td><b>402</b></td>
+                <td>nhat | nhat</td>
+            </tr>
+            <tr>
+                <td><b>403</b></td>
+                <td>nhe | nhe</td>
+            </tr>
+            <tr>
+                <td><b>404</b></td>
+                <td>nhen_nhóm | nhen_nhóm</td>
+            </tr>
+            <tr>
+                <td><b>405</b></td>
+                <td>nhi | nhi</td>
+            </tr>
+            <tr>
+                <td><b>406</b></td>
+                <td>nhi_khoa | nhi_khoa</td>
+            </tr>
+            <tr>
+                <td><b>407</b></td>
+                <td>nhi_đồng | nhi_đồng</td>
+            </tr>
+            <tr>
+                <td><b>408</b></td>
+                <td>nhieu | nhieu</td>
+            </tr>
+            <tr>
+                <td><b>409</b></td>
+                <td>nhiên | nhiên</td>
+            </tr>
+            <tr>
+                <td><b>410</b></td>
+                <td>nhiên_liệu | nhiên_liệu</td>
+            </tr>
+            <tr>
+                <td><b>411</b></td>
+                <td>nhiêu | nhiêu</td>
+            </tr>
+            <tr>
+                <td><b>412</b></td>
+                <td>nhiếp_ảnh | nhiếp_ảnh</td>
+            </tr>
+            <tr>
+                <td><b>413</b></td>
+                <td>nhiễm | nhiễm</td>
+            </tr>
+            <tr>
+                <td><b>414</b></td>
+                <td>nhiễm_bệnh | nhiễm_bệnh</td>
+            </tr>
+            <tr>
+                <td><b>415</b></td>
+                <td>nhiễm_khuẩn | nhiễm_khuẩn</td>
+            </tr>
+            <tr>
+                <td><b>416</b></td>
+                <td>nhiễm_trùng | nhiễm_trùng</td>
+            </tr>
+            <tr>
+                <td><b>417</b></td>
+                <td>nhiễm_độc | nhiễm_độc</td>
+            </tr>
+            <tr>
+                <td><b>418</b></td>
+                <td>nhiễu | nhiễu</td>
+            </tr>
+            <tr>
+                <td><b>419</b></td>
+                <td>nhiệm | nhiệm</td>
+            </tr>
+            <tr>
+                <td><b>420</b></td>
+                <td>nhiệm_kỳ | nhiệm_kỳ</td>
+            </tr>
+            <tr>
+                <td><b>421</b></td>
+                <td>nhiệm_vụ | nhiệm_vụ</td>
+            </tr>
+            <tr>
+                <td><b>422</b></td>
+                <td>nhiệt | nhiệt</td>
+            </tr>
+            <tr>
+                <td><b>423</b></td>
+                <td>nhiệt_huyết | nhiệt_huyết</td>
+            </tr>
+            <tr>
+                <td><b>424</b></td>
+                <td>nhiệt_thành | nhiệt_thành</td>
+            </tr>
+            <tr>
+                <td><b>425</b></td>
+                <td>nhiệt_tình | nhiệt_tình</td>
+            </tr>
+            <tr>
+                <td><b>426</b></td>
+                <td>nhiệt_điện | nhiệt_điện</td>
+            </tr>
+            <tr>
+                <td><b>427</b></td>
+                <td>nhiệt_độ | nhiệt_độ</td>
+            </tr>
+            <tr>
+                <td><b>428</b></td>
+                <td>nhiệt_đới | nhiệt_đới</td>
+            </tr>
+            <tr>
+                <td><b>429</b></td>
+                <td>nho | nho</td>
+            </tr>
+            <tr>
+                <td><b>430</b></td>
+                <td>nho_nhỏ | nho_nhỏ</td>
+            </tr>
+            <tr>
+                <td><b>431</b></td>
+                <td>nhu | nhu</td>
+            </tr>
+            <tr>
+                <td><b>432</b></td>
+                <td>nhu_cầu | nhu_cầu</td>
+            </tr>
+            <tr>
+                <td><b>433</b></td>
+                <td>nhu_nhược | nhu_nhược</td>
+            </tr>
+            <tr>
+                <td><b>434</b></td>
+                <td>nhung | nhung</td>
+            </tr>
+            <tr>
+                <td><b>435</b></td>
+                <td>nhuyễn | nhuyễn</td>
+            </tr>
+            <tr>
+                <td><b>436</b></td>
+                <td>nhuần_nhuyễn | nhuần_nhuyễn</td>
+            </tr>
+            <tr>
+                <td><b>437</b></td>
+                <td>nhuận_tràng | nhuận_tràng</td>
+            </tr>
+            <tr>
+                <td><b>438</b></td>
+                <td>nhuộm | nhuộm</td>
+            </tr>
+            <tr>
+                <td><b>439</b></td>
+                <td>nhà_buôn | nhà_buôn</td>
+            </tr>
+            <tr>
+                <td><b>440</b></td>
+                <td>nhà_báo | nhà_báo</td>
+            </tr>
+            <tr>
+                <td><b>441</b></td>
+                <td>nhà_bè | nhà_bè</td>
+            </tr>
+            <tr>
+                <td><b>442</b></td>
+                <td>nhà_bếp | nhà_bếp</td>
+            </tr>
+            <tr>
+                <td><b>443</b></td>
+                <td>nhà_chung_cư | nhà_chung_cư</td>
+            </tr>
+            <tr>
+                <td><b>444</b></td>
+                <td>nhà_cung_cấp | nhà_cung_cấp</td>
+            </tr>
+            <tr>
+                <td><b>445</b></td>
+                <td>nhà_cái | nhà_cái</td>
+            </tr>
+            <tr>
+                <td><b>446</b></td>
+                <td>nhà_cổ | nhà_cổ</td>
+            </tr>
+            <tr>
+                <td><b>447</b></td>
+                <td>nhà_cửa | nhà_cửa</td>
+            </tr>
+            <tr>
+                <td><b>448</b></td>
+                <td>nhà_du | nhà_du</td>
+            </tr>
+            <tr>
+                <td><b>449</b></td>
+                <td>nhà_du_hành | nhà_du_hành</td>
+            </tr>
+            <tr>
+                <td><b>450</b></td>
+                <td>nhà_dân | nhà_dân</td>
+            </tr>
+            <tr>
+                <td><b>451</b></td>
+                <td>nhà_ga | nhà_ga</td>
+            </tr>
+            <tr>
+                <td><b>452</b></td>
+                <td>nhà_giáo | nhà_giáo</td>
+            </tr>
+            <tr>
+                <td><b>453</b></td>
+                <td>nhà_hàng | nhà_hàng</td>
+            </tr>
+            <tr>
+                <td><b>454</b></td>
+                <td>nhà_hát | nhà_hát</td>
+            </tr>
+            <tr>
+                <td><b>455</b></td>
+                <td>nhà_kho | nhà_kho</td>
+            </tr>
+            <tr>
+                <td><b>456</b></td>
+                <td>nhà_khoa_học | nhà_khoa_học</td>
+            </tr>
+            <tr>
+                <td><b>457</b></td>
+                <td>nhà_kính | nhà_kính</td>
+            </tr>
+            <tr>
+                <td><b>458</b></td>
+                <td>nhà_lãnh_đạo | nhà_lãnh_đạo</td>
+            </tr>
+            <tr>
+                <td><b>459</b></td>
+                <td>nhà_máy | nhà_máy</td>
+            </tr>
+            <tr>
+                <td><b>460</b></td>
+                <td>nhà_máy_điện | nhà_máy_điện</td>
+            </tr>
+            <tr>
+                <td><b>461</b></td>
+                <td>nhà_nghiên_cứu | nhà_nghiên_cứu</td>
+            </tr>
+            <tr>
+                <td><b>462</b></td>
+                <td>nhà_nghèo | nhà_nghèo</td>
+            </tr>
+            <tr>
+                <td><b>463</b></td>
+                <td>nhà_nghề | nhà_nghề</td>
+            </tr>
+            <tr>
+                <td><b>464</b></td>
+                <td>nhà_nghỉ | nhà_nghỉ</td>
+            </tr>
+            <tr>
+                <td><b>465</b></td>
+                <td>nhà_nhập_khẩu | nhà_nhập_khẩu</td>
+            </tr>
+            <tr>
+                <td><b>466</b></td>
+                <td>nhà_nước | nhà_nước</td>
+            </tr>
+            <tr>
+                <td><b>467</b></td>
+                <td>nhà_quê | nhà_quê</td>
+            </tr>
+            <tr>
+                <td><b>468</b></td>
+                <td>nhà_riêng | nhà_riêng</td>
+            </tr>
+            <tr>
+                <td><b>469</b></td>
+                <td>nhà_sàn | nhà_sàn</td>
+            </tr>
+            <tr>
+                <td><b>470</b></td>
+                <td>nhà_sách | nhà_sách</td>
+            </tr>
+            <tr>
+                <td><b>471</b></td>
+                <td>nhà_sản_xuất | nhà_sản_xuất</td>
+            </tr>
+            <tr>
+                <td><b>472</b></td>
+                <td>nhà_thi_đấu | nhà_thi_đấu</td>
+            </tr>
+            <tr>
+                <td><b>473</b></td>
+                <td>nhà_thiết_kế | nhà_thiết_kế</td>
+            </tr>
+            <tr>
+                <td><b>474</b></td>
+                <td>nhà_thuốc | nhà_thuốc</td>
+            </tr>
+            <tr>
+                <td><b>475</b></td>
+                <td>nhà_thơ | nhà_thơ</td>
+            </tr>
+            <tr>
+                <td><b>476</b></td>
+                <td>nhà_thầu | nhà_thầu</td>
+            </tr>
+            <tr>
+                <td><b>477</b></td>
+                <td>nhà_thờ | nhà_thờ</td>
+            </tr>
+            <tr>
+                <td><b>478</b></td>
+                <td>nhà_trường | nhà_trường</td>
+            </tr>
+            <tr>
+                <td><b>479</b></td>
+                <td>nhà_trắng | nhà_trắng</td>
+            </tr>
+            <tr>
+                <td><b>480</b></td>
+                <td>nhà_trẻ | nhà_trẻ</td>
+            </tr>
+            <tr>
+                <td><b>481</b></td>
+                <td>nhà_trọ | nhà_trọ</td>
+            </tr>
+            <tr>
+                <td><b>482</b></td>
+                <td>nhà_tù | nhà_tù</td>
+            </tr>
+            <tr>
+                <td><b>483</b></td>
+                <td>nhà_tắm | nhà_tắm</td>
+            </tr>
+            <tr>
+                <td><b>484</b></td>
+                <td>nhà_vua | nhà_vua</td>
+            </tr>
+            <tr>
+                <td><b>485</b></td>
+                <td>nhà_văn | nhà_văn</td>
+            </tr>
+            <tr>
+                <td><b>486</b></td>
+                <td>nhà_văn_hóa | nhà_văn_hóa</td>
+            </tr>
+            <tr>
+                <td><b>487</b></td>
+                <td>nhà_vườn | nhà_vườn</td>
+            </tr>
+            <tr>
+                <td><b>488</b></td>
+                <td>nhà_xe | nhà_xe</td>
+            </tr>
+            <tr>
+                <td><b>489</b></td>
+                <td>nhà_xuất_bản | nhà_xuất_bản</td>
+            </tr>
+            <tr>
+                <td><b>490</b></td>
+                <td>nhà_xưởng | nhà_xưởng</td>
+            </tr>
+            <tr>
+                <td><b>491</b></td>
+                <td>nhà_ăn | nhà_ăn</td>
+            </tr>
+            <tr>
+                <td><b>492</b></td>
+                <td>nhà_đất | nhà_đất</td>
+            </tr>
+            <tr>
+                <td><b>493</b></td>
+                <td>nhà_đầu_tư | nhà_đầu_tư</td>
+            </tr>
+            <tr>
+                <td><b>494</b></td>
+                <td>nhàm_chán | nhàm_chán</td>
+            </tr>
+            <tr>
+                <td><b>495</b></td>
+                <td>nhàn_rỗi | nhàn_rỗi</td>
+            </tr>
+            <tr>
+                <td><b>496</b></td>
+                <td>nhào | nhào</td>
+            </tr>
+            <tr>
+                <td><b>497</b></td>
+                <td>nhái | nhái</td>
+            </tr>
+            <tr>
+                <td><b>498</b></td>
+                <td>nhánh | nhánh</td>
+            </tr>
+            <tr>
+                <td><b>499</b></td>
+                <td>nhát | nhát</td>
+            </tr>
+            <tr>
+                <td><b>500</b></td>
+                <td>nháy | nháy</td>
+            </tr>
+            <tr>
+                <td><b>501</b></td>
+                <td>nháy_mắt | nháy_mắt</td>
+            </tr>
+            <tr>
+                <td><b>502</b></td>
+                <td>nhâm_nhi | nhâm_nhi</td>
+            </tr>
+            <tr>
+                <td><b>503</b></td>
+                <td>nhân | nhân</td>
+            </tr>
+            <tr>
+                <td><b>504</b></td>
+                <td>nhân_bản | nhân_bản</td>
+            </tr>
+            <tr>
+                <td><b>505</b></td>
+                <td>nhân_chủng_học | nhân_chủng_học</td>
+            </tr>
+            <tr>
+                <td><b>506</b></td>
+                <td>nhân_chứng | nhân_chứng</td>
+            </tr>
+            <tr>
+                <td><b>507</b></td>
+                <td>nhân_cách | nhân_cách</td>
+            </tr>
+            <tr>
+                <td><b>508</b></td>
+                <td>nhân_công | nhân_công</td>
+            </tr>
+            <tr>
+                <td><b>509</b></td>
+                <td>nhân_danh | nhân_danh</td>
+            </tr>
+            <tr>
+                <td><b>510</b></td>
+                <td>nhân_dân | nhân_dân</td>
+            </tr>
+            <tr>
+                <td><b>511</b></td>
+                <td>nhân_dân_tệ | nhân_dân_tệ</td>
+            </tr>
+            <tr>
+                <td><b>512</b></td>
+                <td>nhân_giống | nhân_giống</td>
+            </tr>
+            <tr>
+                <td><b>513</b></td>
+                <td>nhân_hậu | nhân_hậu</td>
+            </tr>
+            <tr>
+                <td><b>514</b></td>
+                <td>nhân_loại | nhân_loại</td>
+            </tr>
+            <tr>
+                <td><b>515</b></td>
+                <td>nhân_lực | nhân_lực</td>
+            </tr>
+            <tr>
+                <td><b>516</b></td>
+                <td>nhân_phẩm | nhân_phẩm</td>
+            </tr>
+            <tr>
+                <td><b>517</b></td>
+                <td>nhân_quyền | nhân_quyền</td>
+            </tr>
+            <tr>
+                <td><b>518</b></td>
+                <td>nhân_sâm | nhân_sâm</td>
+            </tr>
+            <tr>
+                <td><b>519</b></td>
+                <td>nhân_sự | nhân_sự</td>
+            </tr>
+            <tr>
+                <td><b>520</b></td>
+                <td>nhân_thân | nhân_thân</td>
+            </tr>
+            <tr>
+                <td><b>521</b></td>
+                <td>nhân_tài | nhân_tài</td>
+            </tr>
+            <tr>
+                <td><b>522</b></td>
+                <td>nhân_tạo | nhân_tạo</td>
+            </tr>
+            <tr>
+                <td><b>523</b></td>
+                <td>nhân_tố | nhân_tố</td>
+            </tr>
+            <tr>
+                <td><b>524</b></td>
+                <td>nhân_viên | nhân_viên</td>
+            </tr>
+            <tr>
+                <td><b>525</b></td>
+                <td>nhân_văn | nhân_văn</td>
+            </tr>
+            <tr>
+                <td><b>526</b></td>
+                <td>nhân_vật | nhân_vật</td>
+            </tr>
+            <tr>
+                <td><b>527</b></td>
+                <td>nhân_ái | nhân_ái</td>
+            </tr>
+            <tr>
+                <td><b>528</b></td>
+                <td>nhân_đạo | nhân_đạo</td>
+            </tr>
+            <tr>
+                <td><b>529</b></td>
+                <td>nhãn | nhãn</td>
+            </tr>
+            <tr>
+                <td><b>530</b></td>
+                <td>nhãn_hiệu | nhãn_hiệu</td>
+            </tr>
+            <tr>
+                <td><b>531</b></td>
+                <td>nhãn_mác | nhãn_mác</td>
+            </tr>
+            <tr>
+                <td><b>532</b></td>
+                <td>nhão | nhão</td>
+            </tr>
+            <tr>
+                <td><b>533</b></td>
+                <td>nhè_nhẹ | nhè_nhẹ</td>
+            </tr>
+            <tr>
+                <td><b>534</b></td>
+                <td>nhép | nhép</td>
+            </tr>
+            <tr>
+                <td><b>535</b></td>
+                <td>nhét | nhét</td>
+            </tr>
+            <tr>
+                <td><b>536</b></td>
+                <td>nhì | nhì</td>
+            </tr>
+            <tr>
+                <td><b>537</b></td>
+                <td>nhí | nhí</td>
+            </tr>
+            <tr>
+                <td><b>538</b></td>
+                <td>nhích | nhích</td>
+            </tr>
+            <tr>
+                <td><b>539</b></td>
+                <td>nhóc | nhóc</td>
+            </tr>
+            <tr>
+                <td><b>540</b></td>
+                <td>nhóm_họp | nhóm_họp</td>
+            </tr>
+            <tr>
+                <td><b>541</b></td>
+                <td>nhô | nhô</td>
+            </tr>
+            <tr>
+                <td><b>542</b></td>
+                <td>nhôm | nhôm</td>
+            </tr>
+            <tr>
+                <td><b>543</b></td>
+                <td>nhúm | nhúm</td>
+            </tr>
+            <tr>
+                <td><b>544</b></td>
+                <td>nhúng | nhúng</td>
+            </tr>
+            <tr>
+                <td><b>545</b></td>
+                <td>nhút_nhát | nhút_nhát</td>
+            </tr>
+            <tr>
+                <td><b>546</b></td>
+                <td>nhăn | nhăn</td>
+            </tr>
+            <tr>
+                <td><b>547</b></td>
+                <td>nhđa | nhđa</td>
+            </tr>
+            <tr>
+                <td><b>548</b></td>
+                <td>nhđá | nhđá</td>
+            </tr>
+            <tr>
+                <td><b>549</b></td>
+                <td>nhĩ | nhĩ</td>
+            </tr>
+            <tr>
+                <td><b>550</b></td>
+                <td>nhĩ_kỳ | nhĩ_kỳ</td>
+            </tr>
+            <tr>
+                <td><b>551</b></td>
+                <td>nhũ | nhũ</td>
+            </tr>
+            <tr>
+                <td><b>552</b></td>
+                <td>nhũng_nhiễu | nhũng_nhiễu</td>
+            </tr>
+            <tr>
+                <td><b>553</b></td>
+                <td>như_ý_muốn | như_ý_muốn</td>
+            </tr>
+            <tr>
+                <td><b>554</b></td>
+                <td>nhường | nhường</td>
+            </tr>
+            <tr>
+                <td><b>555</b></td>
+                <td>nhường_nhịn | nhường_nhịn</td>
+            </tr>
+            <tr>
+                <td><b>556</b></td>
+                <td>nhược_điểm | nhược_điểm</td>
+            </tr>
+            <tr>
+                <td><b>557</b></td>
+                <td>nhượng | nhượng</td>
+            </tr>
+            <tr>
+                <td><b>558</b></td>
+                <td>nhượng_bộ | nhượng_bộ</td>
+            </tr>
+            <tr>
+                <td><b>559</b></td>
+                <td>nhạc | nhạc</td>
+            </tr>
+            <tr>
+                <td><b>560</b></td>
+                <td>nhạc_công | nhạc_công</td>
+            </tr>
+            <tr>
+                <td><b>561</b></td>
+                <td>nhạc_cụ | nhạc_cụ</td>
+            </tr>
+            <tr>
+                <td><b>562</b></td>
+                <td>nhạc_kịch | nhạc_kịch</td>
+            </tr>
+            <tr>
+                <td><b>563</b></td>
+                <td>nhạc_nhẹ | nhạc_nhẹ</td>
+            </tr>
+            <tr>
+                <td><b>564</b></td>
+                <td>nhạc_phẩm | nhạc_phẩm</td>
+            </tr>
+            <tr>
+                <td><b>565</b></td>
+                <td>nhạc_sĩ | nhạc_sĩ</td>
+            </tr>
+            <tr>
+                <td><b>566</b></td>
+                <td>nhạc_trưởng | nhạc_trưởng</td>
+            </tr>
+            <tr>
+                <td><b>567</b></td>
+                <td>nhạc_viện | nhạc_viện</td>
+            </tr>
+            <tr>
+                <td><b>568</b></td>
+                <td>nhạt | nhạt</td>
+            </tr>
+            <tr>
+                <td><b>569</b></td>
+                <td>nhạt_nhẽo | nhạt_nhẽo</td>
+            </tr>
+            <tr>
+                <td><b>570</b></td>
+                <td>nhạy | nhạy</td>
+            </tr>
+            <tr>
+                <td><b>571</b></td>
+                <td>nhạy_bén | nhạy_bén</td>
+            </tr>
+            <tr>
+                <td><b>572</b></td>
+                <td>nhạy_cảm | nhạy_cảm</td>
+            </tr>
+            <tr>
+                <td><b>573</b></td>
+                <td>nhả | nhả</td>
+            </tr>
+            <tr>
+                <td><b>574</b></td>
+                <td>nhảm_nhí | nhảm_nhí</td>
+            </tr>
+            <tr>
+                <td><b>575</b></td>
+                <td>nhảy | nhảy</td>
+            </tr>
+            <tr>
+                <td><b>576</b></td>
+                <td>nhảy_múa | nhảy_múa</td>
+            </tr>
+            <tr>
+                <td><b>577</b></td>
+                <td>nhảy_nhót | nhảy_nhót</td>
+            </tr>
+            <tr>
+                <td><b>578</b></td>
+                <td>nhảy_vọt | nhảy_vọt</td>
+            </tr>
+            <tr>
+                <td><b>579</b></td>
+                <td>nhấc | nhấc</td>
+            </tr>
+            <tr>
+                <td><b>580</b></td>
+                <td>nhấm_nháp | nhấm_nháp</td>
+            </tr>
+            <tr>
+                <td><b>581</b></td>
+                <td>nhấn_chìm | nhấn_chìm</td>
+            </tr>
+            <tr>
+                <td><b>582</b></td>
+                <td>nhấn_mạnh | nhấn_mạnh</td>
+            </tr>
+            <tr>
+                <td><b>583</b></td>
+                <td>nhấp | nhấp</td>
+            </tr>
+            <tr>
+                <td><b>584</b></td>
+                <td>nhấp_nháy | nhấp_nháy</td>
+            </tr>
+            <tr>
+                <td><b>585</b></td>
+                <td>nhất_quán | nhất_quán</td>
+            </tr>
+            <tr>
+                <td><b>586</b></td>
+                <td>nhất_thời | nhất_thời</td>
+            </tr>
+            <tr>
+                <td><b>587</b></td>
+                <td>nhất_trí | nhất_trí</td>
+            </tr>
+            <tr>
+                <td><b>588</b></td>
+                <td>nhầm | nhầm</td>
+            </tr>
+            <tr>
+                <td><b>589</b></td>
+                <td>nhầm_lẫn | nhầm_lẫn</td>
+            </tr>
+            <tr>
+                <td><b>590</b></td>
+                <td>nhầy | nhầy</td>
+            </tr>
+            <tr>
+                <td><b>591</b></td>
+                <td>nhẩm | nhẩm</td>
+            </tr>
+            <tr>
+                <td><b>592</b></td>
+                <td>nhẫn | nhẫn</td>
+            </tr>
+            <tr>
+                <td><b>593</b></td>
+                <td>nhẫn_nhịn | nhẫn_nhịn</td>
+            </tr>
+            <tr>
+                <td><b>594</b></td>
+                <td>nhẫn_nại | nhẫn_nại</td>
+            </tr>
+            <tr>
+                <td><b>595</b></td>
+                <td>nhẫn_tâm | nhẫn_tâm</td>
+            </tr>
+            <tr>
+                <td><b>596</b></td>
+                <td>nhậm_chức | nhậm_chức</td>
+            </tr>
+            <tr>
+                <td><b>597</b></td>
+                <td>nhận_diện | nhận_diện</td>
+            </tr>
+            <tr>
+                <td><b>598</b></td>
+                <td>nhận_dạng | nhận_dạng</td>
+            </tr>
+            <tr>
+                <td><b>599</b></td>
+                <td>nhận_lời | nhận_lời</td>
+            </tr>
+            <tr>
+                <td><b>600</b></td>
+                <td>nhận_thức | nhận_thức</td>
+            </tr>
+            <tr>
+                <td><b>601</b></td>
+                <td>nhận_xét | nhận_xét</td>
+            </tr>
+            <tr>
+                <td><b>602</b></td>
+                <td>nhận_định | nhận_định</td>
+            </tr>
+            <tr>
+                <td><b>603</b></td>
+                <td>nhập | nhập</td>
+            </tr>
+            <tr>
+                <td><b>604</b></td>
+                <td>nhập_cuộc | nhập_cuộc</td>
+            </tr>
+            <tr>
+                <td><b>605</b></td>
+                <td>nhập_cư | nhập_cư</td>
+            </tr>
+            <tr>
+                <td><b>606</b></td>
+                <td>nhập_cảnh | nhập_cảnh</td>
+            </tr>
+            <tr>
+                <td><b>607</b></td>
+                <td>nhập_học | nhập_học</td>
+            </tr>
+            <tr>
+                <td><b>608</b></td>
+                <td>nhập_khẩu | nhập_khẩu</td>
+            </tr>
+            <tr>
+                <td><b>609</b></td>
+                <td>nhập_ngoại | nhập_ngoại</td>
+            </tr>
+            <tr>
+                <td><b>610</b></td>
+                <td>nhập_ngũ | nhập_ngũ</td>
+            </tr>
+            <tr>
+                <td><b>611</b></td>
+                <td>nhập_nhằng | nhập_nhằng</td>
+            </tr>
+            <tr>
+                <td><b>612</b></td>
+                <td>nhập_vai | nhập_vai</td>
+            </tr>
+            <tr>
+                <td><b>613</b></td>
+                <td>nhập_viện | nhập_viện</td>
+            </tr>
+            <tr>
+                <td><b>614</b></td>
+                <td>nhật | nhật</td>
+            </tr>
+            <tr>
+                <td><b>615</b></td>
+                <td>nhật_báo | nhật_báo</td>
+            </tr>
+            <tr>
+                <td><b>616</b></td>
+                <td>nhật_bản | nhật_bản</td>
+            </tr>
+            <tr>
+                <td><b>617</b></td>
+                <td>nhật_ký | nhật_ký</td>
+            </tr>
+            <tr>
+                <td><b>618</b></td>
+                <td>nhật_tân | nhật_tân</td>
+            </tr>
+            <tr>
+                <td><b>619</b></td>
+                <td>nhậu | nhậu</td>
+            </tr>
+            <tr>
+                <td><b>620</b></td>
+                <td>nhắc | nhắc</td>
+            </tr>
+            <tr>
+                <td><b>621</b></td>
+                <td>nhắc_nhở | nhắc_nhở</td>
+            </tr>
+            <tr>
+                <td><b>622</b></td>
+                <td>nhắm | nhắm</td>
+            </tr>
+            <tr>
+                <td><b>623</b></td>
+                <td>nhắm_mắt | nhắm_mắt</td>
+            </tr>
+            <tr>
+                <td><b>624</b></td>
+                <td>nhắn | nhắn</td>
+            </tr>
+            <tr>
+                <td><b>625</b></td>
+                <td>nhắn_nhủ | nhắn_nhủ</td>
+            </tr>
+            <tr>
+                <td><b>626</b></td>
+                <td>nhắn_tin | nhắn_tin</td>
+            </tr>
+            <tr>
+                <td><b>627</b></td>
+                <td>nhắp | nhắp</td>
+            </tr>
+            <tr>
+                <td><b>628</b></td>
+                <td>nhẵn | nhẵn</td>
+            </tr>
+            <tr>
+                <td><b>629</b></td>
+                <td>nhặt | nhặt</td>
+            </tr>
+            <tr>
+                <td><b>630</b></td>
+                <td>nhẹ | nhẹ</td>
+            </tr>
+            <tr>
+                <td><b>631</b></td>
+                <td>nhẹ_dạ | nhẹ_dạ</td>
+            </tr>
+            <tr>
+                <td><b>632</b></td>
+                <td>nhẹ_nhàng | nhẹ_nhàng</td>
+            </tr>
+            <tr>
+                <td><b>633</b></td>
+                <td>nhẹ_nhõm | nhẹ_nhõm</td>
+            </tr>
+            <tr>
+                <td><b>634</b></td>
+                <td>nhẹ_tay | nhẹ_tay</td>
+            </tr>
+            <tr>
+                <td><b>635</b></td>
+                <td>nhẽ | nhẽ</td>
+            </tr>
+            <tr>
+                <td><b>636</b></td>
+                <td>nhện | nhện</td>
+            </tr>
+            <tr>
+                <td><b>637</b></td>
+                <td>nhỉnh | nhỉnh</td>
+            </tr>
+            <tr>
+                <td><b>638</b></td>
+                <td>nhị | nhị</td>
+            </tr>
+            <tr>
+                <td><b>639</b></td>
+                <td>nhịn | nhịn</td>
+            </tr>
+            <tr>
+                <td><b>640</b></td>
+                <td>nhịp | nhịp</td>
+            </tr>
+            <tr>
+                <td><b>641</b></td>
+                <td>nhịp_nhàng | nhịp_nhàng</td>
+            </tr>
+            <tr>
+                <td><b>642</b></td>
+                <td>nhịp_điệu | nhịp_điệu</td>
+            </tr>
+            <tr>
+                <td><b>643</b></td>
+                <td>nhịp_độ | nhịp_độ</td>
+            </tr>
+            <tr>
+                <td><b>644</b></td>
+                <td>nhọc_nhằn | nhọc_nhằn</td>
+            </tr>
+            <tr>
+                <td><b>645</b></td>
+                <td>nhọn | nhọn</td>
+            </tr>
+            <tr>
+                <td><b>646</b></td>
+                <td>nhỏ_bé | nhỏ_bé</td>
+            </tr>
+            <tr>
+                <td><b>647</b></td>
+                <td>nhỏ_con | nhỏ_con</td>
+            </tr>
+            <tr>
+                <td><b>648</b></td>
+                <td>nhỏ_giọt | nhỏ_giọt</td>
+            </tr>
+            <tr>
+                <td><b>649</b></td>
+                <td>nhỏ_lẻ | nhỏ_lẻ</td>
+            </tr>
+            <tr>
+                <td><b>650</b></td>
+                <td>nhỏ_nhắn | nhỏ_nhắn</td>
+            </tr>
+            <tr>
+                <td><b>651</b></td>
+                <td>nhỏ_nhặt | nhỏ_nhặt</td>
+            </tr>
+            <tr>
+                <td><b>652</b></td>
+                <td>nhỏ_nhẹ | nhỏ_nhẹ</td>
+            </tr>
+            <tr>
+                <td><b>653</b></td>
+                <td>nhỏ_tuổi | nhỏ_tuổi</td>
+            </tr>
+            <tr>
+                <td><b>654</b></td>
+                <td>nhỏ_xíu | nhỏ_xíu</td>
+            </tr>
+            <tr>
+                <td><b>655</b></td>
+                <td>nhốt | nhốt</td>
+            </tr>
+            <tr>
+                <td><b>656</b></td>
+                <td>nhồi | nhồi</td>
+            </tr>
+            <tr>
+                <td><b>657</b></td>
+                <td>nhồi_nhét | nhồi_nhét</td>
+            </tr>
+            <tr>
+                <td><b>658</b></td>
+                <td>nhổ | nhổ</td>
+            </tr>
+            <tr>
+                <td><b>659</b></td>
+                <td>nhộn_nhịp | nhộn_nhịp</td>
+            </tr>
+            <tr>
+                <td><b>660</b></td>
+                <td>nhớ_nhung | nhớ_nhung</td>
+            </tr>
+            <tr>
+                <td><b>661</b></td>
+                <td>nhớt | nhớt</td>
+            </tr>
+            <tr>
+                <td><b>662</b></td>
+                <td>nhờ_vả | nhờ_vả</td>
+            </tr>
+            <tr>
+                <td><b>663</b></td>
+                <td>nhờn | nhờn</td>
+            </tr>
+            <tr>
+                <td><b>664</b></td>
+                <td>nhỡ | nhỡ</td>
+            </tr>
+            <tr>
+                <td><b>665</b></td>
+                <td>nhợt_nhạt | nhợt_nhạt</td>
+            </tr>
+            <tr>
+                <td><b>666</b></td>
+                <td>nhục | nhục</td>
+            </tr>
+            <tr>
+                <td><b>667</b></td>
+                <td>nhục_mạ | nhục_mạ</td>
+            </tr>
+            <tr>
+                <td><b>668</b></td>
+                <td>nhục_nhã | nhục_nhã</td>
+            </tr>
+            <tr>
+                <td><b>669</b></td>
+                <td>nhức | nhức</td>
+            </tr>
+            <tr>
+                <td><b>670</b></td>
+                <td>nhức_nhối | nhức_nhối</td>
+            </tr>
+            <tr>
+                <td><b>671</b></td>
+                <td>nhừ | nhừ</td>
+            </tr>
+            <tr>
+                <td><b>672</b></td>
+                <td>những_tưởng | những_tưởng</td>
+            </tr>
+            <tr>
+                <td><b>673</b></td>
+                <td>nhựa | nhựa</td>
+            </tr>
+            <tr>
+                <td><b>674</b></td>
+                <td>ni | ni</td>
+            </tr>
+            <tr>
+                <td><b>675</b></td>
+                <td>nick | nick</td>
+            </tr>
+            <tr>
+                <td><b>676</b></td>
+                <td>nicole_kidman | nicole_kidman</td>
+            </tr>
+            <tr>
+                <td><b>677</b></td>
+                <td>niem | niem</td>
+            </tr>
+            <tr>
+                <td><b>678</b></td>
+                <td>nigeria | nigeria</td>
+            </tr>
+            <tr>
+                <td><b>679</b></td>
+                <td>nilon | nilon</td>
+            </tr>
+            <tr>
+                <td><b>680</b></td>
+                <td>ninh | ninh</td>
+            </tr>
+            <tr>
+                <td><b>681</b></td>
+                <td>ninh_bình | ninh_bình</td>
+            </tr>
+            <tr>
+                <td><b>682</b></td>
+                <td>ninh_kiều | ninh_kiều</td>
+            </tr>
+            <tr>
+                <td><b>683</b></td>
+                <td>ninh_thuận | ninh_thuận</td>
+            </tr>
+            <tr>
+                <td><b>684</b></td>
+                <td>nintendo | nintendo</td>
+            </tr>
+            <tr>
+                <td><b>685</b></td>
+                <td>nistelrooy | nistelrooy</td>
+            </tr>
+            <tr>
+                <td><b>686</b></td>
+                <td>nitơ | nitơ</td>
+            </tr>
+            <tr>
+                <td><b>687</b></td>
+                <td>niêm_mạc | niêm_mạc</td>
+            </tr>
+            <tr>
+                <td><b>688</b></td>
+                <td>niêm_phong | niêm_phong</td>
+            </tr>
+            <tr>
+                <td><b>689</b></td>
+                <td>niêm_yết | niêm_yết</td>
+            </tr>
+            <tr>
+                <td><b>690</b></td>
+                <td>niêm_yết_giá | niêm_yết_giá</td>
+            </tr>
+            <tr>
+                <td><b>691</b></td>
+                <td>niên_thiếu | niên_thiếu</td>
+            </tr>
+            <tr>
+                <td><b>692</b></td>
+                <td>niên_đại | niên_đại</td>
+            </tr>
+            <tr>
+                <td><b>693</b></td>
+                <td>niềm | niềm</td>
+            </tr>
+            <tr>
+                <td><b>694</b></td>
+                <td>niệm | niệm</td>
+            </tr>
+            <tr>
+                <td><b>695</b></td>
+                <td>niệu | niệu</td>
+            </tr>
+            <tr>
+                <td><b>696</b></td>
+                <td>niệu_đạo | niệu_đạo</td>
+            </tr>
+            <tr>
+                <td><b>697</b></td>
+                <td>nlđ | nlđ</td>
+            </tr>
+            <tr>
+                <td><b>698</b></td>
+                <td>nlđo | nlđo</td>
+            </tr>
+            <tr>
+                <td><b>699</b></td>
+                <td>nn | nn</td>
+            </tr>
+            <tr>
+                <td><b>700</b></td>
+                <td>nn-ptnt | nn-ptnt</td>
+            </tr>
+            <tr>
+                <td><b>701</b></td>
+                <td>no | no</td>
+            </tr>
+            <tr>
+                <td><b>702</b></td>
+                <td>nobel | nobel</td>
+            </tr>
+            <tr>
+                <td><b>703</b></td>
+                <td>noel | noel</td>
+            </tr>
+            <tr>
+                <td><b>704</b></td>
+                <td>noi | noi</td>
+            </tr>
+            <tr>
+                <td><b>705</b></td>
+                <td>nokia | nokia</td>
+            </tr>
+            <tr>
+                <td><b>706</b></td>
+                <td>non | non</td>
+            </tr>
+            <tr>
+                <td><b>707</b></td>
+                <td>non_nớt | non_nớt</td>
+            </tr>
+            <tr>
+                <td><b>708</b></td>
+                <td>non_trẻ | non_trẻ</td>
+            </tr>
+            <tr>
+                <td><b>709</b></td>
+                <td>nong | nong</td>
+            </tr>
+            <tr>
+                <td><b>710</b></td>
+                <td>norwich | norwich</td>
+            </tr>
+            <tr>
+                <td><b>711</b></td>
+                <td>notebook | notebook</td>
+            </tr>
+            <tr>
+                <td><b>712</b></td>
+                <td>nou_camp | nou_camp</td>
+            </tr>
+            <tr>
+                <td><b>713</b></td>
+                <td>november | november</td>
+            </tr>
+            <tr>
+                <td><b>714</b></td>
+                <td>noãn | noãn</td>
+            </tr>
+            <tr>
+                <td><b>715</b></td>
+                <td>nsnd | nsnd</td>
+            </tr>
+            <tr>
+                <td><b>716</b></td>
+                <td>nsưt | nsưt</td>
+            </tr>
+            <tr>
+                <td><b>717</b></td>
+                <td>nt | nt</td>
+            </tr>
+            <tr>
+                <td><b>718</b></td>
+                <td>nude | nude</td>
+            </tr>
+            <tr>
+                <td><b>719</b></td>
+                <td>nung | nung</td>
+            </tr>
+            <tr>
+                <td><b>720</b></td>
+                <td>nuôi_cấy | nuôi_cấy</td>
+            </tr>
+            <tr>
+                <td><b>721</b></td>
+                <td>nuôi_dưỡng | nuôi_dưỡng</td>
+            </tr>
+            <tr>
+                <td><b>722</b></td>
+                <td>nuôi_nấng | nuôi_nấng</td>
+            </tr>
+            <tr>
+                <td><b>723</b></td>
+                <td>nuôi_trồng | nuôi_trồng</td>
+            </tr>
+            <tr>
+                <td><b>724</b></td>
+                <td>nuông_chiều | nuông_chiều</td>
+            </tr>
+            <tr>
+                <td><b>725</b></td>
+                <td>nuối_tiếc | nuối_tiếc</td>
+            </tr>
+            <tr>
+                <td><b>726</b></td>
+                <td>nuốt | nuốt</td>
+            </tr>
+            <tr>
+                <td><b>727</b></td>
+                <td>nv | nv</td>
+            </tr>
+            <tr>
+                <td><b>728</b></td>
+                <td>nxb | nxb</td>
+            </tr>
+            <tr>
+                <td><b>729</b></td>
+                <td>nylon | nylon</td>
+            </tr>
+            <tr>
+                <td><b>730</b></td>
+                <td>nài_nỉ | nài_nỉ</td>
+            </tr>
+            <tr>
+                <td><b>731</b></td>
+                <td>nào_ngờ | nào_ngờ</td>
+            </tr>
+            <tr>
+                <td><b>732</b></td>
+                <td>nách | nách</td>
+            </tr>
+            <tr>
+                <td><b>733</b></td>
+                <td>nám | nám</td>
+            </tr>
+            <tr>
+                <td><b>734</b></td>
+                <td>náo_loạn | náo_loạn</td>
+            </tr>
+            <tr>
+                <td><b>735</b></td>
+                <td>náo_nhiệt | náo_nhiệt</td>
+            </tr>
+            <tr>
+                <td><b>736</b></td>
+                <td>nát | nát</td>
+            </tr>
+            <tr>
+                <td><b>737</b></td>
+                <td>nâng | nâng</td>
+            </tr>
+            <tr>
+                <td><b>738</b></td>
+                <td>nâng_cấp | nâng_cấp</td>
+            </tr>
+            <tr>
+                <td><b>739</b></td>
+                <td>nâng_giá | nâng_giá</td>
+            </tr>
+            <tr>
+                <td><b>740</b></td>
+                <td>nâng_niu | nâng_niu</td>
+            </tr>
+            <tr>
+                <td><b>741</b></td>
+                <td>nâng_đỡ | nâng_đỡ</td>
+            </tr>
+            <tr>
+                <td><b>742</b></td>
+                <td>nâu | nâu</td>
+            </tr>
+            <tr>
+                <td><b>743</b></td>
+                <td>nã | nã</td>
+            </tr>
+            <tr>
+                <td><b>744</b></td>
+                <td>não | não</td>
+            </tr>
+            <tr>
+                <td><b>745</b></td>
+                <td>nãy | nãy</td>
+            </tr>
+            <tr>
+                <td><b>746</b></td>
+                <td>nè | nè</td>
+            </tr>
+            <tr>
+                <td><b>747</b></td>
+                <td>né | né</td>
+            </tr>
+            <tr>
+                <td><b>748</b></td>
+                <td>né_tránh | né_tránh</td>
+            </tr>
+            <tr>
+                <td><b>749</b></td>
+                <td>ném | ném</td>
+            </tr>
+            <tr>
+                <td><b>750</b></td>
+                <td>nén | nén</td>
+            </tr>
+            <tr>
+                <td><b>751</b></td>
+                <td>nét | nét</td>
+            </tr>
+            <tr>
+                <td><b>752</b></td>
+                <td>nêm | nêm</td>
+            </tr>
+            <tr>
+                <td><b>753</b></td>
+                <td>nên_thơ | nên_thơ</td>
+            </tr>
+            <tr>
+                <td><b>754</b></td>
+                <td>nêu | nêu</td>
+            </tr>
+            <tr>
+                <td><b>755</b></td>
+                <td>nín | nín</td>
+            </tr>
+            <tr>
+                <td><b>756</b></td>
+                <td>níu | níu</td>
+            </tr>
+            <tr>
+                <td><b>757</b></td>
+                <td>níu_kéo | níu_kéo</td>
+            </tr>
+            <tr>
+                <td><b>758</b></td>
+                <td>nòng_cốt | nòng_cốt</td>
+            </tr>
+            <tr>
+                <td><b>759</b></td>
+                <td>nói_chuyện | nói_chuyện</td>
+            </tr>
+            <tr>
+                <td><b>760</b></td>
+                <td>nói_dối | nói_dối</td>
+            </tr>
+            <tr>
+                <td><b>761</b></td>
+                <td>nói_gì | nói_gì</td>
+            </tr>
+            <tr>
+                <td><b>762</b></td>
+                <td>nói_năng | nói_năng</td>
+            </tr>
+            <tr>
+                <td><b>763</b></td>
+                <td>nói_thẳng | nói_thẳng</td>
+            </tr>
+            <tr>
+                <td><b>764</b></td>
+                <td>nói_vậy | nói_vậy</td>
+            </tr>
+            <tr>
+                <td><b>765</b></td>
+                <td>nói_xấu | nói_xấu</td>
+            </tr>
+            <tr>
+                <td><b>766</b></td>
+                <td>nón | nón</td>
+            </tr>
+            <tr>
+                <td><b>767</b></td>
+                <td>nóng | nóng</td>
+            </tr>
+            <tr>
+                <td><b>768</b></td>
+                <td>nóng_bỏng | nóng_bỏng</td>
+            </tr>
+            <tr>
+                <td><b>769</b></td>
+                <td>nóng_bức | nóng_bức</td>
+            </tr>
+            <tr>
+                <td><b>770</b></td>
+                <td>nóng_chảy | nóng_chảy</td>
+            </tr>
+            <tr>
+                <td><b>771</b></td>
+                <td>nóng_hổi | nóng_hổi</td>
+            </tr>
+            <tr>
+                <td><b>772</b></td>
+                <td>nóng_lòng | nóng_lòng</td>
+            </tr>
+            <tr>
+                <td><b>773</b></td>
+                <td>nóng_nảy | nóng_nảy</td>
+            </tr>
+            <tr>
+                <td><b>774</b></td>
+                <td>nóng_nực | nóng_nực</td>
+            </tr>
+            <tr>
+                <td><b>775</b></td>
+                <td>nóng_vội | nóng_vội</td>
+            </tr>
+            <tr>
+                <td><b>776</b></td>
+                <td>nô_lệ | nô_lệ</td>
+            </tr>
+            <tr>
+                <td><b>777</b></td>
+                <td>nôi | nôi</td>
+            </tr>
+            <tr>
+                <td><b>778</b></td>
+                <td>nôm_na | nôm_na</td>
+            </tr>
+            <tr>
+                <td><b>779</b></td>
+                <td>nôn | nôn</td>
+            </tr>
+            <tr>
+                <td><b>780</b></td>
+                <td>nôn_mửa | nôn_mửa</td>
+            </tr>
+            <tr>
+                <td><b>781</b></td>
+                <td>nôn_nóng | nôn_nóng</td>
+            </tr>
+            <tr>
+                <td><b>782</b></td>
+                <td>nông | nông</td>
+            </tr>
+            <tr>
+                <td><b>783</b></td>
+                <td>nông_cạn | nông_cạn</td>
+            </tr>
+            <tr>
+                <td><b>784</b></td>
+                <td>nông_dân | nông_dân</td>
+            </tr>
+            <tr>
+                <td><b>785</b></td>
+                <td>nông_lâm | nông_lâm</td>
+            </tr>
+            <tr>
+                <td><b>786</b></td>
+                <td>nông_nghiệp | nông_nghiệp</td>
+            </tr>
+            <tr>
+                <td><b>787</b></td>
+                <td>nông_nổi | nông_nổi</td>
+            </tr>
+            <tr>
+                <td><b>788</b></td>
+                <td>nông_sản | nông_sản</td>
+            </tr>
+            <tr>
+                <td><b>789</b></td>
+                <td>nông_thôn | nông_thôn</td>
+            </tr>
+            <tr>
+                <td><b>790</b></td>
+                <td>nông_đức_mạnh | nông_đức_mạnh</td>
+            </tr>
+            <tr>
+                <td><b>791</b></td>
+                <td>núi_lửa | núi_lửa</td>
+            </tr>
+            <tr>
+                <td><b>792</b></td>
+                <td>núi_rừng | núi_rừng</td>
+            </tr>
+            <tr>
+                <td><b>793</b></td>
+                <td>núm | núm</td>
+            </tr>
+            <tr>
+                <td><b>794</b></td>
+                <td>núp | núp</td>
+            </tr>
+            <tr>
+                <td><b>795</b></td>
+                <td>nút | nút</td>
+            </tr>
+            <tr>
+                <td><b>796</b></td>
+                <td>năm_cam | năm_cam</td>
+            </tr>
+            <tr>
+                <td><b>797</b></td>
+                <td>năm_học | năm_học</td>
+            </tr>
+            <tr>
+                <td><b>798</b></td>
+                <td>năm_ngoái | năm_ngoái</td>
+            </tr>
+            <tr>
+                <td><b>799</b></td>
+                <td>năm_qua | năm_qua</td>
+            </tr>
+            <tr>
+                <td><b>800</b></td>
+                <td>năm_tuổi | năm_tuổi</td>
+            </tr>
+            <tr>
+                <td><b>801</b></td>
+                <td>năn_nỉ | năn_nỉ</td>
+            </tr>
+            <tr>
+                <td><b>802</b></td>
+                <td>năng | năng</td>
+            </tr>
+            <tr>
+                <td><b>803</b></td>
+                <td>năng_khiếu | năng_khiếu</td>
+            </tr>
+            <tr>
+                <td><b>804</b></td>
+                <td>năng_lượng | năng_lượng</td>
+            </tr>
+            <tr>
+                <td><b>805</b></td>
+                <td>năng_lực | năng_lực</td>
+            </tr>
+            <tr>
+                <td><b>806</b></td>
+                <td>năng_suất | năng_suất</td>
+            </tr>
+            <tr>
+                <td><b>807</b></td>
+                <td>năng_động | năng_động</td>
+            </tr>
+            <tr>
+                <td><b>808</b></td>
+                <td>nđ | nđ</td>
+            </tr>
+            <tr>
+                <td><b>809</b></td>
+                <td>nđ-cp | nđ-cp</td>
+            </tr>
+            <tr>
+                <td><b>810</b></td>
+                <td>nơ | nơ</td>
+            </tr>
+            <tr>
+                <td><b>811</b></td>
+                <td>nơm_nớp | nơm_nớp</td>
+            </tr>
+            <tr>
+                <td><b>812</b></td>
+                <td>nương | nương</td>
+            </tr>
+            <tr>
+                <td><b>813</b></td>
+                <td>nương_tựa | nương_tựa</td>
+            </tr>
+            <tr>
+                <td><b>814</b></td>
+                <td>nước_bọt | nước_bọt</td>
+            </tr>
+            <tr>
+                <td><b>815</b></td>
+                <td>nước_chấm | nước_chấm</td>
+            </tr>
+            <tr>
+                <td><b>816</b></td>
+                <td>nước_cốt | nước_cốt</td>
+            </tr>
+            <tr>
+                <td><b>817</b></td>
+                <td>nước_da | nước_da</td>
+            </tr>
+            <tr>
+                <td><b>818</b></td>
+                <td>nước_dùng | nước_dùng</td>
+            </tr>
+            <tr>
+                <td><b>819</b></td>
+                <td>nước_hoa | nước_hoa</td>
+            </tr>
+            <tr>
+                <td><b>820</b></td>
+                <td>nước_khoáng | nước_khoáng</td>
+            </tr>
+            <tr>
+                <td><b>821</b></td>
+                <td>nước_lã | nước_lã</td>
+            </tr>
+            <tr>
+                <td><b>822</b></td>
+                <td>nước_lèo | nước_lèo</td>
+            </tr>
+            <tr>
+                <td><b>823</b></td>
+                <td>nước_lạnh | nước_lạnh</td>
+            </tr>
+            <tr>
+                <td><b>824</b></td>
+                <td>nước_lọc | nước_lọc</td>
+            </tr>
+            <tr>
+                <td><b>825</b></td>
+                <td>nước_lớn | nước_lớn</td>
+            </tr>
+            <tr>
+                <td><b>826</b></td>
+                <td>nước_máy | nước_máy</td>
+            </tr>
+            <tr>
+                <td><b>827</b></td>
+                <td>nước_mũi | nước_mũi</td>
+            </tr>
+            <tr>
+                <td><b>828</b></td>
+                <td>nước_mắm | nước_mắm</td>
+            </tr>
+            <tr>
+                <td><b>829</b></td>
+                <td>nước_mắt | nước_mắt</td>
+            </tr>
+            <tr>
+                <td><b>830</b></td>
+                <td>nước_ngoài | nước_ngoài</td>
+            </tr>
+            <tr>
+                <td><b>831</b></td>
+                <td>nước_ngầm | nước_ngầm</td>
+            </tr>
+            <tr>
+                <td><b>832</b></td>
+                <td>nước_ngọt | nước_ngọt</td>
+            </tr>
+            <tr>
+                <td><b>833</b></td>
+                <td>nước_nhà | nước_nhà</td>
+            </tr>
+            <tr>
+                <td><b>834</b></td>
+                <td>nước_rút | nước_rút</td>
+            </tr>
+            <tr>
+                <td><b>835</b></td>
+                <td>nước_sạch | nước_sạch</td>
+            </tr>
+            <tr>
+                <td><b>836</b></td>
+                <td>nước_thải | nước_thải</td>
+            </tr>
+            <tr>
+                <td><b>837</b></td>
+                <td>nước_tiểu | nước_tiểu</td>
+            </tr>
+            <tr>
+                <td><b>838</b></td>
+                <td>nước_đá | nước_đá</td>
+            </tr>
+            <tr>
+                <td><b>839</b></td>
+                <td>nướng | nướng</td>
+            </tr>
+            <tr>
+                <td><b>840</b></td>
+                <td>nướu | nướu</td>
+            </tr>
+            <tr>
+                <td><b>841</b></td>
+                <td>nạc | nạc</td>
+            </tr>
+            <tr>
+                <td><b>842</b></td>
+                <td>nạn | nạn</td>
+            </tr>
+            <tr>
+                <td><b>843</b></td>
+                <td>nạn_nhân | nạn_nhân</td>
+            </tr>
+            <tr>
+                <td><b>844</b></td>
+                <td>nạo | nạo</td>
+            </tr>
+            <tr>
+                <td><b>845</b></td>
+                <td>nạo_phá_thai | nạo_phá_thai</td>
+            </tr>
+            <tr>
+                <td><b>846</b></td>
+                <td>nạo_vét | nạo_vét</td>
+            </tr>
+            <tr>
+                <td><b>847</b></td>
+                <td>nạp | nạp</td>
+            </tr>
+            <tr>
+                <td><b>848</b></td>
+                <td>nản | nản</td>
+            </tr>
+            <tr>
+                <td><b>849</b></td>
+                <td>nản_chí | nản_chí</td>
+            </tr>
+            <tr>
+                <td><b>850</b></td>
+                <td>nản_lòng | nản_lòng</td>
+            </tr>
+            <tr>
+                <td><b>851</b></td>
+                <td>nảy | nảy</td>
+            </tr>
+            <tr>
+                <td><b>852</b></td>
+                <td>nảy_nở | nảy_nở</td>
+            </tr>
+            <tr>
+                <td><b>853</b></td>
+                <td>nảy_sinh | nảy_sinh</td>
+            </tr>
+            <tr>
+                <td><b>854</b></td>
+                <td>nấc | nấc</td>
+            </tr>
+            <tr>
+                <td><b>855</b></td>
+                <td>nấm | nấm</td>
+            </tr>
+            <tr>
+                <td><b>856</b></td>
+                <td>nấm_hương | nấm_hương</td>
+            </tr>
+            <tr>
+                <td><b>857</b></td>
+                <td>nấm_mốc | nấm_mốc</td>
+            </tr>
+            <tr>
+                <td><b>858</b></td>
+                <td>nấm_rơm | nấm_rơm</td>
+            </tr>
+            <tr>
+                <td><b>859</b></td>
+                <td>nấu | nấu</td>
+            </tr>
+            <tr>
+                <td><b>860</b></td>
+                <td>nấu_nướng | nấu_nướng</td>
+            </tr>
+            <tr>
+                <td><b>861</b></td>
+                <td>nấu_ăn | nấu_ăn</td>
+            </tr>
+            <tr>
+                <td><b>862</b></td>
+                <td>nắm | nắm</td>
+            </tr>
+            <tr>
+                <td><b>863</b></td>
+                <td>nắm_bắt | nắm_bắt</td>
+            </tr>
+            <tr>
+                <td><b>864</b></td>
+                <td>nắng | nắng</td>
+            </tr>
+            <tr>
+                <td><b>865</b></td>
+                <td>nắng_nóng | nắng_nóng</td>
+            </tr>
+            <tr>
+                <td><b>866</b></td>
+                <td>nắp | nắp</td>
+            </tr>
+            <tr>
+                <td><b>867</b></td>
+                <td>nằm | nằm</td>
+            </tr>
+            <tr>
+                <td><b>868</b></td>
+                <td>nằm_mơ | nằm_mơ</td>
+            </tr>
+            <tr>
+                <td><b>869</b></td>
+                <td>nằng_nặc | nằng_nặc</td>
+            </tr>
+            <tr>
+                <td><b>870</b></td>
+                <td>nặc_danh | nặc_danh</td>
+            </tr>
+            <tr>
+                <td><b>871</b></td>
+                <td>nặn | nặn</td>
+            </tr>
+            <tr>
+                <td><b>872</b></td>
+                <td>nặng_ký | nặng_ký</td>
+            </tr>
+            <tr>
+                <td><b>873</b></td>
+                <td>nặng_nhọc | nặng_nhọc</td>
+            </tr>
+            <tr>
+                <td><b>874</b></td>
+                <td>nặng_nề | nặng_nề</td>
+            </tr>
+            <tr>
+                <td><b>875</b></td>
+                <td>nặng_trĩu | nặng_trĩu</td>
+            </tr>
+            <tr>
+                <td><b>876</b></td>
+                <td>nẻo | nẻo</td>
+            </tr>
+            <tr>
+                <td><b>877</b></td>
+                <td>nếm | nếm</td>
+            </tr>
+            <tr>
+                <td><b>878</b></td>
+                <td>nến | nến</td>
+            </tr>
+            <tr>
+                <td><b>879</b></td>
+                <td>nếp | nếp</td>
+            </tr>
+            <tr>
+                <td><b>880</b></td>
+                <td>nề_nếp | nề_nếp</td>
+            </tr>
+            <tr>
+                <td><b>881</b></td>
+                <td>nền_móng | nền_móng</td>
+            </tr>
+            <tr>
+                <td><b>882</b></td>
+                <td>nền_tảng | nền_tảng</td>
+            </tr>
+            <tr>
+                <td><b>883</b></td>
+                <td>nể | nể</td>
+            </tr>
+            <tr>
+                <td><b>884</b></td>
+                <td>nệm | nệm</td>
+            </tr>
+            <tr>
+                <td><b>885</b></td>
+                <td>nối | nối</td>
+            </tr>
+            <tr>
+                <td><b>886</b></td>
+                <td>nối_kết | nối_kết</td>
+            </tr>
+            <tr>
+                <td><b>887</b></td>
+                <td>nối_liền | nối_liền</td>
+            </tr>
+            <tr>
+                <td><b>888</b></td>
+                <td>nối_mạng | nối_mạng</td>
+            </tr>
+            <tr>
+                <td><b>889</b></td>
+                <td>nối_tiếp | nối_tiếp</td>
+            </tr>
+            <tr>
+                <td><b>890</b></td>
+                <td>nốt_nhạc | nốt_nhạc</td>
+            </tr>
+            <tr>
+                <td><b>891</b></td>
+                <td>nồi | nồi</td>
+            </tr>
+            <tr>
+                <td><b>892</b></td>
+                <td>nồng | nồng</td>
+            </tr>
+            <tr>
+                <td><b>893</b></td>
+                <td>nồng_nhiệt | nồng_nhiệt</td>
+            </tr>
+            <tr>
+                <td><b>894</b></td>
+                <td>nồng_nàn | nồng_nàn</td>
+            </tr>
+            <tr>
+                <td><b>895</b></td>
+                <td>nồng_nặc | nồng_nặc</td>
+            </tr>
+            <tr>
+                <td><b>896</b></td>
+                <td>nồng_độ | nồng_độ</td>
+            </tr>
+            <tr>
+                <td><b>897</b></td>
+                <td>nồng_ấm | nồng_ấm</td>
+            </tr>
+            <tr>
+                <td><b>898</b></td>
+                <td>nổ | nổ</td>
+            </tr>
+            <tr>
+                <td><b>899</b></td>
+                <td>nổ_súng | nổ_súng</td>
+            </tr>
+            <tr>
+                <td><b>900</b></td>
+                <td>nổi | nổi</td>
+            </tr>
+            <tr>
+                <td><b>901</b></td>
+                <td>nổi_bật | nổi_bật</td>
+            </tr>
+            <tr>
+                <td><b>902</b></td>
+                <td>nổi_cáu | nổi_cáu</td>
+            </tr>
+            <tr>
+                <td><b>903</b></td>
+                <td>nổi_cộm | nổi_cộm</td>
+            </tr>
+            <tr>
+                <td><b>904</b></td>
+                <td>nổi_danh | nổi_danh</td>
+            </tr>
+            <tr>
+                <td><b>905</b></td>
+                <td>nổi_dậy | nổi_dậy</td>
+            </tr>
+            <tr>
+                <td><b>906</b></td>
+                <td>nổi_giận | nổi_giận</td>
+            </tr>
+            <tr>
+                <td><b>907</b></td>
+                <td>nổi_loạn | nổi_loạn</td>
+            </tr>
+            <tr>
+                <td><b>908</b></td>
+                <td>nổi_nóng | nổi_nóng</td>
+            </tr>
+            <tr>
+                <td><b>909</b></td>
+                <td>nổi_tiếng | nổi_tiếng</td>
+            </tr>
+            <tr>
+                <td><b>910</b></td>
+                <td>nổi_tiếng_thế_giới | nổi_tiếng_thế_giới</td>
+            </tr>
+            <tr>
+                <td><b>911</b></td>
+                <td>nổi_trội | nổi_trội</td>
+            </tr>
+            <tr>
+                <td><b>912</b></td>
+                <td>nỗ_lực | nỗ_lực</td>
+            </tr>
+            <tr>
+                <td><b>913</b></td>
+                <td>nỗi | nỗi</td>
+            </tr>
+            <tr>
+                <td><b>914</b></td>
+                <td>nỗi_lòng | nỗi_lòng</td>
+            </tr>
+            <tr>
+                <td><b>915</b></td>
+                <td>nỗi_niềm | nỗi_niềm</td>
+            </tr>
+            <tr>
+                <td><b>916</b></td>
+                <td>nội_bài | nội_bài</td>
+            </tr>
+            <tr>
+                <td><b>917</b></td>
+                <td>nội_bộ | nội_bộ</td>
+            </tr>
+            <tr>
+                <td><b>918</b></td>
+                <td>nội_chiến | nội_chiến</td>
+            </tr>
+            <tr>
+                <td><b>919</b></td>
+                <td>nội_chính | nội_chính</td>
+            </tr>
+            <tr>
+                <td><b>920</b></td>
+                <td>nội_các | nội_các</td>
+            </tr>
+            <tr>
+                <td><b>921</b></td>
+                <td>nội_dung | nội_dung</td>
+            </tr>
+            <tr>
+                <td><b>922</b></td>
+                <td>nội_khoa | nội_khoa</td>
+            </tr>
+            <tr>
+                <td><b>923</b></td>
+                <td>nội_lực | nội_lực</td>
+            </tr>
+            <tr>
+                <td><b>924</b></td>
+                <td>nội_soi | nội_soi</td>
+            </tr>
+            <tr>
+                <td><b>925</b></td>
+                <td>nội_thành | nội_thành</td>
+            </tr>
+            <tr>
+                <td><b>926</b></td>
+                <td>nội_thất | nội_thất</td>
+            </tr>
+            <tr>
+                <td><b>927</b></td>
+                <td>nội_tiết | nội_tiết</td>
+            </tr>
+            <tr>
+                <td><b>928</b></td>
+                <td>nội_tiết_tố | nội_tiết_tố</td>
+            </tr>
+            <tr>
+                <td><b>929</b></td>
+                <td>nội_trú | nội_trú</td>
+            </tr>
+            <tr>
+                <td><b>930</b></td>
+                <td>nội_trợ | nội_trợ</td>
+            </tr>
+            <tr>
+                <td><b>931</b></td>
+                <td>nội_tâm | nội_tâm</td>
+            </tr>
+            <tr>
+                <td><b>932</b></td>
+                <td>nội_tại | nội_tại</td>
+            </tr>
+            <tr>
+                <td><b>933</b></td>
+                <td>nội_vụ | nội_vụ</td>
+            </tr>
+            <tr>
+                <td><b>934</b></td>
+                <td>nội_địa | nội_địa</td>
+            </tr>
+            <tr>
+                <td><b>935</b></td>
+                <td>nới | nới</td>
+            </tr>
+            <tr>
+                <td><b>936</b></td>
+                <td>nở | nở</td>
+            </tr>
+            <tr>
+                <td><b>937</b></td>
+                <td>nở_rộ | nở_rộ</td>
+            </tr>
+            <tr>
+                <td><b>938</b></td>
+                <td>nỡ | nỡ</td>
+            </tr>
+            <tr>
+                <td><b>939</b></td>
+                <td>nợ | nợ</td>
+            </tr>
+            <tr>
+                <td><b>940</b></td>
+                <td>nợ_nần | nợ_nần</td>
+            </tr>
+            <tr>
+                <td><b>941</b></td>
+                <td>nụ | nụ</td>
+            </tr>
+            <tr>
+                <td><b>942</b></td>
+                <td>nụ_hôn | nụ_hôn</td>
+            </tr>
+            <tr>
+                <td><b>943</b></td>
+                <td>nứt | nứt</td>
+            </tr>
+            <tr>
+                <td><b>944</b></td>
+                <td>nứt_nẻ | nứt_nẻ</td>
+            </tr>
+            <tr>
+                <td><b>945</b></td>
+                <td>nửa_đêm | nửa_đêm</td>
+            </tr>
+            <tr>
+                <td><b>946</b></td>
+                <td>nữ | nữ</td>
+            </tr>
+            <tr>
+                <td><b>947</b></td>
+                <td>nữ_giới | nữ_giới</td>
+            </tr>
+            <tr>
+                <td><b>948</b></td>
+                <td>nữ_hoàng | nữ_hoàng</td>
+            </tr>
+            <tr>
+                <td><b>949</b></td>
+                <td>nữ_sinh | nữ_sinh</td>
+            </tr>
+            <tr>
+                <td><b>950</b></td>
+                <td>nữ_thần | nữ_thần</td>
+            </tr>
+            <tr>
+                <td><b>951</b></td>
+                <td>nữ_trang | nữ_trang</td>
+            </tr>
+            <tr>
+                <td><b>952</b></td>
+                <td>nữ_tính | nữ_tính</td>
+            </tr>
+            <tr>
+                <td><b>953</b></td>
+                <td>nữ_tướng_cướp | nữ_tướng_cướp</td>
+            </tr>
+            <tr>
+                <td><b>954</b></td>
+                <td>nực_cười | nực_cười</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

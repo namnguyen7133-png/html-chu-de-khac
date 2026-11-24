@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>DO THI - Trang tính6</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>DO THI - Trang tính6</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>45485.0 | v | 2 | Thịt vai | 18 kg, 20 kg | Bittet, roadbit, thịt nướng, hầm, nhúng, lẩu shabushabu</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>Thịt bò | 3 | Sườn | 12 kg , 14 kg | Thích hợp để nấu: nhúng lẩu, sukiyaki, shabushabu, bít-tết, thịt nướng</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>11.0 | Thăn đùi | 4, 5 kg | Bít-tết, roast beef, thịt nướng | 4 | Thăn ngoại | 12 kg , 14 kg | Bittet, </td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>Thịt lợn | 5 | Thăn nội | 6kg , 8kg | Bittet,  Capacio</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>9.0 | VIII. 8. Thịt mông | 6 | Nạm | 18 kg, 20 kg | Thích hợp để nấu: Cà ri, thịt nướng, hầm</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>Thịt Gà | 7 | Diềm thăn | 8 kg, 10 kg | Thích hợp để nấu: Hầm, thịt nướng, xào</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>13.0 | 9. Tim gà | 8 | Đầu rồng | 8 kg, 10 kg | Bò nướng Anh, bit-tết, nướng hay hầm</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>Thịt cá | 9 | Bắp rùa | 4kg,5kg | Bít-tết, thịt nướng, roast beef | Dưỡng lão  | Dưỡng lão  | Dưỡng lão </td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>5.0 | Cá Dầu | 10 | Mông | 17, 19 | Cà ri, hầm, ninh, súp, hamburger, thịt viên | Chào bạn, dựa trên các tài liệu bạn cung cấp, tôi sẽ thống kê thông tin theo yêu cầu của bạn. | Chào bạn, | Chào bạn, dựa trên các nguồn video bạn cung cấp, tôi có thể tổng hợp thông tin về các kênh và nội dung liên quan đến cách chăm sóc cơ thể, ăn uống, tập luyện, cũng như các mô hình dưỡng lão mới.</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>ch | 11 | Thăn đùi | 4, 5 kg | Bít-tết, roast beef, thịt nướng</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>12.0 | khỉ | t | 12 | Bắp bò | 15,17 | Cà ri, hầm, súp, hambuger, thịt viên | 1. Thống kê các kênh video trong tài liệu: | Dựa trên các nguồn thông tin bạn cung cấp, không có câu chuyện kinh doanh cụ thể nào được mô tả chi tiết với các yếu tố như mô hình buôn bán, chia sẻ lỗ lãi, phân vai trò trách nhiệm giữa các đối tác kinh doanh, hay quản lý vốn vay trong một doanh nghiệp. Các nguồn tập trung vào các chủ đề khác như lối sống khôn ngoan, lựa chọn an dưỡng tuổi già, sức khỏe truyền thống, nhân tướng học, và phân tích các hệ thống kiểm soát toàn cầu. | Các kênh video và nội dung liên quan bao gồm:</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>d | 13 | Oc bo</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>8.0 | 5 Chả chó nướng | p | 14 | pin bò | Dựa vào các trích đoạn được cung cấp, các kênh YouTube xuất hiện bao gồm: | Tuy nhiên, tôi có thể tổng hợp và phân tích các điểm liên quan đến các yêu cầu của bạn dựa trên thông tin có trong các nguồn, bao gồm: | 1. Kênh "Sức Khỏe Tuổi Già" Video "99 Tuổi Vẫn Dẻo Dai: Bà Cụ Tiết Lộ Cách Giã Hạt Gấc + Mật Ong Trị Đau Lưng Từ 1950!".</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>1 | I. 1. Thịt thăn hay còn gọi là nạc thăn</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>2 | II. 2. Thịt cốt lết ("Cotlete de porc" trong tiếng Pháp) | Hãy Sống Khác | Các kênh video được đề cập: | Nội dung tập trung vào cách chăm sóc cơ thể, đặc biệt là cột sống, dựa trên bí quyết cổ truyền từ làng Đồng Kỵ.</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>c | 3 | III. 3. Thịt thủ | Tri Thức Khắc Kỷ | Cụ thể, video tiết lộ một công thức cổ truyền sử dụng thịt quả gấc chín đỏ và mật ong rừng nguyên chất để chữa đau lưng. Công thức này được cho là giúp tái tạo sụn khớp và chống viêm tự nhiên. Điều đặc biệt là sự kết hợp giữa DHA từ gấc già và enzyme gluco từ mật ong nguyên chất.</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>11.0 | ch | 4 | IV. 4. Thịt chân giò | Sức Khỏe Tuổi Già | Kênh "Hãy Sống Khác". | Bên cạnh công thức uống, video còn hướng dẫn kết hợp với các bài tập và động tác vận động để cột sống dẻo dai. Cụ Minh 99 tuổi thực hiện các động tác như cúi xuống nhặt kim không cần chống tay, xoay người 180 độ, uốn cong lưng về phía sau, xoay người 360 độ một cách mượt mà. Các động tác bắt buộc sau khi uống hỗn hợp gấc mật ong bao gồm "rắn thức giấc" (uốn cong cột sống), "liễu trong gió" (lắc lư thân người), và "tre đàn hồi" (cúi xuống và đứng thẳng từng đốt sống). Các động tác này giúp mát xa toàn diện cột sống.</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>8.0 | t | 5 | V. 5. Móng giò | Huyền Cơ Cổ Nhân | Kênh "Tri Thức Khắc Kỷ". | Video cũng nhấn mạnh tầm quan trọng của nguyên tắc sống thuận tự nhiên, bao gồm cách thức dậy (như rắn thức giấc), cách ngồi (như núi), cách đứng (như cây), cách đi (như nước chảy), cách ăn (như chim ăn - ăn ít nhiều bữa, nhai kỹ, ăn chậm), và cách thư giãn buổi tối (như liễu gãy cành).</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>11.0 | 6 | VI. 6. Thịt ba chỉ | Cuộc sống tuổi về chiều | Kênh "Sức Khỏe Tuổi Già". | Quan trọng nhất là yếu tố tinh thần và tâm linh, đó là lòng biết ơn. Nghi thức cảm ơn cột sống và cơ thể trước khi uống thuốc được xem là bí mật cuối cùng, giúp tạo ra endorphin (hormone hạnh phúc) giảm đau và tăng cường tái tạo tế bào.</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>5.0 | v | 7 | VII. 7. Thịt nạc vai | Chuyển Mình Vượt Thử Thách | Kênh "Huyền Cơ Cổ Nhân".</td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td>5.0 | p | 8 | VIII. 8. Thịt mông | Cuộc Sống Người Cao Tuổi | Kênh "Cuộc sống tuổi về chiều". | 2. Kênh "Huyền Cơ Cổ Nhân" Video "Biết Mình Thuộc Thể Hàn Hay Thể Nhiệt Để Sống Khỏe Mỗi Ngày!".</td>
+            </tr>
+            <tr>
+                <td><b>22</b></td>
+                <td>5.0 | 9 | IX. 9. Thịt nạc dăm | Tâm Đắc Cổ Nhân | Kênh "Chuyển Mình Vượt Thử Thách".</td>
+            </tr>
+            <tr>
+                <td><b>23</b></td>
+                <td>10 | X. 10. Sườn heo | THE HIDDEN SELF | Kênh "Cuộc Sống Người Cao Tuổi". | Video này tập trung vào triết lý Đông y, cụ thể là việc hiểu rõ thể chất cá nhân (thể Hàn hoặc thể Nhiệt) là chìa khóa để chăm sóc sức khỏe.</td>
+            </tr>
+            <tr>
+                <td><b>24</b></td>
+                <td>d | 11 | Oc loc | Kênh "Tâm Đắc Cổ Nhân". | Đông y không chỉ chữa bệnh theo triệu chứng mà tìm ra nguyên nhân sâu xa và điều hòa cơ thể. Việc nhận diện thể chất là bước đầu tiên, có thể thay đổi theo thời tiết, cảm xúc, lối sống.</td>
+            </tr>
+            <tr>
+                <td><b>25</b></td>
+                <td>ti | 12 | Tim lợn | (Lưu ý: Kênh "Cuộc sống tuổi về chiều" và "Chuyển Mình Vượt Thử Thách" có vẻ cùng kể một câu chuyện về ông Tư, và kênh "Cuộc Sống Người Cao Tuổi" kể câu chuyện của cụ ông Mạc Quốc Chính và ông Nguyên, cũng như bàn luận về việc có con hay không.) | Kênh "THE HIDDEN SELF". | Phương pháp nhận diện thể chất được giới thiệu là Tứ Trần (Vọng, Văn, Vấn, Thiết) - quan sát (sắc mặt, dáng đi, ánh mắt), lắng nghe/ngửi (giọng nói, hơi thở, mùi cơ thể), hỏi (thói quen sinh hoạt, ăn uống, tâm trạng), và bắt mạch.</td>
+            </tr>
+            <tr>
+                <td><b>26</b></td>
+                <td>Video mô tả chi tiết đặc điểm của người thể Hàn (sợ lạnh, tay chân lạnh, dễ đầy hơi khó tiêu, ít nói, ngại tiếp xúc) và người thể Nhiệt (thân nhiệt cao, dễ nổi mụn, miệng khô, dễ cáu giận, khó ngủ).</td>
+            </tr>
+            <tr>
+                <td><b>27</b></td>
+                <td>1 | 1. Ức gà | 2. Thống kê các món ăn, thực phẩm và thông tin liên quan: | Các cách "làm ăn", "làm việc" hoặc "phát triển" (theo nghĩa rộng) được đề cập trong các nguồn: | Về ăn uống, video cung cấp lời khuyên cụ thể cho từng thể chất:</td>
+            </tr>
+            <tr>
+                <td><b>28</b></td>
+                <td>2 | • Ức gà có xương, có da | Người thể Hàn nên ăn thực phẩm có tính ấm, dễ tiêu hóa (thịt dê, thịt gà hầm gừng/táo đỏ/kỳ tử, tôm, lươn, trứng gà, hải sâm, cá chép). Rau củ nên xào nấu kỹ với gừng, hành, tỏi, tiêu. Nên tránh đồ sống, lạnh, nước đá, trái cây nhiều nước có tính mát.</td>
+            </tr>
+            <tr>
+                <td><b>29</b></td>
+                <td>3 | • Ức gà không xương và có da | Các nguồn tài liệu đề cập đến các món ăn, thực phẩm và nguyên liệu chủ yếu trong ngữ cảnh của việc dưỡng sinh theo Đông y (Thể Hàn/Thể Nhiệt) và một bài thuốc gia truyền cho đau lưng. | Nguyên tắc sống khôn ngoan để thành công: Dù miệng đời có chửi rủa, người khôn ngoan vẫn sẽ làm 5 việc: nịnh nọt/khéo ăn nói để tạo ấn tượng tốt và nhận được sự giúp đỡ, không quá khiêm tốn để vươn tới nắm bắt cơ hội và cho người khác thấy ưu thế của bản thân, có dã tâm, biết nhẫn tâm một chút để đứng vững, học cách bảo vệ bản thân, và dám phản kích khi cần, chỉ hoàn thành mọi việc ở mức bình thường (không vội vàng, hấp tấp, chỉ nhìn lợi trước mắt, mà trầm ổn, bình tĩnh), không thuận theo ý người khác, dám có chủ kiến, suy nghĩ và phản bác hợp lý để tạo cơ hội. | Người thể Nhiệt nên ưu tiên thực phẩm có tính mát tự nhiên (dưa hấu, dưa lưới, thanh long, cam, lê - ăn ban ngày), trà thảo mộc (trà hoa cúc, hạ khô thảo, atisô), thịt mát (thịt vịt, thịt ngan, cua, nghêu, sò), các loại đậu (đậu xanh), rau (khổ qua, rau má, rau diếp cá, cải cúc). Nên tránh lạm dụng đồ sống lạnh, thực phẩm chế biến sẵn, đường tinh luyện.</td>
+            </tr>
+            <tr>
+                <td><b>30</b></td>
+                <td>v | 4 | 2. Âu cánh gà | Tạo ra cơ hội thay vì chờ đợi: Người thành đạt cho thấy muốn thành công phải chủ động tạo ra cơ hội. | Video nhấn mạnh rằng ăn đúng là ăn hợp với cơ thể mình, không phải ăn tốt theo quan niệm chung. Quan trọng là lắng nghe cơ thể và điều chỉnh lối sống, tâm lý để đạt được sự quân bình.</td>
+            </tr>
+            <tr>
+                <td><b>31</b></td>
+                <td>5 | 3. Cánh tỏi gà | a) Bài thuốc/món ăn gia truyền (Từ kênh Sức Khỏe Tuổi Già): | Sử dụng khủng hoảng để tái định hình và kiểm soát: Các nguồn 116-124 mô tả cách các thực thể toàn cầu (tập đoàn, tổ chức tài chính, chính phủ) sử dụng các cuộc khủng hoảng (lương thực, khí hậu) để tái cấu trúc nền kinh tế và thiết lập hệ thống kiểm soát.</td>
+            </tr>
+            <tr>
+                <td><b>32</b></td>
+                <td>ch | 6 | 4. Đùi gà tỏi | Khủng hoảng lương thực: Được lập trình, trồng lớp lên nhau để mặc cả với các quốc gia nghèo, kiểm soát đất đai, giống cây, chính sách. Các tập đoàn nông nghiệp lớn công bố lợi nhuận tăng vọt khi giá lương thực biến động. Giá phân bón bị đẩy lên cao do chính sách kiểm soát xuất khẩu và trừng phạt. Tổ chức quốc tế thúc đẩy tái thiết nông nghiệp theo mô hình bền vững nhưng thực chất là áp đặt tiêu chuẩn kỹ thuật do tập đoàn kiểm soát. Lương thực trở thành vũ khí, kẻ kiểm soát hạt giống, đất canh tác sẽ kiểm soát cả sự sống. Hệ thống giám sát nông nghiệp toàn cầu dựa trên dữ liệu, blockchain, AI để thiết lập kiểm soát sản xuất, phân phối, tiêu dùng. | 3. Kênh "Tri Thức Khắc Kỷ" và "Cuộc sống tuổi về chiều" / "Chuyển Mình Vượt Thử Thách" và "Cuộc Sống Người Cao Tuổi" Các video từ các kênh này thảo luận về các lựa chọn thay thế cho viện dưỡng lão truyền thống, trình bày cả ưu điểm, nhược điểm và các mô hình mới:</td>
+            </tr>
+            <tr>
+                <td><b>33</b></td>
+                <td>ch | 7 | 5. Má đùi gà | Món ăn/Bài thuốc: Hỗn hợp Gấc và Mật ong rừng nguyên chất. | Biến đổi khí hậu: Trở thành công cụ địa chính trị mới. Dùng làm cái cớ để tái cấu trúc nền kinh tế, định hình chính sách tài chính, thiết lập hệ thống kiểm soát. Các nước đang phát triển bị buộc cắt giảm sản xuất trong khi tập đoàn lớn đầu tư vào tín chỉ carbon, sở hữu công nghệ năng lượng sạch và áp đặt tiêu chuẩn chuỗi cung ứng. Cơ chế CBAM (thuế carbon biên giới EU) được coi là rào cản thương mại ngụy trang bằng đạo đức khí hậu.</td>
+            </tr>
+            <tr>
+                <td><b>34</b></td>
+                <td>8 | 6. Đùi gà góc tư | Tác dụng: | Tiêu chuẩn ESG: Trở thành vũ khí tài chính để kiểm soát vốn, tái lập quyền lực, tái định hình trật tự kinh tế. Hệ thống chấm điểm ESG do các định chế tài chính toàn cầu kiểm soát, buộc doanh nghiệp phải đạt điểm cao để tiếp cận vốn và thị trường. Được xem là hệ thống xếp hạng đạo đức toàn cầu do nhóm quyền lực tư nhân vận hành. Các nước/doanh nghiệp không theo kịp sẽ bị cô lập tài chính. Được cảnh báo là bước đệm thiết lập hệ thống chấm điểm hành vi toàn diện. | "Tri Thức Khắc Kỷ" giới thiệu 5 giải pháp thay thế viện dưỡng lão:</td>
+            </tr>
+            <tr>
+                <td><b>35</b></td>
+                <td>ch | 9 | 7. Chân gà | Trị đau lưng. | CBDC: Tiền kỹ thuật số do Ngân hàng Trung ương phát hành, được quảng bá vì tiện ích nhưng là cỗ máy kiểm soát, thay đổi định nghĩa tiền tệ, quyền riêng tư, tự do tài chính. Mỗi giao dịch được ghi lại, tiền có dấu vết. Có thể gắn điều kiện cho từng đồng tiền, lập trình hành vi tiêu dùng. Gắn liền với điểm tín dụng xã hội, hành vi tiêu dùng, mức phát thải carbon. Tiền trở thành quyền truy cập có thể bị rút lại bằng thuật toán.</td>
+            </tr>
+            <tr>
+                <td><b>36</b></td>
+                <td>10 | 8. Mề gà | Giúp ngủ ngon hơn, không còn thức giấc vì đau. | AI: Công cụ kiểm duyệt hành vi ở cấp độ chưa từng có. Phân tích, dự đoán hành vi dựa trên dữ liệu cá nhân. Có thể xóa tài khoản, hạn chế quyền truy cập. Kết hợp với camera, nhận diện khuôn mặt, hệ thống chấm điểm tín dụng xã hội tạo mạng lưới giám sát toàn diện. Trở thành người gác cổng của tư tưởng, áp đặt xã hội theo hướng định sẵn. | An dưỡng tại gia với sự hỗ trợ chăm sóc tại nhà: Ở lại nhà với sự giúp đỡ chuyên nghiệp, gia đình hoặc sửa đổi nhà cửa để dễ tiếp cận hơn. Ưu điểm là sự thoải mái, quen thuộc, duy trì độc lập và kiểm soát cuộc sống hàng ngày.</td>
+            </tr>
+            <tr>
+                <td><b>37</b></td>
+                <td>ti | 11 | 9. Tim gà | Giảm đau lưng 40-60% chỉ sau 3 ngày đầu. | Cộng đồng sống độc lập (Independent Living): Nhà ở riêng tư trong khu dân cư dành cho người lớn tuổi, ít phải bảo trì, có tiện nghi chung và hoạt động xã hội. Thích hợp cho người còn độc lập, giúp chống cô đơn, nhưng không cung cấp chăm sóc y tế toàn diện.</td>
+            </tr>
+            <tr>
+                <td><b>38</b></td>
+                <td>12 | 10. Gan gà | Giảm cứng khớp, bớt khó khăn khi cúi xuống nhặt đồ. | Cách giữ hoặc bỏ mối quan hệ (trong các câu chuyện đời thường, có thể liên hệ với kinh doanh): | Sống chung đa thế hệ với gia đình: Chuyển đến sống cùng con cháu. Mang lại sự hỗ trợ tinh thần, bầu bạn, kết nối tình cảm sâu sắc, có thể tiết kiệm chi phí. Tuy nhiên, đòi hỏi đặt ra ranh giới rõ ràng và tôn trọng lẫn nhau.</td>
+            </tr>
+            <tr>
+                <td><b>39</b></td>
+                <td>c | 13 | 11. Cổ gà | Tăng tính linh hoạt đáng kể cho cột sống. | Mô hình co housing hoặc sống chung nhà (Co-housing/Shared Living): Sống cùng những người khác (bạn bè, gia đình) trong không gian chung. Cung cấp bầu bạn, giảm chi phí, tạo cảm giác cộng đồng, linh hoạt và duy trì độc lập cá nhân.</td>
+            </tr>
+            <tr>
+                <td><b>40</b></td>
+                <td>p | 14 | 12. Phao câu gà | Giúp cột sống thẳng hơn, dáng đi tự tin hơn. | Giữ mối quan hệ: | Cơ sở trợ giúp sinh hoạt (Assisted Living): Giải pháp trung gian cho người cần hỗ trợ hàng ngày (tắm rửa, mặc quần áo, quản lý thuốc) nhưng không cần chăm sóc y tế toàn diện. Cung cấp chăm sóc cá nhân hóa, hoạt động cộng đồng, an toàn và tự do hơn viện dưỡng lão.</td>
+            </tr>
+            <tr>
+                <td><b>41</b></td>
+                <td>d | 15 | dau ga | Giúp cao thêm 1-2 cm vì cột sống được kéo dãn đúng cách. | Khéo ăn nói, nịnh nọt.</td>
+            </tr>
+            <tr>
+                <td><b>42</b></td>
+                <td>Giúp tái tạo sụn khớp. | Biết cách lắng nghe. | Các kênh "Cuộc sống tuổi về chiều" và "Chuyển Mình Vượt Thử Thách" kể câu chuyện của ông Tư, người đã trải qua những trải nghiệm tiêu cực khi dựa dẫm vào con cái, tái hôn, ở viện dưỡng lão (thiếu thốn tình cảm, dịch vụ kém, nhân viên thờ ơ), và thuê giúp việc (bị lợi dụng). Từ những thất bại này, ông đã tìm thấy một mô hình "dưỡng lão mới" là sống chung nương tựa lẫn nhau với những người bạn già cùng cảnh ngộ. Mô hình này nhấn mạnh sự tự chủ, tôn trọng, sẻ chia công việc và chi phí, cùng nhau chăm sóc khi ốm đau, và tạo ra một "gia đình thứ hai" dựa trên tình người và sự thấu hiểu. Đây là một cách để tránh sự cô đơn, tìm lại giá trị bản thân và sống có ý nghĩa ở tuổi già.</td>
+            </tr>
+            <tr>
+                <td><b>43</b></td>
+                <td>tt | 1 | Cá chép | Có tác dụng kháng viêm tự nhiên. | Mỉm cười thân thiện.</td>
+            </tr>
+            <tr>
+                <td><b>44</b></td>
+                <td>tt | 2 | Cá mè | Tăng cường hấp thu vitamin tan trong dầu. | Tôn trọng người khác. | Kênh "Cuộc Sống Người Cao Tuổi" cũng chia sẻ những trải nghiệm tiêu cực về viện dưỡng lão. Cụ ông Mạc Quốc Chính 77 tuổi chia sẻ rằng sau một năm ở viện dưỡng lão, ông nhận ra đó không phải nơi tốt nhất để an hưởng tuổi già. Lý do bao gồm thức ăn nhạt nhẽo, đơn điệu, thiếu thịt, môi trường ồn ào, thiếu tự do, và thái độ phân biệt đối xử của nhân viên giữa người có con cái thăm nom thường xuyên và người cô đơn. Cụ cũng chỉ ra mục tiêu lợi nhuận của viện dưỡng lão là một lý do khiến chất lượng dịch vụ bị cắt giảm.</td>
+            </tr>
+            <tr>
+                <td><b>45</b></td>
+                <td>tt | 3 | Cá Rô | Tăng cường hấp thu DHA. | Biết ơn.</td>
+            </tr>
+            <tr>
+                <td><b>46</b></td>
+                <td>tt | 4 | Cá Mực | Giúp tế bào tái tạo nhanh hơn 300%. | Không phản ứng nóng nảy khi bị chỉ trích/chửi rủa, bình tĩnh đối diện, tìm hiểu thông tin giá trị từ chỉ trích, làm dịu xung đột. | Video từ cùng kênh cũng có câu chuyện của cụ bà 77 tuổi không có con cái, chia sẻ những bài học đắt giá về sự cô độc và trải nghiệm không tốt ở viện dưỡng lão và với người giúp việc. Cụ nhận ra tầm quan trọng của điểm tựa tinh thần và sự quan tâm từ những người thân yêu, điều mà tiền bạc hay dịch vụ chuyên nghiệp không thể thay thế hoàn toàn. Một câu chuyện khác trên kênh này của ông Nguyên 75 tuổi cũng nhấn mạnh rằng chỉ dựa vào tiền tiết kiệm để dưỡng già là không thực tế, vì cuộc sống thiếu đi sự quan tâm và yêu thương từ gia đình sẽ rất khổ sở về mặt tinh thần.</td>
+            </tr>
+            <tr>
+                <td><b>47</b></td>
+                <td>tt | 5 | Cá Dầu | Endorphin (tạo ra từ lòng biết ơn) giảm đau hiệu quả hơn Morphin 200 lần. | Trong sống chung người già: Đồng cảm, sẻ chia, hỗ trợ lẫn nhau khi khó khăn/ốm đau. Tôn trọng không gian riêng của nhau. Có quy ước chung nhẹ nhàng, góp ý chân thành, không tranh cãi.</td>
+            </tr>
+            <tr>
+                <td><b>48</b></td>
+                <td>tt | 6 | Lươn | Giúp tinh thần thoải mái, lạc quan, yêu đời trở lại. | Bỏ mối quan hệ: | Tóm lại, các nguồn video này cung cấp thông tin từ nhiều khía cạnh khác nhau:</td>
+            </tr>
+            <tr>
+                <td><b>49</b></td>
+                <td>d | 7 | dau ca | Lấy lại được niềm vui sống. | Tránh xa những kẻ không có lương tâm.</td>
+            </tr>
+            <tr>
+                <td><b>50</b></td>
+                <td>tt | 1 | Chuột túi | Thúc đẩy tuần hoàn máu (nghiền gấc theo chiều kim đồng hồ). | Dũng cảm phản kích khi lòng tự tôn bị đụng chạm. | "Sức Khỏe Tuổi Già" và "Huyền Cơ Cổ Nhân" đi sâu vào các phương pháp chăm sóc sức khỏe, ăn uống và tập luyện theo quan điểm cổ truyền/Đông y để duy trì sức khỏe thể chất và tinh thần.</td>
+            </tr>
+            <tr>
+                <td><b>51</b></td>
+                <td>tt | 2 | voi | Tăng cường năng lượng (chén gốm cổ). | Trong câu chuyện Ông Tư và Ông Nguyên: Bỏ mối quan hệ với con cái khi bị đối xử tệ bạc, bị xem là gánh nặng, bị lợi dụng tài chính. Bỏ mối quan hệ với bạn đời mới khi phát hiện bị lợi dụng. Bỏ mối quan hệ với người giúp việc khi bị trộm cắp và vu khống. | "Tri Thức Khắc Kỷ" cung cấp cái nhìn tổng quan về các mô hình dưỡng lão thay thế phổ biến.</td>
+            </tr>
+            <tr>
+                <td><b>52</b></td>
+                <td>tt | 3 | Ngựa | Câu chuyện về món ăn: | Nói xấu sau lưng con dâu/con rể bị xem là không nên, gây mất hòa khí gia đình. | "Cuộc sống tuổi về chiều", "Chuyển Mình Vượt Thử Thách", và "Cuộc Sống Người Cao Tuổi" cung cấp những câu chuyện cá nhân về trải nghiệm thực tế (tiêu cực và tích cực) với các hình thức dưỡng lão khác nhau, đặc biệt làm nổi bật nhu cầu về tình cảm, sự tôn trọng và điểm tựa tinh thần ở tuổi già, dẫn đến việc tìm kiếm các mô hình sống chung dựa trên sự đồng cảm và hỗ trợ lẫn nhau.</td>
+            </tr>
+            <tr>
+                <td><b>53</b></td>
+                <td>tt | 4 | gấu | Đây là công thức cổ truyền được giấu kín 74 năm bởi bà Minh (99 tuổi) ở làng Đồng Kỷ. Chỉ ba người trong làng biết công thức này (bà nội, mẹ và bà Minh).</td>
+            </tr>
+            <tr>
+                <td><b>54</b></td>
+                <td>tt | 5 | khỉ | Công thức này từng giúp cả làng Đồng Kỷ khỏi đau lưng và sống thọ. Năm 1950, 80% dân làng sống trên 100 tuổi và không ai biết đau lưng. Bác sĩ Pháp từng nghiên cứu nhưng không hiểu nổi. | Cách chia lỗ lãi, phân vai trò trách nhiệm: Không có thông tin về chia lỗ lãi trong kinh doanh. Trong mô hình sống chung của nhóm người già:</td>
+            </tr>
+            <tr>
+                <td><b>55</b></td>
+                <td>tt | 6 | Gà bò tót | Cháu gái bà Minh tên Lan (25 tuổi) bị thoát vị đĩa đệm, bác sĩ khuyên phẫu thuật 200 triệu hoặc sống chung với đau đớn. Sau khi uống công thức của bà Minh và tập 3 động tác trong 21 ngày, Lan hoàn toàn khỏi thoát vị đĩa đệm, hết đau, ngủ ngon và cao thêm 2 cm.</td>
+            </tr>
+            <tr>
+                <td><b>56</b></td>
+                <td>tt | 7 | Sói hiển vi | Cảm thấy cơ thể như nào thì ăn món đó: | Chia sẻ chi phí thuê nhà/sinh hoạt.</td>
+            </tr>
+            <tr>
+                <td><b>57</b></td>
+                <td>tt | 8 | ong | Dành cho người bị đau lưng, trằn trọc không ngủ được vì đau lưng. | Chia nhau công việc/vai trò (người nấu ăn, người đi chợ, người lau dọn, người chăm sóc cây cối).</td>
+            </tr>
+            <tr>
+                <td><b>58</b></td>
+                <td>tt | 9 | ếch | Dành cho người mệt mỏi khi thức dậy. | Vai trò được đổi vòng hàng tuần.</td>
+            </tr>
+            <tr>
+                <td><b>59</b></td>
+                <td>tt | 10 | huơu sao | Dành cho người bị đau nhức cơ bắp. | Phân chia công việc theo sức khỏe và khả năng (ai khỏe làm nặng, ai yếu làm nhẹ).</td>
+            </tr>
+            <tr>
+                <td><b>60</b></td>
+                <td>tt | 11 | dê | Dành cho người bị khom lưng. | Quan trọng là sự tự nguyện, vui vẻ, không áp đặt.</td>
+            </tr>
+            <tr>
+                <td><b>61</b></td>
+                <td>tt | 12 | Rươi | Dành cho người bị thoát vị đĩa đệm.</td>
+            </tr>
+            <tr>
+                <td><b>62</b></td>
+                <td>Dành cho người có cột sống yếu, hỏng. | Cách quản lý tiền bạc, vốn vay, mượn lực/trí/tài:</td>
+            </tr>
+            <tr>
+                <td><b>63</b></td>
+                <td>v | 1 |   1 Thịt chó xào lăn | Cách chế biến/nấu nướng:</td>
+            </tr>
+            <tr>
+                <td><b>64</b></td>
+                <td>v | 2 | 2 Chó nướng | Đây là phương pháp pha chế, không phải luộc, hấp, om, hầm, ninh, ủ, chiên, rán, xào, phi. | Quản lý tiền bạc/tài sản cá nhân:</td>
+            </tr>
+            <tr>
+                <td><b>65</b></td>
+                <td>v | 3 | 3 Dồi chó | Chọn gấc: Chọn quả chín đỏ, hái lúc 5:00 sáng khi còn sương và chưa mặt trời mọc. Gấc từ cây già (70 tuổi) có hàm lượng DHA cao gấp 10 lần gấc non. | Sống tiết kiệm khi còn trẻ.</td>
+            </tr>
+            <tr>
+                <td><b>66</b></td>
+                <td>v | 4 | 4 Thịt Chó hấp | Chuẩn bị gấc: Cẩn thận lột vỏ, lấy chính xác 100g thịt gấc đỏ thắm, bỏ hạt. | Tiêu hết lương hưu không nghĩ đến tiết kiệm tuổi già (Ông Tư - sai lầm ban đầu).</td>
+            </tr>
+            <tr>
+                <td><b>67</b></td>
+                <td>v | 5 | 5 Chả chó nướng | Nghiền gấc: Nghiền theo chiều kim đồng hồ 21 vòng, mỗi vòng 3 giây. Vừa nghiền vừa niệm "cột sống như tre, dẻo dai như liễu, khỏe mạnh như núi". Nghiền trong chén gốm cổ (hơn 100 năm tuổi, đất sét Bát Tràng xưa). | Sử dụng tiền tiết kiệm để trang trải cuộc sống, giúp con cái, đóng phí viện dưỡng lão, thuê giúp việc.</td>
+            </tr>
+            <tr>
+                <td><b>68</b></td>
+                <td>v | 6 | 6 Tiết canh chó | Thêm mật ong: Thêm chính xác hai thìa canh mật ong rừng nguyên chất (từ rừng Tây Bắc, ong hút phấn hoa từ thảo dược, không cho ăn đường). Mật ong được thêm theo đường xoắn ốc từ tâm ra ngoài. | Có lương hưu và tiền tiết kiệm.</td>
+            </tr>
+            <tr>
+                <td><b>69</b></td>
+                <td>v | 7 | 7 Chó quay | Trộn: Trộn theo tám vòng tròn đồng tâm từ nhỏ đến to. Nhiệt độ tay khi trộn khoảng 37°C. | Nắm chắc tiền bạc, nhà cửa của mình, đừng vội trao hết cho con cái. Giữ lại một phần để tự lo lúc già, không phụ thuộc ai. Cho con quá nhiều tiền có thể làm chúng lười biếng.</td>
+            </tr>
+            <tr>
+                <td><b>70</b></td>
+                <td>v | 8 | 8 Nhựa Mận | Nghi thức: Việc pha chế cần có lòng thành, cảm ơn tổ tiên, yêu thương bản thân và người thân. | Quản lý tài chính thông minh, chi tiêu hợp lý để cuộc sống tuổi già thoải mái.</td>
+            </tr>
+            <tr>
+                <td><b>71</b></td>
+                <td>Thời tiết nào ăn: Không được đề cập cụ thể trong nguồn, nhưng công thức được dùng hàng ngày. | Tiền tiết kiệm giúp cải thiện chất lượng sống, thực hiện ước mơ, nhưng tiền không đảm bảo cuộc sống tuổi già thực sự thoải mái nếu thiếu tình thân.</td>
+            </tr>
+            <tr>
+                <td><b>72</b></td>
+                <td>Nguyên liệu: Quả gấc chín đỏ, mật ong rừng nguyên chất. Chén gốm cổ. (Dầu gừng được dùng để mát xa trước ngủ, không phải nguyên liệu ăn). | Vốn vay/Mượn tiền:</td>
+            </tr>
+            <tr>
+                <td><b>73</b></td>
+                <td>Lúc ăn: Uống ngay lập tức khi mặt trời vừa ló dạng, khoảng 5:45 sáng. Sau khi uống, ngậm trong miệng 30 giây, nuốt từ từ. Đợi 2 phút rồi uống ngụm nước ấm. Thực hiện ba động tác bắt buộc sau khi uống. | Con cái vay tiền cha mẹ (vay mua nhà, xe, học phí).</td>
+            </tr>
+            <tr>
+                <td><b>74</b></td>
+                <td>Thời gian đun nấu: Không có thời gian đun nấu, chỉ có thời gian pha chế/nghiền/trộn (khoảng vài phút). | Ông Nguyên vay tiền bạn bè để phẫu thuật khi con cái từ chối giúp.</td>
+            </tr>
+            <tr>
+                <td><b>75</b></td>
+                <td>152839 | Số lần ăn uống: Mỗi sáng (mỗi ngày). Áp dụng theo quy trình 21 ngày hoàn chỉnh, sau đó duy trì. Tuần 1 (uống 1 thìa canh), Tuần 2 & 3 (tăng liều lượng lên 1.5 thìa canh). | Mượn lực/trí/tài:</td>
+            </tr>
+            <tr>
+                <td><b>76</b></td>
+                <td>BIDV | Các mặt hàng nguyên liệu nấu nướng: Gấc chín đỏ, mật ong rừng nguyên chất. | Sử dụng miệng dẻo, biết nịnh nọt, giỏi giao tiếp để nhận được nhiều sự giúp đỡ từ người khác.</td>
+            </tr>
+            <tr>
+                <td><b>77</b></td>
+                <td>Chu=125bidv | Sử dụng uyên bác (cụ già 99 tuổi) để chia sẻ bí quyết sức khỏe, giúp đỡ thế hệ sau.</td>
+            </tr>
+            <tr>
+                <td><b>78</b></td>
+                <td>1071015811 | b) Thực phẩm/món ăn theo Thể Chất (Từ kênh Huyền Cơ Cổ Nhân): | Trong mô hình sống chung người già: Mượn lực lẫn nhau để chăm sóc khi ốm đau. Chia sẻ trí tuệ, kinh nghiệm sống. Cùng nhau giải quyết vấn đề chung (góp ý, bàn bạc).</td>
+            </tr>
+            <tr>
+                <td><b>79</b></td>
+                <td>Chu4275839^*nam | Ở cấp độ toàn cầu: Các tập đoàn/tổ chức sử dụng công nghệ (AI, blockchain, dữ liệu vệ tinh), tài chính (ESG, CBDC), và thông tin (kiểm duyệt, áp đặt tiêu chuẩn) để kiểm soát.</td>
+            </tr>
+            <tr>
+                <td><b>80</b></td>
+                <td>Nguyenminhnamtaxixanh@gmail.com | Khái niệm: Mỗi người có một loại thể chất riêng biệt, thường là Thể Hàn (tính lạnh) hoặc Thể Nhiệt (tính nóng). Thể chất thay đổi theo mùa, khí hậu, cảm xúc, cách sống. Hiểu thể chất giúp điều chỉnh lối sống, ăn uống để khỏe mạnh, bình an. Ăn uống không chỉ để no mà để nuôi dưỡng khí huyết, làm ấm tạng phủ, giúp cơ thể quân bình.</td>
+            </tr>
+            <tr>
+                <td><b>81</b></td>
+                <td>1427391528nam | Cách phát triển, cách thoái lui, phán đoán thời cơ/cơ hội kiếm tiền của nhân vật:</td>
+            </tr>
+            <tr>
+                <td><b>82</b></td>
+                <td>ROI=(Dòng tiền/Trả trước)*100 | Nhận diện Thể Chất: Sử dụng phương pháp Tứ Trần: Vọng (quan sát sắc mặt, môi, da, tay, dáng đi, ánh mắt), Văn (lắng nghe giọng nói, hơi thở, ngửi mùi cơ thể, mồ hôi), Vấn (hỏi về giấc ngủ, ăn uống, đại tiểu tiện, tâm trạng, thói quen), Thiết (bắt mạch, cảm nhận mạch đập, độ ấm bàn tay).</td>
+            </tr>
+            <tr>
+                <td><b>83</b></td>
+                <td>Chọn cơ hội | Phát triển:</td>
+            </tr>
+            <tr>
+                <td><b>84</b></td>
+                <td>Chi phí 200.000 Thế chấp 182.000 Trả trước 18.000 Dòng tiền 540 | Thể Hàn: | Học cách nói chuyện, giao tiếp, tùy cơ ứng biến trong xử thế.</td>
+            </tr>
+            <tr>
+                <td><b>85</b></td>
+                <td>Chi phí 30.000 Thế chấp 28.000 Trả trước 2.000 Dòng tiền 200 | Không khiêm tốn quá mức khi tạo cơ hội, để người khác thấy ưu thế của mình.</td>
+            </tr>
+            <tr>
+                <td><b>86</b></td>
+                <td>Chi phí 125.000 Thế chấp 100.000 Trả trước 25.000 Dòng tiền 1000 | Biểu hiện: Sợ lạnh, dễ lạnh bụng, tay chân lạnh buốt, đau nhức xương khớp, răng buốt, lưỡi nhạt màu, ở hơi, khó tiêu khi ăn đồ sống lạnh, uể oải, đầu óc chậm chạp buổi sáng. Tính cách ít nói, ngại tiếp xúc, thích yên tĩnh, không thích vận động mạnh, dễ mệt mỏi, tâm trạng sụt giảm. Khi ngủ thường co người lại. Thường đi kèm khí huyết hư. Ngọn lửa bên trong (sinh lực, ý chí) yếu đi. Nhiệt độ cơ thể thấp. | Chủ động tạo ra cơ hội cho bản thân.</td>
+            </tr>
+            <tr>
+                <td><b>87</b></td>
+                <td>Tỷ lệ lợi nhuận trên vốn đầu tư: | Nên ăn: | Có dã tâm, nhẫn tâm để đứng vững và mạnh mẽ hơn.</td>
+            </tr>
+            <tr>
+                <td><b>88</b></td>
+                <td>Chi phí 170.000 Thế chấp 152.000 Trả trước 18.000 Dòng tiền 900 | Thực phẩm có tính ấm, dễ tiêu hóa, kích thích tuần hoàn, làm ấm bên trong. | Dám phản kích, ra tay lúc nên ra tay.</td>
+            </tr>
+            <tr>
+                <td><b>89</b></td>
+                <td>Chi phí 200.000 Thế chấp 182.000 Trả trước 18.000 Dòng tiền 540 | Thịt dê (ôn dương mạnh mẽ). | Không thuận theo số đông một cách mù quáng, dám nổi loạn hợp lý.</td>
+            </tr>
+            <tr>
+                <td><b>90</b></td>
+                <td>ROI=(900/18.000)*100=5%(NHÀ 2 CĂN) | Thịt gà (đặc biệt gà ác, gà di thả vườn). | Đối với các thực thể toàn cầu: Tái thiết hệ thống, áp đặt tiêu chuẩn, kiểm soát chuỗi cung ứng, mở rộng chương trình giám sát hành vi, số hóa mọi thứ.</td>
+            </tr>
+            <tr>
+                <td><b>91</b></td>
+                <td>ROI=(540/18.000)*100=3%(NHÀ 8 CĂN) | Gừng, hành, tỏi, tiêu (gia vị có tính thuốc, làm ấm dạ dày, chống hàn khí). Gừng là "tiểu dương khí". | Thoái lui:</td>
+            </tr>
+            <tr>
+                <td><b>92</b></td>
+                <td>CHỌN:0% & < 4% TRUNG BINH | Tôm biển, lươn đồng, trứng gà, hải sâm, cá chép. | Khiêm tốn quá mức có thể là rào cản, tự mình đi lùi, biến thành nhu nhược hèn nhát.</td>
+            </tr>
+            <tr>
+                <td><b>93</b></td>
+                <td>5% TỐT | Cháo gạo lứt với gừng. | Đối với người thể Hàn: Cơ thể co lại, tâm trí lùi bước, cuộc sống mất đi màu sắc khi ngọn lửa sinh lực yếu dần. Cần nuôi dưỡng lại ngọn lửa sống bên trong.</td>
+            </tr>
+            <tr>
+                <td><b>94</b></td>
+                <td>> 5% RẤT TỐT | Canh xương hầm. | Trong các câu chuyện tuổi già: Rời khỏi nhà con cái, rời viện dưỡng lão, rời bỏ bạn đời/người giúp việc khi không phù hợp. Chuyển sang mô hình sống chung là một dạng thoái lui khỏi các kỳ vọng truyền thống và sự cô đơn.</td>
+            </tr>
+            <tr>
+                <td><b>95</b></td>
+                <td>TƯ DO TÀI CHÍNH TDTC | Nước ấm có quế. | Phán đoán thời cơ/cơ hội kiếm tiền:</td>
+            </tr>
+            <tr>
+                <td><b>96</b></td>
+                <td>ACR= TỔNG THU NHẬP TỰ ĐỘNG (TNTD) CẦN THIẾT/TỶ LỆ ROI MONG MUỐN | Cháo hành tiêu. | Chủ động tạo ra cơ hội, không chờ đợi.</td>
+            </tr>
+            <tr>
+                <td><b>97</b></td>
+                <td>TDTC=TNTD>TỔNG CHIPHI | Canh gà hầm thuốc. | Các thực thể toàn cầu: Lợi dụng/kích hoạt khủng hoảng (lương thực, khí hậu) như một phần trong trò chơi lớn để kiếm lợi và kiểm soát. Đặt cược vào sự thiếu hụt lương thực để kiếm tiền. Sử dụng CBAM làm rào cản thương mại. Sử dụng ESG để kiểm soát vốn. CBDC để kiểm soát tiền tệ/hành vi. AI để kiểm duyệt.</td>
+            </tr>
+            <tr>
+                <td><b>98</b></td>
+                <td>LƯƠNG=THU NHẬP=9500 | Trái cây ngọt ít nước (như nhãn, vải, sầu riêng). | Trong câu chuyện Ông Nguyên: Thời cơ từ việc đền bù giải tỏa nhà cũ mang lại khoản tiền lớn. Con cái xem đây là cơ hội để xin tiền. Người giúp việc lợi dụng tình cảnh neo đơn để trộm cắp và đòi tiền bồi thường.</td>
+            </tr>
+            <tr>
+                <td><b>99</b></td>
+                <td>TNTD=CHI PHÍ=6000 | Cách chế biến/nấu nướng:</td>
+            </tr>
+            <tr>
+                <td><b>100</b></td>
+                <td>TỶ LỆ ROI MUỐN=>5% | Nướng, hầm, xào với gừng, rượu hoặc gia vị cay nhẹ. | Bản đồ tư duy các việc đó: Dưới đây là cấu trúc các điểm chính có thể đưa vào bản đồ tư duy, dựa trên việc phân tích các nguồn theo yêu cầu của bạn:</td>
+            </tr>
+            <tr>
+                <td><b>101</b></td>
+                <td>ARC=6000/5%=120.000 | Rau củ nên được xào nấu kỹ, đặc biệt xào cùng gừng, hành, tỏi hoặc rắc tiêu.</td>
+            </tr>
+            <tr>
+                <td><b>102</b></td>
+                <td>Hầm (gà, xương). Nấu (cháo, canh). | Chủ đề chính: Các Khía Cạnh Liên Quan Đến "Kinh Doanh" và Cuộc Sống từ Nguồn</td>
+            </tr>
+            <tr>
+                <td><b>103</b></td>
+                <td>Không đề cập các phương pháp cụ thể khác như luộc, hấp, om, ninh, ủ, chiên, rán, phi cho riêng thể hàn trong các trích đoạn này. | I. Các Kênh Video:</td>
+            </tr>
+            <tr>
+                <td><b>104</b></td>
+                <td>Thời tiết nào ăn: Không đề cập cụ thể, nhưng tránh ăn đồ lạnh vào mọi thời tiết. | Hãy Sống Khác</td>
+            </tr>
+            <tr>
+                <td><b>105</b></td>
+                <td>Lúc ăn: Nước ấm có quế, cháo gạo lứt với gừng ăn vào sáng sớm. Cháo hành tiêu ăn buổi tối. | Tri Thức Khắc Kỷ</td>
+            </tr>
+            <tr>
+                <td><b>106</b></td>
+                <td>Số lần ăn uống: Cháo gạo lứt với gừng ăn mỗi ngày. Canh gà hầm thuốc ăn mỗi tuần. Không có tần suất cụ thể cho tất cả các món. | Sức Khỏe Tuổi Già</td>
+            </tr>
+            <tr>
+                <td><b>107</b></td>
+                <td>Các mặt hàng nguyên liệu: Thịt dê, thịt gà, gừng, hành, tỏi, tiêu, tôm biển, lươn đồng, trứng gà, hải sâm, cá chép, gạo lứt, xương, quế, thuốc (trong canh hầm), nhãn, vải, sầu riêng. | Huyền Cơ Cổ Nhân</td>
+            </tr>
+            <tr>
+                <td><b>108</b></td>
+                <td>Nên tránh: Món sống lạnh (sashimi, nước đá, sữa lạnh, nước ép trái cây để tủ lạnh), salad lạnh, canh rau luộc để nguội, trái cây nhiều nước có tính mát (cam, quýt, dưa hấu, dưa lưới). Ăn những thứ này khiến cơ thể vốn lạnh lại càng mất năng lượng dương. | Cuộc sống tuổi về chiều</td>
+            </tr>
+            <tr>
+                <td><b>109</b></td>
+                <td>Chuyển Mình Vượt Thử Thách</td>
+            </tr>
+            <tr>
+                <td><b>110</b></td>
+                <td>Thể Nhiệt: | Cuộc Sống Người Cao Tuổi</td>
+            </tr>
+            <tr>
+                <td><b>111</b></td>
+                <td>Tâm Đắc Cổ Nhân</td>
+            </tr>
+            <tr>
+                <td><b>112</b></td>
+                <td>Biểu hiện: Nhiệt độ cơ thể cao hơn, bàn tay/chân nóng, cảm giác máu sôi sục, giọng nói to/nhanh, suy nghĩ mau lẹ, làm việc cường độ cao, dễ nổi mụn (da dầu/mẩn đỏ), miệng khô/dễ loét, lưỡi đỏ/nóng, hơi thở nóng, mồ hôi ra nhiều nhưng không làm mát, tâm tính dễ cáu giận/nóng nảy, dễ mất ngủ. Dễ bị ảnh hưởng bởi môi trường (tiếng ồn, nóng bức, áp lực). Thường bùng lên khi đối mặt với stress. Có thể liên quan đến "tâm hỏa thượng viêm" (lửa trong tâm bốc lên đầu) hoặc "ngộ hàn" (bề ngoài lạnh nhưng bên trong vẫn bốc hỏa do ăn sai cách). | THE HIDDEN SELF</td>
+            </tr>
+            <tr>
+                <td><b>113</b></td>
+                <td>Nên ăn: | II. "Cách Làm Ăn" & Phát Triển (Theo Nghĩa Rộng):</td>
+            </tr>
+            <tr>
+                <td><b>114</b></td>
+                <td>Thực phẩm có tính mát tự nhiên, giúp làm dịu, tiêu viêm, mát gan, thanh lọc nhiệt khí. | Nguyên tắc sống khôn ngoan (Hãy Sống Khác)</td>
+            </tr>
+            <tr>
+                <td><b>115</b></td>
+                <td>Trái cây có tính mát (dưa hấu, dưa lưới, thanh long, cam, lê). | Khéo ăn nói/nịnh nọt</td>
+            </tr>
+            <tr>
+                <td><b>116</b></td>
+                <td>Trà thảo mộc (trà hoa cúc, hạ khô thảo, atisô, trà dây). Giúp mát gan, sáng mắt, tiêu viêm, điều hòa tâm tính. | Không khiêm tốn quá đà</td>
+            </tr>
+            <tr>
+                <td><b>117</b></td>
+                <td>Thịt mát (thịt vịt, thịt ngan, cua, nghêu, sò). Giúp mát máu, giải độc gan, làm dịu dạ dày. | Có dã tâm/nhẫn tâm</td>
+            </tr>
+            <tr>
+                <td><b>118</b></td>
+                <td>Các loại đậu (đậu xanh, đậu đỏ, đặc biệt đậu xanh nấu loãng). Thanh nhiệt, lợi tiểu, giải độc. | Làm việc ở mức bình thường/trầm ổn</td>
+            </tr>
+            <tr>
+                <td><b>119</b></td>
+                <td>Các loại rau (khổ qua, rau má, rau diếp cá, cải cúc, mồng tơi). | Không thuận theo người khác</td>
+            </tr>
+            <tr>
+                <td><b>120</b></td>
+                <td>Canh khổ qua hầm cá. | Chủ động tạo cơ hội (Hãy Sống Khác)</td>
+            </tr>
+            <tr>
+                <td><b>121</b></td>
+                <td>Nước mát từ rau diếp cá nấu nhạt. | Sử dụng khủng hoảng để kiểm soát (THE HIDDEN SELF)</td>
+            </tr>
+            <tr>
+                <td><b>122</b></td>
+                <td>Cách chế biến/nấu nướng: | Lương thực (kiểm soát nguồn cung, giá, tiêu chuẩn)</td>
+            </tr>
+            <tr>
+                <td><b>123</b></td>
+                <td>Rau củ nên xào nấu kỹ (như cho thể hàn, nhưng có lẽ cần điều chỉnh gia vị cay nóng). | Khí hậu (công cụ địa chính trị, rào cản thương mại, áp đặt tiêu chuẩn ESG)</td>
+            </tr>
+            <tr>
+                <td><b>124</b></td>
+                <td>Rau củ nên luộc nhẹ thay vì ăn sống. | Tiền tệ (CBDC - kiểm soát giao dịch, hành vi)</td>
+            </tr>
+            <tr>
+                <td><b>125</b></td>
+                <td>Trà thảo mộc pha vừa phải, không quá đặc, không quá lạnh. | AI (kiểm duyệt, dự đoán hành vi)</td>
+            </tr>
+            <tr>
+                <td><b>126</b></td>
+                <td>Đậu xanh nấu loãng. | III. Quản Lý Mối Quan Hệ (Trong Đời Thường & Liên Hệ):</td>
+            </tr>
+            <tr>
+                <td><b>127</b></td>
+                <td>Hầm (khổ qua hầm cá). | Cách giữ mối quan hệ (lắng nghe, tôn trọng, biết ơn, bình tĩnh đối diện chỉ trích, đồng cảm, sẻ chia trong cộng đồng)</td>
+            </tr>
+            <tr>
+                <td><b>128</b></td>
+                <td>Không đề cập các phương pháp cụ thể khác như hấp, om, ninh, ủ, chiên, rán, phi cho riêng thể nhiệt trong các trích đoạn này. | Cách bỏ mối quan hệ (tránh kẻ xấu, phản kháng khi cần, rời bỏ khi bị lợi dụng/bỏ rơi)</td>
+            </tr>
+            <tr>
+                <td><b>129</b></td>
+                <td>Thời tiết nào ăn: Trái cây có tính mát tốt nhất ăn vào ban ngày (khi dương vượng). Nên ăn rau củ vào những ngày thời tiết oi bức hoặc khi tâm trạng dễ bị kích động. | IV. Quản Lý Tiền Bạc & Nguồn Lực:</td>
+            </tr>
+            <tr>
+                <td><b>130</b></td>
+                <td>Lúc ăn: Trái cây ăn ban ngày, tránh ăn đêm, ăn quá lạnh hoặc khi đói. Trà hoa cúc uống buổi chiều. | Quản lý tiền cá nhân (tiết kiệm, chi tiêu, giữ tài sản, không dựa hết vào con)</td>
+            </tr>
+            <tr>
+                <td><b>131</b></td>
+                <td>Số lần ăn uống: Rau củ nên có mặt trong bữa ăn hàng tuần. Không có tần suất cụ thể cho tất cả các món. | Vay mượn (con vay cha mẹ, vay bạn bè)</td>
+            </tr>
+            <tr>
+                <td><b>132</b></td>
+                <td>Các mặt hàng nguyên liệu: Dưa hấu, dưa lưới, thanh long, cam, lê, hoa cúc, hạ khô thảo, atisô, trà dây, thịt vịt, thịt ngan, cua, nghêu, sò, đậu xanh, đậu đỏ, khổ qua, rau má, rau diếp cá, cải cúc, mồng tơi, cá (hầm khổ qua). | Mượn lực/trí/tài (social skills, kinh nghiệm sống, hỗ trợ lẫn nhau trong cộng đồng, công nghệ/tài chính ở cấp độ toàn cầu)</td>
+            </tr>
+            <tr>
+                <td><b>133</b></td>
+                <td>Nên tránh: Ăn đồ sống uống lạnh, dùng salad (đặc biệt ăn sống), đá, thực phẩm chế biến sẵn, đường tinh luyện, nước ngọt công nghiệp (nuôi dưỡng ngọn lửa nhiệt bên trong). Ăn lạnh làm tổn thương hệ tiêu hóa, tỳ vị suy yếu. | V. Phân Chia Vai Trò/Trách Nhiệm:</td>
+            </tr>
+            <tr>
+                <td><b>134</b></td>
+                <td>Trong sống chung người già (chia sẻ chi phí, công việc theo sức khỏe/tự nguyện)</td>
+            </tr>
+            <tr>
+                <td><b>135</b></td>
+                <td>c) Các món ăn đơn giản được đề cập trong câu chuyện về tuổi già (Từ kênh Cuộc sống tuổi về chiều, Chuyển Mình Vượt Thử Thách, Cuộc Sống Người Cao Tuổi): | VI. Phán Đoán Thời Cơ/Cơ Hội:</td>
+            </tr>
+            <tr>
+                <td><b>136</b></td>
+                <td>Tạo cơ hội (Hãy Sống Khác)</td>
+            </tr>
+            <tr>
+                <td><b>137</b></td>
+                <td>Món ăn: | Lợi dụng khủng hoảng (THE HIDDEN SELF)</td>
+            </tr>
+            <tr>
+                <td><b>138</b></td>
+                <td>Cháo gà nóng. | Cơ hội tài chính cá nhân (đền bù giải tỏa nhà)</td>
+            </tr>
+            <tr>
+                <td><b>139</b></td>
+                <td>Rau muống luộc cá kho. | Cơ hội/Rủi ro bị lợi dụng (con cái, người giúp việc)</td>
+            </tr>
+            <tr>
+                <td><b>140</b></td>
+                <td>Cơm canh dân dã. | VII. Quản Lý Thời Gian & Lối Sống:</td>
+            </tr>
+            <tr>
+                <td><b>141</b></td>
+                <td>Canh chua, trứng rán, dưa muối. | Nguyên tắc cổ nhân/Đông y (ăn uống theo thể chất, theo giờ; ngủ nghỉ điều độ; vận động)</td>
+            </tr>
+            <tr>
+                <td><b>142</b></td>
+                <td>Canh bí. | Lời khuyên tuổi già (ngủ sớm dậy sớm, không nhàn rỗi, học hỏi liên tục)</td>
+            </tr>
+            <tr>
+                <td><b>143</b></td>
+                <td>Nổi trẻ đậu xanh, chuối chín (cho sinh nhật). | Sinh hoạt trong cộng đồng sống chung (lịch trình chung, hoạt động)</td>
+            </tr>
+            <tr>
+                <td><b>144</b></td>
+                <td>Bánh rán, mắm tép, rau (từ vườn hàng xóm/bạn già). | VIII. Con Người Tốt/Xấu:</td>
+            </tr>
+            <tr>
+                <td><b>145</b></td>
+                <td>Cháo hành tiêu (trong quá khứ của ông Nguyên). | Người khôn ngoan vs người ngu dại (Hãy Sống Khác)</td>
+            </tr>
+            <tr>
+                <td><b>146</b></td>
+                <td>Canh gà hầm thuốc (trong quá khứ của ông Nguyên). | Người biết ơn vs kẻ không lương tâm (Hãy Sống Khác)</td>
+            </tr>
+            <tr>
+                <td><b>147</b></td>
+                <td>Cháo nóng, nước gừng. | Con cái (hiếu thảo vs lạnh nhạt/lợi dụng)</td>
+            </tr>
+            <tr>
+                <td><b>148</b></td>
+                <td>Mì gói, xúc xích, đồ ăn vặt (mua trong viện dưỡng lão do cơm viện nhạt nhẽo). | Bạn đời mới (lợi dụng)</td>
+            </tr>
+            <tr>
+                <td><b>149</b></td>
+                <td>Cách chế biến/nấu nướng: Luộc, kho, nấu canh, rán, hầm (trong quá khứ), pha (nước gừng). Các phương pháp này được đề cập trong ngữ cảnh bữa ăn hàng ngày hoặc khi ốm đau, không gắn với thể chất hay quy tắc Đông y cụ thể trong các trích đoạn này. | Nhân viên viện dưỡng lão (lạnh lùng, phân biệt đối xử)</td>
+            </tr>
+            <tr>
+                <td><b>150</b></td>
+                <td>Luộc (rau muống). | Người giúp việc (không trung thực, trộm cắp, vu khống)</td>
+            </tr>
+            <tr>
+                <td><b>151</b></td>
+                <td>Kho (cá). | Bạn bè/Hàng xóm tốt (giúp đỡ khi khó khăn)</td>
+            </tr>
+            <tr>
+                <td><b>152</b></td>
+                <td>Nấu canh (canh chua, canh bí). | Cộng đồng người già sống chung (đồng cảm, sẻ chia, tôn trọng, trách nhiệm)</td>
+            </tr>
+            <tr>
+                <td><b>153</b></td>
+                <td>Rán (trứng). | Người có tướng đào hoa ẩn (chân thành, điềm tĩnh, thấu cảm, tôn trọng, chín chắn - "tốt" trong mối quan hệ)</td>
+            </tr>
+            <tr>
+                <td><b>154</b></td>
+                <td>Nấu (cháo, cơm). | Những kẻ thao túng toàn cầu (lợi dụng, kiểm soát, bất công, bí mật - "xấu")</td>
+            </tr>
+            <tr>
+                <td><b>155</b></td>
+                <td>Hầm (canh gà hầm thuốc, canh khổ qua hầm cá - được đề cập trong ngữ cảnh chữa bệnh theo Đông y cho thể hàn/nhiệt, và trong câu chuyện của ông Nguyên). | IX. Kinh Nghiệm & Bài Học:</td>
+            </tr>
+            <tr>
+                <td><b>156</b></td>
+                <td>Pha (nước gừng). | Từ sống khôn ngoan (Hãy Sống Khác)</td>
+            </tr>
+            <tr>
+                <td><b>157</b></td>
+                <td>Nghiền/trộn (gấc mật ong - xem mục a). | Từ câu chuyện tuổi già (không dựa hoàn toàn vào con, tiền bạc không đảm bảo hạnh phúc, giá trị của tình người/cộng đồng, tự chủ là quan trọng, regret về lựa chọn cuộc sống, cảnh giác kẻ xấu)</td>
+            </tr>
+            <tr>
+                <td><b>158</b></td>
+                <td>Các phương pháp khác như hấp, om, ninh, ủ, chiên, phi không được đề cập cụ thể trong ngữ cảnh các món ăn này trong các trích đoạn. | Từ nguồn Đông y (hiểu cơ thể mình, ăn uống đúng cách, lối sống thuận tự nhiên)</td>
+            </tr>
+            <tr>
+                <td><b>159</b></td>
+                <td>Nguyên liệu: Gà, rau muống, cá, xương, gừng, táo đỏ, kỷ tử, gạo lứt, hành, tiêu, khổ qua, các loại đậu, trái cây, các loại rau, thịt vịt/ngan, cua, nghêu, sò, hoa cúc, hạ khô thảo, atisô, trà dây, mật ong rừng, gấc, chuối, đậu xanh, mắm tép. | Từ nguồn nhân tướng học (nhìn người bằng tâm, giá trị nội tại vs vẻ ngoài hào nhoáng)</td>
+            </tr>
+            <tr>
+                <td><b>160</b></td>
+                <td>Thời tiết: Không đề cập cụ thể. | Từ nguồn hệ thống toàn cầu (cảnh giác với kiểm soát, nhìn nhận bản chất đằng sau các khái niệm hào nhoáng)</td>
+            </tr>
+            <tr>
+                <td><b>161</b></td>
+                <td>Lúc ăn: Sáng (cháo), bữa cơm chung (trưa, tối), buổi tối (cháo hành tiêu theo lời khuyên Đông y cho thể hàn), sáng sớm (gấc mật ong theo bài thuốc gia truyền), ban ngày (trái cây mát theo lời khuyên Đông y cho thể nhiệt), buổi chiều (trà thảo mộc theo lời khuyên Đông y cho thể nhiệt).</td>
+            </tr>
+            <tr>
+                <td><b>162</b></td>
+                <td>Thời gian đun nấu: Không đề cập thời gian cụ thể cho các món ăn thông thường, chỉ có thời gian nghiền/trộn cho hỗn hợp gấc mật ong. | Cách quản lý thời gian, ăn ngủ, sinh hoạt:</td>
+            </tr>
+            <tr>
+                <td><b>163</b></td>
+                <td>Số lần ăn uống: Hàng ngày (bữa cơm chung, cháo sáng), hàng tuần (canh gà hầm thuốc, rau củ theo lời khuyên Đông y). Gấc mật ong mỗi sáng.</td>
+            </tr>
+            <tr>
+                <td><b>164</b></td>
+                <td>Thời gian & Hoạt động:</td>
+            </tr>
+            <tr>
+                <td><b>165</b></td>
+                <td>Hy vọng thông tin này đầy đủ và hữu ích cho bạn. | Người khôn ngoan làm việc trầm ổn, dứt khoát, nhịp nhàng, hiệu quả.</td>
+            </tr>
+            <tr>
+                <td><b>166</b></td>
+                <td>Sau khi nghỉ hưu: Dành thời gian cho sở thích (khiêu vũ, thư pháp, nhiếp ảnh, hội họa), làm tình nguyện, đọc sách, học hỏi. Không để bản thân quá rảnh rỗi, tìm việc để làm để tránh suy nghĩ tiêu cực/trầm cảm. Luôn học hỏi để giữ trí óc minh mẫn.</td>
+            </tr>
+            <tr>
+                <td><b>167</b></td>
+                <td>Trong viện dưỡng lão: Bị hạn chế ra ngoài, chỉ quanh quẩn trong không gian nhỏ. Lịch trình cứng nhắc.</td>
+            </tr>
+            <tr>
+                <td><b>168</b></td>
+                <td>Trong mô hình sống chung người già: Lịch trình hàng ngày linh hoạt, mỗi người có không gian riêng, tự do đi lại. Chia sẻ các hoạt động chung (đi chợ, nấu ăn, tập thể dục, trò chuyện, nghe đài, sinh nhật).</td>
+            </tr>
+            <tr>
+                <td><b>169</b></td>
+                <td>Ngủ:</td>
+            </tr>
+            <tr>
+                <td><b>170</b></td>
+                <td>Người thể Hàn ngủ co do, quấn chăn. Người thể Nhiệt khó ngủ vì não hoạt động quá đà.</td>
+            </tr>
+            <tr>
+                <td><b>171</b></td>
+                <td>Quan trọng duy trì thói quen tư duy học hỏi để tránh suy giảm trí nhớ.</td>
+            </tr>
+            <tr>
+                <td><b>172</b></td>
+                <td>Đừng thức khuya, hãy ngủ sớm dậy sớm, giữ gìn đồng hồ sinh học ổn định.</td>
+            </tr>
+            <tr>
+                <td><b>173</b></td>
+                <td>Trong viện dưỡng lão: Khó ngủ ngon giấc vì những người khác la hét, tạo tiếng động.</td>
+            </tr>
+            <tr>
+                <td><b>174</b></td>
+                <td>Ăn uống:</td>
+            </tr>
+            <tr>
+                <td><b>175</b></td>
+                <td>Học cách ăn nói, tùy cơ ứng biến.</td>
+            </tr>
+            <tr>
+                <td><b>176</b></td>
+                <td>Trong Đông y: Hiểu rõ thể chất (Hàn/Nhiệt) để ăn uống phù hợp.</td>
+            </tr>
+            <tr>
+                <td><b>177</b></td>
+                <td>Người thể Hàn nên ăn thực phẩm có tính ấm, dễ tiêu hóa: thịt dê, gà, gừng, hành, tỏi, tiêu, tôm biển, lươn, trứng gà, hải sâm, cá chép (chế biến nướng, hầm, xào). Tránh món sống, lạnh: salat, nước đá, sữa lạnh, nước ép lạnh, trái cây nhiều nước tính mát. Xào rau củ nên thêm gừng/hành/tỏi/tiêu.</td>
+            </tr>
+            <tr>
+                <td><b>178</b></td>
+                <td>Người thể Nhiệt nên ăn thực phẩm có tính mát tự nhiên, thanh nhiệt: trái cây nhiều nước (dưa hấu, thanh long, cam, lê) (ăn ban ngày), trà thảo mộc (cúc, hạ khô thảo, atiso, trà dây), thịt vịt, ngan, cua, nghêu, sò, đậu xanh, đậu đỏ, rau (khổ qua, rau má, diếp cá, cải cúc). Tránh lạm dụng đồ sống lạnh vì hại tỳ vị. Nên nấu chín thực phẩm, kết hợp thảo mộc. Tránh thực phẩm chế biến sẵn, đường tinh luyện, nước ngọt công nghiệp.</td>
+            </tr>
+            <tr>
+                <td><b>179</b></td>
+                <td>Ăn ít nhiều bữa, nhai kỹ, ăn chậm, không ăn quá no căng (nguyên tắc cổ nhân).</td>
+            </tr>
+            <tr>
+                <td><b>180</b></td>
+                <td>Công thức gấc mật ong trị đau lưng: Uống vào 5:45 sáng (khi cortisol tự nhiên cao nhất, insulin thấp nhất). Ngậm trong miệng 30 giây rồi nuốt từ từ.</td>
+            </tr>
+            <tr>
+                <td><b>181</b></td>
+                <td>Trong viện dưỡng lão: Thức ăn nhạt nhẽo, đơn điệu, ít thịt. Chất lượng kém. Phải mua thêm đồ ăn ngoài.</td>
+            </tr>
+            <tr>
+                <td><b>182</b></td>
+                <td>Trong mô hình sống chung người già: Bữa ăn đơn giản, dân dã nhưng ấm cúng, ngon miệng. Cùng nhau nấu ăn.</td>
+            </tr>
+            <tr>
+                <td><b>183</b></td>
+                <td>Những người xấu, người tốt:</td>
+            </tr>
+            <tr>
+                <td><b>184</b></td>
+                <td>Người tốt:</td>
+            </tr>
+            <tr>
+                <td><b>185</b></td>
+                <td>Người khôn ngoan, làm nên đại sự, chịu đựng khổ, thành công.</td>
+            </tr>
+            <tr>
+                <td><b>186</b></td>
+                <td>Người biết cách giao tiếp, dẻo miệng, để lại ấn tượng tốt, được nhiều sự giúp đỡ.</td>
+            </tr>
+            <tr>
+                <td><b>187</b></td>
+                <td>Người dám đối mặt với khó khăn, tạo ra cơ hội.</td>
+            </tr>
+            <tr>
+                <td><b>188</b></td>
+                <td>Người nhẫn tâm một chút (để đứng vững), học cách bảo vệ bản thân.</td>
+            </tr>
+            <tr>
+                <td><b>189</b></td>
+                <td>Người biết ơn.</td>
+            </tr>
+            <tr>
+                <td><b>190</b></td>
+                <td>Người trầm ổn, bình tĩnh trong xử thế.</td>
+            </tr>
+            <tr>
+                <td><b>191</b></td>
+                <td>Người có chủ kiến, suy nghĩ, dám phản bác hợp lý.</td>
+            </tr>
+            <tr>
+                <td><b>192</b></td>
+                <td>Người biết bình tâm đón nhận chỉ trích, học hỏi từ đó, không phụ thuộc đánh giá bên ngoài.</td>
+            </tr>
+            <tr>
+                <td><b>193</b></td>
+                <td>Người biết làm dịu xung đột, duy trì thái độ cởi mở, bình tĩnh khi bị chỉ trích.</td>
+            </tr>
+            <tr>
+                <td><b>194</b></td>
+                <td>Người chăm sóc chuyên nghiệp (ý tưởng ban đầu về viện dưỡng lão).</td>
+            </tr>
+            <tr>
+                <td><b>195</b></td>
+                <td>Hàng xóm tốt bụng giúp đỡ khi ngã bệnh.</td>
+            </tr>
+            <tr>
+                <td><b>196</b></td>
+                <td>Nhóm bạn già sống chung: Đồng cảm, sẻ chia, hỗ trợ, chăm sóc khi ốm đau, tôn trọng lẫn nhau, không lợi dụng, không coi thường, có trách nhiệm, tạo cảm giác thuộc về/có ích.</td>
+            </tr>
+            <tr>
+                <td><b>197</b></td>
+                <td>Người có tướng đào hoa ẩn: Mắt có hồn, mềm mại, trầm ấm, tế nhị, biết lắng nghe, chân thành, lịch thiệp, tôn trọng cảm xúc, nụ cười hiền lành, dáng đi khoan thai/vững chắc, nội tâm tĩnh tại/mạnh mẽ, biết quý trọng cảm xúc, thủy chung, chăm sóc bản thân sạch sẽ, kính trọng mọi người, có hiếu, yêu thương trẻ nhỏ, nhường nhịn người yếu thế, giữ chữ tín, tâm thiện lương, không tham dục, chín chắn, cẩn trọng.</td>
+            </tr>
+            <tr>
+                <td><b>198</b></td>
+                <td>Gia đình (khi có tình cảm chân thành, sự hiện diện, quan tâm).</td>
+            </tr>
+            <tr>
+                <td><b>199</b></td>
+                <td>Người xấu:</td>
+            </tr>
+            <tr>
+                <td><b>200</b></td>
+                <td>Người ngu dại (không biết hoàn thành việc ở mức bình thường, không hiểu người khôn ngoan).</td>
+            </tr>
+            <tr>
+                <td><b>201</b></td>
+                <td>Kẻ ức hiếp, giật dây.</td>
+            </tr>
+            <tr>
+                <td><b>202</b></td>
+                <td>Kẻ không có lương tâm.</td>
+            </tr>
+            <tr>
+                <td><b>203</b></td>
+                <td>Người tùy tiện mở mồm nói linh tinh, hứa linh tinh.</td>
+            </tr>
+            <tr>
+                <td><b>204</b></td>
+                <td>Con cái lạnh nhạt, thờ ơ, xem cha mẹ là gánh nặng, lợi dụng tài chính.</td>
+            </tr>
+            <tr>
+                <td><b>205</b></td>
+                <td>Bạn đời mới lợi dụng tài sản.</td>
+            </tr>
+            <tr>
+                <td><b>206</b></td>
+                <td>Nhân viên viện dưỡng lão lạnh lùng, thiếu quan tâm, phân biệt đối xử, mặc kệ người già khó khăn.</td>
+            </tr>
+            <tr>
+                <td><b>207</b></td>
+                <td>Người giúp việc không trung thực, làm việc qua loa, trộm cắp, vu khống, lợi dụng tình cảnh chủ nhà.</td>
+            </tr>
+            <tr>
+                <td><b>208</b></td>
+                <td>Những kẻ lừa đảo bằng chương trình tặng quà miễn phí.</td>
+            </tr>
+            <tr>
+                <td><b>209</b></td>
+                <td>Kẻ thao túng toàn cầu (tập đoàn, quỹ đầu tư) kiếm lợi từ khủng hoảng, áp đặt kiểm soát, không minh bạch, bóc lột.</td>
+            </tr>
+            <tr>
+                <td><b>210</b></td>
+                <td>Những kinh nghiệm hay, không nên trong "kinh doanh" (theo nghĩa rộng cuộc sống, đặc biệt là tuổi già):</td>
+            </tr>
+            <tr>
+                <td><b>211</b></td>
+                <td>Nên:</td>
+            </tr>
+            <tr>
+                <td><b>212</b></td>
+                <td>Học cách đối diện và xử lý chỉ trích một cách bình tĩnh, không phản ứng ngay lập tức, tìm bài học từ đó.</td>
+            </tr>
+            <tr>
+                <td><b>213</b></td>
+                <td>Tự mình tạo ra cơ hội thay vì chờ đợi.</td>
+            </tr>
+            <tr>
+                <td><b>214</b></td>
+                <td>Học cách bảo vệ bản thân.</td>
+            </tr>
+            <tr>
+                <td><b>215</b></td>
+                <td>Trầm ổn, bình tĩnh trong xử thế.</td>
+            </tr>
+            <tr>
+                <td><b>216</b></td>
+                <td>Có chính kiến, suy nghĩ riêng.</td>
+            </tr>
+            <tr>
+                <td><b>217</b></td>
+                <td>Giữ tâm thế ổn định, không quá vui khi khen, không quá buồn khi chê.</td>
+            </tr>
+            <tr>
+                <td><b>218</b></td>
+                <td>Từ bỏ sự phụ thuộc vào đánh giá bên ngoài, quan tâm đánh giá từ bản thân.</td>
+            </tr>
+            <tr>
+                <td><b>219</b></td>
+                <td>Lắng nghe thay vì phản ứng ngay lập tức.</td>
+            </tr>
+            <tr>
+                <td><b>220</b></td>
+                <td>Tìm hiểu các giải pháp thay thế cho viện dưỡng lão để có cuộc sống tuổi già độc lập và trọn vẹn hơn.</td>
+            </tr>
+            <tr>
+                <td><b>221</b></td>
+                <td>Cân nhắc kỹ các yếu tố (nhu cầu chăm sóc, mong muốn cá nhân, tài chính, môi trường xã hội) khi chọn nơi an dưỡng tuổi già.</td>
+            </tr>
+            <tr>
+                <td><b>222</b></td>
+                <td>An dưỡng tại gia với sự hỗ trợ phù hợp để duy trì sự thoải mái, độc lập, thói quen quen thuộc.</td>
+            </tr>
+            <tr>
+                <td><b>223</b></td>
+                <td>Tham gia cộng đồng sống độc lập để duy trì hoạt động, giao tiếp xã hội, độc lập, tiện lợi (không lo bảo trì nhà cửa, có tiện ích chung).</td>
+            </tr>
+            <tr>
+                <td><b>224</b></td>
+                <td>Sống chung đa thế hệ với gia đình để có sự hỗ trợ tinh thần, bầu bạn, mạng lưới chăm sóc, kết nối tình cảm, tiết kiệm chi phí. Tuy nhiên cần đặt ra ranh giới, kỳ vọng rõ ràng để hài hòa.</td>
+            </tr>
+            <tr>
+                <td><b>225</b></td>
+                <td>Mô hình co-housing/sống chung nhà với người cùng chí hướng/bạn bè để chống lại sự cô đơn, giảm chi phí, tạo cảm giác cộng đồng, linh hoạt về lịch trình và không gian riêng tư.</td>
+            </tr>
+            <tr>
+                <td><b>226</b></td>
+                <td>Cơ sở trợ giúp sinh hoạt cho người cần hỗ trợ hàng ngày nhưng không cần chăm sóc y tế toàn diện, duy trì sự độc lập, có chăm sóc cá nhân hóa, cộng đồng, an toàn.</td>
+            </tr>
+            <tr>
+                <td><b>227</b></td>
+                <td>Quan trọng nhất khi già là giữ vững quyền kiểm soát tài chính và tài sản, duy trì mối quan hệ tốt đẹp với con cái.</td>
+            </tr>
+            <tr>
+                <td><b>228</b></td>
+                <td>Đừng thức khuya, ngủ sớm dậy sớm, giữ gìn đồng hồ sinh học.</td>
+            </tr>
+            <tr>
+                <td><b>229</b></td>
+                <td>Đừng để bản thân quá rảnh rỗi, tìm việc làm, học hỏi, duy trì thói quen tư duy.</td>
+            </tr>
+            <tr>
+                <td><b>230</b></td>
+                <td>Đừng ham đồ miễn phí, cảnh giác các chương trình bán hàng lừa đảo.</td>
+            </tr>
+            <tr>
+                <td><b>231</b></td>
+                <td>Nắm chắc tiền bạc, nhà cửa của mình, không vội trao hết cho con cái.</td>
+            </tr>
+            <tr>
+                <td><b>232</b></td>
+                <td>Vui vẻ đón nhận lòng hiếu thảo của con cái.</td>
+            </tr>
+            <tr>
+                <td><b>233</b></td>
+                <td>Học cách bao dung, đặt mình vào vị trí của con (dâu, rể) để hiểu và góp ý chân thành giữ hòa khí gia đình.</td>
+            </tr>
+            <tr>
+                <td><b>234</b></td>
+                <td>Tuổi già là quãng thời gian đáng trân trọng, sống vui vẻ, khỏe mạnh, tích cực, lạc quan, thích ứng thay đổi.</td>
+            </tr>
+            <tr>
+                <td><b>235</b></td>
+                <td>Hiểu và sống thuận theo thể chất của mình (Đông y). Quan sát cơ thể mình bằng cảm giác và sự hiểu biết. Ăn đúng cách (hợp thể chất), không phải chỉ ăn "tốt" hay theo trào lưu. Làm ấm bên trong cơ thể (với người thể Hàn). Làm mát một cách có trí tuệ (với người thể Nhiệt).</td>
+            </tr>
+            <tr>
+                <td><b>236</b></td>
+                <td>Học nghệ thuật hạ nhiệt nội tâm (với người thể Nhiệt), sống chậm lại, thở sâu, buông bỏ.</td>
+            </tr>
+            <tr>
+                <td><b>237</b></td>
+                <td>Chăm sóc sức khỏe không bắt đầu từ bệnh viện mà từ gian bếp, giấc ngủ, cách lắng nghe cơ thể.</td>
+            </tr>
+            <tr>
+                <td><b>238</b></td>
+                <td>Tuổi già không cần kỳ vọng vào ai nữa, chỉ có thể dựa vào chính mình.</td>
+            </tr>
+            <tr>
+                <td><b>239</b></td>
+                <td>Giá trị nhất ở tuổi già là cảm giác mình vẫn còn được cần đến, được đóng góp.</td>
+            </tr>
+            <tr>
+                <td><b>240</b></td>
+                <td>Hạnh phúc tuổi già không đến từ tiền bạc, con cháu quây quần, mà là cảm giác được là chính mình, được yêu thương, thấu hiểu, quan tâm.</td>
+            </tr>
+            <tr>
+                <td><b>241</b></td>
+                <td>Tuổi già là cơ hội thứ hai để sống ý nghĩa hơn.</td>
+            </tr>
+            <tr>
+                <td><b>242</b></td>
+                <td>Giá trị của một câu hỏi han, ánh nhìn tử tế, chén nước ấm.</td>
+            </tr>
+            <tr>
+                <td><b>243</b></td>
+                <td>Tình cảm giữa những người đồng cảnh ngộ có thể thiêng liêng và gần gũi hơn cả máu mủ.</td>
+            </tr>
+            <tr>
+                <td><b>244</b></td>
+                <td>Gia đình thực sự là nơi ta được sống là chính mình, được yêu thương không điều kiện, có người sẵn sàng sẻ chia.</td>
+            </tr>
+            <tr>
+                <td><b>245</b></td>
+                <td>Tuổi già không phải là đoạn kết, mà là phần lắng lại để sống sâu hơn, chậm hơn, yêu thương nhiều hơn.</td>
+            </tr>
+            <tr>
+                <td><b>246</b></td>
+                <td>Biết chọn cách sống khiến mình thấy hạnh phúc, tự chủ.</td>
+            </tr>
+            <tr>
+                <td><b>247</b></td>
+                <td>Tìm kiếm và đón nhận những mô hình dưỡng già mới (sống chung tự lập).</td>
+            </tr>
+            <tr>
+                <td><b>248</b></td>
+                <td>Dành thời gian quan tâm thăm hỏi cha mẹ già (dù bận rộn).</td>
+            </tr>
+            <tr>
+                <td><b>249</b></td>
+                <td>Cảnh giác với những hệ thống kiểm soát toàn cầu (khủng hoảng, ESG, CBDC, AI).</td>
+            </tr>
+            <tr>
+                <td><b>250</b></td>
+                <td>Không ngừng học hỏi (từ cổ nhân, từ cuộc sống). Nhìn người bằng tâm, không chỉ vẻ ngoài.</td>
+            </tr>
+            <tr>
+                <td><b>251</b></td>
+                <td>Không nên:</td>
+            </tr>
+            <tr>
+                <td><b>252</b></td>
+                <td>Quá khiêm tốn khi có cơ hội.</td>
+            </tr>
+            <tr>
+                <td><b>253</b></td>
+                <td>Nhẫn nhịn, nhân nhượng quá mức với người khác.</td>
+            </tr>
+            <tr>
+                <td><b>254</b></td>
+                <td>Chỉ hoàn thành công việc qua loa, thiếu trách nhiệm.</td>
+            </tr>
+            <tr>
+                <td><b>255</b></td>
+                <td>Dễ dàng để lộ suy nghĩ bản thân để người khác nhìn thấu.</td>
+            </tr>
+            <tr>
+                <td><b>256</b></td>
+                <td>Tùy tiện mở mồm nói hay hứa linh tinh.</td>
+            </tr>
+            <tr>
+                <td><b>257</b></td>
+                <td>Việc không nắm chắc không tùy tiện ra tay.</td>
+            </tr>
+            <tr>
+                <td><b>258</b></td>
+                <td>Quá quan tâm hay phụ thuộc vào những đánh giá bên ngoài.</td>
+            </tr>
+            <tr>
+                <td><b>259</b></td>
+                <td>Trở thành người bất cần, không muốn nghe lời chỉ trích giá trị.</td>
+            </tr>
+            <tr>
+                <td><b>260</b></td>
+                <td>Phản ứng lại những lời chửi rủa ngay lập tức, giận quá mất khôn.</td>
+            </tr>
+            <tr>
+                <td><b>261</b></td>
+                <td>Chờ đợi cơ hội đến mà không chủ động tạo ra.</td>
+            </tr>
+            <tr>
+                <td><b>262</b></td>
+                <td>Để người khác ức hiếp, giật dây.</td>
+            </tr>
+            <tr>
+                <td><b>263</b></td>
+                <td>Ăn miếng trả miếng, oan oan tương báo.</td>
+            </tr>
+            <tr>
+                <td><b>264</b></td>
+                <td>Để người khác đụng chạm tới lòng tự tôn mà không phản kháng.</td>
+            </tr>
+            <tr>
+                <td><b>265</b></td>
+                <td>Làm việc vội vàng, hấp tấp, chỉ nhìn lợi trước mắt (Dục Tốc Bất Đạt).</td>
+            </tr>
+            <tr>
+                <td><b>266</b></td>
+                <td>Quá lạc quan vào việc sống nhờ con cái khi về già (Ông Tư - sai lầm lớn).</td>
+            </tr>
+            <tr>
+                <td><b>267</b></td>
+                <td>Kỳ vọng rằng con cái sẽ chăm sóc chu đáo nếu không có tình cảm chân thành, chỉ dựa vào nghĩa vụ/trách nhiệm.</td>
+            </tr>
+            <tr>
+                <td><b>268</b></td>
+                <td>Trao hết tiền bạc, tài sản cho con cái quá sớm.</td>
+            </tr>
+            <tr>
+                <td><b>269</b></td>
+                <td>Ham đồ miễn phí, tham gia sự kiện tặng quà dễ bị lừa đảo.</td>
+            </tr>
+            <tr>
+                <td><b>270</b></td>
+                <td>Nói xấu con dâu/con rể sau lưng.</td>
+            </tr>
+            <tr>
+                <td><b>271</b></td>
+                <td>Thức khuya khi đã lớn tuổi.</td>
+            </tr>
+            <tr>
+                <td><b>272</b></td>
+                <td>Để bản thân quá rảnh rỗi, không có mục tiêu sống sau khi nghỉ hưu.</td>
+            </tr>
+            <tr>
+                <td><b>273</b></td>
+                <td>Ngừng học hỏi, không rèn luyện trí óc.</td>
+            </tr>
+            <tr>
+                <td><b>274</b></td>
+                <td>Người thể Hàn không nên ăn quá nhiều đồ sống lạnh vì làm cơ thể mất năng lượng dương, suy yếu tỳ vị.</td>
+            </tr>
+            <tr>
+                <td><b>275</b></td>
+                <td>Người thể Nhiệt không nên lạm dụng đồ sống lạnh để giải nhiệt cấp tốc vì hại hệ tiêu hóa, tỳ vị suy yếu.</td>
+            </tr>
+            <tr>
+                <td><b>276</b></td>
+                <td>Dựa vào con cái để dưỡng già một cách chắc chắn.</td>
+            </tr>
+            <tr>
+                <td><b>277</b></td>
+                <td>Chỉ dựa vào tiền tiết kiệm để dưỡng già mà thiếu tình thân.</td>
+            </tr>
+            <tr>
+                <td><b>278</b></td>
+                <td>Để số phận quyết định cuộc sống của mình khi già.</td>
+            </tr>
+            <tr>
+                <td><b>279</b></td>
+                <td>Chấp nhận sống cô đơn.</td>
+            </tr>
+            <tr>
+                <td><b>280</b></td>
+                <td>Sống sai cách với thân thể của chính mình.</td>
+            </tr>
+            <tr>
+                <td><b>281</b></td>
+                <td>Chạy theo vẻ ngoài hào nhoáng, lời nói ngọt ngào mà bỏ qua giá trị nội tại/sự chân thành.</td>
+            </tr>
+            <tr>
+                <td><b>282</b></td>
+                <td>Để tâm trí loạn, sân giận, sống trong tốc độ và áp lực (với người thể Nhiệt).</td>
+            </tr>
+            <tr>
+                <td><b>283</b></td>
+                <td>Kỳ vọng quá nhiều vào người khác.</td>
+            </tr>
+            <tr>
+                <td><b>284</b></td>
+                <td>Để tuổi tác trở thành lý do sống với đau đớn.</td>
+            </tr>
+            <tr>
+                <td><b>285</b></td>
+                <td>Chê bai cơ thể hay nói lưng yếu, cột sống hỏng (thay vì nói đang học cách khỏe mạnh).</td>
+            </tr>
+            <tr>
+                <td><b>286</b></td>
+                <td>Người giàu/nghèo trong câu chuyện:</td>
+            </tr>
+            <tr>
+                <td><b>287</b></td>
+                <td>Các nguồn không phân biệt rõ ràng "người giàu" hay "người nghèo" theo nghĩa tài sản lớn trong các câu chuyện cá nhân.</td>
+            </tr>
+            <tr>
+                <td><b>288</b></td>
+                <td>Ông Tư và Ông Nguyên được mô tả là có lương hưu, tiết kiệm, nhà cửa, thậm chí Ông Nguyên có khoản đền bù lớn. Họ không hẳn là "nghèo", nhưng cũng không phải quá "giàu có" theo nghĩa tập đoàn hay quỹ đầu tư. Kinh nghiệm của họ cho thấy ngay cả khi có tiền (không nghèo), cuộc sống tuổi già vẫn có thể khổ sở nếu thiếu tình thân và sự tự chủ. Họ gặp phải những vấn đề về mối quan hệ và sự lợi dụng, không phải do thiếu tiền mà do thiếu sự kết nối và cảnh giác.</td>
+            </tr>
+            <tr>
+                <td><b>289</b></td>
+                <td>Nguồn 116-124 mô tả các thực thể toàn cầu như tập đoàn nông nghiệp lớn, quỹ đầu tư khổng lồ, ngân hàng trung ương. Đây là những "người giàu" ở cấp độ vĩ mô. Kinh nghiệm (được trình bày dưới dạng phân tích) của họ cho thấy cách sử dụng quyền lực, tài chính, công nghệ và các cuộc khủng hoảng để kiếm lợi và kiểm soát thị trường/xã hội. Bài học ở đây là về bản chất của quyền lực kinh tế toàn cầu và sự cần thiết phải nhận biết và cảnh giác trước các cơ chế kiểm soát tinh vi này.</td>
+            </tr>
+            <tr>
+                <td><b>290</b></td>
+                <td>Hy vọng bản tổng hợp và phân tích này dựa trên các nguồn đã cung cấp sẽ hữu ích cho bạn.</td>
+            </tr>
+            <tr>
+                <td><b>291</b></td>
+                <td>Trân trọng.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Tính Toán, Quản Lý & So Tìm Bệnh Án (6 Tabs - Siêu Nhẹ)</title>
+    <style>
+        :root {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --bg-input: #334155;
+            --border-color: #475569;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-cyan: #38bdf8;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+            --accent-red: #ef4444;
+            --accent-yellow: #facc15;
+            --accent-orange: #f97316;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        /* Kéo giãn tối đa màn hình Desktop */
+        .container {
+            width: 100%;
+            max-width: 1920px;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        /* Thanh điều hướng 6 Tabs */
+        .tabs-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            background-color: var(--bg-card);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            border-color: var(--accent-cyan);
+        }
+
+        .tab-btn.active {
+            background-color: var(--accent-blue);
+            color: #fff;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .clock-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .clock-text {
+            color: var(--accent-cyan);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .stt-minute-box {
+            background-color: #0f172a;
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-align: right;
+        }
+
+        .stt-minute-box span {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .stt-minute-box strong {
+            font-size: 24px;
+            color: var(--accent-green);
+        }
+
+        .card-title {
+            color: var(--accent-cyan);
+            font-size: 18px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .import-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .import-box {
+            background-color: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .import-box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .import-box-title {
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .badge-count {
+            background-color: var(--bg-input);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--accent-cyan);
+        }
+
+        .preview-area {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px;
+            height: 125px;
+            overflow-y: auto;
+            font-size: 12px;
+            color: #cbd5e1;
+            white-space: pre-wrap;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        input[type="time"],
+        input[type="file"],
+        select,
+        textarea {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            width: 100%;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn:hover { opacity: 0.9; }
+        .btn:active { transform: scale(0.98); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .btn-green { background-color: var(--accent-green); color: #fff; flex: 1; font-size: 14px; }
+        .btn-gray { background-color: #475569; color: #fff; }
+        .btn-purple { background-color: var(--accent-purple); color: #fff; }
+        .btn-blue { background-color: var(--accent-blue); color: #fff; }
+        .btn-orange { background-color: var(--accent-orange); color: #fff; }
+        .btn-red { background-color: var(--accent-red); color: #fff; }
+        .btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 5px; }
+
+        .table-header-tools {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            max-height: 65vh;
+            overflow: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-card);
+        }
+
+        table {
+            width: 100%;
+            min-width: 100%;
+            border-collapse: collapse;
+            white-space: nowrap;
+            font-size: 13.5px;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #0f172a;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        tr:hover td {
+            background-color: rgba(56, 189, 248, 0.08);
+        }
+
+        .val-highlight { color: var(--accent-green); font-weight: bold; }
+        .val-yellow { color: var(--accent-yellow); font-weight: bold; }
+        .val-cyan { color: var(--accent-cyan); font-weight: bold; }
+        .val-purple { color: #c084fc; font-weight: bold; }
+
+        .match-badge {
+            display: inline-block;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 4px;
+            font-weight: 700;
+            cursor: help;
+        }
+        .match-dacbiet { background: #ef4444; color: #fff; }
+        .match-thamchieu { background: #3b82f6; color: #fff; }
+        .match-thuongluu { background: #10b981; color: #fff; }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--accent-green);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            display: none;
+            z-index: 9999;
+        }
+
+        .hint-box {
+            background-color: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--accent-cyan);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #cbd5e1;
+            margin-bottom: 16px;
+        }
+
+        .wrap-text {
+            white-space: normal;
+            min-width: 240px;
+            max-width: 450px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Thanh điều hướng 6 Tabs -->
+    <div class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab('tab_1', this)">Tab 1: Nhập 4 Tệp Dữ Liệu (.txt)</button>
+        <button class="tab-btn" onclick="switchTab('tab_2', this)">Tab 2: Nhập Bệnh & Cột 0 - 10</button>
+        <button class="tab-btn" onclick="switchTab('tab_3', this)">Tab 3: Cột 11 - 19</button>
+        <button class="tab-btn" onclick="switchTab('tab_4', this)">Tab 4: Cột 20 - 29</button>
+        <button class="tab-btn" onclick="switchTab('tab_5', this)">Tab 5: Cột 30 - 38</button>
+        <button class="tab-btn" onclick="switchTab('tab_6', this)">Tab 6: So Tìm (Đối Chiếu Số & Chữ)</button>
+    </div>
+
+    <!-- ==================== TAB 1: 4 NÚT NHẬP TỆP TXT ==================== -->
+    <div id="tab_1" class="tab-content active">
+        <div class="card">
+            <div class="card-title">
+                <span>Quản Lý 4 Nguồn Dữ Liệu Tệp TXT (Tối ưu chống treo RAM)</span>
+                <div class="btn-group">
+                    <button class="btn btn-gray btn-sm" onclick="loadAllSampleData()">Nạp Dữ Liệu Mẫu Cho Cả 4 Bảng</button>
+                    <button class="btn btn-red btn-sm" onclick="clearAllTab1Data()">Xóa Toàn Bộ Dữ Liệu Tab 1</button>
+                </div>
+            </div>
+
+            <div class="hint-box">
+                <strong>Quy tắc nhận diện tệp TXT (Nút 1):</strong><br>
+                • Định dạng dòng: `TÊN | NGÀY/THÁNG/NĂM | GIỜ SINH (1-24) | GIỚI TÍNH` (Ví dụ: `NGUYỄN KHẮC NĂNG|4/6/1944|11|T`[cite: 2]).<br>
+                • Hệ thống tự động quy đổi: Mã **`T` = Nam**, Mã **`G` = Nữ**. Giờ sinh lấy số nguyên từ `1` đến `24`.
+            </div>
+
+            <!-- 4 Nút nhập TXT -->
+            <div class="import-grid-4">
+                <div class="import-box" style="border-top: 3px solid var(--accent-cyan);">
+                    <div class="import-box-header">
+                        <span class="import-box-title" style="color: var(--accent-cyan);">1. Danh Sách Tên Người</span>
+                        <span class="badge-count" id="countPeople">0 người</span>
+                    </div>
+                    <input type="file" id="fileInput1" accept=".txt" style="display:none" onchange="handleTxtUpload(event, 'people')">
+                    <button class="btn btn-blue" onclick="document.getElementById('fileInput1').click()">📂 Nút 1: Nhập TXT Tên Người</button>
+                    <div class="preview-area" id="previewPeople">Chưa có dữ liệu...</div>
+                </div>
+
+                <div class="import-box" style="border-top: 3px solid var(--accent-red);">
+                    <div class="import-box-header">
+                        <span class="import-box-title" style="color: var(--accent-red);">2. Bảng Số Đặc Biệt</span>
+                        <span class="badge-count" id="countDacBiet">0 số</span>
+                    </div>
+                    <input type="file" id="fileInput2" accept=".txt" style="display:none" onchange="handleTxtUpload(event, 'dacbiet')">
+                    <button class="btn btn-red" onclick="document.getElementById('fileInput2').click()">📂 Nút 2: Nhập TXT Số Đặc Biệt</button>
+                    <div class="preview-area" id="previewDacBiet">Chưa có dữ liệu...</div>
+                </div>
+
+                <div class="import-box" style="border-top: 3px solid var(--accent-purple);">
+                    <div class="import-box-header">
+                        <span class="import-box-title" style="color: #c084fc;">3. Bảng Số Tham Chiếu</span>
+                        <span class="badge-count" id="countThamChieu">0 số</span>
+                    </div>
+                    <input type="file" id="fileInput3" accept=".txt" style="display:none" onchange="handleTxtUpload(event, 'thamchieu')">
+                    <button class="btn btn-purple" onclick="document.getElementById('fileInput3').click()">📂 Nút 3: Nhập TXT Số Tham Chiếu</button>
+                    <div class="preview-area" id="previewThamChieu">Chưa có dữ liệu...</div>
+                </div>
+
+                <div class="import-box" style="border-top: 3px solid var(--accent-green);">
+                    <div class="import-box-header">
+                        <span class="import-box-title" style="color: var(--accent-green);">4. Bảng Số Thương Lưu</span>
+                        <span class="badge-count" id="countThuongLuu">0 số</span>
+                    </div>
+                    <input type="file" id="fileInput4" accept=".txt" style="display:none" onchange="handleTxtUpload(event, 'thuongluu')">
+                    <button class="btn btn-green" onclick="document.getElementById('fileInput4').click()">📂 Nút 4: Nhập TXT Số Thương Lưu</button>
+                    <div class="preview-area" id="previewThuongLuu">Chưa có dữ liệu...</div>
+                </div>
+            </div>
+
+            <div class="card-title" style="font-size: 15px; margin-top: 10px;">Chi Tiết Danh Sách Người Đã Nạp (Dùng cho Tab 2)</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Họ Tên + Giờ Sinh (Cột 2)</th>
+                            <th>Ngày Sinh</th>
+                            <th>Giờ Sinh (1 - 24)</th>
+                            <th>Giới Tính</th>
+                            <th>Dòng Gốc</th>
+                        </tr>
+                    </thead>
+                    <tbody id="peopleTableBody">
+                        <tr><td colspan="6" style="text-align:center; color: var(--text-muted);">Chưa có danh sách người. Hãy bấm Nút 1 để tải tệp .txt lên.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== TAB 2: NHẬP LIỆU & CỘT 0 -> 10 ==================== -->
+    <div id="tab_2" class="tab-content">
+        <div class="card clock-bar">
+            <div class="clock-text" id="liveClock">Đang tải thời gian...</div>
+            <div class="stt-minute-box">
+                <span>Cột 14 (STT Phút hiện tại):</span>
+                <strong id="liveMinuteIndex">0</strong>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Nhập Thông Tin Khám & Bệnh Án</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Cột 2 - Chọn Tên Người (Từ danh sách Tab 1):</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="personFilterInput" placeholder="Gõ tên để lọc..." oninput="filterPeopleDropdown()" style="max-width: 180px;">
+                        <select id="personSelectDropdown" onchange="onSelectPersonDropdown()">
+                            <option value="">-- Chọn tên người từ danh sách --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Ngày Sinh & Giờ Sinh (Số từ 1 đến 24):</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="date" id="birthDateInput">
+                        <input type="number" id="birthHourInput" min="1" max="24" step="1" placeholder="Giờ (1-24)" style="max-width: 140px;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Cột 3 - Ngày Nhập Vào (Ngày hiện tại):</label>
+                    <input type="date" id="entryDateInput">
+                </div>
+                <div class="form-group">
+                    <label>Cột 4 - Giờ & Phút Mắc Bệnh (HH:mm):</label>
+                    <input type="time" id="entryTimeInput">
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Cột 5 - Triệu Chứng Bệnh:</label>
+                    <input type="text" id="symptomInput" placeholder="Ví dụ: Hoa mắt, chóng mặt...">
+                </div>
+                <div class="form-group">
+                    <label>Cột 6 - Cách Chữa Bệnh (Thuốc Tây y, Đông y):</label>
+                    <input type="text" id="remedyInput" placeholder="Ví dụ: Trà gừng mật ong...">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-green" onclick="calculateAndSave()">Tính & Lưu Vào Bảng</button>
+                <button class="btn btn-gray" onclick="resetFormInputs()">Làm mới</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="table-header-tools">
+                <div class="card-title" style="margin-bottom:0;">Bảng Kết Quả - Phần 1 (Cột 0 đến Cột 10) — <span id="rowCountBadge">0 dòng</span></div>
+                <div class="btn-group">
+                    <button class="btn btn-purple" onclick="copyAllResults()">📋 Copy Tất Cả Kết Quả (39 Cột)</button>
+                    <button class="btn btn-blue" onclick="exportToTxt()">⬇ Tải Về Máy (.txt)</button>
+                    <button class="btn btn-red" onclick="clearAllRecords()">Xóa Hết</button>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cột 0 (Xóa)</th>
+                            <th>Cột 1 (STT)</th>
+                            <th>Cột 2 (Tên + Giờ sinh)</th>
+                            <th>Cột 3 (Ngày nhập)</th>
+                            <th>Cột 4 (Giờ phút)</th>
+                            <th>Cột 5 (Tên bệnh)</th>
+                            <th>Cột 6 (Thuốc Tây/Đông y)</th>
+                            <th>Cột 7 (Tổng ngày)</th>
+                            <th>Cột 8 (Tổng tuần)</th>
+                            <th>Cột 9 (Tổng tháng)</th>
+                            <th>Cột 10 (Tổng quý)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBodyTab2"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== TAB 3: CỘT 11 -> 19 ==================== -->
+    <div id="tab_3" class="tab-content">
+        <div class="card">
+            <div class="table-header-tools">
+                <div class="card-title" style="margin-bottom:0;">Bảng Kết Quả - Phần 2 (Cột 11 đến Cột 19)</div>
+                <button class="btn btn-purple" onclick="copyTabResults(3)">📋 Copy Kết Quả Tab 3</button>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cột 1 (STT)</th>
+                            <th>Cột 2 (Tên)</th>
+                            <th>Cột 11 (Tổng năm)</th>
+                            <th>Cột 12 (Tổng giờ)</th>
+                            <th>Cột 13 (Tổng giờ + giờ sinh)</th>
+                            <th>Cột 14 (STT giờ mắc bệnh)</th>
+                            <th>Cột 15 (INT C13 / C14)</th>
+                            <th>Cột 16 (MOD C13 / C14)</th>
+                            <th>Cột 17 (C15 % 1000)</th>
+                            <th>Cột 18 (C16 % 1000)</th>
+                            <th>Cột 19 (INT C7 / C14)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBodyTab3"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== TAB 4: CỘT 20 -> 29 ==================== -->
+    <div id="tab_4" class="tab-content">
+        <div class="card">
+            <div class="table-header-tools">
+                <div class="card-title" style="margin-bottom:0;">Bảng Kết Quả - Phần 3 (Cột 20 đến Cột 29)</div>
+                <button class="btn btn-purple" onclick="copyTabResults(4)">📋 Copy Kết Quả Tab 4</button>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cột 1 (STT)</th>
+                            <th>Cột 2 (Tên)</th>
+                            <th>Cột 20 (MOD C7 / C14)</th>
+                            <th>Cột 21 (C19 % 1000)</th>
+                            <th>Cột 22 (C20 % 1000)</th>
+                            <th>Cột 23 (INT C8 / C14)</th>
+                            <th>Cột 24 (MOD C8 / C14)</th>
+                            <th>Cột 25 (C23 % 1000)</th>
+                            <th>Cột 26 (C24 % 1000)</th>
+                            <th>Cột 27 (INT C9 / C14)</th>
+                            <th>Cột 28 (MOD C9 / C14)</th>
+                            <th>Cột 29 (C27 % 1000)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBodyTab4"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== TAB 5: CỘT 30 -> 38 ==================== -->
+    <div id="tab_5" class="tab-content">
+        <div class="card">
+            <div class="table-header-tools">
+                <div class="card-title" style="margin-bottom:0;">Bảng Kết Quả - Phần 4 (Cột 30 đến Cột 38)</div>
+                <button class="btn btn-purple" onclick="copyTabResults(5)">📋 Copy Kết Quả Tab 5</button>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cột 1 (STT)</th>
+                            <th>Cột 2 (Tên)</th>
+                            <th>Cột 30 (C28 % 1000)</th>
+                            <th>Cột 31 (INT C10 / C14)</th>
+                            <th>Cột 32 (MOD C10 / C14)</th>
+                            <th>Cột 33 (C23 % 1000)</th>
+                            <th>Cột 34 (C24 % 1000)</th>
+                            <th>Cột 35 (INT C11 / C14)</th>
+                            <th>Cột 36 (MOD C11 / C14)</th>
+                            <th>Cột 37 (C23 % 1000)</th>
+                            <th>Cột 38 (C24 % 1000)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBodyTab5"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== TAB 6: SO TÌM (ĐỐI CHIẾU SỐ & CHỮ) ==================== -->
+    <div id="tab_6" class="tab-content">
+        <div class="card">
+            <div class="table-header-tools">
+                <div class="card-title" style="margin-bottom:0;">Tab 6: Kết Quả So Tìm — <span id="tab6TotalBadge">0 kết quả</span></div>
+                <div class="btn-group">
+                    <button class="btn btn-gray btn-sm" id="btnPrevPage" onclick="changeTab6Page(-1)">◀ Trang trước</button>
+                    <span id="tab6PageInfo" style="font-size:13px; color:var(--accent-cyan); font-weight:600;">Trang 1/1</span>
+                    <button class="btn btn-gray btn-sm" id="btnNextPage" onclick="changeTab6Page(1)">Trang sau ▶</button>
+                    <button class="btn btn-blue btn-sm" onclick="rebuildTab6Matches(true)">🔄 So Tìm Lại</button>
+                    <button class="btn btn-purple btn-sm" onclick="copyTab6Results()">📋 Copy Tất Cả So Tìm</button>
+                </div>
+            </div>
+            <div class="hint-box">
+                Hệ thống sử dụng bộ chỉ mục tốc độ cao (Map O(1)) để đối chiếu toàn bộ kết quả các cột với các con số trong <b>Bảng số đặc biệt (ĐB)</b>, <b>Bảng số tham chiếu (TC)</b> và <b>Bảng số thương lưu (TL)</b> ở Tab 1 mà không gây treo máy.
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Bệnh Nhân (Cột 2)</th>
+                            <th>Ngày Nhập (Cột 3)</th>
+                            <th>Tên Bệnh (Cột 5)</th>
+                            <th>Cột Trùng</th>
+                            <th>Số Trùng</th>
+                            <th>Thuộc Bảng</th>
+                            <th>Nội Dung Chữ Đi Kèm Với Số</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBodyTab6">
+                        <tr><td colspan="8" style="text-align:center; color: var(--text-muted);">Chưa có dữ liệu trùng khớp.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast">Đã sao chép kết quả!</div>
+
+<script>
+    // ==================== LƯU TRỮ AN TOÀN & BẢNG BĂM MAP O(1) ====================
+    function safeSave(key, data) {
+        try {
+            localStorage.setItem(key, JSON.stringify(data));
+        } catch (e) {
+            // Bỏ qua lỗi quota 5MB của localStorage, dữ liệu vẫn vận hành mượt trong RAM
+        }
+    }
+
+    function safeLoad(key) {
+        try {
+            const raw = localStorage.getItem(key);
+            return raw ? JSON.parse(raw) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    let peopleList = safeLoad('benhAn_peopleList_v3');
+    let listDacBiet = safeLoad('benhAn_dacBiet_v3');
+    let listThamChieu = safeLoad('benhAn_thamChieu_v3');
+    let listThuongLuu = safeLoad('benhAn_thuongLuu_v3');
+    let records = safeLoad('benhAn_records_v3');
+
+    // Tạo Map băm tra cứu siêu tốc O(1) chống treo máy khi tệp TXT hàng vạn dòng
+    let mapDacBiet = new Map();
+    let mapThamChieu = new Map();
+    let mapThuongLuu = new Map();
+
+    // Phân trang Tab 6
+    let tab6AllMatches = [];
+    let tab6CurrentPage = 1;
+    const TAB6_PAGE_SIZE = 100;
+
+    function buildLookupMaps() {
+        mapDacBiet.clear();
+        mapThamChieu.clear();
+        mapThuongLuu.clear();
+
+        const addToMap = (targetMap, list) => {
+            for (let i = 0; i < list.length; i++) {
+                const item = list[i];
+                let arr = targetMap.get(item.num);
+                if (!arr) {
+                    arr = [];
+                    targetMap.set(item.num, arr);
+                }
+                if (!arr.includes(item.text)) {
+                    arr.push(item.text);
+                }
+            }
+        };
+
+        addToMap(mapDacBiet, listDacBiet);
+        addToMap(mapThamChieu, listThamChieu);
+        addToMap(mapThuongLuu, listThuongLuu);
+    }
+
+    window.onload = function() {
+        buildLookupMaps();
+        updateClock();
+        setInterval(updateClock, 1000);
+        setDefaultDateTime();
+        renderTab1UI();
+        renderAllTables();
+    };
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 2500);
+    }
+
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
+        if (tabId === 'tab_6') {
+            rebuildTab6Matches(false);
+        }
+    }
+
+    function updateClock() {
+        const now = new Date();
+        const days = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+        const dd = String(now.getDate()).padStart(2, '0');
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const yyyy = now.getFullYear();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const min = String(now.getMinutes()).padStart(2, '0');
+        const ss = String(now.getSeconds()).padStart(2, '0');
+
+        document.getElementById('liveClock').textContent = `${days[now.getDay()]}, Ngày ${dd}/${mm}/${yyyy} - Giờ: ${hh}:${min}:${ss}`;
+        document.getElementById('liveMinuteIndex').textContent = now.getHours() * 60 + now.getMinutes();
+    }
+
+    function setDefaultDateTime() {
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        const hh = String(now.getHours()).padStart(2, '0');
+        const min = String(now.getMinutes()).padStart(2, '0');
+
+        document.getElementById('entryDateInput').value = `${yyyy}-${mm}-${dd}`;
+        document.getElementById('entryTimeInput').value = `${hh}:${min}`;
+    }
+
+    function handleTxtUpload(event, type) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const content = e.target.result;
+            if (type === 'people') {
+                parseTextToPeople(content);
+                showToast(`Nút 1: Đã nạp ${peopleList.length} người từ tệp!`);
+            } else if (type === 'dacbiet') {
+                listDacBiet = parseNumberAndTextEntries(content);
+                safeSave('benhAn_dacBiet_v3', listDacBiet);
+                showToast(`Nút 2: Đã trích xuất ${listDacBiet.length} số vào Bảng Số Đặc Biệt!`);
+            } else if (type === 'thamchieu') {
+                listThamChieu = parseNumberAndTextEntries(content);
+                safeSave('benhAn_thamChieu_v3', listThamChieu);
+                showToast(`Nút 3: Đã trích xuất ${listThamChieu.length} số vào Bảng Số Tham Chiếu!`);
+            } else if (type === 'thuongluu') {
+                listThuongLuu = parseNumberAndTextEntries(content);
+                safeSave('benhAn_thuongLuu_v3', listThuongLuu);
+                showToast(`Nút 4: Đã trích xuất ${listThuongLuu.length} số vào Bảng Số Thương Lưu!`);
+            }
+            buildLookupMaps();
+            renderTab1UI();
+            renderAllTables();
+            event.target.value = '';
+        };
+        reader.readAsText(file, 'UTF-8');
+    }
+
+    function parseNumberAndTextEntries(rawText) {
+        const lines = rawText.split(/\r?\n/);
+        const results = [];
+
+        for (let idx = 0; idx < lines.length; idx++) {
+            const line = lines[idx].trim();
+            if (!line) continue;
+
+            const numsInLine = line.match(/\d+/g);
+            if (!numsInLine || numsInLine.length === 0) continue;
+
+            const cols = line.split('|');
+            const textParts = [];
+            for (let j = 0; j < cols.length; j++) {
+                const cleaned = cols[j].trim().replace(/^\d+[\s\.\-\:]*/, '').trim();
+                if (cleaned.length > 0 && !/^\d+$/.test(cleaned)) {
+                    textParts.push(cleaned);
+                }
+            }
+
+            let associatedText = textParts.join(' | ');
+            if (!associatedText) {
+                const segments = line.split(/[,;]+/).map(s => s.trim()).filter(Boolean);
+                let hasPair = false;
+                for (let i = 0; i < segments.length; i++) {
+                    if (/^\d+$/.test(segments[i])) {
+                        let nextText = (segments[i + 1] && !/^\d+$/.test(segments[i + 1])) ? segments[i + 1] : '';
+                        results.push({
+                            num: String(Number(segments[i])),
+                            text: nextText || '(Không có chữ đi kèm)'
+                        });
+                        hasPair = true;
+                    }
+                }
+                if (hasPair) continue;
+            }
+
+            for (let k = 0; k < numsInLine.length; k++) {
+                results.push({
+                    num: String(Number(numsInLine[k])),
+                    text: associatedText || '(Không có chữ đi kèm)'
+                });
+            }
+        }
+
+        return results;
+    }
+
+    function parseTextToPeople(rawText) {
+        const lines = rawText.split(/\r?\n/);
+        const parsed = [];
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+
+            if (line.includes('|')) {
+                const parts = line.split('|');
+                const nameOnly = (parts[0] || '').trim() || 'Không rõ tên';
+                const rawDate = (parts[1] || '').trim();
+                const rawHour = (parts[2] || '0').trim();
+                const rawGender = (parts[3] || '').trim().toUpperCase();
+
+                let genderText = '-';
+                if (rawGender === 'T') genderText = 'Nam (T)';
+                else if (rawGender === 'G') genderText = 'Nữ (G)';
+                else if (rawGender) genderText = rawGender;
+
+                let birthDateISO = '';
+                let birthDateDisplay = rawDate || 'Chưa có';
+                const dateMatch = rawDate.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+                if (dateMatch) {
+                    const d = dateMatch[1].padStart(2, '0');
+                    const m = dateMatch[2].padStart(2, '0');
+                    const y = dateMatch[3];
+                    birthDateISO = `${y}-${m}-${d}`;
+                    birthDateDisplay = `${d}/${m}/${y}`;
+                }
+
+                const hourMatch = rawHour.match(/\d+/);
+                const birthHourNum = hourMatch ? parseInt(hourMatch[0], 10) : 0;
+                const displayLabel = `${nameOnly} (${birthHourNum})`;
+
+                parsed.push({
+                    name: nameOnly,
+                    birthDateISO: birthDateISO,
+                    birthDateDisplay: birthDateDisplay,
+                    birthHour: birthHourNum,
+                    gender: genderText,
+                    displayLabel: displayLabel,
+                    raw: line
+                });
+            } else {
+                const dateMatch = line.match(/(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4})/);
+                let birthDateISO = '';
+                let birthDateDisplay = 'Chưa có';
+                if (dateMatch) {
+                    const [d, m, y] = dateMatch[0].split(/[\/\-]/);
+                    birthDateISO = `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+                    birthDateDisplay = `${d.padStart(2, '0')}/${m.padStart(2, '0')}/${y}`;
+                }
+                const withoutDate = line.replace(dateMatch ? dateMatch[0] : '', '');
+                const hourMatch = withoutDate.match(/\b([1-9]|1\d|2[0-4])\b/);
+                const birthHourNum = hourMatch ? parseInt(hourMatch[0], 10) : 0;
+                const nameOnly = withoutDate.replace(hourMatch ? hourMatch[0] : '', '').replace(/[\-\,;]+/g, ' ').trim() || line;
+
+                parsed.push({
+                    name: nameOnly,
+                    birthDateISO: birthDateISO,
+                    birthDateDisplay: birthDateDisplay,
+                    birthHour: birthHourNum,
+                    gender: '-',
+                    displayLabel: `${nameOnly} (${birthHourNum})`,
+                    raw: line
+                });
+            }
+        }
+
+        peopleList = parsed;
+        safeSave('benhAn_peopleList_v3', peopleList);
+    }
+
+    function loadAllSampleData() {
+        parseTextToPeople(`NGUYỄN KHẮC NĂNG|4/6/1944|11|T\nTÔ THỊ HÀ|29/8/1948|10|G\nNGUYỄN MINH NAM|3/3/1971|21|T`);
+        listDacBiet = parseNumberAndTextEntries(`23 | Sức khỏe\n28 | Tình cảm\n33 | Trí tuệ\n38 | Trực giác`);
+        listThamChieu = parseNumberAndTextEntries(`307 | không cắt tóc, gội đầu, tắm, rửa\n111 | không cắt tóc`);
+        listThuongLuu = parseNumberAndTextEntries(`409 | Điều chỉnh sinh hoạt\n881 | Trà gừng mật ong`);
+
+        safeSave('benhAn_dacBiet_v3', listDacBiet);
+        safeSave('benhAn_thamChieu_v3', listThamChieu);
+        safeSave('benhAn_thuongLuu_v3', listThuongLuu);
+
+        buildLookupMaps();
+        renderTab1UI();
+        renderAllTables();
+        showToast('Đã nạp dữ liệu mẫu chuẩn!');
+    }
+
+    function clearAllTab1Data() {
+        if (!confirm('Bạn có chắc muốn xóa toàn bộ dữ liệu đã nạp ở Tab 1 không?')) return;
+        peopleList = [];
+        listDacBiet = [];
+        listThamChieu = [];
+        listThuongLuu = [];
+        localStorage.removeItem('benhAn_peopleList_v3');
+        localStorage.removeItem('benhAn_dacBiet_v3');
+        localStorage.removeItem('benhAn_thamChieu_v3');
+        localStorage.removeItem('benhAn_thuongLuu_v3');
+        buildLookupMaps();
+        renderTab1UI();
+        renderAllTables();
+        showToast('Đã xóa sạch dữ liệu Tab 1!');
+    }
+
+    function renderTab1UI() {
+        document.getElementById('countPeople').textContent = `${peopleList.length} người`;
+        document.getElementById('countDacBiet').textContent = `${listDacBiet.length} số`;
+        document.getElementById('countThamChieu').textContent = `${listThamChieu.length} số`;
+        document.getElementById('countThuongLuu').textContent = `${listThuongLuu.length} số`;
+
+        document.getElementById('previewPeople').textContent = peopleList.length
+            ? peopleList.slice(0, 80).map((p, i) => `${i + 1}. ${p.name} | Giờ: ${p.birthHour} | Giới tính: ${p.gender}`).join('\n')
+            : 'Chưa có dữ liệu...';
+
+        document.getElementById('previewDacBiet').textContent = listDacBiet.length ? listDacBiet.slice(0, 60).map(x => `${x.num} (${x.text})`).join('\n') : 'Chưa có dữ liệu...';
+        document.getElementById('previewThamChieu').textContent = listThamChieu.length ? listThamChieu.slice(0, 60).map(x => `${x.num} (${x.text})`).join('\n') : 'Chưa có dữ liệu...';
+        document.getElementById('previewThuongLuu').textContent = listThuongLuu.length ? listThuongLuu.slice(0, 60).map(x => `${x.num} (${x.text})`).join('\n') : 'Chưa có dữ liệu...';
+
+        const tbody = document.getElementById('peopleTableBody');
+        if (peopleList.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted);">Chưa có danh sách người. Hãy bấm Nút 1 để tải tệp .txt lên.</td></tr>`;
+        } else {
+            const rowsHtml = [];
+            const maxShow = Math.min(peopleList.length, 500);
+            for (let idx = 0; idx < maxShow; idx++) {
+                const p = peopleList[idx];
+                rowsHtml.push(`
+                    <tr>
+                        <td>${idx + 1}</td>
+                        <td class="val-cyan">${p.displayLabel}</td>
+                        <td>${p.birthDateDisplay}</td>
+                        <td class="val-yellow">${p.birthHour}</td>
+                        <td><b>${p.gender}</b></td>
+                        <td style="color: var(--text-muted);">${p.raw}</td>
+                    </tr>
+                `);
+            }
+            tbody.innerHTML = rowsHtml.join('');
+        }
+
+        filterPeopleDropdown();
+    }
+
+    function filterPeopleDropdown() {
+        const filterText = (document.getElementById('personFilterInput').value || '').toLowerCase().trim();
+        const select = document.getElementById('personSelectDropdown');
+
+        const filtered = [];
+        for (let i = 0; i < peopleList.length; i++) {
+            const p = peopleList[i];
+            if (!filterText || p.name.toLowerCase().includes(filterText) || p.displayLabel.toLowerCase().includes(filterText)) {
+                filtered.push({ p, originalIndex: i });
+            }
+        }
+
+        if (filtered.length === 0) {
+            select.innerHTML = `<option value="">${peopleList.length === 0 ? '-- Chưa nạp danh sách ở Tab 1 --' : '-- Không tìm thấy tên phù hợp --'}</option>`;
+            return;
+        }
+
+        const opts = [];
+        if (!filterText) {
+            opts.push(`<option value="">-- Chọn 1 trong ${filtered.length} người --</option>`);
+        }
+
+        const maxOpts = Math.min(filtered.length, 500);
+        for (let i = 0; i < maxOpts; i++) {
+            const { p, originalIndex } = filtered[i];
+            opts.push(`<option value="${originalIndex}">${p.displayLabel} - Sinh: ${p.birthDateDisplay} (${p.gender})</option>`);
+        }
+        select.innerHTML = opts.join('');
+
+        if (filterText && filtered.length === 1) {
+            select.selectedIndex = 0;
+            onSelectPersonDropdown();
+        }
+    }
+
+    function onSelectPersonDropdown() {
+        const idxStr = document.getElementById('personSelectDropdown').value;
+        if (idxStr === '') return;
+        const person = peopleList[parseInt(idxStr, 10)];
+        if (person) {
+            if (person.birthDateISO) {
+                document.getElementById('birthDateInput').value = person.birthDateISO;
+            }
+            document.getElementById('birthHourInput').value = person.birthHour;
+        }
+    }
+
+    // Tra cứu siêu nhanh O(1) qua Map
+    function formatWithLookup(val) {
+        const strVal = String(val);
+        const db = mapDacBiet.get(strVal);
+        const tc = mapThamChieu.get(strVal);
+        const tl = mapThuongLuu.get(strVal);
+
+        if (!db && !tc && !tl) return strVal;
+
+        let badges = '';
+        if (db) badges += `<span class="match-badge match-dacbiet" title="Đặc Biệt: ${db.join(' ; ')}">ĐB</span>`;
+        if (tc) badges += `<span class="match-badge match-thamchieu" title="Tham Chiếu: ${tc.join(' ; ')}">TC</span>`;
+        if (tl) badges += `<span class="match-badge match-thuongluu" title="Thương Lưu: ${tl.join(' ; ')}">TL</span>`;
+        return `${strVal}${badges}`;
+    }
+
+    function intDiv(a, b) { return (!b || b === 0) ? 0 : Math.floor(a / b); }
+    function modDiv(a, b) { return (!b || b === 0) ? 0 : a % b; }
+
+    function calculateAndSave() {
+        const selectEl = document.getElementById('personSelectDropdown');
+        const filterText = document.getElementById('personFilterInput').value.trim();
+        let personLabel = '';
+
+        if (selectEl.value !== '') {
+            const p = peopleList[parseInt(selectEl.value, 10)];
+            if (p) personLabel = p.displayLabel;
+        } else if (filterText) {
+            personLabel = filterText;
+        }
+
+        const birthDateStr = document.getElementById('birthDateInput').value;
+        const birthHourRaw = parseFloat(document.getElementById('birthHourInput').value);
+        const entryDateStr = document.getElementById('entryDateInput').value;
+        const entryTimeStr = document.getElementById('entryTimeInput').value;
+        const symptom = document.getElementById('symptomInput').value.trim() || 'Không ghi';
+        const remedy = document.getElementById('remedyInput').value.trim() || 'Không ghi';
+
+        if (!personLabel) { alert('Vui lòng chọn hoặc nhập Tên người từ danh sách!'); return; }
+        if (!birthDateStr || isNaN(birthHourRaw) || !entryDateStr || !entryTimeStr) {
+            alert('Vui lòng kiểm tra đầy đủ Ngày sinh, Giờ sinh (1-24), Ngày nhập và Giờ mắc bệnh!');
+            return;
+        }
+
+        const col2 = personLabel.includes('(') ? personLabel : `${personLabel} (${birthHourRaw})`;
+        const [eY, eM, eD] = entryDateStr.split('-');
+        const col3 = `${eD}/${eM}/${eY}`;
+        const col4 = entryTimeStr;
+        const col5 = symptom;
+        const col6 = remedy;
+
+        const dEntry = new Date(Date.UTC(parseInt(eY), parseInt(eM) - 1, parseInt(eD)));
+        const [bY, bM, bD] = birthDateStr.split('-');
+        const dBirth = new Date(Date.UTC(parseInt(bY), parseInt(bM) - 1, parseInt(bD)));
+        const diffTime = dEntry - dBirth;
+        
+        const col7 = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        if (col7 < 0) { alert('Ngày nhập không được nhỏ hơn ngày sinh!'); return; }
+
+        const col8 = intDiv(col7, 7);
+        const col9 = intDiv(col7, 30);
+        const col10 = intDiv(col7, 90);
+        const col11 = intDiv(col7, 365);
+        const col12 = col7 * 24;
+
+        let birthHourValue = birthHourRaw;
+        if (birthHourValue > 24) birthHourValue = Math.abs(24 - birthHourValue);
+        const col13 = col12 + birthHourValue;
+
+        const [eHour, eMin] = entryTimeStr.split(':').map(Number);
+        const col14 = eHour * 60 + eMin;
+
+        const col15 = intDiv(col13, col14);
+        const col16 = modDiv(col13, col14);
+        const col17 = modDiv(col15, 1000);
+        const col18 = modDiv(col16, 1000);
+
+        const col19 = intDiv(col7, col14);
+        const col20 = modDiv(col7, col14);
+        const col21 = modDiv(col19, 1000);
+        const col22 = modDiv(col20, 1000);
+
+        const col23 = intDiv(col8, col14);
+        const col24 = modDiv(col8, col14);
+        const col25 = modDiv(col23, 1000);
+        const col26 = modDiv(col24, 1000);
+
+        const col27 = intDiv(col9, col14);
+        const col28 = modDiv(col9, col14);
+        const col29 = modDiv(col27, 1000);
+        const col30 = modDiv(col28, 1000);
+
+        const col31 = intDiv(col10, col14);
+        const col32 = modDiv(col10, col14);
+        const col33 = modDiv(col23, 1000);
+        const col34 = modDiv(col24, 1000);
+
+        const col35 = intDiv(col11, col14);
+        const col36 = modDiv(col11, col14);
+        const col37 = modDiv(col23, 1000);
+        const col38 = modDiv(col24, 1000);
+
+        const newRecord = {
+            col2, col3, col4, col5, col6,
+            col7, col8, col9, col10, col11, col12, col13, col14,
+            col15, col16, col17, col18,
+            col19, col20, col21, col22,
+            col23, col24, col25, col26,
+            col27, col28, col29, col30,
+            col31, col32, col33, col34,
+            col35, col36, col37, col38
+        };
+
+        records.push(newRecord);
+        safeSave('benhAn_records_v3', records);
+        renderAllTables();
+        showToast('Đã tính toán và lưu dòng mới thành công!');
+    }
+
+    function deleteRow(index) {
+        records.splice(index, 1);
+        safeSave('benhAn_records_v3', records);
+        renderAllTables();
+        showToast('Đã xóa dòng dữ liệu!');
+    }
+
+    function clearAllRecords() {
+        if (records.length === 0) return;
+        if (confirm('Bạn có chắc chắn muốn xóa toàn bộ bảng kết quả không?')) {
+            records = [];
+            safeSave('benhAn_records_v3', records);
+            renderAllTables();
+            showToast('Đã xóa toàn bộ dữ liệu!');
+        }
+    }
+
+    function resetFormInputs() {
+        document.getElementById('personFilterInput').value = '';
+        filterPeopleDropdown();
+        document.getElementById('birthDateInput').value = '';
+        document.getElementById('birthHourInput').value = '';
+        document.getElementById('symptomInput').value = '';
+        document.getElementById('remedyInput').value = '';
+        setDefaultDateTime();
+    }
+
+    function renderAllTables() {
+        const tb2 = document.getElementById('tableBodyTab2');
+        const tb3 = document.getElementById('tableBodyTab3');
+        const tb4 = document.getElementById('tableBodyTab4');
+        const tb5 = document.getElementById('tableBodyTab5');
+
+        document.getElementById('rowCountBadge').textContent = `${records.length} dòng dữ liệu`;
+
+        if (records.length === 0) {
+            const emptyMsg = `<tr><td colspan="12" style="text-align:center; color: var(--text-muted);">Chưa có dữ liệu tính toán.</td></tr>`;
+            tb2.innerHTML = emptyMsg; tb3.innerHTML = emptyMsg; tb4.innerHTML = emptyMsg; tb5.innerHTML = emptyMsg;
+            return;
+        }
+
+        const html2 = [], html3 = [], html4 = [], html5 = [];
+
+        for (let idx = 0; idx < records.length; idx++) {
+            const r = records[idx];
+            const stt = idx + 1;
+
+            html2.push(`
+                <tr>
+                    <td><button class="btn btn-red btn-sm" onclick="deleteRow(${idx})">Xóa</button></td>
+                    <td class="val-yellow">${stt}</td>
+                    <td class="val-cyan">${r.col2}</td>
+                    <td>${r.col3}</td>
+                    <td>${r.col4}</td>
+                    <td>${r.col5}</td>
+                    <td>${r.col6}</td>
+                    <td class="val-highlight">${formatWithLookup(r.col7)}</td>
+                    <td>${formatWithLookup(r.col8)}</td>
+                    <td>${formatWithLookup(r.col9)}</td>
+                    <td>${formatWithLookup(r.col10)}</td>
+                </tr>
+            `);
+
+            html3.push(`
+                <tr>
+                    <td class="val-yellow">${stt}</td>
+                    <td class="val-cyan">${r.col2}</td>
+                    <td>${formatWithLookup(r.col11)}</td>
+                    <td>${formatWithLookup(r.col12)}</td>
+                    <td class="val-highlight">${formatWithLookup(r.col13)}</td>
+                    <td class="val-yellow">${formatWithLookup(r.col14)}</td>
+                    <td class="val-cyan">${formatWithLookup(r.col15)}</td>
+                    <td class="val-purple">${formatWithLookup(r.col16)}</td>
+                    <td>${formatWithLookup(r.col17)}</td>
+                    <td>${formatWithLookup(r.col18)}</td>
+                    <td class="val-cyan">${formatWithLookup(r.col19)}</td>
+                </tr>
+            `);
+
+            html4.push(`
+                <tr>
+                    <td class="val-yellow">${stt}</td>
+                    <td class="val-cyan">${r.col2}</td>
+                    <td class="val-purple">${formatWithLookup(r.col20)}</td>
+                    <td>${formatWithLookup(r.col21)}</td>
+                    <td>${formatWithLookup(r.col22)}</td>
+                    <td class="val-cyan">${formatWithLookup(r.col23)}</td>
+                    <td class="val-purple">${formatWithLookup(r.col24)}</td>
+                    <td>${formatWithLookup(r.col25)}</td>
+                    <td>${formatWithLookup(r.col26)}</td>
+                    <td class="val-cyan">${formatWithLookup(r.col27)}</td>
+                    <td class="val-purple">${formatWithLookup(r.col28)}</td>
+                    <td>${formatWithLookup(r.col29)}</td>
+                </tr>
+            `);
+
+            html5.push(`
+                <tr>
+                    <td class="val-yellow">${stt}</td>
+                    <td class="val-cyan">${r.col2}</td>
+                    <td>${formatWithLookup(r.col30)}</td>
+                    <td class="val-cyan">${formatWithLookup(r.col31)}</td>
+                    <td class="val-purple">${formatWithLookup(r.col32)}</td>
+                    <td>${formatWithLookup(r.col33)}</td>
+                    <td>${formatWithLookup(r.col34)}</td>
+                    <td class="val-cyan">${formatWithLookup(r.col35)}</td>
+                    <td class="val-purple">${formatWithLookup(r.col36)}</td>
+                    <td>${formatWithLookup(r.col37)}</td>
+                    <td>${formatWithLookup(r.col38)}</td>
+                </tr>
+            `);
+        }
+
+        tb2.innerHTML = html2.join('');
+        tb3.innerHTML = html3.join('');
+        tb4.innerHTML = html4.join('');
+        tb5.innerHTML = html5.join('');
+    }
+
+    // ==================== TAB 6: SO TÌM SIÊU NHANH + PHÂN TRANG ====================
+    const COLUMN_NAMES = {
+        7: "Cột 7 (Tổng ngày)", 8: "Cột 8 (Tổng tuần)", 9: "Cột 9 (Tổng tháng)", 10: "Cột 10 (Tổng quý)",
+        11: "Cột 11 (Tổng năm)", 12: "Cột 12 (Tổng giờ)", 13: "Cột 13 (Tổng giờ + giờ sinh)", 14: "Cột 14 (STT giờ bệnh)",
+        15: "Cột 15 (INT C13/C14)", 16: "Cột 16 (MOD C13/C14)", 17: "Cột 17 (C15 % 1000)", 18: "Cột 18 (C16 % 1000)",
+        19: "Cột 19", 20: "Cột 20", 21: "Cột 21", 22: "Cột 22", 23: "Cột 23", 24: "Cột 24", 25: "Cột 25", 26: "Cột 26",
+        27: "Cột 27", 28: "Cột 28", 29: "Cột 29", 30: "Cột 30", 31: "Cột 31", 32: "Cột 32", 33: "Cột 33", 34: "Cột 34",
+        35: "Cột 35", 36: "Cột 36", 37: "Cột 37", 38: "Cột 38"
+    };
+
+    function rebuildTab6Matches(notify) {
+        tab6AllMatches = [];
+        for (let idx = 0; idx < records.length; idx++) {
+            const r = records[idx];
+            for (let c = 7; c <= 38; c++) {
+                const val = r[`col${c}`];
+                const strVal = String(val);
+
+                const db = mapDacBiet.get(strVal);
+                if (db) {
+                    for (let k = 0; k < db.length; k++) {
+                        tab6AllMatches.push({ col2: r.col2, col3: r.col3, col5: r.col5, colName: COLUMN_NAMES[c] || `Cột ${c}`, val: strVal, css: 'match-dacbiet', typeLabel: 'Đặc Biệt (ĐB)', text: db[k] });
+                    }
+                }
+                const tc = mapThamChieu.get(strVal);
+                if (tc) {
+                    for (let k = 0; k < tc.length; k++) {
+                        tab6AllMatches.push({ col2: r.col2, col3: r.col3, col5: r.col5, colName: COLUMN_NAMES[c] || `Cột ${c}`, val: strVal, css: 'match-thamchieu', typeLabel: 'Tham Chiếu (TC)', text: tc[k] });
+                    }
+                }
+                const tl = mapThuongLuu.get(strVal);
+                if (tl) {
+                    for (let k = 0; k < tl.length; k++) {
+                        tab6AllMatches.push({ col2: r.col2, col3: r.col3, col5: r.col5, colName: COLUMN_NAMES[c] || `Cột ${c}`, val: strVal, css: 'match-thuongluu', typeLabel: 'Thương Lưu (TL)', text: tl[k] });
+                    }
+                }
+            }
+        }
+        tab6CurrentPage = 1;
+        renderTab6Page();
+        if (notify) showToast(`Đã hoàn tất so tìm: ${tab6AllMatches.length} kết quả!`);
+    }
+
+    function changeTab6Page(delta) {
+        const totalPages = Math.max(1, Math.ceil(tab6AllMatches.length / TAB6_PAGE_SIZE));
+        const next = tab6CurrentPage + delta;
+        if (next >= 1 && next <= totalPages) {
+            tab6CurrentPage = next;
+            renderTab6Page();
+        }
+    }
+
+    function renderTab6Page() {
+        const tb6 = document.getElementById('tableBodyTab6');
+        const total = tab6AllMatches.length;
+        const totalPages = Math.max(1, Math.ceil(total / TAB6_PAGE_SIZE));
+
+        document.getElementById('tab6TotalBadge').textContent = `${total} kết quả`;
+        document.getElementById('tab6PageInfo').textContent = `Trang ${tab6CurrentPage}/${totalPages}`;
+        document.getElementById('btnPrevPage').disabled = (tab6CurrentPage <= 1);
+        document.getElementById('btnNextPage').disabled = (tab6CurrentPage >= totalPages);
+
+        if (total === 0) {
+            tb6.innerHTML = `<tr><td colspan="8" style="text-align:center; color: var(--text-muted);">Không tìm thấy giá trị nào trùng khớp.</td></tr>`;
+            return;
+        }
+
+        const start = (tab6CurrentPage - 1) * TAB6_PAGE_SIZE;
+        const end = Math.min(start + TAB6_PAGE_SIZE, total);
+        const rowsHtml = [];
+
+        for (let i = start; i < end; i++) {
+            const m = tab6AllMatches[i];
+            rowsHtml.push(`
+                <tr>
+                    <td>${i + 1}</td>
+                    <td class="val-cyan">${m.col2}</td>
+                    <td>${m.col3}</td>
+                    <td>${m.col5}</td>
+                    <td>${m.colName}</td>
+                    <td class="val-yellow">${m.val}</td>
+                    <td><span class="match-badge ${m.css}">${m.typeLabel}</span></td>
+                    <td class="wrap-text" style="color: #f8fafc;">${m.text}</td>
+                </tr>
+            `);
+        }
+        tb6.innerHTML = rowsHtml.join('');
+    }
+
+    function copyTab6Results() {
+        if (tab6AllMatches.length === 0) {
+            alert('Không có dữ liệu so tìm để copy!');
+            return;
+        }
+        const lines = [["STT", "Bệnh Nhân", "Ngày Nhập", "Tên Bệnh", "Cột Trùng", "Số Trùng", "Thuộc Bảng", "Nội Dung Chữ Đi Kèm"].join('\t')];
+        for (let i = 0; i < tab6AllMatches.length; i++) {
+            const m = tab6AllMatches[i];
+            lines.push([i + 1, m.col2, m.col3, m.col5, m.colName, m.val, m.typeLabel, m.text].join('\t'));
+        }
+        navigator.clipboard.writeText(lines.join('\n')).then(() => {
+            showToast(`Đã copy toàn bộ ${tab6AllMatches.length} dòng So Tìm!`);
+        });
+    }
+
+    function buildFullTsvText() {
+        const headers = [
+            "Cột 1 (STT)", "Cột 2 (Tên+Giờ sinh)", "Cột 3 (Ngày nhập)", "Cột 4 (Giờ phút)",
+            "Cột 5 (Tên bệnh)", "Cột 6 (Thuốc)", "Cột 7 (Tổng ngày)", "Cột 8 (Tổng tuần)",
+            "Cột 9 (Tổng tháng)", "Cột 10 (Tổng quý)", "Cột 11 (Tổng năm)", "Cột 12 (Tổng giờ)",
+            "Cột 13 (Tổng giờ+giờ sinh)", "Cột 14 (STT giờ bệnh)", "Cột 15", "Cột 16", "Cột 17", "Cột 18",
+            "Cột 19", "Cột 20", "Cột 21", "Cột 22", "Cột 23", "Cột 24", "Cột 25", "Cột 26",
+            "Cột 27", "Cột 28", "Cột 29", "Cột 30", "Cột 31", "Cột 32", "Cột 33", "Cột 34",
+            "Cột 35", "Cột 36", "Cột 37", "Cột 38"
+        ];
+        const lines = [headers.join('\t')];
+        for (let idx = 0; idx < records.length; idx++) {
+            const r = records[idx];
+            lines.push([
+                idx + 1, r.col2, r.col3, r.col4, r.col5, r.col6,
+                r.col7, r.col8, r.col9, r.col10, r.col11, r.col12, r.col13, r.col14,
+                r.col15, r.col16, r.col17, r.col18, r.col19, r.col20, r.col21, r.col22,
+                r.col23, r.col24, r.col25, r.col26, r.col27, r.col28, r.col29, r.col30,
+                r.col31, r.col32, r.col33, r.col34, r.col35, r.col36, r.col37, r.col38
+            ].join('\t'));
+        }
+        return lines.join('\n');
+    }
+
+    function copyAllResults() {
+        if (records.length === 0) { alert('Chưa có dữ liệu để sao chép!'); return; }
+        navigator.clipboard.writeText(buildFullTsvText()).then(() => { showToast('Đã copy toàn bộ 38 cột dữ liệu!'); });
+    }
+
+    function copyTabResults(tabNum) {
+        if (records.length === 0) { alert('Chưa có dữ liệu để sao chép!'); return; }
+        const lines = [];
+        for (let idx = 0; idx < records.length; idx++) {
+            const r = records[idx];
+            const stt = idx + 1;
+            if (tabNum === 3) lines.push([stt, r.col2, r.col11, r.col12, r.col13, r.col14, r.col15, r.col16, r.col17, r.col18, r.col19].join('\t'));
+            else if (tabNum === 4) lines.push([stt, r.col2, r.col20, r.col21, r.col22, r.col23, r.col24, r.col25, r.col26, r.col27, r.col28, r.col29].join('\t'));
+            else if (tabNum === 5) lines.push([stt, r.col2, r.col30, r.col31, r.col32, r.col33, r.col34, r.col35, r.col36, r.col37, r.col38].join('\t'));
+        }
+        navigator.clipboard.writeText(lines.join('\n')).then(() => { showToast(`Đã copy kết quả Tab ${tabNum}!`); });
+    }
+
+    function exportToTxt() {
+        if (records.length === 0) { alert('Chưa có dữ liệu để tải về!'); return; }
+        const blob = new Blob([buildFullTsvText()], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'ket_qua_38_cot.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+</script>
+
+</body>
+</html>

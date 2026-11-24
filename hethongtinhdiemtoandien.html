@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Tính Điểm Toàn Diện & Quy Đổi Tài Sản</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1d4ed8',
+                        success: '#16a34a',
+                        danger: '#dc2626',
+                        warning: '#f59e0b',
+                        info: '#0891b2',
+                        purple: '#7c3aed',
+                        pink: '#ec4899',
+                        amber: '#d97706',
+                        neutral: '#f3f4f6',
+                        dark: '#1f2937'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .card-shadow { box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-btn.active { background-color: #1d4ed8; color: white; border-color: #1d4ed8; }
+        input, select, textarea { transition: all 0.2s; }
+        input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 2px rgba(29,78,216,0.2); outline: none; }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 text-white py-5 shadow-lg">
+        <div class="container mx-auto px-4">
+            <h1 class="text-[clamp(1.4rem,3vw,2.2rem)] font-bold text-center tracking-wide">
+                <i class="fa fa-star text-yellow-300 mr-2 animate-pulse"></i> HỆ THỐNG TÍNH ĐIỂM TOÀN DIỆN & QUY ĐỔI TÀI SẢN
+            </h1>
+            <p class="text-center mt-1.5 text-blue-100 text-xs sm:text-sm">
+                Quản lý tích điểm Thành viên • Việc nhà • Sức khỏe • Thuốc/Chi tiêu • Lao động • Mục tiêu • Quy đổi Vàng, Xăng, USD, Nhà đất
+            </p>
+        </div>
+    </header>
+
+    <!-- Thanh Điểm Tổng & Sao Lưu JSON -->
+    <section class="py-3 bg-white border-b sticky top-0 z-30 shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+                <div class="bg-green-50 rounded-lg p-2.5 border border-green-200">
+                    <h3 class="text-[11px] font-semibold text-green-700 uppercase tracking-wider">Tổng Điểm Cộng</h3>
+                    <p id="tongDiemCong" class="text-xl sm:text-2xl font-bold text-green-600 mt-0.5">0</p>
+                </div>
+                <div class="bg-red-50 rounded-lg p-2.5 border border-red-200">
+                    <h3 class="text-[11px] font-semibold text-red-700 uppercase tracking-wider">Tổng Điểm Trừ</h3>
+                    <p id="tongDiemTru" class="text-xl sm:text-2xl font-bold text-red-600 mt-0.5">0</p>
+                </div>
+                <div class="bg-blue-50 rounded-lg p-2.5 border border-blue-200">
+                    <h3 class="text-[11px] font-semibold text-blue-800 uppercase tracking-wider">Điểm Tích Lũy Chung</h3>
+                    <p id="tongDiem" class="text-xl sm:text-2xl font-bold text-primary mt-0.5">0</p>
+                </div>
+                <div class="bg-amber-50 rounded-lg p-2 border border-amber-200 flex flex-col justify-center items-center gap-1.5">
+                    <button onclick="xuatDuLieuJSON()" class="text-xs bg-amber-600 text-white px-2.5 py-1 rounded hover:bg-amber-700 w-full transition font-medium shadow-sm flex items-center justify-center gap-1">
+                        <i class="fa fa-download"></i> Sao lưu JSON
+                    </button>
+                    <label class="text-xs bg-gray-700 text-white px-2.5 py-1 rounded hover:bg-gray-800 cursor-pointer w-full text-center transition font-medium shadow-sm flex items-center justify-center gap-1">
+                        <i class="fa fa-upload"></i> Khôi phục JSON <input type="file" accept=".json" onchange="nhapDuLieuJSON(event)" class="hidden">
+                    </label>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Container -->
+    <main class="container mx-auto px-4 py-6 flex-grow">
+        
+        <!-- Thanh Tab Navigation -->
+        <div class="flex flex-wrap gap-1.5 mb-6 border-b border-gray-200 pb-2 overflow-x-auto">
+            <button class="tab-btn active px-3.5 py-2 rounded-t-lg border border-b-0 bg-white font-semibold text-xs sm:text-sm text-gray-700 hover:bg-blue-50 transition flex items-center gap-1.5" onclick="doiTab('tab-nguoi', this)">
+                <i class="fa fa-users text-primary"></i> Tab 1: Thành viên
+            </button>
+            <button class="tab-btn px-3.5 py-2 rounded-t-lg border border-b-0 bg-white font-semibold text-xs sm:text-sm text-gray-700 hover:bg-blue-50 transition flex items-center gap-1.5" onclick="doiTab('tab-viec', this)">
+                <i class="fa fa-home text-green-600"></i> Tab 2: Việc nhà & Hành vi
+            </button>
+            <button class="tab-btn px-3.5 py-2 rounded-t-lg border border-b-0 bg-white font-semibold text-xs sm:text-sm text-gray-700 hover:bg-blue-50 transition flex items-center gap-1.5" onclick="doiTab('tab-sucKhoe', this)">
+                <i class="fa fa-heartbeat text-pink-500"></i> Tab 3: Sức khỏe
+            </button>
+            <button class="tab-btn px-3.5 py-2 rounded-t-lg border border-b-0 bg-white font-semibold text-xs sm:text-sm text-gray-700 hover:bg-blue-50 transition flex items-center gap-1.5" onclick="doiTab('tab-thuoc', this)">
+                <i class="fa fa-medkit text-red-500"></i> Tab 4: Mua sắm & Thuốc
+            </button>
+            <button class="tab-btn px-3.5 py-2 rounded-t-lg border border-b-0 bg-white font-semibold text-xs sm:text-sm text-gray-700 hover:bg-blue-50 transition flex items-center gap-1.5" onclick="doiTab('tab-laoDong', this)">
+                <i class="fa fa-briefcase text-purple-600"></i> Tab 5: Lao động & Thu nhập
+            </button>
+            <button class="tab-btn px-3.5 py-2 rounded-t-lg border border-b-0 bg-white font-semibold text-xs sm:text-sm text-gray-700 hover:bg-blue-50 transition flex items-center gap-1.5" onclick="doiTab('tab-mucTieu', this)">
+                <i class="fa fa-bullseye text-amber-500"></i> Tab 6: Mục tiêu & Đổi thưởng
+            </button>
+            <button class="tab-btn px-3.5 py-2 rounded-t-lg border border-b-0 bg-white font-semibold text-xs sm:text-sm text-gray-700 hover:bg-blue-50 transition flex items-center gap-1.5" onclick="doiTab('tab-quyDoi', this)">
+                <i class="fa fa-exchange text-amber-700"></i> Tab 7: Quy Đổi Tỷ Giá
+            </button>
+        </div>
+
+        <!-- ================= TAB 1: THÀNH VIÊN ================= -->
+        <div id="tab-nguoi" class="tab-content active">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Thêm Thành Viên / Import TXT -->
+                <div class="bg-white rounded-xl p-5 card-shadow lg:col-span-1 border border-gray-100">
+                    <h2 class="text-lg font-bold mb-4 text-blue-900 border-b pb-2 flex items-center gap-2">
+                        <i class="fa fa-user-plus text-primary"></i> Thêm Thành Viên
+                    </h2>
+                    <div class="mb-4">
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Tên thành viên mới</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="tenThanhVien" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="Nhập tên thành viên...">
+                            <button onclick="themThanhVien()" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition whitespace-nowrap">
+                                <i class="fa fa-plus"></i> Thêm
+                            </button>
+                        </div>
+                    </div>
+                    <hr class="my-4 border-gray-200">
+                    <h3 class="font-semibold text-xs text-gray-700 mb-1 flex items-center gap-1.5">
+                        <i class="fa fa-file-text-o text-green-600"></i> Import danh sách từ TXT
+                    </h3>
+                    <p class="text-[11px] text-gray-500 mb-2">Định dạng: Mỗi dòng một tên thành viên.</p>
+                    <textarea id="danhSachTxtTV" rows="3" class="w-full px-3 py-2 border rounded-lg text-xs mb-2 font-mono" placeholder="Nguyễn Văn A&#10;Trần Thị B&#10;Lê Văn C"></textarea>
+                    <div class="flex gap-2">
+                        <label class="flex-1 bg-gray-100 border text-center py-2 rounded-lg text-xs cursor-pointer font-medium hover:bg-gray-200 transition">
+                            <i class="fa fa-folder-open-o"></i> Chọn file .txt <input type="file" accept=".txt" onchange="docFileTxt(event, 'danhSachTxtTV')" class="hidden">
+                        </label>
+                        <button onclick="nhapThanhVienTxt()" class="flex-1 bg-green-600 text-white py-2 rounded-lg text-xs font-medium hover:bg-green-700 transition">
+                            <i class="fa fa-check"></i> Import ngay
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bảng Điểm Các Thành Viên -->
+                <div class="bg-white rounded-xl p-5 card-shadow lg:col-span-2 border border-gray-100">
+                    <h2 class="text-lg font-bold mb-4 text-blue-900 border-b pb-2 flex items-center gap-2">
+                        <i class="fa fa-users text-primary"></i> Bảng Điểm Các Thành Viên
+                    </h2>
+                    <div class="overflow-x-auto border rounded-lg">
+                        <table class="w-full text-sm text-left">
+                            <thead class="bg-gray-100 text-gray-700 text-xs font-bold uppercase border-b">
+                                <tr>
+                                    <th class="px-3 py-2.5 w-12 text-center">STT</th>
+                                    <th class="px-3 py-2.5">Họ và tên</th>
+                                    <th class="px-3 py-2.5 text-right text-green-600">Điểm Cộng</th>
+                                    <th class="px-3 py-2.5 text-right text-red-600">Điểm Trừ</th>
+                                    <th class="px-3 py-2.5 text-right font-bold text-primary">Tích lũy</th>
+                                    <th class="px-3 py-2.5 text-center w-16">Xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bangDanhSachThanhVien" class="divide-y divide-gray-100">
+                                <tr><td colspan="6" class="text-center py-6 text-gray-400">Chưa có thành viên nào. Vui lòng thêm mới hoặc Import TXT!</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 2: VIỆC NHÀ & HÀNH VI ================= -->
+        <div id="tab-viec" class="tab-content">
+            <section class="bg-white rounded-xl p-5 card-shadow border border-gray-100">
+                <h2 class="text-lg font-bold mb-4 text-gray-800 border-b pb-2 flex items-center gap-2">
+                    <i class="fa fa-list-alt text-green-600"></i> Ghi Nhận Công Việc & Hành Vi
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1"><span class="text-red-500">*</span> Thành viên thực hiện:</label>
+                        <select id="nguoiThucHienViec" class="w-full px-3 py-2 border rounded-lg bg-yellow-50 font-medium text-sm">
+                            <option value="">-- Chọn thành viên --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Chọn nhanh từ danh mục mẫu:</label>
+                        <select id="chonViec" onchange="dienViec()" class="w-full px-3 py-2 border rounded-lg text-sm">
+                            <option value="">-- Chọn công việc / hành vi --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Tên việc / Hành vi</label>
+                        <input type="text" id="tenViec" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="VD: Dọn dẹp phòng khách...">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Số điểm (+ cộng / - trừ)</label>
+                        <input type="number" id="diemViec" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="VD: 15 hoặc -10">
+                    </div>
+                    <div class="flex items-end">
+                        <button onclick="themViec()" class="w-full bg-green-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition">
+                            <i class="fa fa-check"></i> Ghi nhận điểm
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Import Danh mục Việc Nhà từ TXT -->
+                <div class="bg-gray-50 border rounded-lg p-3.5 mb-6">
+                    <h3 class="font-semibold text-xs text-gray-700 mb-1 flex items-center gap-1.5">
+                        <i class="fa fa-file-text-o text-primary"></i> Nạp thêm Danh mục Việc nhà mẫu từ TXT
+                    </h3>
+                    <p class="text-[11px] text-gray-500 mb-1.5">Định dạng mỗi dòng: <code class="bg-gray-200 px-1 rounded">Tên việc, Số điểm</code> (VD: <code class="bg-gray-200 px-1 rounded">Lau nhà tầng 1, 20</code>)</p>
+                    <textarea id="danhSachTxtViec" rows="2" class="w-full px-3 py-2 border rounded-lg text-xs mb-2 font-mono" placeholder="Rửa bát, 10&#10;Gấp quần áo, 15&#10;Đi học muộn, -20"></textarea>
+                    <div class="flex gap-2">
+                        <label class="bg-white border px-3 py-1.5 rounded text-xs cursor-pointer font-medium hover:bg-gray-100 transition">
+                            <i class="fa fa-folder-open-o"></i> Chọn file TXT <input type="file" accept=".txt" onchange="docFileTxt(event, 'danhSachTxtViec')" class="hidden">
+                        </label>
+                        <button onclick="nhapViecTxt()" class="bg-primary text-white px-3 py-1.5 rounded text-xs font-medium hover:bg-blue-700 transition">
+                            <i class="fa fa-plus"></i> Nạp vào Danh mục mẫu
+                        </button>
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-sm mb-2 text-gray-700">📋 Lịch sử công việc & hành vi:</h3>
+                <div class="max-h-60 overflow-y-auto border rounded-lg">
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-gray-100 text-xs font-bold uppercase sticky top-0 border-b">
+                            <tr>
+                                <th class="px-3 py-2 w-36">Thời gian</th>
+                                <th class="px-3 py-2 w-32 text-primary font-bold">Thành viên</th>
+                                <th class="px-3 py-2">Nội dung</th>
+                                <th class="px-3 py-2 text-right w-24">Điểm</th>
+                                <th class="px-3 py-2 text-center w-14">Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lsViec" class="divide-y divide-gray-100">
+                            <tr><td colspan="5" class="py-4 text-center text-gray-400">Chưa có lịch sử recorded.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= TAB 3: SỨC KHỎE ================= -->
+        <div id="tab-sucKhoe" class="tab-content">
+            <section class="bg-white rounded-xl p-5 card-shadow border border-gray-100">
+                <h2 class="text-lg font-bold mb-4 text-gray-800 border-b pb-2 flex items-center gap-2">
+                    <i class="fa fa-heartbeat text-pink-500"></i> Chăm Sóc & Sức Khỏe
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1"><span class="text-red-500">*</span> Thành viên chăm sóc:</label>
+                        <select id="nguoiThucHienCS" class="w-full px-3 py-2 border rounded-lg bg-pink-50 font-medium text-sm">
+                            <option value="">-- Chọn thành viên --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Loại chăm sóc mẫu:</label>
+                        <select id="loaiCS" class="w-full px-3 py-2 border rounded-lg text-sm">
+                            <option value="500|Trực ca ngày (8-12h)">Trực ca ngày (8-12h) — 500 điểm</option>
+                            <option value="700|Trực ca đêm">Trực ca đêm — 700 điểm</option>
+                            <option value="100|Lau người / Thay đồ">Lau người / Thay đồ — 100 điểm</option>
+                            <option value="40|Đút cơm / Nhắc uống thuốc">Đút cơm / Nhắc uống thuốc — 40 điểm</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Số lượng / Lần</label>
+                        <input type="number" id="slCS" min="1" value="1" class="w-full px-3 py-2 border rounded-lg text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Điểm / Lần (Nếu tùy chỉnh)</label>
+                        <input type="number" id="diemCSTuyChinh" placeholder="Để trống nếu dùng mặc định" class="w-full px-3 py-2 border rounded-lg text-sm">
+                    </div>
+                    <div class="flex items-end">
+                        <button onclick="tinhCS()" class="w-full bg-pink-500 text-white py-2 rounded-lg text-sm font-medium hover:bg-pink-600 transition">
+                            <i class="fa fa-plus"></i> Cộng điểm chăm sóc
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Import TXT Danh Mục Chăm Sóc Sức Khỏe -->
+                <div class="bg-gray-50 border rounded-lg p-3.5 mb-6">
+                    <h3 class="font-semibold text-xs text-gray-700 mb-1 flex items-center gap-1.5">
+                        <i class="fa fa-file-text-o text-pink-600"></i> Import Danh Mục Sức Khỏe từ TXT
+                    </h3>
+                    <p class="text-[11px] text-gray-500 mb-1.5">Định dạng: <code class="bg-gray-200 px-1 rounded">Tên hoạt động, Số điểm</code></p>
+                    <textarea id="danhSachTxtSucKhoe" rows="2" class="w-full px-3 py-2 border rounded-lg text-xs mb-2 font-mono" placeholder="Dẫn đi dạo công viên, 80&#10;Đo huyết áp và ghi chép, 30"></textarea>
+                    <div class="flex gap-2">
+                        <label class="bg-white border px-3 py-1.5 rounded text-xs cursor-pointer font-medium hover:bg-gray-100 transition">
+                            <i class="fa fa-folder-open-o"></i> Chọn file TXT <input type="file" accept=".txt" onchange="docFileTxt(event, 'danhSachTxtSucKhoe')" class="hidden">
+                        </label>
+                        <button onclick="nhapSucKhoeTxt()" class="bg-pink-600 text-white px-3 py-1.5 rounded text-xs font-medium hover:bg-pink-700 transition">
+                            <i class="fa fa-plus"></i> Nạp vào Danh mục
+                        </button>
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-sm mb-2 text-gray-700">📋 Lịch sử chăm sóc & sức khỏe:</h3>
+                <div class="max-h-60 overflow-y-auto border rounded-lg">
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-gray-100 text-xs font-bold uppercase sticky top-0 border-b">
+                            <tr>
+                                <th class="px-3 py-2 w-36">Thời gian</th>
+                                <th class="px-3 py-2 w-32 text-primary font-bold">Thành viên</th>
+                                <th class="px-3 py-2">Nội dung</th>
+                                <th class="px-3 py-2 text-right w-24">Điểm</th>
+                                <th class="px-3 py-2 text-center w-14">Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lsCS" class="divide-y divide-gray-100">
+                            <tr><td colspan="5" class="py-4 text-center text-gray-400">Chưa có dữ liệu.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= TAB 4: MUA SẮM & THUỐC ================= -->
+        <div id="tab-thuoc" class="tab-content">
+            <section class="bg-white rounded-xl p-5 card-shadow border border-gray-100">
+                <h2 class="text-lg font-bold mb-4 text-gray-800 border-b pb-2 flex items-center gap-2">
+                    <i class="fa fa-medkit text-red-500"></i> Trừ Điểm Mua Sắm & Thuốc
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1"><span class="text-red-500">*</span> Thành viên mua / chi tiêu:</label>
+                        <select id="nguoiDungThuoc" class="w-full px-3 py-2 border rounded-lg bg-red-50 font-medium text-sm">
+                            <option value="">-- Chọn thành viên --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Tên thuốc / Hàng hóa mua</label>
+                        <input type="text" id="tenThuoc" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="VD: Kháng sinh, Thực phẩm bổ dưỡng...">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Số lượng / Mô tả</label>
+                        <input type="text" id="soLuongThuoc" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="VD: 2 hộp, 1 gói...">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Thành tiền (Quy đổi: 1.000 VNĐ = 1 điểm trừ)</label>
+                        <input type="number" id="tienThuoc" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="VD: 200 (nghĩa là 200.000đ = -200 điểm)">
+                    </div>
+                </div>
+
+                <button onclick="themThuoc()" class="w-full bg-red-600 text-white py-2.5 rounded-lg hover:bg-red-700 font-medium text-sm transition mb-6 shadow-sm">
+                    <i class="fa fa-shopping-cart mr-1"></i> Xác nhận Đã Mua — Trừ Điểm
+                </button>
+
+                <!-- Import TXT Thuốc & Mua Sắm -->
+                <div class="bg-gray-50 border rounded-lg p-3.5 mb-6">
+                    <h3 class="font-semibold text-xs text-gray-700 mb-1 flex items-center gap-1.5">
+                        <i class="fa fa-file-text-o text-red-600"></i> Import Giao Dịch Mua Sắm Hàng Loạt từ TXT
+                    </h3>
+                    <p class="text-[11px] text-gray-500 mb-1.5">Định dạng mỗi dòng: <code class="bg-gray-200 px-1 rounded">Tên người, Mặt hàng, Số lượng, Số tiền(ngàn VNĐ)</code></p>
+                    <textarea id="danhSachTxtThuoc" rows="2" class="w-full px-3 py-2 border rounded-lg text-xs mb-2 font-mono" placeholder="Nguyễn Văn A, Thuốc bổ gan, 1 hộp, 150&#10;Trần Thị B, Khẩu trang y tế, 5 hộp, 100"></textarea>
+                    <div class="flex gap-2">
+                        <label class="bg-white border px-3 py-1.5 rounded text-xs cursor-pointer font-medium hover:bg-gray-100 transition">
+                            <i class="fa fa-folder-open-o"></i> Chọn file TXT <input type="file" accept=".txt" onchange="docFileTxt(event, 'danhSachTxtThuoc')" class="hidden">
+                        </label>
+                        <button onclick="nhapThuocTxt()" class="bg-red-600 text-white px-3 py-1.5 rounded text-xs font-medium hover:bg-red-700 transition">
+                            <i class="fa fa-plus"></i> Import Hóa Đơn Mua Sắm
+                        </button>
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-sm mb-2 text-gray-700">📋 Lịch sử chi tiêu / mua thuốc:</h3>
+                <div class="max-h-60 overflow-y-auto border rounded-lg">
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-gray-100 text-xs font-bold uppercase sticky top-0 border-b">
+                            <tr>
+                                <th class="px-3 py-2 w-36">Thời gian</th>
+                                <th class="px-3 py-2 w-32 text-primary font-bold">Thành viên</th>
+                                <th class="px-3 py-2">Mặt hàng</th>
+                                <th class="px-3 py-2 text-center w-20">SL</th>
+                                <th class="px-3 py-2 text-right w-24 text-red-600">Điểm trừ</th>
+                                <th class="px-3 py-2 text-center w-14">Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lsThuoc" class="divide-y divide-gray-100">
+                            <tr><td colspan="6" class="py-4 text-center text-gray-400">Chưa có lịch sử mua thuốc/chi tiêu.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= TAB 5: LAO ĐỘNG & THU NHẬP ================= -->
+        <div id="tab-laoDong" class="tab-content">
+            <section class="bg-white rounded-xl p-5 card-shadow border border-gray-100">
+                <h2 class="text-lg font-bold mb-4 text-gray-800 border-b pb-2 flex items-center gap-2">
+                    <i class="fa fa-briefcase text-purple-600"></i> Lao Động & Thu Nhập
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1"><span class="text-red-500">*</span> Thành viên lao động:</label>
+                        <select id="nguoiLaoDong" class="w-full px-3 py-2 border rounded-lg bg-purple-50 font-medium text-sm">
+                            <option value="">-- Chọn thành viên --</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Công việc / Nguồn thu nhập</label>
+                        <input type="text" id="ngheNghiep" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="VD: Lương tháng, Kinh doanh online, Thưởng...">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Số điểm cộng (Quy đổi: 1.000 VNĐ = 1 điểm cộng)</label>
+                        <input type="number" id="diemLN" class="w-full px-3 py-2 border rounded-lg text-sm" placeholder="VD: 8000 (tương đương 8.000.000 VNĐ)">
+                    </div>
+                    <div class="flex items-end">
+                        <button onclick="themLN()" class="w-full bg-purple-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-purple-700 transition">
+                            <i class="fa fa-plus-circle"></i> Ghi nhận Thu nhập (+)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Import TXT Lao động & Thu nhập -->
+                <div class="bg-gray-50 border rounded-lg p-3.5 mb-6">
+                    <h3 class="font-semibold text-xs text-gray-700 mb-1 flex items-center gap-1.5">
+                        <i class="fa fa-file-text-o text-purple-600"></i> Import Bảng Thu Nhập Hàng Loạt từ TXT
+                    </h3>
+                    <p class="text-[11px] text-gray-500 mb-1.5">Định dạng mỗi dòng: <code class="bg-gray-200 px-1 rounded">Tên người, Nội dung công việc, Số điểm cộng</code></p>
+                    <textarea id="danhSachTxtLaoDong" rows="2" class="w-full px-3 py-2 border rounded-lg text-xs mb-2 font-mono" placeholder="Nguyễn Văn A, Lương tháng 10, 12000&#10;Trần Thị B, Bán hàng nông sản, 3500"></textarea>
+                    <div class="flex gap-2">
+                        <label class="bg-white border px-3 py-1.5 rounded text-xs cursor-pointer font-medium hover:bg-gray-100 transition">
+                            <i class="fa fa-folder-open-o"></i> Chọn file TXT <input type="file" accept=".txt" onchange="docFileTxt(event, 'danhSachTxtLaoDong')" class="hidden">
+                        </label>
+                        <button onclick="nhapLaoDongTxt()" class="bg-purple-600 text-white px-3 py-1.5 rounded text-xs font-medium hover:bg-purple-700 transition">
+                            <i class="fa fa-plus"></i> Import Bảng Thu Nhập
+                        </button>
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-sm mb-2 text-gray-700">📋 Lịch sử thu nhập & lao động:</h3>
+                <div class="max-h-60 overflow-y-auto border rounded-lg">
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-gray-100 text-xs font-bold uppercase sticky top-0 border-b">
+                            <tr>
+                                <th class="px-3 py-2 w-36">Thời gian</th>
+                                <th class="px-3 py-2 w-32 text-primary font-bold">Thành viên</th>
+                                <th class="px-3 py-2">Nội dung</th>
+                                <th class="px-3 py-2 text-right w-24 text-green-600">Điểm cộng</th>
+                                <th class="px-3 py-2 text-center w-14">Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lsLaoDong" class="divide-y divide-gray-100">
+                            <tr><td colspan="5" class="py-4 text-center text-gray-400">Chưa có dữ liệu thu nhập.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= TAB 6: MỤC TIÊU & ĐỔI THƯỞNG ================= -->
+        <div id="tab-mucTieu" class="tab-content">
+            <section class="bg-white rounded-xl p-5 card-shadow border border-gray-100">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4 border-b pb-3">
+                    <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                        <i class="fa fa-bullseye text-amber-500"></i> Mục Tiêu & Đổi Thưởng
+                    </h2>
+                    <div class="w-full md:w-72">
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Chọn thành viên xem tiến độ:</label>
+                        <select id="chonNguoiXemMucTieu" onchange="renderMucTieu()" class="w-full px-3 py-1.5 border rounded-lg bg-blue-50 font-bold text-sm text-primary">
+                            <option value="">-- Chọn thành viên --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-5 flex justify-between items-center">
+                    <div>
+                        <p class="text-xs text-gray-600">Điểm tích lũy hiện tại của thành viên được chọn:</p>
+                        <p id="diemHienTaiCuaNguoi" class="text-2xl font-bold text-primary mt-0.5">0 điểm</p>
+                    </div>
+                </div>
+
+                <!-- Thêm mới / Import TXT Mục Tiêu -->
+                <div class="bg-gray-50 border rounded-lg p-3.5 mb-6">
+                    <h3 class="font-semibold text-xs text-gray-700 mb-1 flex items-center gap-1.5">
+                        <i class="fa fa-file-text-o text-amber-600"></i> Nhập / Import Danh sách Mục tiêu từ TXT
+                    </h3>
+                    <p class="text-[11px] text-gray-500 mb-1.5">Định dạng từng dòng: <code class="bg-gray-200 px-1 rounded">Tên mục tiêu, Số điểm cần</code> (VD: <code class="bg-gray-200 px-1 rounded">Chuyến du lịch, 5000</code>)</p>
+                    <textarea id="danhSachTxtMucTieu" rows="2" class="w-full px-3 py-2 border rounded-lg text-xs mb-2 font-mono" placeholder="Mua tai nghe Bluetooth, 800&#10;Đồng hồ thông minh, 2500"></textarea>
+                    <div class="flex gap-2">
+                        <label class="bg-white border px-3 py-1.5 rounded text-xs cursor-pointer font-medium hover:bg-gray-100 transition">
+                            <i class="fa fa-folder-open-o"></i> Chọn file TXT <input type="file" accept=".txt" onchange="docFileTxt(event, 'danhSachTxtMucTieu')" class="hidden">
+                        </label>
+                        <button onclick="nhapMucTieuTxt()" class="bg-amber-600 text-white px-3 py-1.5 rounded text-xs font-medium hover:bg-amber-700 transition">
+                            <i class="fa fa-plus"></i> Nạp thêm mục tiêu
+                        </button>
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-sm mb-3 text-gray-700">🎁 Danh sách mục tiêu cá nhân:</h3>
+                <div class="overflow-x-auto border rounded-lg">
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-gray-100 text-xs font-bold uppercase border-b">
+                            <tr>
+                                <th class="px-3 py-2.5">Tên mục tiêu</th>
+                                <th class="px-3 py-2.5 text-center w-28">Điểm cần</th>
+                                <th class="px-3 py-2.5 text-center w-48">Tiến độ</th>
+                                <th class="px-3 py-2.5 text-center w-36">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bangMucTieu" class="divide-y divide-gray-100">
+                            <tr><td colspan="4" class="text-center py-6 text-gray-400">Vui lòng chọn thành viên ở trên để xem tiến độ mục tiêu!</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= TAB 7: QUY ĐỔI TỶ GIÁ ================= -->
+        <div id="tab-quyDoi" class="tab-content">
+            <section class="bg-white rounded-xl p-5 card-shadow border border-gray-100">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3 border-b pb-3">
+                    <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                        <i class="fa fa-exchange text-amber-700"></i> Quy Đổi Điểm Ra Tỷ Giá Tài Sản
+                    </h2>
+                    <button onclick="moModalTyGia()" class="text-xs bg-amber-600 text-white px-3 py-1.5 rounded-lg hover:bg-amber-700 font-medium transition shadow-sm flex items-center gap-1">
+                        <i class="fa fa-cog"></i> Chỉnh sửa Tỷ Giá
+                    </button>
+                </div>
+
+                <!-- Thẻ Tỷ Giá Tham Chiếu Hiện Tại -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 text-center">
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-3">
+                        <p class="text-xs text-amber-800 font-semibold">🟡 Vàng SJC (1 chỉ)</p>
+                        <p id="hienThiGiaVang" class="text-base sm:text-lg font-bold text-amber-700 mt-1">14.000.000 đ</p>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-3">
+                        <p class="text-xs text-blue-800 font-semibold">⛽ Xăng RON 95 (1 lít)</p>
+                        <p id="hienThiGiaXang" class="text-base sm:text-lg font-bold text-blue-700 mt-1">25.000 đ</p>
+                    </div>
+                    <div class="bg-green-50 border border-green-200 rounded-xl p-3">
+                        <p class="text-xs text-green-800 font-semibold">💵 Đô la Mỹ (1 USD)</p>
+                        <p id="hienThiGiaUSD" class="text-base sm:text-lg font-bold text-green-700 mt-1">26.000 đ</p>
+                    </div>
+                    <div class="bg-purple-50 border border-purple-200 rounded-xl p-3">
+                        <p class="text-xs text-purple-800 font-semibold">🏠 Bất động sản (1 m²)</p>
+                        <p id="hienThiGiaNha" class="text-base sm:text-lg font-bold text-purple-700 mt-1">50.000.000 đ</p>
+                    </div>
+                </div>
+
+                <!-- Cập nhật tỷ giá qua file TXT -->
+                <div class="bg-gray-50 border rounded-lg p-3.5 mb-6">
+                    <h3 class="font-semibold text-xs text-gray-700 mb-1 flex items-center gap-1.5">
+                        <i class="fa fa-file-text-o text-amber-700"></i> Cập nhật tỷ giá hàng ngày bằng file .TXT
+                    </h3>
+                    <p class="text-[11px] text-gray-500 mb-1.5">Định dạng file TXT (Mỗi dòng 1 loại): <code class="bg-gray-200 px-1 rounded">vang, 142000000</code> hoặc <code class="bg-gray-200 px-1 rounded">xang, 25500</code> hoặc <code class="bg-gray-200 px-1 rounded">usd, 26200</code> hoặc <code class="bg-gray-200 px-1 rounded">nhadat, 52000000</code></p>
+                    <textarea id="danhSachTxtTyGia" rows="2" class="w-full px-3 py-2 border rounded-lg text-xs mb-2 font-mono" placeholder="vang, 14200000&#10;xang, 25500&#10;usd, 26200&#10;nhadat, 52000000"></textarea>
+                    <div class="flex gap-2">
+                        <label class="bg-white border px-3 py-1.5 rounded text-xs cursor-pointer font-medium hover:bg-gray-100 transition">
+                            <i class="fa fa-folder-open-o"></i> Chọn file TXT <input type="file" accept=".txt" onchange="docFileTxt(event, 'danhSachTxtTyGia')" class="hidden">
+                        </label>
+                        <button onclick="nhapTyGiaTxt()" class="bg-amber-700 text-white px-3 py-1.5 rounded text-xs font-medium hover:bg-amber-800 transition">
+                            <i class="fa fa-refresh"></i> Cập nhật Tỷ giá từ TXT
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bảng Tổng hợp Quy Đổi Tài Sản Tích Lũy Theo Thành Viên -->
+                <div class="bg-gray-50 border rounded-xl p-4">
+                    <h3 class="font-bold text-sm mb-3 text-gray-800 flex items-center gap-2">
+                        <i class="fa fa-user-circle text-primary"></i> Tổng hợp quy đổi tài sản tích lũy theo từng thành viên
+                    </h3>
+                    <div class="mb-4 w-full md:w-1/2">
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Chọn thành viên quy đổi:</label>
+                        <select id="chonNguoiQuyDoi" onchange="thucHienQuyDoiThanhVien()" class="w-full px-3 py-2 border rounded-lg bg-white font-medium text-sm">
+                            <option value="">-- Chọn thành viên --</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="bg-white p-3.5 rounded-lg border text-center shadow-sm">
+                            <p class="text-xs text-gray-500 font-medium">Quy đổi Vàng SJC</p>
+                            <p id="kqVang" class="text-lg font-bold text-amber-600 mt-1">0 chỉ</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-lg border text-center shadow-sm">
+                            <p class="text-xs text-gray-500 font-medium">Quy đổi Xăng RON 95</p>
+                            <p id="kqXang" class="text-lg font-bold text-blue-600 mt-1">0 lít</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-lg border text-center shadow-sm">
+                            <p class="text-xs text-gray-500 font-medium">Quy đổi Đô la USD</p>
+                            <p id="kqUSD" class="text-lg font-bold text-green-600 mt-1">$0</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-lg border text-center shadow-sm">
+                            <p class="text-xs text-gray-500 font-medium">Quy đổi Bất động sản</p>
+                            <p id="kqNha" class="text-lg font-bold text-purple-600 mt-1">0 m²</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Modal Chỉnh Sửa Tỷ Giá -->
+    <div id="modalTyGia" class="fixed inset-0 bg-black/50 hidden justify-center items-center z-50 p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full shadow-2xl">
+            <h3 class="text-lg font-bold mb-4 text-gray-800 border-b pb-2 flex items-center justify-between">
+                <span>Cấu hình Tỷ Giá Tham Chiếu (VNĐ)</span>
+                <button onclick="dongModalTyGia()" class="text-gray-400 hover:text-gray-600"><i class="fa fa-times"></i></button>
+            </h3>
+            <div class="space-y-3 mb-5">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">1 Lượng Vàng SJC (VNĐ)</label>
+                    <input type="number" id="inputGiaVang" class="w-full px-3 py-2 border rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">1 Lít Xăng RON95 (VNĐ)</label>
+                    <input type="number" id="inputGiaXang" class="w-full px-3 py-2 border rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">1 USD (VNĐ)</label>
+                    <input type="number" id="inputGiaUSD" class="w-full px-3 py-2 border rounded-lg text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">1 m² Bất động sản (VNĐ)</label>
+                    <input type="number" id="inputGiaNha" class="w-full px-3 py-2 border rounded-lg text-sm">
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="dongModalTyGia()" class="flex-1 bg-gray-200 text-gray-800 py-2 rounded-lg text-sm font-medium hover:bg-gray-300 transition">Hủy</button>
+                <button onclick="luuTyGia()" class="flex-1 bg-amber-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-amber-700 transition">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Thông Báo Tùy Chỉnh (Thay thế alert) -->
+    <div id="modalThongBao" class="fixed inset-0 bg-black/50 hidden justify-center items-center z-50 p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-xl p-5 max-w-sm w-full text-center shadow-xl">
+            <div id="thongBaoIcon" class="text-3xl mb-2 text-primary">
+                <i class="fa fa-info-circle"></i>
+            </div>
+            <p id="thongBaoNoiDung" class="text-sm font-medium text-gray-800 mb-4"></p>
+            <button onclick="dongThongBao()" class="bg-primary text-white px-5 py-1.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition">Đồng ý</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-400 py-4 text-center text-xs mt-auto">
+        <p>© 2026 Hệ Thống Tính Điểm Toàn Diện & Quy Đổi Tài Sản. Tự động lưu trữ an toàn local storage.</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC HỆ THỐNG -->
+    <script>
+        // Key lưu trữ localStorage
+        const STORAGE_KEY = 'HE_THONG_DIEM_TOAN_DIEN_DATA_V2';
+
+        // Khởi tạo Dữ liệu mặc định
+        let store = {
+            thanhVien: [],      // [{ id, ten, diemCong, diemTru }]
+            viecMau: [
+                { id: 'v1', ten: 'Rửa bát & Dọn bếp', diem: 10 },
+                { id: 'v2', ten: 'Lau dọn nhà cửa', diem: 20 },
+                { id: 'v3', ten: 'Giặt & Phơi quần áo', diem: 15 },
+                { id: 'v4', ten: 'Đi học / Làm việc muộn', diem: -15 }
+            ],
+            lichSuViec: [],     // [{ id, nguoiId, tenNguoi, noiDung, diem, thoiGian }]
+            lichSuSucKhoe: [],  // [{ id, nguoiId, tenNguoi, noiDung, diem, thoiGian }]
+            lichSuThuoc: [],    // [{ id, nguoiId, tenNguoi, matHang, soLuong, diemTru, thoiGian }]
+            lichSuLaoDong: [],  // [{ id, nguoiId, tenNguoi, noiDung, diemCong, thoiGian }]
+            mucTieu: [
+                { id: 'm1', ten: 'Sách giáo khoa / Tài liệu học', diem: 300 },
+                { id: 'm2', ten: 'Đồng hồ thông minh', diem: 1500 },
+                { id: 'm3', ten: 'Chuyến du lịch gia đình', diem: 10000 }
+            ],
+            mucTieuDaDoi: [],  // [{ id, nguoiId, mucTieuId, thoiGian }]
+            tyGia: {
+                vang: 140000000,  // 1 lượng vàng SJC (10 chỉ) = 140tr -> 1 chỉ = 14tr
+                xang: 25000,      // 1 lít RON 95
+                usd: 26000,       // 1 USD
+                nhadat: 50000000  // 1 m² BĐS
+            }
+        };
+
+        // --- KHỞI TẠO TRANG ---
+        window.onload = function() {
+            docLocalStorage();
+            capNhatGiaoDien();
+        };
+
+        // --- LƯU & ĐỌC LOCALSTORAGE ---
+        function luuLocalStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+            } catch (e) {
+                console.error("Lỗi khi lưu localStorage:", e);
+            }
+        }
+
+        function docLocalStorage() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    store = { ...store, ...parsed };
+                }
+            } catch (e) {
+                console.error("Lỗi khi đọc localStorage:", e);
+            }
+        }
+
+        // --- THÔNG BÁO TÙY CHỈNH ---
+        function hienThongBao(msg, iconClass = "fa-info-circle text-primary") {
+            const modal = document.getElementById('modalThongBao');
+            const content = document.getElementById('thongBaoNoiDung');
+            const icon = document.getElementById('thongBaoIcon');
+            content.innerText = msg;
+            icon.innerHTML = `<i class="fa ${iconClass}"></i>`;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function dongThongBao() {
+            const modal = document.getElementById('modalThongBao');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // --- ĐỔI TAB ---
+        function doiTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        // --- CẬP NHẬT GIAO DIỆN CHUNG ---
+        function capNhatGiaoDien() {
+            renderThanhVien();
+            renderDropdownNguoi();
+            renderViecMauSelect();
+            renderLichSuViec();
+            renderLichSuSucKhoe();
+            renderLichSuThuoc();
+            renderLichSuLaoDong();
+            renderMucTieu();
+            renderTyGiaView();
+            thucHienQuyDoiThanhVien();
+            tinhTongDiemChung();
+        }
+
+        // TÍNH TỔNG ĐIỂM CHUNG
+        function tinhTongDiemChung() {
+            let tongCong = 0;
+            let tongTru = 0;
+
+            store.thanhVien.forEach(tv => {
+                tongCong += tv.diemCong || 0;
+                tongTru += tv.diemTru || 0;
+            });
+
+            document.getElementById('tongDiemCong').innerText = tongCong.toLocaleString('vi-VN');
+            document.getElementById('tongDiemTru').innerText = tongTru.toLocaleString('vi-VN');
+            document.getElementById('tongDiem').innerText = (tongCong - tongTru).toLocaleString('vi-VN');
+        }
+
+        // --- TAB 1: THÀNH VIÊN ---
+        function themThanhVien() {
+            const input = document.getElementById('tenThanhVien');
+            const ten = input.value.trim();
+            if (!ten) {
+                hienThongBao("Vui lòng nhập tên thành viên!");
+                return;
+            }
+            const tvMoi = { id: 'tv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4), ten: ten, diemCong: 0, diemTru: 0 };
+            store.thanhVien.push(tvMoi);
+            input.value = '';
+            luuLocalStorage();
+            capNhatGiaoDien();
+            hienThongBao(`Đã thêm thành viên "${ten}" thành công!`, "fa-check-circle text-green-600");
+        }
+
+        function nhapThanhVienTxt() {
+            const txtArea = document.getElementById('danhSachTxtTV');
+            const noiDung = txtArea.value.trim();
+            if (!noiDung) {
+                hienThongBao("Nội dung TXT trống!");
+                return;
+            }
+            const lines = noiDung.split('\n');
+            let count = 0;
+            lines.forEach(line => {
+                const ten = line.trim();
+                if (ten) {
+                    store.thanhVien.push({ id: 'tv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4), ten: ten, diemCong: 0, diemTru: 0 });
+                    count++;
+                }
+            });
+            txtArea.value = '';
+            luuLocalStorage();
+            capNhatGiaoDien();
+            hienThongBao(`Đã nạp ${count} thành viên từ TXT!`, "fa-check-circle text-green-600");
+        }
+
+        function xoaThanhVien(id) {
+            store.thanhVien = store.thanhVien.filter(tv => tv.id !== id);
+            luuLocalStorage();
+            capNhatGiaoDien();
+        }
+
+        function renderThanhVien() {
+            const tbody = document.getElementById('bangDanhSachThanhVien');
+            if (store.thanhVien.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-gray-400">Chưa có thành viên nào. Vui lòng thêm mới hoặc Import TXT!</td></tr>';
+                return;
+            }
+            let html = '';
+            store.thanhVien.forEach((tv, index) => {
+                const tíchLũy = (tv.diemCong || 0) - (tv.diemTru || 0);
+                html += `
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-3 py-2 text-center text-gray-500 font-medium">${index + 1}</td>
+                        <td class="px-3 py-2 font-semibold text-gray-800">${tv.ten}</td>
+                        <td class="px-3 py-2 text-right text-green-600 font-medium">+${(tv.diemCong || 0).toLocaleString('vi-VN')}</td>
+                        <td class="px-3 py-2 text-right text-red-600 font-medium">-${(tv.diemTru || 0).toLocaleString('vi-VN')}</td>
+                        <td class="px-3 py-2 text-right font-bold text-primary">${tíchLũy.toLocaleString('vi-VN')}</td>
+                        <td class="px-3 py-2 text-center">
+                            <button onclick="xoaThanhVien('${tv.id}')" class="text-red-500 hover:text-red-700 text-xs px-2 py-1 rounded border border-red-200 hover:bg-red-50 transition">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function renderDropdownNguoi() {
+            const ids = ['nguoiThucHienViec', 'nguoiThucHienCS', 'nguoiDungThuoc', 'nguoiLaoDong', 'chonNguoiXemMucTieu', 'chonNguoiQuyDoi'];
+            ids.forEach(id => {
+                const select = document.getElementById(id);
+                if (!select) return;
+                const currentVal = select.value;
+                let opts = '<option value="">-- Chọn thành viên --</option>';
+                store.thanhVien.forEach(tv => {
+                    opts += `<option value="${tv.id}">${tv.ten}</option>`;
+                });
+                select.innerHTML = opts;
+                select.value = currentVal;
+            });
+        }
+
+        // --- TAB 2: VIỆC NHÀ ---
+        function renderViecMauSelect() {
+            const select = document.getElementById('chonViec');
+            let opts = '<option value="">-- Chọn công việc / hành vi --</option>';
+            store.viecMau.forEach(vm => {
+                opts += `<option value="${vm.ten}|${vm.diem}">${vm.ten} (${vm.diem >= 0 ? '+' : ''}${vm.diem} điểm)</option>`;
+            });
+            select.innerHTML = opts;
+        }
+
+        function dienViec() {
+            const val = document.getElementById('chonViec').value;
+            if (val) {
+                const parts = val.split('|');
+                document.getElementById('tenViec').value = parts[0];
+                document.getElementById('diemViec').value = parts[1];
+            }
+        }
+
+        function themViec() {
+            const nguoiId = document.getElementById('nguoiThucHienViec').value;
+            const ten = document.getElementById('tenViec').value.trim();
+            const diem = parseInt(document.getElementById('diemViec').value);
+
+            if (!nguoiId) { hienThongBao("Vui lòng chọn thành viên!"); return; }
+            if (!ten || isNaN(diem)) { hienThongBao("Vui lòng nhập tên công việc và số điểm hợp lệ!"); return; }
+
+            const tv = store.thanhVien.find(t => t.id === nguoiId);
+            if (!tv) return;
+
+            if (diem >= 0) tv.diemCong = (tv.diemCong || 0) + diem;
+            else tv.diemTru = (tv.diemTru || 0) + Math.abs(diem);
+
+            store.lichSuViec.unshift({
+                id: 'ls_v_' + Date.now(),
+                nguoiId: tv.id,
+                tenNguoi: tv.ten,
+                noiDung: ten,
+                diem: diem,
+                thoiGian: new Date().toLocaleString('vi-VN')
+            });
+
+            document.getElementById('tenViec').value = '';
+            document.getElementById('diemViec').value = '';
+            document.getElementById('chonViec').value = '';
+
+            luuLocalStorage();
+            capNhatGiaoDien();
+            hienThongBao(`Đã ghi nhận ${diem >= 0 ? '+' : ''}${diem} điểm cho ${tv.ten}!`, "fa-check-circle text-green-600");
+        }
+
+        function nhapViecTxt() {
+            const txtArea = document.getElementById('danhSachTxtViec');
+            const noiDung = txtArea.value.trim();
+            if (!noiDung) { hienThongBao("Nội dung TXT trống!"); return; }
+
+            const lines = noiDung.split('\n');
+            let count = 0;
+            lines.forEach(line => {
+                const parts = line.split(',');
+                if (parts.length >= 2) {
+                    const ten = parts[0].trim();
+                    const diem = parseInt(parts[1].trim());
+                    if (ten && !isNaN(diem)) {
+                        store.viecMau.push({ id: 'vm_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4), ten: ten, diem: diem });
+                        count++;
+                    }
+                }
+            });
+            txtArea.value = '';
+            luuLocalStorage();
+            renderViecMauSelect();
+            hienThongBao(`Đã nạp ${count} việc mới vào danh mục mẫu!`, "fa-check-circle text-green-600");
+        }
+
+        function xoaLichSuViec(id) {
+            const item = store.lichSuViec.find(i => i.id === id);
+            if (item) {
+                const tv = store.thanhVien.find(t => t.id === item.nguoiId);
+                if (tv) {
+                    if (item.diem >= 0) tv.diemCong = Math.max(0, (tv.diemCong || 0) - item.diem);
+                    else tv.diemTru = Math.max(0, (tv.diemTru || 0) - Math.abs(item.diem));
+                }
+                store.lichSuViec = store.lichSuViec.filter(i => i.id !== id);
+                luuLocalStorage();
+                capNhatGiaoDien();
+            }
+        }
+
+        function renderLichSuViec() {
+            const tbody = document.getElementById('lsViec');
+            if (store.lichSuViec.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-gray-400">Chưa có lịch sử recorded.</td></tr>';
+                return;
+            }
+            let html = '';
+            store.lichSuViec.forEach(item => {
+                html += `
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-3 py-2 text-xs text-gray-500">${item.thoiGian}</td>
+                        <td class="px-3 py-2 font-semibold text-primary">${item.tenNguoi}</td>
+                        <td class="px-3 py-2">${item.noiDung}</td>
+                        <td class="px-3 py-2 text-right font-bold ${item.diem >= 0 ? 'text-green-600' : 'text-red-600'}">${item.diem >= 0 ? '+' : ''}${item.diem}</td>
+                        <td class="px-3 py-2 text-center">
+                            <button onclick="xoaLichSuViec('${item.id}')" class="text-red-400 hover:text-red-600 text-xs"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // --- TAB 3: SỨC KHỎE ---
+        function tinhCS() {
+            const nguoiId = document.getElementById('nguoiThucHienCS').value;
+            const loaiCSVal = document.getElementById('loaiCS').value;
+            const sl = parseInt(document.getElementById('slCS').value) || 1;
+            const diemTuyChinh = parseInt(document.getElementById('diemCSTuyChinh').value);
+
+            if (!nguoiId) { hienThongBao("Vui lòng chọn thành viên!"); return; }
+
+            const parts = loaiCSVal.split('|');
+            let diemDonGia = parseInt(parts[0]);
+            let tenCS = parts[1];
+
+            if (!isNaN(diemTuyChinh) && diemTuyChinh > 0) diemDonGia = diemTuyChinh;
+
+            const tongDiem = diemDonGia * sl;
+            const tv = store.thanhVien.find(t => t.id === nguoiId);
+            if (!tv) return;
+
+            tv.diemCong = (tv.diemCong || 0) + tongDiem;
+
+            store.lichSuSucKhoe.unshift({
+                id: 'ls_sk_' + Date.now(),
+                nguoiId: tv.id,
+                tenNguoi: tv.ten,
+                noiDung: `${tenCS} (x${sl})`,
+                diem: tongDiem,
+                thoiGian: new Date().toLocaleString('vi-VN')
+            });
+
+            document.getElementById('slCS').value = 1;
+            document.getElementById('diemCSTuyChinh').value = '';
+
+            luuLocalStorage();
+            capNhatGiaoDien();
+            hienThongBao(`Đã cộng +${tongDiem} điểm chăm sóc sức khỏe cho ${tv.ten}!`, "fa-check-circle text-green-600");
+        }
+
+        function nhapSucKhoeTxt() {
+            const txtArea = document.getElementById('danhSachTxtSucKhoe');
+            const noiDung = txtArea.value.trim();
+            if (!noiDung) { hienThongBao("Nội dung TXT trống!"); return; }
+
+            const lines = noiDung.split('\n');
+            let count = 0;
+            const selectLoaiCS = document.getElementById('loaiCS');
+
+            lines.forEach(line => {
+                const parts = line.split(',');
+                if (parts.length >= 2) {
+                    const ten = parts[0].trim();
+                    const diem = parseInt(parts[1].trim());
+                    if (ten && !isNaN(diem)) {
+                        const opt = document.createElement('option');
+                        opt.value = `${diem}|${ten}`;
+                        opt.innerHTML = `${ten} — ${diem} điểm`;
+                        selectLoaiCS.appendChild(opt);
+                        count++;
+                    }
+                }
+            });
+            txtArea.value = '';
+            hienThongBao(`Đã thêm ${count} mục chăm sóc vào danh sách chọn!`, "fa-check-circle text-green-600");
+        }
+
+        function xoaLichSuSucKhoe(id) {
+            const item = store.lichSuSucKhoe.find(i => i.id === id);
+            if (item) {
+                const tv = store.thanhVien.find(t => t.id === item.nguoiId);
+                if (tv) tv.diemCong = Math.max(0, (tv.diemCong || 0) - item.diem);
+                store.lichSuSucKhoe = store.lichSuSucKhoe.filter(i => i.id !== id);
+                luuLocalStorage();
+                capNhatGiaoDien();
+            }
+        }
+
+        function renderLichSuSucKhoe() {
+            const tbody = document.getElementById('lsCS');
+            if (store.lichSuSucKhoe.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-gray-400">Chưa có dữ liệu.</td></tr>';
+                return;
+            }
+            let html = '';
+            store.lichSuSucKhoe.forEach(item => {
+                html += `
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-3 py-2 text-xs text-gray-500">${item.thoiGian}</td>
+                        <td class="px-3 py-2 font-semibold text-primary">${item.tenNguoi}</td>
+                        <td class="px-3 py-2">${item.noiDung}</td>
+                        <td class="px-3 py-2 text-right font-bold text-green-600">+${item.diem}</td>
+                        <td class="px-3 py-2 text-center">
+                            <button onclick="xoaLichSuSucKhoe('${item.id}')" class="text-red-400 hover:text-red-600 text-xs"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // --- TAB 4: MUA SẮM & THUỐC ---
+        function themThuoc() {
+            const nguoiId = document.getElementById('nguoiDungThuoc').value;
+            const matHang = document.getElementById('tenThuoc').value.trim();
+            const soLuong = document.getElementById('soLuongThuoc').value.trim() || '1';
+            const tien = parseInt(document.getElementById('tienThuoc').value);
+
+            if (!nguoiId) { hienThongBao("Vui lòng chọn thành viên!"); return; }
+            if (!matHang || isNaN(tien) || tien <= 0) { hienThongBao("Vui lòng nhập mặt hàng và số tiền (1.000 VNĐ = 1 điểm trừ)!"); return; }
+
+            const tv = store.thanhVien.find(t => t.id === nguoiId);
+            if (!tv) return;
+
+            tv.diemTru = (tv.diemTru || 0) + tien;
+
+            store.lichSuThuoc.unshift({
+                id: 'ls_th_' + Date.now(),
+                nguoiId: tv.id,
+                tenNguoi: tv.ten,
+                matHang: matHang,
+                soLuong: soLuong,
+                diemTru: tien,
+                thoiGian: new Date().toLocaleString('vi-VN')
+            });
+
+            document.getElementById('tenThuoc').value = '';
+            document.getElementById('soLuongThuoc').value = '';
+            document.getElementById('tienThuoc').value = '';
+
+            luuLocalStorage();
+            capNhatGiaoDien();
+            hienThongBao(`Đã ghi nhận trừ -${tien} điểm của ${tv.ten}!`, "fa-check-circle text-red-600");
+        }
+
+        function nhapThuocTxt() {
+            const txtArea = document.getElementById('danhSachTxtThuoc');
+            const noiDung = txtArea.value.trim();
+            if (!noiDung) { hienThongBao("Nội dung TXT trống!"); return; }
+
+            const lines = noiDung.split('\n');
+            let count = 0;
+
+            lines.forEach(line => {
+                const parts = line.split(',');
+                if (parts.length >= 4) {
+                    const tenNguoi = parts[0].trim();
+                    const matHang = parts[1].trim();
+                    const soLuong = parts[2].trim();
+                    const tien = parseInt(parts[3].trim());
+
+                    const tv = store.thanhVien.find(t => t.ten.toLowerCase() === tenNguoi.toLowerCase());
+                    if (tv && matHang && !isNaN(tien)) {
+                        tv.diemTru = (tv.diemTru || 0) + tien;
+                        store.lichSuThuoc.unshift({
+                            id: 'ls_th_' + Date.now() + '_' + count,
+                            nguoiId: tv.id,
+                            tenNguoi: tv.ten,
+                            matHang: matHang,
+                            soLuong: soLuong,
+                            diemTru: tien,
+                            thoiGian: new Date().toLocaleString('vi-VN')
+                        });
+                        count++;
+                    }
+                }
+            });
+            txtArea.value = '';
+            luuLocalStorage();
+            capNhatGiaoDien();
+            hienThongBao(`Đã nạp ${count} hóa đơn chi tiêu từ TXT!`, "fa-check-circle text-green-600");
+        }
+
+        function xoaLichSuThuoc(id) {
+            const item = store.lichSuThuoc.find(i => i.id === id);
+            if (item) {
+                const tv = store.thanhVien.find(t => t.id === item.nguoiId);
+                if (tv) tv.diemTru = Math.max(0, (tv.diemTru || 0) - item.diemTru);
+                store.lichSuThuoc = store.lichSuThuoc.filter(i => i.id !== id);
+                luuLocalStorage();
+                capNhatGiaoDien();
+            }
+        }
+
+        function renderLichSuThuoc() {
+            const tbody = document.getElementById('lsThuoc');
+            if (store.lichSuThuoc.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="py-4 text-center text-gray-400">Chưa có lịch sử mua thuốc/chi tiêu.</td></tr>';
+                return;
+            }
+            let html = '';
+            store.lichSuThuoc.forEach(item => {
+                html += `
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-3 py-2 text-xs text-gray-500">${item.thoiGian}</td>
+                        <td class="px-3 py-2 font-semibold text-primary">${item.tenNguoi}</td>
+                        <td class="px-3 py-2">${item.matHang}</td>
+                        <td class="px-3 py-2 text-center text-xs font-mono">${item.soLuong}</td>
+                        <td class="px-3 py-2 text-right font-bold text-red-600">-${item.diemTru}</td>
+                        <td class="px-3 py-2 text-center">
+                            <button onclick="xoaLichSuThuoc('${item.id}')" class="text-red-400 hover:text-red-600 text-xs"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // --- TAB 5: LAO ĐỘNG & THU NHẬP ---
+        function themLN() {
+            const nguoiId = document.getElementById('nguoiLaoDong').value;
+            const noiDung = document.getElementById('ngheNghiep').value.trim();
+            const diemCong = parseInt(document.getElementById('diemLN').value);
+
+            if (!nguoiId) { hienThongBao("Vui lòng chọn thành viên!"); return; }
+            if (!noiDung || isNaN(diemCong) || diemCong <= 0) { hienThongBao("Vui lòng nhập công việc và số điểm thu nhập (1.000 VNĐ = 1 điểm cộng)!"); return; }
+
+            const tv = store.thanhVien.find(t => t.id === nguoiId);
+            if (!tv) return;
+
+            tv.diemCong = (tv.diemCong || 0) + diemCong;
+
+            store.lichSuLaoDong.unshift({
+                id: 'ls_ld_' + Date.now(),
+                nguoiId: tv.id,
+                tenNguoi: tv.ten,
+                noiDung: noiDung,
+                diemCong: diemCong,
+                thoiGian: new Date().toLocaleString('vi-VN')
+            });
+
+            document.getElementById('ngheNghiep').value = '';
+            document.getElementById('diemLN').value = '';
+
+            luuLocalStorage();
+            capNhatGiaoDien();
+            hienThongBao(`Đã ghi nhận +${diemCong} điểm thu nhập cho ${tv.ten}!`, "fa-check-circle text-green-600");
+        }
+
+        function nhapLaoDongTxt() {
+            const txtArea = document.getElementById('danhSachTxtLaoDong');
+            const noiDung = txtArea.value.trim();
+            if (!noiDung) { hienThongBao("Nội dung TXT trống!"); return; }
+
+            const lines = noiDung.split('\n');
+            let count = 0;
+
+            lines.forEach(line => {
+                const parts = line.split(',');
+                if (parts.length >= 3) {
+                    const tenNguoi = parts[0].trim();
+                    const noiDungCV = parts[1].trim();
+                    const diemCong = parseInt(parts[2].trim());
+
+                    const tv = store.thanhVien.find(t => t.ten.toLowerCase() === tenNguoi.toLowerCase());
+                    if (tv && noiDungCV && !isNaN(diemCong)) {
+                        tv.diemCong = (tv.diemCong || 0) + diemCong;
+                        store.lichSuLaoDong.unshift({
+                            id: 'ls_ld_' + Date.now() + '_' + count,
+                            nguoiId: tv.id,
+                            tenNguoi: tv.ten,
+                            noiDung: noiDungCV,
+                            diemCong: diemCong,
+                            thoiGian: new Date().toLocaleString('vi-VN')
+                        });
+                        count++;
+                    }
+                }
+            });
+            txtArea.value = '';
+            luuLocalStorage();
+            capNhatGiaoDien();
+            hienThongBao(`Đã nạp ${count} ghi nhận thu nhập từ TXT!`, "fa-check-circle text-green-600");
+        }
+
+        function xoaLichSuLaoDong(id) {
+            const item = store.lichSuLaoDong.find(i => i.id === id);
+            if (item) {
+                const tv = store.thanhVien.find(t => t.id === item.nguoiId);
+                if (tv) tv.diemCong = Math.max(0, (tv.diemCong || 0) - item.diemCong);
+                store.lichSuLaoDong = store.lichSuLaoDong.filter(i => i.id !== id);
+                luuLocalStorage();
+                capNhatGiaoDien();
+            }
+        }
+
+        function renderLichSuLaoDong() {
+            const tbody = document.getElementById('lsLaoDong');
+            if (store.lichSuLaoDong.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-gray-400">Chưa có dữ liệu thu nhập.</td></tr>';
+                return;
+            }
+            let html = '';
+            store.lichSuLaoDong.forEach(item => {
+                html += `
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-3 py-2 text-xs text-gray-500">${item.thoiGian}</td>
+                        <td class="px-3 py-2 font-semibold text-primary">${item.tenNguoi}</td>
+                        <td class="px-3 py-2">${item.noiDung}</td>
+                        <td class="px-3 py-2 text-right font-bold text-green-600">+${item.diemCong}</td>
+                        <td class="px-3 py-2 text-center">
+                            <button onclick="xoaLichSuLaoDong('${item.id}')" class="text-red-400 hover:text-red-600 text-xs"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // --- TAB 6: MỤC TIÊU & ĐỔI THƯỞNG ---
+        function nhapMucTieuTxt() {
+            const txtArea = document.getElementById('danhSachTxtMucTieu');
+            const noiDung = txtArea.value.trim();
+            if (!noiDung) { hienThongBao("Nội dung TXT trống!"); return; }
+
+            const lines = noiDung.split('\n');
+            let count = 0;
+
+            lines.forEach(line => {
+                const parts = line.split(',');
+                if (parts.length >= 2) {
+                    const ten = parts[0].trim();
+                    const diem = parseInt(parts[1].trim());
+                    if (ten && !isNaN(diem) && diem > 0) {
+                        store.mucTieu.push({
+                            id: 'mt_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                            ten: ten,
+                            diem: diem
+                        });
+                        count++;
+                    }
+                }
+            });
+            txtArea.value = '';
+            luuLocalStorage();
+            renderMucTieu();
+            hienThongBao(`Đã thêm ${count} mục tiêu mới!`, "fa-check-circle text-green-600");
+        }
+
+        function doiThuong(mucTieuId) {
+            const nguoiId = document.getElementById('chonNguoiXemMucTieu').value;
+            if (!nguoiId) { hienThongBao("Vui lòng chọn thành viên trước!"); return; }
+
+            const tv = store.thanhVien.find(t => t.id === nguoiId);
+            const mt = store.mucTieu.find(m => m.id === mucTieuId);
+            if (!tv || !mt) return;
+
+            const diemHienTai = (tv.diemCong || 0) - (tv.diemTru || 0);
+            if (diemHienTai < mt.diem) {
+                hienThongBao(`Bạn còn thiếu ${mt.diem - diemHienTai} điểm nữa để đổi phần thưởng này!`);
+                return;
+            }
+
+            // Trừ điểm tích lũy bằng cách tăng điểm trừ
+            tv.diemTru = (tv.diemTru || 0) + mt.diem;
+
+            store.mucTieuDaDoi.push({
+                id: 'dt_' + Date.now(),
+                nguoiId: tv.id,
+                mucTieuId: mt.id,
+                thoiGian: new Date().toLocaleString('vi-VN')
+            });
+
+            luuLocalStorage();
+            capNhatGiaoDien();
+            hienThongBao(`Chúc mừng ${tv.ten} đã đổi thành công phần thưởng "${mt.ten}"!`, "fa-gift text-amber-500");
+        }
+
+        function renderMucTieu() {
+            const nguoiId = document.getElementById('chonNguoiXemMucTieu').value;
+            const diemHienTaiEl = document.getElementById('diemHienTaiCuaNguoi');
+            const tbody = document.getElementById('bangMucTieu');
+
+            if (!nguoiId) {
+                diemHienTaiEl.innerText = "0 điểm";
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-400">Vui lòng chọn thành viên ở trên để xem tiến độ mục tiêu!</td></tr>';
+                return;
+            }
+
+            const tv = store.thanhVien.find(t => t.id === nguoiId);
+            if (!tv) return;
+
+            const tíchLũy = (tv.diemCong || 0) - (tv.diemTru || 0);
+            diemHienTaiEl.innerText = `${tíchLũy.toLocaleString('vi-VN')} điểm`;
+
+            let html = '';
+            store.mucTieu.forEach(mt => {
+                const phanTram = Math.min(100, Math.round((tíchLũy / mt.diem) * 100));
+                const dủĐiểm = tíchLũy >= mt.diem;
+
+                html += `
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-3 py-3 font-medium text-gray-800">${mt.ten}</td>
+                        <td class="px-3 py-3 text-center font-bold text-amber-600">${mt.diem.toLocaleString('vi-VN')}</td>
+                        <td class="px-3 py-3">
+                            <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-300" style="width: ${phanTram}%"></div>
+                            </div>
+                            <span class="text-[11px] text-gray-500 mt-0.5 block text-center font-medium">${phanTram}% (${tíchLũy}/${mt.diem})</span>
+                        </td>
+                        <td class="px-3 py-3 text-center">
+                            <button onclick="doiThuong('${mt.id}')" ${!dủĐiểm ? 'disabled' : ''} class="${dủĐiểm ? 'bg-amber-500 hover:bg-amber-600 text-white cursor-pointer' : 'bg-gray-200 text-gray-400 cursor-not-allowed'} px-3 py-1 rounded text-xs font-bold transition flex items-center justify-center gap-1 mx-auto">
+                                <i class="fa fa-gift"></i> Đổi thưởng
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // --- TAB 7: QUY ĐỔI TỶ GIÁ ---
+        function moModalTyGia() {
+            document.getElementById('inputGiaVang').value = store.tyGia.vang;
+            document.getElementById('inputGiaXang').value = store.tyGia.xang;
+            document.getElementById('inputGiaUSD').value = store.tyGia.usd;
+            document.getElementById('inputGiaNha').value = store.tyGia.nhadat;
+
+            const modal = document.getElementById('modalTyGia');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function dongModalTyGia() {
+            const modal = document.getElementById('modalTyGia');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function luuTyGia() {
+            const v = parseInt(document.getElementById('inputGiaVang').value);
+            const x = parseInt(document.getElementById('inputGiaXang').value);
+            const u = parseInt(document.getElementById('inputGiaUSD').value);
+            const n = parseInt(document.getElementById('inputGiaNha').value);
+
+            if (!isNaN(v) && v > 0) store.tyGia.vang = v;
+            if (!isNaN(x) && x > 0) store.tyGia.xang = x;
+            if (!isNaN(u) && u > 0) store.tyGia.usd = u;
+            if (!isNaN(n) && n > 0) store.tyGia.nhadat = n;
+
+            dongModalTyGia();
+            luuLocalStorage();
+            capNhatGiaoDien();
+            hienThongBao("Cập nhật tỷ giá tài sản thành công!", "fa-check-circle text-green-600");
+        }
+
+        function nhapTyGiaTxt() {
+            const txtArea = document.getElementById('danhSachTxtTyGia');
+            const noiDung = txtArea.value.trim();
+            if (!noiDung) { hienThongBao("Nội dung TXT trống!"); return; }
+
+            const lines = noiDung.split('\n');
+            let updated = 0;
+
+            lines.forEach(line => {
+                const parts = line.split(',');
+                if (parts.length >= 2) {
+                    const key = parts[0].trim().toLowerCase();
+                    const val = parseInt(parts[1].trim());
+
+                    if (!isNaN(val) && val > 0) {
+                        if (key.includes('vang') || key.includes('gold')) { store.tyGia.vang = val; updated++; }
+                        else if (key.includes('xang') || key.includes('gas')) { store.tyGia.xang = val; updated++; }
+                        else if (key.includes('usd') || key.includes('dola')) { store.tyGia.usd = val; updated++; }
+                        else if (key.includes('nhadat') || key.includes('bds') || key.includes('nha')) { store.tyGia.nhadat = val; updated++; }
+                    }
+                }
+            });
+            txtArea.value = '';
+            luuLocalStorage();
+            capNhatGiaoDien();
+            hienThongBao(`Đã cập nhật ${updated} tỷ giá tài sản từ TXT!`, "fa-check-circle text-green-600");
+        }
+
+        function renderTyGiaView() {
+            // Giá 1 chỉ vàng = Giá 1 lượng / 10
+            const giaChiVang = store.tyGia.vang / 10;
+            document.getElementById('hienThiGiaVang').innerText = `${giaChiVang.toLocaleString('vi-VN')} đ`;
+            document.getElementById('hienThiGiaXang').innerText = `${store.tyGia.xang.toLocaleString('vi-VN')} đ`;
+            document.getElementById('hienThiGiaUSD').innerText = `${store.tyGia.usd.toLocaleString('vi-VN')} đ`;
+            document.getElementById('hienThiGiaNha').innerText = `${store.tyGia.nhadat.toLocaleString('vi-VN')} đ`;
+        }
+
+        function thucHienQuyDoiThanhVien() {
+            const nguoiId = document.getElementById('chonNguoiQuyDoi').value;
+            const kqVang = document.getElementById('kqVang');
+            const kqXang = document.getElementById('kqXang');
+            const kqUSD = document.getElementById('kqUSD');
+            const kqNha = document.getElementById('kqNha');
+
+            if (!nguoiId) {
+                kqVang.innerText = '0 chỉ';
+                kqXang.innerText = '0 lít';
+                kqUSD.innerText = '$0';
+                kqNha.innerText = '0 m²';
+                return;
+            }
+
+            const tv = store.thanhVien.find(t => t.id === nguoiId);
+            if (!tv) return;
+
+            const tíchLũy = (tv.diemCong || 0) - (tv.diemTru || 0);
+            // Quy đổi: 1 điểm = 1.000 VNĐ
+            const tongTienVND = tíchLũy * 1000;
+
+            if (tongTienVND <= 0) {
+                kqVang.innerText = '0 chỉ';
+                kqXang.innerText = '0 lít';
+                kqUSD.innerText = '$0';
+                kqNha.innerText = '0 m²';
+                return;
+            }
+
+            const gia1ChiVang = store.tyGia.vang / 10;
+            const soChiVang = (tongTienVND / gia1ChiVang).toFixed(2);
+            const soLitXang = (tongTienVND / store.tyGia.xang).toFixed(1);
+            const soUSD = (tongTienVND / store.tyGia.usd).toFixed(2);
+            const soM2Nha = (tongTienVND / store.tyGia.nhadat).toFixed(3);
+
+            kqVang.innerText = `${soChiVang} chỉ`;
+            kqXang.innerText = `${soLitXang} lít`;
+            kqUSD.innerText = `$${soUSD}`;
+            kqNha.innerText = `${soM2Nha} m²`;
+        }
+
+        // --- ĐỌC FILE TXT TỔNG QUÁT ---
+        function docFileTxt(event, targetTextareaId) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById(targetTextareaId).value = e.target.result;
+            };
+            reader.readAsText(file, 'UTF-8');
+        }
+
+        // --- EXPORT & IMPORT JSON BẢO VỆ DỮ LIỆU TỐI ƯU ---
+        function xuatDuLieuJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(store, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `backup_he_thong_diem_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function nhapDuLieuJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedStore = JSON.parse(e.target.result);
+                    if (importedStore && typeof importedStore === 'object') {
+                        store = { ...store, ...importedStore };
+                        luuLocalStorage();
+                        capNhatGiaoDien();
+                        hienThongBao("Khôi phục toàn bộ dữ liệu từ JSON thành công!", "fa-check-circle text-green-600");
+                    }
+                } catch (err) {
+                    hienThongBao("File JSON không hợp lệ!");
+                }
+            };
+            reader.readAsText(file, 'UTF-8');
+        }
+    </script>
+</body>
+</html>

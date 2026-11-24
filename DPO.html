@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 28 - Vòng quay hàng tồn kho (Inventory Turnover) | CEO AI Enterprise</title>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- SheetJS (xlsx) để xuất Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #0369a1;
+            --primary-dark: #0c4a6e;
+            --primary-light: #0ea5e9;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #8b5cf6;
+            --bg: #f0f9ff;
+            --card: #ffffff;
+            --text: #0c4a6e;
+            --text-muted: #7dd3fc;
+            --border: #bae6fd;
+            --shadow: 0 10px 25px -5px rgba(3, 105, 161, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 28px 32px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .header-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        /* Form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .form-group label .hint {
+            font-weight: 400;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        .form-group input, .form-group select {
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #f0f9ff;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(3, 105, 161, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(3, 105, 161, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Result Cards */
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--border);
+            transition: transform 0.2s;
+        }
+
+        .result-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .result-card .label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .result-card .value {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .result-card.positive .value { color: var(--success); }
+        .result-card.negative .value { color: var(--danger); }
+        .result-card.warning .value { color: var(--warning); }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        .status-healthy {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* AI Analysis */
+        .ai-section {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 5px solid var(--primary);
+        }
+
+        .ai-content {
+            display: grid;
+            gap: 16px;
+        }
+
+        .ai-item {
+            background: white;
+            padding: 16px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .ai-item h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-item p {
+            color: #334155;
+            font-size: 0.95rem;
+        }
+
+        /* Chart */
+        .chart-container {
+            position: relative;
+            height: 320px;
+            margin-top: 10px;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            color: #0c4a6e;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+
+        /* Formula box */
+        .formula-box {
+            background: #f0f9ff;
+            border: 1px dashed var(--primary);
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--primary-dark);
+            line-height: 1.8;
+        }
+
+        /* Benchmark table */
+        .benchmark-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .benchmark-table th,
+        .benchmark-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .benchmark-table th {
+            background: #f0f9ff;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .benchmark-table tr:hover {
+            background: #f0f9ff;
+        }
+
+        /* History table */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-table th {
+            background: #f0f9ff;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .history-table tr:hover {
+            background: #f0f9ff;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.25rem; }
+            .result-card .value { font-size: 1.2rem; }
+            .btn { width: 100%; justify-content: center; }
+        }
+
+        .hidden { display: none; }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 20px 0 12px;
+            padding-left: 8px;
+            border-left: 3px solid var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ==================== HEADER ==================== -->
+        <header class="header">
+            <div>
+                <h1>
+                    <span>📦</span>
+                    Module 28 – Vòng quay hàng tồn kho (Inventory Turnover)
+                </h1>
+                <div class="header-subtitle">Đo lường hiệu quả quản lý hàng tồn kho – Tiền đang bị “đóng băng” bao nhiêu ngày?</div>
+            </div>
+            <div class="badge">CEO AI Enterprise • Module độc lập</div>
+        </header>
+
+        <!-- ==================== GIẢI THÍCH NHANH ==================== -->
+        <div class="card">
+            <div class="card-title">📖 Inventory Turnover là gì?</div>
+            <p style="margin-bottom: 12px;">
+                <strong>Vòng quay hàng tồn kho (Inventory Turnover)</strong> cho biết trong một kỳ, doanh nghiệp bán hết và thay thế hàng tồn kho bao nhiêu lần.
+            </p>
+            <div class="formula-box">
+                Inventory Turnover = Giá vốn hàng bán (COGS) ÷ Hàng tồn kho bình quân<br>
+                Days Inventory Outstanding (DIO) = 365 ÷ Inventory Turnover<br>
+                (Hoặc 90 ÷ Turnover nếu tính theo quý)
+            </div>
+            <div class="alert alert-info">
+                <span>💡</span>
+                <div>
+                    <strong>Ý nghĩa:</strong> Turnover cao = Hàng bán nhanh, ít bị chiếm dụng vốn. 
+                    Turnover thấp = Hàng tồn đọng, tiền bị “đóng băng”, rủi ro hàng chết cao.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== FORM NHẬP LIỆU ==================== -->
+        <div class="card">
+            <div class="card-title">📥 Nhập dữ liệu</div>
+            
+            <div class="section-label">Dữ liệu tồn kho & giá vốn</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Giá vốn hàng bán (COGS)
+                        <span class="hint">– Cost of Goods Sold trong kỳ</span>
+                    </label>
+                    <input type="number" id="cogs" placeholder="Ví dụ: 12000000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Tồn kho đầu kỳ
+                        <span class="hint">– Giá trị hàng tồn kho đầu kỳ</span>
+                    </label>
+                    <input type="number" id="invStart" placeholder="Ví dụ: 2500000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Tồn kho cuối kỳ
+                        <span class="hint">– Giá trị hàng tồn kho cuối kỳ</span>
+                    </label>
+                    <input type="number" id="invEnd" placeholder="Ví dụ: 2800000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Số ngày trong kỳ
+                        <span class="hint">– 30 / 90 / 365</span>
+                    </label>
+                    <select id="days">
+                        <option value="30">30 ngày (Tháng)</option>
+                        <option value="90" selected>90 ngày (Quý)</option>
+                        <option value="365">365 ngày (Năm)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="section-label">Thông tin kỳ</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Kỳ báo cáo
+                        <span class="hint">– Tháng / Quý / Năm</span>
+                    </label>
+                    <input type="text" id="period" placeholder="Ví dụ: Quý 2/2026" value="Kỳ hiện tại">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="calculateInventory()">
+                    <span>🧮</span> Tính toán Vòng quay tồn kho
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <span>🔄</span> Làm mới
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== KẾT QUẢ ==================== -->
+        <div id="resultSection" class="hidden">
+            <!-- Kết quả số -->
+            <div class="card">
+                <div class="card-title">📊 Kết quả tính toán</div>
+                
+                <div id="statusBadge" class="status-badge"></div>
+
+                <div class="result-grid">
+                    <div class="result-card" id="turnoverCard">
+                        <div class="label">Inventory Turnover</div>
+                        <div class="value" id="turnoverValue">—</div>
+                    </div>
+                    <div class="result-card" id="dioCard">
+                        <div class="label">Days Inventory (DIO)</div>
+                        <div class="value" id="dioValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Tồn kho bình quân</div>
+                        <div class="value" id="avgInvValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Giá vốn hàng bán</div>
+                        <div class="value" id="cogsValue">—</div>
+                    </div>
+                </div>
+
+                <div class="formula-box" id="formulaDetail">
+                    <!-- Công thức chi tiết sẽ được điền bằng JS -->
+                </div>
+
+                <!-- Bảng chuẩn tham khảo -->
+                <h4 style="margin: 20px 0 10px; color: var(--primary);">📌 Tham chiếu mức Inventory Turnover phổ biến (theo năm)</h4>
+                <table class="benchmark-table">
+                    <thead>
+                        <tr>
+                            <th>Ngành nghề</th>
+                            <th>Turnover tốt</th>
+                            <th>DIO tốt</th>
+                            <th>Ghi chú</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Bán lẻ / FMCG</td>
+                            <td style="color:#059669;font-weight:600;">8 – 12 lần</td>
+                            <td style="color:#059669;font-weight:600;">30 – 45 ngày</td>
+                            <td>Hàng quay vòng rất nhanh</td>
+                        </tr>
+                        <tr>
+                            <td>Thời trang / May mặc</td>
+                            <td style="color:#059669;font-weight:600;">4 – 6 lần</td>
+                            <td style="color:#059669;font-weight:600;">60 – 90 ngày</td>
+                            <td>Phụ thuộc mùa vụ</td>
+                        </tr>
+                        <tr>
+                            <td>Sản xuất / Công nghiệp</td>
+                            <td style="color:#059669;font-weight:600;">4 – 8 lần</td>
+                            <td style="color:#059669;font-weight:600;">45 – 90 ngày</td>
+                            <td>Nguyên vật liệu + thành phẩm</td>
+                        </tr>
+                        <tr>
+                            <td>Đặc thù / Giá trị cao</td>
+                            <td style="color:#d97706;font-weight:600;">1 – 3 lần</td>
+                            <td style="color:#d97706;font-weight:600;">120 – 365 ngày</td>
+                            <td>Cần kiểm soát chặt hàng chết</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Biểu đồ -->
+            <div class="card">
+                <div class="card-title">📈 Biểu đồ Vòng quay & Số ngày tồn kho</div>
+                <div class="chart-container">
+                    <canvas id="inventoryChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Cảnh báo -->
+            <div id="alertBox"></div>
+
+            <!-- AI Phân tích & Khuyến nghị -->
+            <div class="card ai-section">
+                <div class="card-title">🤖 Phân tích AI & Khuyến nghị</div>
+                <div class="ai-content" id="aiContent">
+                    <!-- Nội dung AI sẽ được sinh bằng JS -->
+                </div>
+            </div>
+
+            <!-- Nút hành động -->
+            <div class="card">
+                <div class="card-title">💾 Lưu trữ & Xuất dữ liệu</div>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="saveToLocalStorage()">
+                        <span>💾</span> Lưu vào SQLite (Local)
+                    </button>
+                    <button class="btn btn-info" onclick="exportToExcel()">
+                        <span>📥</span> Xuất Excel
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewHistory()">
+                        <span>📋</span> Xem lịch sử đã lưu
+                    </button>
+                </div>
+
+                <!-- Bảng lịch sử -->
+                <div id="historySection" class="hidden" style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 10px; color: var(--primary);">Lịch sử tính toán đã lưu</h4>
+                    <div style="overflow-x: auto;">
+                        <table class="history-table" id="historyTable">
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Kỳ</th>
+                                    <th>Turnover</th>
+                                    <th>DIO (ngày)</th>
+                                    <th>Tồn kho BQ</th>
+                                    <th>COGS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            CEO AI Enterprise • Module 28 – Vòng quay hàng tồn kho (Inventory Turnover) • Có thể chạy độc lập • Sẵn sàng kết nối Python + SQLite
+        </div>
+    </div>
+
+    <script>
+        /**
+         * =====================================================
+         * MODULE 28 – VÒNG QUAY HÀNG TỒN KHO (Inventory Turnover)
+         * CEO AI Enterprise
+         * =====================================================
+         * 
+         * Công thức chính:
+         * Hàng tồn kho bình quân = (Tồn kho đầu kỳ + Tồn kho cuối kỳ) / 2
+         * Inventory Turnover     = COGS / Hàng tồn kho bình quân
+         * Days Inventory (DIO)   = Số ngày trong kỳ / Inventory Turnover
+         * 
+         * Module được thiết kế:
+         * - Chạy độc lập (standalone)
+         * - Dễ ghép vào Dashboard sau này
+         * - Có sẵn chỗ kết nối Python + SQLite thật
+         * - Lưu tạm bằng localStorage (mô phỏng SQLite)
+         * - Xuất Excel bằng SheetJS
+         */
+
+        // Biến toàn cục
+        let currentResult = null;
+        let inventoryChartInstance = null;
+
+        /**
+         * Định dạng số tiền Việt Nam
+         */
+        function formatCurrency(value) {
+            if (value === null || value === undefined || isNaN(value)) return '—';
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        /**
+         * Định dạng số
+         */
+        function formatNumber(value, decimals = 1) {
+            if (value === null || value === undefined || isNaN(value)) return '—';
+            return new Intl.NumberFormat('vi-VN', {
+                maximumFractionDigits: decimals
+            }).format(value);
+        }
+
+        /**
+         * Hàm tính toán chính
+         */
+        function calculateInventory() {
+            const cogs = parseFloat(document.getElementById('cogs').value);
+            const invStart = parseFloat(document.getElementById('invStart').value);
+            const invEnd = parseFloat(document.getElementById('invEnd').value);
+            const days = parseFloat(document.getElementById('days').value);
+            const period = document.getElementById('period').value.trim() || 'Kỳ hiện tại';
+
+            // Kiểm tra dữ liệu
+            if (isNaN(cogs) || isNaN(invStart) || isNaN(invEnd)) {
+                alert('⚠️ Vui lòng nhập đầy đủ COGS, Tồn kho đầu kỳ và Tồn kho cuối kỳ!');
+                return;
+            }
+
+            if (cogs <= 0) {
+                alert('⚠️ Giá vốn hàng bán phải lớn hơn 0!');
+                return;
+            }
+
+            if (invStart < 0 || invEnd < 0) {
+                alert('⚠️ Giá trị tồn kho không được âm!');
+                return;
+            }
+
+            // Tính toán
+            const avgInventory = (invStart + invEnd) / 2;
+            
+            if (avgInventory === 0) {
+                alert('⚠️ Tồn kho bình quân bằng 0, không thể tính vòng quay!');
+                return;
+            }
+
+            const turnover = cogs / avgInventory;
+            const dio = days / turnover;
+
+            // Lưu kết quả
+            currentResult = {
+                period: period,
+                cogs: cogs,
+                invStart: invStart,
+                invEnd: invEnd,
+                avgInventory: avgInventory,
+                days: days,
+                turnover: turnover,
+                dio: dio,
+                timestamp: new Date().toISOString()
+            };
+
+            // Hiển thị
+            displayResults(currentResult);
+            generateAIAnalysis(currentResult);
+            renderChart(currentResult);
+
+            document.getElementById('resultSection').classList.remove('hidden');
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        /**
+         * Hiển thị kết quả số
+         */
+        function displayResults(data) {
+            document.getElementById('turnoverValue').textContent = data.turnover.toFixed(2) + ' lần';
+            document.getElementById('dioValue').textContent = data.dio.toFixed(1) + ' ngày';
+            document.getElementById('avgInvValue').textContent = formatCurrency(data.avgInventory);
+            document.getElementById('cogsValue').textContent = formatCurrency(data.cogs);
+
+            // Màu sắc theo DIO (càng thấp càng tốt)
+            const turnoverCard = document.getElementById('turnoverCard');
+            const dioCard = document.getElementById('dioCard');
+            
+            turnoverCard.classList.remove('positive', 'negative', 'warning');
+            dioCard.classList.remove('positive', 'negative', 'warning');
+
+            // Đánh giá dựa trên DIO (giả sử kỳ năm để chuẩn hóa, nhưng dùng tương đối)
+            // Với kỳ quý (90 ngày): DIO < 45 tốt, 45-75 trung bình, >75 kém
+            const goodDio = data.days * 0.5;      // 50% số ngày trong kỳ
+            const warnDio = data.days * 0.85;
+
+            if (data.dio < goodDio) {
+                turnoverCard.classList.add('positive');
+                dioCard.classList.add('positive');
+            } else if (data.dio <= warnDio) {
+                turnoverCard.classList.add('warning');
+                dioCard.classList.add('warning');
+            } else {
+                turnoverCard.classList.add('negative');
+                dioCard.classList.add('negative');
+            }
+
+            // Status badge
+            const badge = document.getElementById('statusBadge');
+            if (data.dio < goodDio) {
+                badge.className = 'status-badge status-healthy';
+                badge.textContent = '🟢 Tồn kho quay vòng tốt – Ít bị chiếm dụng vốn';
+            } else if (data.dio <= warnDio) {
+                badge.className = 'status-badge status-warning';
+                badge.textContent = '🟡 Tồn kho ở mức trung bình – Cần theo dõi sát';
+            } else {
+                badge.className = 'status-badge status-danger';
+                badge.textContent = '🔴 Tồn kho quay chậm – Rủi ro hàng đọng & chiếm dụng vốn cao';
+            }
+
+            // Công thức chi tiết
+            document.getElementById('formulaDetail').innerHTML = `
+                Tồn kho bình quân = (${formatCurrency(data.invStart)} + ${formatCurrency(data.invEnd)}) ÷ 2 = <strong>${formatCurrency(data.avgInventory)}</strong><br>
+                Inventory Turnover = ${formatCurrency(data.cogs)} ÷ ${formatCurrency(data.avgInventory)} = <strong>${data.turnover.toFixed(2)} lần</strong><br>
+                Days Inventory (DIO) = ${data.days} ÷ ${data.turnover.toFixed(2)} = <strong>${data.dio.toFixed(1)} ngày</strong>
+            `;
+        }
+
+        /**
+         * Sinh phân tích AI (rule-based)
+         */
+        function generateAIAnalysis(data) {
+            const container = document.getElementById('aiContent');
+            let html = '';
+
+            const goodDio = data.days * 0.5;
+            const warnDio = data.days * 0.85;
+
+            // 1. Doanh nghiệp đang khỏe hay yếu?
+            let healthText = '';
+            let healthIcon = '';
+            if (data.dio < goodDio) {
+                healthIcon = '✅';
+                healthText = `Doanh nghiệp đang <strong>khỏe về quản lý tồn kho</strong>. 
+                              Hàng hóa quay vòng ${data.turnover.toFixed(2)} lần trong kỳ, tương đương chỉ mất khoảng ${data.dio.toFixed(0)} ngày để bán hết tồn kho. 
+                              Vốn lưu động được giải phóng tốt, ít bị chiếm dụng.`;
+            } else if (data.dio <= warnDio) {
+                healthIcon = '⚠️';
+                healthText = `Hiệu quả tồn kho ở mức <strong>trung bình</strong>. 
+                              DIO ${data.dio.toFixed(1)} ngày cho thấy hàng đang nằm kho khá lâu. 
+                              Còn dư địa để tối ưu nhằm giảm chiếm dụng vốn và rủi ro hàng lỗi thời.`;
+            } else {
+                healthIcon = '🚨';
+                healthText = `Doanh nghiệp đang <strong>yếu về quản lý tồn kho</strong>. 
+                              DIO lên tới ${data.dio.toFixed(1)} ngày nghĩa là tiền đang bị “đóng băng” khá lâu trong kho. 
+                              Rủi ro hàng chết, chi phí lưu kho và thiếu hụt vốn lưu động đều tăng cao.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>${healthIcon} 1. Doanh nghiệp đang khỏe hay yếu?</h4>
+                    <p>${healthText}</p>
+                </div>
+            `;
+
+            // 2. Tiền đang chảy đi đâu?
+            let flowText = '';
+            if (data.dio > warnDio) {
+                flowText = `Tiền đang bị <strong>chiếm dụng nhiều trong hàng tồn kho</strong>. 
+                            Với DIO ${data.dio.toFixed(1)} ngày, một lượng lớn vốn đang nằm im trong kho thay vì được dùng để kinh doanh hoặc đầu tư. 
+                            Chi phí lưu kho, bảo hiểm, hao hụt và rủi ro giảm giá trị hàng hóa đang âm thầm bào mòn lợi nhuận.`;
+            } else {
+                flowText = `Tiền đang được <strong>chu chuyển khá tốt qua hàng tồn kho</strong>. 
+                            Hàng bán ra nhanh giúp thu hồi vốn sớm, giảm áp lực lên dòng tiền và hạn chế rủi ro hàng ứ đọng.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>💸 2. Tiền đang chảy đi đâu?</h4>
+                    <p>${flowText}</p>
+                </div>
+            `;
+
+            // 3. Nên đầu tư hay cắt giảm?
+            let actionText = '';
+            if (data.dio > warnDio) {
+                actionText = `<strong>Ưu tiên giảm tồn kho và tăng vòng quay.</strong> 
+                              Rà soát các mặt hàng bán chậm / hàng chết, áp dụng chương trình xả kho, 
+                              điều chỉnh chính sách mua hàng (mua ít hơn, thường xuyên hơn), 
+                              cải thiện dự báo nhu cầu. Không nên tăng nhập hàng lớn khi Turnover đang thấp.`;
+            } else if (data.dio > goodDio) {
+                actionText = `<strong>Tiếp tục tối ưu tồn kho.</strong> 
+                              Có thể duy trì mức nhập hàng hiện tại nhưng nên theo dõi sát các SKU chậm luân chuyển. 
+                              Cân nhắc áp dụng mô hình Just-in-Time hoặc tăng tần suất đặt hàng để giảm mức tồn trung bình.`;
+            } else {
+                actionText = `<strong>Quản lý tồn kho đang hiệu quả.</strong> 
+                              Có thể duy trì chiến lược hiện tại. Nếu muốn tăng trưởng, hãy đảm bảo năng lực cung ứng và kho bãi đáp ứng được 
+                              khi doanh số tăng, tránh để Turnover giảm mạnh do nhập hàng quá đà.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>🎯 3. Nên đầu tư hay cắt giảm?</h4>
+                    <p>${actionText}</p>
+                </div>
+            `;
+
+            // 4. Dự báo tương lai
+            let forecastText = '';
+            if (data.dio < goodDio) {
+                forecastText = `Với vòng quay tốt hiện tại, doanh nghiệp có lợi thế về vốn lưu động. 
+                                Nếu duy trì được kỷ luật nhập – xuất kho, dòng tiền sẽ tiếp tục ổn định, 
+                                giảm phụ thuộc vay ngắn hạn và tăng khả năng nắm bắt cơ hội kinh doanh nhanh.`;
+            } else if (data.dio <= warnDio) {
+                forecastText = `Nếu cải thiện được DIO xuống thấp hơn, doanh nghiệp sẽ giải phóng được một lượng tiền mặt đáng kể. 
+                                Ngược lại, nếu để tồn kho tăng thêm mà doanh số không theo kịp, áp lực vốn và rủi ro hàng chết sẽ gia tăng trong các kỳ tới.`;
+            } else {
+                forecastText = `Nếu không có biện pháp giảm tồn kho, tiền sẽ tiếp tục bị chiếm dụng, 
+                                chi phí lưu kho tăng, và nguy cơ phải giảm giá xả hàng (ảnh hưởng biên lợi nhuận) sẽ hiện hữu. 
+                                Cần có kế hoạch rõ ràng để cải thiện vòng quay trong 1–2 quý tới.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>🔮 4. Điều gì sẽ xảy ra trong tương lai?</h4>
+                    <p>${forecastText}</p>
+                </div>
+            `;
+
+            // Cảnh báo bổ sung
+            let alerts = '';
+            if (data.dio > data.days) {
+                alerts += `
+                    <div class="alert alert-danger">
+                        <span>🚨</span>
+                        <div><strong>Cảnh báo nghiêm trọng:</strong> DIO cao hơn số ngày trong kỳ. Hàng tồn kho quay vòng cực chậm, rủi ro hàng chết rất cao.</div>
+                    </div>
+                `;
+            } else if (data.dio > warnDio) {
+                alerts += `
+                    <div class="alert alert-warning">
+                        <span>⚠️</span>
+                        <div><strong>Cảnh báo:</strong> Số ngày tồn kho đang cao. Nên rà soát các mặt hàng chậm luân chuyển và điều chỉnh kế hoạch mua hàng.</div>
+                    </div>
+                `;
+            }
+
+            if (data.invEnd > data.invStart * 1.3) {
+                alerts += `
+                    <div class="alert alert-warning">
+                        <span>📈</span>
+                        <div><strong>Lưu ý:</strong> Tồn kho cuối kỳ tăng mạnh so với đầu kỳ (&gt;30%). Cần kiểm tra nguyên nhân (nhập nhiều hay bán chậm).</div>
+                    </div>
+                `;
+            }
+
+            if (data.dio < goodDio) {
+                alerts += `
+                    <div class="alert alert-success">
+                        <span>🎉</span>
+                        <div><strong>Tín hiệu tốt:</strong> Vòng quay tồn kho đang ở mức tích cực, giúp tối ưu vốn lưu động.</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('alertBox').innerHTML = alerts;
+            container.innerHTML = html;
+        }
+
+        /**
+         * Vẽ biểu đồ
+         */
+        function renderChart(data) {
+            const ctx = document.getElementById('inventoryChart').getContext('2d');
+
+            if (inventoryChartInstance) {
+                inventoryChartInstance.destroy();
+            }
+
+            inventoryChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Inventory Turnover (lần)', 'Days Inventory (ngày)', 'Mức DIO tham chiếu tốt'],
+                    datasets: [{
+                        label: 'Giá trị',
+                        data: [
+                            data.turnover,
+                            data.dio,
+                            data.days * 0.5
+                        ],
+                        backgroundColor: [
+                            data.dio < data.days * 0.5 ? 'rgba(16, 185, 129, 0.8)' : data.dio <= data.days * 0.85 ? 'rgba(245, 158, 11, 0.8)' : 'rgba(239, 68, 68, 0.8)',
+                            data.dio < data.days * 0.5 ? 'rgba(16, 185, 129, 0.8)' : data.dio <= data.days * 0.85 ? 'rgba(245, 158, 11, 0.8)' : 'rgba(239, 68, 68, 0.8)',
+                            'rgba(148, 163, 184, 0.4)'
+                        ],
+                        borderColor: [
+                            data.dio < data.days * 0.5 ? 'rgb(5, 150, 105)' : data.dio <= data.days * 0.85 ? 'rgb(217, 119, 6)' : 'rgb(220, 38, 38)',
+                            data.dio < data.days * 0.5 ? 'rgb(5, 150, 105)' : data.dio <= data.days * 0.85 ? 'rgb(217, 119, 6)' : 'rgb(220, 38, 38)',
+                            'rgb(100, 116, 139)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        barPercentage: 0.55
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.dataIndex === 0) return context.raw.toFixed(2) + ' lần';
+                                    return context.raw.toFixed(1) + ' ngày';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(3, 105, 161, 0.08)'
+                            }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * Lưu vào localStorage (mô phỏng SQLite)
+         */
+        function saveToLocalStorage() {
+            if (!currentResult) {
+                alert('⚠️ Chưa có dữ liệu để lưu. Hãy tính toán trước!');
+                return;
+            }
+
+            let history = JSON.parse(localStorage.getItem('ceo_ai_inventory_history') || '[]');
+
+            history.unshift({
+                id: Date.now(),
+                ...currentResult
+            });
+
+            if (history.length > 50) history = history.slice(0, 50);
+
+            localStorage.setItem('ceo_ai_inventory_history', JSON.stringify(history));
+
+            alert('✅ Đã lưu thành công vào bộ nhớ cục bộ (mô phỏng SQLite)!\n\nSau này khi kết nối Python backend, dữ liệu sẽ được ghi vào database SQLite thật.');
+        }
+
+        /**
+         * Xem lịch sử đã lưu
+         */
+        function viewHistory() {
+            const history = JSON.parse(localStorage.getItem('ceo_ai_inventory_history') || '[]');
+            const section = document.getElementById('historySection');
+            const tbody = document.getElementById('historyBody');
+
+            if (history.length === 0) {
+                alert('📭 Chưa có dữ liệu nào được lưu.');
+                return;
+            }
+
+            tbody.innerHTML = history.map(item => `
+                <tr>
+                    <td>${new Date(item.timestamp).toLocaleString('vi-VN')}</td>
+                    <td>${item.period}</td>
+                    <td style="font-weight:600;">${item.turnover.toFixed(2)} lần</td>
+                    <td style="color: ${item.dio < item.days * 0.5 ? '#059669' : item.dio <= item.days * 0.85 ? '#d97706' : '#dc2626'}; font-weight: 600;">
+                        ${item.dio.toFixed(1)} ngày
+                    </td>
+                    <td>${formatCurrency(item.avgInventory)}</td>
+                    <td>${formatCurrency(item.cogs)}</td>
+                </tr>
+            `).join('');
+
+            section.classList.remove('hidden');
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /**
+         * Xuất Excel
+         */
+        function exportToExcel() {
+            if (!currentResult) {
+                alert('⚠️ Chưa có dữ liệu để xuất. Hãy tính toán trước!');
+                return;
+            }
+
+            const wb = XLSX.utils.book_new();
+
+            const data = [
+                ['MODULE 28 – VÒNG QUAY HÀNG TỒN KHO (Inventory Turnover)', ''],
+                ['CEO AI Enterprise', ''],
+                ['', ''],
+                ['Kỳ báo cáo', currentResult.period],
+                ['Số ngày trong kỳ', currentResult.days],
+                ['Thời gian xuất', new Date().toLocaleString('vi-VN')],
+                ['', ''],
+                ['Chỉ tiêu', 'Giá trị'],
+                ['Giá vốn hàng bán (COGS)', currentResult.cogs],
+                ['Tồn kho đầu kỳ', currentResult.invStart],
+                ['Tồn kho cuối kỳ', currentResult.invEnd],
+                ['Tồn kho bình quân', currentResult.avgInventory],
+                ['Inventory Turnover (lần)', currentResult.turnover.toFixed(2)],
+                ['Days Inventory Outstanding (DIO)', currentResult.dio.toFixed(1) + ' ngày'],
+                ['', ''],
+                ['Công thức Turnover', 'COGS / Tồn kho bình quân'],
+                ['Công thức DIO', 'Số ngày trong kỳ / Inventory Turnover'],
+                ['', ''],
+                ['Ghi chú', 'File được xuất từ Module 28 – CEO AI Enterprise']
+            ];
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            ws['!cols'] = [{ wch: 45 }, { wch: 25 }];
+            XLSX.utils.book_append_sheet(wb, ws, 'Inventory_Turnover');
+
+            // Sheet lịch sử
+            const history = JSON.parse(localStorage.getItem('ceo_ai_inventory_history') || '[]');
+            if (history.length > 0) {
+                const histData = [
+                    ['Thời gian', 'Kỳ', 'Turnover', 'DIO (ngày)', 'Tồn kho BQ', 'COGS']
+                ];
+                history.forEach(item => {
+                    histData.push([
+                        new Date(item.timestamp).toLocaleString('vi-VN'),
+                        item.period,
+                        item.turnover.toFixed(2),
+                        item.dio.toFixed(1),
+                        item.avgInventory,
+                        item.cogs
+                    ]);
+                });
+                const ws2 = XLSX.utils.aoa_to_sheet(histData);
+                ws2['!cols'] = [{ wch: 22 }, { wch: 14 }, { wch: 12 }, { wch: 12 }, { wch: 16 }, { wch: 16 }];
+                XLSX.utils.book_append_sheet(wb, ws2, 'Lịch sử');
+            }
+
+            const fileName = `InventoryTurnover_${currentResult.period.replace(/[\/\s]/g, '_')}_${new Date().toISOString().slice(0,10)}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+        }
+
+        /**
+         * Làm mới form
+         */
+        function resetForm() {
+            document.getElementById('cogs').value = '';
+            document.getElementById('invStart').value = '';
+            document.getElementById('invEnd').value = '';
+            document.getElementById('days').value = '90';
+            document.getElementById('period').value = 'Kỳ hiện tại';
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('historySection').classList.add('hidden');
+            currentResult = null;
+
+            if (inventoryChartInstance) {
+                inventoryChartInstance.destroy();
+                inventoryChartInstance = null;
+            }
+        }
+
+        /**
+         * =====================================================
+         * CHỖ DÀNH CHO TƯƠNG LAI – KẾT NỐI PYTHON + SQLITE
+         * =====================================================
+         * 
+         * Khi sẵn sàng kết nối backend:
+         * 
+         * async function saveToSQLite() {
+         *     const response = await fetch('/api/inventory/save', {
+         *         method: 'POST',
+         *         headers: { 'Content-Type': 'application/json' },
+         *         body: JSON.stringify(currentResult)
+         *     });
+         *     ...
+         * }
+         * 
+         * Python sẽ ghi vào bảng:
+         * CREATE TABLE inventory_turnover (
+         *     id INTEGER PRIMARY KEY,
+         *     period TEXT,
+         *     cogs REAL,
+         *     inv_start REAL,
+         *     inv_end REAL,
+         *     avg_inventory REAL,
+         *     turnover REAL,
+         *     dio REAL,
+         *     days INTEGER,
+         *     created_at TEXT
+         * );
+         */
+    </script>
+</body>
+</html>

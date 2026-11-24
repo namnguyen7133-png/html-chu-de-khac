@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trung Tâm Điều Hành Prompt AI - Xử Lý Hàng Loạt</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --accent-color: #00e676;
+            --accent-hover: #00c853;
+            --danger-color: #ff5252;
+            --warning-color: #ffb74d;
+            --text-color: #ffffff;
+            --text-secondary: #b0bec5;
+            --border-color: #333333;
+            --button-bg: #2c2c2c;
+            --button-hover: #3d3d3d;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        h1, h2 {
+            color: var(--accent-color);
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+        }
+
+        .bookmarks-bar {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .bookmark-btn {
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .bookmark-btn:hover { background-color: var(--accent-color); color: #000; }
+
+        .config-card {
+            background-color: var(--card-bg);
+            padding: 18px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"], input[type="number"], textarea, select {
+            width: 100%;
+            background-color: #2a2a2a;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
+            outline: 2px solid var(--accent-color);
+        }
+
+        textarea { height: 120px; resize: vertical; }
+
+        .file-upload-box {
+            border: 2px dashed var(--accent-color);
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .file-upload-box:hover { background-color: #2f2f2f; }
+
+        input[type="file"] { display: none; }
+
+        .file-list {
+            margin-top: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #181818;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 8px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .file-item:last-child { border-bottom: none; }
+
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            background-color: var(--accent-color);
+            color: #000;
+            font-weight: bold;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.05rem;
+            transition: background 0.2s;
+        }
+
+        .btn:hover:not(:disabled) { background-color: var(--accent-hover); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-danger { background-color: var(--danger-color); color: #fff; }
+        .btn-danger:hover:not(:disabled) { background-color: #e53935; }
+
+        .btn-secondary {
+            background-color: var(--button-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+        .btn-secondary:hover:not(:disabled) { background-color: var(--button-hover); }
+
+        .progress-container { margin-top: 15px; display: none; }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 24px;
+            background-color: #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            margin-top: 6px;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .output-box {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .result-card {
+            background-color: #252525;
+            border: 1px solid #3a3a3a;
+            border-left: 4px solid var(--accent-color);
+            border-radius: 6px;
+            padding: 15px;
+        }
+
+        .result-card.error { border-left-color: var(--danger-color); }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #3a3a3a;
+            font-weight: bold;
+            color: var(--accent-color);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .result-content {
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 1rem;
+        }
+
+        .status-msg {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .small-btn {
+            padding: 5px 10px;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            cursor: pointer;
+            background: var(--button-bg);
+            color: #fff;
+            border: 1px solid #555;
+        }
+
+        .small-btn:hover { background: var(--accent-color); color: #000; }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+            padding: 10px;
+            background: #181818;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .radio-group input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-color);
+            cursor: pointer;
+        }
+
+        .hint {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .badge-line { background: #1565c0; color: #fff; }
+        .badge-file { background: #6a1b9a; color: #fff; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- LIÊN KẾT NHANH -->
+    <div>
+        <h2>📌 Danh Mục Địa Chỉ Nhanh</h2>
+        <div class="bookmarks-bar">
+            <a href="https://www.google.com/?hl=vi" target="_blank" class="bookmark-btn">Google</a>
+            <a href="https://gemini.google.com/app?hl=vi" target="_blank" class="bookmark-btn">Gemini Web</a>
+            <a href="https://github.com/namnguyen7133-png" target="_blank" class="bookmark-btn">GitHub</a>
+            <a href="https://app.talkpal.ai/dashboard?redirect=%2Fchat" target="_blank" class="bookmark-btn">TalkPal AI</a>
+            <a href="https://chatgpt.com/" target="_blank" class="bookmark-btn">ChatGPT</a>
+            <a href="https://chat.deepseek.com/" target="_blank" class="bookmark-btn">DeepSeek</a>
+            <a href="https://grok.com/" target="_blank" class="bookmark-btn">Grok</a>
+            <a href="https://www.dola.com/chat/" target="_blank" class="bookmark-btn">Dola Chat</a>
+            <a href="file:///D:/PROMPT/prompt_hub.html" class="bookmark-btn">Prompt Hub Local</a>
+        </div>
+    </div>
+
+    <!-- API KEY -->
+    <div class="config-card">
+        <label for="apiKey"><strong>🔑 Khóa Gemini API Key:</strong></label>
+        <div class="input-group">
+            <input type="text" id="apiKey" placeholder="Dán Google Gemini API Key tại đây (Lưu tự động vào máy)...">
+            <button class="btn btn-secondary" onclick="saveApiKey()">Lưu Key</button>
+            <button class="btn btn-danger" onclick="clearApiKey()">Xóa Key</button>
+        </div>
+        <div class="hint">✅ Key được lưu vào <code>localStorage</code> của trình duyệt và tự động điền lại khi mở trang.</div>
+    </div>
+
+    <!-- CHỌN FILE -->
+    <div class="config-card">
+        <h2>📂 Bước 1: Chọn Danh Sách File .TXT Cần Xử Lý</h2>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <label class="file-upload-box" style="flex: 1;">
+                <input type="file" id="txtFilesInput" accept=".txt" multiple onchange="handleFilesSelected(this.files)">
+                📄 <strong>Bấm để chọn nhiều file .TXT</strong><br>
+                <span style="font-size: 0.9rem; color: var(--text-secondary);">(Giữ Ctrl hoặc Shift để chọn nhiều file)</span>
+            </label>
+            <label class="file-upload-box" style="flex: 1;">
+                <input type="file" id="folderInput" webkitdirectory directory multiple onchange="handleFilesSelected(this.files)">
+                📁 <strong>Hoặc chọn cả Thư Mục chứa .TXT</strong><br>
+                <span style="font-size: 0.9rem; color: var(--text-secondary);">(Tự động lọc lấy toàn bộ file .txt bên trong)</span>
+            </label>
+        </div>
+        <div id="fileListContainer" class="file-list" style="display: none;"></div>
+    </div>
+
+    <!-- CẤU HÌNH XỬ LÝ -->
+    <div class="config-card">
+        <h2>📝 Bước 2: Cấu Hình Xử Lý</h2>
+
+        <label><strong>Chế độ xử lý:</strong></label>
+        <div class="radio-group">
+            <label>
+                <input type="radio" name="processMode" value="line" checked onchange="updateModeHint()">
+                📄 Xử lý <strong>theo từng dòng</strong> (mỗi dòng = 1 prompt)
+            </label>
+            <label>
+                <input type="radio" name="processMode" value="file" onchange="updateModeHint()">
+                📁 Xử lý <strong>theo từng file</strong> (mỗi file = 1 prompt)
+            </label>
+        </div>
+        <div id="modeHint" class="hint"></div>
+
+        <label style="margin-top: 12px; display: block;"><strong>💾 Cách lưu kết quả:</strong></label>
+        <div class="radio-group">
+            <label>
+                <input type="radio" name="saveMode" value="single" checked>
+                📦 Lưu <strong>chung vào 1 file .txt</strong>
+            </label>
+            <label>
+                <input type="radio" name="saveMode" value="separate">
+                🗂️ Lưu <strong>riêng từng file .txt</strong>
+            </label>
+        </div>
+        <div class="hint">💡 Khi chọn "Lưu riêng", mỗi kết quả sẽ được tải xuống thành 1 file .txt riêng (tự động, lần lượt).</div>
+
+        <h2 style="margin-top: 18px;">📝 Prompt Chung (tùy chọn)</h2>
+        <textarea id="promptInput" placeholder="Nhập yêu cầu áp dụng cho mỗi dòng/file. Ví dụ: Hãy dịch đoạn văn sau sang tiếng Việt... (Để trống nếu nội dung file đã là câu lệnh hoàn chỉnh)"></textarea>
+
+        <div class="input-group" style="margin-top: 10px;">
+            <label for="delayInput" style="white-space: nowrap;">⏱️ Nghỉ giữa mỗi lần gọi (giây):</label>
+            <input type="number" id="delayInput" value="2" min="0" max="60" style="width: 100px;">
+            <span style="font-size: 0.9rem; color: var(--text-secondary);">(Nên 2-4 giây để tránh bị chặn rate-limit)</span>
+        </div>
+
+        <div class="action-bar">
+            <button id="btnRunBatch" class="btn" onclick="runBatchProcess()">⚡ Chạy Tự Động</button>
+            <button id="btnStopBatch" class="btn btn-danger" onclick="stopBatchProcess()" style="display: none;">🛑 Dừng Lại</button>
+            <button class="btn" onclick="callSinglePrompt()">🚀 Chạy Lẻ 1 Lần</button>
+            <button class="btn btn-secondary" onclick="clearAll()">🧹 Xóa Làm Lại</button>
+        </div>
+
+        <div id="progressContainer" class="progress-container">
+            <div class="progress-bar-bg">
+                <div id="progressBarFill" class="progress-bar-fill"></div>
+            </div>
+            <div id="progressText" class="progress-text">Đang chuẩn bị...</div>
+        </div>
+    </div>
+
+    <!-- KẾT QUẢ -->
+    <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
+            <h2 style="margin-bottom: 0;">📤 Kết Quả Xử Lý</h2>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button id="btnDownloadAll" class="btn" onclick="downloadAllResults()" style="display: none;">💾 Tải Tất Cả (gộp)</button>
+                <button id="btnDownloadSeparate" class="btn btn-secondary" onclick="downloadSeparateResults()" style="display: none;">🗂️ Tải Riêng Từng File</button>
+                <button id="btnCopyAll" class="btn btn-secondary" onclick="copyAllResults()" style="display: none;">📋 Copy Tất Cả</button>
+            </div>
+        </div>
+        <div id="output" class="output-box">
+            <span class="status-msg">Kết quả phản hồi từ AI sẽ lần lượt xuất hiện ở đây...</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    let selectedTxtFiles = [];
+    let batchResults = [];   // { fileName, lineIndex (nếu chế độ line), input, output, status }
+    let isStopping = false;
+
+    // ============ KHỞI TẠO ============
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedKey = localStorage.getItem('gemini_api_key');
+        if (savedKey) document.getElementById('apiKey').value = savedKey;
+        updateModeHint();
+    });
+
+    function updateModeHint() {
+        const mode = document.querySelector('input[name="processMode"]:checked').value;
+        const hint = document.getElementById('modeHint');
+        if (mode === 'line') {
+            hint.innerHTML = '📄 <strong>Chế độ theo dòng:</strong> Mỗi dòng không rỗng trong file .txt sẽ được gửi riêng đến AI. Kết quả lưu kèm tên file + số dòng.';
+        } else {
+            hint.innerHTML = '📁 <strong>Chế độ theo file:</strong> Toàn bộ nội dung mỗi file .txt được gửi 1 lần đến AI. Kết quả lưu theo tên file.';
+        }
+    }
+
+    // ============ API KEY ============
+    function saveApiKey() {
+        const key = document.getElementById('apiKey').value.trim();
+        if (!key) return alert('Vui lòng nhập API Key trước!');
+        localStorage.setItem('gemini_api_key', key);
+        alert('✅ Đã lưu API Key vào trình duyệt!');
+    }
+
+    function clearApiKey() {
+        if (!confirm('Xóa API Key đã lưu?')) return;
+        localStorage.removeItem('gemini_api_key');
+        document.getElementById('apiKey').value = '';
+        alert('🗑️ Đã xóa API Key!');
+    }
+
+    // ============ CHỌN FILE ============
+    function handleFilesSelected(fileList) {
+        const filesArray = Array.from(fileList);
+        selectedTxtFiles = filesArray
+            .filter(f => f.name.toLowerCase().endsWith('.txt'))
+            .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+
+        const container = document.getElementById('fileListContainer');
+        if (selectedTxtFiles.length === 0) {
+            container.style.display = 'block';
+            container.innerHTML = '<span style="color: var(--danger-color);">⚠️ Không tìm thấy file .txt nào hợp lệ!</span>';
+            return;
+        }
+
+        container.style.display = 'block';
+        let html = `<div style="margin-bottom: 8px; color: var(--accent-color); font-weight: bold;">✅ Đã nạp ${selectedTxtFiles.length} file .txt:</div>`;
+        selectedTxtFiles.forEach((file, index) => {
+            html += `
+                <div class="file-item" id="file-status-${index}">
+                    <span>${index + 1}. ${file.name}</span>
+                    <span class="status-badge" style="color: var(--text-secondary);">Chờ xử lý</span>
+                </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    // ============ TIỆN ÍCH ============
+    function readFileAsText(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsText(file, 'UTF-8');
+        });
+    }
+
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function safeFileName(name) {
+        return name.replace(/[\\/:*?"<>|]/g, '_').slice(0, 180);
+    }
+
+    // ============ GỌI GEMINI ============
+    async function fetchGemini(apiKey, fullPrompt) {
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: fullPrompt }] }] })
+        });
+        const data = await response.json();
+        if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+            return data.candidates[0].content.parts[0].text;
+        } else if (data.error) {
+            throw new Error(data.error.message);
+        }
+        throw new Error('Không nhận được phản hồi hợp lệ từ AI.');
+    }
+
+    // ============ CHẠY BATCH ============
+    async function runBatchProcess() {
+        const apiKey = document.getElementById('apiKey').value.trim() || localStorage.getItem('gemini_api_key');
+        const basePrompt = document.getElementById('promptInput').value.trim();
+        const delaySeconds = parseInt(document.getElementById('delayInput').value) || 0;
+        const processMode = document.querySelector('input[name="processMode"]:checked').value;
+        const saveMode = document.querySelector('input[name="saveMode"]:checked').value;
+
+        if (!apiKey) return alert('Vui lòng nhập Gemini API Key trước!');
+        if (selectedTxtFiles.length === 0) return alert('Vui lòng chọn ít nhất 1 file .txt ở Bước 1!');
+
+        // Reset
+        isStopping = false;
+        batchResults = [];
+        const outputDiv = document.getElementById('output');
+        outputDiv.innerHTML = '';
+
+        document.getElementById('btnRunBatch').disabled = true;
+        document.getElementById('btnStopBatch').style.display = 'inline-block';
+        document.getElementById('btnDownloadAll').style.display = 'none';
+        document.getElementById('btnDownloadSeparate').style.display = 'none';
+        document.getElementById('btnCopyAll').style.display = 'none';
+
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBarFill = document.getElementById('progressBarFill');
+        const progressText = document.getElementById('progressText');
+        progressContainer.style.display = 'block';
+
+        // Xây dựng danh sách task
+        // Mỗi task: { fileName, lineIndex (1-based hoặc null), inputText, displayLabel }
+        const tasks = [];
+        for (let i = 0; i < selectedTxtFiles.length; i++) {
+            const file = selectedTxtFiles[i];
+            const content = await readFileAsText(file);
+
+            if (processMode === 'line') {
+                const lines = content.split(/\r?\n/);
+                let lineNo = 0;
+                for (const raw of lines) {
+                    const line = raw.trim();
+                    if (!line) continue; // bỏ dòng trống
+                    lineNo++;
+                    tasks.push({
+                        fileName: file.name,
+                        fileIndex: i,
+                        lineIndex: lineNo,
+                        inputText: line,
+                        displayLabel: `${file.name} — dòng ${lineNo}`
+                    });
+                }
+            } else {
+                tasks.push({
+                    fileName: file.name,
+                    fileIndex: i,
+                    lineIndex: null,
+                    inputText: content,
+                    displayLabel: file.name
+                });
+            }
+        }
+
+        const total = tasks.length;
+        if (total === 0) {
+            alert('Không có nội dung nào để xử lý!');
+            resetUI();
+            return;
+        }
+
+        // Cập nhật badge file -> đang chạy
+        document.querySelectorAll('.status-badge').forEach(el => {
+            el.innerText = '⏳ Đang chạy...';
+            el.style.color = 'var(--warning-color)';
+        });
+
+        // Xử lý từng task
+        for (let i = 0; i < total; i++) {
+            if (isStopping) {
+                progressText.innerText = `🛑 Đã dừng ở task ${i}/${total}.`;
+                break;
+            }
+
+            const task = tasks[i];
+            const percent = Math.round((i / total) * 100);
+            progressBarFill.style.width = `${percent}%`;
+            progressText.innerText = `⏳ (${i + 1}/${total}) ${task.displayLabel}...`;
+
+            // Ghép prompt
+            const finalPrompt = basePrompt
+                ? `${basePrompt}\n\n--- NỘI DUNG ---\n${task.inputText}`
+                : task.inputText;
+
+            let resultItem;
+            try {
+                const aiResponse = await fetchGemini(apiKey, finalPrompt);
+                resultItem = {
+                    fileName: task.fileName,
+                    lineIndex: task.lineIndex,
+                    displayLabel: task.displayLabel,
+                    input: task.inputText,
+                    output: aiResponse,
+                    status: 'success'
+                };
+            } catch (err) {
+                resultItem = {
+                    fileName: task.fileName,
+                    lineIndex: task.lineIndex,
+                    displayLabel: task.displayLabel,
+                    input: task.inputText,
+                    output: 'Lỗi: ' + err.message,
+                    status: 'error'
+                };
+            }
+
+            batchResults.push(resultItem);
+            appendResultCard(resultItem, i);
+
+            // Cập nhật badge file
+            if (processMode === 'file') {
+                const badge = document.querySelector(`#file-status-${task.fileIndex} .status-badge`);
+                if (badge) {
+                    badge.innerText = resultItem.status === 'success' ? '✅ Xong' : '❌ Lỗi';
+                    badge.style.color = resultItem.status === 'success' ? 'var(--accent-color)' : 'var(--danger-color)';
+                }
+            }
+
+            // Nghỉ
+            if (i < total - 1 && !isStopping && delaySeconds > 0) {
+                progressText.innerText = `💤 Đã xong ${task.displayLabel}. Đợi ${delaySeconds}s...`;
+                await sleep(delaySeconds * 1000);
+            }
+        }
+
+        // Đánh dấu các file đã xong (chế độ line)
+        if (processMode === 'line') {
+            document.querySelectorAll('.status-badge').forEach(el => {
+                el.innerText = '✅ Đã xử lý';
+                el.style.color = 'var(--accent-color)';
+            });
+        }
+
+        if (!isStopping) progressText.innerText = `🎉 Hoàn tất ${batchResults.length}/${total} task!`;
+        else progressText.innerText += ` (đã dừng theo yêu cầu)`;
+
+        progressBarFill.style.width = '100%';
+        resetUI();
+
+        // Hiện nút tải
+        if (batchResults.length > 0) {
+            document.getElementById('btnDownloadAll').style.display = 'inline-block';
+            document.getElementById('btnDownloadSeparate').style.display = 'inline-block';
+            document.getElementById('btnCopyAll').style.display = 'inline-block';
+
+            // Nếu chọn "lưu riêng" thì tự động tải từng file
+            if (saveMode === 'separate') {
+                setTimeout(() => downloadSeparateResults(), 300);
+            }
+        }
+    }
+
+    function resetUI() {
+        document.getElementById('btnRunBatch').disabled = false;
+        document.getElementById('btnStopBatch').style.display = 'none';
+        document.getElementById('btnStopBatch').disabled = false;
+    }
+
+    function stopBatchProcess() {
+        isStopping = true;
+        document.getElementById('btnStopBatch').disabled = true;
+        document.getElementById('progressText').innerText = '⏳ Đang dừng sau khi hoàn tất task hiện tại...';
+    }
+
+    // ============ HIỂN THỊ ============
+    function appendResultCard(item, index) {
+        const outputDiv = document.getElementById('output');
+        const card = document.createElement('div');
+        const isError = item.status === 'error';
+        card.className = `result-card ${isError ? 'error' : ''}`;
+
+        const modeBadge = item.lineIndex !== null
+            ? `<span class="badge badge-line">Dòng ${item.lineIndex}</span>`
+            : `<span class="badge badge-file">File</span>`;
+
+        card.innerHTML = `
+            <div class="result-header">
+                <span>📄 ${index + 1}. ${escapeHtml(item.displayLabel)} ${modeBadge}</span>
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <button class="small-btn" onclick="copySingleResult(${index})">📋 Copy kết quả</button>
+                    <button class="small-btn" onclick="copySingleInput(${index})">📋 Copy input</button>
+                    <button class="small-btn" onclick="downloadSingleResult(${index})">💾 Tải file</button>
+                </div>
+            </div>
+            <div class="result-content">${escapeHtml(item.output)}</div>
+        `;
+        outputDiv.appendChild(card);
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // ============ COPY / TẢI ============
+    function copySingleResult(index) {
+        const item = batchResults[index];
+        if (!item) return;
+        navigator.clipboard.writeText(item.output)
+            .then(() => alert(`✅ Đã copy kết quả: ${item.displayLabel}`))
+            .catch(() => alert('❌ Không copy được, hãy thử chọn thủ công.'));
+    }
+
+    function copySingleInput(index) {
+        const item = batchResults[index];
+        if (!item) return;
+        navigator.clipboard.writeText(item.input)
+            .then(() => alert(`✅ Đã copy input: ${item.displayLabel}`))
+            .catch(() => alert('❌ Không copy được.'));
+    }
+
+    function downloadSingleResult(index) {
+        const item = batchResults[index];
+        if (!item) return;
+        const name = item.lineIndex !== null
+            ? `KetQua_${safeFileName(item.fileName)}_dong${item.lineIndex}.txt`
+            : `KetQua_${safeFileName(item.fileName)}`;
+        const blob = new Blob([item.output], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = name; a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // Tải chung 1 file
+    function downloadAllResults() {
+        if (batchResults.length === 0) return;
+
+        let combined = '';
+        batchResults.forEach((item, idx) => {
+            combined += `========================================\n`;
+            combined += `KẾT QUẢ ${idx + 1}: ${item.displayLabel}\n`;
+            combined += `Trạng thái: ${item.status === 'success' ? 'OK' : 'LỖI'}\n`;
+            combined += `========================================\n`;
+            combined += `${item.output}\n\n\n`;
+        });
+
+        const timestamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+        const blob = new Blob([combined], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Tong_Hop_Ket_Qua_${timestamp}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // Tải riêng từng file (tuần tự với delay nhỏ tránh trình duyệt chặn)
+    async function downloadSeparateResults() {
+        if (batchResults.length === 0) return;
+        for (let i = 0; i < batchResults.length; i++) {
+            downloadSingleResult(i);
+            await sleep(250); // tránh bị chặn tải nhiều file cùng lúc
+        }
+    }
+
+    // Copy tất cả
+    function copyAllResults() {
+        if (batchResults.length === 0) return;
+        let combined = '';
+        batchResults.forEach((item, idx) => {
+            combined += `--- ${idx + 1}. ${item.displayLabel} [${item.status}] ---\n`;
+            combined += `${item.output}\n\n`;
+        });
+        navigator.clipboard.writeText(combined)
+            .then(() => alert(`✅ Đã copy ${batchResults.length} kết quả vào clipboard!`))
+            .catch(() => alert('❌ Không copy được.'));
+    }
+
+    // ============ CHẠY LẺ ============
+    async function callSinglePrompt() {
+        const apiKey = document.getElementById('apiKey').value.trim() || localStorage.getItem('gemini_api_key');
+        const prompt = document.getElementById('promptInput').value.trim();
+        const outputDiv = document.getElementById('output');
+
+        if (!apiKey) return alert('Vui lòng nhập Gemini API Key!');
+        if (!prompt) return alert('Vui lòng nhập nội dung Prompt!');
+
+        outputDiv.innerHTML = '<span class="status-msg">⏳ Đang gửi yêu cầu...</span>';
+        try {
+            const res = await fetchGemini(apiKey, prompt);
+            batchResults = [{
+                fileName: 'KetQua_DonLe.txt',
+                lineIndex: null,
+                displayLabel: 'Kết quả chạy đơn lẻ',
+                input: prompt,
+                output: res,
+                status: 'success'
+            }];
+            outputDiv.innerHTML = '';
+            appendResultCard(batchResults[0], 0);
+            document.getElementById('btnDownloadAll').style.display = 'inline-block';
+            document.getElementById('btnDownloadSeparate').style.display = 'inline-block';
+            document.getElementById('btnCopyAll').style.display = 'inline-block';
+        } catch (error) {
+            outputDiv.innerHTML = `<span style="color: var(--danger-color);">❌ Lỗi: ${escapeHtml(error.message)}</span>`;
+        }
+    }
+
+    // ============ RESET ============
+    function clearAll() {
+        if (batchResults.length > 0 && !confirm('Xóa toàn bộ kết quả và file đã chọn?')) return;
+        selectedTxtFiles = [];
+        batchResults = [];
+        document.getElementById('txtFilesInput').value = '';
+        document.getElementById('folderInput').value = '';
+        document.getElementById('fileListContainer').style.display = 'none';
+        document.getElementById('fileListContainer').innerHTML = '';
+        document.getElementById('progressContainer').style.display = 'none';
+        document.getElementById('progressBarFill').style.width = '0%';
+        document.getElementById('btnDownloadAll').style.display = 'none';
+        document.getElementById('btnDownloadSeparate').style.display = 'none';
+        document.getElementById('btnCopyAll').style.display = 'none';
+        document.getElementById('output').innerHTML = '<span class="status-msg">Kết quả phản hồi từ AI sẽ lần lượt xuất hiện ở đây...</span>';
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Ngành Nghề & Công Việc Kinh Doanh</title>
+	<a href="baiviet_un.html" style="float: right; padding: 8px 15px; background: #27ae60; color: white; text-decoration: none; border-radius: 4px; font-weight: bold;">📊 Xem 4 Bài Viết Chiến Lược UN</a>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+        h1, h2 { color: #2c3e50; }
+        .card {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: #fff;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #34495e;
+        }
+        .btn-danger {
+            background-color: #e74c3c;
+            padding: 4px 8px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        .task-item {
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🏢 QUẢN LÝ CÁC HÌNH THỨC KINH DOANH & CÔNG VIỆC THEO TÊN</h1>
+    
+    <!-- Phần Nhập Công Việc Theo Tên Người -->
+    <div class="card">
+        <h2>✍️ Nhập Thêm Công Việc Theo Tên Người</h2>
+        <form id="taskForm" onsubmit="addPersonalTask(event)">
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 200px;" class="form-group">
+                    <label for="personName">Tên người thực hiện:</label>
+                    <input type="text" id="personName" placeholder="Nhập tên..." required>
+                </div>
+                <div style="flex: 2; min-width: 250px;" class="form-group">
+                    <label for="taskDescription">Nội dung công việc:</label>
+                    <input type="text" id="taskDescription" placeholder="Nhập nội dung công việc..." required>
+                </div>
+                <div style="flex: 1; min-width: 150px;" class="form-group">
+                    <label for="taskCategory">Chọn lĩnh vực:</label>
+                    <select id="taskCategory">
+                        <option value="Mạ vàng, bạc, đồng">Mạ vàng, bạc, đồng mọi chất liệu</option>
+                        <option value="Thủy điện & Phát điện">Máy thủy điện & Phát điện</option>
+                        <option value="Trồng cây lâu năm">Trồng cây lâu năm</option>
+                        <option value="Kinh doanh Facebook cá nhân">Kinh doanh trên Facebook cá nhân</option>
+                        <option value="Mua sắm bán lẻ">Mua sắm bán lẻ</option>
+                        <option value="Nhà nghỉ tư nhân">Nhà nghỉ tư nhân</option>
+                        <option value="Sửa chữa thiết bị điện gia dụng">Sửa chữa thiết bị điện gia dụng</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit">➕ Thêm Công Việc</button>
+        </form>
+    </div>
+
+    <!-- Bảng Danh Sách Các Hình Thức Kinh Doanh & Phụ Trách (Để trống để bạn tự gõ hoặc dùng form nhập) -->
+    <div class="card">
+        <h2>📊 Danh Sách Các Hình Thức Kinh Doanh & Phụ Trách</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 25%;">Lĩnh Vực Kinh Doanh</th>
+                    <th style="width: 40%;">Mô Tả Chi Tiết Hoạt Động</th>
+                    <th style="width: 35%;">Người Phụ Trách / Công Việc (Nhập tay trực tiếp hoặc dùng form trên)</th>
+                </tr>
+            </thead>
+            <tbody id="businessTableBody">
+                <tr data-category="Mạ vàng, bạc, đồng">
+                    <td contenteditable="true"><b>Mạ vàng, bạc, đồng mọi chất liệu</b></td>
+                    <td contenteditable="true">Dịch vụ mạ trang sức, đồ phong thủy, chi tiết máy, đồ đồng mỹ nghệ trên mọi chất liệu (kim loại, nhựa, gốm sứ...).</td>
+                    <td class="task-cell" contenteditable="true">Nhập nội dung vào đây...</td>
+                </tr>
+                <tr data-category="Thủy điện & Phát điện">
+                    <td contenteditable="true"><b>Máy thủy điện & Phát điện</b></td>
+                    <td contenteditable="true">Đầu tư, vận hành, cung cấp thiết bị, bảo dưỡng máy móc hệ thống thủy điện và trạm phát điện.</td>
+                    <td class="task-cell" contenteditable="true">Nhập nội dung vào đây...</td>
+                </tr>
+                <tr data-category="Trồng cây lâu năm">
+                    <td contenteditable="true"><b>Trồng cây lâu năm</b></td>
+                    <td contenteditable="true">Phát triển nông nghiệp quy mô lớn, trồng và khai thác các loại cây công nghiệp, cây ăn quả, cây gỗ lâu năm.</td>
+                    <td class="task-cell" contenteditable="true">Nhập nội dung vào đây...</td>
+                </tr>
+                <tr data-category="Kinh doanh Facebook cá nhân">
+                    <td contenteditable="true"><b>Kinh doanh trên Facebook cá nhân</b></td>
+                    <td contenteditable="true">Xây dựng thương hiệu cá nhân, livestream bán hàng, tiếp thị liên kết (affiliate) và tương tác khách hàng trực tuyến.</td>
+                    <td class="task-cell" contenteditable="true">Nhập nội dung vào đây...</td>
+                </tr>
+                <tr data-category="Mua sắm bán lẻ">
+                    <td contenteditable="true"><b>Mua sắm bán lẻ</b></td>
+                    <td contenteditable="true">Hệ thống cửa hàng / tạp hóa bán lẻ phục vụ nhu cầu tiêu dùng hàng ngày của người dân.</td>
+                    <td class="task-cell" contenteditable="true">Nhập nội dung vào đây...</td>
+                </tr>
+                <tr data-category="Nhà nghỉ tư nhân">
+                    <td contenteditable="true"><b>Nhà nghỉ tư nhân</b></td>
+                    <td contenteditable="true">Kinh doanh dịch vụ lưu trú du lịch, phòng nghỉ ngắn hạn tiện nghi, sạch sẽ và an toàn.</td>
+                    <td class="task-cell" contenteditable="true">Nhập nội dung vào đây...</td>
+                </tr>
+                <tr data-category="Sửa chữa thiết bị điện gia dụng">
+                    <td contenteditable="true"><b>Sửa chữa thiết bị điện gia dụng</b></td>
+                    <td contenteditable="true">Dịch vụ kiểm tra, sửa chữa và bảo dưỡng các thiết bị gia đình như nồi cơm điện, quạt, bếp từ...</td>
+                    <td class="task-cell">
+                        <div class="task-item">
+                            <span>👤 <b>Nam</b>: Sửa nồi cơm điện</span>
+                            <button type="button" class="btn-danger" onclick="removeTask(this)">Xóa</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function addPersonalTask(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('personName').value.trim();
+            const task = document.getElementById('taskDescription').value.trim();
+            const category = document.getElementById('taskCategory').value;
+
+            const tbody = document.getElementById('businessTableBody');
+            const rows = tbody.getElementsByTagName('tr');
+
+            let foundRow = null;
+            for (let i = 0; i < rows.length; i++) {
+                if (rows[i].getAttribute('data-category') === category) {
+                    foundRow = rows[i];
+                    break;
+                }
+            }
+
+            if (foundRow) {
+                const targetCell = foundRow.getElementsByClassName('task-cell')[0];
+                
+                // Nếu ô đang chứa chữ hướng dẫn mặc định thì xóa đi
+                if (targetCell.innerHTML.includes('Nhập nội dung') || targetCell.innerHTML.includes('Đang cập nhật')) {
+                    targetCell.innerHTML = '';
+                }
+
+                // Thêm dòng công việc kèm nút xóa
+                const taskDiv = document.createElement('div');
+                taskDiv.className = 'task-item';
+                taskDiv.innerHTML = `
+                    <span>👤 <b>${name}</b>: ${task}</span>
+                    <button type="button" class="btn-danger" onclick="removeTask(this)">Xóa</button>
+                `;
+                targetCell.appendChild(taskDiv);
+            }
+
+            document.getElementById('taskForm').reset();
+        }
+
+        function removeTask(button) {
+            const taskItem = button.parentElement;
+            const taskCell = taskItem.parentElement;
+            
+            taskItem.remove();
+
+            if (taskCell.children.length === 0) {
+                taskCell.innerHTML = 'Nhập nội dung vào đây...';
+            }
+        }
+    </script>
+
+<script src="bg-music.js"></script>
+</body>
+</html>

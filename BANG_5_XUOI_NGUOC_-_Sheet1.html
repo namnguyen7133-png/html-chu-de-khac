@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>BANG 5 XUOI NGUOC - Sheet1</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>BANG 5 XUOI NGUOC - Sheet1</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>A | 1.0 | 5.0 | A | 2.0 | 4.0</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>Ă | 2.0 | 4.0 | Ă | 3.0 | 3.0</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>Â | 3.0 | 3.0 | Â | 4.0 | 2.0</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>B | 4.0 | 2.0 | B | 5.0 | 1.0</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>C | 5.0 | 1.0 | C</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>D | 1.0 | 5.0 | D</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>Đ | 2.0 | 4.0 | Đ</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>E | 3.0 | 3.0 | E</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>Ê | 4.0 | 2.0 | Ê</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>G | 5.0 | 1.0 | G</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>H | 1.0 | 5.0 | H</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>I | 2.0 | 4.0 | I</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>K | 3.0 | 3.0 | K</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>L | 4.0 | 2.0 | L</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>M | 5.0 | 1.0 | M</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>N | 1.0 | 5.0 | N</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>O | 2.0 | 4.0 | O</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>Ô | 3.0 | 3.0 | Ô</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>Ơ | 4.0 | 2.0 | Ơ</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>P | 5.0 | 1.0 | P</td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td>Q | 1.0 | 5.0 | Q</td>
+            </tr>
+            <tr>
+                <td><b>22</b></td>
+                <td>R | 2.0 | 4.0 | R</td>
+            </tr>
+            <tr>
+                <td><b>23</b></td>
+                <td>S | 3.0 | 3.0 | S</td>
+            </tr>
+            <tr>
+                <td><b>24</b></td>
+                <td>T | 4.0 | 2.0 | T</td>
+            </tr>
+            <tr>
+                <td><b>25</b></td>
+                <td>U | 5.0 | 1.0 | U</td>
+            </tr>
+            <tr>
+                <td><b>26</b></td>
+                <td>Ư | 1.0 | 5.0 | Ư</td>
+            </tr>
+            <tr>
+                <td><b>27</b></td>
+                <td>V | 2.0 | 4.0 | V</td>
+            </tr>
+            <tr>
+                <td><b>28</b></td>
+                <td>X | 3.0 | 3.0 | X</td>
+            </tr>
+            <tr>
+                <td><b>29</b></td>
+                <td>Y | 4.0 | 2.0 | Y</td>
+            </tr>
+            <tr>
+                <td><b>30</b></td>
+                <td>A | 1.0 | 5.0 | A</td>
+            </tr>
+            <tr>
+                <td><b>31</b></td>
+                <td>À | 1.0 | 5.0 | À</td>
+            </tr>
+            <tr>
+                <td><b>32</b></td>
+                <td>Á | 1.0 | 5.0 | Á</td>
+            </tr>
+            <tr>
+                <td><b>33</b></td>
+                <td>Ả | 1.0 | 5.0 | Ả</td>
+            </tr>
+            <tr>
+                <td><b>34</b></td>
+                <td>Ã | 1.0 | 5.0 | Ã</td>
+            </tr>
+            <tr>
+                <td><b>35</b></td>
+                <td>Ạ | 1.0 | 5.0 | Ạ</td>
+            </tr>
+            <tr>
+                <td><b>36</b></td>
+                <td>Ă | 2.0 | 4.0 | Ă</td>
+            </tr>
+            <tr>
+                <td><b>37</b></td>
+                <td>Ằ | 2.0 | 4.0 | Ằ</td>
+            </tr>
+            <tr>
+                <td><b>38</b></td>
+                <td>Ắ | 2.0 | 4.0 | Ắ</td>
+            </tr>
+            <tr>
+                <td><b>39</b></td>
+                <td>Ẳ | 2.0 | 4.0 | Ẳ</td>
+            </tr>
+            <tr>
+                <td><b>40</b></td>
+                <td>Ẵ | 2.0 | 4.0 | Ẵ</td>
+            </tr>
+            <tr>
+                <td><b>41</b></td>
+                <td>Ặ | 2.0 | 4.0 | Ặ</td>
+            </tr>
+            <tr>
+                <td><b>42</b></td>
+                <td>Â | 3.0 | 3.0 | Â</td>
+            </tr>
+            <tr>
+                <td><b>43</b></td>
+                <td>Ầ | 3.0 | 3.0 | Ầ</td>
+            </tr>
+            <tr>
+                <td><b>44</b></td>
+                <td>Ấ | 3.0 | 3.0 | Ấ</td>
+            </tr>
+            <tr>
+                <td><b>45</b></td>
+                <td>Ẩ | 3.0 | 3.0 | Ẩ</td>
+            </tr>
+            <tr>
+                <td><b>46</b></td>
+                <td>Ẫ | 3.0 | 3.0 | Ẫ</td>
+            </tr>
+            <tr>
+                <td><b>47</b></td>
+                <td>Ậ | 3.0 | 3.0 | Ậ</td>
+            </tr>
+            <tr>
+                <td><b>48</b></td>
+                <td>E | 3.0 | 3.0 | E</td>
+            </tr>
+            <tr>
+                <td><b>49</b></td>
+                <td>È | 3.0 | 3.0 | È</td>
+            </tr>
+            <tr>
+                <td><b>50</b></td>
+                <td>É | 3.0 | 3.0 | É</td>
+            </tr>
+            <tr>
+                <td><b>51</b></td>
+                <td>Ẻ | 3.0 | 3.0 | Ẻ</td>
+            </tr>
+            <tr>
+                <td><b>52</b></td>
+                <td>Ẽ | 3.0 | 3.0 | Ẽ</td>
+            </tr>
+            <tr>
+                <td><b>53</b></td>
+                <td>Ẹ | 3.0 | 3.0 | Ẹ</td>
+            </tr>
+            <tr>
+                <td><b>54</b></td>
+                <td>Ê | 4.0 | 2.0 | Ê</td>
+            </tr>
+            <tr>
+                <td><b>55</b></td>
+                <td>Ề | 4.0 | 2.0 | Ề</td>
+            </tr>
+            <tr>
+                <td><b>56</b></td>
+                <td>Ế | 4.0 | 2.0 | Ế</td>
+            </tr>
+            <tr>
+                <td><b>57</b></td>
+                <td>Ể | 4.0 | 2.0 | Ể</td>
+            </tr>
+            <tr>
+                <td><b>58</b></td>
+                <td>Ễ | 4.0 | 2.0 | Ễ</td>
+            </tr>
+            <tr>
+                <td><b>59</b></td>
+                <td>Ệ | 4.0 | 2.0 | Ệ</td>
+            </tr>
+            <tr>
+                <td><b>60</b></td>
+                <td>I | 2.0 | 4.0 | I</td>
+            </tr>
+            <tr>
+                <td><b>61</b></td>
+                <td>Ì | 2.0 | 4.0 | Ì</td>
+            </tr>
+            <tr>
+                <td><b>62</b></td>
+                <td>Í | 2.0 | 4.0 | Í</td>
+            </tr>
+            <tr>
+                <td><b>63</b></td>
+                <td>Ỉ | 2.0 | 4.0 | Ỉ</td>
+            </tr>
+            <tr>
+                <td><b>64</b></td>
+                <td>Ĩ | 2.0 | 4.0 | Ĩ</td>
+            </tr>
+            <tr>
+                <td><b>65</b></td>
+                <td>Ị | 2.0 | 4.0 | Ị</td>
+            </tr>
+            <tr>
+                <td><b>66</b></td>
+                <td>O | 2.0 | 4.0 | O</td>
+            </tr>
+            <tr>
+                <td><b>67</b></td>
+                <td>Ò | 2.0 | 4.0 | Ò</td>
+            </tr>
+            <tr>
+                <td><b>68</b></td>
+                <td>Ó | 2.0 | 4.0 | Ó</td>
+            </tr>
+            <tr>
+                <td><b>69</b></td>
+                <td>Ỏ | 2.0 | 4.0 | Ỏ</td>
+            </tr>
+            <tr>
+                <td><b>70</b></td>
+                <td>Õ | 2.0 | 4.0 | Õ</td>
+            </tr>
+            <tr>
+                <td><b>71</b></td>
+                <td>Ọ | 2.0 | 4.0 | Ọ</td>
+            </tr>
+            <tr>
+                <td><b>72</b></td>
+                <td>Ô | 3.0 | 3.0 | Ô</td>
+            </tr>
+            <tr>
+                <td><b>73</b></td>
+                <td>Ồ | 3.0 | 3.0 | Ồ</td>
+            </tr>
+            <tr>
+                <td><b>74</b></td>
+                <td>Ố | 3.0 | 3.0 | Ố</td>
+            </tr>
+            <tr>
+                <td><b>75</b></td>
+                <td>Ổ | 3.0 | 3.0 | Ổ</td>
+            </tr>
+            <tr>
+                <td><b>76</b></td>
+                <td>Ỗ | 3.0 | 3.0 | Ỗ</td>
+            </tr>
+            <tr>
+                <td><b>77</b></td>
+                <td>Ộ | 3.0 | 3.0 | Ộ</td>
+            </tr>
+            <tr>
+                <td><b>78</b></td>
+                <td>Ơ | 4.0 | 2.0 | Ơ</td>
+            </tr>
+            <tr>
+                <td><b>79</b></td>
+                <td>Ờ | 4.0 | 2.0 | Ờ</td>
+            </tr>
+            <tr>
+                <td><b>80</b></td>
+                <td>Ớ | 4.0 | 2.0 | Ớ</td>
+            </tr>
+            <tr>
+                <td><b>81</b></td>
+                <td>Ở | 4.0 | 2.0 | Ở</td>
+            </tr>
+            <tr>
+                <td><b>82</b></td>
+                <td>Ỡ | 4.0 | 2.0 | Ỡ</td>
+            </tr>
+            <tr>
+                <td><b>83</b></td>
+                <td>Ợ | 4.0 | 2.0 | Ợ</td>
+            </tr>
+            <tr>
+                <td><b>84</b></td>
+                <td>U | 5.0 | 1.0 | U</td>
+            </tr>
+            <tr>
+                <td><b>85</b></td>
+                <td>Ù | 5.0 | 1.0 | Ù</td>
+            </tr>
+            <tr>
+                <td><b>86</b></td>
+                <td>Ú | 5.0 | 1.0 | Ú</td>
+            </tr>
+            <tr>
+                <td><b>87</b></td>
+                <td>Ủ | 5.0 | 1.0 | Ủ</td>
+            </tr>
+            <tr>
+                <td><b>88</b></td>
+                <td>Ũ | 5.0 | 1.0 | Ũ</td>
+            </tr>
+            <tr>
+                <td><b>89</b></td>
+                <td>Ụ | 5.0 | 1.0 | Ụ</td>
+            </tr>
+            <tr>
+                <td><b>90</b></td>
+                <td>Ư | 1.0 | 5.0 | Ư</td>
+            </tr>
+            <tr>
+                <td><b>91</b></td>
+                <td>Ừ | 1.0 | 5.0 | Ừ</td>
+            </tr>
+            <tr>
+                <td><b>92</b></td>
+                <td>Ứ | 1.0 | 5.0 | Ứ</td>
+            </tr>
+            <tr>
+                <td><b>93</b></td>
+                <td>Ử | 1.0 | 5.0 | Ử</td>
+            </tr>
+            <tr>
+                <td><b>94</b></td>
+                <td>Ữ | 1.0 | 5.0 | Ữ</td>
+            </tr>
+            <tr>
+                <td><b>95</b></td>
+                <td>Ự | 1.0 | 5.0 | Ự</td>
+            </tr>
+            <tr>
+                <td><b>96</b></td>
+                <td>Y | 4.0 | 2.0 | Y</td>
+            </tr>
+            <tr>
+                <td><b>97</b></td>
+                <td>Ỳ | 4.0 | 2.0 | Ỳ</td>
+            </tr>
+            <tr>
+                <td><b>98</b></td>
+                <td>Ý | 4.0 | 2.0 | Ý</td>
+            </tr>
+            <tr>
+                <td><b>99</b></td>
+                <td>Ỷ | 4.0 | 2.0 | Ỷ</td>
+            </tr>
+            <tr>
+                <td><b>100</b></td>
+                <td>Ỹ | 4.0 | 2.0 | Ỹ</td>
+            </tr>
+            <tr>
+                <td><b>101</b></td>
+                <td>Ỵ | 4.0 | 2.0 | Ỵ</td>
+            </tr>
+            <tr>
+                <td><b>102</b></td>
+                <td>a | 1.0 | 5.0 | a</td>
+            </tr>
+            <tr>
+                <td><b>103</b></td>
+                <td>ă | 2.0 | 4.0 | ă</td>
+            </tr>
+            <tr>
+                <td><b>104</b></td>
+                <td>â | 3.0 | 3.0 | â</td>
+            </tr>
+            <tr>
+                <td><b>105</b></td>
+                <td>b | 4.0 | 2.0 | b</td>
+            </tr>
+            <tr>
+                <td><b>106</b></td>
+                <td>c | 5.0 | 1.0 | c</td>
+            </tr>
+            <tr>
+                <td><b>107</b></td>
+                <td>d | 1.0 | 5.0 | d</td>
+            </tr>
+            <tr>
+                <td><b>108</b></td>
+                <td>đ | 2.0 | 4.0 | đ</td>
+            </tr>
+            <tr>
+                <td><b>109</b></td>
+                <td>e | 3.0 | 3.0 | e</td>
+            </tr>
+            <tr>
+                <td><b>110</b></td>
+                <td>ê | 4.0 | 2.0 | ê</td>
+            </tr>
+            <tr>
+                <td><b>111</b></td>
+                <td>g | 5.0 | 1.0 | g</td>
+            </tr>
+            <tr>
+                <td><b>112</b></td>
+                <td>h | 1.0 | 5.0 | h</td>
+            </tr>
+            <tr>
+                <td><b>113</b></td>
+                <td>i | 2.0 | 4.0 | i</td>
+            </tr>
+            <tr>
+                <td><b>114</b></td>
+                <td>k | 3.0 | 3.0 | k</td>
+            </tr>
+            <tr>
+                <td><b>115</b></td>
+                <td>l | 4.0 | 2.0 | l</td>
+            </tr>
+            <tr>
+                <td><b>116</b></td>
+                <td>m | 5.0 | 1.0 | m</td>
+            </tr>
+            <tr>
+                <td><b>117</b></td>
+                <td>n | 1.0 | 5.0 | n</td>
+            </tr>
+            <tr>
+                <td><b>118</b></td>
+                <td>o | 2.0 | 4.0 | o</td>
+            </tr>
+            <tr>
+                <td><b>119</b></td>
+                <td>ô | 3.0 | 3.0 | ô</td>
+            </tr>
+            <tr>
+                <td><b>120</b></td>
+                <td>ơ | 4.0 | 2.0 | ơ</td>
+            </tr>
+            <tr>
+                <td><b>121</b></td>
+                <td>p | 5.0 | 1.0 | p</td>
+            </tr>
+            <tr>
+                <td><b>122</b></td>
+                <td>q | 1.0 | 5.0 | q</td>
+            </tr>
+            <tr>
+                <td><b>123</b></td>
+                <td>r | 2.0 | 4.0 | r</td>
+            </tr>
+            <tr>
+                <td><b>124</b></td>
+                <td>s | 3.0 | 3.0 | s</td>
+            </tr>
+            <tr>
+                <td><b>125</b></td>
+                <td>t | 4.0 | 2.0 | t</td>
+            </tr>
+            <tr>
+                <td><b>126</b></td>
+                <td>u | 5.0 | 1.0 | u</td>
+            </tr>
+            <tr>
+                <td><b>127</b></td>
+                <td>ư | 1.0 | 5.0 | ư</td>
+            </tr>
+            <tr>
+                <td><b>128</b></td>
+                <td>v | 2.0 | 4.0 | v</td>
+            </tr>
+            <tr>
+                <td><b>129</b></td>
+                <td>x | 3.0 | 3.0 | x</td>
+            </tr>
+            <tr>
+                <td><b>130</b></td>
+                <td>y | 4.0 | 2.0 | y</td>
+            </tr>
+            <tr>
+                <td><b>131</b></td>
+                <td>a | 1.0 | 5.0 | a</td>
+            </tr>
+            <tr>
+                <td><b>132</b></td>
+                <td>à | 1.0 | 5.0 | à</td>
+            </tr>
+            <tr>
+                <td><b>133</b></td>
+                <td>á | 1.0 | 5.0 | á</td>
+            </tr>
+            <tr>
+                <td><b>134</b></td>
+                <td>ả | 1.0 | 5.0 | ả</td>
+            </tr>
+            <tr>
+                <td><b>135</b></td>
+                <td>ã | 1.0 | 5.0 | ã</td>
+            </tr>
+            <tr>
+                <td><b>136</b></td>
+                <td>ạ | 1.0 | 5.0 | ạ</td>
+            </tr>
+            <tr>
+                <td><b>137</b></td>
+                <td>ă | 2.0 | 4.0 | ă</td>
+            </tr>
+            <tr>
+                <td><b>138</b></td>
+                <td>ằ | 2.0 | 4.0 | ằ</td>
+            </tr>
+            <tr>
+                <td><b>139</b></td>
+                <td>ắ | 2.0 | 4.0 | ắ</td>
+            </tr>
+            <tr>
+                <td><b>140</b></td>
+                <td>ẳ | 2.0 | 4.0 | ẳ</td>
+            </tr>
+            <tr>
+                <td><b>141</b></td>
+                <td>ẵ | 2.0 | 4.0 | ẵ</td>
+            </tr>
+            <tr>
+                <td><b>142</b></td>
+                <td>ặ | 2.0 | 4.0 | ặ</td>
+            </tr>
+            <tr>
+                <td><b>143</b></td>
+                <td>â | 3.0 | 3.0 | â</td>
+            </tr>
+            <tr>
+                <td><b>144</b></td>
+                <td>ầ | 3.0 | 3.0 | ầ</td>
+            </tr>
+            <tr>
+                <td><b>145</b></td>
+                <td>ấ | 3.0 | 3.0 | ấ</td>
+            </tr>
+            <tr>
+                <td><b>146</b></td>
+                <td>ẩ | 3.0 | 3.0 | ẩ</td>
+            </tr>
+            <tr>
+                <td><b>147</b></td>
+                <td>ẫ | 3.0 | 3.0 | ẫ</td>
+            </tr>
+            <tr>
+                <td><b>148</b></td>
+                <td>ậ | 3.0 | 3.0 | ậ</td>
+            </tr>
+            <tr>
+                <td><b>149</b></td>
+                <td>e | 3.0 | 3.0 | e</td>
+            </tr>
+            <tr>
+                <td><b>150</b></td>
+                <td>è | 3.0 | 3.0 | è</td>
+            </tr>
+            <tr>
+                <td><b>151</b></td>
+                <td>é | 3.0 | 3.0 | é</td>
+            </tr>
+            <tr>
+                <td><b>152</b></td>
+                <td>ẻ | 3.0 | 3.0 | ẻ</td>
+            </tr>
+            <tr>
+                <td><b>153</b></td>
+                <td>ẽ | 3.0 | 3.0 | ẽ</td>
+            </tr>
+            <tr>
+                <td><b>154</b></td>
+                <td>ẹ | 3.0 | 3.0 | ẹ</td>
+            </tr>
+            <tr>
+                <td><b>155</b></td>
+                <td>ê | 4.0 | 2.0 | ê</td>
+            </tr>
+            <tr>
+                <td><b>156</b></td>
+                <td>ề | 4.0 | 2.0 | ề</td>
+            </tr>
+            <tr>
+                <td><b>157</b></td>
+                <td>ế | 4.0 | 2.0 | ế</td>
+            </tr>
+            <tr>
+                <td><b>158</b></td>
+                <td>ể | 4.0 | 2.0 | ể</td>
+            </tr>
+            <tr>
+                <td><b>159</b></td>
+                <td>ễ | 4.0 | 2.0 | ễ</td>
+            </tr>
+            <tr>
+                <td><b>160</b></td>
+                <td>ệ | 4.0 | 2.0 | ệ</td>
+            </tr>
+            <tr>
+                <td><b>161</b></td>
+                <td>i | 2.0 | 4.0 | i</td>
+            </tr>
+            <tr>
+                <td><b>162</b></td>
+                <td>ì | 2.0 | 4.0 | ì</td>
+            </tr>
+            <tr>
+                <td><b>163</b></td>
+                <td>í | 2.0 | 4.0 | í</td>
+            </tr>
+            <tr>
+                <td><b>164</b></td>
+                <td>ỉ | 2.0 | 4.0 | ỉ</td>
+            </tr>
+            <tr>
+                <td><b>165</b></td>
+                <td>ĩ | 2.0 | 4.0 | ĩ</td>
+            </tr>
+            <tr>
+                <td><b>166</b></td>
+                <td>ị | 2.0 | 4.0 | ị</td>
+            </tr>
+            <tr>
+                <td><b>167</b></td>
+                <td>o | 2.0 | 4.0 | o</td>
+            </tr>
+            <tr>
+                <td><b>168</b></td>
+                <td>ò | 2.0 | 4.0 | ò</td>
+            </tr>
+            <tr>
+                <td><b>169</b></td>
+                <td>ó | 2.0 | 4.0 | ó</td>
+            </tr>
+            <tr>
+                <td><b>170</b></td>
+                <td>ỏ | 2.0 | 4.0 | ỏ</td>
+            </tr>
+            <tr>
+                <td><b>171</b></td>
+                <td>õ | 2.0 | 4.0 | õ</td>
+            </tr>
+            <tr>
+                <td><b>172</b></td>
+                <td>ọ | 2.0 | 4.0 | ọ</td>
+            </tr>
+            <tr>
+                <td><b>173</b></td>
+                <td>ô | 3.0 | 3.0 | ô</td>
+            </tr>
+            <tr>
+                <td><b>174</b></td>
+                <td>ồ | 3.0 | 3.0 | ồ</td>
+            </tr>
+            <tr>
+                <td><b>175</b></td>
+                <td>ố | 3.0 | 3.0 | ố</td>
+            </tr>
+            <tr>
+                <td><b>176</b></td>
+                <td>ổ | 3.0 | 3.0 | ổ</td>
+            </tr>
+            <tr>
+                <td><b>177</b></td>
+                <td>ỗ | 3.0 | 3.0 | ỗ</td>
+            </tr>
+            <tr>
+                <td><b>178</b></td>
+                <td>ộ | 3.0 | 3.0 | ộ</td>
+            </tr>
+            <tr>
+                <td><b>179</b></td>
+                <td>ơ | 4.0 | 2.0 | ơ</td>
+            </tr>
+            <tr>
+                <td><b>180</b></td>
+                <td>ờ | 4.0 | 2.0 | ờ</td>
+            </tr>
+            <tr>
+                <td><b>181</b></td>
+                <td>ớ | 4.0 | 2.0 | ớ</td>
+            </tr>
+            <tr>
+                <td><b>182</b></td>
+                <td>ở | 4.0 | 2.0 | ở</td>
+            </tr>
+            <tr>
+                <td><b>183</b></td>
+                <td>ỡ | 4.0 | 2.0 | ỡ</td>
+            </tr>
+            <tr>
+                <td><b>184</b></td>
+                <td>ợ | 4.0 | 2.0 | ợ</td>
+            </tr>
+            <tr>
+                <td><b>185</b></td>
+                <td>u | 5.0 | 1.0 | u</td>
+            </tr>
+            <tr>
+                <td><b>186</b></td>
+                <td>ù | 5.0 | 1.0 | ù</td>
+            </tr>
+            <tr>
+                <td><b>187</b></td>
+                <td>ú | 5.0 | 1.0 | ú</td>
+            </tr>
+            <tr>
+                <td><b>188</b></td>
+                <td>ủ | 5.0 | 1.0 | ủ</td>
+            </tr>
+            <tr>
+                <td><b>189</b></td>
+                <td>ũ | 5.0 | 1.0 | ũ</td>
+            </tr>
+            <tr>
+                <td><b>190</b></td>
+                <td>ụ | 5.0 | 1.0 | ụ</td>
+            </tr>
+            <tr>
+                <td><b>191</b></td>
+                <td>ư | 1.0 | 5.0 | ư</td>
+            </tr>
+            <tr>
+                <td><b>192</b></td>
+                <td>ừ | 1.0 | 5.0 | ừ</td>
+            </tr>
+            <tr>
+                <td><b>193</b></td>
+                <td>ứ | 1.0 | 5.0 | ứ</td>
+            </tr>
+            <tr>
+                <td><b>194</b></td>
+                <td>ử | 1.0 | 5.0 | ử</td>
+            </tr>
+            <tr>
+                <td><b>195</b></td>
+                <td>ữ | 1.0 | 5.0 | ữ</td>
+            </tr>
+            <tr>
+                <td><b>196</b></td>
+                <td>ự | 1.0 | 5.0 | ự</td>
+            </tr>
+            <tr>
+                <td><b>197</b></td>
+                <td>y | 4.0 | 2.0 | y</td>
+            </tr>
+            <tr>
+                <td><b>198</b></td>
+                <td>ỳ | 4.0 | 2.0 | ỳ</td>
+            </tr>
+            <tr>
+                <td><b>199</b></td>
+                <td>ý | 4.0 | 2.0 | ý</td>
+            </tr>
+            <tr>
+                <td><b>200</b></td>
+                <td>ỷ | 4.0 | 2.0 | ỷ</td>
+            </tr>
+            <tr>
+                <td><b>201</b></td>
+                <td>ỹ | 4.0 | 2.0 | ỹ</td>
+            </tr>
+            <tr>
+                <td><b>202</b></td>
+                <td>ỵ | 4.0 | 2.0 | ỵ</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

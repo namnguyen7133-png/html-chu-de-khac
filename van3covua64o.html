@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cờ Vua Điểm Thi Đua — 64 Ô</title>
+<style>
+:root{--bg:#0d1117;--light:#e8d4b0;--dark:#8b5a2b;--gold:#f1c40f;--plus:#27ae60;--minus:#e74c3c;--panel:#161b22;}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif;}
+body{background:var(--bg);color:#e6edf3;padding:12px;min-height:100vh;}
+h1{text-align:center;color:var(--gold);font-size:1.5rem;margin-bottom:4px;text-shadow:0 2px 6px #000;}
+.sub{text-align:center;color:#8b949e;font-size:.8rem;margin-bottom:12px;}
+.panel{background:var(--panel);border:2px solid #30363d;border-radius:10px;padding:12px;margin-bottom:14px;box-shadow:0 4px 12px rgba(0,0,0,.6);}
+.stats{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:10px;}
+.stat{background:#21262d;border:1px solid #30363d;border-radius:8px;padding:8px 14px;text-align:center;min-width:100px;}
+.stat .lbl{font-size:.62rem;color:#8b949e;text-transform:uppercase;}
+.stat .val{font-size:1.3rem;font-weight:800;}
+.vp{color:var(--plus);}.vm{color:var(--minus);}.vn{color:var(--gold);}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:8px;}
+.form-grid label{font-size:.68rem;color:#8b949e;display:block;margin-bottom:2px;}
+.form-grid input,.form-grid select{width:100%;padding:6px;border-radius:6px;border:1px solid #30363d;background:#0d1117;color:#e6edf3;font-size:.85rem;}
+.form-grid button{grid-column:1/-1;padding:8px;border:none;border-radius:6px;background:var(--gold);color:#0d1117;font-weight:800;cursor:pointer;}
+.board-wrap{display:flex;justify-content:center;padding:10px;}
+.chess{display:grid;grid-template-columns:repeat(8,1fr);width:min(100%,640px);aspect-ratio:1/1;border:8px solid #5c3a1e;border-radius:4px;box-shadow:0 0 40px rgba(241,196,15,.2);}
+.cell{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:.15s;padding:1px;overflow:hidden;}
+.cell.light{background:var(--light);color:#2a1810;}
+.cell.dark{background:var(--dark);color:#f5e6d3;}
+.cell:hover{outline:3px solid var(--gold);z-index:5;transform:scale(1.06);box-shadow:0 0 16px var(--gold);}
+.cell .num{position:absolute;top:1px;left:2px;font-size:.5rem;font-weight:700;opacity:.5;}
+.cell .name{font-size:.55rem;font-weight:700;text-align:center;line-height:1.05;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;}
+.cell .pts{font-size:.62rem;font-weight:900;margin-top:1px;padding:0 4px;border-radius:3px;color:#fff;}
+.cell.plus .pts{background:var(--plus);}
+.cell.minus .pts{background:var(--minus);}
+.cell.done{opacity:.35;filter:grayscale(.8);}
+.cell.done::after{content:"♛";position:absolute;top:1px;right:3px;color:var(--gold);font-size:.8rem;font-weight:900;}
+/* Quân cờ trang trí */
+.cell.plus::before{content:"♙";position:absolute;bottom:1px;right:2px;font-size:.7rem;color:rgba(39,174,96,.5);}
+.cell.minus::before{content:"♟";position:absolute;bottom:1px;right:2px;font-size:.7rem;color:rgba(231,76,60,.5);}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;align-items:center;justify-content:center;padding:14px;}
+.modal.show{display:flex;}
+.mbox{background:var(--panel);border:3px solid var(--gold);border-radius:12px;padding:18px;max-width:400px;width:100%;}
+.mbox h3{color:var(--gold);font-size:1.05rem;margin-bottom:8px;}
+.mbox .detail{background:#21262d;border-radius:8px;padding:10px;margin-bottom:10px;}
+.mbox .big{font-size:1.6rem;font-weight:900;margin-top:4px;}
+.mbox .row{display:flex;gap:8px;}
+.mbox button{flex:1;padding:10px;border:none;border-radius:8px;font-weight:800;cursor:pointer;font-size:.9rem;}
+.ok{background:var(--plus);color:#fff;}.cancel{background:#30363d;color:#e6edf3;}
+.log{max-height:180px;overflow-y:auto;font-size:.78rem;}
+.li{display:flex;justify-content:space-between;padding:5px 6px;border-bottom:1px solid #21262d;gap:6px;}
+.li .t{color:#8b949e;font-size:.65rem;white-space:nowrap;}
+.li.p .s{color:var(--plus);font-weight:800;}.li.m .s{color:var(--minus);font-weight:800;}
+.note{font-size:.7rem;color:#8b949e;margin-top:6px;line-height:1.4;}
+</style>
+</head>
+<body>
+<h1>♞ CỜ VUA ĐIỂM THI ĐUA — 64 Ô</h1>
+<p class="sub">Bấm quân cờ để ghi nhận · 32 việc cộng + 32 việc trừ · Bàn cờ vua chuẩn 8×8</p>
+
+<div class="panel">
+  <div class="stats">
+    <div class="stat"><div class="lbl">Cộng</div><div class="val vp" id="sP">0</div></div>
+    <div class="stat"><div class="lbl">Trừ</div><div class="val vm" id="sM">0</div></div>
+    <div class="stat"><div class="lbl">Còn lại</div><div class="val vn" id="sN">0</div></div>
+    <div class="stat"><div class="lbl">Đã làm</div><div class="val" id="sC">0</div></div>
+    <div class="stat"><div class="lbl">Thâm niên</div><div class="val" id="sS">0</div></div>
+  </div>
+  <div class="form-grid">
+    <div><label>Tên</label><input id="pName" value="Thành viên"></div>
+    <div><label>Tuổi</label><input id="pYear" type="number" value="10" min="0"></div>
+    <div><label>Tháng</label><input id="pMonth" type="number" value="0" min="0" max="11"></div>
+    <div><label>Giờ</label><input id="pHour" type="number" value="0" min="0"></div>
+    <div><label>Cấp bậc</label><select id="pRank"><option value="1">Tân binh x1</option><option value="1.2">Chiến binh x1.2</option><option value="1.5">Đội trưởng x1.5</option><option value="2">Thủ lĩnh x2</option><option value="3">Tướng quân x3</option></select></div>
+    <div><label>Công trạng</label><input id="pMerit" type="number" value="0"></div>
+    <button id="btnInfo">🔄 Áp dụng</button>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="board-wrap"><div class="chess" id="board"></div></div>
+  <p class="note">Ô sáng = việc cộng ♙ · Ô tối = việc trừ ♟ · Bàn cờ vua chuẩn 8×8 = 64 ô</p>
+</div>
+
+<div class="panel">
+  <h3 style="color:var(--gold);margin-bottom:6px;">📜 Nhật ký</h3>
+  <div class="log" id="log"></div>
+  <button id="btnReset" style="margin-top:8px;padding:6px 12px;border:none;border-radius:6px;background:var(--minus);color:#fff;font-weight:800;cursor:pointer;">🗑️ Xóa tất cả</button>
+</div>
+
+<div class="modal" id="modal"><div class="mbox">
+  <h3 id="mTitle"></h3>
+  <div class="detail"><div id="mName"></div><div class="big" id="mPts"></div><div id="mCalc" style="font-size:.7rem;color:#8b949e;margin-top:4px;"></div></div>
+  <div class="row"><button class="cancel" id="mCancel">Hủy</button><button class="ok" id="mOk">✔ Ghi nhận</button></div>
+</div></div>
+
+<script>
+const PLUS=[
+{n:"Quét nhà",p:5},{n:"Thu quần áo",p:10},{n:"Dọn ghế sofa",p:5},{n:"Đổ rác",p:5},
+{n:"Lau bàn",p:5},{n:"Thu dọn giường",p:5},{n:"Lấy hàng chuyển phát",p:10},
+{n:"Giặt tất",p:5},{n:"Sắp xếp giày dép",p:5},{n:"Thu dọn đồ chơi",p:5},
+{n:"Không kén ăn",p:5},{n:"Phơi quần áo",p:5},{n:"Lau nhà",p:5},{n:"Rửa bát",p:10},
+{n:"Chạy việc/làm việc vặt",p:5},{n:"Tự giác hoàn thành bài tập",p:15},
+{n:"Nhảy dây/luyện bóng",p:15},{n:"Duy trì tất cả việc 1 tuần",p:25},
+{n:"Xách cặp lồng cơm T1→nhà",p:5},{n:"Vét cơm nguội T4, cất tủ lạnh T2",p:5},
+{n:"Lau nhà bếp sạch sẽ",p:10},{n:"Rửa & tráng bát đĩa",p:10},
+{n:"Cọ nhà vệ sinh sau rửa bát",p:15},{n:"Hứng nước lọc T2 vào bình 5L",p:5},
+{n:"Bình 5L nước T2→T4",p:5},{n:"Đun sôi bình nước 5L",p:5},
+{n:"Nhóm than tổ ong",p:18},{n:"Xách nước T2→T4 & đun nấu",p:22},
+{n:"Chia nước nguội các phòng",p:10},{n:"Nấu cơm, canh buổi sáng",p:25},
+{n:"Đón trẻ tan học (900m)",p:20},{n:"Đưa con đi học thêm xe máy",p:15},
+{n:"Đưa đón Ông Bà xe máy",p:25},{n:"Mở cửa hàng buổi sáng",p:15},
+{n:"Đóng cửa hàng & khóa tối",p:15},{n:"Hỗ trợ vợ buổi tối dọn đồ",p:15},
+{n:"Chuẩn bị xe cho vợ sáng",p:15},{n:"Đi học đầy đủ đúng giờ",p:5},
+{n:"Quần áo đầu tóc gọn gàng",p:5},{n:"Chào hỏi lễ phép người thân",p:5},
+{n:"Chào hỏi hàng xóm",p:3},{n:"Giúp đỡ bạn học tập",p:5},
+{n:"Bênh vực bạn bị bắt nạt",p:10},{n:"Tự giải quyết khôn ngoan",p:15},
+{n:"Thầy cô khen ngợi",p:10},{n:"Công nhật VS công nghiệp",p:600}
+];
+const MINUS=[
+{n:"Nổi nóng",p:10},{n:"Trì hoãn",p:10},{n:"Nói dối",p:10},{n:"Cãi lại",p:10},
+{n:"Điện thoại/giờ",p:25},{n:"Xem TV/giờ",p:25},{n:"Làm hỏng bát đĩa",p:20},
+{n:"Làm hỏng thiết bị đun",p:50},{n:"Làm rách bình chứa",p:15},
+{n:"Làm rơi vỡ cặp lồng",p:10},{n:"Lười biếng không làm bài",p:15},
+{n:"Đi học muộn",p:10},{n:"Nói trống không",p:5},{n:"Không chào hỏi",p:5},
+{n:"Tranh giành đồ chơi",p:5},{n:"Đánh bạn",p:20},{n:"Nói bậy",p:15},
+{n:"Vứt rác bừa bãi",p:5},{n:"Không gấp chăn màn",p:5},{n:"Để đồ đạc bừa bộn",p:5},
+{n:"Không rửa tay trước ăn",p:3},{n:"Ăn vụng",p:5},{n:"Kén ăn",p:5},
+{n:"Bỏ thừa cơm",p:5},{n:"Xem TV quá giờ",p:15},{n:"Chơi game quá giờ",p:20},
+{n:"Cãi lời ông bà",p:15},{n:"Không giúp việc nhà",p:10},
+{n:"Điện thoại trong giờ học",p:25},{n:"Nói xấu bạn",p:10},
+{n:"Bắt nạt em nhỏ",p:20},{n:"Không trung thực thi cử",p:25},
+{n:"Pha trò nghịch ngợm",p:10},{n:"Làm ồn khi mọi người nghỉ",p:10},
+{n:"Không tắt điện khi ra",p:5},{n:"Lãng phí nước",p:5},
+{n:"Để cửa mở khi ra ngoài",p:5},{n:"Không khóa cửa hàng",p:15},
+{n:"Quên việc được giao",p:10},{n:"Đi chơi không xin phép",p:15},
+{n:"Về nhà muộn",p:10},{n:"Không dọn phòng",p:10},
+{n:"Nói dối về điểm số",p:20},{n:"Giấu lỗi",p:15}
+];
+const KEY="chess_v1";
+let state={plus:0,minus:0,count:0,log:[],done:{}};
+let info={name:"Thành viên",year:10,month:0,hour:0,rank:1,merit:0};
+let pending=null;
+function senior(){return Math.round(info.year*5+info.month*1+info.hour*0.1);}
+function build(){
+  const b=document.getElementById("board");b.innerHTML="";
+  let pi=0,mi=0;
+  for(let r=0;r<8;r++){
+    for(let c=0;c<8;c++){
+      const isLight=(r+c)%2===0;
+      let task,type,idx;
+      if(isLight){task=PLUS[pi%PLUS.length];pi++;type="plus";idx=`P${r}-${c}`;}
+      else{task=MINUS[mi%MINUS.length];mi++;type="minus";idx=`M${r}-${c}`;}
+      const d=document.createElement("div");
+      d.className="cell "+(isLight?"light":"dark")+" "+type;
+      d.dataset.id=idx;d.dataset.name=task.n;d.dataset.pts=task.p;d.dataset.type=type;
+      d.innerHTML=`<span class="num">${r*8+c+1}</span><span class="name">${task.n}</span><span class="pts">${type==="plus"?"+":"-"}${task.p}</span>`;
+      d.onclick=()=>openM(d,task,type);
+      b.appendChild(d);
+    }
+  }
+}
+function openM(cell,task,type){
+  if(state.done[cell.dataset.id]){alert("Ô này đã ghi nhận!");return;}
+  pending={cell,task,type};
+  const calc=task.p*info.rank;
+  document.getElementById("mTitle").textContent=type==="plus"?"♙ Việc tốt — Cộng điểm":"♟ Vi phạm — Trừ điểm";
+  document.getElementById("mName").textContent=task.n+(info.rank!==1?` (x${info.rank})`:"");
+  document.getElementById("mPts").textContent=(type==="plus"?"+":"-")+calc+" điểm";
+  document.getElementById("mPts").style.color=type==="plus"?"var(--plus)":"var(--minus)";
+  document.getElementById("mCalc").textContent=`Gốc ${task.p} × cấp bậc ${info.rank} = ${calc}`;
+  document.getElementById("modal").classList.add("show");
+}
+document.getElementById("mCancel").onclick=()=>{document.getElementById("modal").classList.remove("show");pending=null;};
+document.getElementById("mOk").onclick=()=>{
+  if(!pending)return;const{cell,task,type}=pending;const calc=task.p*info.rank;
+  if(type==="plus")state.plus+=calc;else state.minus+=calc;
+  state.count++;state.done[cell.dataset.id]=true;cell.classList.add("done");
+  state.log.unshift({t:new Date().toLocaleString("vi-VN"),n:task.n,p:type==="plus"?calc:-calc});
+  save();render();document.getElementById("modal").classList.remove("show");pending=null;
+};
+function render(){
+  document.getElementById("sP").textContent=state.plus;
+  document.getElementById("sM").textContent=state.minus;
+  document.getElementById("sN").textContent=state.plus-state.minus+info.merit+senior();
+  document.getElementById("sC").textContent=state.count;
+  document.getElementById("sS").textContent=senior();
+  const el=document.getElementById("log");
+  el.innerHTML=state.log.length?state.log.map(l=>`<div class="li ${l.p>=0?'p':'m'}"><span>${l.n}</span><span><span class="t">${l.t}</span> <span class="s">${l.p>=0?'+':''}${l.p}</span></span></div>`).join(""):"<div style='color:#8b949e;font-size:.8rem'>Chưa có ghi nhận.</div>";
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));}
+function load(){const r=localStorage.getItem(KEY);if(r){try{state=JSON.parse(r);}catch(e){}}}
+function applyDone(){document.querySelectorAll(".cell").forEach(c=>{if(state.done[c.dataset.id])c.classList.add("done");});}
+document.getElementById("btnInfo").onclick=()=>{
+  info.name=document.getElementById("pName").value||"Thành viên";
+  info.year=+document.getElementById("pYear").value||0;
+  info.month=+document.getElementById("pMonth").value||0;
+  info.hour=+document.getElementById("pHour").value||0;
+  info.rank=+document.getElementById("pRank").value||1;
+  info.merit=+document.getElementById("pMerit").value||0;
+  render();alert(`Đã áp dụng: ${info.name}\nTuổi ${info.year} năm ${info.month} tháng ${info.hour} giờ\nCấp bậc x${info.rank} · Công trạng ${info.merit}\nThâm niên: ${senior()} điểm`);
+};
+document.getElementById("btnReset").onclick=()=>{if(!confirm("Xóa toàn bộ?"))return;state={plus:0,minus:0,count:0,log:[],done:{}};document.querySelectorAll(".cell").forEach(c=>c.classList.remove("done"));save();render();};
+load();build();applyDone();render();
+</script>
+</body>
+</html>

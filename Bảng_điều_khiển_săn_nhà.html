@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HỆ THỐNG TRUY VẾT MẶT BẰNG 24/7</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; padding: 15px; background: #263238; color: #eceff1; }
+        .card { background: #37474f; padding: 20px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1px solid #455a64; }
+        h2 { color: #ffeb3b; font-size: 1.1em; margin-top: 0; text-transform: uppercase; letter-spacing: 1px; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: none; border-radius: 8px; box-sizing: border-box; background: #eceff1; color: #263238; font-weight: bold; }
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        button { border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-save { background: #4caf50; color: white; width: 100%; }
+        .btn-map { background: #1e88e5; color: white; }
+        .btn-search { background: #7e57c2; color: white; }
+        .btn-hunt { display: block; background: #f4511e; color: white; text-align: center; padding: 15px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 10px; border: 2px solid #ff9e80; }
+        .log-box { background: #212121; border-left: 5px solid #ffeb3b; padding: 10px; margin-top: 10px; font-size: 0.85em; white-space: pre-wrap; color: #cfd8dc; max-height: 200px; overflow-y: auto; }
+        .question { color: #81c784; font-size: 0.85em; margin: 8px 0; border-bottom: 1px solid #455a64; padding-bottom: 5px; }
+        .label { font-size: 0.8em; color: #b0bec5; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>📍 TRUY VẾT ĐỊA CHỈ & MẶT BẰNG</h2>
+        <span class="label">Nhập số nhà, ngõ, phường tại đây:</span>
+        <input type="text" id="address" placeholder="Ví dụ: Số 15 ngõ 254 Minh Khai, Tương Mai">
+        
+        <div class="btn-group">
+            <button class="btn-map" onclick="openMap()">XEM BẢN ĐỒ</button>
+            <button class="btn-search" onclick="searchGoogle()">TÌM TRÊN GOOGLE</button>
+        </div>
+
+        <textarea id="note" rows="2" placeholder="Ghi chú nhanh (Vd: Chủ nhà tên Hùng, giá có thương lượng...)"></textarea>
+        <button class="btn-save" onclick="saveData()">LƯU VÀO NHẬT KÝ SĂN TIN</button>
+    </div>
+
+    <div class="card">
+        <h2>📝 LỊCH SỬ TÌM ĐƯỢC</h2>
+        <div id="logDisplay" class="log-box">Chưa có địa chỉ nào được lưu...</div>
+        <button style="margin-top:10px; background:transparent; color:#ff5252; border:1px solid #ff5252; font-size:0.7em;" onclick="clearData()">XÓA HẾT NHẬT KÝ</button>
+    </div>
+
+    <div class="card" style="border: 2px solid #f4511e;">
+        <h2>🤖 TRẠM PHÁT LỆNH ROBOT</h2>
+        <a href="https://www.nhatot.com/thue-van-phong-mat-bang-kinh-doanh-phuong-tuong-mai-quan-hoang-mai-ha-noi-gia-3-trieu-7-trieu" target="_blank" class="btn-hunt">QUÉT TIN MỚI TƯƠNG MAI (3-7TR)</a>
+    </div>
+
+    <div class="card">
+        <h2>📞 CÂU HỎI NHẮC VỞ KHI GỌI ĐIỆN</h2>
+        <p class="question">1. Điện riêng (công tơ riêng) chịu tải máy photo không?</p>
+        <p class="question">2. Lối đi riêng, có chung đụng chủ nhà không?</p>
+        <p class="question">3. Vỉa hè để được mấy xe máy khách?</p>
+    </div>
+
+    <script>
+        // Hàm mở Google Maps để xem vị trí nhà
+        function openMap() {
+            const addr = document.getElementById('address').value;
+            if(!addr) { alert("Nhập địa chỉ đã bạn ơi!"); return; }
+            window.open(`https://www.google.com/maps/search/${encodeURIComponent(addr)}`, '_blank');
+        }
+
+        // Hàm tìm kiếm sâu trên Google (xem địa chỉ này có phốt hay có tin cũ không)
+        function searchGoogle() {
+            const addr = document.getElementById('address').value;
+            if(!addr) { alert("Nhập địa chỉ đã bạn ơi!"); return; }
+            window.open(`https://www.google.com/search?q=${encodeURIComponent('cho thuê mặt bằng ' + addr)}`, '_blank');
+        }
+
+        // Lưu dữ liệu vào máy
+        function saveData() {
+            const addr = document.getElementById('address').value;
+            const nt = document.getElementById('note').value;
+            if(!addr) { alert("Nhập địa chỉ để lưu!"); return; }
+            
+            let history = localStorage.getItem('houseLogs') || "";
+            let time = new Date().toLocaleString('vi-VN');
+            history = `📌 [${time}]\nĐ/C: ${addr}\nGhi chú: ${nt}\n------------------\n` + history;
+            
+            localStorage.setItem('houseLogs', history);
+            displayData();
+            alert("Đã lưu địa chỉ!");
+        }
+
+        function displayData() {
+            const history = localStorage.getItem('houseLogs');
+            document.getElementById('logDisplay').innerText = history ? history : "Chưa có địa chỉ nào được lưu...";
+        }
+
+        function clearData() {
+            if(confirm("Xóa sạch lịch sử săn nhà?")) {
+                localStorage.removeItem('houseLogs');
+                displayData();
+            }
+        }
+
+        displayData();
+    </script>
+</body>
+</html>

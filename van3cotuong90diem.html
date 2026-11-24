@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cờ Tướng Điểm Thi Đua — 99 Ô</title>
+<style>
+:root{--bg:#1a0f0a;--wood:#d4a574;--wood2:#b8845a;--line:#5c3a1e;--gold:#f1c40f;--plus:#27ae60;--minus:#e74c3c;--panel:#2a1810;}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',serif;}
+body{background:var(--bg);color:#f5e6d3;padding:8px;height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+
+/* HEADER */
+header{text-align:center;margin-bottom:4px;flex-shrink:0;display:flex;justify-content:space-between;align-items:center;padding:0 10px;}
+h1{color:var(--gold);font-size:1.1rem;text-shadow:0 2px 4px #000;flex:1;text-align:center;}
+.sub{color:#c9a87c;font-size:.65rem;}
+
+/* NÚT ĐIỀU KHIỂN CHUNG */
+.top-btns{display:flex;gap:6px;}
+.top-btns button{padding:5px 10px;background:var(--wood2);color:#fff;border:1px solid var(--gold);border-radius:4px;cursor:pointer;font-size:.7rem;font-weight:700;transition:.2s;}
+.top-btns button:hover{background:var(--gold);color:#1a0f0a;}
+
+/* BỐ CỤC CHÍNH (Mặc định: App bên trái, Khu vực trống bên phải) */
+.main-layout{display:flex;gap:15px;flex:1;min-height:0;transition:.3s;}
+
+/* KHỐI APP BÊN TRÁI */
+.app-wrapper{width:50%;display:flex;gap:10px;min-height:0;transition:.3s;}
+
+/* Bố cục khi Đổi bên Trái/Phải */
+.main-layout.swap-horizontal { flex-direction:row-reverse; }
+.main-layout.swap-horizontal .app-wrapper { flex-direction:row-reverse; }
+
+/* Bố cục khi Đổi bên Trên/Dưới */
+.app-wrapper.swap-vertical { flex-direction:column; width:100%; height: 100%; }
+.main-layout.swap-vertical { flex-direction:column; }
+.main-layout.swap-vertical .app-wrapper { width:100%; }
+.main-layout.swap-vertical .right-space { width:100%; height:200px; }
+
+/* Sidebar & Bảng hiển thị */
+.sidebar{width:230px;display:flex;flex-direction:column;gap:8px;flex-shrink:0;overflow-y:auto;}
+.app-wrapper.swap-vertical .sidebar { flex-direction:row; width:100%; height: 140px; overflow-x: auto; }
+.app-wrapper.swap-vertical .sidebar .panel { flex: 1; min-width: 200px; }
+
+.panel{background:var(--panel);border:2px solid var(--wood2);border-radius:10px;padding:8px;box-shadow:0 4px 12px rgba(0,0,0,.6);}
+.stats{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-bottom:6px;}
+.stat{background:#3d2416;border:1px solid var(--wood2);border-radius:6px;padding:3px 5px;text-align:center;flex:1;min-width:60px;}
+.stat .lbl{font-size:.5rem;color:#c9a87c;text-transform:uppercase;}
+.stat .val{font-size:.85rem;font-weight:800;}
+.vp{color:var(--plus);}.vm{color:var(--minus);}.vn{color:var(--gold);}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;}
+.form-grid label{font-size:.55rem;color:#c9a87c;display:block;margin-bottom:1px;}
+.form-grid input,.form-grid select{width:100%;padding:3px;border-radius:4px;border:1px solid var(--wood2);background:#1a0f0a;color:#f5e6d3;font-size:.7rem;}
+.form-grid button{grid-column:1/-1;padding:5px;border:none;border-radius:4px;background:var(--gold);color:#1a0f0a;font-weight:800;cursor:pointer;font-size:.7rem;margin-top:2px;}
+.form-grid button:hover{background:#f39c12;}
+
+/* BẢNG HIỂN THỊ NỘI DUNG Ô TO */
+.display-panel{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:#3d2416;border:2px dashed var(--gold);}
+.display-panel h3{font-size:.8rem;color:var(--gold);margin-bottom:6px;}
+.display-panel .d-name{font-size:1rem;font-weight:800;color:#fff;margin-bottom:6px;line-height:1.3;}
+.display-panel .d-pts{font-size:1.3rem;font-weight:900;padding:4px 10px;border-radius:6px;color:#fff;}
+.display-panel.plus .d-pts{background:var(--plus);}
+.display-panel.minus .d-pts{background:var(--minus);}
+.display-panel .d-btn{width:80%;padding:8px;margin-top:12px;border:none;border-radius:6px;background:var(--gold);color:#1a0f0a;font-weight:800;font-size:.9rem;cursor:pointer;display:none;}
+.display-panel .d-note{font-size:.65rem;color:#c9a87c;margin-top:6px;line-height:1.3;}
+
+/* Cột 2: Bàn cờ */
+.board-container{flex:1;display:flex;justify-content:center;align-items:center;background:var(--panel);border:2px solid var(--wood2);border-radius:10px;padding:6px;box-shadow:0 4px 12px rgba(0,0,0,.6);overflow:hidden;min-height: 0;}
+
+/* BÀN CỜ - 99 Ô VUÔNG VỨC TUYỆT ĐỐI (9 Cột x 11 Hàng) */
+.xiangqi{
+  display:grid;
+  grid-template-columns:repeat(9, 1fr);
+  grid-template-rows:repeat(11, 1fr);
+  gap:0;
+  background:var(--wood);
+  border:3px solid var(--line);
+  border-radius:4px;
+  height:100%; 
+  aspect-ratio:9 / 11; 
+  max-width:100%;
+  max-height:100%;
+  position:relative;
+  box-shadow:inset 0 0 20px rgba(0,0,0,.3);
+  transition:transform .4s ease;
+}
+.xiangqi.flipped { transform: rotate(180deg); }
+.xiangqi.flipped .cell { transform: rotate(180deg); }
+
+/* CÁC Ô CỜ */
+.cell{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid var(--line);cursor:pointer;transition:.15s;padding:0px;overflow:hidden;background:var(--wood);}
+.cell:nth-child(odd){background:var(--wood2);}
+.cell:hover:not(.empty):not(.river-cell){background:var(--gold);z-index:5;transform:scale(1.05);box-shadow:0 0 8px var(--gold);}
+.cell.active{box-shadow:inset 0 0 0 3px #fff; z-index: 10;}
+.cell .num{position:absolute;top:0px;left:1px;font-size:.25rem;color:#5c3a1e;font-weight:700;opacity:.6;}
+.cell .name{font-size:.32rem;font-weight:700;color:#2a1810;text-align:center;line-height:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;}
+.cell .pts{font-size:.35rem;font-weight:900;margin-top:0px;padding:0 1px;border-radius:2px;color:#fff;}
+.cell.plus .pts{background:var(--plus);}
+.cell.minus .pts{background:var(--minus);}
+.cell.done{opacity:.4;filter:grayscale(.8);}
+.cell.done::after{content:"✔";position:absolute;top:0px;right:1px;color:var(--gold);font-size:.45rem;font-weight:900;}
+
+/* Ô Sông và các ô trống */
+.river-cell { background:linear-gradient(180deg,#7a5230,#5c3a1e,#7a5230) !important; cursor:default; border:1px solid var(--line); }
+.empty { background:var(--wood2); cursor:default; pointer-events:none; border:1px solid var(--line); }
+
+/* VÙNG TRỐNG BÊN CẠNH */
+.right-space{width:50%;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#5c3a1e;font-size:1.2rem;font-style:italic;font-weight:bold;text-align:center;padding:20px;border:2px dashed #3d2416;border-radius:10px;transition:.3s;}
+
+/* CSS cho log */
+.li{display:flex;justify-content:space-between;padding:2px;border-bottom:1px solid #3d2416;gap:2px;}
+.li .t{color:#c9a87c;font-size:.5rem;white-space:nowrap;}
+.li.p .s{color:var(--plus);font-weight:800;}.li.m .s{color:var(--minus);font-weight:800;}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="top-btns">
+    <button id="btnSwapH">↔ Đổi Panel Trái/Phải</button>
+    <button id="btnSwapV">↕ Đổi Panel Lên/Xuống</button>
+  </div>
+  <div style="flex:1;">
+    <h1>🐉 CỜ TƯỚNG ĐIỂM THI ĐUA</h1>
+    <p class="sub">Bấm ô để xem chi tiết · Các nút trên để tùy biến bố cục</p>
+  </div>
+  <div class="top-btns">
+    <button id="btnFlip">🔄 Đảo bàn cờ</button>
+  </div>
+</header>
+
+<div class="main-layout" id="mainLayout">
+  
+  <!-- KHỐI APP -->
+  <div class="app-wrapper" id="appWrapper">
+    
+    <div class="sidebar">
+      <div class="panel">
+        <div class="stats">
+          <div class="stat"><div class="lbl">Cộng</div><div class="val vp" id="sP">0</div></div>
+          <div class="stat"><div class="lbl">Trừ</div><div class="val vm" id="sM">0</div></div>
+          <div class="stat"><div class="lbl">Còn lại</div><div class="val vn" id="sN">0</div></div>
+          <div class="stat"><div class="lbl">Đã làm</div><div class="val" id="sC">0</div></div>
+          <div class="stat"><div class="lbl">Thâm niên</div><div class="val" id="sS">0</div></div>
+        </div>
+        <div class="form-grid">
+          <div><label>Tên</label><input id="pName" value="Thành viên"></div>
+          <div><label>Tuổi</label><input id="pYear" type="number" value="10" min="0"></div>
+          <div><label>Tháng</label><input id="pMonth" type="number" value="0" min="0" max="11"></div>
+          <div><label>Giờ</label><input id="pHour" type="number" value="0" min="0"></div>
+          <div><label>Cấp bậc</label><select id="pRank"><option value="1">Tân binh x1</option><option value="1.2">Chiến binh x1.2</option><option value="1.5">Đội trưởng x1.5</option><option value="2">Thủ lĩnh x2</option><option value="3">Tướng quân x3</option></select></div>
+          <div><label>Công trạng</label><input id="pMerit" type="number" value="0"></div>
+          <button id="btnInfo">🔄 Áp dụng thông tin</button>
+        </div>
+      </div>
+
+      <!-- BẢNG HIỂN THỊ NỘI DUNG Ô TO -->
+      <div class="panel display-panel" id="displayPanel">
+        <h3>👈 Bấm vào ô cờ để xem</h3>
+        <div class="d-name" id="dName">Chưa chọn ô nào</div>
+        <div class="d-pts" id="dPts" style="display:none;"></div>
+        <button class="d-btn" id="dBtn">✔ Ghi nhận điểm</button>
+        <div class="d-note" id="dNote">Chọn một ô trên bàn cờ</div>
+      </div>
+
+      <div class="panel" style="flex:1;display:flex;flex-direction:column;min-height:100px;">
+        <h3 style="color:var(--gold);margin-bottom:4px;font-size:.75rem;">📜 Nhật ký</h3>
+        <div style="flex:1;overflow-y:auto;font-size:.65rem;background:#1a0f0a;border-radius:4px;padding:3px;margin-bottom:4px;" id="log"></div>
+        <button id="btnReset" style="padding:5px;border:none;border-radius:4px;background:var(--minus);color:#fff;font-weight:800;cursor:pointer;width:100%;font-size:.7rem;">🗑️ Xóa tất cả</button>
+      </div>
+    </div>
+
+    <!-- BÀN CỜ -->
+    <div class="board-container">
+      <div class="xiangqi" id="board"></div>
+    </div>
+
+  </div>
+
+  <!-- VÙNG TRỐNG ĐỂ CHƠI PHẦN MỀM KHÁC -->
+  <div class="right-space" id="rightSpace">
+    (Khu vực trống)<br>Bạn có thể kéo phần mềm cờ tướng vào đây
+  </div>
+
+</div>
+
+<script>
+const PLUS=[
+{n:"Quét nhà",p:5},{n:"Thu quần áo",p:10},{n:"Dọn ghế sofa",p:5},{n:"Đổ rác",p:5},
+{n:"Lau bàn",p:5},{n:"Thu dọn giường",p:5},{n:"Lấy hàng chuyển phát",p:10},
+{n:"Giặt tất",p:5},{n:"Sắp xếp giày dép",p:5},{n:"Thu dọn đồ chơi",p:5},
+{n:"Không kén ăn",p:5},{n:"Phơi quần áo",p:5},{n:"Lau nhà",p:5},{n:"Rửa bát",p:10},
+{n:"Chạy việc/làm việc vặt",p:5},{n:"Tự giác hoàn thành bài tập",p:15},
+{n:"Nhảy dây/luyện bóng",p:15},{n:"Duy trì tất cả việc 1 tuần",p:25},
+{n:"Xách cặp lồng cơm T1→nhà",p:5},{n:"Vét cơm nguội T4, cất tủ lạnh T2",p:5},
+{n:"Lau nhà bếp sạch sẽ",p:10},{n:"Rửa & tráng bát đĩa",p:10},
+{n:"Cọ nhà vệ sinh sau rửa bát",p:15},{n:"Hứng nước lọc T2 vào bình 5L",p:5},
+{n:"Bình 5L nước T2→T4",p:5},{n:"Đun sôi bình nước 5L",p:5},
+{n:"Nhóm than tổ ong",p:18},{n:"Xách nước T2→T4 & đun nấu",p:22},
+{n:"Chia nước nguội các phòng",p:10},{n:"Nấu cơm, canh buổi sáng",p:25},
+{n:"Đón trẻ tan học (900m)",p:20},{n:"Đưa con đi học thêm xe máy",p:15},
+{n:"Đưa đón Ông Bà xe máy",p:25},{n:"Mở cửa hàng buổi sáng",p:15},
+{n:"Đóng cửa hàng & khóa tối",p:15},{n:"Hỗ trợ vợ buổi tối dọn đồ",p:15},
+{n:"Chuẩn bị xe cho vợ sáng",p:15},{n:"Đi học đầy đủ đúng giờ",p:5},
+{n:"Quần áo đầu tóc gọn gàng",p:5},{n:"Chào hỏi lễ phép người thân",p:5},
+{n:"Chào hỏi hàng xóm",p:3},{n:"Giúp đỡ bạn học tập",p:5},
+{n:"Bênh vực bạn bị bắt nạt",p:10},{n:"Tự giải quyết khôn ngoan",p:15},
+{n:"Thầy cô khen ngợi",p:10},{n:"Công nhật VS công nghiệp",p:600}
+];
+
+const MINUS=[
+{n:"Nổi nóng",p:10},{n:"Trì hoãn",p:10},{n:"Nói dối",p:10},{n:"Cãi lại",p:10},
+{n:"Điện thoại/giờ",p:25},{n:"Xem TV/giờ",p:25},{n:"Làm hỏng bát đĩa",p:20},
+{n:"Làm hỏng thiết bị đun",p:50},{n:"Làm rách bình chứa",p:15},
+{n:"Làm rơi vỡ cặp lồng",p:10},{n:"Lười biếng không làm bài",p:15},
+{n:"Đi học muộn",p:10},{n:"Nói trống không",p:5},{n:"Không chào hỏi",p:5},
+{n:"Tranh giành đồ chơi",p:5},{n:"Đánh bạn",p:20},{n:"Nói bậy",p:15},
+{n:"Vứt rác bừa bãi",p:5},{n:"Không gấp chăn màn",p:5},{n:"Để đồ đạc bừa bộn",p:5},
+{n:"Không rửa tay trước ăn",p:3},{n:"Ăn vụng",p:5},{n:"Kén ăn",p:5},
+{n:"Bỏ thừa cơm",p:5},{n:"Xem TV quá giờ",p:15},{n:"Chơi game quá giờ",p:20},
+{n:"Cãi lời ông bà",p:15},{n:"Không giúp việc nhà",p:10},
+{n:"Điện thoại trong giờ học",p:25},{n:"Nói xấu bạn",p:10},
+{n:"Bắt nạt em nhỏ",p:20},{n:"Không trung thực thi cử",p:25},
+{n:"Pha trò nghịch ngợm",p:10},{n:"Làm ồn khi mọi người nghỉ",p:10},
+{n:"Không tắt điện khi ra",p:5},{n:"Lãng phí nước",p:5},
+{n:"Để cửa mở khi ra ngoài",p:5},{n:"Không khóa cửa hàng",p:15},
+{n:"Quên việc được giao",p:10},{n:"Đi chơi không xin phép",p:15},
+{n:"Về nhà muộn",p:10},{n:"Không dọn phòng",p:10},
+{n:"Nói dối về điểm số",p:20},{n:"Giấu lỗi",p:15},
+{n:"Không phụ giúp gia đình",p:10},{n:"Học hành sa sút",p:15},
+{n:"Thiếu trách nhiệm với bản thân",p:10},{n:"Không giữ lời hứa",p:15},
+{n:"Thái độ thiếu tôn trọng",p:15},{n:"Làm việc riêng trong giờ học",p:10}
+];
+
+const KEY="xiangqi_v6";
+let state={plus:0,minus:0,count:0,log:[],done:{}};
+let info={name:"Thành viên",year:10,month:0,hour:0,rank:1,merit:0};
+let currentCell = null;
+
+function senior(){return Math.round(info.year*5+info.month*1+info.hour*0.1);}
+
+function build(){
+  const b=document.getElementById("board");b.innerHTML="";
+  let pi=0,mi=0;
+  
+  for(let r=0;r<11;r++){
+    for(let c=0;c<9;c++){
+      const d=document.createElement("div");
+      
+      if(r === 5){
+        d.className = "cell river-cell";
+      } 
+      else if(r < 5){
+        let task = PLUS[pi % PLUS.length]; pi++;
+        d.className = "cell plus";
+        d.dataset.id=`P${r}-${c}`; d.dataset.name=task.n; d.dataset.pts=task.p; d.dataset.type="plus";
+        d.innerHTML=`<span class="num">${r*9+c+1}</span><span class="name">${task.n}</span><span class="pts">+${task.p}</span>`;
+        d.onclick=()=>selectCell(d, task, "plus");
+      } 
+      else {
+        let task = MINUS[mi % MINUS.length]; mi++;
+        d.className = "cell minus";
+        d.dataset.id=`M${r}-${c}`; d.dataset.name=task.n; d.dataset.pts=task.p; d.dataset.type="minus";
+        d.innerHTML=`<span class="num">${r*9+c+1}</span><span class="name">${task.n}</span><span class="pts">-${task.p}</span>`;
+        d.onclick=()=>selectCell(d, task, "minus");
+      }
+      b.appendChild(d);
+    }
+  }
+}
+
+function selectCell(cellElement, task, type){
+  if(state.done[cellElement.dataset.id]){
+    alert("Ô này đã được ghi nhận rồi!");
+    return;
+  }
+  
+  if(currentCell) currentCell.classList.remove("active");
+  currentCell = cellElement;
+  currentCell.classList.add("active");
+
+  const displayPanel = document.getElementById("displayPanel");
+  displayPanel.className = "panel display-panel " + type;
+  
+  document.getElementById("dName").textContent = task.n + (info.rank!==1 ? ` (x${info.rank})` : "");
+  
+  const calc = task.p * info.rank;
+  const dPts = document.getElementById("dPts");
+  dPts.style.display = "inline-block";
+  dPts.textContent = (type === "plus" ? "+" : "-") + calc + " điểm";
+  
+  document.getElementById("dNote").textContent = `Gốc ${task.p} × cấp bậc ${info.rank} = ${calc}`;
+  
+  const dBtn = document.getElementById("dBtn");
+  dBtn.style.display = "block";
+  
+  dBtn.onclick = () => {
+    if(type === "plus") state.plus += calc;
+    else state.minus += calc;
+    
+    state.count++;
+    state.done[cellElement.dataset.id] = true;
+    cellElement.classList.add("done");
+    cellElement.classList.remove("active");
+    
+    state.log.unshift({t:new Date().toLocaleString("vi-VN"), n:task.n, p:type === "plus" ? calc : -calc});
+    
+    save(); 
+    render();
+    resetDisplay();
+  };
+}
+
+function resetDisplay(){
+  currentCell = null;
+  document.getElementById("displayPanel").className = "panel display-panel";
+  document.getElementById("dName").textContent = "Chưa chọn ô nào";
+  document.getElementById("dPts").style.display = "none";
+  document.getElementById("dBtn").style.display = "none";
+  document.getElementById("dNote").textContent = "Chọn một ô trên bàn cờ";
+}
+
+function render(){
+  document.getElementById("sP").textContent=state.plus;
+  document.getElementById("sM").textContent=state.minus;
+  document.getElementById("sN").textContent=state.plus-state.minus+info.merit+senior();
+  document.getElementById("sC").textContent=state.count;
+  document.getElementById("sS").textContent=senior();
+  
+  const el=document.getElementById("log");
+  el.innerHTML=state.log.length?state.log.map(l=>`<div class="li ${l.p>=0?'p':'m'}"><span>${l.n}</span><span><span class="t">${l.t}</span> <span class="s">${l.p>=0?'+':''}${l.p}</span></span></div>`).join(""):"<div style='color:#c9a87c;font-size:.7rem;padding:4px;'>Chưa có ghi nhận.</div>";
+}
+
+function save(){localStorage.setItem(KEY,JSON.stringify(state));}
+function load(){const r=localStorage.getItem(KEY);if(r){try{state=JSON.parse(r);}catch(e){}}}
+function applyDone(){document.querySelectorAll(".cell").forEach(c=>{if(state.done[c.dataset.id])c.classList.add("done");});}
+
+// SỰ KIỆN ĐẢO BÀN CỜ (Trên xuống dưới)
+document.getElementById("btnFlip").onclick = () => {
+  document.getElementById("board").classList.toggle("flipped");
+};
+
+// SỰ KIỆN ĐỔI BÊN TRÁI/PHẢI
+document.getElementById("btnSwapH").onclick = () => {
+  document.getElementById("mainLayout").classList.toggle("swap-horizontal");
+};
+
+// SỰ KIỆN ĐỔI BÊN TRÊN/XUỐNG
+document.getElementById("btnSwapV").onclick = () => {
+  document.getElementById("mainLayout").classList.toggle("swap-vertical");
+  document.getElementById("appWrapper").classList.toggle("swap-vertical");
+};
+
+document.getElementById("btnInfo").onclick=()=>{
+  info.name=document.getElementById("pName").value||"Thành viên";
+  info.year=+document.getElementById("pYear").value||0;
+  info.month=+document.getElementById("pMonth").value||0;
+  info.hour=+document.getElementById("pHour").value||0;
+  info.rank=+document.getElementById("pRank").value||1;
+  info.merit=+document.getElementById("pMerit").value||0;
+  render();
+  resetDisplay();
+  alert(`Đã áp dụng: ${info.name}\nCấp bậc: x${info.rank} · Thâm niên: ${senior()} điểm`);
+};
+
+document.getElementById("btnReset").onclick=()=>{
+  if(!confirm("Xóa toàn bộ điểm và nhật ký?")) return;
+  state={plus:0,minus:0,count:0,log:[],done:{}};
+  document.querySelectorAll(".cell").forEach(c=>c.classList.remove("done"));
+  save();render();resetDisplay();
+};
+
+load();build();applyDone();render();
+</script>
+</body>
+</html>

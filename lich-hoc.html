@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siêu Nhắc Nhở Học Tập</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+        }
+
+        #alertOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 0, 0, 0.9); z-index: 9999;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            animation: flash 0.5s infinite;
+        }
+        @keyframes flash { 0% { opacity: 1; } 50% { opacity: 0.7; } }
+
+        .glass-panel {
+            position: relative; z-index: 10; max-width: 600px; width: 90%;
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px);
+            border-radius: 30px; padding: 40px; text-align: center;
+            border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        #timer {
+            font-size: 6rem; font-weight: 900; color: #00ffcc;
+            margin: 20px 0; font-family: monospace;
+        }
+
+        .status-badge {
+            font-size: 1.5rem; padding: 10px 20px; border-radius: 15px;
+            background: rgba(255,255,255,0.2); margin-bottom: 20px; display: inline-block;
+        }
+
+        .session-info { font-size: 1.2rem; color: #f1c40f; margin-top: 10px; }
+
+        .btn {
+            padding: 20px 40px; font-size: 1.5rem; border-radius: 50px;
+            border: none; cursor: pointer; transition: 0.3s; font-weight: bold;
+        }
+        .btn-start { background: #2ecc71; color: white; }
+        .btn-stop { background: white; color: #ff0000; }
+
+        #startScreen {
+            position: fixed; inset: 0; background: #1e3c72; z-index: 10000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="startScreen">
+        <h1 style="margin-bottom: 20px;">Sẵn sàng học tập chưa nào?</h1>
+        <button class="btn btn-start" onclick="startApp()">🚀 BẮT ĐẦU NGAY</button>
+    </div>
+
+    <div id="alertOverlay">
+        <h1 id="alertText" style="font-size: 3rem; margin-bottom: 30px; color: white;">HẾT GIỜ!</h1>
+        <button class="btn btn-stop" onclick="stopAlarm()">TÔI ĐÃ NGHE</button>
+    </div>
+
+    <div class="glass-panel">
+        <div id="status" class="status-badge">Đang tải...</div>
+        <div id="timer">45:00</div>
+        <div id="sessionCount" class="session-info">Phiên học: 1/4</div>
+        <p id="nextStep" style="margin-top: 20px; opacity: 0.8;">Tiếp theo: Nghỉ giải lao 5 phút</p>
+    </div>
+
+    <audio id="alarmSound" loop src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
+
+    <script>
+        // Cấu hình chu kỳ: type (work/break), duration (phút)
+        const schedule = [
+            { type: 'HỌC TẬP', min: 45, next: 'Giải lao 5 phút' },
+            { type: 'GIẢI LAO', min: 5, next: 'Học phiên 2 (45p)' },
+            { type: 'HỌC TẬP', min: 45, next: 'Nghỉ dài 15 phút' },
+            { type: 'GIẢI LAO DÀI', min: 15, next: 'Học phiên 3 (45p)' },
+            { type: 'HỌC TẬP', min: 45, next: 'Giải lao 5 phút' },
+            { type: 'GIẢI LAO', min: 5, next: 'Học phiên cuối (45p)' },
+            { type: 'HỌC TẬP', min: 45, next: 'Giải lao 5 phút' },
+            { type: 'GIẢI LAO', min: 5, next: '15 phút nghỉ cuối' },
+            { type: 'NGHỈ CUỐI', min: 15, next: 'Hoàn thành!' }
+        ];
+
+        let currentIndex = 0;
+        let timeLeft = 0;
+        let timerInterval = null;
+        let isAlarming = false;
+
+        function startApp() {
+            document.getElementById('startScreen').style.display = 'none';
+            // Kích hoạt audio
+            const sound = document.getElementById('alarmSound');
+            sound.play().then(() => { sound.pause(); }).catch(() => {});
+            
+            loadSession(0);
+            timerInterval = setInterval(updateTimer, 1000);
+            speak("Bắt đầu phiên học đầu tiên. Chúc bé học tốt!");
+        }
+
+        function loadSession(index) {
+            if (index >= schedule.length) {
+                clearInterval(timerInterval);
+                document.getElementById('status').innerText = "HOÀN THÀNH";
+                document.getElementById('timer').innerText = "DONE";
+                speak("Chúc mừng bé đã hoàn thành tất cả bài học!");
+                return;
+            }
+            currentIndex = index;
+            timeLeft = schedule[index].min * 60;
+            document.getElementById('status').innerText = schedule[index].type;
+            document.getElementById('nextStep').innerText = "Tiếp theo: " + schedule[index].next;
+            
+            // Cập nhật số phiên học (chỉ đếm các mục 'HỌC TẬP')
+            const workSessions = schedule.slice(0, index + 1).filter(s => s.type === 'HỌC TẬP').length;
+            if (schedule[index].type === 'HỌC TẬP') {
+                document.getElementById('sessionCount').innerText = `Phiên học: ${workSessions}/4`;
+            }
+        }
+
+        function updateTimer() {
+            if (isAlarming) return;
+
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            document.getElementById('timer').innerText = 
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+            if (timeLeft <= 0) {
+                triggerAlarm();
+            } else {
+                timeLeft--;
+            }
+        }
+
+        function triggerAlarm() {
+            isAlarming = true;
+            document.getElementById('alertOverlay').style.display = 'flex';
+            document.getElementById('alarmSound').play();
+            
+            const msg = schedule[currentIndex].type === 'HỌC TẬP' ? "Hết giờ học rồi, đi nghỉ thôi!" : "Hết giờ nghỉ rồi, vào học thôi!";
+            speak(msg);
+        }
+
+        function stopAlarm() {
+            isAlarming = false;
+            document.getElementById('alertOverlay').style.display = 'none';
+            document.getElementById('alarmSound').pause();
+            window.speechSynthesis.cancel();
+            
+            loadSession(currentIndex + 1);
+        }
+
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'vi-VN';
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>

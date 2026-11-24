@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 20 - Tỷ lệ Nợ & Khả năng trả lãi (Debt Ratios & Interest Coverage) | CEO AI Enterprise</title>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- SheetJS (xlsx) để xuất Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #b91c1c;
+            --primary-dark: #991b1b;
+            --primary-light: #dc2626;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #0ea5e9;
+            --bg: #fef2f2;
+            --card: #ffffff;
+            --text: #7f1d1d;
+            --text-muted: #fca5a5;
+            --border: #fecaca;
+            --shadow: 0 10px 25px -5px rgba(185, 28, 28, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 50%, #fef2f2 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 28px 32px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 1.55rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .header-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        /* Form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .form-group label .hint {
+            font-weight: 400;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        .form-group input {
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #fff5f5;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(185, 28, 28, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        /* Result Cards */
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--border);
+            transition: transform 0.2s;
+        }
+
+        .result-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .result-card .label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .result-card .value {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .result-card.positive .value { color: var(--success); }
+        .result-card.negative .value { color: var(--danger); }
+        .result-card.warning .value { color: var(--warning); }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        .status-healthy {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* AI Analysis */
+        .ai-section {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border-left: 5px solid var(--primary);
+        }
+
+        .ai-content {
+            display: grid;
+            gap: 16px;
+        }
+
+        .ai-item {
+            background: white;
+            padding: 16px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .ai-item h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-item p {
+            color: #334155;
+            font-size: 0.95rem;
+        }
+
+        /* Chart */
+        .chart-container {
+            position: relative;
+            height: 320px;
+            margin-top: 10px;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            color: #0c4a6e;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+
+        /* Formula box */
+        .formula-box {
+            background: #fff5f5;
+            border: 1px dashed var(--primary);
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--primary-dark);
+            line-height: 1.8;
+        }
+
+        /* Benchmark table */
+        .benchmark-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .benchmark-table th,
+        .benchmark-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .benchmark-table th {
+            background: #fef2f2;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .benchmark-table tr:hover {
+            background: #fff5f5;
+        }
+
+        /* History table */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-table th {
+            background: #fef2f2;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .history-table tr:hover {
+            background: #fff5f5;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.25rem; }
+            .result-card .value { font-size: 1.2rem; }
+            .btn { width: 100%; justify-content: center; }
+        }
+
+        .hidden { display: none; }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 20px 0 12px;
+            padding-left: 8px;
+            border-left: 3px solid var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ==================== HEADER ==================== -->
+        <header class="header">
+            <div>
+                <h1>
+                    <span>🏦</span>
+                    Module 20 – Tỷ lệ Nợ & Khả năng trả lãi (Debt Ratios & Interest Coverage)
+                </h1>
+                <div class="header-subtitle">Đánh giá mức độ sử dụng nợ và khả năng trả lãi vay – Rủi ro tài chính của doanh nghiệp</div>
+            </div>
+            <div class="badge">CEO AI Enterprise • Module độc lập</div>
+        </header>
+
+        <!-- ==================== GIẢI THÍCH NHANH ==================== -->
+        <div class="card">
+            <div class="card-title">📖 Các chỉ số Nợ quan trọng</div>
+            <p style="margin-bottom: 12px;">
+                Module này tập trung vào 3 chỉ số then chốt để đánh giá rủi ro nợ:
+            </p>
+            <div class="formula-box">
+                Debt Ratio = Tổng Nợ ÷ Tổng Tài sản<br>
+                Debt-to-Equity (D/E) = Tổng Nợ ÷ Vốn Chủ sở hữu<br>
+                Interest Coverage = EBIT ÷ Chi phí lãi vay
+            </div>
+            <div class="alert alert-info">
+                <span>💡</span>
+                <div>
+                    <strong>Ý nghĩa:</strong> Debt Ratio & D/E cho biết doanh nghiệp phụ thuộc nợ nhiều hay ít. 
+                    Interest Coverage cho biết lợi nhuận có đủ để trả lãi vay hay không.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== FORM NHẬP LIỆU ==================== -->
+        <div class="card">
+            <div class="card-title">📥 Nhập dữ liệu</div>
+            
+            <div class="section-label">Bảng cân đối kế toán</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Tổng Nợ (Total Liabilities)
+                        <span class="hint">– Nợ ngắn hạn + Nợ dài hạn</span>
+                    </label>
+                    <input type="number" id="totalDebt" placeholder="Ví dụ: 8500000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Tổng Tài sản (Total Assets)
+                        <span class="hint">– Tổng nguồn lực doanh nghiệp</span>
+                    </label>
+                    <input type="number" id="totalAssets" placeholder="Ví dụ: 15000000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Vốn Chủ sở hữu (Equity)
+                        <span class="hint">– Vốn góp + Lợi nhuận giữ lại</span>
+                    </label>
+                    <input type="number" id="equity" placeholder="Ví dụ: 6500000000" step="any">
+                </div>
+            </div>
+
+            <div class="section-label">Báo cáo kết quả kinh doanh</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        EBIT (Lợi nhuận trước lãi & thuế)
+                        <span class="hint">– Operating Profit</span>
+                    </label>
+                    <input type="number" id="ebit" placeholder="Ví dụ: 1800000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Chi phí lãi vay (Interest Expense)
+                        <span class="hint">– Tổng lãi phải trả trong kỳ</span>
+                    </label>
+                    <input type="number" id="interest" placeholder="Ví dụ: 350000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Kỳ báo cáo
+                        <span class="hint">– Tháng / Quý / Năm</span>
+                    </label>
+                    <input type="text" id="period" placeholder="Ví dụ: Năm 2025" value="Kỳ hiện tại">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="calculateDebt()">
+                    <span>🧮</span> Tính toán Tỷ lệ Nợ
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <span>🔄</span> Làm mới
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== KẾT QUẢ ==================== -->
+        <div id="resultSection" class="hidden">
+            <!-- Kết quả số -->
+            <div class="card">
+                <div class="card-title">📊 Kết quả tính toán</div>
+                
+                <div id="statusBadge" class="status-badge"></div>
+
+                <div class="result-grid">
+                    <div class="result-card" id="debtRatioCard">
+                        <div class="label">Debt Ratio</div>
+                        <div class="value" id="debtRatioValue">—</div>
+                    </div>
+                    <div class="result-card" id="deCard">
+                        <div class="label">Debt-to-Equity (D/E)</div>
+                        <div class="value" id="deValue">—</div>
+                    </div>
+                    <div class="result-card" id="icCard">
+                        <div class="label">Interest Coverage</div>
+                        <div class="value" id="icValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Tỷ lệ Vốn CSH / Tài sản</div>
+                        <div class="value" id="equityRatioValue">—</div>
+                    </div>
+                </div>
+
+                <div class="formula-box" id="formulaDetail">
+                    <!-- Công thức chi tiết sẽ được điền bằng JS -->
+                </div>
+
+                <!-- Bảng chuẩn tham khảo -->
+                <h4 style="margin: 20px 0 10px; color: var(--primary);">📌 Tham chiếu mức an toàn phổ biến</h4>
+                <table class="benchmark-table">
+                    <thead>
+                        <tr>
+                            <th>Chỉ số</th>
+                            <th>An toàn</th>
+                            <th>Chấp nhận được</th>
+                            <th>Rủi ro cao</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Debt Ratio</strong></td>
+                            <td style="color:#059669;font-weight:600;">&lt; 40%</td>
+                            <td style="color:#d97706;font-weight:600;">40% – 60%</td>
+                            <td style="color:#dc2626;font-weight:600;">&gt; 60%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Debt-to-Equity</strong></td>
+                            <td style="color:#059669;font-weight:600;">&lt; 1.0</td>
+                            <td style="color:#d97706;font-weight:600;">1.0 – 2.0</td>
+                            <td style="color:#dc2626;font-weight:600;">&gt; 2.0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Interest Coverage</strong></td>
+                            <td style="color:#059669;font-weight:600;">&gt; 5 lần</td>
+                            <td style="color:#d97706;font-weight:600;">2 – 5 lần</td>
+                            <td style="color:#dc2626;font-weight:600;">&lt; 2 lần</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Biểu đồ -->
+            <div class="card">
+                <div class="card-title">📈 Biểu đồ Cơ cấu Nguồn vốn & Khả năng trả lãi</div>
+                <div class="chart-container">
+                    <canvas id="debtChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Cảnh báo -->
+            <div id="alertBox"></div>
+
+            <!-- AI Phân tích & Khuyến nghị -->
+            <div class="card ai-section">
+                <div class="card-title">🤖 Phân tích AI & Khuyến nghị</div>
+                <div class="ai-content" id="aiContent">
+                    <!-- Nội dung AI sẽ được sinh bằng JS -->
+                </div>
+            </div>
+
+            <!-- Nút hành động -->
+            <div class="card">
+                <div class="card-title">💾 Lưu trữ & Xuất dữ liệu</div>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="saveToLocalStorage()">
+                        <span>💾</span> Lưu vào SQLite (Local)
+                    </button>
+                    <button class="btn btn-info" onclick="exportToExcel()">
+                        <span>📥</span> Xuất Excel
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewHistory()">
+                        <span>📋</span> Xem lịch sử đã lưu
+                    </button>
+                </div>
+
+                <!-- Bảng lịch sử -->
+                <div id="historySection" class="hidden" style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 10px; color: var(--primary);">Lịch sử tính toán đã lưu</h4>
+                    <div style="overflow-x: auto;">
+                        <table class="history-table" id="historyTable">
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Kỳ</th>
+                                    <th>Debt Ratio</th>
+                                    <th>D/E</th>
+                                    <th>Interest Coverage</th>
+                                    <th>Equity Ratio</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            CEO AI Enterprise • Module 20 – Tỷ lệ Nợ & Khả năng trả lãi (Debt Ratios & Interest Coverage) • Có thể chạy độc lập • Sẵn sàng kết nối Python + SQLite
+        </div>
+    </div>
+
+    <script>
+        /**
+         * =====================================================
+         * MODULE 20 – TỶ LỆ NỢ & KHẢ NĂNG TRẢ LÃI
+         * (Debt Ratios & Interest Coverage)
+         * CEO AI Enterprise
+         * =====================================================
+         * 
+         * Công thức chính:
+         * Debt Ratio          = Tổng Nợ / Tổng Tài sản
+         * Debt-to-Equity      = Tổng Nợ / Vốn Chủ sở hữu
+         * Interest Coverage   = EBIT / Chi phí lãi vay
+         * Equity Ratio        = Vốn Chủ sở hữu / Tổng Tài sản
+         * 
+         * Module được thiết kế:
+         * - Chạy độc lập (standalone)
+         * - Dễ ghép vào Dashboard sau này
+         * - Có sẵn chỗ kết nối Python + SQLite thật
+         * - Lưu tạm bằng localStorage (mô phỏng SQLite)
+         * - Xuất Excel bằng SheetJS
+         */
+
+        // Biến toàn cục
+        let currentResult = null;
+        let debtChartInstance = null;
+
+        /**
+         * Định dạng số tiền Việt Nam
+         */
+        function formatCurrency(value) {
+            if (value === null || value === undefined || isNaN(value)) return '—';
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        /**
+         * Định dạng phần trăm
+         */
+        function formatPercent(value, decimals = 1) {
+            if (value === null || value === undefined || isNaN(value)) return '—';
+            return (value * 100).toFixed(decimals) + '%';
+        }
+
+        /**
+         * Hàm tính toán chính
+         */
+        function calculateDebt() {
+            const totalDebt = parseFloat(document.getElementById('totalDebt').value);
+            const totalAssets = parseFloat(document.getElementById('totalAssets').value);
+            const equity = parseFloat(document.getElementById('equity').value);
+            const ebit = parseFloat(document.getElementById('ebit').value);
+            const interest = parseFloat(document.getElementById('interest').value);
+            const period = document.getElementById('period').value.trim() || 'Kỳ hiện tại';
+
+            // Kiểm tra dữ liệu
+            if (isNaN(totalDebt) || isNaN(totalAssets) || isNaN(equity) || isNaN(ebit) || isNaN(interest)) {
+                alert('⚠️ Vui lòng nhập đầy đủ tất cả các chỉ tiêu!');
+                return;
+            }
+
+            if (totalAssets <= 0 || equity <= 0) {
+                alert('⚠️ Tổng Tài sản và Vốn Chủ sở hữu phải lớn hơn 0!');
+                return;
+            }
+
+            if (interest < 0) {
+                alert('⚠️ Chi phí lãi vay không hợp lệ!');
+                return;
+            }
+
+            // Tính toán
+            const debtRatio = totalDebt / totalAssets;
+            const deRatio = totalDebt / equity;
+            const interestCoverage = interest > 0 ? ebit / interest : (ebit > 0 ? Infinity : 0);
+            const equityRatio = equity / totalAssets;
+
+            // Lưu kết quả
+            currentResult = {
+                period: period,
+                totalDebt: totalDebt,
+                totalAssets: totalAssets,
+                equity: equity,
+                ebit: ebit,
+                interest: interest,
+                debtRatio: debtRatio,
+                deRatio: deRatio,
+                interestCoverage: interestCoverage,
+                equityRatio: equityRatio,
+                timestamp: new Date().toISOString()
+            };
+
+            // Hiển thị
+            displayResults(currentResult);
+            generateAIAnalysis(currentResult);
+            renderChart(currentResult);
+
+            document.getElementById('resultSection').classList.remove('hidden');
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        /**
+         * Hiển thị kết quả số
+         */
+        function displayResults(data) {
+            document.getElementById('debtRatioValue').textContent = formatPercent(data.debtRatio);
+            document.getElementById('deValue').textContent = data.deRatio.toFixed(2) + ' lần';
+            document.getElementById('icValue').textContent = data.interestCoverage === Infinity 
+                ? '∞ (không có lãi vay)' 
+                : data.interestCoverage.toFixed(2) + ' lần';
+            document.getElementById('equityRatioValue').textContent = formatPercent(data.equityRatio);
+
+            // Màu sắc Debt Ratio
+            const debtRatioCard = document.getElementById('debtRatioCard');
+            debtRatioCard.classList.remove('positive', 'negative', 'warning');
+            if (data.debtRatio < 0.4) {
+                debtRatioCard.classList.add('positive');
+            } else if (data.debtRatio <= 0.6) {
+                debtRatioCard.classList.add('warning');
+            } else {
+                debtRatioCard.classList.add('negative');
+            }
+
+            // Màu sắc D/E
+            const deCard = document.getElementById('deCard');
+            deCard.classList.remove('positive', 'negative', 'warning');
+            if (data.deRatio < 1) {
+                deCard.classList.add('positive');
+            } else if (data.deRatio <= 2) {
+                deCard.classList.add('warning');
+            } else {
+                deCard.classList.add('negative');
+            }
+
+            // Màu sắc Interest Coverage
+            const icCard = document.getElementById('icCard');
+            icCard.classList.remove('positive', 'negative', 'warning');
+            if (data.interestCoverage >= 5 || data.interestCoverage === Infinity) {
+                icCard.classList.add('positive');
+            } else if (data.interestCoverage >= 2) {
+                icCard.classList.add('warning');
+            } else {
+                icCard.classList.add('negative');
+            }
+
+            // Status badge tổng hợp
+            const badge = document.getElementById('statusBadge');
+            const isSafe = data.debtRatio < 0.5 && data.deRatio < 1.5 && data.interestCoverage >= 3;
+            const isRisky = data.debtRatio > 0.6 || data.deRatio > 2 || data.interestCoverage < 2;
+
+            if (isSafe) {
+                badge.className = 'status-badge status-healthy';
+                badge.textContent = '🟢 Cấu trúc nợ an toàn – Khả năng trả lãi tốt';
+            } else if (isRisky) {
+                badge.className = 'status-badge status-danger';
+                badge.textContent = '🔴 Rủi ro nợ cao – Cần kiểm soát ngay';
+            } else {
+                badge.className = 'status-badge status-warning';
+                badge.textContent = '🟡 Mức nợ chấp nhận được – Cần theo dõi sát';
+            }
+
+            // Công thức chi tiết
+            let icText = data.interestCoverage === Infinity 
+                ? 'Không có chi phí lãi vay' 
+                : `${formatCurrency(data.ebit)} ÷ ${formatCurrency(data.interest)} = <strong>${data.interestCoverage.toFixed(2)} lần</strong>`;
+
+            document.getElementById('formulaDetail').innerHTML = `
+                Debt Ratio = ${formatCurrency(data.totalDebt)} ÷ ${formatCurrency(data.totalAssets)} = <strong>${formatPercent(data.debtRatio)}</strong><br>
+                Debt-to-Equity = ${formatCurrency(data.totalDebt)} ÷ ${formatCurrency(data.equity)} = <strong>${data.deRatio.toFixed(2)} lần</strong><br>
+                Interest Coverage = ${icText}
+            `;
+        }
+
+        /**
+         * Sinh phân tích AI (rule-based)
+         */
+        function generateAIAnalysis(data) {
+            const container = document.getElementById('aiContent');
+            let html = '';
+
+            // 1. Doanh nghiệp đang khỏe hay yếu?
+            let healthText = '';
+            let healthIcon = '';
+            if (data.debtRatio < 0.4 && data.interestCoverage >= 5) {
+                healthIcon = '✅';
+                healthText = `Doanh nghiệp đang <strong>khỏe về cấu trúc vốn và khả năng trả nợ</strong>. 
+                              Tỷ lệ nợ thấp (${formatPercent(data.debtRatio)}) kết hợp với khả năng trả lãi mạnh (${data.interestCoverage.toFixed(1)} lần) 
+                              cho thấy rủi ro tài chính thấp, dư địa vay thêm nếu cần đầu tư.`;
+            } else if (data.debtRatio <= 0.6 && data.interestCoverage >= 2) {
+                healthIcon = '⚠️';
+                healthText = `Tình hình nợ ở mức <strong>trung bình</strong>. 
+                              Doanh nghiệp đang sử dụng đòn bẩy tài chính ở mức vừa phải. 
+                              Cần theo dõi dòng tiền và khả năng trả lãi để tránh rủi ro khi lãi suất tăng hoặc lợi nhuận giảm.`;
+            } else {
+                healthIcon = '🚨';
+                healthText = `Doanh nghiệp đang <strong>mang rủi ro nợ cao</strong>. 
+                              Tỷ lệ nợ lớn hoặc khả năng trả lãi yếu có thể dẫn đến áp lực dòng tiền, 
+                              khó tiếp cận vốn mới, và tăng nguy cơ mất khả năng thanh toán nếu kinh doanh không thuận lợi.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>${healthIcon} 1. Doanh nghiệp đang khỏe hay yếu?</h4>
+                    <p>${healthText}</p>
+                </div>
+            `;
+
+            // 2. Tiền đang chảy đi đâu?
+            let flowText = '';
+            if (data.debtRatio > 0.5) {
+                flowText = `Một phần lớn tài sản đang được tài trợ bằng <strong>nợ vay</strong> (${formatPercent(data.debtRatio)}). 
+                            Tiền lãi vay đang “chảy” ra khỏi doanh nghiệp định kỳ. 
+                            Nếu Interest Coverage thấp, phần lớn lợi nhuận hoạt động đang phải dùng để trả lãi thay vì tái đầu tư hoặc chia cổ tức.`;
+            } else {
+                flowText = `Doanh nghiệp đang tài trợ chủ yếu bằng <strong>vốn chủ sở hữu</strong> (${formatPercent(data.equityRatio)}). 
+                            Áp lực trả lãi thấp, tiền lãi vay không chiếm quá nhiều lợi nhuận. 
+                            Đây là vị thế tài chính vững chắc.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>💸 2. Tiền đang chảy đi đâu?</h4>
+                    <p>${flowText}</p>
+                </div>
+            `;
+
+            // 3. Nên đầu tư hay cắt giảm?
+            let actionText = '';
+            if (data.debtRatio > 0.6 || data.interestCoverage < 2) {
+                actionText = `<strong>Ưu tiên giảm nợ và tăng khả năng trả lãi.</strong> 
+                              Không nên vay thêm lúc này. Tập trung tạo dòng tiền tự do để trả bớt nợ, 
+                              đàm phán lại lãi suất, hoặc tăng vốn chủ sở hữu. Tránh các khoản đầu tư lớn bằng vốn vay.`;
+            } else if (data.debtRatio < 0.4 && data.interestCoverage >= 5) {
+                actionText = `<strong>Có thể cân nhắc sử dụng thêm đòn bẩy tài chính</strong> nếu có dự án đầu tư hiệu quả (ROI > lãi vay). 
+                              Cấu trúc vốn đang an toàn, dư địa vay còn nhiều mà không làm tăng rủi ro quá mức.`;
+            } else {
+                actionText = `<strong>Duy trì kỷ luật nợ hiện tại.</strong> 
+                              Có thể vay thêm một cách thận trọng cho các dự án có dòng tiền rõ ràng và thời gian hoàn vốn ngắn. 
+                              Tránh để Debt Ratio vượt quá 60% hoặc Interest Coverage giảm dưới 3 lần.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>🎯 3. Nên đầu tư hay cắt giảm?</h4>
+                    <p>${actionText}</p>
+                </div>
+            `;
+
+            // 4. Dự báo tương lai
+            let forecastText = '';
+            if (data.debtRatio > 0.6 || data.interestCoverage < 2) {
+                forecastText = `Nếu không giảm được áp lực nợ, doanh nghiệp sẽ dễ bị tổn thương khi lãi suất tăng hoặc doanh thu giảm. 
+                                Khả năng tiếp cận vốn mới sẽ khó khăn hơn, chi phí vốn tăng, và rủi ro mất khả năng thanh toán tăng cao trong trung hạn.`;
+            } else if (data.debtRatio < 0.4 && data.interestCoverage >= 5) {
+                forecastText = `Với cấu trúc vốn vững chắc hiện tại, doanh nghiệp có khả năng chịu đựng biến động thị trường tốt hơn. 
+                                Có thể tận dụng đòn bẩy để tăng trưởng nhanh hơn mà vẫn kiểm soát được rủi ro trong các năm tới.`;
+            } else {
+                forecastText = `Mức nợ hiện tại ở ngưỡng cần theo dõi. 
+                                Nếu lợi nhuận duy trì ổn định và không vay thêm ồ ạt, tình hình sẽ tiếp tục kiểm soát được. 
+                                Ngược lại, chỉ cần EBIT giảm mạnh hoặc lãi suất tăng, Interest Coverage có thể nhanh chóng xuống mức nguy hiểm.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>🔮 4. Điều gì sẽ xảy ra trong tương lai?</h4>
+                    <p>${forecastText}</p>
+                </div>
+            `;
+
+            // Cảnh báo bổ sung
+            let alerts = '';
+            if (data.interestCoverage < 1.5 && data.interestCoverage !== Infinity) {
+                alerts += `
+                    <div class="alert alert-danger">
+                        <span>🚨</span>
+                        <div><strong>Cảnh báo nghiêm trọng:</strong> Interest Coverage dưới 1.5 lần. Lợi nhuận gần như không đủ trả lãi vay. Rủi ro mất khả năng thanh toán rất cao.</div>
+                    </div>
+                `;
+            } else if (data.interestCoverage < 2 && data.interestCoverage !== Infinity) {
+                alerts += `
+                    <div class="alert alert-warning">
+                        <span>⚠️</span>
+                        <div><strong>Cảnh báo:</strong> Interest Coverage dưới 2 lần. Khả năng trả lãi yếu, dễ bị ảnh hưởng nếu lợi nhuận giảm.</div>
+                    </div>
+                `;
+            }
+
+            if (data.debtRatio > 0.7) {
+                alerts += `
+                    <div class="alert alert-danger">
+                        <span>🚨</span>
+                        <div><strong>Cảnh báo:</strong> Debt Ratio trên 70%. Doanh nghiệp phụ thuộc nợ rất nặng, rủi ro tài chính cao.</div>
+                    </div>
+                `;
+            } else if (data.debtRatio > 0.6) {
+                alerts += `
+                    <div class="alert alert-warning">
+                        <span>⚠️</span>
+                        <div><strong>Lưu ý:</strong> Debt Ratio trên 60%. Nên kiểm soát việc vay thêm và ưu tiên giảm nợ.</div>
+                    </div>
+                `;
+            }
+
+            if (data.debtRatio < 0.4 && data.interestCoverage >= 5) {
+                alerts += `
+                    <div class="alert alert-success">
+                        <span>🎉</span>
+                        <div><strong>Tín hiệu tốt:</strong> Cấu trúc vốn an toàn và khả năng trả lãi mạnh. Doanh nghiệp có vị thế tài chính vững chắc.</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('alertBox').innerHTML = alerts;
+            container.innerHTML = html;
+        }
+
+        /**
+         * Vẽ biểu đồ
+         */
+        function renderChart(data) {
+            const ctx = document.getElementById('debtChart').getContext('2d');
+
+            if (debtChartInstance) {
+                debtChartInstance.destroy();
+            }
+
+            debtChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Debt Ratio (%)', 'Debt-to-Equity', 'Interest Coverage', 'Equity Ratio (%)'],
+                    datasets: [{
+                        label: 'Giá trị',
+                        data: [
+                            data.debtRatio * 100,
+                            data.deRatio,
+                            data.interestCoverage === Infinity ? 10 : Math.min(data.interestCoverage, 15),
+                            data.equityRatio * 100
+                        ],
+                        backgroundColor: [
+                            data.debtRatio < 0.4 ? 'rgba(16, 185, 129, 0.8)' : data.debtRatio <= 0.6 ? 'rgba(245, 158, 11, 0.8)' : 'rgba(239, 68, 68, 0.8)',
+                            data.deRatio < 1 ? 'rgba(16, 185, 129, 0.8)' : data.deRatio <= 2 ? 'rgba(245, 158, 11, 0.8)' : 'rgba(239, 68, 68, 0.8)',
+                            data.interestCoverage >= 5 || data.interestCoverage === Infinity ? 'rgba(16, 185, 129, 0.8)' : data.interestCoverage >= 2 ? 'rgba(245, 158, 11, 0.8)' : 'rgba(239, 68, 68, 0.8)',
+                            'rgba(59, 130, 246, 0.7)'
+                        ],
+                        borderColor: [
+                            data.debtRatio < 0.4 ? 'rgb(5, 150, 105)' : data.debtRatio <= 0.6 ? 'rgb(217, 119, 6)' : 'rgb(220, 38, 38)',
+                            data.deRatio < 1 ? 'rgb(5, 150, 105)' : data.deRatio <= 2 ? 'rgb(217, 119, 6)' : 'rgb(220, 38, 38)',
+                            data.interestCoverage >= 5 || data.interestCoverage === Infinity ? 'rgb(5, 150, 105)' : data.interestCoverage >= 2 ? 'rgb(217, 119, 6)' : 'rgb(220, 38, 38)',
+                            'rgb(37, 99, 235)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        barPercentage: 0.55
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const labels = ['%', ' lần', ' lần', '%'];
+                                    return context.raw.toFixed(2) + labels[context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(185, 28, 28, 0.08)'
+                            }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * Lưu vào localStorage (mô phỏng SQLite)
+         */
+        function saveToLocalStorage() {
+            if (!currentResult) {
+                alert('⚠️ Chưa có dữ liệu để lưu. Hãy tính toán trước!');
+                return;
+            }
+
+            let history = JSON.parse(localStorage.getItem('ceo_ai_debt_history') || '[]');
+
+            history.unshift({
+                id: Date.now(),
+                ...currentResult
+            });
+
+            if (history.length > 50) history = history.slice(0, 50);
+
+            localStorage.setItem('ceo_ai_debt_history', JSON.stringify(history));
+
+            alert('✅ Đã lưu thành công vào bộ nhớ cục bộ (mô phỏng SQLite)!\n\nSau này khi kết nối Python backend, dữ liệu sẽ được ghi vào database SQLite thật.');
+        }
+
+        /**
+         * Xem lịch sử đã lưu
+         */
+        function viewHistory() {
+            const history = JSON.parse(localStorage.getItem('ceo_ai_debt_history') || '[]');
+            const section = document.getElementById('historySection');
+            const tbody = document.getElementById('historyBody');
+
+            if (history.length === 0) {
+                alert('📭 Chưa có dữ liệu nào được lưu.');
+                return;
+            }
+
+            tbody.innerHTML = history.map(item => `
+                <tr>
+                    <td>${new Date(item.timestamp).toLocaleString('vi-VN')}</td>
+                    <td>${item.period}</td>
+                    <td style="color: ${item.debtRatio < 0.4 ? '#059669' : item.debtRatio <= 0.6 ? '#d97706' : '#dc2626'}; font-weight: 600;">
+                        ${(item.debtRatio * 100).toFixed(1)}%
+                    </td>
+                    <td style="font-weight: 600;">${item.deRatio.toFixed(2)}</td>
+                    <td style="color: ${item.interestCoverage >= 5 || item.interestCoverage === Infinity ? '#059669' : item.interestCoverage >= 2 ? '#d97706' : '#dc2626'}; font-weight: 600;">
+                        ${item.interestCoverage === Infinity ? '∞' : item.interestCoverage.toFixed(2)}
+                    </td>
+                    <td>${(item.equityRatio * 100).toFixed(1)}%</td>
+                </tr>
+            `).join('');
+
+            section.classList.remove('hidden');
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /**
+         * Xuất Excel
+         */
+        function exportToExcel() {
+            if (!currentResult) {
+                alert('⚠️ Chưa có dữ liệu để xuất. Hãy tính toán trước!');
+                return;
+            }
+
+            const wb = XLSX.utils.book_new();
+
+            const data = [
+                ['MODULE 20 – TỶ LỆ NỢ & KHẢ NĂNG TRẢ LÃI (Debt Ratios & Interest Coverage)', ''],
+                ['CEO AI Enterprise', ''],
+                ['', ''],
+                ['Kỳ báo cáo', currentResult.period],
+                ['Thời gian xuất', new Date().toLocaleString('vi-VN')],
+                ['', ''],
+                ['Chỉ tiêu', 'Giá trị'],
+                ['Tổng Nợ (Total Liabilities)', currentResult.totalDebt],
+                ['Tổng Tài sản (Total Assets)', currentResult.totalAssets],
+                ['Vốn Chủ sở hữu (Equity)', currentResult.equity],
+                ['EBIT', currentResult.ebit],
+                ['Chi phí lãi vay (Interest Expense)', currentResult.interest],
+                ['Debt Ratio', (currentResult.debtRatio * 100).toFixed(2) + '%'],
+                ['Debt-to-Equity (D/E)', currentResult.deRatio.toFixed(2)],
+                ['Interest Coverage', currentResult.interestCoverage === Infinity ? '∞' : currentResult.interestCoverage.toFixed(2)],
+                ['Equity Ratio', (currentResult.equityRatio * 100).toFixed(2) + '%'],
+                ['', ''],
+                ['Công thức Debt Ratio', 'Tổng Nợ / Tổng Tài sản'],
+                ['Công thức D/E', 'Tổng Nợ / Vốn Chủ sở hữu'],
+                ['Công thức Interest Coverage', 'EBIT / Chi phí lãi vay'],
+                ['', ''],
+                ['Ghi chú', 'File được xuất từ Module 20 – CEO AI Enterprise']
+            ];
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            ws['!cols'] = [{ wch: 50 }, { wch: 25 }];
+            XLSX.utils.book_append_sheet(wb, ws, 'Debt_Ratios');
+
+            // Sheet lịch sử
+            const history = JSON.parse(localStorage.getItem('ceo_ai_debt_history') || '[]');
+            if (history.length > 0) {
+                const histData = [
+                    ['Thời gian', 'Kỳ', 'Debt Ratio (%)', 'D/E', 'Interest Coverage', 'Equity Ratio (%)']
+                ];
+                history.forEach(item => {
+                    histData.push([
+                        new Date(item.timestamp).toLocaleString('vi-VN'),
+                        item.period,
+                        (item.debtRatio * 100).toFixed(2),
+                        item.deRatio.toFixed(2),
+                        item.interestCoverage === Infinity ? '∞' : item.interestCoverage.toFixed(2),
+                        (item.equityRatio * 100).toFixed(2)
+                    ]);
+                });
+                const ws2 = XLSX.utils.aoa_to_sheet(histData);
+                ws2['!cols'] = [{ wch: 22 }, { wch: 14 }, { wch: 14 }, { wch: 10 }, { wch: 16 }, { wch: 14 }];
+                XLSX.utils.book_append_sheet(wb, ws2, 'Lịch sử');
+            }
+
+            const fileName = `Debt_Ratios_${currentResult.period.replace(/[\/\s]/g, '_')}_${new Date().toISOString().slice(0,10)}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+        }
+
+        /**
+         * Làm mới form
+         */
+        function resetForm() {
+            document.getElementById('totalDebt').value = '';
+            document.getElementById('totalAssets').value = '';
+            document.getElementById('equity').value = '';
+            document.getElementById('ebit').value = '';
+            document.getElementById('interest').value = '';
+            document.getElementById('period').value = 'Kỳ hiện tại';
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('historySection').classList.add('hidden');
+            currentResult = null;
+
+            if (debtChartInstance) {
+                debtChartInstance.destroy();
+                debtChartInstance = null;
+            }
+        }
+
+        /**
+         * =====================================================
+         * CHỖ DÀNH CHO TƯƠNG LAI – KẾT NỐI PYTHON + SQLITE
+         * =====================================================
+         * 
+         * Khi sẵn sàng kết nối backend:
+         * 
+         * async function saveToSQLite() {
+         *     const response = await fetch('/api/debt/save', {
+         *         method: 'POST',
+         *         headers: { 'Content-Type': 'application/json' },
+         *         body: JSON.stringify(currentResult)
+         *     });
+         *     ...
+         * }
+         * 
+         * Python sẽ ghi vào bảng:
+         * CREATE TABLE debt_ratios (
+         *     id INTEGER PRIMARY KEY,
+         *     period TEXT,
+         *     total_debt REAL,
+         *     total_assets REAL,
+         *     equity REAL,
+         *     ebit REAL,
+         *     interest REAL,
+         *     debt_ratio REAL,
+         *     de_ratio REAL,
+         *     interest_coverage REAL,
+         *     created_at TEXT
+         * );
+         */
+    </script>
+</body>
+</html>

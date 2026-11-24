@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>320 – Tủ trang phục</title>
+
+<style>
+/* ===== RESET & MOBILE FIRST ===== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, Arial;
+  background: #f2f4f8;
+  padding: 16px;
+}
+
+/* ===== TIÊU ĐỀ ===== */
+h1 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 16px;
+}
+
+/* ===== NÚT ===== */
+button {
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto 16px;
+  display: block;
+  padding: 14px;
+  font-size: 18px;
+  border: none;
+  border-radius: 12px;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+}
+
+/* ===== CARD KẾT QUẢ ===== */
+#ketqua {
+  max-width: 360px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.6;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+/* ===== DÒNG PHỤ ===== */
+.note {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* ===== LỊCH SỬ ===== */
+.log {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed #ddd;
+  font-size: 14px;
+  color: #444;
+  text-align: left;
+  line-height: 1.4;
+}
+
+/* ===== DESKTOP ===== */
+@media (min-width: 768px) {
+  h1 { font-size: 26px; }
+  button { font-size: 20px; }
+  #ketqua { font-size: 20px; }
+}
+</style>
+</head>
+
+<body>
+
+<h1>🤖 TỦ TRANG PHỤC THÔNG MINH</h1>
+
+<button onclick="chayRobot()">Chọn đồ hôm nay</button>
+
+<div id="ketqua">
+  Nhấn nút để robot chọn đồ<br>
+  <div class="note">Phù hợp thời tiết · không trùng hôm qua</div>
+</div>
+
+<!-- ===== DỮ LIỆU (ẨN) ===== -->
+<section class="item-quanao" data-loai="ao"   data-ten="Áo thun dài tay" data-do-day="mong" data-mua="xuan,thu" data-mau="trang,be"></section>
+<section class="item-quanao" data-loai="ao"   data-ten="Áo sơ mi"        data-do-day="vua"  data-mua="xuan,thu" data-mau="trang,xanh-nhat"></section>
+<section class="item-quanao" data-loai="quan" data-ten="Quần vải"        data-do-day="vua"  data-mau="den,xanh-dam"></section>
+<section class="item-quanao" data-loai="quan" data-ten="Quần jean"       data-do-day="day"  data-mau="xanh-dam"></section>
+
+<section class="item-mau" data-mau="trang" data-nhietdo-min="18" data-nhietdo-max="28"></section>
+<section class="item-mau" data-mau="den"   data-nhietdo-min="15" data-nhietdo-max="24"></section>
+<section class="item-mau" data-mau="be"    data-nhietdo-min="20" data-nhietdo-max="30"></section>
+
+<script>
+async function chayRobot() {
+  const box = document.getElementById("ketqua");
+  box.innerHTML = "⏳ Đang xem thời tiết...";
+
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const api = `https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`;
+    const data = await (await fetch(api)).json();
+    xuLy(Math.round(data.current_weather.temperature));
+  }, () => {
+    box.innerHTML = "❌ Không lấy được vị trí";
+  });
+}
+
+function xuLy(nhietDo) {
+  const homNay = new Date().toISOString().slice(0,10);
+  const lichSu = JSON.parse(localStorage.getItem("lich_su_mac_do") || "[]");
+  const homQua = lichSu[0];
+
+  const mauHop = [];
+  document.querySelectorAll(".item-mau").forEach(m => {
+    if (nhietDo >= m.dataset.nhietdoMin && nhietDo <= m.dataset.nhietdoMax)
+      mauHop.push(m.dataset.mau);
+  });
+
+  const ao = [], quan = [];
+  document.querySelectorAll(".item-quanao").forEach(i => {
+    if (!i.dataset.mau.split(",").some(m => mauHop.includes(m))) return;
+    if (homQua && homQua.items.includes(i.dataset.ten)) return;
+    (i.dataset.loai === "ao" ? ao : quan).push(i.dataset.ten);
+  });
+
+  if (!ao.length || !quan.length) {
+    document.getElementById("ketqua").innerHTML = "❌ Không có đồ phù hợp";
+    return;
+  }
+
+  const kqAo = ao[Math.floor(Math.random()*ao.length)];
+  const kqQuan = quan[Math.floor(Math.random()*quan.length)];
+
+  lichSu.unshift({ ngay: homNay, items: [kqAo, kqQuan] });
+  localStorage.setItem("lich_su_mac_do", JSON.stringify(lichSu.slice(0,5)));
+
+  document.getElementById("ketqua").innerHTML = `
+    🌡 <b>${nhietDo}°C</b><br><br>
+    👕 <b>${kqAo}</b><br>
+    👖 <b>${kqQuan}</b>
+    <div class="note">Đã tránh trùng hôm qua</div>
+  `;
+}
+</script>
+
+</body>
+</html>

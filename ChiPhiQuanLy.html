@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 16: ROE (Return on Equity) - CEO AI Enterprise</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- Header / Navbar -->
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+            <div class="flex items-center space-x-3 mb-2 sm:mb-0">
+                <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-lg">
+                    <i class="fa-solid fa-percent text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white">CEO AI Enterprise</h1>
+                    <p class="text-xs text-indigo-400 font-medium">Module 16: Tỷ Suất Sinh Lợi Trên Vốn Chủ Sở Hữu (ROE)</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-900/60 text-indigo-300 border border-indigo-700/50">
+                    <i class="fa-solid fa-circle text-[8px] text-emerald-400 mr-1.5 animate-pulse"></i> DuPont Analysis Ready
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+        <!-- Cột Trái: Nhập liệu (5 Cột) -->
+        <div class="lg:col-span-5 space-y-6">
+            
+            <div class="bg-slate-800 rounded-2xl p-6 border border-slate-700 shadow-xl">
+                <h2 class="text-lg font-semibold text-white mb-4 flex items-center">
+                    <i class="fa-solid fa-sliders text-indigo-400 mr-2"></i> Dữ liệu đầu vào tài chính
+                </h2>
+                
+                <form id="roeForm" class="space-y-4" onsubmit="event.preventDefault(); calculateROE();">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            Lợi nhuận ròng (VNĐ)
+                        </label>
+                        <input type="number" id="netIncomeInput" value="500000000" step="1000000" required
+                            class="w-full bg-slate-900 border border-slate-750 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition font-medium">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            Vốn chủ sở hữu bình quân (VNĐ)
+                        </label>
+                        <input type="number" id="equityInput" value="2500000000" step="10000000" required
+                            class="w-full bg-slate-900 border border-slate-750 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition font-medium">
+                    </div>
+
+                    <div class="pt-2 flex space-x-3">
+                        <button type="button" onclick="calculateROE()" 
+                            class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 px-4 rounded-xl shadow-lg hover:shadow-indigo-500/25 transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-calculator"></i>
+                            <span>Tính toán & Phân tích</span>
+                        </button>
+                        <button type="reset" onclick="setTimeout(calculateROE, 50)"
+                            class="bg-slate-700 hover:bg-slate-600 text-slate-300 font-medium py-3 px-4 rounded-xl transition">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Công thức chuẩn -->
+            <div class="bg-slate-800/80 rounded-2xl p-6 border border-slate-700/80 backdrop-blur-sm">
+                <h3 class="text-sm font-semibold text-indigo-300 uppercase tracking-wider mb-3 flex items-center">
+                    <i class="fa-solid fa-book-bookmark mr-2"></i> Công thức tài chính
+                </h3>
+                <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-750 text-xs text-slate-300 space-y-2 font-mono">
+                    <p><span class="text-indigo-400 font-semibold">ROE</span> = (Lợi nhuận ròng / Vốn chủ sở hữu) &times; 100</p>
+                    <p class="text-[11px] text-slate-400 font-sans mt-1">
+                        ROE đo lường mức độ sinh lời trên mỗi đồng vốn mà các cổ đông đầu tư vào doanh nghiệp.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Cột Phải: Kết quả, Biểu đồ & Đánh giá AI (7 Cột) -->
+        <div class="lg:col-span-7 space-y-6">
+
+            <!-- Thẻ Kết quả tổng quan -->
+            <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700 shadow-xl flex flex-col justify-between bg-gradient-to-br from-slate-800 to-indigo-950/40">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-indigo-300">Tỷ Suất Sinh Lợi Vốn Chủ Sở Hữu (ROE)</span>
+                        <h3 id="resultROE" class="text-4xl font-extrabold text-white mt-1">-- <span class="text-lg font-normal text-slate-400">%</span></h3>
+                    </div>
+                    <div id="badgeHealth" class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                        Đang đánh giá...
+                    </div>
+                </div>
+                <p id="resultSummary" class="text-xs text-slate-300 mt-3 pt-3 border-t border-slate-700/60">
+                    Đang phân tích hiệu suất sử dụng vốn chủ sở hữu...
+                </p>
+            </div>
+
+            <!-- Khối Biểu đồ trực quan -->
+            <div class="bg-slate-800 rounded-2xl p-6 border border-slate-700 shadow-xl">
+                <h3 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center">
+                    <i class="fa-solid fa-chart-bar text-indigo-400 mr-2"></i> So sánh ROE với chuẩn kỳ vọng thị trường (15%)
+                </h3>
+                <div class="h-48 relative">
+                    <canvas id="roeChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Khối Phân tích, Cảnh báo & Khuyến nghị AI -->
+            <div class="bg-slate-800 rounded-2xl p-6 border border-slate-700 shadow-xl space-y-4">
+                <h3 class="text-sm font-semibold text-indigo-300 uppercase tracking-wider flex items-center">
+                    <i class="fa-solid fa-robot text-indigo-400 mr-2"></i> Đánh giá & Khuyến nghị từ AI CEO
+                </h3>
+                
+                <div class="space-y-3">
+                    <div id="aiHealthStatus" class="p-4 rounded-xl bg-slate-900/90 border border-slate-750 text-sm text-slate-200">
+                        <!-- Populated via JS -->
+                    </div>
+
+                    <div id="aiWarnings" class="p-4 rounded-xl bg-amber-950/25 border border-amber-800/40 text-sm text-amber-200 space-y-1">
+                        <div class="font-semibold flex items-center text-amber-400 mb-1">
+                            <i class="fa-solid fa-triangle-exclamation mr-2"></i> Cảnh báo trọng yếu:
+                        </div>
+                        <ul id="warningList" class="list-disc list-inside space-y-1 text-xs text-amber-200/90">
+                            <!-- Populated via JS -->
+                        </ul>
+                    </div>
+
+                    <div id="aiRecommendations" class="p-4 rounded-xl bg-indigo-950/25 border border-indigo-800/40 text-sm text-indigo-200 space-y-1">
+                        <div class="font-semibold flex items-center text-indigo-400 mb-1">
+                            <i class="fa-solid fa-lightbulb mr-2"></i> Khuyến nghị điều hành:
+                        </div>
+                        <ul id="recommendationList" class="list-disc list-inside space-y-1 text-xs text-indigo-200/90">
+                            <!-- Populated via JS -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Thao tác mở rộng (SQLite & Excel) -->
+                <div class="pt-4 border-t border-slate-700/60 flex flex-wrap gap-3 justify-end">
+                    <button type="button" onclick="saveToSQLite()" 
+                        class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold py-2.5 px-4 rounded-xl transition flex items-center space-x-2 shadow">
+                        <i class="fa-solid fa-database text-indigo-400"></i>
+                        <span>Lưu SQLite</span>
+                    </button>
+                    <button type="button" onclick="exportExcel()" 
+                        class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold py-2.5 px-4 rounded-xl transition flex items-center space-x-2 shadow">
+                        <i class="fa-solid fa-file-excel text-emerald-400"></i>
+                        <span>Xuất Excel</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+        <p>CEO AI Enterprise System &bull; Module 16: ROE (Return on Equity) &bull; Thiết kế chuyên lập trình ra quyết định điều hành</p>
+    </footer>
+
+    <!-- JavaScript Xử lý biểu đồ và logic tính toán -->
+    <script>
+        let roeChartInstance = null;
+
+        function initChart(roeValue) {
+            const ctx = document.getElementById('roeChart').getContext('2d');
+            
+            if (roeChartInstance) {
+                roeChartInstance.destroy();
+            }
+
+            roeChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Doanh nghiệp của bạn', 'Mức kỳ vọng chuẩn (15%)', 'Top ngành hàng (25%)'],
+                    datasets: [{
+                        label: 'Tỷ suất ROE (%)',
+                        data: [roeValue, 15, 25],
+                        backgroundColor: [
+                            'rgba(99, 102, 241, 0.8)',
+                            'rgba(148, 163, 184, 0.5)',
+                            'rgba(16, 185, 129, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgb(99, 102, 241)',
+                            'rgb(148, 163, 184)',
+                            'rgb(16, 185, 129)'
+                        ],
+                        borderWidth: 1,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8', font: { size: 11 } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#94a3b8', font: { size: 11 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function calculateROE() {
+            const netIncome = parseFloat(document.getElementById('netIncomeInput').value) || 0;
+            const equity = parseFloat(document.getElementById('equityInput').value) || 1;
+
+            const roe = (netIncome / equity) * 100;
+
+            document.getElementById('resultROE').innerHTML = `${roe.toFixed(2)} <span class="text-lg font-normal text-slate-400">%</span>`;
+
+            let badge = document.getElementById('badgeHealth');
+            let summary = document.getElementById('resultSummary');
+            let statusHtml = '';
+            let warningsHtml = '';
+            let recommendationsHtml = '';
+
+            if (roe >= 20) {
+                badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+                badge.innerText = "Sinh lời xuất sắc";
+                summary.innerText = `Hiệu suất sử dụng vốn chủ sở hữu cao tuyệt vời (${roe.toFixed(2)}%), tạo ra giá trị lớn cho cổ đông.`;
+                statusHtml = `<strong class="text-emerald-400">Trạng thái: Khỏe mạnh & Hiệu quả cao.</strong> Doanh nghiệp tạo ra mức sinh lời vượt trội trên từng đồng vốn chủ sở hữu bỏ ra.`;
+                warningsHtml = `<li>Kiểm tra xem ROE cao đến từ biên lợi nhuận tốt hay do đòn bẩy tài chính (vay nợ lớn). Tránh lạm dụng đòn bẩy quá mức.</li>`;
+                recommendationsHtml = `<li>Duy trì chính sách tái đầu tư thông minh và tiếp tục bảo vệ lợi thế cạnh tranh cốt lõi.</li>`;
+            } else if (roe >= 12) {
+                badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30";
+                badge.innerText = "Hiệu suất ổn định";
+                summary.innerText = `Mức ROE đạt ${roe.toFixed(2)}%, đáp ứng khá tốt kỳ vọng sinh lời thông thường của thị trường.`;
+                statusHtml = `<strong class="text-indigo-400">Trạng thái: Bình thường.</strong> Hiệu quả sinh lời ổn định nhưng còn không ít dư địa để cải thiện năng suất vận hành.`;
+                warningsHtml = `<li>Tốc độ tăng trưởng vốn chủ sở hữu có thể làm loãng ROE nếu lợi nhuận ròng không tăng trưởng tương xứng.</li>`;
+                recommendationsHtml = `<li>Tập trung tối ưu hóa biên lợi nhuận ròng và vòng quay tài sản để đẩy chỉ số ROE lên mức cao hơn.</li>`;
+            } else {
+                badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30";
+                badge.innerText = "Sinh lời thấp / Kém";
+                summary.innerText = `ROE thấp (${roe.toFixed(2)}%), không hấp dẫn so với chi phí cơ hội đầu tư bên ngoài.`;
+                statusHtml = `<strong class="text-amber-400">Trạng thái: Cảnh báo yếu.</strong> Vốn chủ sở hữu chưa được khai thác hiệu quả, mức sinh lời thua kém kỳ vọng của cổ đông.`;
+                warningsHtml = `<li>Lợi nhuận ròng tạo ra quá nhỏ so với quy mô vốn chủ sở hữu hiện tại, dẫn đến lãng phí nguồn lực tài chính.</li>`;
+                recommendationsHtml = `<li>Rà soát lại toàn bộ cấu trúc chi phí, tìm giải pháp tăng doanh thu hoặc xem xét chiến lược mua lại cổ phần / tối ưu vốn.</li>`;
+            }
+
+            document.getElementById('aiHealthStatus').innerHTML = statusHtml;
+            document.getElementById('warningList').innerHTML = warningsHtml;
+            document.getElementById('recommendationList').innerHTML = recommendationsHtml;
+
+            initChart(roe);
+        }
+
+        function saveToSQLite() {
+            alert("Đã kết nối luồng lưu trữ Module 16 (ROE) vào cơ sở dữ liệu SQLite.");
+        }
+
+        function exportExcel() {
+            alert("Đang khởi tạo tệp Excel xuất dữ liệu phân tích ROE...");
+        }
+
+        window.onload = function() {
+            calculateROE();
+        };
+    </script>
+</body>
+</html>

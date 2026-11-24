@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bàn Cờ Vây - Khớp Tọa Độ & Kho 40 Link Riêng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body { background-color: #0b1120; color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .board-texture {
+            background-color: #d7b382;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(247, 237, 220, 0.4) 0%, rgba(197, 147, 85, 0.2) 100%),
+                linear-gradient(to right, rgba(142, 94, 39, 0.08) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(142, 94, 39, 0.08) 1px, transparent 1px);
+            box-shadow: inset 0 0 30px rgba(76, 46, 16, 0.5), 0 20px 40px rgba(0, 0, 0, 0.7);
+        }
+        .white-stone {
+            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #e2e8f0 60%, #94a3b8 100%);
+            box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.45), inset -1px -1px 2px rgba(0,0,0,0.2);
+        }
+        .black-stone {
+            background: radial-gradient(circle at 35% 35%, #475569 0%, #1e293b 50%, #0f172a 100%);
+            box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.6), inset 1px 1px 1px rgba(255,255,255,0.2);
+        }
+        .selected-ring {
+            box-shadow: 0 0 0 3px #f59e0b, 0 0 18px #f59e0b !important;
+            transform: scale(1.22);
+            z-index: 30 !important;
+        }
+        .go-grid-19 {
+            display: grid !important;
+            grid-template-columns: repeat(19, minmax(0, 1fr)) !important;
+            grid-template-rows: repeat(19, minmax(0, 1fr)) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+    <!-- Header Nạp Dữ Liệu & Can Chi -->
+    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-600 to-amber-300 flex items-center justify-center text-slate-950 font-bold shadow-lg">
+                    <i class="fa-solid fa-chess-board text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-bold text-white">Bàn Cờ Vây • Khớp Chuẩn Tọa Độ & Kho 40 Link Riêng</h1>
+                    <p id="canChiInfo" class="text-xs text-amber-400 font-medium">Đang tính toán lịch Can Chi, Ngũ hành hôm nay...</p>
+                </div>
+            </div>
+
+            <!-- Các nút nạp file TXT -->
+            <div class="flex items-center gap-2 flex-wrap">
+                <label class="cursor-pointer px-3.5 py-2 rounded-xl text-xs font-bold bg-sky-600 hover:bg-sky-500 text-white shadow transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <span>Tải TXT Nội Dung Ván</span>
+                    <input type="file" id="txtContentInput" accept=".txt" class="hidden" onchange="loadGameContentTXT(event)">
+                </label>
+
+                <label class="cursor-pointer px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <span>Tải Hàng Loạt TXT Link (Nhiều Điểm)</span>
+                    <input type="file" id="multiTxtLinkInput" accept=".txt" multiple class="hidden" onchange="loadMultipleLinkTXTs(event)">
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-5">
+        <!-- Thanh điều khiển Ván cờ & Nước đi -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col xl:flex-row items-center justify-between gap-3 shadow-xl">
+            <div class="flex items-center flex-wrap gap-2">
+                <span class="text-sm text-amber-400 font-bold"><i class="fa-solid fa-layer-group mr-1"></i> Ván cờ (40 link):</span>
+                <button onclick="changeVan(-1)" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-sm text-white border border-slate-700 transition">Ván Trước</button>
+                <span id="txtVanHienTai" class="text-sm font-bold px-3.5 py-1.5 bg-amber-500/20 text-amber-300 rounded-lg border border-amber-500/40">Ván 1 / 40</span>
+                <button onclick="changeVan(1)" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-sm text-white border border-slate-700 transition">Ván Sau</button>
+
+                <div class="h-6 w-[1px] bg-slate-700 mx-1"></div>
+
+                <span class="text-sm text-slate-300 font-medium">Nước đi:</span>
+                <button onclick="changeMove(-1)" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs text-white border border-slate-700 transition">◀ Nước Trước</button>
+                <span id="txtMoveHienTai" class="text-xs font-bold px-3.5 py-1.5 bg-slate-800 text-white rounded-lg">Nước 1 / 361</span>
+                <button onclick="changeMove(1)" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs text-white border border-slate-700 transition">Nước Tiếp ▶</button>
+
+                <button onclick="focusHomNay()" class="ml-1 px-3.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-lg shadow transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-calendar-day"></i> Đến Ô Ngày Hôm Nay
+                </button>
+            </div>
+
+            <!-- Tùy chọn chế độ hiển thị quân trên bàn cờ -->
+            <div class="flex items-center gap-3">
+                <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
+                    <input type="checkbox" id="chkShowCumulative" class="accent-amber-500 w-4 h-4 cursor-pointer" onchange="renderBoard()">
+                    <span>Hiện lũy tiến cả ván (thay vì chỉ 1 quân đang chọn)</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <!-- Bàn cờ vây 19x19 -->
+            <div class="lg:col-span-7 flex flex-col items-center">
+                <div class="w-full max-w-[640px] aspect-square rounded-2xl p-3 sm:p-5 board-texture border-4 border-amber-900 shadow-2xl relative flex flex-col">
+                    <div class="flex w-full text-xs font-extrabold text-amber-950 justify-between px-6 pb-1">
+                        <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>J</span><span>K</span><span>L</span><span>M</span><span>N</span><span>O</span><span>P</span><span>Q</span><span>R</span><span>S</span><span>T</span>
+                    </div>
+                    <div class="flex-1 flex overflow-hidden">
+                        <div class="flex flex-col text-xs font-extrabold text-amber-950 justify-between py-2 pr-1.5">
+                            <span>19</span><span>18</span><span>17</span><span>16</span><span>15</span><span>14</span><span>13</span><span>12</span><span>11</span><span>10</span><span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                        </div>
+                        <div id="goBoard" class="flex-1 go-grid-19 relative bg-transparent border border-amber-950/70 cursor-pointer"></div>
+                        <div class="flex flex-col text-xs font-extrabold text-amber-950 justify-between py-2 pl-1.5">
+                            <span>19</span><span>18</span><span>17</span><span>16</span><span>15</span><span>14</span><span>13</span><span>12</span><span>11</span><span>10</span><span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                        </div>
+                    </div>
+                    <div class="flex w-full text-xs font-extrabold text-amber-950 justify-between px-6 pt-1">
+                        <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>J</span><span>K</span><span>L</span><span>M</span><span>N</span><span>O</span><span>P</span><span>Q</span><span>R</span><span>S</span><span>T</span>
+                    </div>
+                </div>
+
+                <!-- Thanh trượt nước đi -->
+                <div class="mt-4 w-full max-w-[640px] flex items-center gap-3 bg-slate-900 p-3 rounded-xl border border-slate-800">
+                    <input type="range" id="moveSlider" min="0" max="360" value="0" class="w-full accent-amber-500 cursor-pointer" oninput="onSliderChange(this.value)">
+                </div>
+            </div>
+
+            <!-- Panel Chi Tiết & Nút Quản Lý Link Riêng Của Nước Đang Chọn -->
+            <div class="lg:col-span-5 flex flex-col gap-4">
+                <div id="detailCard" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl min-h-[540px] flex flex-col justify-between">
+                    <!-- Chi tiết nước đi render tại đây -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const COLUMN_LABELS = ['A','B','C','D','E','F','G','H','J','K','L','M','N','O','P','Q','R','S','T'];
+        
+        let gameMoves = [];
+        let currentMoveIndex = 0; // Bắt đầu từ 0 (Nước số 1)
+        let currentVan = 1;
+        let homNayIndex = 0;
+
+        function tinhToanCanChiNguHanh() {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 0);
+            const diff = now - start;
+            const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const can = ["Giáp", "Ất", "Bính", "Đinh", "Mậu", "Kỷ", "Canh", "Tân", "Nhâm", "Quý"];
+            const chi = ["Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi", "Thân", "Dậu", "Tuất", "Hợi"];
+            const canStr = can[(dayOfYear + 6) % 10];
+            const chiStr = chi[(dayOfYear + 8) % 12];
+
+            homNayIndex = (dayOfYear - 1);
+
+            document.getElementById("canChiInfo").innerHTML = `📅 Hôm nay: <strong>${now.toLocaleDateString('vi-VN')}</strong> (Ngày thứ ${dayOfYear} trong năm) | Can Chi: <strong class="text-amber-300">${canStr} ${chiStr}</strong>`;
+        }
+
+        // Tạo tọa độ chuẩn từ 1 đến 361 (hoặc hơn) phủ đều bàn cờ 19x19
+        function getCoordsForIndex(idx) {
+            const posInBoard = idx % 361;
+            const colIdx = posInBoard % 19;          // 0 -> 18 (A -> T)
+            const rowGridIdx = Math.floor(posInBoard / 19); // 0 -> 18 (Từ trên xuống dưới: hàng 19 -> hàng 1)
+            const rowDisplayNum = 19 - rowGridIdx;   // 19 -> 1
+            return {
+                colIdx: colIdx,
+                rowGridIdx: rowGridIdx,
+                coordStr: `${COLUMN_LABELS[colIdx]}${rowDisplayNum}`
+            };
+        }
+
+        function initDefaultGame() {
+            gameMoves = [];
+            for (let i = 0; i < 361; i++) {
+                const stt = i + 1;
+                const pos = getCoordsForIndex(i);
+
+                let defaultLinks = [];
+                for (let l = 1; l <= 40; l++) {
+                    defaultLinks.push(`https://www.youtube.com/results?search_query=nuoc_${stt}_link_so_${l}`);
+                }
+
+                gameMoves.push({
+                    stt: stt,
+                    colIdx: pos.colIdx,
+                    rowGridIdx: pos.rowGridIdx,
+                    coord: pos.coordStr,
+                    isBlack: (stt % 2 !== 0),
+                    content: `Nội dung Nước đi #${stt} tại tọa độ [${pos.coordStr}].`,
+                    links: defaultLinks,
+                    fileName: "Dữ liệu mẫu (40 link)"
+                });
+            }
+            currentMoveIndex = 0;
+            updateUI();
+        }
+
+        function loadGameContentTXT(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const rawLines = e.target.result.split(/\r?\n/);
+                const validLines = [];
+                rawLines.forEach(l => {
+                    const trimmed = l.trim();
+                    if (trimmed.length > 0 && 
+                        !trimmed.toUpperCase().startsWith("PHẦN") && 
+                        !trimmed.toUpperCase().startsWith("CHƯƠNG") && 
+                        !trimmed.startsWith("===") && 
+                        !trimmed.startsWith("---")) {
+                        validLines.push(trimmed);
+                    }
+                });
+
+                if (validLines.length === 0) return;
+
+                // Xây dựng lại danh sách đúng theo số dòng thực tế của file TXT
+                const newMoves = [];
+                validLines.forEach((line, idx) => {
+                    const stt = idx + 1;
+                    const pos = getCoordsForIndex(idx);
+                    // Giữ lại kho link đã nạp trước đó nếu có
+                    const existingLinks = (gameMoves[idx] && gameMoves[idx].links) ? gameMoves[idx].links : Array.from({length: 40}, (_, l) => `https://www.youtube.com/results?search_query=nuoc_${stt}_link_so_${l + 1}`);
+                    const existingFile = (gameMoves[idx] && gameMoves[idx].fileName) ? gameMoves[idx].fileName : "Mặc định (40 link)";
+
+                    newMoves.push({
+                        stt: stt,
+                        colIdx: pos.colIdx,
+                        rowGridIdx: pos.rowGridIdx,
+                        coord: pos.coordStr,
+                        isBlack: (stt % 2 !== 0),
+                        content: line,
+                        links: existingLinks,
+                        fileName: existingFile
+                    });
+                });
+
+                gameMoves = newMoves;
+                currentMoveIndex = 0; // Luôn về Nước số 1
+                updateUI();
+                alert(`✅ Đã nạp thành công ${validLines.length} nước đi!`);
+            };
+            reader.readAsText(file, "UTF-8");
+            event.target.value = "";
+        }
+
+        async function loadMultipleLinkTXTs(event) {
+            const files = Array.from(event.target.files);
+            if (files.length === 0) return;
+
+            files.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+
+            let loadedCount = 0;
+            for (let i = 0; i < Math.min(files.length, gameMoves.length); i++) {
+                const file = files[i];
+                await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const links = e.target.result.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0 && l.includes("http"));
+                        if (links.length > 0) {
+                            gameMoves[i].links = links;
+                            gameMoves[i].fileName = file.name;
+                            loadedCount++;
+                        }
+                        resolve();
+                    };
+                    reader.readAsText(file, "UTF-8");
+                });
+            }
+
+            updateUI();
+            alert(`✅ Đã nạp thành công hàng loạt ${loadedCount} tệp TXT link!`);
+            event.target.value = "";
+        }
+
+        function loadLinksForCurrentMove(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const links = e.target.result.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0 && l.includes("http"));
+                if (links.length > 0) {
+                    gameMoves[currentMoveIndex].links = links;
+                    gameMoves[currentMoveIndex].fileName = file.name;
+                    updateUI();
+                    alert(`✅ Đã nạp ${links.length} link riêng cho Nước #${currentMoveIndex + 1} (${gameMoves[currentMoveIndex].coord})!`);
+                } else {
+                    alert(`⚠️ Không tìm thấy đường link hợp lệ trong tệp này!`);
+                }
+            };
+            reader.readAsText(file, "UTF-8");
+            event.target.value = "";
+        }
+
+        function changeVan(dir) {
+            currentVan += dir;
+            if (currentVan > 40) currentVan = 1;
+            if (currentVan < 1) currentVan = 40;
+            updateUI();
+        }
+
+        function changeMove(dir) {
+            currentMoveIndex += dir;
+            if (currentMoveIndex >= gameMoves.length) currentMoveIndex = 0;
+            if (currentMoveIndex < 0) currentMoveIndex = gameMoves.length - 1;
+            updateUI();
+        }
+
+        function onSliderChange(val) {
+            currentMoveIndex = parseInt(val);
+            updateUI();
+        }
+
+        function focusHomNay() {
+            if (gameMoves.length > 0) {
+                currentMoveIndex = homNayIndex % gameMoves.length;
+                updateUI();
+            }
+        }
+
+        function updateUI() {
+            document.getElementById("txtVanHienTai").innerText = `Ván ${currentVan} / 40`;
+            document.getElementById("txtMoveHienTai").innerText = `Nước ${currentMoveIndex + 1} / ${gameMoves.length}`;
+            const slider = document.getElementById("moveSlider");
+            slider.max = gameMoves.length - 1;
+            slider.value = currentMoveIndex;
+            renderBoard();
+            renderCard();
+        }
+
+        function renderBoard() {
+            const boardEl = document.getElementById("goBoard");
+            boardEl.innerHTML = "";
+            const hoshiCoords = ["D4", "D10", "D16", "K4", "K10", "K16", "Q4", "Q10", "Q16"];
+            const showCumulative = document.getElementById("chkShowCumulative").checked;
+
+            let placedMap = {};
+            if (showCumulative) {
+                // Hiện lũy tiến từ nước đầu đến nước đang chọn
+                for (let i = 0; i <= currentMoveIndex; i++) {
+                    const m = gameMoves[i];
+                    placedMap[`${m.colIdx}_${m.rowGridIdx}`] = { stt: m.stt, isBlack: m.isBlack, isLatest: (i === currentMoveIndex) };
+                }
+            } else {
+                // Chỉ hiện duy nhất quân cờ tại nước đang chọn (Nước số 1, hoặc Nước ngày hôm nay...)
+                const m = gameMoves[currentMoveIndex];
+                if (m) {
+                    placedMap[`${m.colIdx}_${m.rowGridIdx}`] = { stt: m.stt, isBlack: m.isBlack, isLatest: true };
+                }
+            }
+
+            for (let r = 0; r < 19; r++) {
+                for (let c = 0; c < 19; c++) {
+                    const colLetter = COLUMN_LABELS[c];
+                    const rowDisplayNum = 19 - r;
+                    const coordStr = `${colLetter}${rowDisplayNum}`;
+
+                    const cell = document.createElement("div");
+                    const isHoshi = hoshiCoords.includes(coordStr);
+                    const hoshiHtml = isHoshi ? `<div class="absolute w-2 h-2 rounded-full bg-amber-950 z-0"></div>` : "";
+
+                    const key = `${c}_${r}`;
+                    const stoneInfo = placedMap[key];
+
+                    if (stoneInfo) {
+                        const stoneClass = stoneInfo.isBlack ? "black-stone border border-slate-700" : "white-stone border border-slate-300";
+                        const ringClass = stoneInfo.isLatest ? "selected-ring" : "";
+                        const textColor = stoneInfo.isBlack ? "text-amber-300" : "text-slate-900";
+
+                        cell.className = "relative flex items-center justify-center border-[0.5px] border-amber-950/40 w-full h-full cursor-pointer";
+                        cell.innerHTML = `
+                            ${hoshiHtml}
+                            <div class="relative w-[84%] h-[84%] rounded-full ${stoneClass} ${ringClass} z-10 flex items-center justify-center shadow-lg transition-transform">
+                                <span class="text-[9px] sm:text-[10px] font-extrabold ${textColor}">${stoneInfo.stt}</span>
+                            </div>
+                        `;
+                    } else {
+                        cell.className = "relative flex items-center justify-center border-[0.5px] border-amber-950/30 w-full h-full cursor-pointer hover:bg-amber-950/15";
+                        cell.innerHTML = hoshiHtml;
+                    }
+
+                    // Click vào bất kỳ điểm nào trên bàn cờ cũng nhảy thẳng đến nước đi tại tọa độ đó
+                    cell.onclick = () => {
+                        const foundIdx = gameMoves.findIndex(m => m.colIdx === c && m.rowGridIdx === r);
+                        if (foundIdx !== -1) {
+                            currentMoveIndex = foundIdx;
+                            updateUI();
+                        }
+                    };
+
+                    boardEl.appendChild(cell);
+                }
+            }
+        }
+
+        function renderCard() {
+            const cardEl = document.getElementById("detailCard");
+            const move = gameMoves[currentMoveIndex];
+            if (!move) return;
+
+            const linksCount = move.links.length;
+            const linkIndex = (currentVan - 1) % linksCount;
+            const activeLink = move.links[linkIndex];
+
+            cardEl.innerHTML = `
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="px-3 py-1 bg-amber-500 text-slate-950 rounded-lg text-sm font-extrabold font-mono shadow">
+                                Tọa độ ${move.coord}
+                            </span>
+                            <span class="text-sm font-bold text-slate-200">Nước #${move.stt} / ${gameMoves.length}</span>
+                        </div>
+                        <span class="text-xs px-3 py-1 rounded-full ${move.isBlack ? 'bg-slate-800 text-amber-300 border border-slate-600 font-bold' : 'bg-slate-200 text-slate-900 font-bold'}">
+                            ${move.isBlack ? '● Quân Đen' : '○ Quân Trắng'}
+                        </span>
+                    </div>
+
+                    <!-- Quản lý tệp TXT link riêng cho nước này -->
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2 text-xs">
+                        <div class="flex items-center justify-between text-slate-400">
+                            <span class="truncate max-w-[65%]" title="${move.fileName}">
+                                <i class="fa-solid fa-file-lines text-sky-400 mr-1"></i> File: ${move.fileName}
+                            </span>
+                            <span class="text-amber-300 font-bold">${linksCount} link</span>
+                        </div>
+                        <label class="w-full cursor-pointer py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition flex items-center justify-center gap-1.5 shadow">
+                            <i class="fa-solid fa-upload"></i>
+                            <span>Tải TXT Link Riêng Cho Nước Này</span>
+                            <input type="file" accept=".txt" class="hidden" onchange="loadLinksForCurrentMove(event)">
+                        </label>
+                    </div>
+
+                    <!-- Nội dung nước đi -->
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/90 max-h-[200px] overflow-y-auto shadow-inner">
+                        <p class="text-sm font-medium text-white leading-relaxed whitespace-pre-line">${move.content}</p>
+                    </div>
+                </div>
+
+                <!-- Khu vực hiển thị Link xoay vòng theo Ván -->
+                <div class="pt-3 border-t border-slate-800 space-y-2">
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-play text-red-500 mr-1"></i> Đang ở <strong class="text-amber-400">Ván ${currentVan}</strong> (Link ${linkIndex + 1}/${linksCount})</span>
+                        <span class="font-mono text-xs text-amber-300">Tọa độ ${move.coord}</span>
+                    </div>
+                    <div class="text-[11px] text-slate-400 truncate font-mono bg-slate-950 px-3 py-2 rounded-lg border border-slate-800">
+                        ${activeLink}
+                    </div>
+                    <a href="${activeLink}" target="_blank" class="w-full flex items-center justify-center gap-2.5 py-3 px-4 bg-red-600 hover:bg-red-500 text-white rounded-xl text-sm sm:text-base font-extrabold transition shadow-lg shadow-red-600/20">
+                        <i class="fa-brands fa-youtube text-xl"></i>
+                        <span>Mở Video (Ván ${currentVan} - Link ${linkIndex + 1})</span>
+                    </a>
+                </div>
+            `;
+        }
+
+        window.onload = function() {
+            tinhToanCanChiNguHanh();
+            initDefaultGame();
+        };
+    </script>
+</body>
+</html>

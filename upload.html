@@ -1,0 +1,47 @@
+<div class="card">
+    <h2 class="card-title"><i class="fas fa-file-csv"></i> Upload & Phân Tích CSV Shopee</h2>
+    
+    <div class="upload-area" id="dropZone" onclick="document.getElementById('csvFile').click()">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p class="upload-text">Kéo thả file CSV vào đây hoặc click để chọn</p>
+        <p class="upload-subtext">Hỗ trợ file CSV từ hệ thống Shopee Affiliate</p>
+        <input type="file" id="csvFile" accept=".csv" style="display: none;">
+    </div>
+    
+    <div class="price-tiers">
+        <div class="price-tier tier-l">
+            <i class="fas fa-tag"></i>
+            Tầng L: Dưới 200k
+        </div>
+        <div class="price-tier tier-t">
+            <i class="fas fa-tag"></i>
+            Tầng T: 200k - 1 triệu
+        </div>
+        <div class="price-tier tier-c">
+            <i class="fas fa-tag"></i>
+            Tầng C: 1 - 5 triệu
+        </div>
+        <div class="price-tier tier-d">
+            <i class="fas fa-tag"></i>
+            Tầng D: Trên 5 triệu
+        </div>
+    </div>
+    
+    <div id="resultBox" style="display: none;">
+        <div class="result-box">
+            <h3><i class="fas fa-chart-bar"></i> Phân Tích Hoàn Tất</h3>
+            <div id="analysisResult"></div>
+            <div style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="createTemplate()">
+                    <i class="fas fa-layer-group"></i> 1. Tạo Sheet Mẫu
+                </button>
+                <button class="btn btn-success" onclick="sendSampleData()">
+                    <i class="fas fa-file-export"></i> 2. Xuất Dữ Liệu
+                </button>
+                <button class="btn btn-warning" onclick="analyzeData()">
+                    <i class="fas fa-filter"></i> 3. Lọc Sản Phẩm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

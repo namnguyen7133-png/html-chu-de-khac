@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>THONGTINCANHAN - su_kien_sk</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>THONGTINCANHAN - su_kien_sk</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>448 | 13:28 | NAM | dương | Nước lá lốt / Ngâm chân | 808 | 27/6/2025 | 19840 | lạnh người | Trà gừng đường đỏ / Ngâm chân nước nóng</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>936 | 16:35 | NAM | Tim  | Cháo hạt sen long nhãn | 995 | 28/6/2025 | 19841 | Trà hoa cúc / Nghe nhạc nhẹ / Hít thở sâu</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>675 | 22:49 | NAM | Giải trí hoa hậu | Điều chỉnh sinh hoạt | 1369 | 28/6/2025 | 19841 | khó chịu | Trà bạc hà / Đi dạo nơi thoáng mát</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>1311 | 23:45 | NAM | NHANH NHU CHOP giải trí  | Điều chỉnh sinh hoạt | 1425 | 23/6/2025 | 19836 | tiểu đêm | Giảm nước sau 20h / Ăn giá đỗ chần</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>1316 | 23:45 | KA | trứng | Ăn thực phẩm giàu kẽm / Uống đủ nước / Tránh đồ lạnh | 1425 | 28/6/2025 | 19841 | xoang | Xông lá sả bạc hà / Rửa mũi nước muối</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>10 | 09:00 | BA HA | ngã | Điều chỉnh sinh hoạt | 540 | 13/3/1971 | 10 | khó thở | Mở cửa thoáng / Day huyệt Đản trung</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>188 | 12:36 | NAM | khớp | Điều chỉnh sinh hoạt | 756 | 1/7/2025 | 19844 | nóng bừng | Nước bột sắn dây / Trà đậu đen mát</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>570 | 13:58 | NAM | mặt | Điều chỉnh sinh hoạt | 838 | 1/7/2025 | 19844 | sưng mũi | Xông lá sả bạc hà / Rửa mũi nước muối / Rau diếp cá</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>249 | 14:12 | NAM | Tim  | Cháo hạt sen long nhãn | 852 | 2/7/2025 | 19845 | mông | Nước đậu xanh cả vỏ / Mướp đắng / Đắp diếp cá</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>162 | 11:43 | NAM | Tim  | Cháo hạt sen long nhãn | 703 | 3/7/2025 | 19846 | đầy bụng | Nước gừng ấm / Đu đủ chín / Sữa chua</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>345 | 09:51 | NAM | mặt | Điều chỉnh sinh hoạt | 591 | 5/7/2025 | 19848 | mệt ngủ | Hạt sen / Trà dưỡng tâm / Ngâm chân nước nóng</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>108 | 08:25 | NAM | máu | Điều chỉnh sinh hoạt | 505 | 21/5/2025 | 19803 | rã rời óc | Trà hoa cúc / Nghe nhạc nhẹ / Hít thở sâu</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>598 | 22:55 | NAM | mặt | Điều chỉnh sinh hoạt | 1375 | 5/7/2025 | 19848 | đầu | Day huyệt Thái dương / Trà bạc hà / Nghỉ ngơi</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>54 | 08:55 | NAM | Tim  | Cháo hạt sen long nhãn | 535 | 6/7/2025 | 19849 | vươn vai sảng khoái | Duy trì vận động nhẹ / Uống nước lọc ấm</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>598 | 11:53 | NAM | Tim  | Cháo hạt sen long nhãn | 713 | 6/7/2025 | 19849 | bụng cứng đầy | Massage bụng theo chiều kim đồng hồ / Nước sắc trần bì</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>621 | 16:52 | NAM | mặt | Điều chỉnh sinh hoạt | 1012 | 6/7/2025 | 19849 | trứng | Ăn thực phẩm giàu kẽm / Uống đủ nước / Tránh đồ lạnh</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>214 | 08:10 | NAM | Ngứa | Nước sắn dây / Đậu đen xanh lòng | 490 | 1/6/2025 | 19814 | bắt đầu  | Nước gừng đường đen ấm / Tránh đồ lạnh</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>447 | 08:30 | NAM | máu | Điều chỉnh sinh hoạt | 510 | 14/6/2025 | 19827 | hết  | Canh gà hầm táo đỏ / Bổ sung sắt (thịt bò, gan)</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>4 | 06:45 | KA | bắt đầu   | Nước gừng đường đen ấm / Tránh đồ lạnh | 405 | 6/7/2025 | 19849 | gối | Xoa bóp dầu nóng / Tập co duỗi nhẹ / Bổ sung Omega-3</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>454 | 12:25 | KA | hết   | Canh gà hầm táo đỏ / Bổ sung sắt (thịt bò, gan) | 745 | 11/6/2025 | 19824 | cổ gáy | Chườm thảo dược / Tập bài tập cổ / Day huyệt Phong trì</td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td>38 | 23:30 | NAM | THI NGUOI MAU | Điều chỉnh sinh hoạt | 1410 | 26/4/2025 | 19778 | mỏi vai gáy | Massage rượu gừng / Vận động cổ nhẹ nhàng</td>
+            </tr>
+            <tr>
+                <td><b>22</b></td>
+                <td>404 | 08:30 | NAM | máu | Điều chỉnh sinh hoạt | 510 | 2/5/2025 | 19784 | đau lưng | Nước đậu đen rang / Chườm ngải cứu nóng</td>
+            </tr>
+            <tr>
+                <td><b>23</b></td>
+                <td>1160 | 22:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1335 | 7/7/2025 | 19850 | hoa mắt | Trà gừng mật ong nóng</td>
+            </tr>
+            <tr>
+                <td><b>24</b></td>
+                <td>110 | 11:45 | NAM | Tê chân tay | Rượu gừng xoa bóp | 705 | 7/7/2025 | 19850 | tim | Cháo hạt sen long nhãn</td>
+            </tr>
+            <tr>
+                <td><b>25</b></td>
+                <td>1002 | 19:38 | NAM | Tê chân tay | Rượu gừng xoa bóp | 1178 | 7/7/2025 | 19850 | đi ngoài | Canh rau muống luộc / Nước rau má</td>
+            </tr>
+            <tr>
+                <td><b>26</b></td>
+                <td>531 | 11:30 | NAM | bụng | Điều chỉnh sinh hoạt | 690 | 8/7/2025 | 19851 | dương | Nước lá lốt / Ngâm chân</td>
+            </tr>
+            <tr>
+                <td><b>27</b></td>
+                <td>286 | 06:30 | NAM | Đau lưng | Nước đậu đen rang / Chườm ngải cứu nóng | 390 | 4/5/2025 | 19786 | đau bụng | Cháo trắng + Gừng già</td>
+            </tr>
+            <tr>
+                <td><b>28</b></td>
+                <td>405 | 08:30 | NAM | ngủ, mệt | Điều chỉnh sinh hoạt | 510 | 3/5/2025 | 19785 | mất ngủ | Trà tâm sen / Canh hoa thiên lý</td>
+            </tr>
+            <tr>
+                <td><b>29</b></td>
+                <td>437 | 07:30 | NAM | Tê chân tay | Rượu gừng xoa bóp | 450 | 5/5/2025 | 19787 | tê chân | Rượu gừng xoa bóp</td>
+            </tr>
+            <tr>
+                <td><b>30</b></td>
+                <td>441 | 07:30 | NAM | Tê chân tay | Rượu gừng xoa bóp | 450 | 9/5/2025 | 19791 | viêm họng | Nước chanh sả gừng ấm</td>
+            </tr>
+            <tr>
+                <td><b>31</b></td>
+                <td>294 | 06:30 | NAM | Buồn nôn | Ngậm gừng tươi / Nước chanh gừng ấm | 390 | 12/5/2025 | 19794 | ngứa | Nước sắn dây / Đậu đen xanh lòng</td>
+            </tr>
+            <tr>
+                <td><b>32</b></td>
+                <td>295 | 06:30 | NAM | bụng | Điều chỉnh sinh hoạt | 390 | 13/5/2025 | 19795 | buồn ngủ | Trà táo đỏ kỳ tử / Vận động nhẹ</td>
+            </tr>
+            <tr>
+                <td><b>33</b></td>
+                <td>555 | 10:03 | NAM | may bay truc thang | Điều chỉnh sinh hoạt | 603 | 8/7/2025 | 19851 | đói | Sữa hạt ấm / Một ít hạt hạnh nhân</td>
+            </tr>
+            <tr>
+                <td><b>34</b></td>
+                <td>171 | 08:00 | NAM | Hop Ubnd | Điều chỉnh sinh hoạt | 480 | 8/7/2025 | 19851 | mệt mỏi | Nước yến / Ngậm sâm / Nghỉ ngơi 15 phút</td>
+            </tr>
+            <tr>
+                <td><b>35</b></td>
+                <td>443 | 07:30 | NAM | Viêm họng cấp | Nước chanh sả gừng ấm | 450 | 16/2/2024 | 19343 | buồn nôn | Ngậm gừng tươi / Nước chanh gừng ấm</td>
+            </tr>
+            <tr>
+                <td><b>36</b></td>
+                <td>107 | 08:00 | PHO | Hop QH BAT DAU | Điều chỉnh sinh hoạt | 480 | 5/5/2025 | 19787 | Đột quỵ | Gọi cấp cứu - Tuyệt đối không ăn uống</td>
+            </tr>
+            <tr>
+                <td><b>37</b></td>
+                <td>144 | 08:00 | PHO | Hop QH BAT DAU | Điều chỉnh sinh hoạt | 480 | 11/6/2025 | 19824 | Ngã | Gọi cấp cứu - Tuyệt đối không ăn uống</td>
+            </tr>
+            <tr>
+                <td><b>38</b></td>
+                <td>430 | 17:00 | PHO | Hop QH be mac | Điều chỉnh sinh hoạt | 1020 | 28/5/2025 | 19810 | gối,Xoa bóp dầu nóng / Tập co duỗi nhẹ / Bổ sung Omega-3</td>
+            </tr>
+            <tr>
+                <td><b>39</b></td>
+                <td>461 | 17:00 | PHO | Hop QH be mac | Điều chỉnh sinh hoạt | 1020 | 28/6/2025 | 19841 | cổ gáy,Chườm thảo dược / Tập bài tập cổ / Day huyệt Phong trì</td>
+            </tr>
+            <tr>
+                <td><b>40</b></td>
+                <td>352 | 06:15 | NAM | ngủ, mệt | Điều chỉnh sinh hoạt | 375 | 9/7/2025 | 19852</td>
+            </tr>
+            <tr>
+                <td><b>41</b></td>
+                <td>2 | 06:37 | NAM | Tim  | Cháo hạt sen long nhãn | 397 | 9/7/2025 | 19852</td>
+            </tr>
+            <tr>
+                <td><b>42</b></td>
+                <td>11 | 00:25 | KA | đầu kỳ   | Day huyệt Thái dương / Trà bạc hà / Nghỉ ngơi | 25 | 14/9/2013 | 15536</td>
+            </tr>
+            <tr>
+                <td><b>43</b></td>
+                <td>166 | 09:00 | AN HOI | Điều chỉnh sinh hoạt | 540 | 29/4/2026 | 20146</td>
+            </tr>
+            <tr>
+                <td><b>44</b></td>
+                <td>166 | 09:00 | NH | AN HOI | Điều chỉnh sinh hoạt | 540 | 29/4/2026 | 20146</td>
+            </tr>
+            <tr>
+                <td><b>45</b></td>
+                <td>0 | 00:25 | KA | hết kỳ  | Canh gà hầm táo đỏ / Bổ sung sắt (thịt bò, gan) | 25 | 28/9/2013 | 15550</td>
+            </tr>
+            <tr>
+                <td><b>46</b></td>
+                <td>727 | 12:45 | NAM | gối | Xoa bóp dầu nóng / Tập co duỗi nhẹ / Bổ sung Omega-3 | 765 | 9/7/2025 | 19852</td>
+            </tr>
+            <tr>
+                <td><b>47</b></td>
+                <td>278 | 07:15 | NAM | Tim  | Cháo hạt sen long nhãn | 435 | 10/7/2025 | 19853</td>
+            </tr>
+            <tr>
+                <td><b>48</b></td>
+                <td>637 | 15:15 | NAM | cổ gáy | Chườm thảo dược / Tập bài tập cổ / Day huyệt Phong trì | 915 | 9/7/2025 | 19852</td>
+            </tr>
+            <tr>
+                <td><b>49</b></td>
+                <td>1154 | 22:15 | NAM | gối | Xoa bóp dầu nóng / Tập co duỗi nhẹ / Bổ sung Omega-3 | 1335 | 1/7/2025 | 19844</td>
+            </tr>
+            <tr>
+                <td><b>50</b></td>
+                <td>95 | 06:20 | NAM | máu | Điều chỉnh sinh hoạt | 380 | 12/7/2025 | 19855</td>
+            </tr>
+            <tr>
+                <td><b>51</b></td>
+                <td>355 | 06:15 | NAM | dương | Nước lá lốt / Ngâm chân | 375 | 12/7/2025 | 19855</td>
+            </tr>
+            <tr>
+                <td><b>52</b></td>
+                <td>31 | 02:29 | NAM | dương | Nước lá lốt / Ngâm chân | 149 | 29/4/2026 | 20146</td>
+            </tr>
+            <tr>
+                <td><b>53</b></td>
+                <td>71 | 06:05 | NAM | dương | Nước lá lốt / Ngâm chân | 365 | 29/4/2026 | 20146</td>
+            </tr>
+            <tr>
+                <td><b>54</b></td>
+                <td>166 | 09:00 | NAM | CUOI NA | Điều chỉnh sinh hoạt | 540 | 29/4/2026 | 20146</td>
+            </tr>
+            <tr>
+                <td><b>55</b></td>
+                <td>946 | 20:00 | AN | 1200 | 29/4/2026 | 20146</td>
+            </tr>
+            <tr>
+                <td><b>56</b></td>
+                <td>946 | 20:00 | CHAU | 1200 | 29/4/2026 | 20146</td>
+            </tr>
+            <tr>
+                <td><b>57</b></td>
+                <td>946 | 20:00 | NGOC | 1200 | 29/4/2026 | 20146</td>
+            </tr>
+            <tr>
+                <td><b>58</b></td>
+                <td>234 | 07:26 | NAM | mặt | Điều chỉnh sinh hoạt | 446 | 15/7/2025 | 19858</td>
+            </tr>
+            <tr>
+                <td><b>59</b></td>
+                <td>487 | 09:47 | NAM | mặt | Điều chỉnh sinh hoạt | 587 | 15/7/2025 | 19858</td>
+            </tr>
+            <tr>
+                <td><b>60</b></td>
+                <td>274 | 18:08 | NAM | máu | Điều chỉnh sinh hoạt | 1088 | 15/7/2025 | 19858</td>
+            </tr>
+            <tr>
+                <td><b>61</b></td>
+                <td>34 | 13:13 | NAM | mặt | Điều chỉnh sinh hoạt | 793 | 16/7/2025 | 19859</td>
+            </tr>
+            <tr>
+                <td><b>62</b></td>
+                <td>416 | 09:00 | NAM | Tim  | Cháo hạt sen long nhãn | 540 | 14/9/2013 | 15536</td>
+            </tr>
+            <tr>
+                <td><b>63</b></td>
+                <td>416 | 09:00 | KA | Tim  | Cháo hạt sen long nhãn | 540 | 14/9/2013 | 15536</td>
+            </tr>
+            <tr>
+                <td><b>64</b></td>
+                <td>9 | 00:25 | KA | Tim  | Cháo hạt sen long nhãn | 25 | 16/7/2025 | 19859</td>
+            </tr>
+            <tr>
+                <td><b>65</b></td>
+                <td>9 | 00:25 | NAM | Tim  | Cháo hạt sen long nhãn | 25 | 16/7/2025 | 19859</td>
+            </tr>
+            <tr>
+                <td><b>66</b></td>
+                <td>60 | 06:00 | NAM | mặt | Điều chỉnh sinh hoạt | 360 | 17/7/2025 | 19860</td>
+            </tr>
+            <tr>
+                <td><b>67</b></td>
+                <td>502 | 14:40 | NAM | mặt | Điều chỉnh sinh hoạt | 880 | 19/7/2025 | 19862</td>
+            </tr>
+            <tr>
+                <td><b>68</b></td>
+                <td>737 | 12:45 | NAM | máu | Điều chỉnh sinh hoạt | 765 | 19/7/2025 | 19862</td>
+            </tr>
+            <tr>
+                <td><b>69</b></td>
+                <td>63 | 06:00 | NAM | Tim  | Cháo hạt sen long nhãn | 360 | 20/7/2025 | 19863</td>
+            </tr>
+            <tr>
+                <td><b>70</b></td>
+                <td>63 | 15:00 | NAM | máu | Điều chỉnh sinh hoạt | 900 | 20/7/2025 | 19863</td>
+            </tr>
+            <tr>
+                <td><b>71</b></td>
+                <td>1031 | 19:37 | NAM | Tim  | Cháo hạt sen long nhãn | 1177 | 20/7/2025 | 19863</td>
+            </tr>
+            <tr>
+                <td><b>72</b></td>
+                <td>280 | 04:48 | NAM | dương | Nước lá lốt / Ngâm chân | 288 | 21/7/2025 | 19864</td>
+            </tr>
+            <tr>
+                <td><b>73</b></td>
+                <td>104 | 05:04 | NAM | Tim  | Cháo hạt sen long nhãn | 304 | 21/7/2025 | 19864</td>
+            </tr>
+            <tr>
+                <td><b>74</b></td>
+                <td>664 | 16:00 | NAM | Tim  | Cháo hạt sen long nhãn | 960 | 21/7/2025 | 19864</td>
+            </tr>
+            <tr>
+                <td><b>75</b></td>
+                <td>1315 | 23:45 | NAM | đói | Sữa hạt ấm / Một ít hạt hạnh nhân | 1425 | 27/06/2025 | 19840</td>
+            </tr>
+            <tr>
+                <td><b>76</b></td>
+                <td>154 | 02:44 | NAM | đói | Sữa hạt ấm / Một ít hạt hạnh nhân | 164 | 21/06/2025 | 19834</td>
+            </tr>
+            <tr>
+                <td><b>77</b></td>
+                <td>334 | 17:08 | NAM | bụng | Điều chỉnh sinh hoạt | 1028 | 23/7/2025 | 19866</td>
+            </tr>
+            <tr>
+                <td><b>78</b></td>
+                <td>532 | 20:08 | NAM | Ngứa | Nước sắn dây / Đậu đen xanh lòng | 1208 | 17/7/2025 | 19860</td>
+            </tr>
+            <tr>
+                <td><b>79</b></td>
+                <td>31 | 05:48 | NAM | vươn vai sảng khoái | Duy trì vận động nhẹ / Uống nước lọc ấm | 348 | 24/7/2025 | 19867</td>
+            </tr>
+            <tr>
+                <td><b>80</b></td>
+                <td>147 | 03:52 | NAM |  tiểu đêm | Giảm nước sau 20h / Ăn giá đỗ chần | 232 | 24/7/2025 | 19867</td>
+            </tr>
+            <tr>
+                <td><b>81</b></td>
+                <td>429 | 09:00 | NAM | Nam đi nghia trang ngoc hoi | Điều chỉnh sinh hoạt | 540 | 26/7/2025 | 19869</td>
+            </tr>
+            <tr>
+                <td><b>82</b></td>
+                <td>333 | 06:47 | NAM | máu | Điều chỉnh sinh hoạt | 407 | 26/7/2025 | 19869</td>
+            </tr>
+            <tr>
+                <td><b>83</b></td>
+                <td>189 | 08:00 | NAM | Đau lưng | Nước đậu đen rang / Chườm ngải cứu nóng | 480 | 26/7/2025 | 19869</td>
+            </tr>
+            <tr>
+                <td><b>84</b></td>
+                <td>66 | 07:30 | NAM | Ngứa | Nước sắn dây / Đậu đen xanh lòng | 450 | 23/7/2025 | 19866</td>
+            </tr>
+            <tr>
+                <td><b>85</b></td>
+                <td>278 | 05:16 | NAM | vươn vai | Điều chỉnh sinh hoạt | 316 | 27/7/2025 | 19870</td>
+            </tr>
+            <tr>
+                <td><b>86</b></td>
+                <td>400 | 09:50 | NAM | tiểu đêm | Giảm nước sau 20h / Ăn giá đỗ chần | 590 | 27/7/2025 | 19870</td>
+            </tr>
+            <tr>
+                <td><b>87</b></td>
+                <td>30 | 10:20 | NAM | ngủ, mệt | Điều chỉnh sinh hoạt | 620 | 27/7/2025 | 19870</td>
+            </tr>
+            <tr>
+                <td><b>88</b></td>
+                <td>121 | 02:05 | NAM | dương | Nước lá lốt / Ngâm chân | 125 | 28/7/2025 | 19871</td>
+            </tr>
+            <tr>
+                <td><b>89</b></td>
+                <td>111 | 03:28 | NAM | tiểu đêm | Giảm nước sau 20h / Ăn giá đỗ chần | 208 | 28/7/2025 | 19871</td>
+            </tr>
+            <tr>
+                <td><b>90</b></td>
+                <td>1001 | 18:30 | NAM | đi dạo | Điều chỉnh sinh hoạt | 1110 | 28/7/2025 | 19871</td>
+            </tr>
+            <tr>
+                <td><b>91</b></td>
+                <td>31 | 10:20 | NAM | ngủ, mệt | Điều chỉnh sinh hoạt | 620 | 28/7/2025 | 19871</td>
+            </tr>
+            <tr>
+                <td><b>92</b></td>
+                <td>178 | 07:38 | NAM | Buồn nôn | Ngậm gừng tươi / Nước chanh gừng ấm | 458 | 29/7/2025 | 19872</td>
+            </tr>
+            <tr>
+                <td><b>93</b></td>
+                <td>237 | 09:55 | NAM | ngủ, mệt | Điều chỉnh sinh hoạt | 595 | 29/7/2025 | 19872</td>
+            </tr>
+            <tr>
+                <td><b>94</b></td>
+                <td>368 | 06:55 | NAM | Khó chịu  | Trà bạc hà / Đi dạo nơi thoáng mát | 415 | 30/7/2025 | 19873</td>
+            </tr>
+            <tr>
+                <td><b>95</b></td>
+                <td>447 | 21:35 | KA | Khó chịu  | Trà bạc hà / Đi dạo nơi thoáng mát | 1295 | 29/7/2025 | 19872</td>
+            </tr>
+            <tr>
+                <td><b>96</b></td>
+                <td>28 | 15:45 | NAM | máu | Điều chỉnh sinh hoạt | 945 | 30/7/2025 | 19873</td>
+            </tr>
+            <tr>
+                <td><b>97</b></td>
+                <td>969 | 18:32 | NAM | bụng | Điều chỉnh sinh hoạt | 1112 | 30/7/2025 | 19873</td>
+            </tr>
+            <tr>
+                <td><b>98</b></td>
+                <td>532 | 20:08 | NAM | Ngứa | Nước sắn dây / Đậu đen xanh lòng | 1208 | 17/7/2025 | 19860</td>
+            </tr>
+            <tr>
+                <td><b>99</b></td>
+                <td>287 | 04:48 | NAM | tiểu đêm | Giảm nước sau 20h / Ăn giá đỗ chần | 288 | 28/7/2025 | 19871</td>
+            </tr>
+            <tr>
+                <td><b>100</b></td>
+                <td>416 | 16:13 | NAM | Đau lưng | Nước đậu đen rang / Chườm ngải cứu nóng | 973 | 2/8/2025 | 19876</td>
+            </tr>
+            <tr>
+                <td><b>101</b></td>
+                <td>706 | 11:50 | NAM | máu | Điều chỉnh sinh hoạt | 710 | 2/8/2025 | 19876</td>
+            </tr>
+            <tr>
+                <td><b>102</b></td>
+                <td>209 | 04:58 | NAM | tiểu đêm | Giảm nước sau 20h / Ăn giá đỗ chần | 298 | 3/8/2025 | 19877</td>
+            </tr>
+            <tr>
+                <td><b>103</b></td>
+                <td>168 | 06:05 | NAM | máu | Điều chỉnh sinh hoạt | 365 | 4/8/2025 | 19878</td>
+            </tr>
+            <tr>
+                <td><b>104</b></td>
+                <td>2 | 00:05 | NAM | dương | Nước lá lốt / Ngâm chân | 5 | 3/8/2025 | 19877</td>
+            </tr>
+            <tr>
+                <td><b>105</b></td>
+                <td>1053 | 20:55 | NAM | ngáp | Điều chỉnh sinh hoạt | 1255 | 4/8/2025 | 19878</td>
+            </tr>
+            <tr>
+                <td><b>106</b></td>
+                <td>1188 | 22:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1335 | 4/8/2025 | 19878</td>
+            </tr>
+            <tr>
+                <td><b>107</b></td>
+                <td>349 | 07:45 | NAM |  khó chịu | Trà bạc hà / Đi dạo nơi thoáng mát | 465 | 5/8/2025 | 19879</td>
+            </tr>
+            <tr>
+                <td><b>108</b></td>
+                <td>879 | 16:40 | NAM | mặt | Điều chỉnh sinh hoạt | 1000 | 5/8/2025 | 19879</td>
+            </tr>
+            <tr>
+                <td><b>109</b></td>
+                <td>341 | 07:45 | NAM | Mắt có dử | Điều chỉnh sinh hoạt | 465 | 28/7/2025 | 19871</td>
+            </tr>
+            <tr>
+                <td><b>110</b></td>
+                <td>359 | 20:20 | NAM | Viêm họng | Nước chanh sả gừng ấm | 1220 | 5/8/2025 | 19879</td>
+            </tr>
+            <tr>
+                <td><b>111</b></td>
+                <td>584 | 18:55 | NAM | Đau lưng | Nước đậu đen rang / Chườm ngải cứu nóng | 1135 | 5/8/2025 | 19879</td>
+            </tr>
+            <tr>
+                <td><b>112</b></td>
+                <td>347 | 07:45 | NAM | Xoang mũi tắc | Xông lá sả bạc hà / Rửa mũi nước muối | 465 | 3/8/2025 | 19877</td>
+            </tr>
+            <tr>
+                <td><b>113</b></td>
+                <td>39 | 20:40 | NAM | Buồn nôn | Ngậm gừng tươi / Nước chanh gừng ấm | 1240 | 5/8/2025 | 19879</td>
+            </tr>
+            <tr>
+                <td><b>114</b></td>
+                <td>142 | 23:30 | NAM | ngủ, mệt | Điều chỉnh sinh hoạt | 1410 | 8/8/2025 | 19882</td>
+            </tr>
+            <tr>
+                <td><b>115</b></td>
+                <td>191 | 09:07 | NAM | mặt | Điều chỉnh sinh hoạt | 547 | 9/8/2025 | 19883</td>
+            </tr>
+            <tr>
+                <td><b>116</b></td>
+                <td>333 | 07:05 | NAM | máu | Điều chỉnh sinh hoạt | 425 | 9/8/2025 | 19883</td>
+            </tr>
+            <tr>
+                <td><b>117</b></td>
+                <td>202 | 08:00 | NAM | Đau lưng | Nước đậu đen rang / Chườm ngải cứu nóng | 480 | 8/8/2025 | 19882</td>
+            </tr>
+            <tr>
+                <td><b>118</b></td>
+                <td>309 | 21:45 | NAM | mặt | Điều chỉnh sinh hoạt | 1305 | 10/8/2025 | 19884</td>
+            </tr>
+            <tr>
+                <td><b>119</b></td>
+                <td>459 | 08:45 | NAM | Ngứa | Nước sắn dây / Đậu đen xanh lòng | 525 | 10/8/2025 | 19884</td>
+            </tr>
+            <tr>
+                <td><b>120</b></td>
+                <td>84 | 13:45 | NAM | máu | Điều chỉnh sinh hoạt | 825 | 10/8/2025 | 19884</td>
+            </tr>
+            <tr>
+                <td><b>121</b></td>
+                <td>844 | 19:50 | NAM | ngã | Điều chỉnh sinh hoạt | 1190 | 10/8/2025 | 19884</td>
+            </tr>
+            <tr>
+                <td><b>122</b></td>
+                <td>45 | 02:35 | NAM | Tim  | Cháo hạt sen long nhãn | 155 | 11/8/2025 | 19885</td>
+            </tr>
+            <tr>
+                <td><b>123</b></td>
+                <td>85 | 02:45 | NAM | dương | Nước lá lốt / Ngâm chân | 165 | 11/8/2025 | 19885</td>
+            </tr>
+            <tr>
+                <td><b>124</b></td>
+                <td>460 | 15:25 | BANH | ngã | Điều chỉnh sinh hoạt | 925 | 11/8/2025 | 19885</td>
+            </tr>
+            <tr>
+                <td><b>125</b></td>
+                <td>39 | 06:45 | An | Viêm họng | Nước chanh sả gừng ấm | 405 | 10/8/2025 | 19884</td>
+            </tr>
+            <tr>
+                <td><b>126</b></td>
+                <td>39 | 06:45 | Châu | Viêm họng | Nước chanh sả gừng ấm | 405 | 10/8/2025 | 19884</td>
+            </tr>
+            <tr>
+                <td><b>127</b></td>
+                <td>39 | 06:45 | Ngọc  | Viêm họng | Nước chanh sả gừng ấm | 405 | 10/8/2025 | 19884</td>
+            </tr>
+            <tr>
+                <td><b>128</b></td>
+                <td>326 | 13:35 | NAM | máu | Điều chỉnh sinh hoạt | 815 | 12/8/2025 | 19886</td>
+            </tr>
+            <tr>
+                <td><b>129</b></td>
+                <td>87 | 07:30 | NAM | Tim  | Cháo hạt sen long nhãn | 450 | 13/8/2025 | 19887</td>
+            </tr>
+            <tr>
+                <td><b>130</b></td>
+                <td>123 | 05:35 | NAM | máu | Điều chỉnh sinh hoạt | 335 | 14/8/2025 | 19888</td>
+            </tr>
+            <tr>
+                <td><b>131</b></td>
+                <td>1198 | 22:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1335 | 14/8/2025 | 19888</td>
+            </tr>
+            <tr>
+                <td><b>132</b></td>
+                <td>15 | 06:15 | NAM | máu | Điều chỉnh sinh hoạt | 375 | 16/8/2025 | 19890</td>
+            </tr>
+            <tr>
+                <td><b>133</b></td>
+                <td>360 | 10:30 | NAM | ngã | Điều chỉnh sinh hoạt | 630 | 16/8/2025 | 19890</td>
+            </tr>
+            <tr>
+                <td><b>134</b></td>
+                <td>290 | 11:40 | Ngọc  | ngủ, mệt | Điều chỉnh sinh hoạt | 700 | 16/8/2025 | 19890</td>
+            </tr>
+            <tr>
+                <td><b>135</b></td>
+                <td>46 | 12:15 | NAM | máu | Điều chỉnh sinh hoạt | 735 | 17/8/2025 | 19891</td>
+            </tr>
+            <tr>
+                <td><b>136</b></td>
+                <td>451 | 09:00 | NAM | ngủ, mệt | Điều chỉnh sinh hoạt | 540 | 17/8/2025 | 19891</td>
+            </tr>
+            <tr>
+                <td><b>137</b></td>
+                <td>422 | 09:16 | NAM | ngủ, mệt | Điều chỉnh sinh hoạt | 556 | 8/8/2025 | 19882</td>
+            </tr>
+            <tr>
+                <td><b>138</b></td>
+                <td>584 | 11:55 | NAM | bụng | Điều chỉnh sinh hoạt | 715 | 15/8/2025 | 19889</td>
+            </tr>
+            <tr>
+                <td><b>139</b></td>
+                <td>48 | 12:15 | NAM | máu | Điều chỉnh sinh hoạt | 735 | 19/8/2025 | 19893</td>
+            </tr>
+            <tr>
+                <td><b>140</b></td>
+                <td>374 | 20:20 | NAM | ngủ, mệt | Điều chỉnh sinh hoạt | 1220 | 20/8/2025 | 19894</td>
+            </tr>
+            <tr>
+                <td><b>141</b></td>
+                <td>275 | 05:27 | NAM | Tim  | Cháo hạt sen long nhãn | 327 | 21/8/2025 | 19895</td>
+            </tr>
+            <tr>
+                <td><b>142</b></td>
+                <td>20 | 06:15 | NAM | máu | Điều chỉnh sinh hoạt | 375 | 21/8/2025 | 19895</td>
+            </tr>
+            <tr>
+                <td><b>143</b></td>
+                <td>215 | 20:30 | NAM | ngã | Điều chỉnh sinh hoạt | 1230 | 21/8/2025 | 19895</td>
+            </tr>
+            <tr>
+                <td><b>144</b></td>
+                <td>326 | 17:10 | NAM | Khó thở | Mở cửa thoáng / Day huyệt Đản trung | 1030 | 22/8/2025 | 19896</td>
+            </tr>
+            <tr>
+                <td><b>145</b></td>
+                <td>366 | 18:05 | NAM | ngủ, mệt | Điều chỉnh sinh hoạt | 1085 | 22/8/2025 | 19896</td>
+            </tr>
+            <tr>
+                <td><b>146</b></td>
+                <td>7 | 00:15 | NAM | dương | Nước lá lốt / Ngâm chân | 15 | 23/8/2025 | 19897</td>
+            </tr>
+            <tr>
+                <td><b>147</b></td>
+                <td>475 | 08:18 | NAM | ngã | Điều chỉnh sinh hoạt | 498 | 23/8/2025 | 19897</td>
+            </tr>
+            <tr>
+                <td><b>148</b></td>
+                <td>217 | 10:15 | NAM | ngủ, mệt | Điều chỉnh sinh hoạt | 615 | 23/8/2025 | 19897</td>
+            </tr>
+            <tr>
+                <td><b>149</b></td>
+                <td>547 | 10:45 | An | bụng | Điều chỉnh sinh hoạt | 645 | 23/8/2025 | 19897</td>
+            </tr>
+            <tr>
+                <td><b>150</b></td>
+                <td>99 | 08:15 | NAM | máu | Điều chỉnh sinh hoạt | 495 | 25/8/2025 | 19899</td>
+            </tr>
+            <tr>
+                <td><b>151</b></td>
+                <td>264 | 06:25 | KA | bắt đầu   | Nước gừng đường đen ấm / Tránh đồ lạnh | 385 | 25/8/2025 | 19899</td>
+            </tr>
+            <tr>
+                <td><b>152</b></td>
+                <td>267 | 06:25 | KA | hết   | Canh gà hầm táo đỏ / Bổ sung sắt (thịt bò, gan) | 385 | 28/8/2025 | 19902</td>
+            </tr>
+            <tr>
+                <td><b>153</b></td>
+                <td>275 | 06:25 | KA | KA HKINH RT | Điều chỉnh sinh hoạt | 385 | 5/9/2025 | 19910</td>
+            </tr>
+            <tr>
+                <td><b>154</b></td>
+                <td>550 | 10:45 | An | bụng | Điều chỉnh sinh hoạt | 645 | 26/8/2025 | 19900</td>
+            </tr>
+            <tr>
+                <td><b>155</b></td>
+                <td>370 | 10:30 | NAM | Buồn nôn | Ngậm gừng tươi / Nước chanh gừng ấm | 630 | 26/8/2025 | 19900</td>
+            </tr>
+            <tr>
+                <td><b>156</b></td>
+                <td>56 | 15:45 | NAM | Khó thở | Mở cửa thoáng / Day huyệt Đản trung | 945 | 27/8/2025 | 19901</td>
+            </tr>
+            <tr>
+                <td><b>157</b></td>
+                <td>940 | 19:45 | NAM | Ngứa | Nước sắn dây / Đậu đen xanh lòng | 1185 | 26/8/2025 | 19900</td>
+            </tr>
+            <tr>
+                <td><b>158</b></td>
+                <td>102 | 13:45 | NAM | máu | Điều chỉnh sinh hoạt | 825 | 28/8/2025 | 19902</td>
+            </tr>
+            <tr>
+                <td><b>159</b></td>
+                <td>777 | 18:45 | NAM | bụng | Điều chỉnh sinh hoạt | 1125 | 28/8/2025 | 19902</td>
+            </tr>
+            <tr>
+                <td><b>160</b></td>
+                <td>695 | 20:00 | NAM | Rượu hành | Điều chỉnh sinh hoạt | 1200 | 21/8/2025 | 19895</td>
+            </tr>
+            <tr>
+                <td><b>161</b></td>
+                <td>698 | 20:00 | NAM | Rượu hành | Điều chỉnh sinh hoạt | 1200 | 24/8/2025 | 19898</td>
+            </tr>
+            <tr>
+                <td><b>162</b></td>
+                <td>701 | 20:00 | NAM | Rượu hành | Điều chỉnh sinh hoạt | 1200 | 27/8/2025 | 19901</td>
+            </tr>
+            <tr>
+                <td><b>163</b></td>
+                <td>14 | 06:30 | NAM | Rượu hành | Điều chỉnh sinh hoạt | 390 | 30/8/2025 | 19904</td>
+            </tr>
+            <tr>
+                <td><b>164</b></td>
+                <td>17 | 06:30 | NAM | Rượu hành | Điều chỉnh sinh hoạt | 390 | 2/9/2025 | 19907</td>
+            </tr>
+            <tr>
+                <td><b>165</b></td>
+                <td>1032 | 18:30 | NAM | Họp phụ huynh An | Điều chỉnh sinh hoạt | 1110 | 28/8/2025 | 19902</td>
+            </tr>
+            <tr>
+                <td><b>166</b></td>
+                <td>1216 | 22:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1335 | 1/9/2025 | 19906</td>
+            </tr>
+            <tr>
+                <td><b>167</b></td>
+                <td>482 | 08:45 | NAM | máu | Điều chỉnh sinh hoạt | 525 | 2/9/2025 | 19907</td>
+            </tr>
+            <tr>
+                <td><b>168</b></td>
+                <td>379 | 07:45 | NAM | máu | Điều chỉnh sinh hoạt | 465 | 4/9/2025 | 19909</td>
+            </tr>
+            <tr>
+                <td><b>169</b></td>
+                <td>1220 | 22:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1335 | 5/9/2025 | 19910</td>
+            </tr>
+            <tr>
+                <td><b>170</b></td>
+                <td>1222 | 22:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1335 | 7/9/2025 | 19912</td>
+            </tr>
+            <tr>
+                <td><b>171</b></td>
+                <td>67 | 06:45 | NAM | Đi ngoài talking  | Canh rau muống luộc / Nước rau má | 405 | 7/9/2025 | 19912</td>
+            </tr>
+            <tr>
+                <td><b>172</b></td>
+                <td>343 | 17:10 | NAM | Đi ngoài talking  | Canh rau muống luộc / Nước rau má | 1030 | 8/9/2025 | 19913</td>
+            </tr>
+            <tr>
+                <td><b>173</b></td>
+                <td>166 | 09:00 | HANG | CUOI HANG | Điều chỉnh sinh hoạt | 540 | 29/4/2026 | 20146</td>
+            </tr>
+            <tr>
+                <td><b>174</b></td>
+                <td>166 | 09:00 | PHƯƠNG | CUOI PHƯƠNG | Điều chỉnh sinh hoạt | 540 | 29/4/2026 | 20146</td>
+            </tr>
+            <tr>
+                <td><b>175</b></td>
+                <td>166 | 09:00 | NAM | AN HOI | Điều chỉnh sinh hoạt | 540 | 29/4/2026 | 20146</td>
+            </tr>
+            <tr>
+                <td><b>176</b></td>
+                <td>166 | 09:00 | HANG | AN HOI | Điều chỉnh sinh hoạt | 540 | 29/4/2026 | 20146</td>
+            </tr>
+            <tr>
+                <td><b>177</b></td>
+                <td>166 | 09:00 | PHƯƠNG | AN HOI | Điều chỉnh sinh hoạt | 540 | 29/4/2026 | 20146</td>
+            </tr>
+            <tr>
+                <td><b>178</b></td>
+                <td>315 | 08:10 | NAM | máu | Điều chỉnh sinh hoạt | 490 | 10/9/2025 | 19915</td>
+            </tr>
+            <tr>
+                <td><b>179</b></td>
+                <td>1226 | 22:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1335 | 11/9/2025 | 19916</td>
+            </tr>
+            <tr>
+                <td><b>180</b></td>
+                <td>305 | 08:50 | NAM | máu | Điều chỉnh sinh hoạt | 530 | 10/9/2025 | 19915</td>
+            </tr>
+            <tr>
+                <td><b>181</b></td>
+                <td>143 | 09:25 | NAM | Đi ngoài talking  | Canh rau muống luộc / Nước rau má | 565 | 13/9/2025 | 19918</td>
+            </tr>
+            <tr>
+                <td><b>182</b></td>
+                <td>27 | 06:30 | NAM | Đau lưng | Nước đậu đen rang / Chườm ngải cứu nóng | 390 | 12/9/2025 | 19917</td>
+            </tr>
+            <tr>
+                <td><b>183</b></td>
+                <td>31 | 18:25 | NAM | Đi ngoài són | Canh rau muống luộc / Nước rau má | 1105 | 16/9/2025 | 19921</td>
+            </tr>
+            <tr>
+                <td><b>184</b></td>
+                <td>85 | 04:21 | NAM | Tim  | Cháo hạt sen long nhãn | 261 | 16/9/2025 | 19921</td>
+            </tr>
+            <tr>
+                <td><b>185</b></td>
+                <td>31 | 06:30 | NAM | Đau lưng | Nước đậu đen rang / Chườm ngải cứu nóng | 390 | 16/9/2025 | 19921</td>
+            </tr>
+            <tr>
+                <td><b>186</b></td>
+                <td>961 | 19:45 | NAM | Ngứa | Nước sắn dây / Đậu đen xanh lòng | 1185 | 16/9/2025 | 19921</td>
+            </tr>
+            <tr>
+                <td><b>187</b></td>
+                <td>1021 | 17:30 | NAM | sổ mũi | Điều chỉnh sinh hoạt | 1050 | 16/9/2025 | 19921</td>
+            </tr>
+            <tr>
+                <td><b>188</b></td>
+                <td>575 | 21:30 | NAM | Đi ngoài talking  | Canh rau muống luộc / Nước rau má | 1290 | 20/9/2025 | 19925</td>
+            </tr>
+            <tr>
+                <td><b>189</b></td>
+                <td>803 | 21:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1275 | 23/9/2025 | 19928</td>
+            </tr>
+            <tr>
+                <td><b>190</b></td>
+                <td>327 | 09:54 | NAM | máu | Điều chỉnh sinh hoạt | 594 | 24/9/2025 | 19929</td>
+            </tr>
+            <tr>
+                <td><b>191</b></td>
+                <td>86 | 06:45 | NAM | Khó thở | Mở cửa thoáng / Day huyệt Đản trung | 405 | 26/9/2025 | 19931</td>
+            </tr>
+            <tr>
+                <td><b>192</b></td>
+                <td>131 | 08:15 | NAM | máu | Điều chỉnh sinh hoạt | 495 | 26/9/2025 | 19931</td>
+            </tr>
+            <tr>
+                <td><b>193</b></td>
+                <td>395 | 07:30 | NAM | sổ mũi | Điều chỉnh sinh hoạt | 450 | 24/3/2025 | 19745</td>
+            </tr>
+            <tr>
+                <td><b>194</b></td>
+                <td>129 | 07:30 | NAM | sổ mũi | Điều chỉnh sinh hoạt | 450 | 24/9/2025 | 19929</td>
+            </tr>
+            <tr>
+                <td><b>195</b></td>
+                <td>652 | 20:05 | NAM | máu | Điều chỉnh sinh hoạt | 1205 | 27/9/2025 | 19932</td>
+            </tr>
+            <tr>
+                <td><b>196</b></td>
+                <td>48 | 08:05 | NAM | máu | Điều chỉnh sinh hoạt | 485 | 28/9/2025 | 19933</td>
+            </tr>
+            <tr>
+                <td><b>197</b></td>
+                <td>0 | 00:05 | NAM | BỤNG CỨNG | Điều chỉnh sinh hoạt | 5 | 30/9/2025 | 19935</td>
+            </tr>
+            <tr>
+                <td><b>198</b></td>
+                <td>556 | 09:30 | NAM | BỤNG CỨNG | Điều chỉnh sinh hoạt | 570 | 1/10/2025 | 19936</td>
+            </tr>
+            <tr>
+                <td><b>199</b></td>
+                <td>17 | 20:45 | NAM | Buồn nôn | Ngậm gừng tươi / Nước chanh gừng ấm | 1245 | 2/10/2025 | 19937</td>
+            </tr>
+            <tr>
+                <td><b>200</b></td>
+                <td>113 | 05:05 | NAM | Cảm mệt tụt áp | Điều chỉnh sinh hoạt | 305 | 3/10/2025 | 19938</td>
+            </tr>
+            <tr>
+                <td><b>201</b></td>
+                <td>115 | 05:05 | NAM | Nứt kẽ tai trái | Điều chỉnh sinh hoạt | 305 | 5/10/2025 | 19940</td>
+            </tr>
+            <tr>
+                <td><b>202</b></td>
+                <td>516 | 08:45 | NAM | bụng | Điều chỉnh sinh hoạt | 525 | 6/10/2025 | 19941</td>
+            </tr>
+            <tr>
+                <td><b>203</b></td>
+                <td>333 | 08:50 | NAM | ngủ, mệt | Điều chỉnh sinh hoạt | 530 | 8/10/2025 | 19943</td>
+            </tr>
+            <tr>
+                <td><b>204</b></td>
+                <td>1256 | 22:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1335 | 11/10/2025 | 19946</td>
+            </tr>
+            <tr>
+                <td><b>205</b></td>
+                <td>517 | 14:05 | NAM | lỏng | Điều chỉnh sinh hoạt | 845 | 17/10/2025 | 19952</td>
+            </tr>
+            <tr>
+                <td><b>206</b></td>
+                <td>380 | 12:05 | NAM | máu | Điều chỉnh sinh hoạt | 725 | 20/10/2025 | 19955</td>
+            </tr>
+            <tr>
+                <td><b>207</b></td>
+                <td>285 | 08:00 | NAM | Tim | Cháo hạt sen long nhãn | 480 | 30/10/2025 | 19965</td>
+            </tr>
+            <tr>
+                <td><b>208</b></td>
+                <td>529 | 14:05 | NAM | lỏng | Điều chỉnh sinh hoạt | 845 | 29/10/2025 | 19964</td>
+            </tr>
+            <tr>
+                <td><b>209</b></td>
+                <td>1278 | 22:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1335 | 2/11/2025 | 19968</td>
+            </tr>
+            <tr>
+                <td><b>210</b></td>
+                <td>120 | 06:45 | An | Viêm họng | Nước chanh sả gừng ấm | 405 | 30/10/2025 | 19965</td>
+            </tr>
+            <tr>
+                <td><b>211</b></td>
+                <td>123 | 06:45 | Châu | Viêm họng | Nước chanh sả gừng ấm | 405 | 2/11/2025 | 19968</td>
+            </tr>
+            <tr>
+                <td><b>212</b></td>
+                <td>1279 | 22:15 | NAM | Viêm họng | Nước chanh sả gừng ấm | 1335 | 3/11/2025 | 19969</td>
+            </tr>
+            <tr>
+                <td><b>213</b></td>
+                <td>1286 | 22:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1335 | 10/11/2025 | 19976</td>
+            </tr>
+            <tr>
+                <td><b>214</b></td>
+                <td>207 | 14:27 | NAM | Tim | Cháo hạt sen long nhãn | 867 | 5/5/2007 | 13212</td>
+            </tr>
+            <tr>
+                <td><b>215</b></td>
+                <td>544 | 14:05 | NAM | máu | Điều chỉnh sinh hoạt | 845 | 13/11/2025 | 19979</td>
+            </tr>
+            <tr>
+                <td><b>216</b></td>
+                <td>1296 | 22:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1335 | 20/11/2025 | 19986</td>
+            </tr>
+            <tr>
+                <td><b>217</b></td>
+                <td>1302 | 22:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1335 | 26/11/2025 | 19992</td>
+            </tr>
+            <tr>
+                <td><b>218</b></td>
+                <td>454 | 07:45 | NAM | mặt | Điều chỉnh sinh hoạt | 465 | 18/11/2025 | 19984</td>
+            </tr>
+            <tr>
+                <td><b>219</b></td>
+                <td>249 | 11:45 | NAM | mặt | Điều chỉnh sinh hoạt | 705 | 23/11/2025 | 19989</td>
+            </tr>
+            <tr>
+                <td><b>220</b></td>
+                <td>821 | 17:45 | NAM | mặt | Điều chỉnh sinh hoạt | 1065 | 25/11/2025 | 19991</td>
+            </tr>
+            <tr>
+                <td><b>221</b></td>
+                <td>821 | 17:45 | NAM | Táo bón | Điều chỉnh sinh hoạt | 1065 | 25/11/2025 | 19991</td>
+            </tr>
+            <tr>
+                <td><b>222</b></td>
+                <td>821 | 17:45 | NAM | Táo bón | Điều chỉnh sinh hoạt | 1065 | 25/11/2025 | 19991</td>
+            </tr>
+            <tr>
+                <td><b>223</b></td>
+                <td>1311 | 22:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1335 | 5/12/2025 | 20001</td>
+            </tr>
+            <tr>
+                <td><b>224</b></td>
+                <td>1312 | 22:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1335 | 6/12/2025 | 20002</td>
+            </tr>
+            <tr>
+                <td><b>225</b></td>
+                <td>1313 | 22:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1335 | 7/12/2025 | 20003</td>
+            </tr>
+            <tr>
+                <td><b>226</b></td>
+                <td>1311 | 22:15 | NAM | Mũi | Điều chỉnh sinh hoạt | 1335 | 5/12/2025 | 20001</td>
+            </tr>
+            <tr>
+                <td><b>227</b></td>
+                <td>576 | 14:05 | NAM | máu | Điều chỉnh sinh hoạt | 845 | 15/12/2025 | 20011</td>
+            </tr>
+            <tr>
+                <td><b>228</b></td>
+                <td>1326 | 22:15 | NAM | Mất ngủ | Trà tâm sen / Canh hoa thiên lý | 1335 | 20/12/2025 | 20016</td>
+            </tr>
+            <tr>
+                <td><b>229</b></td>
+                <td>1325 | 22:15 | NAM | hết sưng mũi | Canh gà hầm táo đỏ / Bổ sung sắt (thịt bò, gan) | 1335 | 19/12/2025 | 20015</td>
+            </tr>
+            <tr>
+                <td><b>230</b></td>
+                <td>572 | 20:15 | NAM | mông | Nước đậu xanh cả vỏ / Mướp đắng / Đắp diếp cá | 1215 | 16/12/2025 | 20012</td>
+            </tr>
+            <tr>
+                <td><b>231</b></td>
+                <td>170 | 12:15 | NAM | WC | Điều chỉnh sinh hoạt | 735 | 19/12/2025 | 20015</td>
+            </tr>
+            <tr>
+                <td><b>232</b></td>
+                <td>129 | 19:30 | NAM | đầy bụng  | Nước gừng ấm / Đu đủ chín / Sữa chua | 1170 | 23/12/2025 | 20019</td>
+            </tr>
+            <tr>
+                <td><b>233</b></td>
+                <td>130 | 19:30 | NAM | máu | Điều chỉnh sinh hoạt | 1170 | 24/12/2025 | 20020</td>
+            </tr>
+            <tr>
+                <td><b>234</b></td>
+                <td>1334 | 22:15 | NAM | Viêm họng | Nước chanh sả gừng ấm | 1335 | 28/12/2025 | 20024</td>
+            </tr>
+            <tr>
+                <td><b>235</b></td>
+                <td>1334 | 22:15 | NAM | Viêm họng | Nước chanh sả gừng ấm | 1335 | 28/12/2025 | 20024</td>
+            </tr>
+            <tr>
+                <td><b>236</b></td>
+                <td>1334 | 22:15 | NAM | máu | Điều chỉnh sinh hoạt | 1335 | 28/12/2025 | 20024</td>
+            </tr>
+            <tr>
+                <td><b>237</b></td>
+                <td>1334 | 22:15 | NAM | TIM | Cháo hạt sen long nhãn | 1335 | 28/12/2025 | 20024</td>
+            </tr>
+            <tr>
+                <td><b>238</b></td>
+                <td>1334 | 22:15 | NAM | Đau lưng | Nước đậu đen rang / Chườm ngải cứu nóng | 1335 | 28/12/2025 | 20024</td>
+            </tr>
+            <tr>
+                <td><b>239</b></td>
+                <td>1334 | 22:15 | NAM | Đau lưng | Nước đậu đen rang / Chườm ngải cứu nóng | 1335 | 28/12/2025 | 20024</td>
+            </tr>
+            <tr>
+                <td><b>240</b></td>
+                <td>1334 | 22:15 | NAM | máu | Điều chỉnh sinh hoạt | 1335 | 28/12/2025 | 20024</td>
+            </tr>
+            <tr>
+                <td><b>241</b></td>
+                <td>65 | 07:45 | NAM | máu | Điều chỉnh sinh hoạt | 465 | 2/2/2026 | 20060</td>
+            </tr>
+            <tr>
+                <td><b>242</b></td>
+                <td>1103 | 19:45 | NAM | máu | Điều chỉnh sinh hoạt | 1185 | 5/2/2026 | 20063</td>
+            </tr>
+            <tr>
+                <td><b>243</b></td>
+                <td>489 | 13:35 | NAM | tim nhói  | Cháo hạt sen long nhãn | 815 | 22/1/2026 | 20049</td>
+            </tr>
+            <tr>
+                <td><b>244</b></td>
+                <td>1031 | 21:08 | NAM | tim nhói  | Cháo hạt sen long nhãn | 1268 | 24/1/2026 | 20051</td>
+            </tr>
+            <tr>
+                <td><b>245</b></td>
+                <td>197 | 09:44 | NAM | Lưng | Điều chỉnh sinh hoạt | 584 | 26/1/2026 | 20053</td>
+            </tr>
+            <tr>
+                <td><b>246</b></td>
+                <td>528 | 15:30 | NAM | tim nhói  | Cháo hạt sen long nhãn | 930 | 31/1/2026 | 20058</td>
+            </tr>
+            <tr>
+                <td><b>247</b></td>
+                <td>70 | 06:48 | NAM | tim nhói  | Cháo hạt sen long nhãn | 408 | 4/2/2026 | 20062</td>
+            </tr>
+            <tr>
+                <td><b>248</b></td>
+                <td>769 | 16:04 | NAM | tim nhói  | Cháo hạt sen long nhãn | 964 | 22/1/2026 | 20049</td>
+            </tr>
+            <tr>
+                <td><b>249</b></td>
+                <td>353 | 20:31 | NAM | tim nhói  | Cháo hạt sen long nhãn | 1231 | 22/1/2026 | 20049</td>
+            </tr>
+            <tr>
+                <td><b>250</b></td>
+                <td>9 | 00:49 | NAM | tim nhói  | Cháo hạt sen long nhãn | 49 | 23/1/2026 | 20050</td>
+            </tr>
+            <tr>
+                <td><b>251</b></td>
+                <td>42 | 05:28 | NAM | tim nhói  | Cháo hạt sen long nhãn | 328 | 23/1/2026 | 20050</td>
+            </tr>
+            <tr>
+                <td><b>252</b></td>
+                <td>69 | 06:17 | NAM | tay phải  | Điều chỉnh sinh hoạt | 377 | 23/1/2026 | 20050</td>
+            </tr>
+            <tr>
+                <td><b>253</b></td>
+                <td>1010 | 18:40 | NAM | tim nhói  | Cháo hạt sen long nhãn | 1120 | 23/1/2026 | 20050</td>
+            </tr>
+            <tr>
+                <td><b>254</b></td>
+                <td>17 | 04:59 | NAM | cung cu | Điều chỉnh sinh hoạt | 299 | 23/1/2026 | 20050</td>
+            </tr>
+            <tr>
+                <td><b>255</b></td>
+                <td>250 | 22:00 | NAM | cung cu | Điều chỉnh sinh hoạt | 1320 | 23/1/2026 | 20050</td>
+            </tr>
+            <tr>
+                <td><b>256</b></td>
+                <td>250 | 22:00 | NAM | chốc mép  | Điều chỉnh sinh hoạt | 1320 | 23/1/2026 | 20050</td>
+            </tr>
+            <tr>
+                <td><b>257</b></td>
+                <td>1150 | 21:00 | KA | Kinh dom | Điều chỉnh sinh hoạt | 1260 | 23/1/2026 | 20050</td>
+            </tr>
+            <tr>
+                <td><b>258</b></td>
+                <td>730 | 14:00 | NAM | máu | Điều chỉnh sinh hoạt | 840 | 23/1/2026 | 20050</td>
+            </tr>
+            <tr>
+                <td><b>259</b></td>
+                <td>116 | 18:30 | NAM | Mệt ngủ | Hạt sen / Trà dưỡng tâm / Ngâm chân nước nóng | 1110 | 10/3/2026 | 20096</td>
+            </tr>
+            <tr>
+                <td><b>260</b></td>
+                <td>215 | 08:30 | NAM | Rã rời óc | Trà hoa cúc / Nghe nhạc nhẹ / Hít thở sâu | 510 | 19/3/2026 | 20105</td>
+            </tr>
+            <tr>
+                <td><b>261</b></td>
+                <td>126 | 18:30 | NAM | đầu | Day huyệt Thái dương / Trà bạc hà / Nghỉ ngơi | 1110 | 20/3/2026 | 20106</td>
+            </tr>
+            <tr>
+                <td><b>262</b></td>
+                <td>216 | 08:30 | NAM | TIM, MỆT MỎI | Cháo hạt sen long nhãn | 510 | 20/3/2026 | 20106</td>
+            </tr>
+            <tr>
+                <td><b>263</b></td>
+                <td>170 | 10:45 | NAM | mặt | Điều chỉnh sinh hoạt | 645 | 18/5/2026 | 20165</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

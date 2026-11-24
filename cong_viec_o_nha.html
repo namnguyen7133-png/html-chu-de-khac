@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Quy Đổi Điểm Thưởng & Chi Phí Dịch Vụ</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0f172a',
+                        cardBg: '#1e293b',
+                        accentBlue: '#38bdf8',
+                        accentGreen: '#4ade80',
+                        accentOrange: '#fb923c',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar and smooth aesthetics */
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #0f172a;
+            color: #f1f5f9;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        /* Grid structure for uniform 3-column rows */
+        .data-row {
+            display: grid;
+            grid-template-columns: 140px 60px 1fr;
+            gap: 12px;
+            align-items: center;
+        }
+
+        @media (max-width: 640px) {
+            .data-row {
+                grid-template-columns: 100px 45px 1fr;
+                gap: 8px;
+            }
+        }
+
+        /* Glassmorphic sticky header */
+        .glass-header {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Custom styling for range input */
+        input[type=range] {
+            accent-color: #38bdf8;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-slate-100 min-h-screen overflow-x-hidden flex flex-col">
+
+    <!-- STICKY CONTROL PANEL -->
+    <header class="sticky top-0 z-50 glass-header px-4 py-3 shadow-2xl transition-all duration-300">
+        <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Title & Info Badge -->
+            <div class="flex items-center space-x-2">
+                <span class="text-xl font-bold bg-gradient-to-r from-sky-400 to-emerald-400 bg-clip-text text-transparent">
+                    BẢNG THI ĐUA & QUY ĐỔI ĐIỂM
+                </span>
+                <span id="scroll-status-badge" class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                    ▶ Đang cuộn
+                </span>
+            </div>
+
+            <!-- Controls Group -->
+            <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                <!-- Play / Pause Button -->
+                <button id="btn-toggle" class="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-medium text-sm transition flex items-center gap-1 shadow-lg shadow-sky-900/40 active:scale-95">
+                    <span id="btn-toggle-icon">⏸</span>
+                    <span id="btn-toggle-text" class="hidden sm:inline">Tạm dừng</span>
+                </button>
+
+                <!-- Rewind Button -->
+                <button id="btn-rewind" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium text-sm transition flex items-center gap-1 active:scale-95">
+                    <span>↺</span>
+                    <span class="hidden sm:inline">Tua lại</span>
+                </button>
+
+                <!-- Speed Control Slider -->
+                <div class="flex items-center gap-2 bg-slate-800/80 px-3 py-1 rounded-lg border border-slate-700">
+                    <span class="text-xs text-slate-400 font-medium">Tốc độ:</span>
+                    <input type="range" id="speed-slider" min="1" max="10" value="3" class="w-20 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                    <span id="speed-val" class="text-xs text-sky-400 font-bold w-4">3</span>
+                </div>
+
+                <!-- Font Size Controls -->
+                <div class="flex items-center bg-slate-800/80 rounded-lg border border-slate-700 p-0.5">
+                    <button id="btn-font-dec" class="px-2 py-1 text-slate-300 hover:text-white font-bold text-xs hover:bg-slate-700 rounded transition">A-</button>
+                    <div class="h-4 w-px bg-slate-700"></div>
+                    <button id="btn-font-inc" class="px-2 py-1 text-slate-300 hover:text-white font-bold text-xs hover:bg-slate-700 rounded transition">A+</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- COLUMN HEADERS -->
+    <div class="max-w-5xl w-full mx-auto px-4 py-2 bg-slate-900/90 text-xs font-semibold text-slate-400 uppercase tracking-wider data-row border-b border-slate-800 sticky top-[61px] z-40">
+        <div class="text-emerald-400 font-bold">Giá / Mức điểm</div>
+        <div class="text-orange-400 font-bold text-center">STT</div>
+        <div class="text-slate-300 font-bold">Tên công việc / Mô tả chi tiết</div>
+    </div>
+
+    <!-- MAIN AUTO-SCROLLING DISPLAY AREA -->
+    <main id="scroll-wrapper" class="flex-1 max-w-5xl w-full mx-auto px-4 py-2 cursor-pointer relative" onclick="togglePlayPause()">
+        <div id="content-container" class="space-y-6 transition-all duration-150">
+            <!-- Content will be injected dynamically via JavaScript -->
+        </div>
+        
+        <!-- Bottom padding to allow full scroll view -->
+        <div class="h-[60vh]"></div>
+    </main>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        // CLEANED & STRUCTURAL DATA
+        const categories = [
+            {
+                title: "NHÓM 1: THƯỞNG / PHẠT VIỆC NHÀ & NỀ NẾP HÀNG NGÀY",
+                color: "from-blue-500 to-indigo-600",
+                items: [
+                    { price: "+5 điểm", desc: "Quét nhà sạch sẽ toàn bộ không gian phòng khách và hành lang." },
+                    { price: "+10 điểm", desc: "Thu gom quần áo khô từ giàn phơi và phân loại cẩn thận." },
+                    { price: "+5 điểm", desc: "Dọn dẹp, lau chùi bề mặt ghế sofa gọn gàng ngăn nắp." },
+                    { price: "+5 điểm", desc: "Thu gom rác sinh hoạt trong nhà và mang ra nơi quy định." },
+                    { price: "+5 điểm", desc: "Lau sạch các bề mặt bàn làm việc, bàn ăn và bàn tiếp khách." },
+                    { price: "+5 điểm", desc: "Thu dọn chăn màn, gấp ga giường gọn gàng sau khi ngủ dậy." },
+                    { price: "+10 điểm", desc: "Xuống tầng nhận và lấy hàng chuyển phát nhanh/shipper giúp gia đình." },
+                    { price: "+5 điểm", desc: "Giặt tất cá nhân sạch sẽ và phơi đúng nơi quy định." },
+                    { price: "+5 điểm", desc: "Sắp xếp ngăn nắp giày dép trên kệ và khu vực cửa ra vào." },
+                    { price: "+5 điểm", desc: "Thu dọn toàn bộ đồ chơi, dụng cụ cá nhân sau khi sử dụng xong." },
+                    { price: "+5 điểm", desc: "Không kén ăn, vui vẻ ăn hết suất ăn dinh dưỡng được chuẩn bị." },
+                    { price: "+5 điểm", desc: "Mang quần áo sau khi giặt ra giàn phơi đúng cách." },
+                    { price: "+5 điểm", desc: "Lau sạch các bề mặt sàn nhà bằng cây lau chuyên dụng." },
+                    { price: "+10 điểm", desc: "Rửa sạch toàn bộ bát đĩa, nồi chảo và tráng nước sạch." },
+                    { price: "+5 điểm", desc: "Nhiệt tình chạy việc vặt, giúp đỡ công việc đột xuất trong nhà." },
+                    { price: "+15 điểm", desc: "Tự giác hoàn thành bài tập về nhà đúng giờ không cần nhắc nhở." },
+                    { price: "+15 điểm", desc: "Tích cực luyện tập thể thao: Mỗi ngày nhảy dây hoặc rèn luyện kỹ năng bóng." },
+                    { price: "+25 điểm", desc: "Thưởng thêm tuần: Duy trì hoàn hảo tất cả các việc nề nếp trên liên tục trong 1 tuần." },
+                    { price: "+5 điểm/ngày", desc: "Đi học đầy đủ, đúng giờ quy định của nhà trường." },
+                    { price: "+5 điểm/ngày", desc: "Quần áo, đầu tóc ngăn nắp, chỉn chu, gọn gàng khi đến trường." },
+                    { price: "+5 điểm/lần", desc: "Về nhà chào hỏi lễ phép người lớn: Ông, Bà, Bố, Mẹ, Anh, Chị, Em." },
+                    { price: "+3 điểm/lần", desc: "Chào hỏi lễ phép với hàng xóm, người buôn bán xung quanh nhà." },
+                    { price: "+5 điểm/lần", desc: "Chủ động giúp đỡ bạn bè trong học tập và sinh hoạt." },
+                    { price: "+10 điểm/lần", desc: "Bênh vực, bảo vệ bạn bè khi gặp sự cố bất công hoặc bị bắt nạt." },
+                    { price: "+15 điểm/lần", desc: "Tự giải quyết khôn ngoan khi bị người xấu bắt nạt (tìm người giúp đỡ, không để Bố Mẹ phải can thiệp)." },
+                    { price: "+10 điểm/lần", desc: "Tích cực đóng góp ý kiến và được thầy cô giáo khen ngợi trên lớp." },
+                    { price: "+50.000 điểm", desc: "Thưởng sự kiện lớn: Sinh con trai." },
+                    { price: "+40.000 điểm", desc: "Thưởng sự kiện lớn: Sinh con gái." },
+                    { price: "-10 điểm", desc: "Hình phạt: Nổi nóng, gắt gỏng vô lý với người khác." },
+                    { price: "-10 điểm", desc: "Hình phạt: Trì hoãn, chây ỳ công việc được giao." },
+                    { price: "-10 điểm", desc: "Hình phạt: Nói dối, không trung thực với gia đình." },
+                    { price: "-10 điểm", desc: "Hình phạt: Cãi lại người lớn, thái độ không đúng mực." },
+                    { price: "-25 điểm/giờ", desc: "Phạt quy đổi: Sử dụng điện thoại giải trí quá thời gian." },
+                    { price: "-25 điểm/giờ", desc: "Phạt quy đổi: Xem TV/Giải trí quá thời gian quy định." }
+                ]
+            },
+            {
+                title: "NHÓM 2: CÁC CÔNG VIỆC VẬN ĐỘNG & VẬN HÀNH GIA ĐÌNH",
+                color: "from-amber-500 to-orange-600",
+                items: [
+                    { price: "15 - 20 điểm", desc: "Nhóm than tổ ong: Đốt than, canh khói, chuẩn bị bếp lò hoàn chỉnh." },
+                    { price: "20 - 25 điểm", desc: "Xách nước từ T2 lên T4 & đun nấu: Leo 2 tầng cầu thang xách nước và đun sôi." },
+                    { price: "10 điểm", desc: "Chia nước nguội cho các phòng: Chờ nước nguội, rót/phân phối về các phòng." },
+                    { price: "20 - 30 điểm", desc: "Nấu cơm, nấu canh buổi sáng: Chuẩn bị bữa sáng hoàn chỉnh cho gia đình." },
+                    { price: "20 điểm", desc: "Đi đón trẻ tan học: Đi bộ cả đi lẫn về khoảng 1.8 km (900m mỗi chiều) đón con." },
+                    { price: "15 điểm", desc: "Đưa con đi học thêm bằng xe máy: 20 phút cả đi lẫn về (áp dụng 2 lần/tuần)." },
+                    { price: "20 - 30 điểm", desc: "Đưa đón Ông Bà bằng xe máy: Chở Ông Bà đi lại an toàn theo yêu cầu." },
+                    { price: "15 điểm", desc: "Mở cửa hàng buổi sáng: Dậy sớm mở cửa, dọn dẹp mặt tiền cửa hàng sẵn sàng." },
+                    { price: "15 điểm", desc: "Đóng cửa hàng buổi tối: Kiểm tra an ninh, thu dọn mặt tiền và khóa cửa chắc chắn." },
+                    { price: "15 điểm", desc: "Hỗ trợ vợ buổi tối: Dọn dẹp cất đồ đạc, cất máy hút bụi, cất ghế gọn gàng." },
+                    { price: "15 điểm", desc: "Chuẩn bị xe buổi sáng: Buộc máy/ghế lên xe máy sẵn sàng cho vợ đi làm." },
+                    { price: "+5 điểm", desc: "Xách cặp lồng cơm từ tầng 1 lên nhà (Phạt trừ điểm nếu làm rơi vỡ)." },
+                    { price: "+5 điểm", desc: "Vét cơm nguội tầng 4, cho vào cặp lồng đem xuống cất tầng 2 tủ lạnh." },
+                    { price: "+10 điểm", desc: "Lau dọn sàn nhà phòng bếp sạch sẽ sau bữa ăn." },
+                    { price: "+10 điểm", desc: "Rửa và tráng bát đĩa sạch sẽ (Phạt trừ điểm theo giá trị nếu làm sứt mẻ/vỡ)." },
+                    { price: "+15 điểm", desc: "Cọ rửa nhà vệ sinh sạch sẽ sau khi kết thúc công việc rửa bát." },
+                    { price: "+5 điểm", desc: "Xuống hứng nước sạch từ máy lọc nước tầng 2 vào bình 5 lít." },
+                    { price: "+5 điểm", desc: "Đem bình 5 lít nước sạch từ tầng 2 xách lên tầng 4." },
+                    { price: "+5 điểm", desc: "Đun sôi bình nước 5 lít (Phạt trừ điểm nếu làm hỏng thiết bị đun)." }
+                ]
+            },
+            {
+                title: "NHÓM 3: DỊCH VỤ CHĂM SÓC SỨC KHỎE & DỌN VỆ SINH QUY ĐỔI",
+                color: "from-emerald-500 to-teal-600",
+                items: [
+                    { price: "5.400 điểm/tháng", desc: "Vệ sinh cá nhân người bệnh: Lau người, thay quần áo, thay tã/bỉm, dọn dẹp vệ sinh (30% gói)." },
+                    { price: "4.500 điểm/tháng", desc: "Y tế & Bác sĩ: Cho uống thuốc đúng giờ, đo huyết áp, theo dõi sức khỏe, báo bác sĩ (25% gói)." },
+                    { price: "3.600 điểm/tháng", desc: "Ăn uống & Dinh dưỡng: Nấu đồ ăn mềm/bổ dưỡng, đút cơm/cháo, cho uống nước (20% gói)." },
+                    { price: "2.700 điểm/tháng", desc: "Đi chợ & Mua sắm: Đi mua thuốc men, mua thức ăn bồi bổ sức khỏe (15% gói)." },
+                    { price: "1.800 điểm/tháng", desc: "Chăm sóc tinh thần: Hỏi thăm, trò chuyện, túc trực bên cạnh người bệnh (10% gói)." },
+                    { price: "18.000 điểm/tháng", desc: "Trọn gói chăm sóc toàn diện người bệnh (30 ngày liên tục)." },
+                    { price: "500 - 600 điểm/ngày", desc: "Chăm sóc ca ngày toàn thời gian (8 đến 12 tiếng / ngày)." },
+                    { price: "700 - 800 điểm/đêm", desc: "Chăm sóc ca đêm: Thức đêm, hỗ trợ túc trực khi người bệnh cần." },
+                    { price: "60 - 80 điểm/giờ", desc: "Chia ca chăm sóc theo giờ lẻ (từ 3 đến 4 tiếng)." },
+                    { price: "80 - 120 điểm/lần", desc: "Lau người & Thay quần áo vệ sinh cơ thể tại giường." },
+                    { price: "30 - 50 điểm/bữa", desc: "Đút cơm / Cho ăn: Hỗ trợ ăn hết bữa cháo/cơm, uống nước." },
+                    { price: "30 - 50 điểm/lượt", desc: "Mua hộ thuốc / Mua đồ bổ: Công đi lại mua đồ (không gồm tiền hàng)." },
+                    { price: "15 - 25 điểm/m²", desc: "Tổng vệ sinh sau xây dựng / sửa chữa: Hút bụi, tẩy vết sơn, xi măng, lau kính toàn nhà." },
+                    { price: "10 - 18 điểm/m²", desc: "Tổng vệ sinh nhà đang ở định kỳ: Hút bụi, lau sàn, dọn bếp, lau nhà vệ sinh." },
+                    { price: "8 - 12 điểm/m²", desc: "Vệ sinh văn phòng / Tòa nhà lớn: Làm sạch mặt sàn diện tích rộng (>200m²)." },
+                    { price: "10 - 15 điểm/m²", desc: "Giặt thảm trải sàn văn phòng / giặt sofa tận nơi." },
+                    { price: "60 - 90 điểm/giờ", desc: "Dọn dẹp theo giờ lẻ (ca 2-4 tiếng), mang theo dụng cụ cơ bản." },
+                    { price: "90 - 130 điểm/giờ", desc: "Dọn vệ sinh công nghiệp chuyên sâu: Có máy hút bụi công nghiệp, máy đánh sàn." },
+                    { price: "50 - 70 điểm/giờ", desc: "Thuê dọn dẹp theo ca cố định hàng tháng (từ 2-3 buổi/tuần)." },
+                    { price: "600 điểm/ngày", desc: "Làm công nhật vệ sinh công nghiệp trọn vẹn 1 ngày làm việc." },
+                    { price: "500 điểm", desc: "Quản lý tòa nhà đang ở." }
+                ]
+            },
+            {
+                title: "NHÓM 4: MỨC LƯƠNG THAM KHẢO CÁC NGHỀ NGHIỆP (1.000 VNĐ = 1 ĐIỂM)",
+                color: "from-purple-500 to-pink-600",
+                items: [
+                    { price: "6.000 - 12.000", desc: "Cán bộ cấp Chuyên viên / Nhân viên văn phòng hành chính." },
+                    { price: "10.000 - 16.000", desc: "Chuyên viên chính / Phó Trưởng phòng." },
+                    { price: "15.000 - 25.000", desc: "Trưởng phòng / Giám đốc Trung tâm / Sở chuyên môn." },
+                    { price: "20.000 - 35.000", desc: "Lãnh đạo Cục / Vụ / Viện." },
+                    { price: "6.000 - 11.000", desc: "Giáo viên Mầm non / Tiểu học (Công lập)." },
+                    { price: "7.000 - 14.000", desc: "Giáo viên THCS / THPT (Công lập)." },
+                    { price: "12.000 - 35.000", desc: "Giáo viên Trường Tư thục / Quốc tế." },
+                    { price: "9.000 - 20.000", desc: "Giảng viên Đại học Công lập." },
+                    { price: "20.000 - 50.000", desc: "Giảng viên Đại học Tư thục / Phó Giáo sư - Giáo sư." },
+                    { price: "6.000 - 10.000", desc: "Nhân viên Mới tốt nghiệp / Thực tập sinh doanh nghiệp." },
+                    { price: "9.000 - 16.000", desc: "Nhân viên Văn phòng / Chuyên viên (1–3 năm kinh nghiệm)." },
+                    { price: "15.000 - 28.000", desc: "Trưởng nhóm (Team Leader) / Supervisor." },
+                    { price: "25.000 - 50.000", desc: "Trưởng phòng / Quản lý Bộ phận doanh nghiệp." },
+                    { price: "50.000 - 100.000", desc: "Giám đốc Khối / Giám đốc Chi nhánh." },
+                    { price: "15.000 - 30.000", desc: "Chuyên viên / Nhân viên kinh nghiệm (Junior - Mid level)." },
+                    { price: "30.000 - 60.000", desc: "Chuyên viên cao cấp (Senior Specialist / Lead)." },
+                    { price: "50.000 - 100.000", desc: "Trưởng phòng / Quản lý cấp trung (Manager khối kỹ thuật/công nghệ)." },
+                    { price: "100.000 - 250.000", desc: "Giám đốc Bộ phận / Giám đốc Khu vực (Director / C-Level)." },
+                    { price: "20.000 - 40.000", desc: "Trưởng ban Quản lý tòa nhà chung cư/văn phòng." },
+                    { price: "12.000 - 20.000", desc: "Giám sát Kỹ thuật tòa nhà." },
+                    { price: "8.000 - 13.000", desc: "Nhân viên Kỹ thuật tòa nhà." },
+                    { price: "7.000 - 11.000", desc: "Nhân viên Lễ tân / Chăm sóc cư dân." },
+                    { price: "6.000 - 9.000", desc: "Nhân viên An ninh / Bảo vệ tòa nhà." },
+                    { price: "6.000 - 8.500", desc: "Nhân viên Vệ sinh / Buồng phòng." },
+                    { price: "6.000 - 12.000", desc: "Nhân viên Bán hàng (Retail Sales)." },
+                    { price: "12.000 - 25.000", desc: "Cửa hàng trưởng (Store Manager)." },
+                    { price: "9.000 - 16.000", desc: "Nhân viên Nhập hàng / Mua hàng." },
+                    { price: "20.000 - 35.000", desc: "Trưởng phòng Mua hàng." },
+                    { price: "7.500 - 12.000", desc: "Nhân viên Quản lý Kho (Storekeeper)." },
+                    { price: "6.000 - 9.000", desc: "Nhân viên Đóng gói & Thu ngân." },
+                    { price: "10.000 - 22.000", desc: "Thợ Cắt tỉa / Groomer Thú cưng (Lành nghề)." },
+                    { price: "6.000 - 9.000", desc: "Nhân viên Tắm rửa / Phụ việc Spa Pet." },
+                    { price: "6.500 - 10.000", desc: "Nhân viên Bán hàng Pet Shop." },
+                    { price: "12.000 - 25.000", desc: "Bác sĩ Thú y (Pet Clinic)." },
+                    { price: "7.000 - 11.000", desc: "Điều dưỡng / Y tá Thú y." },
+                    { price: "200 - 500", desc: "Chăm sóc thú cưng theo ngày." },
+                    { price: "22 - 40", desc: "Tiền công dịch vụ theo giờ." },
+                    { price: "250 điểm", desc: "Mua sắm bán lẻ." }
+                ]
+            },
+            {
+                title: "NHÓM 5: MỤC TIÊU TÍCH LŨY ĐỔI ĐỒ DÙNG & PHƯƠNG TIỆN",
+                color: "from-cyan-500 to-blue-600",
+                items: [
+                    { price: "10 - 50 điểm", desc: "Vở viết, bút bi, thước kẻ, tẩy, compa (Dụng cụ học tập nhỏ)." },
+                    { price: "100 - 200 điểm", desc: "Bút màu, bình đựng nước cá nhân, truyện tranh..." },
+                    { price: "300 - 500 điểm", desc: "Bánh sinh nhật tặng bạn, quà sinh nhật hoặc balo học sinh mới." },
+                    { price: "300 - 1.000 điểm", desc: "Hoa tai bạc / Dây chuyền bạc (Trang sức cá nhân)." },
+                    { price: "600 điểm+", desc: "Bộ đồ dùng học tập trọn gói, quà tặng sự kiện lớn." },
+                    { price: "1.000 - 3.000 điểm", desc: "Bếp điện / Bếp từ mới phục vụ nấu nướng gia đình." },
+                    { price: "2.000 - 4.000 điểm", desc: "Xe đạp mới phục vụ đi học hàng ngày." },
+                    { price: "3.000 - 8.000 điểm", desc: "Loa kéo hát Karaoke sinh hoạt gia đình." },
+                    { price: "4.000 - 9.000 điểm", desc: "Máy lọc nước mới bảo vệ sức khỏe cả nhà." },
+                    { price: "5.000 - 12.000 điểm", desc: "Máy phát điện gia đình dự phòng khi mất điện." },
+                    { price: "5.000 - 25.000 điểm", desc: "Điện thoại đời mới phục vụ học tập, liên lạc." },
+                    { price: "6.000 - 15.000 điểm", desc: "Tủ rượu phòng khách trang trí không gian sống." },
+                    { price: "8.000 - 30.000+ điểm", desc: "Dây chuyền vàng / Hoa tai vàng (Trang sức tích lũy)." },
+                    { price: "10.000 - 25.000 điểm", desc: "Tủ chè gỗ nội thất truyền thống." },
+                    { price: "20.000 - 45.000 điểm", desc: "Xe máy mới làm phương tiện di chuyển chính." },
+                    { price: "25.000 - 60.000+ điểm", desc: "Sập gụ cao cấp nội thất sang trọng biếu Ông Bà/Cha Mẹ." },
+                    { price: "360.000 điểm", desc: "Xe ô tô điện chạy khi hết khấu hao âm tiền bán lại." }
+                ]
+            },
+            {
+                title: "NHÓM 6: MỤC TIÊU ĐỔI QUYỀN LỢI, TIỆC TÙNG & DU LỊCH",
+                color: "from-rose-500 to-red-600",
+                items: [
+                    { price: "300 - 800 điểm", desc: "Mua sách vở, tài liệu, app học ngoại ngữ bản quyền chuyên sâu." },
+                    { price: "500 - 1.000 điểm", desc: "Bữa ăn ngon khao quân gia đình cuối tuần (Lẩu, nướng, hải sản...)." },
+                    { price: "1.000 - 2.000 điểm", desc: "Tiệc nhỏ mời bạn bè thân thiết đến nhà giao lưu, sinh nhật." },
+                    { price: "1.500 - 3.000 điểm", desc: "Khóa học Ngoại ngữ ngắn hạn / Học Online nâng cao giao tiếp." },
+                    { price: "1.500 - 3.000 điểm", desc: "Chuyến du lịch Dã ngoại / Camping cuối tuần gần nhà." },
+                    { price: "3.000 - 6.000 điểm", desc: "Bữa tiệc lớn chiêu đãi họ hàng, dòng họ (Họp mặt, giỗ chạp)." },
+                    { price: "3.000 - 7.000 điểm", desc: "Chuyến du lịch trong nước cho 1 người (Hạ Long, Sapa, Đà Nẵng...)." },
+                    { price: "5.000 - 15.000 điểm", desc: "Khóa học Ngoại ngữ chất lượng cao / Trung tâm dài hạn." },
+                    { price: "7.000 - 15.000 điểm", desc: "Du lịch Đông Nam Á cá nhân (Thái Lan, Singapore, Malaysia...)." },
+                    { price: "10.000 - 25.000 điểm", desc: "Chuyến du lịch trong nước trọn gói cho Cả Gia Đình nghỉ dưỡng." },
+                    { price: "15.000 - 35.000 điểm", desc: "Du lịch Đông Bắc Á cá nhân (Hàn Quốc, Nhật Bản, Trung Quốc...)." },
+                    { price: "40.000 - 100.000+ điểm", desc: "Du lịch Nước ngoài trọn gói cho Cả Gia Đình." },
+                    { price: "5.000.000 điểm", desc: "Công trình tâm linh: Xây Lăng mộ cho tổ tiên." }
+                ]
+            }
+        ];
+
+        // RENDER DATA INTO DOM WITH GLOBAL SEQUENTIAL NUMBERING
+        const container = document.getElementById('content-container');
+        let globalIndex = 1;
+
+        categories.forEach((cat) => {
+            // Category Header Block
+            const catHeader = document.createElement('div');
+            catHeader.className = "pt-4 pb-2 sticky top-[100px] z-30 bg-darkBg/95 backdrop-blur-md";
+            catHeader.innerHTML = `
+                <div class="px-4 py-2.5 rounded-xl bg-gradient-to-r ${cat.color} text-white font-bold text-base sm:text-lg shadow-lg tracking-wide border border-white/10 flex items-center justify-between">
+                    <span>${cat.title}</span>
+                    <span class="text-xs bg-black/30 px-2 py-1 rounded-md font-mono">${cat.items.length} mục</span>
+                </div>
+            `;
+            container.appendChild(catHeader);
+
+            // Category Data Items
+            cat.items.forEach((item) => {
+                const row = document.createElement('div');
+                row.className = "data-row px-3 py-2.5 rounded-lg bg-cardBg/70 hover:bg-slate-800 transition border border-slate-800/80 shadow-sm text-content";
+                
+                row.innerHTML = `
+                    <div class="text-emerald-400 font-bold font-mono text-sm sm:text-base break-words">${item.price}</div>
+                    <div class="text-orange-400 font-extrabold font-mono text-sm sm:text-base text-center bg-orange-950/40 py-1 rounded border border-orange-500/20">${globalIndex}</div>
+                    <div class="text-slate-200 text-sm sm:text-base leading-relaxed break-words">${item.desc}</div>
+                `;
+                container.appendChild(row);
+                globalIndex++;
+            });
+        });
+
+        // AUTO-SCROLL ENGINE & CONTROLS
+        let isPlaying = true;
+        let speed = 3; // pixels per frame divisor/step
+        let currentFontSize = 16; // base font size in px
+        let animationFrameId = null;
+
+        const btnToggle = document.getElementById('btn-toggle');
+        const btnToggleIcon = document.getElementById('btn-toggle-icon');
+        const btnToggleText = document.getElementById('btn-toggle-text');
+        const badge = document.getElementById('scroll-status-badge');
+        const speedSlider = document.getElementById('speed-slider');
+        const speedVal = document.getElementById('speed-val');
+
+        // Main animation loop
+        function scrollLoop() {
+            if (isPlaying) {
+                // Scroll down smoothly
+                window.scrollBy(0, speed * 0.4);
+
+                // Auto restart when reaching near bottom
+                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
+                    window.scrollTo({ top: 0, behavior: 'instant' });
+                }
+            }
+            animationFrameId = requestAnimationFrame(scrollLoop);
+        }
+
+        // Toggle Play / Pause state
+        function togglePlayPause() {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                btnToggleIcon.innerText = "⏸";
+                btnToggleText.innerText = "Tạm dừng";
+                btnToggle.classList.replace('bg-emerald-600', 'bg-sky-600');
+                btnToggle.classList.replace('hover:bg-emerald-500', 'hover:bg-sky-500');
+                badge.innerText = "▶ Đang cuộn";
+                badge.className = "text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+            } else {
+                btnToggleIcon.innerText = "▶";
+                btnToggleText.innerText = "Tiếp tục";
+                btnToggle.classList.replace('bg-sky-600', 'bg-emerald-600');
+                btnToggle.classList.replace('hover:bg-sky-500', 'hover:bg-emerald-500');
+                badge.innerText = "⏸ Tạm dừng";
+                badge.className = "text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30";
+            }
+        }
+
+        // Rewind to Top Immediately
+        document.getElementById('btn-rewind').addEventListener('click', (e) => {
+            e.stopPropagation();
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        });
+
+        // Toggle button click listener
+        btnToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            togglePlayPause();
+        });
+
+        // Speed adjustment listener
+        speedSlider.addEventListener('input', (e) => {
+            speed = parseInt(e.target.value, 10);
+            speedVal.innerText = speed;
+        });
+        speedSlider.addEventListener('click', (e) => e.stopPropagation());
+
+        // Font Size Adjustments
+        document.getElementById('btn-font-inc').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (currentFontSize < 24) {
+                currentFontSize += 1.5;
+                updateFontSize();
+            }
+        });
+
+        document.getElementById('btn-font-dec').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (currentFontSize > 12) {
+                currentFontSize -= 1.5;
+                updateFontSize();
+            }
+        });
+
+        function updateFontSize() {
+            const elements = document.querySelectorAll('.text-content div');
+            elements.forEach(el => {
+                el.style.fontSize = `${currentFontSize}px`;
+            });
+        }
+
+        // START ON LOAD IMMEDIATELY WITH ITEM 1 AT TOP
+        window.onload = function() {
+            window.scrollTo(0, 0); // Ensure Item 1 is visible instantly at top
+            animationFrameId = requestAnimationFrame(scrollLoop);
+        };
+    </script>
+</body>
+</html>

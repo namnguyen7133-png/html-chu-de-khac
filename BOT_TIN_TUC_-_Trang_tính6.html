@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>BOT TIN TUC - Trang tính6</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>BOT TIN TUC - Trang tính6</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>Title | URL | ⚪ KHÁC | #REF!</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>Cách các nước quy định thời hạn sở hữu chung cư | https://vnexpress.net/cach-cac-nuoc-quy-dinh-thoi-han-so-huu-chung-cu-5103935.html | ⚪ KHÁC</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>Bỗng dưng đứng tên doanh nghiệp, hộ kinh doanh | https://vnexpress.net/bong-dung-dung-ten-doanh-nghiep-ho-kinh-doanh-5102337.html | ⚪ KHÁC</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>ACV giảm hơn 2.300 nhân sự trong nửa năm | https://vnexpress.net/acv-giam-hon-2-300-nhan-su-trong-nua-nam-5104359.html | 🔴 GIẢM</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>Lắp pin mặt trời, dùng xe điện để 'xanh hóa' nhà kho | https://vnexpress.net/lap-pin-mat-troi-dung-xe-dien-de-xanh-hoa-nha-kho-5104295.html | ⚪ KHÁC</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>Capital One nói đóng 300 tài khoản của Tập đoàn Trump do lo ngại rửa tiền | https://vnexpress.net/capital-one-noi-dong-300-tai-khoan-cua-tap-doan-trump-do-lo-ngai-rua-tien-5104331.html | ⚪ KHÁC</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>Ông lớn' ngành xổ số lãi nghìn tỷ nửa đầu năm | https://vnexpress.net/ong-lon-nganh-xo-so-lai-nghin-ty-nua-dau-nam-5104288.html | 🟢 TĂNG</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>Mỹ dự kiến can thiệp cứu đồng yen Nhật sau hơn một thập kỷ | https://vnexpress.net/my-du-kien-can-thiep-cuu-dong-yen-nhat-sau-hon-mot-thap-ky-5104300.html | ⚪ KHÁC</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>Petrolimex thu hơn 5 tỷ USD một quý | https://vnexpress.net/petrolimex-thu-hon-5-ty-usd-mot-quy-5104262.html | ⚪ KHÁC</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>GS Nguyễn Đức Khương: Cần đào tạo tư duy làm chủ công nghệ thay vì để AI dẫn dắt | https://vnexpress.net/gs-nguyen-duc-khuong-can-dao-tao-tu-duy-lam-chu-cong-nghe-thay-vi-de-ai-dan-dat-5104160.html | ⚪ KHÁC</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>Lợi nhuận nhiều ngân hàng đi lùi | https://vnexpress.net/loi-nhuan-nhieu-ngan-hang-di-lui-5104061.html | ⚪ KHÁC</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>EuroCham: Việt Nam là mỏ neo hàng đầu của kinh tế châu Âu ở châu Á | https://vnexpress.net/eurocham-viet-nam-la-mo-neo-hang-dau-cua-kinh-te-chau-au-o-chau-a-5104094.html | ⚪ KHÁC</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>Người Mỹ trưởng thành vẫn được cha mẹ hỗ trợ tài chính | https://vnexpress.net/nguoi-my-truong-thanh-van-duoc-cha-me-ho-tro-tai-chinh-5104059.html | ⚪ KHÁC</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>Eximbank có tổng giám đốc mới | https://vnexpress.net/eximbank-co-tong-giam-doc-moi-5104133.html | ⚪ KHÁC</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>Doanh nghiệp miền Bắc tăng lắp điện mặt trời mái nhà | https://vnexpress.net/doanh-nghiep-mien-bac-tang-lap-dien-mat-troi-mai-nha-5104088.html | 🟢 TĂNG</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>Nhập khẩu điều thô vượt 3 tỷ USD | https://vnexpress.net/nhap-khau-dieu-tho-vuot-3-ty-usd-5104042.html | ⚪ KHÁC</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>Sun Group ra mắt doanh nghiệp dịch vụ mặt đất tại Phú Quốc | https://vnexpress.net/sun-group-ra-mat-doanh-nghiep-dich-vu-mat-dat-tai-phu-quoc-5104052.html | ⚪ KHÁC</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>Elon Musk phủ nhận tin bán chi nhánh Tesla tại Trung Quốc | https://vnexpress.net/elon-musk-phu-nhan-tin-ban-chi-nhanh-tesla-tai-trung-quoc-5104054.html | ⚪ KHÁC</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>VinFast mở 21 đại lý xe máy điện ở Philippines | https://vnexpress.net/vinfast-mo-21-dai-ly-xe-may-dien-o-philippines-5103996.html | ⚪ KHÁC</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>Ông lớn' vật liệu xây dựng Thái Lan tăng doanh thu 126% ở Việt Nam | https://vnexpress.net/ong-lon-vat-lieu-xay-dung-thai-lan-tang-doanh-thu-126-o-viet-nam-5103897.html | 🟢 TĂNG</td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td>Lợi nhuận Yeah1 giảm một nửa do thiếu concert | https://vnexpress.net/loi-nhuan-yeah1-giam-mot-nua-do-thieu-concert-5103752.html | 🔴 GIẢM</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

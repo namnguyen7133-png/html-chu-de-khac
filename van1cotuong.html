@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bàn Cờ 90 Ô: Sinh Con Trai - Khó Khăn & Thuận Lợi Qua Các Bối Cảnh Xã Hội</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font Inter & Lucida / Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        danger: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                            900: '#881337',
+                        },
+                        success: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for inner scrollable components */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0,0,0,0.3);
+        }
+
+        /* Chessboard Cell Styling */
+        .board-cell {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .board-cell:hover {
+            transform: translateY(-3px) scale(1.03);
+            z-index: 10;
+        }
+
+        /* Modal backdrop blur */
+        .backdrop-blur-custom {
+            backdrop-filter: blur(8px);
+        }
+
+        /* Responsive Grid for 9 columns */
+        .grid-cols-9-custom {
+            grid-template-columns: repeat(9, minmax(0, 1fr));
+        }
+
+        @media (max-width: 768px) {
+            .grid-cols-9-custom {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header Section -->
+    <header class="bg-slate-800/90 border-b border-slate-700/80 sticky top-0 z-30 backdrop-blur-md px-4 py-3 shadow-lg">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2.5 bg-gradient-to-tr from-amber-500 to-indigo-600 rounded-xl shadow-md">
+                    <i class="fa-solid font-bold fa-chess-board text-2xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-amber-200 to-emerald-400">
+                        BÀN CỜ 90 Ô: TƯƠNG QUAN BỐI CẢNH SINH CON TRAI
+                    </h1>
+                    <p class="text-xs text-slate-400">45 Khó Khăn & Giải Pháp | 45 Thuận Lợi & Cách Phòng Tránh Rủi Ro</p>
+                </div>
+            </div>
+
+            <!-- Global Search & Filter Controls -->
+            <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+                <div class="relative flex-1 md:w-64">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Tìm kiếm theo từ khóa..."
+                        class="w-full pl-9 pr-4 py-1.5 text-sm bg-slate-900/80 border border-slate-700 rounded-lg focus:outline-none focus:border-indigo-500 text-slate-200 placeholder-slate-500 transition">
+                </div>
+
+                <div class="flex bg-slate-900 p-1 rounded-lg border border-slate-700 text-xs">
+                    <button onclick="filterType('all')" id="btn-all" class="px-3 py-1.5 rounded-md font-medium transition bg-indigo-600 text-white">Tất Cả (90)</button>
+                    <button onclick="filterType('difficult')" id="btn-difficult" class="px-3 py-1.5 rounded-md font-medium text-slate-400 hover:text-white transition">Khó Khăn (45)</button>
+                    <button onclick="filterType('favorable')" id="btn-favorable" class="px-3 py-1.5 rounded-md font-medium text-slate-400 hover:text-white transition">Thuận Lợi (45)</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto w-full px-4 py-6 flex-grow flex flex-col gap-6">
+
+        <!-- Legend & Overview Panel -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Left Header Legend -->
+            <div class="bg-gradient-to-r from-rose-950/40 to-slate-800/60 border border-rose-900/40 rounded-xl p-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="w-4 h-4 rounded-full bg-rose-500 shadow-lg shadow-rose-500/50 flex-shrink-0"></span>
+                    <div>
+                        <h2 class="font-bold text-rose-300 text-base">Bên Tả (Ô 1 - 45): Thách Thức & Giải Pháp</h2>
+                        <p class="text-xs text-slate-400">Khó khăn tâm lý, xã hội, kinh tế & Phương án ứng phó</p>
+                    </div>
+                </div>
+                <span class="text-xs font-mono font-bold px-2.5 py-1 bg-rose-950 text-rose-300 border border-rose-800 rounded-md">1 - 45</span>
+            </div>
+
+            <!-- Right Header Legend -->
+            <div class="bg-gradient-to-r from-emerald-950/40 to-slate-800/60 border border-emerald-900/40 rounded-xl p-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="w-4 h-4 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/50 flex-shrink-0"></span>
+                    <div>
+                        <h2 class="font-bold text-emerald-300 text-base">Bên Hữu (Ô 46 - 90): Thuận Lợi & Quản Trị Rủi Ro</h2>
+                        <p class="text-xs text-slate-400">Lợi thế truyền thống, cơ hội & Cách tránh hệ lụy lệch pha</p>
+                    </div>
+                </div>
+                <span class="text-xs font-mono font-bold px-2.5 py-1 bg-emerald-950 text-emerald-300 border border-emerald-800 rounded-md">46 - 90</span>
+            </div>
+        </div>
+
+        <!-- 90-Cell Interactive Board (Grid 10 Rows x 9 Columns) -->
+        <div class="bg-slate-800/50 border border-slate-700/60 rounded-2xl p-3 md:p-5 shadow-2xl backdrop-blur-sm relative overflow-hidden">
+
+            <!-- Middle River / Divider Line Marker for Aesthetic -->
+            <div class="hidden md:flex justify-between items-center text-[10px] font-mono text-slate-500 mb-2 px-2">
+                <span>CỘT 1</span><span>CỘT 2</span><span>CỘT 3</span><span>CỘT 4</span>
+                <span class="text-amber-400 font-bold tracking-widest px-3 py-0.5 rounded bg-amber-950/60 border border-amber-800/50">RANH GIỚI TRUYỀN THỐNG & HIỆN ĐẠI</span>
+                <span>CỘT 6</span><span>CỘT 7</span><span>CỘT 8</span><span>CỘT 9</span>
+            </div>
+
+            <!-- Board Grid -->
+            <div id="chessboard" class="grid grid-cols-9-custom gap-2 md:gap-2.5">
+                <!-- Javascript will inject 90 cells here -->
+            </div>
+        </div>
+
+        <!-- Info / Tip Banner -->
+        <div class="bg-slate-800/40 border border-slate-700/40 rounded-xl p-3 text-xs text-slate-400 flex items-center gap-3">
+            <i class="fa-solid fa-circle-info text-indigo-400 text-lg"></i>
+            <span><strong>Hướng dẫn:</strong> Bấm vào bất kỳ ô nào trên bàn cờ để mở chi tiết <strong>Nội dung bối cảnh</strong>, <strong>Thách thức / Lợi thế</strong> và <strong>Phương án xử lý / Tránh rủi ro cụ thể</strong>.</span>
+        </div>
+    </main>
+
+    <!-- Modal Popup for Cell Detail -->
+    <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-custom hidden opacity-0 transition-opacity duration-300">
+        <div id="modalContainer" class="bg-slate-900 border border-slate-700 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]">
+            
+            <!-- Modal Header -->
+            <div id="modalHeader" class="p-5 border-b border-slate-800 flex items-start justify-between relative">
+                <div class="flex items-center gap-3">
+                    <span id="modalBadge" class="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-extrabold text-white shadow-lg">01</span>
+                    <div>
+                        <span id="modalCategory" class="text-xs uppercase font-bold tracking-wider px-2 py-0.5 rounded border">BỐI CẢNH</span>
+                        <h3 id="modalTitle" class="text-lg md:text-xl font-bold text-white mt-1">Tiêu đề ô</h3>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Modal Content (Scrollable) -->
+            <div class="p-6 overflow-y-auto space-y-5 text-slate-300 text-sm">
+                
+                <!-- Section 1: Context/Background -->
+                <div class="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4">
+                    <h4 class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-amber-400"></i> Bối Cảnh Xã Hội & Thực Trạng
+                    </h4>
+                    <p id="modalContext" class="text-slate-200 leading-relaxed font-medium"></p>
+                </div>
+
+                <!-- Section 2: Main Point (Khó khăn hoặc Thuận lợi) -->
+                <div id="modalMainBox" class="border rounded-xl p-4">
+                    <h4 id="modalMainHeading" class="text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-2">
+                        <!-- Icon injected by JS -->
+                    </h4>
+                    <p id="modalMainContent" class="leading-relaxed font-medium text-slate-100"></p>
+                </div>
+
+                <!-- Section 3: Actionable Solution / Risk Avoidance -->
+                <div id="modalActionBox" class="bg-slate-800/90 border border-indigo-500/30 rounded-xl p-4">
+                    <h4 id="modalActionHeading" class="text-indigo-400 text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-lightbulb text-indigo-400"></i> Giải Pháp & Quản Trị Rủi Ro
+                    </h4>
+                    <p id="modalActionContent" class="text-indigo-100 leading-relaxed font-medium"></p>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 bg-slate-950/60 border-t border-slate-800/80 flex justify-between items-center text-xs">
+                <span class="text-slate-500">Mã ô: <span id="modalCellId" class="font-mono font-bold text-slate-300">#0</span></span>
+                <button onclick="closeModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-lg transition">Đóng Hộp Thoại</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800/80 py-4 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4">
+            Ứng dụng Bàn cờ 90 Ô - Phân tích Đa chiều Bối cảnh Sinh Con Trai & Quản trị Rủi ro Xã hội © 2026
+        </div>
+    </footer>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // Data Array: 90 Full Detailed Items (45 Difficulties + 45 Favorable Factors)
+        const boardData = [
+            // ==================== BÊN TRÁI: 45 KHÓ KHĂN & GIẢI PHÁP (Ô 1 đến 45) ====================
+            {
+                id: 1, type: 'difficult', title: 'Áp lực nối dỗi tông đường phong kiến',
+                context: 'Trong xã hội xưa và một số vùng nông thôn hiện nay, áp lực phải sinh bằng được con trai để gánh vác trách nhiệm thờ cúng tổ tiên rất nặng nề.',
+                main: 'Gây khủng hoảng tâm lý nghiêm trọng cho người mẹ, rạn nứt tình cảm vợ chồng khi liên tục sinh con gái.',
+                action: 'Tuyên truyền bình đẳng giới, nâng cao nhận thức rằng con nào cũng có hiếu; phân chia trách nhiệm thờ cúng bình đẳng giữa nam và nữ.'
+            },
+            {
+                id: 2, type: 'difficult', title: 'Tỷ lệ mất cân bằng giới tính khi sinh cao',
+                context: 'Sự can thiệp của y khoa hiện đại trong việc lựa chọn giới tính thai nhi gây ra sự chênh lệch lớn giữa tỷ lệ bé trai và bé gái.',
+                main: 'Dẫn đến nguy cơ hàng triệu nam giới khó có khả năng tìm được bạn đời trong tương lai.',
+                action: 'Nghiêm cấm tuyệt đối hành vi lạm dụng công nghệ chọn lọc giới tính; xử phạt nặng các cơ sở y tế vi phạm.'
+            },
+            {
+                id: 3, type: 'difficult', title: 'Chi phí nuôi dạy và lập nghiệp tốn kém',
+                context: 'Quan niệm truyền thống đòi hỏi cha mẹ phải chuẩn bị nhà cửa, đất đai và tài chính lớn cho con trai lập gia đình.',
+                main: 'Tạo gánh nặng tài chính khổng lồ lên vai cha mẹ kéo dài từ khi con nhỏ đến lúc trưởng thành.',
+                action: 'Rèn luyện cho con tính tự lập tài chính sớm; thay đổi tư duy không gánh vác toàn bộ của cải cho con trai.'
+            },
+            {
+                id: 4, type: 'difficult', title: 'Tâm lý nuông chiều dẫn đến hư hỏng',
+                context: 'Vì là con trai nối dỗi nên nhiều gia đình dồn toàn bộ sự yêu thương và chiều chuộng tuyệt đối.',
+                main: 'Trẻ dễ sinh thói ỉ ôi, ích kỷ, thiếu kỹ năng sống và dễ vướng vào tệ nạn xã hội.',
+                action: 'Áp dụng phương pháp giáo dục nghiêm khắc, công bằng giữa các con; giao trách nhiệm và công việc nhà từ nhỏ.'
+            },
+            {
+                id: 5, type: 'difficult', title: 'Gánh nặng phụng dưỡng cha mẹ già độc tôn',
+                context: 'Trách nhiệm chăm sóc cha mẹ khi về già thường dồn hết lên vai con trai trưởng.',
+                main: 'Tạo áp lực kinh tế và thời gian rất lớn cho gia đình con trai, dễ gây mâu thuẫn giữa vợ và mẹ chồng.',
+                action: 'Xây dựng kế hoạch tài chính nghỉ hưu độc lập cho cha mẹ; chia sẻ trách nhiệm phụng dưỡng đều cho cả con gái.'
+            },
+            {
+                id: 6, type: 'difficult', title: 'Nguy cơ bạo lực và hành vi xung đột cao',
+                context: 'Hormone testosterone và sự giáo dục thiên về tính nam bạo lực khiến trẻ nam dễ có xu hướng gây hấn.',
+                main: 'Dễ vướng vào các vụ ẩu đả, vi phạm pháp luật hoặc tai nạn thương tích trong quá trình trưởng thành.',
+                action: 'Giáo dục trí tuệ cảm xúc (EQ), dạy trẻ cách kiểm soát cơn giận và giải quyết mâu thuẫn bằng hòa giải.'
+            },
+            {
+                id: 7, type: 'difficult', title: 'Áp lực thành công và trụ cột kinh tế',
+                context: 'Định kiến xã hội luôn kỳ vọng con trai phải công thành danh toại, làm chủ gia đình và có sự nghiệp vững vàng.',
+                main: 'Khiến nam giới dễ rơi vào trầm cảm, kiệt sức (burnout) nếu không đạt được sự nghiệp mong muốn.',
+                action: 'Giúp con hiểu giá trị bản thân không chỉ nằm ở tiền tài; khuyến khích chia sẻ áp lực với bạn đời.'
+            },
+            {
+                id: 8, type: 'difficult', title: 'Mâu thuẫn mẹ chồng - nàng dâu gia tăng',
+                context: 'Sự gắn kết quá mức giữa người mẹ và con trai cưng thường tạo ra sự cạnh tranh ngầm với con dâu.',
+                main: 'Gây ra các xung đột gia đình dai dẳng, khiến người con trai đứng ở giữa rơi vào thế khó xử.',
+                action: 'Người con trai cần có lập trường độc lập, thiết lập ranh giới sống riêng tư hợp lý sau khi kết hôn.'
+            },
+            {
+                id: 9, type: 'difficult', title: 'Hiện tượng "Tội phạm giới nam" bùng nổ',
+                context: 'Khi dư thừa nam giới trong xã hội, cạnh tranh việc làm và bạn đời trở nên vô cùng khốc liệt.',
+                main: 'Gia tăng các vụ án buôn bán phụ nữ, hiếp dâm và trộm cắp do nhóm nam giới yếu thế thất vọng.',
+                action: 'Tăng cường an ninh trật tự, tạo nhiều việc làm phổ thông và nâng cao giáo dục pháp luật toàn dân.'
+            },
+            {
+                id: 10, type: 'difficult', title: 'Khó khăn trong việc tìm kiếm bạn đời',
+                context: 'Chênh lệch giới tính nghiêm trọng khiến hàng triệu nam giới đến tuổi trưởng thành không thể kết hôn.',
+                main: 'Dẫn đến tâm lý cô đơn, suy giảm hạnh phúc cá nhân và khủng hoảng cấu trúc gia đình.',
+                action: 'Mở rộng giao lưu văn hóa, thay đổi tiêu chuẩn chọn bạn đời quá khắt khe, chấp nhận đa dạng kiểu mẫu gia đình.'
+            },
+            {
+                id: 11, type: 'difficult', title: 'Trách nhiệm duy trì dòng họ nặng nề',
+                context: 'Con trai thường gắn liền với nghĩa vụ duy trì nhà thờ họ, giỗ chạp và việc làng xã phức tạp.',
+                main: 'Tốn kém nhiều thời gian, công sức và tiền bạc vào các thủ tục dòng họ rườm rà.',
+                action: 'Cải cách và đơn giản hóa các nghi lễ thờ cúng dòng họ theo hướng văn minh, tiết kiệm.'
+            },
+            {
+                id: 12, type: 'difficult', title: 'Khó khăn trong biểu đạt cảm xúc nội tâm',
+                context: 'Quan niệm "nam nhi không được khóc" ngăn cản bộc lộ cảm xúc tiêu cực từ nhỏ.',
+                main: 'Tích tụ dồn nén tâm lý, dẫn đến bệnh lý tâm thần hoặc bùng nổ hành vi tiêu cực cực đoan.',
+                action: 'Khuyến khích con trai tự do thể hiện cảm xúc, lắng nghe và thấu hiểu thay vì phán xét.'
+            },
+            {
+                id: 13, type: 'difficult', title: 'Tỷ lệ tai nạn lao động và rủi ro cao',
+                context: 'Nam giới thường đảm nhận các công việc nặng nhọc, độc hại và nguy hiểm hơn.',
+                main: 'Nguy cơ thương tật, tàn phế hoặc tử vong sớm cao hơn hẳn so với nữ giới.',
+                action: 'Tuân thủ nghiêm ngặt bảo hộ lao động; mua bảo hiểm nhân thọ và bảo hiểm tai nạn cho trụ cột gia đình.'
+            },
+            {
+                id: 14, type: 'difficult', title: 'Tệ nạn rượu bia, thuốc lá và chất kích thích',
+                context: 'Văn hóa xã giao trên bàn nhậu và áp lực công việc khiến nam giới dễ tìm đến chất kích thích.',
+                main: 'Gây tàn phá sức khỏe nghiêm trọng (xơ gan, ung thư) và tốn kém chi phí y tế.',
+                action: 'Tạo dựng lối sống lành mạnh, kiên quyết từ chối ép rượu bia và kiểm tra sức khỏe định kỳ.'
+            },
+            {
+                id: 15, type: 'difficult', title: 'Tâm lý tự cao, coi thường phái nữ',
+                context: 'Sinh ra trong gia đình trọng nam khinh nữ khiến trẻ nam dễ ngộ nhận về vị thế độc tôn của mình.',
+                main: 'Khó xây dựng mối quan hệ hôn nhân bình đẳng, dễ có hành vi gia trưởng và bạo lực gia đình.',
+                action: 'Dạy con tôn trọng phụ nữ ngay từ trong gia đình thông qua hành động thực tế của bố với mẹ.'
+            },
+            {
+                id: 16, type: 'difficult', title: 'Chi phí thách cưới và đám cưới gia tăng',
+                context: 'Tại một số vùng miền, hiện tượng thiếu nữ giới dẫn đến tục thách cưới cao ngất ngưởng.',
+                main: 'Nhiều gia đình nam giới phải vay nợ chồng chất chỉ để lo chi phí cưới xin cho con.',
+                action: 'Vận động bài trừ tục thách cưới biến tướng; tổ chức đám cưới văn minh, gọn nhẹ.'
+            },
+            {
+                id: 17, type: 'difficult', title: 'Sự suy giảm khả năng tự chăm sóc bản thân',
+                context: 'Nhiều con trai được mẹ và chị em gái phục vụ từ nhỏ nên thiếu kỹ năng nội trợ cơ bản.',
+                main: 'Rất thụ động và lúng túng khi sống độc thân hoặc khi bạn đời vắng nhà.',
+                action: 'Đào tạo kỹ năng nấu ăn, giặt giũ, dọn dẹp nhà cửa cho con trai ngay từ tiểu học.'
+            },
+            {
+                id: 18, type: 'difficult', title: 'Khủng hoảng bản sắc giới trong thế giới hiện đại',
+                context: 'Vai trò truyền thống của nam giới (người săn bắt/trụ cột) đang bị thay đổi mạnh mẽ bởi công nghệ.',
+                main: 'Nhiều nam thanh niên mất phương hướng, không xác định được giá trị vị thế bản thân.',
+                action: 'Định hình giá trị bản thân dựa trên sự tử tế, tri thức và năng lực thích ứng thay vì chỉ dựa vào cơ bắp.'
+            },
+            {
+                id: 19, type: 'difficult', title: 'Nghĩa vụ quân sự và rủi ro chiến tranh',
+                context: 'Trong nhiều quốc gia, nghĩa vụ quân sự là bắt buộc đối với nam giới.',
+                main: 'Gián đoạn học tập, sự nghiệp và đối mặt với rủi ro xung đột vũ trang.',
+                action: 'Chuẩn bị thể lực và tinh thần tốt để hoàn thành nghĩa vụ quốc gia một cách tự hào.'
+            },
+            {
+                id: 20, type: 'difficult', title: 'Tranh chấp tài sản thừa kế trong gia đình',
+                context: 'Tâm lý chia phần lớn đất đai cho con trai dễ gây mâu thuẫn gay gắt với các con gái.',
+                main: 'Làm rạn nứt tình anh chị em ruột thịt, dẫn đến tranh chấp kiện tụng kéo dài.',
+                action: 'Cha mẹ nên lập di chúc minh bạch, công bằng dựa trên tình cảm và sự đóng góp thực tế.'
+            },
+            {
+                id: 21, type: 'difficult', title: 'Tuổi thọ trung bình thấp hơn nữ giới',
+                context: 'Do lối sống rủi ro, áp lực công việc và yếu tố sinh học, nam giới thường có tuổi thọ thấp hơn.',
+                main: 'Gia đình dễ mất đi người trụ cột sớm, để lại vợ hiền con thơ hẫng hẫng.',
+                action: 'Rèn luyện thể thao đều đặn, chú trọng sức khỏe tinh thần và khám sức khỏe định kỳ.'
+            },
+            {
+                id: 22, type: 'difficult', title: 'Nguy cơ bỏ học chạy theo kiếm tiền sớm',
+                context: 'Áp lực phải tự lập và kiếm tiền sớm khiến nhiều nam thanh niên coi nhẹ việc học lên cao.',
+                main: 'Bị mắc kẹt trong các công việc lao động phổ thông thu nhập thấp, khó bứt phá sự nghiệp.',
+                action: 'Định hướng tầm quan trọng của học tập dài hạn và rèn luyện kỹ năng chuyên môn cao.'
+            },
+            {
+                id: 23, type: 'difficult', title: 'Thiếu sự gắn kết tình cảm với con cái',
+                context: 'Nam giới bận rộn kiếm tiền thường ít dành thời gian chăm sóc và trò chuyện với con.',
+                main: 'Khoảng cách thế hệ lớn, con cái xa cách và không coi bố là chỗ dựa tinh thần.',
+                action: 'Dành ít nhất 30 phút mỗi ngày để chơi và tâm sự cùng con mà không dùng điện thoại.'
+            },
+            {
+                id: 24, type: 'difficult', title: 'Gánh nặng nợ nần khi đầu tư mạo hiểm',
+                context: 'Khao khát làm giàu nhanh chóng khiến nam giới dễ sa vào đầu tư rủi ro high-risk, cờ bạc.',
+                main: 'Dẫn đến vỡ nợ, phá sản và kéo theo gia đình vào cảnh bần cùng.',
+                action: 'Giáo dục quản lý tài chính cá nhân an toàn, đa dạng hóa đầu tư và kiềm chế lòng tham.'
+            },
+            {
+                id: 25, type: 'difficult', title: 'Nhiễm các thói quen xấu từ bạn bè (Peer Pressure)',
+                context: 'Nam giới dễ bị ảnh hưởng bởi áp lực nhóm bạn để chứng tỏ "độ ngầu" hay sức mạnh.',
+                main: 'Dễ sa đà vào đua xe, cờ bạc, nghiện game hoặc tệ nạn xã hội.',
+                action: 'Dạy con chọn bạn mà chơi, trang bị bản lĩnh biết nói "KHÔNG" trước những lời rủ rê xấu.'
+            },
+            {
+                id: 26, type: 'difficult', title: 'Khó khăn khi thích ứng với sếp/đồng nghiệp nữ',
+                context: 'Tư duy coi thường nữ giới khiến một số nam giới khó chịu khi làm việc dưới quyền nữ quản lý.',
+                main: 'Gây cản trở sự thăng tiến công việc và tạo môi trường làm việc độc hại.',
+                action: 'Cởi bỏ định kiến giới, công nhận năng lực lãnh đạo dựa trên hiệu quả công việc.'
+            },
+            {
+                id: 27, type: 'difficult', title: 'Áp lực khi vợ có thu nhập cao hơn',
+                context: 'Nhiều nam giới cảm thấy tổn thương tự trọng khi không phải là người kiếm tiền chính.',
+                main: 'Dẫn đến tự ti, gây sự vô cớ hoặc tự đẩy hôn nhân đến bờ vực đổ vỡ.',
+                action: 'Nhìn nhận hôn nhân là sự hợp tác đồng đội, trân trọng sự đóng góp của bạn đời.'
+            },
+            {
+                id: 28, type: 'difficult', title: 'Tỷ lệ phạm tội vị thành niên nam cao',
+                context: 'Sự thiếu hụt giáo dục cảm xúc kết hợp với sự bốc đồng tuổi dậy thì.',
+                main: 'Trẻ dễ vi phạm pháp luật, gây ảnh hưởng nghiêm trọng đến tương lai.',
+                action: 'Đồng hành chặt chẽ cùng con trong giai đoạn dậy thì, kết hợp nhà trường và gia đình.'
+            },
+            {
+                id: 29, type: 'difficult', title: 'Nguy cơ kiệt sức do làm việc quá sức (Overwork)',
+                context: 'Văn hóa tăng ca và gánh nặng kinh tế khiến nam giới làm việc không nghỉ ngơi.',
+                main: 'Gây đột quỵ, suy nhược cơ thể và đột tử ở độ tuổi còn rất trẻ.',
+                action: 'Cân bằng giữa làm việc và phục hồi; ưu tiên sức khỏe là tài sản lớn nhất.'
+            },
+            {
+                id: 30, type: 'difficult', title: 'Thiếu mạng lưới hỗ trợ tinh thần',
+                context: 'Nam giới ít khi tâm sự chuyện buồn với bạn bè so với phụ nữ.',
+                main: 'Dễ rơi vào trạng thái cô độc hoàn toàn khi gặp biến cố lớn trong cuộc sống.',
+                action: 'Xây dựng vài mối quan hệ bạn tri kỷ cởi mở và sẵn sàng tìm kiếm tư vấn tâm lý chuyên nghiệp.'
+            },
+            {
+                id: 31, type: 'difficult', title: 'Áp lực duy trì hình mẫu "Mạnh mẽ"',
+                context: 'Xã hội không chấp nhận sự yếu đuối hay thất bại ở nam giới.',
+                main: 'Kìm nén tổn thương tâm lý, lâu dần biến thành sự cộc cằn và thô bạo với người xung quanh.',
+                action: 'Chấp nhận rằng thất bại và tổn thương là một phần bình thường của con người.'
+            },
+            {
+                id: 32, type: 'difficult', title: 'Xung đột nghĩa vụ giữa gia đình nhỏ và gia đình lớn',
+                context: 'Tranh chấp tài nguyên (thời gian, tiền bạc) giữa việc lo cho bố mẹ đẻ và vợ con.',
+                main: 'Gây căng thẳng thường xuyên cho mối quan hệ vợ chồng.',
+                action: 'Thỏa thuận rõ ràng với vợ về ngân sách hỗ trợ chamẹ hai bên ngay từ đầu.'
+            },
+            {
+                id: 33, type: 'difficult', title: 'Dễ mắc các bệnh lý mãn tính muộn',
+                context: 'Tâm lý ngại đi khám bệnh khiến nam giới thường phát hiện bệnh ở giai đoạn muộn.',
+                main: 'Chi phí chữa trị đắt đỏ và giảm tỷ lệ sống sót.',
+                action: 'Thiết lập thói quen khám sức khỏe tổng quát tối thiểu 1 lần/năm.'
+            },
+            {
+                id: 34, type: 'difficult', title: 'Sự tha hóa đạo đức khi có quyền lực/tiền bạc',
+                context: 'Khi đạt được thành công sớm, một số nam giới dễ mắc bệnh ngôi sao, ngoại tình.',
+                main: 'Đánh mất gia đình êm ấm và sự kính trọng từ con cái.',
+                action: 'Giữ vững sự khiêm tốn, tu dưỡng đạo đức và lấy gia đình làm gốc.'
+            },
+            {
+                id: 35, type: 'difficult', title: 'Khó khăn trong việc giao tiếp với con gái',
+                context: 'Các ông bố thường lúng túng trong việc thể hiện sự quan tâm tới con gái tuổi dậy thì.',
+                main: 'Tạo khoảng cách vô hình, khiến con gái tìm kiếm sự bù đắp tình cảm bên ngoài quá sớm.',
+                action: 'Chủ động học cách lắng nghe nhẹ nhàng, nhờ sự hỗ trợ của người mẹ.'
+            },
+            {
+                id: 36, type: 'difficult', title: 'Áp lực mua nhà riêng trước khi kết hôn',
+                context: 'Tập quán xã hội coi việc có nhà riêng là điều kiện tiên quyết để nam giới lấy vợ.',
+                main: 'Biến người trẻ thành "nô lệ của bất động sản" với khoản nợ ngân hàng kéo dài hàng chục năm.',
+                action: 'Thay đổi tư duy tích lũy linh hoạt, có thể thuê nhà hợp lý trong giai đoạn đầu.'
+            },
+            {
+                id: 37, type: 'difficult', title: 'Độc đoán trong quyết định gia đình',
+                context: 'Tư duy chủ hộ truyền thống khiến nam giới tự mình quyết định các việc lớn.',
+                main: 'Tạo tâm lý bị coi thường cho vợ và triệt tiêu tính sáng tạo của con cái.',
+                action: 'Thực hành dân chủ gia đình, bàn bạc công khai mọi quyết định lớn.'
+            },
+            {
+                id: 38, type: 'difficult', title: 'Nguy cơ bị lừa đảo trong kinh doanh',
+                context: 'Sự hiếu thắng và muốn chứng tỏ bản thân mau chóng.',
+                main: 'Dễ sập bẫy các mô hình đa cấp, đầu tư tài chính ảo.',
+                action: 'Trau dồi kiến thức tài chính thực chất, tham khảo ý kiến chuyên gia trước khi xuống tiền.'
+            },
+            {
+                id: 39, type: 'difficult', title: 'Thiếu kiên nhẫn trong nuôi dạy con nhỏ',
+                context: 'Nam giới thường thiếu sự tỉ mỉ và nhẫn nại so với phụ nữ khi chăm con.',
+                main: 'Dễ nổi giận, quát mắng làm tổn thương tinh thần của trẻ nhỏ.',
+                action: 'Tập luyện tính kiên nhẫn qua các hoạt động đọc sách, chơi trò chơi cùng con.'
+            },
+            {
+                id: 40, type: 'difficult', title: 'Khó thích ứng với sự thay đổi của công nghệ',
+                context: 'Lao động cơ bắp nam giới dễ bị thay thế bởi tự động hóa và AI.',
+                main: 'Nguy cơ thất nghiệp ở độ tuổi trung niên (trên 40 tuổi) rất cao.',
+                action: 'Học tập suốt đời (Lifelong learning), nâng cao kỹ năng mềm và tri thức số.'
+            },
+            {
+                id: 41, type: 'difficult', title: 'Sự xa cách với cha đẻ (Father-Son conflict)',
+                context: 'Mối quan hệ giữa hai người đàn ông trong nhà thường lạnh nhạt và hay khắc khẩu.',
+                main: 'Tạo ra những vết thương tâm lý kéo dài qua nhiều thế hệ.',
+                action: 'Chủ động mở lời, hạ bớt cái tôi để thấu hiểu sự khác biệt thế hệ.'
+            },
+            {
+                id: 42, type: 'difficult', title: 'Lãng phí tiền bạc vào các sở thích xa xỉ',
+                context: 'Dễ sa đà vào các thú vui tốn kém như độ xe, đồ công nghệ, sưu tầm xa xỉ.',
+                main: 'Gây thâm hụt ngân sách gia đình, ảnh hưởng quỹ giáo dục cho con.',
+                action: 'Lập quỹ cá nhân riêng biệt, không đụng đến ngân sách sinh hoạt chung.'
+            },
+            {
+                id: 43, type: 'difficult', title: 'Tâm lý phó mặc việc chăm sóc sức khỏe cho vợ',
+                context: 'Ỷ lại vào việc vợ lo ăn uống, thuốc men nên không tự giác bảo vệ bản thân.',
+                main: 'Thụ động và gặp rủi ro cao nếu sống một mình.',
+                action: 'Tự trang bị kiến thức y học thường thức và tự chăm sóc bản thân.'
+            },
+            {
+                id: 44, type: 'difficult', title: 'Áp lực danh dự và lòng tự trọng quá cao',
+                context: 'Sợ bị người khác coi thường hay sĩ diện với bạn bè.',
+                main: 'Sẵn sàng vay nợ để chi tiêu xa hoa vô bổ.',
+                action: 'Sống thật với năng lực tài chính của mình, từ bỏ sĩ diện hão.'
+            },
+            {
+                id: 45, type: 'difficult', title: 'Khó khăn trong việc nghỉ hưu và bàn giao',
+                context: 'Khi về già, nam giới từng có quyền lực thường khó chấp nhận vị trí đứng sau.',
+                main: 'Dễ bị hẫng hẫng tâm lý, hay can thiệp sâu vào cuộc sống của con cháu.',
+                action: 'Chuẩn bị tâm lý nghỉ hưu, tìm kiếm các niềm vui mới như cây cảnh, từ thiện, thể thao.'
+            },
+
+            // ==================== BÊN PHẢI: 45 THUẬN LỢI & PHÒNG TRÁNH RỦI RO (Ô 46 đến 90) ====================
+            {
+                id: 46, type: 'favorable', title: 'Lợi thế về thể lực và sức bền tự nhiên',
+                context: 'Cơ địa nam giới thường có khối lượng cơ bắp và sức mạnh vượt trội.',
+                main: 'Dễ dàng đảm nhận các công việc nặng nhọc, bảo vệ gia đình trong tình huống khẩn cấp.',
+                action: 'Rủi ro: Chủ quan với sức khỏe. Cách tránh: Tránh quá sức, kết hợp nghỉ ngơi và tập luyện khoa học.'
+            },
+            {
+                id: 47, type: 'favorable', title: 'Sự tiếp nối dòng họ và truyền thống gia đình',
+                context: 'Theo phong tục truyền thống, con trai duy trì tên tuổi dòng họ qua nhiều thế hệ.',
+                main: 'Tạo sự gắn kết dòng họ và tinh thần tự hào về nguồn cội.',
+                action: 'Rủi ro: Hẹp hòi dòng họ. Cách tránh: Hướng sự tự hào thành động lực đóng góp tích cực cho xã hội.'
+            },
+            {
+                id: 48, type: 'favorable', title: 'Không bị gián đoạn sự nghiệp do sinh nở',
+                context: 'Nam giới không trải qua giai đoạn mang thai, sinh con và ở cữ.',
+                main: 'Có khả năng duy trì sự tập trung liên tục cho sự nghiệp và thăng tiến nhanh chóng.',
+                action: 'Rủi ro: Vô cảm với vợ. Cách tránh: Chủ động chia sẻ công việc nhà và chăm sóc con cái để thấu hiểu vợ.'
+            },
+            {
+                id: 49, type: 'favorable', title: 'Khả năng quyết đoán và tư duy logic cao',
+                context: 'Xu hướng tư duy phân tích giúp nam giới xử lý tốt các bài toán kỹ thuật, chiến lược.',
+                main: 'Dễ đảm nhận các vị trí quản lý, lãnh đạo và giải quyết khủng hoảng.',
+                action: 'Rủi ro: Thiếu sự thấu cảm. Cách tránh: Rèn luyện trí tuệ cảm xúc để quyết định có lý có tình.'
+            },
+            {
+                id: 50, type: 'favorable', title: 'Chỗ dựa vững chắc cho cha mẹ khi về già',
+                context: 'Con trai thường sống chung hoặc ở gần để chăm sóc cha mẹ phụng dưỡng lúc ốm đau.',
+                main: 'Mang lại sự an tâm tinh thần to lớn cho bậc sinh thành.',
+                action: 'Rủi ro: Đổ dồn gánh nặng lên vợ. Cách tránh: Trực tiếp chăm sóc cha mẹ thay vì giao toàn bộ cho con dâu.'
+            },
+            {
+                id: 51, type: 'favorable', title: 'Khả năng chịu đựng áp lực cạnh tranh cao',
+                context: 'Môi trường xã hội tôi luyện cho nam giới tinh thần chiến đấu và bản lĩnh vượt khó.',
+                main: 'Dễ vươn lên trong các môi trường doanh nghiệp khốc liệt.',
+                action: 'Rủi ro: Kiệt sức ẩn giấu. Cách tránh: Lập kế hoạch quản lý căng thẳng và cân bằng cuộc sống.'
+            },
+            {
+                id: 52, type: 'favorable', title: 'Được ưu ái trong một số ngành nghề đặc thù',
+                context: 'Các ngành kỹ thuật nặng, khai khoáng, hàng hải vẫn ưu tiên nhân lực nam giới.',
+                main: 'Mở ra nhiều cơ hội việc làm với mức lương hấp dẫn.',
+                action: 'Rủi ro: Ỷ lại vào lợi thế giới tính. Cách tránh: Liên tục nâng cao trình độ chuyên môn thực chất.'
+            },
+            {
+                id: 53, type: 'favorable', title: 'Gánh vác trách nhiệm xã hội và cộng đồng',
+                context: 'Nam giới thường đứng ra gánh vác các việc chung của làng xã, dòng họ, đoàn thể.',
+                main: 'Xây dựng vị thế và uy tín cá nhân rộng lớn trong cộng đồng.',
+                action: 'Rủi ro: "Ăn cơm nhà thổi tù và hàng tổng". Cách tránh: Cân đối giữa việc nhà và việc xã hội.'
+            },
+            {
+                id: 54, type: 'favorable', title: 'Dễ dàng mở rộng mạng lưới quan hệ (Networking)',
+                context: 'Phong cách giao tiếp cởi mở giúp nam giới dễ kết nối trên bàn làm việc hay thể thao.',
+                main: 'Tạo lợi thế lớn trong việc tìm kiếm cơ hội hợp tác kinh doanh.',
+                action: 'Rủi ro: Quan hệ bề nổi, tốn thời gian nhậu nhẹt. Cách tránh: Tập trung vào chất lượng quan hệ thực chất.'
+            },
+            {
+                id: 55, type: 'favorable', title: 'Tinh thần mạo hiểm và sẵn sàng đổi mới',
+                context: 'Nam giới có xu hướng chấp nhận rủi ro cao hơn để tìm kiếm cơ hội đột phá.',
+                main: 'Là động lực chính thúc đẩy khởi nghiệp và sáng tạo công nghệ.',
+                action: 'Rủi ro: Mất trắng do liều lĩnh. Cách tránh: Tính toán rủi ro kỹ lưỡng (Calculated Risk).'
+            },
+            {
+                id: 56, type: 'favorable', title: 'Truyền thừa tài sản và cơ nghiệp gia đình',
+                context: 'Trong các gia đình kinh doanh, con trai thường được đào tạo để nối nghiệp.',
+                main: 'Giúp giữ gìn và phát triển thương hiệu gia đình bền vững qua nhiều thế hệ.',
+                action: 'Rủi ro: Con không có đam mê. Cách tránh: Tôn trọng lựa chọn nghề nghiệp riêng của con.'
+            },
+            {
+                id: 57, type: 'favorable', title: 'An toàn hơn trước các nguy cơ xâm hại tình dục',
+                context: 'Thực tế xã hội cho thấy nam giới ít nguy cơ bị quấy rối hay xâm hại hơn nữ giới.',
+                main: 'Tạo cảm giác an tâm hơn cho cha mẹ khi con đi xa nhà học tập/làm việc.',
+                action: 'Rủi ro: Chủ quan với nguy cơ tệ nạn. Cách tránh: Vẫn cần trang bị kỹ năng tự bảo vệ bản thân.'
+            },
+            {
+                id: 58, type: 'favorable', title: 'Khả năng thích ứng với môi trường khắc nghiệt',
+                context: 'Nam giới dễ dàng thích nghi với điều kiện sinh hoạt thiếu thốn khi đi công tác, dã ngoại.',
+                main: 'Sẵn sàng đảm nhận các nhiệm vụ ở vùng xa, biên giới, hải đảo.',
+                action: 'Rủi ro: Bỏ bê sức khỏe cá nhân. Cách tránh: Duy trì vệ sinh và chế độ dinh dưỡng tối thiểu.'
+            },
+            {
+                id: 59, type: 'favorable', title: 'Tâm lý vững vàng trong các tình huống nguy cấp',
+                context: 'Khả năng giữ bình tĩnh để đưa ra quyết định cứu hộ, ứng phó hỏa hoạn, thiên tai.',
+                main: 'Bảo vệ an toàn cho những người thân yêu xung quanh.',
+                action: 'Rủi ro: Anh hùng bàn phím/Hành động bốc đồng. Cách tránh: Trang bị kỹ năng cứu hộ bài bản.'
+            },
+            {
+                id: 60, type: 'favorable', title: 'Sự tự do hơn trong di chuyển và lịch trình',
+                context: 'Nam giới ít bị ràng buộc bởi các định kiến về thời gian đi lại ban đêm.',
+                main: 'Linh hoạt làm ca đêm, đi công tác đột xuất phục vụ công việc.',
+                action: 'Rủi ro: Tùy tiện giờ giác. Cách tránh: Tự giác giữ kỷ luật bản thân và báo cáo với gia đình.'
+            },
+            {
+                id: 61, type: 'favorable', title: 'Dễ dàng tìm kiếm các hoạt động thể thao đồng đội',
+                context: 'Bóng đá, bóng rổ, cầu lông giúp nam giới dễ dàng rèn luyện sức khỏe và xả stress.',
+                main: 'Nâng cao thể lực và xây dựng tình bạn tri kỷ dài lâu.',
+                action: 'Rủi ro: Chấn thương thể thao. Cách tránh: Khởi động kỹ và sử dụng dụng cụ bảo hộ.'
+            },
+            {
+                id: 62, type: 'favorable', title: 'Cơ hội tiếp cận các vị trí lãnh đạo cao cấp',
+                context: 'Dù bình đẳng giới tiến bộ, tỷ lệ nam giới trong bộ máy quản lý vẫn chiếm ưu thế.',
+                main: 'Mở rộng con đường thăng tiến sự nghiệp đỉnh cao.',
+                action: 'Rủi ro: Trở nên quan liêu. Cách tránh: Luôn lắng nghe cấp dưới và duy trì sự khiêm tốn.'
+            },
+            {
+                id: 63, type: 'favorable', title: 'Sự bao dung và không để bụng mâu thuẫn nhỏ',
+                context: 'Nam giới thường có xu hướng giải quyết tranh cãi nhanh chóng và không khắc sâu thành kiến.',
+                main: 'Giúp không khí gia đình và đồng nghiệp bớt căng thẳng dằn dỗi.',
+                action: 'Rủi ro: Hời hợt bỏ qua vấn đề gốc rễ. Cách tránh: Đối thoại thẳng thắn để giải quyết dứt điểm.'
+            },
+            {
+                id: 64, type: 'favorable', title: 'Khả năng tập trung cao độ vào mục tiêu ngắn hạn',
+                context: 'Tư duy đơn nhiệm (Single-tasking) giúp nam giới dồn 100% năng lượng hoàn thành dự án.',
+                main: 'Tạo ra hiệu suất công việc bứt phá trong thời gian ngắn.',
+                action: 'Rủi ro: Quên mất các việc khác xung quanh. Cách tránh: Sử dụng phần mềm quản lý lịch trình.'
+            },
+            {
+                id: 65, type: 'favorable', title: 'Không gặp rào cản về sinh lý chu kỳ hàng tháng',
+                context: 'Nam giới không bị ảnh hưởng bởi sự biến động hormone chu kỳ như phụ nữ.',
+                main: 'Duy trì trạng thái làm việc và phong độ thể chất ổn định quanh năm.',
+                action: 'Rủi ro: Thiếu sự thông cảm với đồng nghiệp nữ. Cách tránh: Chủ động hỗ trợ phụ nữ vào những ngày khó khăn.'
+            },
+            {
+                id: 66, type: 'favorable', title: 'Dễ tạo niềm tin về sự che chở cho bạn đời',
+                context: 'Hình ảnh người đàn ông vững chãi mang lại cảm giác an toàn tuyệt đối cho người vợ.',
+                main: 'Là nền tảng quan trọng giữ lửa hạnh phúc hôn nhân.',
+                action: 'Rủi ro: Áp đặt quyền lực. Cách tránh: Che chở dựa trên tình yêu thương chứ không phải kiểm soát.'
+            },
+            {
+                id: 67, type: 'favorable', title: 'Thuận lợi trong việc học tập các ngành STEM',
+                context: 'Năng khiếu bẩm sinh với toán học, lập trình và máy móc giúp nam giới học nhanh.',
+                main: 'Dễ dàng đón đầu xu hướng công nghệ 4.0 và AI.',
+                action: 'Rủi ro: Khô khô, thiếu kỹ năng mềm. Cách tránh: Đọc thêm sách văn học, tâm lý học.'
+            },
+            {
+                id: 68, type: 'favorable', title: 'Khả năng định hướng không gian và bản đồ tốt',
+                context: 'Bộ não nam giới có vùng xử lý không gian phát triển, thuận lợi khi di chuyển, lái xe.',
+                main: 'Giảm thiểu rủi ro lạc đường, tai nạn khi giao thông xa.',
+                action: 'Rủi ro: Phủ nhận GPS hay sự trợ giúp. Cách tránh: Sử dụng công nghệ hỗ trợ khi cần thiết.'
+            },
+            {
+                id: 69, type: 'favorable', title: 'Lợi thế trong việc đàm phán thương lượng',
+                context: 'Phong thái tự tin và giọng nói trầm ấm giúp tạo uy lực trên bàn đàm phán.',
+                main: 'Mang lại lợi thế hợp đồng cho doanh nghiệp hoặc gia đình.',
+                action: 'Rủi ro: Lấn lướt đối phương quá đà. Cách tránh: Hướng tới giải pháp Win-Win đôi bên cùng có lợi.'
+            },
+            {
+                id: 70, type: 'favorable', title: 'Làm gương về tinh thần trượng phu cho con cái',
+                context: 'Hình mẫu ông bố dũng cảm, biết bênh vực kẻ yếu là bài học sống động nhất.',
+                main: 'Giúp con cái phát triển nhân cách cao đẹp và lòng nhân ái.',
+                action: 'Rủi ro: Nói không đi đôi với làm. Cách tránh: Nhất quán giữa lời nói và hành động thực tế.'
+            },
+            {
+                id: 71, type: 'favorable', title: 'Sự độc lập trong suy nghĩ và ít bị ảnh hưởng bởi dư luận',
+                context: 'Nam giới thường ít bị dao động bởi những lời bàn tán phán xét xung quanh.',
+                main: 'Giữ vững mục tiêu sống và kiên định với con đường đã chọn.',
+                action: 'Rủi ro: Bảo thủ, không chịu nghe góp ý. Cách tránh: Lắng nghe có chọn lọc từ những người có chuyên môn.'
+            },
+            {
+                id: 72, type: 'favorable', title: 'Dễ dàng tham gia các hoạt động thiện nguyện cứu hộ',
+                context: 'Sức mạnh thể chất cho phép nam giới trực tiếp tham gia bốc vác, cứu trợ lũ lụt.',
+                main: 'Đóng góp thiết thực cho cộng đồng trong thiên tai.',
+                action: 'Rủi ro: Dangerous hazard. Cách tránh: Trang bị kỹ năng bảo hộ và tuân thủ chỉ huy.'
+            },
+            {
+                id: 73, type: 'favorable', title: 'Tạo tâm lý an tâm cho dòng họ về việc có người gánh vác',
+                context: 'Sự xuất hiện của con trai giúp người lớn tuổi trong họ yên lòng về tương lai.',
+                main: 'Duy trì sự hòa thuận và tôn ti trật tự trong gia tộc.',
+                action: 'Rủi ro: Kiêu ngạo với chị em gái. Cách tránh: Tôn trọng và đối xử công bằng với tất cả anh chị em.'
+            },
+            {
+                id: 74, type: 'favorable', title: 'Khả năng chịu đựng sự cô đơn để làm việc lớn',
+                context: 'Nam giới dễ dàng chấp nhận làm việc một mình trong thời gian dài để nghiên cứu.',
+                main: 'Tạo ra các phát minh, công trình khoa học mang tính bước ngoặt.',
+                action: 'Rủi ro: Trầm cảm tự kỷ. Cách tránh: Chủ động duy trì tương tác xã hội tối thiểu.'
+            },
+            {
+                id: 75, type: 'favorable', title: 'Thuận lợi khi đảm nhận vai trò trọng tài/hoà giải',
+                context: 'Sự khách quan và ít bị cảm xúc chi phối giúp nam giới làm tốt vai trò phân xử.',
+                main: 'Dễ dàng đứng ra hòa giải các tranh chấp trong nội bộ gia đình.',
+                action: 'Rủi ro: Quyết định cứng nhắc. Cách tránh: Đặt mình vào vị trí các bên để thấu hiểu.'
+            },
+            {
+                id: 76, type: 'favorable', title: 'Ít chịu áp lực về tiêu chuẩn vẻ đẹp ngoại hình (Beauty Standards)',
+                context: 'Xã hội thường ít khắt khe với nếp nhăn hay thân hình của nam giới hơn phụ nữ.',
+                main: 'Tiết kiệm thời gian và tiền bạc cho việc trang điểm, phẫu thuật thẩm mỹ.',
+                action: 'Rủi ro: Xuề xòa, lếch thếch. Cách tránh: Giữ gìn sự gọn gàng, sạch sẽ và chỉn chu tối thiểu.'
+            },
+            {
+                id: 77, type: 'favorable', title: 'Sự hào phóng và sẵn sàng giúp đỡ bạn bè',
+                context: 'Tính khí "trượng nghĩa" khiến nam giới sẵn lòng cho vay tiền hay giúp đỡ công sức.',
+                main: 'Xây dựng mối quan hệ bạn bè thắm thiết, coi nhau như anh em.',
+                action: 'Rủi ro: Bị kẻ xấu lợi dụng. Cách tránh: Đặt niềm tin đúng chỗ và có giới hạn an toàn.'
+            },
+            {
+                id: 78, type: 'favorable', title: 'Năng lực hướng dẫn các trò chơi vận động cho con',
+                context: 'Bố thường là người tuyệt vời để dạy con đá bóng, bơi lội, đi xe đạp, cắm trại.',
+                main: 'Giúp con phát triển thể chất toàn diện và sự dạn dĩ với thiên nhiên.',
+                action: 'Rủi ro: Quá bạo lực hoặc thiếu an toàn. Cách tránh: Luôn có dụng cụ bảo hộ cho con.'
+            },
+            {
+                id: 79, type: 'favorable', title: 'Khả năng hồi phục nhanh sau thất bại (Resilience)',
+                context: 'Sự va đập xã hội giúp nam giới coi thất bại như bài học trải nghiệm.',
+                main: 'Nhanh chóng đứng dậy tái cấu trúc lại sự nghiệp sau phá sản.',
+                action: 'Rủi ro: Lặp lại sai lầm cũ. Cách tránh: Phân tích nguyên nhân thất bại một cách nghiêm túc.'
+            },
+            {
+                id: 80, type: 'favorable', title: 'Dễ dàng thích ứng với việc sống xa nhà',
+                context: 'Tính tự lập giúp nam giới ít bị nhớ nhà hay khủng hoảng tâm lý khi du học, đi xa.',
+                main: 'Tạo tiền đề vững chắc cho việc hội nhập quốc tế.',
+                action: 'Rủi ro: Xa cách tình cảm gia đình. Cách tránh: Gọi điện về cho cha mẹ thường xuyên.'
+            },
+            {
+                id: 81, type: 'favorable', title: 'Lợi thế trong các môn thể thao đối kháng',
+                context: 'Võ thuật, boxing, gym giúp nam giới tôi luyện cả thể xác lẫn tinh thần thép.',
+                main: 'Nâng cao khả năng tự vệ và bảo vệ người yếu thế.',
+                action: 'Rủi ro: Lạm dụng võ lực. Cách tránh: Chỉ sử dụng võ thuật vào mục đích tự vệ và chính nghĩa.'
+            },
+            {
+                id: 82, type: 'favorable', title: 'Tạo sự tin tưởng trong các giao dịch lớn',
+                context: 'Định kiến xã hội tích cực đôi khi giúp nam giới dễ chốt các hợp đồng BĐS, ô tô.',
+                main: 'Tăng tỷ lệ thành công trong kinh doanh tài sản giá trị cao.',
+                action: 'Rủi ro: Chủ quan thiếu pháp lý. Cách tránh: Luôn cẩn trọng kiểm tra hợp đồng rõ ràng.'
+            },
+            {
+                id: 83, type: 'favorable', title: 'Khả năng giữ bí mật và sự tin cậy trong tình bạn',
+                context: 'Nam giới ít khi thêu dệt hay phát tán chuyện riêng tư của bạn bè.',
+                main: 'Trở thành điểm tựa đáng tin cậy để bạn bè gửi gắm tâm sự thầm kín.',
+                action: 'Rủi ro: Bao che cho hành vi sai trái. Cách tránh: Thẳng thắn khuyên ngăn bạn khi làm điều xấu.'
+            },
+            {
+                id: 84, type: 'favorable', title: 'Sự sáng tạo trong sửa chữa đồ đạc gia đình (DIY)',
+                context: 'Khả năng tự tay sửa điện, nước, đồ gỗ, máy móc trong nhà.',
+                main: 'Tiết kiệm chi phí sửa chữa và tăng sự gắn kết gia đình.',
+                action: 'Rủi ro: Mất an toàn điện/máy móc. Cách tránh: Tắt nguồn điện và đeo găng tay bảo hộ.'
+            },
+            {
+                id: 85, type: 'favorable', title: 'Khả năng làm việc hiệu quả dưới thời tiết khắc nghiệt',
+                context: 'Sức chịu đựng nắng mưa tốt hơn giúp hoàn thành công việc ngoài trời.',
+                main: 'Đảm bảo tiến độ công trình, nông nghiệp đúng thời hạn.',
+                action: 'Rủi ro: Say nắng, đột quỵ nhiệt. Cách tránh: Bổ sung nước điện giải và đội mũ bảo hộ.'
+            },
+            {
+                id: 86, type: 'favorable', title: 'Lợi thế trong việc truyền dạy kinh nghiệm sống cho con trai',
+                context: 'Người bố hiểu rõ tâm sinh lý con trai nên dễ đưa ra lời khuyên thiết thực.',
+                main: 'Giúp con tránh được các cạm bẫy tuổi dậy thì và trưởng thành vững vàng.',
+                action: 'Rủi ro: Áp đặt trải nghiệm cũ lên thời đại mới. Cách tránh: Cập nhật xu hướng giới trẻ.'
+            },
+            {
+                id: 87, type: 'favorable', title: 'Tự tin khi đối mặt với các thử thách mới',
+                context: 'Hormone nam thúc đẩy tinh thần chinh phục những đỉnh cao mới.',
+                main: 'Thúc đẩy sự tiến bộ liên tục của bản thân và tổ chức.',
+                action: 'Rủi ro: Nóng vội. Cách tránh: Kết hợp sự tự tin với kế hoạch chi tiết.'
+            },
+            {
+                id: 88, type: 'favorable', title: 'Tạo dựng vị thế trụ cột tinh thần cho cả gia tộc',
+                context: 'Người đàn ông thành đạt thường là chỗ dựa cho cả họ hàng khi gặp khó khăn.',
+                main: 'Mang lại sự nở mặt nở mày và hỗ trợ nâng đỡ thế hệ em cháu.',
+                action: 'Rủi ro: Dung dưỡng sự ỷ lại. Cách tránh: Hỗ trợ cần đi kèm với điều kiện tự lập.'
+            },
+            {
+                id: 89, type: 'favorable', title: 'Dễ cân bằng lại cuộc sống sau các biến cố',
+                context: 'Tư duy nhìn về phía trước giúp nam giới nhanh chóng vượt qua đau thương.',
+                main: 'Tái thiết lập trật tự cuộc sống để tiếp tục vươn lên.',
+                action: 'Rủi ro: Trốn tránh quá khứ. Cách tránh: Chấp nhận đau thương rồi mới bước tiếp.'
+            },
+            {
+                id: 90, type: 'favorable', title: 'Đóng góp to lớn vào sự phát triển chung của đất nước',
+                context: 'Lực lượng nòng cốt trong quốc phòng, an ninh, công nghiệp nặng và hạ tầng.',
+                main: 'Xây dựng nền kinh tế vững mạnh và bảo vệ chủ quyền quốc gia.',
+                action: 'Rủi ro: Quên mất gia đình nhỏ. Cách tránh: Luôn ghi nhớ gia đình là hậu phương vững chắc nhất.'
+            }
+        ];
+
+        let currentFilter = 'all';
+        let searchQuery = '';
+
+        // Render Chessboard Cells
+        function renderBoard() {
+            const board = document.getElementById('chessboard');
+            board.innerHTML = '';
+
+            const filteredData = boardData.filter(item => {
+                const matchesType = (currentFilter === 'all') || 
+                                   (currentFilter === 'difficult' && item.type === 'difficult') || 
+                                   (currentFilter === 'favorable' && item.type === 'favorable');
+                
+                const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      item.context.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                      item.main.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                      item.action.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                      item.id.toString().includes(searchQuery);
+
+                return matchesType && matchesSearch;
+            });
+
+            if (filteredData.length === 0) {
+                board.innerHTML = `
+                    <div class="col-span-9 py-12 text-center text-slate-400">
+                        <i class="fa-solid fa-folder-open text-4xl mb-2 text-slate-600"></i>
+                        <p>Không tìm thấy ô nào phù hợp với từ khóa "${searchQuery}"</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Generate cells
+            boardData.forEach(item => {
+                // Check if this item is in filtered set
+                const isVisible = filteredData.some(f => f.id === item.id);
+                if (!isVisible) return;
+
+                const isDifficult = item.type === 'difficult';
+
+                const cell = document.createElement('button');
+                cell.onclick = () => openModal(item.id);
+                cell.className = `board-cell relative group h-24 md:h-28 p-2 rounded-xl border text-left flex flex-col justify-between overflow-hidden shadow-md cursor-pointer ${
+                    isDifficult 
+                    ? 'bg-gradient-to-b from-rose-950/60 to-slate-900 border-rose-900/60 hover:border-rose-500 hover:shadow-rose-900/30' 
+                    : 'bg-gradient-to-b from-emerald-950/60 to-slate-900 border-emerald-900/60 hover:border-emerald-500 hover:shadow-emerald-900/30'
+                }`;
+
+                cell.innerHTML = `
+                    <!-- Top Bar inside cell -->
+                    <div class="flex items-center justify-between w-full">
+                        <span class="font-mono text-xs font-extrabold px-1.5 py-0.5 rounded ${
+                            isDifficult ? 'bg-rose-900/80 text-rose-200' : 'bg-emerald-900/80 text-emerald-200'
+                        }">
+                            ${item.id < 10 ? '0' + item.id : item.id}
+                        </span>
+                        <i class="fa-solid ${isDifficult ? 'fa-triangle-exclamation text-rose-400' : 'fa-circle-check text-emerald-400'} text-xs"></i>
+                    </div>
+
+                    <!-- Cell Title Content -->
+                    <div class="my-auto">
+                        <h4 class="text-xs md:text-xs font-bold leading-tight line-clamp-3 ${
+                            isDifficult ? 'text-rose-100 group-hover:text-white' : 'text-emerald-100 group-hover:text-white'
+                        }">
+                            ${item.title}
+                        </h4>
+                    </div>
+
+                    <!-- Bottom Indicator -->
+                    <div class="flex justify-end w-full">
+                        <span class="text-[10px] font-medium text-slate-400 group-hover:text-amber-300 flex items-center gap-1">
+                            Xem thêm <i class="fa-solid fa-chevron-right text-[8px]"></i>
+                        </span>
+                    </div>
+
+                    <!-- Visual Accent Line -->
+                    <div class="absolute bottom-0 left-0 right-0 h-1 ${isDifficult ? 'bg-rose-600' : 'bg-emerald-600'} opacity-50 group-hover:opacity-100 transition"></div>
+                `;
+
+                board.appendChild(cell);
+            });
+        }
+
+        // Open Modal Function
+        function openModal(id) {
+            const item = boardData.find(d => d.id === id);
+            if (!item) return;
+
+            const isDifficult = item.type === 'difficult';
+
+            // Populate Modal Fields
+            document.getElementById('modalCellId').innerText = `#${item.id < 10 ? '0' + item.id : item.id}`;
+            document.getElementById('modalBadge').innerText = item.id;
+            document.getElementById('modalBadge').className = `w-10 h-10 rounded-xl flex items-center justify-center text-lg font-extrabold text-white shadow-lg ${
+                isDifficult ? 'bg-rose-600 shadow-rose-600/50' : 'bg-emerald-600 shadow-emerald-600/50'
+            }`;
+
+            document.getElementById('modalCategory').innerText = isDifficult ? 'BÊN TẢ: KHÓ KHĂN & THÁCH THỨC' : 'BÊN HỮU: THUẬN LỢI & LỢI THẾ';
+            document.getElementById('modalCategory').className = `text-xs uppercase font-bold tracking-wider px-2 py-0.5 rounded border ${
+                isDifficult ? 'bg-rose-950 text-rose-300 border-rose-800' : 'bg-emerald-950 text-emerald-300 border-emerald-800'
+            }`;
+
+            document.getElementById('modalTitle').innerText = item.title;
+            document.getElementById('modalContext').innerText = item.context;
+
+            // Main Content Box Styling
+            const mainBox = document.getElementById('modalMainBox');
+            const mainHeading = document.getElementById('modalMainHeading');
+            
+            if (isDifficult) {
+                mainBox.className = 'bg-rose-950/30 border-rose-800/60 rounded-xl p-4';
+                mainHeading.className = 'text-rose-400 text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-2';
+                mainHeading.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-400"></i> Khó Khăn & Tác Động Tiêu Cực';
+            } else {
+                mainBox.className = 'bg-emerald-950/30 border-emerald-800/60 rounded-xl p-4';
+                mainHeading.className = 'text-emerald-400 text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-2';
+                mainHeading.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400"></i> Lợi Thế & Giá Trị Đạt Được';
+            }
+            document.getElementById('modalMainContent').innerText = item.main;
+
+            // Action / Solution Box
+            const actionHeading = document.getElementById('modalActionHeading');
+            if (isDifficult) {
+                actionHeading.innerHTML = '<i class="fa-solid fa-shield-halved text-indigo-400"></i> Phương Án & Giải Pháp Cụ Thể';
+            } else {
+                actionHeading.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Rủi Ro Đi Kèm & Cách Phòng Tránh';
+            }
+            document.getElementById('modalActionContent').innerText = item.action;
+
+            // Show Modal with Animation
+            const modal = document.getElementById('detailModal');
+            const container = document.getElementById('modalContainer');
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                container.classList.remove('scale-95');
+                container.classList.add('scale-100');
+            }, 10);
+        }
+
+        // Close Modal Function
+        function closeModal() {
+            const modal = document.getElementById('detailModal');
+            const container = document.getElementById('modalContainer');
+
+            modal.classList.add('opacity-0');
+            container.classList.remove('scale-100');
+            container.classList.add('scale-95');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Filter Handlers
+        function filterType(type) {
+            currentFilter = type;
+            
+            // Update Tab UI
+            ['all', 'difficult', 'favorable'].forEach(t => {
+                const btn = document.getElementById(`btn-${t}`);
+                if (t === type) {
+                    btn.className = 'px-3 py-1.5 rounded-md font-medium transition bg-indigo-600 text-white shadow';
+                } else {
+                    btn.className = 'px-3 py-1.5 rounded-md font-medium text-slate-400 hover:text-white transition';
+                }
+            });
+
+            renderBoard();
+        }
+
+        // Search Handler
+        function handleSearch() {
+            searchQuery = document.getElementById('searchInput').value;
+            renderBoard();
+        }
+
+        // Keyboard navigation support (ESC to close modal)
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Close modal when clicking on backdrop
+        document.getElementById('detailModal').addEventListener('click', (e) => {
+            if (e.target.id === 'detailModal') {
+                closeModal();
+            }
+        });
+
+        // Initialize Board on Page Load
+        window.onload = function() {
+            renderBoard();
+        };
+    </script>
+</body>
+</html>

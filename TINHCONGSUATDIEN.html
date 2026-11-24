@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Tính Công Suất & Chọn Máy Phát Điện / Motor</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f9; color: #333; }
+        .container { max-width: 800px; margin: auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2, h3 { color: #0277bd; }
+        .section { margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 6px; border: 1px solid #ddd; }
+        .device-row { display: flex; justify-content: space-between; margin-bottom: 10px; align-items: center; }
+        input[type="number"] { width: 60px; padding: 6px; text-align: center; }
+        select { padding: 8px; width: 100%; border-radius: 4px; border: 1px solid #ccc; font-size: 15px; }
+        .result { margin-top: 20px; padding: 15px; background: #e1f5fe; border-left: 5px solid #0288d1; font-size: 16px; line-height: 1.6; }
+        .warning { color: #d32f2f; font-weight: bold; }
+        .success { color: #388e3c; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Trang Web Tính Toán & Chọn Máy Phát / Motor Phù Hợp</h2>
+    
+    <!-- Phần 1: Chọn thiết bị trong nhà -->
+    <div class="section">
+        <h3>1. Nhập số lượng đồ dùng điện trong nhà bạn:</h3>
+        <div class="device-row">
+            <span>Đèn LED (20W)</span>
+            <input type="number" id="den" value="4" min="0" oninput="tinhToan()">
+        </div>
+        <div class="device-row">
+            <span>Quạt điện (50W)</span>
+            <input type="number" id="quat" value="2" min="0" oninput="tinhToan()">
+        </div>
+        <div class="device-row">
+            <span>Tivi (120W)</span>
+            <input type="number" id="tivi" value="1" min="0" oninput="tinhToan()">
+        </div>
+        <div class="device-row">
+            <span>Tủ lạnh (200W - Tính tải khởi động)</span>
+            <input type="number" id="tuLanh" value="1" min="0" oninput="tinhToan()">
+        </div>
+        <div class="device-row">
+            <span>Điều hòa 9000 BTU (1000W)</span>
+            <input type="number" id="dieuHoa" value="0" min="0" oninput="tinhToan()">
+        </div>
+        <div class="device-row">
+            <span>Máy xay thịt / Motor nhỏ (400W)</span>
+            <input type="number" id="mayXay" value="0" min="0" oninput="tinhToan()">
+        </div>
+    </div>
+
+    <!-- Phần 2: Chọn máy phát hoặc motor muốn dùng -->
+    <div class="section">
+        <h3>2. Chọn loại máy phát điện hoặc Motor bạn muốn mua/dùng thử:</h3>
+        <select id="chonMay" onchange="tinhToan()">
+            <option value="500">Máy phát điện cũ siêu nhỏ (Khoảng 500W) - Giá ~500k</option>
+            <option value="1200" selected>Máy phát xăng nhỏ gọn (Wadfow 1.2kW)</option>
+            <option value="2000">Tổ máy phát xăng tầm trung (Oshima 2kW)</option>
+            <option value="6000">Máy phát công suất lớn (Koop / Total 6kW)</option>
+            <option value="8500">Máy phát chạy xăng gia đình lớn (Wadfow 8.5kW)</option>
+            <option value="300">Motor điện cũ kéo phụ tải nhỏ (300W)</option>
+        </select>
+    </div>
+
+    <!-- Phần kết quả phân tích -->
+    <div class="result" id="ketQua">
+        <!-- JS sẽ điền kết quả vào đây -->
+    </div>
+</div>
+
+<script>
+function tinhToan() {
+    let slDen = parseInt(document.getElementById('den').value) || 0;
+    let slQuat = parseInt(document.getElementById('quat').value) || 0;
+    let slTivi = parseInt(document.getElementById('tivi').value) || 0;
+    let slTuLanh = parseInt(document.getElementById('tuLanh').value) || 0;
+    let slDieuHoa = parseInt(document.getElementById('dieuHoa').value) || 0;
+    let slMayXay = parseInt(document.getElementById('mayXay').value) || 0;
+
+    // Tổng công suất thực tế chạy đồng thời
+    let tongW = (slDen * 20) + (slQuat * 50) + (slTivi * 120) + (slTuLanh * 200) + (slDieuHoa * 1000) + (slMayXay * 400);
+    
+    // Công suất máy chọn
+    let congSuatMay = parseInt(document.getElementById('chonMay').value);
+    
+    let htmlKetQua = `<b>Tổng công suất thiết bị đang dùng:</b> ${tongW.toLocaleString()} W (~ ${(tongW/1000).toFixed(2)} kW)<br>`;
+    htmlKetQua += `<b>Công suất thiết bị nguồn bạn chọn:</b> ${congSuatMay.toLocaleString()} W<br><hr>`;
+
+    if (congSuatMay >= tongW * 1.2) {
+        htmlKetQua += `<span class="success">✔ ĐÁNH GIÁ: Thiết bị nguồn bạn chọn HOÀN TOÀN ĐÁP ỨNG TỐT. Máy chạy khỏe, đủ tải và có dư khoảng an toàn cho lúc khởi động thiết bị.</span>`;
+    } else if (congSuatMay >= tongW) {
+        htmlKetQua += `<span class="warning">⚠ ĐÁNH GIÁ: Thiết bị nguồn vừa đủ chạm ngưỡng công suất. Cẩn thận khi bật tủ lạnh hoặc điều hòa sẽ dễ bị sập nguồn/quá tải.</span>`;
+    } else {
+        htmlKetQua += `<span class="warning">❌ ĐÁNH GIÁ: KHÔNG ĐỦ CÔNG SUẤT! Tổng đồ đạc trong nhà (${tongW}W) lớn hơn khả năng cung cấp của máy (${congSuatMay}W). Máy sẽ chết máy hoặc đứt cầu chì ngay lập tức.</span>`;
+    }
+
+    document.getElementById('ketQua').innerHTML = htmlKetQua;
+}
+
+// Chạy hàm tính toán ngay khi mở trang
+tinhToan();
+</script>
+
+</body>
+</html>

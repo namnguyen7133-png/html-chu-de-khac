@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            /* 800px is Chrome's hard cap for popup width; border-box keeps
+               the padding inside it so the popup never gets its own h-scroll. */
+            width: 800px;
+            box-sizing: border-box;
+            padding: 16px;
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-right: 8px;
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .logo {
+            font-size: 20px;
+            margin-right: 12px;
+        }
+
+        .title-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Rate Us button style */
+        .rate-button {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            background-color: white;
+            color: #1f2937;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .rate-button:hover {
+            background-color: #f8fafc;
+        }
+
+        .thumbs-up {
+            font-size: 16px;
+        }
+        
+        /* Added container for buttons and table */
+        .main-container {
+            border: 1px solid #e0e0e0;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        /* Fixed-height info row: toast on the left, counter on the right.
+           Reserving the height stops the layout jumping when toasts appear. */
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            min-height: 18px;
+            margin-bottom: 10px;
+        }
+
+        #videoCounter {
+            font-size: 13px;
+            color: #666;
+            white-space: nowrap;
+            margin-left: auto;
+        }
+
+        .button-container {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .auto-scroll-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+            color: #475569;
+            cursor: pointer;
+            margin-left: auto;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .auto-scroll-label input {
+            accent-color: #E34F3A;
+            cursor: pointer;
+        }
+
+        /* Loader container */
+        .loader-container {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 16px;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .loader-container.show {
+            display: flex;
+        }
+
+        /* Loader spinner */
+        .loader {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #E34F3A;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        button {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid #e2e8f0;
+            white-space: nowrap;
+            background: white;
+            color: #1f2937;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #extract {
+            background: #E34F3A;
+            color: white;
+            border: none;
+        }
+
+        #extract:hover:not(:disabled) {
+            background: #cf4735;
+        }
+
+        #copyUrlsBtn,
+        #exportCsvBtn,
+        #clearBtn {
+            background: white;
+            border: 1px solid #e2e8f0;
+        }
+
+        #copyUrlsBtn:hover:not(:disabled),
+        #exportCsvBtn:hover:not(:disabled),
+        #clearBtn:hover:not(:disabled) {
+            background: #f8fafc;
+        }
+
+        .toast {
+            display: none;
+            flex: 1;
+            min-width: 0;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #666;
+            text-align: left;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        /* Modified status message to remove grey box */
+        .saved-data-message {
+            padding: 8px 0;
+            background: transparent;
+            border: none;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 16px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .table-container {
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            overflow: hidden;
+            width: 100%;
+            background-color: white; /* Added to ensure table stands out against the light grey background */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th {
+            text-align: left;
+            background: #f1f5f9; /* opaque — sticky headers can't be see-through */
+            padding: 12px;
+            font-weight: 500;
+            color: #334155;
+            /* Sticky within the scrolling .video-list; box-shadow instead of
+               border-bottom because borders scroll away on sticky cells. */
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            box-shadow: inset 0 -1px 0 #e2e8f0;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Column widths + cell padding must total less than the container
+           minus the vertical scrollbar (~15px), or the list gets a
+           horizontal scrollbar too. */
+        .col-title {
+            width: 220px;
+            max-width: 220px;
+        }
+
+        .col-channel {
+            width: 110px;
+            max-width: 110px;
+        }
+
+        .col-url {
+            width: 110px;
+            max-width: 110px;
+        }
+
+        .col-url a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .col-url a:hover {
+            text-decoration: underline;
+        }
+
+        .empty-state {
+            display: none;
+            padding: 28px 16px;
+            text-align: center;
+            color: #666;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .empty-state .empty-tip {
+            display: block;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .col-date {
+            width: 80px;
+            max-width: 80px;
+        }
+
+        .col-views {
+            width: 60px;
+            max-width: 60px;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Reduced max-height of video list to ensure footer is visible */
+        .video-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        /* Added footer style and adjusted for visibility */
+        .footer {
+            text-align: center;
+            padding-top: 10px;
+            padding-bottom: 5px;
+            font-size: 12px;
+            color: #888;
+            background-color: white; /* Ensure it stands out if scrolled down */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title-container">
+            <span class="logo">&#129408;</span>
+            <h1 class="title">YouTube URL Extractor</h1>
+        </div>
+        <a href="https://chromewebstore.google.com/detail/youtube-url-extractor/jmilibpbdpajjnabchfpfmmmjgbimefo?hl=en" target="_blank" class="rate-button">
+            <span class="thumbs-up">&#128077;</span>
+            Rate Us
+        </a>
+    </div>
+
+    <div id="statusMessage" class="saved-data-message">No data loaded</div>
+
+    <!-- New container div that wraps the buttons and table -->
+    <div class="main-container">
+        <div class="button-container">
+            <button id="extract">Extract URLs</button>
+            <button id="cancelBtn" style="display:none;">Cancel</button>
+            <button id="copyUrlsBtn" disabled>Copy URLs</button>
+            <button id="exportCsvBtn" disabled>Export CSV</button>
+            <button id="clearBtn" disabled>Clear Data</button>
+            <label class="auto-scroll-label" title="Automatically scrolls the YouTube page to load the entire list before extracting. Slower on long lists.">
+                <input type="checkbox" id="autoScrollToggle">
+                Auto-load full list
+            </label>
+        </div>
+
+        <div class="info-row">
+            <div id="toast" class="toast" role="status" aria-live="polite"></div>
+            <div id="videoCounter">Videos: 0</div>
+        </div>
+
+        <div id="loaderContainer" class="loader-container">
+            <div class="loader"></div>
+            <span>Extracting URLs</span>
+        </div>
+
+        <div class="table-container">
+            <div class="video-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="col-title">Title</th>
+                            <th class="col-channel">Channel</th>
+                            <th class="col-url">URL</th>
+                            <th class="col-date">Uploaded</th>
+                            <th class="col-views">Views</th>
+                        </tr>
+                    </thead>
+                    <tbody id="videoList"></tbody>
+                </table>
+            </div>
+            <div id="emptyState" class="empty-state">
+                Open a YouTube playlist, channel, search or video page,<br>
+                then click <strong>Extract URLs</strong> to collect the links.
+                <span class="empty-tip">Scroll down the page to load more videos, or turn on "Auto-load full list"</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Added copyright footer with proper UTF-8 encoding -->
+    <div class="footer">
+        &#169; 2026 Coral Labs. All rights reserved - Version 1.2.2
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

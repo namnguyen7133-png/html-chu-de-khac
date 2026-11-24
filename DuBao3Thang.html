@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 37 - EBITDA & Biên EBITDA (EBITDA & EBITDA Margin) | CEO AI Enterprise</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #0e7490;
+            --primary-dark: #155e75;
+            --primary-light: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #ecfeff;
+            --card: #ffffff;
+            --text: #164e63;
+            --border: #a5f3fc;
+            --shadow: 0 10px 25px -5px rgba(14, 116, 144, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #ecfeff 0%, #cffafe 50%, #ecfeff 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 28px 32px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .header-subtitle { font-size: 0.95rem; opacity: 0.9; margin-top: 4px; }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+        .form-group label { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+        .form-group label .hint { font-weight: 400; color: #64748b; font-size: 0.8rem; }
+
+        .form-group input {
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #f0fdfa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(14, 116, 144, 0.15);
+        }
+
+        .btn-group { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(14, 116, 144, 0.3); }
+
+        .btn-secondary { background: #e2e8f0; color: #334155; }
+        .btn-secondary:hover { background: #cbd5e1; }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); }
+
+        .btn-info {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+        }
+        .btn-info:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3); }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--border);
+            transition: transform 0.2s;
+        }
+        .result-card:hover { transform: translateY(-3px); }
+
+        .result-card .label { font-size: 0.85rem; color: #64748b; margin-bottom: 6px; font-weight: 500; }
+        .result-card .value { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
+
+        .result-card.positive .value { color: var(--success); }
+        .result-card.negative .value { color: var(--danger); }
+        .result-card.warning .value { color: var(--warning); }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+        .status-healthy { background: #d1fae5; color: #065f46; }
+        .status-warning { background: #fef3c7; color: #92400e; }
+        .status-danger { background: #fee2e2; color: #991b1b; }
+
+        .ai-section {
+            background: linear-gradient(135deg, #ecfeff 0%, #cffafe 100%);
+            border-left: 5px solid var(--primary);
+        }
+
+        .ai-content { display: grid; gap: 16px; }
+
+        .ai-item {
+            background: white;
+            padding: 16px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .ai-item h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-item p { color: #334155; font-size: 0.95rem; }
+
+        .chart-container { position: relative; height: 320px; margin-top: 10px; }
+
+        .alert {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .alert-info { background: #f0f9ff; border: 1px solid #bae6fd; color: #0c4a6e; }
+        .alert-warning { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+        .alert-danger { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+        .alert-success { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; }
+
+        .formula-box {
+            background: #f0fdfa;
+            border: 1px dashed var(--primary);
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--primary-dark);
+            line-height: 1.8;
+        }
+
+        .benchmark-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+        .benchmark-table th, .benchmark-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .benchmark-table th { background: #ecfeff; font-weight: 600; color: var(--primary); }
+        .benchmark-table tr:hover { background: #f0fdfa; }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+        .history-table th, .history-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .history-table th { background: #ecfeff; font-weight: 600; color: var(--primary); }
+        .history-table tr:hover { background: #f0fdfa; }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.2rem; }
+            .result-card .value { font-size: 1.2rem; }
+            .btn { width: 100%; justify-content: center; }
+        }
+
+        .hidden { display: none; }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 20px 0 12px;
+            padding-left: 8px;
+            border-left: 3px solid var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <div>
+                <h1>
+                    <span>💹</span>
+                    Module 37 – EBITDA & Biên EBITDA
+                </h1>
+                <div class="header-subtitle">EBITDA & EBITDA Margin – Đo lường lợi nhuận hoạt động cốt lõi trước lãi, thuế và khấu hao</div>
+            </div>
+            <div class="badge">CEO AI Enterprise • Module độc lập</div>
+        </header>
+
+        <!-- GIẢI THÍCH -->
+        <div class="card">
+            <div class="card-title">📖 EBITDA là gì?</div>
+            <p style="margin-bottom: 12px;">
+                <strong>EBITDA</strong> (Earnings Before Interest, Taxes, Depreciation and Amortization) là lợi nhuận trước lãi vay, thuế và khấu hao. 
+                Đây là chỉ số quan trọng để đánh giá khả năng sinh lời từ hoạt động kinh doanh cốt lõi, loại bỏ ảnh hưởng của cấu trúc vốn và chính sách khấu hao.
+            </p>
+            <div class="formula-box">
+                EBITDA = Lợi nhuận ròng + Lãi vay + Thuế + Khấu hao & Phân bổ<br>
+                hoặc EBITDA = EBIT + Khấu hao & Phân bổ<br>
+                Biên EBITDA (EBITDA Margin) = EBITDA ÷ Doanh thu × 100%
+            </div>
+            <div class="alert alert-info">
+                <span>💡</span>
+                <div>
+                    <strong>Tại sao CEO quan tâm?</strong> EBITDA cho thấy sức khỏe hoạt động thực sự, được dùng nhiều trong định giá doanh nghiệp (EV/EBITDA) và so sánh giữa các công ty.
+                </div>
+            </div>
+        </div>
+
+        <!-- FORM -->
+        <div class="card">
+            <div class="card-title">📥 Nhập dữ liệu</div>
+            
+            <div class="section-label">Cách 1: Từ Lợi nhuận ròng (phổ biến)</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Lợi nhuận ròng (Net Income)
+                        <span class="hint">– Lợi nhuận sau thuế</span>
+                    </label>
+                    <input type="number" id="netIncome" placeholder="Ví dụ: 1200000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Chi phí lãi vay (Interest)
+                        <span class="hint">– Tổng lãi phải trả</span>
+                    </label>
+                    <input type="number" id="interest" placeholder="Ví dụ: 350000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Thuế TNDN (Taxes)
+                        <span class="hint">– Thuế thu nhập doanh nghiệp</span>
+                    </label>
+                    <input type="number" id="taxes" placeholder="Ví dụ: 300000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Khấu hao & Phân bổ (D&A)
+                        <span class="hint">– Depreciation & Amortization</span>
+                    </label>
+                    <input type="number" id="da" placeholder="Ví dụ: 450000000" step="any">
+                </div>
+            </div>
+
+            <div class="section-label">Doanh thu (để tính Biên EBITDA)</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Doanh thu thuần (Revenue)
+                        <span class="hint">– Để tính EBITDA Margin</span>
+                    </label>
+                    <input type="number" id="revenue" placeholder="Ví dụ: 15000000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Kỳ báo cáo
+                        <span class="hint">– Tháng / Quý / Năm</span>
+                    </label>
+                    <input type="text" id="period" placeholder="Ví dụ: Năm 2025" value="Kỳ hiện tại">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="calculateEBITDA()">
+                    <span>🧮</span> Tính toán EBITDA
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <span>🔄</span> Làm mới
+                </button>
+            </div>
+        </div>
+
+        <!-- KẾT QUẢ -->
+        <div id="resultSection" class="hidden">
+            <div class="card">
+                <div class="card-title">📊 Kết quả tính toán</div>
+                
+                <div id="statusBadge" class="status-badge"></div>
+
+                <div class="result-grid">
+                    <div class="result-card" id="ebitdaCard">
+                        <div class="label">EBITDA</div>
+                        <div class="value" id="ebitdaValue">—</div>
+                    </div>
+                    <div class="result-card" id="marginCard">
+                        <div class="label">Biên EBITDA</div>
+                        <div class="value" id="marginValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Lợi nhuận ròng</div>
+                        <div class="value" id="niValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Doanh thu</div>
+                        <div class="value" id="revValue">—</div>
+                    </div>
+                </div>
+
+                <div class="formula-box" id="formulaDetail"></div>
+
+                <h4 style="margin: 20px 0 10px; color: var(--primary);">📌 Tham chiếu Biên EBITDA theo ngành</h4>
+                <table class="benchmark-table">
+                    <thead>
+                        <tr>
+                            <th>Ngành</th>
+                            <th>Biên EBITDA tốt</th>
+                            <th>Biên trung bình</th>
+                            <th>Biên thấp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Phần mềm / SaaS</td>
+                            <td style="color:#059669;font-weight:600;">&gt; 25%</td>
+                            <td>15–25%</td>
+                            <td style="color:#dc2626;">&lt; 15%</td>
+                        </tr>
+                        <tr>
+                            <td>Sản xuất / Công nghiệp</td>
+                            <td style="color:#059669;font-weight:600;">&gt; 15%</td>
+                            <td>8–15%</td>
+                            <td style="color:#dc2626;">&lt; 8%</td>
+                        </tr>
+                        <tr>
+                            <td>Bán lẻ / Thương mại</td>
+                            <td style="color:#059669;font-weight:600;">&gt; 10%</td>
+                            <td>5–10%</td>
+                            <td style="color:#dc2626;">&lt; 5%</td>
+                        </tr>
+                        <tr>
+                            <td>Dịch vụ</td>
+                            <td style="color:#059669;font-weight:600;">&gt; 18%</td>
+                            <td>10–18%</td>
+                            <td style="color:#dc2626;">&lt; 10%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📈 Biểu đồ cấu phần EBITDA</div>
+                <div class="chart-container">
+                    <canvas id="ebitdaChart"></canvas>
+                </div>
+            </div>
+
+            <div id="alertBox"></div>
+
+            <div class="card ai-section">
+                <div class="card-title">🤖 Phân tích AI & Khuyến nghị</div>
+                <div class="ai-content" id="aiContent"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💾 Lưu trữ & Xuất dữ liệu</div>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="saveToLocalStorage()">
+                        <span>💾</span> Lưu vào SQLite (Local)
+                    </button>
+                    <button class="btn btn-info" onclick="exportToExcel()">
+                        <span>📥</span> Xuất Excel
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewHistory()">
+                        <span>📋</span> Xem lịch sử đã lưu
+                    </button>
+                </div>
+
+                <div id="historySection" class="hidden" style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 10px; color: var(--primary);">Lịch sử tính toán đã lưu</h4>
+                    <div style="overflow-x: auto;">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Kỳ</th>
+                                    <th>EBITDA</th>
+                                    <th>Biên EBITDA</th>
+                                    <th>Lợi nhuận ròng</th>
+                                    <th>Doanh thu</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            CEO AI Enterprise • Module 37 – EBITDA & Biên EBITDA • Có thể chạy độc lập • Sẵn sàng kết nối Python + SQLite
+        </div>
+    </div>
+
+    <script>
+        /**
+         * =====================================================
+         * MODULE 37 – EBITDA & EBITDA MARGIN
+         * CEO AI Enterprise
+         * =====================================================
+         * 
+         * Công thức:
+         * EBITDA = Net Income + Interest + Taxes + Depreciation & Amortization
+         * EBITDA Margin = (EBITDA / Revenue) × 100%
+         */
+
+        let currentResult = null;
+        let ebitdaChartInstance = null;
+
+        function formatCurrency(value) {
+            if (value === null || value === undefined || isNaN(value)) return '—';
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        function calculateEBITDA() {
+            const netIncome = parseFloat(document.getElementById('netIncome').value);
+            const interest = parseFloat(document.getElementById('interest').value) || 0;
+            const taxes = parseFloat(document.getElementById('taxes').value) || 0;
+            const da = parseFloat(document.getElementById('da').value) || 0;
+            const revenue = parseFloat(document.getElementById('revenue').value);
+            const period = document.getElementById('period').value.trim() || 'Kỳ hiện tại';
+
+            if (isNaN(netIncome)) {
+                alert('⚠️ Vui lòng nhập Lợi nhuận ròng!');
+                return;
+            }
+
+            const ebitda = netIncome + interest + taxes + da;
+            let margin = null;
+            if (!isNaN(revenue) && revenue > 0) {
+                margin = (ebitda / revenue) * 100;
+            }
+
+            currentResult = {
+                period,
+                netIncome,
+                interest,
+                taxes,
+                da,
+                revenue: isNaN(revenue) ? null : revenue,
+                ebitda,
+                margin,
+                timestamp: new Date().toISOString()
+            };
+
+            displayResults(currentResult);
+            generateAIAnalysis(currentResult);
+            renderChart(currentResult);
+
+            document.getElementById('resultSection').classList.remove('hidden');
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function displayResults(data) {
+            document.getElementById('ebitdaValue').textContent = formatCurrency(data.ebitda);
+            document.getElementById('niValue').textContent = formatCurrency(data.netIncome);
+            document.getElementById('revValue').textContent = data.revenue ? formatCurrency(data.revenue) : 'N/A';
+            document.getElementById('marginValue').textContent = data.margin !== null ? data.margin.toFixed(1) + '%' : 'N/A';
+
+            const ebitdaCard = document.getElementById('ebitdaCard');
+            const marginCard = document.getElementById('marginCard');
+            ebitdaCard.classList.remove('positive', 'negative', 'warning');
+            marginCard.classList.remove('positive', 'negative', 'warning');
+
+            if (data.ebitda > 0) {
+                ebitdaCard.classList.add('positive');
+            } else {
+                ebitdaCard.classList.add('negative');
+            }
+
+            if (data.margin !== null) {
+                if (data.margin >= 15) marginCard.classList.add('positive');
+                else if (data.margin >= 8) marginCard.classList.add('warning');
+                else marginCard.classList.add('negative');
+            }
+
+            const badge = document.getElementById('statusBadge');
+            if (data.margin !== null) {
+                if (data.margin >= 20) {
+                    badge.className = 'status-badge status-healthy';
+                    badge.textContent = '🟢 Biên EBITDA xuất sắc – Hoạt động cốt lõi rất mạnh';
+                } else if (data.margin >= 12) {
+                    badge.className = 'status-badge status-healthy';
+                    badge.textContent = '🟢 Biên EBITDA tốt – Khả năng sinh lời hoạt động ổn định';
+                } else if (data.margin >= 6) {
+                    badge.className = 'status-badge status-warning';
+                    badge.textContent = '🟡 Biên EBITDA trung bình – Cần cải thiện hiệu quả';
+                } else {
+                    badge.className = 'status-badge status-danger';
+                    badge.textContent = '🔴 Biên EBITDA thấp – Sức khỏe hoạt động yếu';
+                }
+            } else {
+                badge.className = 'status-badge status-warning';
+                badge.textContent = data.ebitda > 0 ? '🟡 EBITDA dương – Nhập doanh thu để xem biên' : '🔴 EBITDA âm – Hoạt động cốt lõi đang lỗ';
+            }
+
+            document.getElementById('formulaDetail').innerHTML = `
+                EBITDA = ${formatCurrency(data.netIncome)} + ${formatCurrency(data.interest)} + ${formatCurrency(data.taxes)} + ${formatCurrency(data.da)} = <strong>${formatCurrency(data.ebitda)}</strong><br>
+                ${data.margin !== null ? `Biên EBITDA = ${formatCurrency(data.ebitda)} ÷ ${formatCurrency(data.revenue)} × 100% = <strong>${data.margin.toFixed(1)}%</strong>` : 'Chưa nhập Doanh thu nên chưa tính được Biên EBITDA'}
+            `;
+        }
+
+        function generateAIAnalysis(data) {
+            const container = document.getElementById('aiContent');
+            let html = '';
+
+            // 1. Khỏe hay yếu?
+            let healthIcon, healthText;
+            if (data.ebitda <= 0) {
+                healthIcon = '🚨';
+                healthText = `Doanh nghiệp đang <strong>yếu về lợi nhuận hoạt động cốt lõi</strong>. EBITDA âm nghĩa là ngay cả trước khi trả lãi vay, thuế và khấu hao, hoạt động kinh doanh đã không sinh lời. Đây là tín hiệu nghiêm trọng.`;
+            } else if (data.margin !== null && data.margin >= 15) {
+                healthIcon = '✅';
+                healthText = `Doanh nghiệp đang <strong>khỏe về khả năng sinh lời hoạt động</strong>. Biên EBITDA ${data.margin.toFixed(1)}% cho thấy hoạt động cốt lõi mang lại lợi nhuận tốt, có dư địa để trả lãi, thuế và tái đầu tư.`;
+            } else if (data.margin !== null && data.margin >= 8) {
+                healthIcon = '⚠️';
+                healthText = `Sức khỏe hoạt động ở mức <strong>trung bình</strong>. Biên EBITDA ${data.margin.toFixed(1)}% chấp nhận được nhưng chưa thực sự mạnh. Còn dư địa để tối ưu chi phí hoặc tăng giá trị gia tăng.`;
+            } else {
+                healthIcon = '⚠️';
+                healthText = `EBITDA dương nhưng ${data.margin !== null ? 'biên còn thấp' : 'chưa đánh giá được biên'}. Cần theo dõi sát để đảm bảo hoạt động cốt lõi thực sự vững chắc.`;
+            }
+            html += `<div class="ai-item"><h4>${healthIcon} 1. Doanh nghiệp đang khỏe hay yếu?</h4><p>${healthText}</p></div>`;
+
+            // 2. Tiền chảy đi đâu?
+            let flowText = data.ebitda > 0
+                ? `Hoạt động kinh doanh đang <strong>tạo ra dòng lợi nhuận cốt lõi dương</strong> (EBITDA ${formatCurrency(data.ebitda)}). Phần này sẽ được dùng để trả lãi vay, thuế, tái đầu tư tài sản cố định và tạo lợi nhuận ròng.`
+                : `Hoạt động cốt lõi đang <strong>không tạo ra đủ lợi nhuận</strong>. Doanh nghiệp phải dựa vào nguồn khác (vay thêm, bán tài sản, vốn chủ) để bù đắp, đây là tình trạng không bền vững.`;
+            html += `<div class="ai-item"><h4>💸 2. Tiền đang chảy đi đâu?</h4><p>${flowText}</p></div>`;
+
+            // 3. Đầu tư hay cắt giảm?
+            let actionText;
+            if (data.margin !== null && data.margin >= 18) {
+                actionText = `<strong>Có thể cân nhắc đầu tư mở rộng</strong> vì biên lợi nhuận hoạt động đang tốt. Ưu tiên các dự án giữ vững hoặc nâng cao biên EBITDA.`;
+            } else if (data.ebitda > 0 && (data.margin === null || data.margin >= 8)) {
+                actionText = `<strong>Tập trung tối ưu hoạt động</strong> trước khi mở rộng mạnh. Kiểm soát chi phí vận hành, nâng cao năng suất, cải thiện giá bán hoặc cơ cấu sản phẩm để nâng biên EBITDA.`;
+            } else {
+                actionText = `<strong>Ưu tiên cắt giảm chi phí và cải thiện hiệu quả hoạt động</strong>. Không nên đầu tư mở rộng khi EBITDA yếu hoặc âm. Tập trung vào các biện pháp tăng doanh thu chất lượng và giảm chi phí biến đổi/cố định không cần thiết.`;
+            }
+            html += `<div class="ai-item"><h4>🎯 3. Nên đầu tư hay cắt giảm?</h4><p>${actionText}</p></div>`;
+
+            // 4. Tương lai
+            let forecastText = data.ebitda > 0 && (data.margin === null || data.margin >= 10)
+                ? `Nếu duy trì được EBITDA và biên hiện tại, doanh nghiệp có nền tảng tốt để tăng trưởng, trả nợ và tạo giá trị dài hạn. Việc nâng cao thêm vài điểm % biên EBITDA sẽ tạo ra sự khác biệt lớn về lợi nhuận ròng.`
+                : `Nếu không cải thiện EBITDA, doanh nghiệp sẽ gặp khó khăn trong việc trả lãi vay, tái đầu tư và thu hút vốn. Cần có lộ trình rõ ràng để đưa biên EBITDA lên mức lành mạnh trong các quý tới.`;
+            html += `<div class="ai-item"><h4>🔮 4. Điều gì sẽ xảy ra trong tương lai?</h4><p>${forecastText}</p></div>`;
+
+            // Cảnh báo
+            let alerts = '';
+            if (data.ebitda <= 0) {
+                alerts += `<div class="alert alert-danger"><span>🚨</span><div><strong>Cảnh báo nghiêm trọng:</strong> EBITDA âm. Hoạt động cốt lõi đang lỗ, cần hành động ngay.</div></div>`;
+            } else if (data.margin !== null && data.margin < 6) {
+                alerts += `<div class="alert alert-warning"><span>⚠️</span><div><strong>Cảnh báo:</strong> Biên EBITDA dưới 6% là mức thấp với hầu hết ngành. Cần tối ưu ngay.</div></div>`;
+            }
+            if (data.margin !== null && data.margin >= 20) {
+                alerts += `<div class="alert alert-success"><span>🎉</span><div><strong>Tín hiệu xuất sắc:</strong> Biên EBITDA trên 20% thể hiện lợi thế cạnh tranh và khả năng sinh lời hoạt động rất mạnh.</div></div>`;
+            }
+            document.getElementById('alertBox').innerHTML = alerts;
+            container.innerHTML = html;
+        }
+
+        function renderChart(data) {
+            const ctx = document.getElementById('ebitdaChart').getContext('2d');
+            if (ebitdaChartInstance) ebitdaChartInstance.destroy();
+
+            ebitdaChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Lợi nhuận ròng', 'Lãi vay', 'Thuế', 'Khấu hao (D&A)', 'EBITDA'],
+                    datasets: [{
+                        label: 'Giá trị',
+                        data: [data.netIncome, data.interest, data.taxes, data.da, data.ebitda],
+                        backgroundColor: [
+                            'rgba(14, 165, 233, 0.7)',
+                            'rgba(245, 158, 11, 0.7)',
+                            'rgba(239, 68, 68, 0.7)',
+                            'rgba(139, 92, 246, 0.7)',
+                            data.ebitda >= 0 ? 'rgba(16, 185, 129, 0.8)' : 'rgba(239, 68, 68, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(2, 132, 199)',
+                            'rgb(217, 119, 6)',
+                            'rgb(220, 38, 38)',
+                            'rgb(124, 58, 237)',
+                            data.ebitda >= 0 ? 'rgb(5, 150, 105)' : 'rgb(220, 38, 38)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => formatCurrency(ctx.raw)
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    if (Math.abs(value) >= 1e9) return (value/1e9).toFixed(1) + ' tỷ';
+                                    if (Math.abs(value) >= 1e6) return (value/1e6).toFixed(0) + ' tr';
+                                    return value;
+                                }
+                            },
+                            grid: { color: 'rgba(14, 116, 144, 0.08)' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function saveToLocalStorage() {
+            if (!currentResult) { alert('⚠️ Chưa có dữ liệu để lưu!'); return; }
+            let history = JSON.parse(localStorage.getItem('ceo_ai_ebitda_history') || '[]');
+            history.unshift({ id: Date.now(), ...currentResult });
+            if (history.length > 50) history = history.slice(0, 50);
+            localStorage.setItem('ceo_ai_ebitda_history', JSON.stringify(history));
+            alert('✅ Đã lưu thành công vào bộ nhớ cục bộ (mô phỏng SQLite)!');
+        }
+
+        function viewHistory() {
+            const history = JSON.parse(localStorage.getItem('ceo_ai_ebitda_history') || '[]');
+            if (history.length === 0) { alert('📭 Chưa có dữ liệu nào được lưu.'); return; }
+            const tbody = document.getElementById('historyBody');
+            tbody.innerHTML = history.map(item => `
+                <tr>
+                    <td>${new Date(item.timestamp).toLocaleString('vi-VN')}</td>
+                    <td>${item.period}</td>
+                    <td style="color: ${item.ebitda >= 0 ? '#059669' : '#dc2626'}; font-weight: 600;">
+                        ${formatCurrency(item.ebitda)}
+                    </td>
+                    <td style="font-weight: 600;">
+                        ${item.margin !== null ? item.margin.toFixed(1) + '%' : 'N/A'}
+                    </td>
+                    <td>${formatCurrency(item.netIncome)}</td>
+                    <td>${item.revenue ? formatCurrency(item.revenue) : 'N/A'}</td>
+                </tr>
+            `).join('');
+            document.getElementById('historySection').classList.remove('hidden');
+            document.getElementById('historySection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function exportToExcel() {
+            if (!currentResult) { alert('⚠️ Chưa có dữ liệu để xuất!'); return; }
+            const wb = XLSX.utils.book_new();
+            const data = [
+                ['MODULE 37 – EBITDA & EBITDA MARGIN', ''],
+                ['CEO AI Enterprise', ''],
+                ['', ''],
+                ['Kỳ báo cáo', currentResult.period],
+                ['Thời gian xuất', new Date().toLocaleString('vi-VN')],
+                ['', ''],
+                ['Chỉ tiêu', 'Giá trị'],
+                ['Lợi nhuận ròng (Net Income)', currentResult.netIncome],
+                ['Chi phí lãi vay (Interest)', currentResult.interest],
+                ['Thuế TNDN (Taxes)', currentResult.taxes],
+                ['Khấu hao & Phân bổ (D&A)', currentResult.da],
+                ['EBITDA', currentResult.ebitda],
+                ['Doanh thu (Revenue)', currentResult.revenue || 'Không nhập'],
+                ['Biên EBITDA (%)', currentResult.margin !== null ? currentResult.margin.toFixed(2) : 'N/A'],
+                ['', ''],
+                ['Công thức', 'EBITDA = Net Income + Interest + Taxes + D&A'],
+                ['', ''],
+                ['Ghi chú', 'File được xuất từ Module 37 – CEO AI Enterprise']
+            ];
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            ws['!cols'] = [{ wch: 40 }, { wch: 25 }];
+            XLSX.utils.book_append_sheet(wb, ws, 'EBITDA');
+
+            const history = JSON.parse(localStorage.getItem('ceo_ai_ebitda_history') || '[]');
+            if (history.length > 0) {
+                const histData = [['Thời gian', 'Kỳ', 'EBITDA', 'Biên EBITDA (%)', 'Lợi nhuận ròng', 'Doanh thu']];
+                history.forEach(item => {
+                    histData.push([
+                        new Date(item.timestamp).toLocaleString('vi-VN'),
+                        item.period,
+                        item.ebitda,
+                        item.margin !== null ? item.margin.toFixed(2) : 'N/A',
+                        item.netIncome,
+                        item.revenue || 'N/A'
+                    ]);
+                });
+                const ws2 = XLSX.utils.aoa_to_sheet(histData);
+                ws2['!cols'] = [{ wch: 22 }, { wch: 14 }, { wch: 16 }, { wch: 14 }, { wch: 16 }, { wch: 16 }];
+                XLSX.utils.book_append_sheet(wb, ws2, 'Lịch sử');
+            }
+
+            XLSX.writeFile(wb, `EBITDA_${currentResult.period.replace(/[\/\s]/g, '_')}_${new Date().toISOString().slice(0,10)}.xlsx`);
+        }
+
+        function resetForm() {
+            document.getElementById('netIncome').value = '';
+            document.getElementById('interest').value = '';
+            document.getElementById('taxes').value = '';
+            document.getElementById('da').value = '';
+            document.getElementById('revenue').value = '';
+            document.getElementById('period').value = 'Kỳ hiện tại';
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('historySection').classList.add('hidden');
+            currentResult = null;
+            if (ebitdaChartInstance) {
+                ebitdaChartInstance.destroy();
+                ebitdaChartInstance = null;
+            }
+        }
+    </script>
+</body>
+</html>

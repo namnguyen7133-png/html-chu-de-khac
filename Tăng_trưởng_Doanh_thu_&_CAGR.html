@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 40 - Tăng trưởng Doanh thu & CAGR (Revenue Growth & CAGR) | CEO AI Enterprise</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #047857;
+            --primary-dark: #065f46;
+            --primary-light: #10b981;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #ecfdf5;
+            --card: #ffffff;
+            --text: #064e3b;
+            --border: #a7f3d0;
+            --shadow: 0 10px 25px -5px rgba(4, 120, 87, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 50%, #ecfdf5 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 28px 32px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .header-subtitle { font-size: 0.95rem; opacity: 0.9; margin-top: 4px; }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+        .form-group label { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+        .form-group label .hint { font-weight: 400; color: #64748b; font-size: 0.8rem; }
+
+        .form-group input {
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #f0fdf4;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.15);
+        }
+
+        .btn-group { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(4, 120, 87, 0.3); }
+
+        .btn-secondary { background: #e2e8f0; color: #334155; }
+        .btn-secondary:hover { background: #cbd5e1; }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); }
+
+        .btn-info {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+        }
+        .btn-info:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3); }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--border);
+            transition: transform 0.2s;
+        }
+        .result-card:hover { transform: translateY(-3px); }
+
+        .result-card .label { font-size: 0.85rem; color: #64748b; margin-bottom: 6px; font-weight: 500; }
+        .result-card .value { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
+
+        .result-card.positive .value { color: var(--success); }
+        .result-card.negative .value { color: var(--danger); }
+        .result-card.warning .value { color: var(--warning); }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+        .status-healthy { background: #d1fae5; color: #065f46; }
+        .status-warning { background: #fef3c7; color: #92400e; }
+        .status-danger { background: #fee2e2; color: #991b1b; }
+
+        .ai-section {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-left: 5px solid var(--primary);
+        }
+
+        .ai-content { display: grid; gap: 16px; }
+
+        .ai-item {
+            background: white;
+            padding: 16px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .ai-item h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-item p { color: #334155; font-size: 0.95rem; }
+
+        .chart-container { position: relative; height: 320px; margin-top: 10px; }
+
+        .alert {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .alert-info { background: #f0f9ff; border: 1px solid #bae6fd; color: #0c4a6e; }
+        .alert-warning { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+        .alert-danger { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+        .alert-success { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; }
+
+        .formula-box {
+            background: #f0fdf4;
+            border: 1px dashed var(--primary);
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--primary-dark);
+            line-height: 1.8;
+        }
+
+        .benchmark-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+        .benchmark-table th, .benchmark-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .benchmark-table th { background: #ecfdf5; font-weight: 600; color: var(--primary); }
+        .benchmark-table tr:hover { background: #f0fdf4; }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+        .history-table th, .history-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .history-table th { background: #ecfdf5; font-weight: 600; color: var(--primary); }
+        .history-table tr:hover { background: #f0fdf4; }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.2rem; }
+            .result-card .value { font-size: 1.2rem; }
+            .btn { width: 100%; justify-content: center; }
+        }
+
+        .hidden { display: none; }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 20px 0 12px;
+            padding-left: 8px;
+            border-left: 3px solid var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <div>
+                <h1>
+                    <span>📊</span>
+                    Module 40 – Tăng trưởng Doanh thu & CAGR
+                </h1>
+                <div class="header-subtitle">Revenue Growth & Compound Annual Growth Rate – Đo lường tốc độ tăng trưởng doanh thu theo thời gian</div>
+            </div>
+            <div class="badge">CEO AI Enterprise • Module độc lập</div>
+        </header>
+
+        <!-- GIẢI THÍCH -->
+        <div class="card">
+            <div class="card-title">📖 Tăng trưởng Doanh thu & CAGR là gì?</div>
+            <p style="margin-bottom: 12px;">
+                <strong>Tốc độ tăng trưởng doanh thu (Revenue Growth Rate)</strong> cho biết doanh thu kỳ này tăng/giảm bao nhiêu % so với kỳ trước.<br>
+                <strong>CAGR (Compound Annual Growth Rate)</strong> là tốc độ tăng trưởng kép trung bình hàng năm trong một khoảng thời gian dài.
+            </p>
+            <div class="formula-box">
+                Growth Rate = (Doanh thu kỳ này − Doanh thu kỳ trước) ÷ Doanh thu kỳ trước × 100%<br>
+                CAGR = (Doanh thu cuối kỳ ÷ Doanh thu đầu kỳ) ^ (1 ÷ Số năm) − 1
+            </div>
+            <div class="alert alert-info">
+                <span>💡</span>
+                <div>
+                    <strong>Ý nghĩa với CEO:</strong> Tăng trưởng doanh thu là chỉ số hàng đầu để đánh giá sức khỏe kinh doanh và tiềm năng mở rộng. CAGR giúp nhìn nhận tăng trưởng dài hạn một cách công bằng.
+                </div>
+            </div>
+        </div>
+
+        <!-- FORM -->
+        <div class="card">
+            <div class="card-title">📥 Nhập dữ liệu</div>
+            
+            <div class="section-label">Tăng trưởng kỳ này so với kỳ trước</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Doanh thu kỳ này
+                        <span class="hint">– Current Period Revenue</span>
+                    </label>
+                    <input type="number" id="revCurrent" placeholder="Ví dụ: 18500000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Doanh thu kỳ trước
+                        <span class="hint">– Previous Period Revenue</span>
+                    </label>
+                    <input type="number" id="revPrevious" placeholder="Ví dụ: 15200000000" step="any">
+                </div>
+            </div>
+
+            <div class="section-label">CAGR (Tăng trưởng kép dài hạn) – Tùy chọn</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Doanh thu đầu kỳ (cách đây N năm)
+                        <span class="hint">– Beginning Revenue</span>
+                    </label>
+                    <input type="number" id="revBegin" placeholder="Ví dụ: 8000000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Doanh thu cuối kỳ (hiện tại)
+                        <span class="hint">– Ending Revenue</span>
+                    </label>
+                    <input type="number" id="revEnd" placeholder="Ví dụ: 18500000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Số năm
+                        <span class="hint">– Number of Years</span>
+                    </label>
+                    <input type="number" id="years" placeholder="Ví dụ: 3" step="any" value="3">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Kỳ báo cáo
+                        <span class="hint">– Tháng / Quý / Năm</span>
+                    </label>
+                    <input type="text" id="period" placeholder="Ví dụ: Năm 2025" value="Kỳ hiện tại">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="calculateGrowth()">
+                    <span>🧮</span> Tính toán Tăng trưởng
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <span>🔄</span> Làm mới
+                </button>
+            </div>
+        </div>
+
+        <!-- KẾT QUẢ -->
+        <div id="resultSection" class="hidden">
+            <div class="card">
+                <div class="card-title">📊 Kết quả tính toán</div>
+                
+                <div id="statusBadge" class="status-badge"></div>
+
+                <div class="result-grid">
+                    <div class="result-card" id="growthCard">
+                        <div class="label">Tăng trưởng kỳ này</div>
+                        <div class="value" id="growthValue">—</div>
+                    </div>
+                    <div class="result-card" id="cagrCard">
+                        <div class="label">CAGR</div>
+                        <div class="value" id="cagrValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Doanh thu kỳ này</div>
+                        <div class="value" id="revCurValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Doanh thu kỳ trước</div>
+                        <div class="value" id="revPrevValue">—</div>
+                    </div>
+                </div>
+
+                <div class="formula-box" id="formulaDetail"></div>
+
+                <h4 style="margin: 20px 0 10px; color: var(--primary);">📌 Tham chiếu mức tăng trưởng phổ biến</h4>
+                <table class="benchmark-table">
+                    <thead>
+                        <tr>
+                            <th>Mức tăng trưởng</th>
+                            <th>Đánh giá</th>
+                            <th>Ý nghĩa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>&gt; 30%</td>
+                            <td style="color:#059669;font-weight:600;">Tăng trưởng nóng</td>
+                            <td>Rất tích cực, cần kiểm soát chất lượng tăng trưởng</td>
+                        </tr>
+                        <tr>
+                            <td>15% – 30%</td>
+                            <td style="color:#059669;font-weight:600;">Tăng trưởng tốt</td>
+                            <td>Mức lý tưởng với hầu hết doanh nghiệp vừa và nhỏ</td>
+                        </tr>
+                        <tr>
+                            <td>5% – 15%</td>
+                            <td style="color:#d97706;font-weight:600;">Tăng trưởng ổn định</td>
+                            <td>Ổn định, phù hợp doanh nghiệp đã trưởng thành</td>
+                        </tr>
+                        <tr>
+                            <td>0% – 5%</td>
+                            <td style="color:#d97706;font-weight:600;">Tăng trưởng chậm</td>
+                            <td>Cần tìm động lực tăng trưởng mới</td>
+                        </tr>
+                        <tr>
+                            <td>&lt; 0%</td>
+                            <td style="color:#dc2626;font-weight:600;">Suy giảm</td>
+                            <td>Cảnh báo – Cần hành động ngay</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📈 Biểu đồ Doanh thu & Tăng trưởng</div>
+                <div class="chart-container">
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+
+            <div id="alertBox"></div>
+
+            <div class="card ai-section">
+                <div class="card-title">🤖 Phân tích AI & Khuyến nghị</div>
+                <div class="ai-content" id="aiContent"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💾 Lưu trữ & Xuất dữ liệu</div>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="saveToLocalStorage()">
+                        <span>💾</span> Lưu vào SQLite (Local)
+                    </button>
+                    <button class="btn btn-info" onclick="exportToExcel()">
+                        <span>📥</span> Xuất Excel
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewHistory()">
+                        <span>📋</span> Xem lịch sử đã lưu
+                    </button>
+                </div>
+
+                <div id="historySection" class="hidden" style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 10px; color: var(--primary);">Lịch sử tính toán đã lưu</h4>
+                    <div style="overflow-x: auto;">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Kỳ</th>
+                                    <th>Tăng trưởng</th>
+                                    <th>CAGR</th>
+                                    <th>DT kỳ này</th>
+                                    <th>DT kỳ trước</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            CEO AI Enterprise • Module 40 – Tăng trưởng Doanh thu & CAGR (Revenue Growth & CAGR) • Có thể chạy độc lập • Sẵn sàng kết nối Python + SQLite
+        </div>
+    </div>
+
+    <script>
+        /**
+         * =====================================================
+         * MODULE 40 – TĂNG TRƯỞNG DOANH THU & CAGR
+         * Revenue Growth Rate & Compound Annual Growth Rate
+         * CEO AI Enterprise
+         * =====================================================
+         * 
+         * Công thức:
+         * Growth Rate = (Rev_t - Rev_t-1) / Rev_t-1 × 100%
+         * CAGR = (Rev_end / Rev_begin) ^ (1/n) - 1
+         */
+
+        let currentResult = null;
+        let growthChartInstance = null;
+
+        function formatCurrency(value) {
+            if (value === null || value === undefined || isNaN(value)) return '—';
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        function calculateGrowth() {
+            const revCurrent = parseFloat(document.getElementById('revCurrent').value);
+            const revPrevious = parseFloat(document.getElementById('revPrevious').value);
+            const revBegin = parseFloat(document.getElementById('revBegin').value);
+            const revEnd = parseFloat(document.getElementById('revEnd').value);
+            const years = parseFloat(document.getElementById('years').value) || 0;
+            const period = document.getElementById('period').value.trim() || 'Kỳ hiện tại';
+
+            if (isNaN(revCurrent) || isNaN(revPrevious)) {
+                alert('⚠️ Vui lòng nhập đầy đủ Doanh thu kỳ này và kỳ trước!');
+                return;
+            }
+
+            if (revPrevious <= 0) {
+                alert('⚠️ Doanh thu kỳ trước phải lớn hơn 0!');
+                return;
+            }
+
+            const growthRate = ((revCurrent - revPrevious) / revPrevious) * 100;
+
+            let cagr = null;
+            if (!isNaN(revBegin) && !isNaN(revEnd) && years > 0 && revBegin > 0) {
+                cagr = (Math.pow(revEnd / revBegin, 1 / years) - 1) * 100;
+            }
+
+            currentResult = {
+                period,
+                revCurrent,
+                revPrevious,
+                revBegin: isNaN(revBegin) ? null : revBegin,
+                revEnd: isNaN(revEnd) ? null : revEnd,
+                years: years > 0 ? years : null,
+                growthRate,
+                cagr,
+                timestamp: new Date().toISOString()
+            };
+
+            displayResults(currentResult);
+            generateAIAnalysis(currentResult);
+            renderChart(currentResult);
+
+            document.getElementById('resultSection').classList.remove('hidden');
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function displayResults(data) {
+            const sign = data.growthRate >= 0 ? '+' : '';
+            document.getElementById('growthValue').textContent = sign + data.growthRate.toFixed(1) + '%';
+            document.getElementById('cagrValue').textContent = data.cagr !== null ? data.cagr.toFixed(1) + '%' : 'N/A';
+            document.getElementById('revCurValue').textContent = formatCurrency(data.revCurrent);
+            document.getElementById('revPrevValue').textContent = formatCurrency(data.revPrevious);
+
+            const growthCard = document.getElementById('growthCard');
+            growthCard.classList.remove('positive', 'negative', 'warning');
+            if (data.growthRate >= 15) growthCard.classList.add('positive');
+            else if (data.growthRate >= 5) growthCard.classList.add('warning');
+            else growthCard.classList.add('negative');
+
+            const cagrCard = document.getElementById('cagrCard');
+            cagrCard.classList.remove('positive', 'negative', 'warning');
+            if (data.cagr !== null) {
+                if (data.cagr >= 15) cagrCard.classList.add('positive');
+                else if (data.cagr >= 5) cagrCard.classList.add('warning');
+                else cagrCard.classList.add('negative');
+            }
+
+            const badge = document.getElementById('statusBadge');
+            if (data.growthRate >= 20) {
+                badge.className = 'status-badge status-healthy';
+                badge.textContent = '🟢 Tăng trưởng mạnh – Doanh thu đang mở rộng tốt';
+            } else if (data.growthRate >= 10) {
+                badge.className = 'status-badge status-healthy';
+                badge.textContent = '🟢 Tăng trưởng tốt – Đà phát triển tích cực';
+            } else if (data.growthRate >= 0) {
+                badge.className = 'status-badge status-warning';
+                badge.textContent = '🟡 Tăng trưởng chậm hoặc đi ngang – Cần tìm động lực mới';
+            } else {
+                badge.className = 'status-badge status-danger';
+                badge.textContent = '🔴 Doanh thu suy giảm – Cần hành động ngay';
+            }
+
+            let formulaHtml = `
+                Growth Rate = (${formatCurrency(data.revCurrent)} − ${formatCurrency(data.revPrevious)}) ÷ ${formatCurrency(data.revPrevious)} × 100% = <strong>${sign}${data.growthRate.toFixed(2)}%</strong>
+            `;
+            if (data.cagr !== null) {
+                formulaHtml += `<br>CAGR = (${formatCurrency(data.revEnd)} ÷ ${formatCurrency(data.revBegin)}) ^ (1/${data.years}) − 1 = <strong>${data.cagr.toFixed(2)}%</strong>`;
+            }
+            document.getElementById('formulaDetail').innerHTML = formulaHtml;
+        }
+
+        function generateAIAnalysis(data) {
+            const container = document.getElementById('aiContent');
+            let html = '';
+
+            // 1. Khỏe hay yếu?
+            let healthIcon, healthText;
+            if (data.growthRate >= 15) {
+                healthIcon = '✅';
+                healthText = `Doanh nghiệp đang <strong>khỏe về tăng trưởng doanh thu</strong>. Tốc độ ${data.growthRate.toFixed(1)}% cho thấy thị trường đang đón nhận tốt và đội ngũ kinh doanh đang hoạt động hiệu quả.`;
+            } else if (data.growthRate >= 5) {
+                healthIcon = '⚠️';
+                healthText = `Tăng trưởng ở mức <strong>ổn định nhưng chưa đột phá</strong> (${data.growthRate.toFixed(1)}%). Doanh nghiệp đang duy trì được quy mô, nhưng cần tìm thêm động lực để tăng tốc nếu muốn mở rộng mạnh.`;
+            } else if (data.growthRate >= 0) {
+                healthIcon = '⚠️';
+                healthText = `Doanh thu gần như <strong>đi ngang</strong> (${data.growthRate.toFixed(1)}%). Đây có thể là dấu hiệu thị trường bão hòa hoặc cạnh tranh gia tăng. Cần có chiến lược mới.`;
+            } else {
+                healthIcon = '🚨';
+                healthText = `Doanh thu đang <strong>suy giảm</strong> (${data.growthRate.toFixed(1)}%). Đây là tín hiệu cảnh báo rõ ràng về sức khỏe kinh doanh, cần rà soát nguyên nhân ngay (sản phẩm, giá, kênh, đối thủ…).`;
+            }
+            html += `<div class="ai-item"><h4>${healthIcon} 1. Doanh nghiệp đang khỏe hay yếu?</h4><p>${healthText}</p></div>`;
+
+            // 2. Tiền chảy đi đâu?
+            let flowText = data.growthRate > 0
+                ? `Doanh thu tăng đồng nghĩa với <strong>dòng tiền từ khách hàng đang cải thiện</strong>. Tuy nhiên cần đối chiếu với chi phí để xem lợi nhuận và dòng tiền thực có tăng tương ứng hay không.`
+                : `Doanh thu giảm sẽ trực tiếp làm <strong>thu hẹp dòng tiền vào</strong>. Nếu chi phí không giảm tương ứng, doanh nghiệp sẽ nhanh chóng gặp áp lực về lợi nhuận và thanh khoản.`;
+            html += `<div class="ai-item"><h4>💸 2. Tiền đang chảy đi đâu?</h4><p>${flowText}</p></div>`;
+
+            // 3. Đầu tư hay cắt giảm?
+            let actionText;
+            if (data.growthRate >= 15) {
+                actionText = `<strong>Có thể tăng đầu tư</strong> vào marketing, bán hàng và mở rộng năng lực để tận dụng đà tăng trưởng. Ưu tiên các kênh/sản phẩm đang đóng góp nhiều nhất vào tăng trưởng.`;
+            } else if (data.growthRate >= 5) {
+                actionText = `<strong>Duy trì đầu tư có chọn lọc</strong> và tập trung vào các sáng kiến tăng trưởng (sản phẩm mới, thị trường mới, cải thiện chuyển đổi). Tránh cắt giảm mạnh các hoạt động tạo doanh thu.`;
+            } else {
+                actionText = `<strong>Cần hành động quyết liệt</strong>: rà soát danh mục sản phẩm, chính sách giá, kênh phân phối và hiệu quả đội ngũ bán hàng. Có thể phải cắt giảm chi phí đồng thời với việc tìm kiếm nguồn tăng trưởng mới.`;
+            }
+            html += `<div class="ai-item"><h4>🎯 3. Nên đầu tư hay cắt giảm?</h4><p>${actionText}</p></div>`;
+
+            // 4. Tương lai
+            let forecastText = data.growthRate >= 10
+                ? `Nếu duy trì được tốc độ tăng trưởng hiện tại, doanh nghiệp sẽ tiếp tục mở rộng quy mô và tạo nền tảng vững chắc cho lợi nhuận dài hạn. CAGR ${data.cagr !== null ? data.cagr.toFixed(1) + '%' : 'tốt'} càng củng cố triển vọng tích cực.`
+                : `Nếu không đảo chiều được đà tăng trưởng, doanh nghiệp có nguy cơ mất thị phần và bị đối thủ bỏ xa. Cần có kế hoạch rõ ràng để phục hồi tăng trưởng trong 2–4 quý tới.`;
+            html += `<div class="ai-item"><h4>🔮 4. Điều gì sẽ xảy ra trong tương lai?</h4><p>${forecastText}</p></div>`;
+
+            // Cảnh báo
+            let alerts = '';
+            if (data.growthRate < 0) {
+                alerts += `<div class="alert alert-danger"><span>🚨</span><div><strong>Cảnh báo:</strong> Doanh thu đang giảm. Cần phân tích ngay nguyên nhân và đưa ra biện pháp khắc phục.</div></div>`;
+            } else if (data.growthRate < 5) {
+                alerts += `<div class="alert alert-warning"><span>⚠️</span><div><strong>Lưu ý:</strong> Tăng trưởng dưới 5%. Nên tìm kiếm động lực tăng trưởng mới để tránh bị tụt lại.</div></div>`;
+            }
+            if (data.growthRate >= 20) {
+                alerts += `<div class="alert alert-success"><span>🎉</span><div><strong>Tín hiệu tốt:</strong> Tăng trưởng trên 20% là mức rất tích cực. Hãy đảm bảo chất lượng tăng trưởng (lợi nhuận và dòng tiền cũng tăng theo).</div></div>`;
+            }
+            document.getElementById('alertBox').innerHTML = alerts;
+            container.innerHTML = html;
+        }
+
+        function renderChart(data) {
+            const ctx = document.getElementById('growthChart').getContext('2d');
+            if (growthChartInstance) growthChartInstance.destroy();
+
+            growthChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Doanh thu kỳ trước', 'Doanh thu kỳ này', 'Tăng trưởng (%)'],
+                    datasets: [{
+                        label: 'Giá trị',
+                        data: [data.revPrevious, data.revCurrent, data.growthRate],
+                        backgroundColor: [
+                            'rgba(100, 116, 139, 0.7)',
+                            data.growthRate >= 0 ? 'rgba(16, 185, 129, 0.8)' : 'rgba(239, 68, 68, 0.8)',
+                            data.growthRate >= 15 ? 'rgba(16, 185, 129, 0.8)' : data.growthRate >= 0 ? 'rgba(245, 158, 11, 0.8)' : 'rgba(239, 68, 68, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(71, 85, 105)',
+                            data.growthRate >= 0 ? 'rgb(5, 150, 105)' : 'rgb(220, 38, 38)',
+                            data.growthRate >= 15 ? 'rgb(5, 150, 105)' : data.growthRate >= 0 ? 'rgb(217, 119, 6)' : 'rgb(220, 38, 38)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        barPercentage: 0.55
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(ctx) {
+                                    if (ctx.dataIndex === 2) return ctx.raw.toFixed(1) + '%';
+                                    return formatCurrency(ctx.raw);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(4, 120, 87, 0.08)' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function saveToLocalStorage() {
+            if (!currentResult) { alert('⚠️ Chưa có dữ liệu để lưu!'); return; }
+            let history = JSON.parse(localStorage.getItem('ceo_ai_growth_history') || '[]');
+            history.unshift({ id: Date.now(), ...currentResult });
+            if (history.length > 50) history = history.slice(0, 50);
+            localStorage.setItem('ceo_ai_growth_history', JSON.stringify(history));
+            alert('✅ Đã lưu thành công vào bộ nhớ cục bộ (mô phỏng SQLite)!');
+        }
+
+        function viewHistory() {
+            const history = JSON.parse(localStorage.getItem('ceo_ai_growth_history') || '[]');
+            if (history.length === 0) { alert('📭 Chưa có dữ liệu nào được lưu.'); return; }
+            const tbody = document.getElementById('historyBody');
+            tbody.innerHTML = history.map(item => `
+                <tr>
+                    <td>${new Date(item.timestamp).toLocaleString('vi-VN')}</td>
+                    <td>${item.period}</td>
+                    <td style="color: ${item.growthRate >= 10 ? '#059669' : item.growthRate >= 0 ? '#d97706' : '#dc2626'}; font-weight: 600;">
+                        ${item.growthRate >= 0 ? '+' : ''}${item.growthRate.toFixed(1)}%
+                    </td>
+                    <td>${item.cagr !== null ? item.cagr.toFixed(1) + '%' : 'N/A'}</td>
+                    <td>${formatCurrency(item.revCurrent)}</td>
+                    <td>${formatCurrency(item.revPrevious)}</td>
+                </tr>
+            `).join('');
+            document.getElementById('historySection').classList.remove('hidden');
+            document.getElementById('historySection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function exportToExcel() {
+            if (!currentResult) { alert('⚠️ Chưa có dữ liệu để xuất!'); return; }
+            const wb = XLSX.utils.book_new();
+            const data = [
+                ['MODULE 40 – TĂNG TRƯỞNG DOANH THU & CAGR', ''],
+                ['CEO AI Enterprise', ''],
+                ['', ''],
+                ['Kỳ báo cáo', currentResult.period],
+                ['Thời gian xuất', new Date().toLocaleString('vi-VN')],
+                ['', ''],
+                ['Chỉ tiêu', 'Giá trị'],
+                ['Doanh thu kỳ này', currentResult.revCurrent],
+                ['Doanh thu kỳ trước', currentResult.revPrevious],
+                ['Tốc độ tăng trưởng (%)', currentResult.growthRate.toFixed(2)],
+                ['Doanh thu đầu kỳ (CAGR)', currentResult.revBegin || 'Không nhập'],
+                ['Doanh thu cuối kỳ (CAGR)', currentResult.revEnd || 'Không nhập'],
+                ['Số năm', currentResult.years || 'Không nhập'],
+                ['CAGR (%)', currentResult.cagr !== null ? currentResult.cagr.toFixed(2) : 'N/A'],
+                ['', ''],
+                ['Công thức Growth', '(DT kỳ này - DT kỳ trước) / DT kỳ trước × 100%'],
+                ['Công thức CAGR', '(DT cuối / DT đầu) ^ (1/n) - 1'],
+                ['', ''],
+                ['Ghi chú', 'File được xuất từ Module 40 – CEO AI Enterprise']
+            ];
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            ws['!cols'] = [{ wch: 40 }, { wch: 25 }];
+            XLSX.utils.book_append_sheet(wb, ws, 'Revenue_Growth');
+
+            const history = JSON.parse(localStorage.getItem('ceo_ai_growth_history') || '[]');
+            if (history.length > 0) {
+                const histData = [['Thời gian', 'Kỳ', 'Tăng trưởng (%)', 'CAGR (%)', 'DT kỳ này', 'DT kỳ trước']];
+                history.forEach(item => {
+                    histData.push([
+                        new Date(item.timestamp).toLocaleString('vi-VN'),
+                        item.period,
+                        item.growthRate.toFixed(2),
+                        item.cagr !== null ? item.cagr.toFixed(2) : 'N/A',
+                        item.revCurrent,
+                        item.revPrevious
+                    ]);
+                });
+                const ws2 = XLSX.utils.aoa_to_sheet(histData);
+                ws2['!cols'] = [{ wch: 22 }, { wch: 14 }, { wch: 14 }, { wch: 12 }, { wch: 16 }, { wch: 16 }];
+                XLSX.utils.book_append_sheet(wb, ws2, 'Lịch sử');
+            }
+
+            XLSX.writeFile(wb, `RevenueGrowth_${currentResult.period.replace(/[\/\s]/g, '_')}_${new Date().toISOString().slice(0,10)}.xlsx`);
+        }
+
+        function resetForm() {
+            document.getElementById('revCurrent').value = '';
+            document.getElementById('revPrevious').value = '';
+            document.getElementById('revBegin').value = '';
+            document.getElementById('revEnd').value = '';
+            document.getElementById('years').value = '3';
+            document.getElementById('period').value = 'Kỳ hiện tại';
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('historySection').classList.add('hidden');
+            currentResult = null;
+            if (growthChartInstance) {
+                growthChartInstance.destroy();
+                growthChartInstance = null;
+            }
+        }
+    </script>
+</body>
+</html>

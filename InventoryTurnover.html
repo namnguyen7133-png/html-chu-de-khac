@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Module 24 - Dự báo Doanh thu 3 tháng</title>
+    <!-- Chart.js v3 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js">
+    </script>
+    <style>
+        /* ---------- RESET & FONTS ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #f4f7fc;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .module-container {
+            max-width: 1300px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.08);
+            padding: 40px 35px 45px;
+            transition: all 0.2s;
+        }
+
+        /* ---------- HEADER ---------- */
+        .module-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eef3f8;
+            padding-bottom: 20px;
+        }
+
+        .module-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0b1e33;
+            letter-spacing: -0.3px;
+        }
+
+        .module-header h1 span {
+            background: #0b1e33;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 40px;
+            margin-left: 14px;
+            letter-spacing: 0.3px;
+        }
+
+        .module-badge {
+            background: #eaf2ff;
+            color: #1a5cff;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* ---------- GRID LAYOUT ---------- */
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .row-full {
+            grid-column: 1 / -1;
+        }
+
+        /* ---------- CARDS ---------- */
+        .card {
+            background: #fafcff;
+            border-radius: 24px;
+            padding: 24px 26px 28px;
+            border: 1px solid #eef3f8;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            transition: 0.15s;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #2c3e50;
+            letter-spacing: 0.3px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title i {
+            font-style: normal;
+            background: #eef3f8;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            color: #4a5b6e;
+        }
+
+        /* ---------- FORM ---------- */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            font-weight: 500;
+            font-size: 14px;
+            color: #1f2a3a;
+        }
+
+        .input-group .hint {
+            font-size: 12px;
+            color: #7a8a9e;
+            margin-top: -2px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .input-row .input-group {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #dde6ef;
+            border-radius: 16px;
+            font-size: 15px;
+            background: #ffffff;
+            transition: 0.2s;
+            outline: none;
+            color: #0b1e33;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #1a5cff;
+            box-shadow: 0 0 0 4px rgba(26, 92, 255, 0.08);
+        }
+
+        .btn {
+            background: #0b1e33;
+            color: #fff;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #1a5cff;
+        }
+
+        .btn-primary:hover {
+            background: #0f47cc;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(26, 92, 255, 0.25);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #1a5cff;
+            border: 1.5px solid #1a5cff;
+        }
+
+        .btn-outline:hover {
+            background: #f0f5ff;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        /* ---------- AI BOX ---------- */
+        .ai-box {
+            background: #f0f7fe;
+            border-radius: 20px;
+            padding: 20px 24px;
+            border-left: 6px solid #1a5cff;
+            margin-top: 16px;
+        }
+
+        .ai-box h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0b1e33;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .ai-box p {
+            font-size: 14.5px;
+            line-height: 1.6;
+            color: #1f2a3a;
+            margin-bottom: 6px;
+        }
+
+        .ai-box .label {
+            font-weight: 600;
+            color: #0b1e33;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .tag-green {
+            background: #d4f0e0;
+            color: #0e6b3e;
+        }
+
+        .tag-yellow {
+            background: #fff1cf;
+            color: #9e6f0a;
+        }
+
+        .tag-red {
+            background: #fde2e2;
+            color: #b91c1c;
+        }
+
+        .tag-blue {
+            background: #dce7ff;
+            color: #1a5cff;
+        }
+
+        /* ---------- CHART WRAPPER ---------- */
+        .chart-wrapper {
+            position: relative;
+            height: 240px;
+            margin-top: 6px;
+        }
+
+        /* ---------- TABLE ---------- */
+        .table-wrap {
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 8px 8px 0;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 2px solid #e2eaf2;
+        }
+
+        td {
+            padding: 10px 8px 10px 0;
+            border-bottom: 1px solid #edf2f7;
+            color: #1f2a3a;
+        }
+
+        td:last-child,
+        th:last-child {
+            text-align: right;
+        }
+
+        .highlight-row {
+            background: #f8faff;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 820px) {
+            .row {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .module-container {
+                padding: 24px 16px;
+            }
+            .module-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+
+        /* ---------- STATUS BAR ---------- */
+        .status-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 40px;
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 16px 24px;
+            margin-top: 20px;
+            border: 1px solid #eef3f8;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .status-item .num {
+            font-weight: 700;
+            font-size: 20px;
+            color: #0b1e33;
+        }
+
+        .status-item .lbl {
+            font-size: 14px;
+            color: #5b6f84;
+        }
+
+        /* ---------- SCROLLBAR ---------- */
+        ::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0f4fa;
+            border-radius: 12px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd8e6;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="module-container" id="app">
+
+        <!-- ===== HEADER ===== -->
+        <div class="module-header">
+            <div>
+                <h1>
+                    📈 Dự báo Doanh thu 3 tháng
+                    <span>24</span>
+                </h1>
+                <div style="font-size:14px; color:#5b6f84; margin-top:6px;">
+                    Dự báo doanh thu ngắn hạn dựa trên dữ liệu lịch sử và tăng trưởng kỳ vọng
+                </div>
+            </div>
+            <div class="module-badge">⚡ AI + SQLite sẵn sàng</div>
+        </div>
+
+        <!-- ===== ROW 1: NHẬP LIỆU ===== -->
+        <div class="row">
+            <!-- Cột trái: dữ liệu lịch sử -->
+            <div class="card">
+                <div class="card-title">
+                    📊 Dữ liệu lịch sử
+                    <i>3 tháng gần nhất</i>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Tháng 1 (triệu VNĐ)</label>
+                        <input type="number" id="hist1" value="850" step="10" />
+                    </div>
+                    <div class="input-group">
+                        <label>Tháng 2</label>
+                        <input type="number" id="hist2" value="920" step="10" />
+                    </div>
+                    <div class="input-group">
+                        <label>Tháng 3</label>
+                        <input type="number" id="hist3" value="1010" step="10" />
+                    </div>
+                </div>
+
+                <div style="margin-top:6px; font-size:13px; color:#7a8a9e;">
+                    ⚡ Nhập doanh thu thực tế của 3 tháng gần nhất.
+                </div>
+            </div>
+
+            <!-- Cột phải: tham số dự báo -->
+            <div class="card">
+                <div class="card-title">
+                    🎯 Tham số dự báo
+                    <i>kỳ vọng</i>
+                </div>
+
+                <div class="input-group">
+                    <label>Tăng trưởng kỳ vọng hàng tháng (%)</label>
+                    <input type="number" id="growthRate" value="8.5" step="0.5" />
+                    <div class="hint">Dựa trên kế hoạch kinh doanh hoặc xu hướng</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Độ tin cậy (hệ số điều chỉnh)</label>
+                    <select id="confidence">
+                        <option value="0.7">Thận trọng (0.7)</option>
+                        <option value="1.0" selected>Trung bình (1.0)</option>
+                        <option value="1.3">Lạc quan (1.3)</option>
+                    </select>
+                    <div class="hint">Điều chỉnh mức độ rủi ro trong dự báo</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ROW 2: NÚT & KẾT QUẢ CHÍNH ===== -->
+        <div class="row row-full">
+            <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;">
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btnForecast">🔮 Dự báo</button>
+                    <button class="btn btn-outline" id="btnSaveSQLite">💾 Lưu SQLite</button>
+                    <button class="btn btn-outline" id="btnExportExcel">📥 Xuất Excel</button>
+                </div>
+                <div style="font-size:13px; color:#7a8a9e; background:#f4f7fc; padding:6px 18px; border-radius:40px;">
+                    Module 24 · Dự báo 3 tháng
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== STATUS BAR ===== -->
+        <div class="status-bar" id="statusBar">
+            <div class="status-item">
+                <span class="lbl">Doanh thu T3 (gần nhất)</span>
+                <span class="num" id="lastRevenue">1.010</span>
+                <span class="lbl">tr VNĐ</span>
+            </div>
+            <div class="status-item">
+                <span class="lbl">Tăng trưởng TB</span>
+                <span class="num" id="avgGrowth">9,1</span>
+                <span class="lbl">%</span>
+            </div>
+            <div class="status-item">
+                <span class="lbl">Dự báo T4</span>
+                <span class="num" id="forecastM1">1.096</span>
+                <span class="lbl">tr VNĐ</span>
+            </div>
+            <div class="status-item">
+                <span class="lbl">Tổng Q (3 tháng tới)</span>
+                <span class="num" id="totalQuarter">3.468</span>
+                <span class="lbl">tr VNĐ</span>
+            </div>
+        </div>
+
+        <!-- ===== ROW 3: BIỂU ĐỒ + BẢNG ===== -->
+        <div class="row">
+            <!-- Biểu đồ -->
+            <div class="card">
+                <div class="card-title">
+                    📉 Xu hướng & Dự báo
+                    <i>Lịch sử + Dự báo</i>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="forecastChart"></canvas>
+                </div>
+                <div style="margin-top:12px; font-size:13px; color:#5b6f84; display:flex; gap:18px; flex-wrap:wrap;">
+                    <span>🔵 Lịch sử</span>
+                    <span>🟠 Dự báo</span>
+                    <span>🟢 Trung bình</span>
+                </div>
+            </div>
+
+            <!-- Bảng chi tiết + AI -->
+            <div class="card">
+                <div class="card-title">
+                    📋 Dự báo chi tiết
+                    <i>3 tháng</i>
+                </div>
+                <div class="table-wrap">
+                    <table id="forecastTable">
+                        <thead>
+                            <tr>
+                                <th>Tháng</th>
+                                <th>Doanh thu (tr VNĐ)</th>
+                                <th>Tăng trưởng</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- JavaScript sẽ điền -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- AI NHẬN XÉT -->
+                <div class="ai-box" id="aiBox">
+                    <h4>🧠 AI Nhận xét & Khuyến nghị</h4>
+                    <div id="aiContent">
+                        <p><span class="label">Trạng thái:</span> <span class="tag tag-green">Tích cực</span></p>
+                        <p>Doanh thu dự báo tăng trưởng ổn định. Duy trì đà này và tối ưu chi phí bán hàng.</p>
+                        <p><span class="label">Khuyến nghị:</span> Tiếp tục đầu tư vào kênh bán hàng hiệu quả.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <div style="margin-top:28px; border-top:1px solid #eef3f8; padding-top:22px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:14px; color:#7a8a9e;">
+            <div>© CEO AI Enterprise · Module 24 · Dự báo doanh thu 3 tháng</div>
+            <div>⚡ Dữ liệu lưu trữ SQLite · Xuất Excel · Tích hợp Dashboard</div>
+        </div>
+
+    </div>
+
+    <script>
+        // ================================================================
+        // MODULE 24 – DỰ BÁO DOANH THU 3 THÁNG
+        // Toàn bộ logic: tính toán, biểu đồ, AI, SQLite, Excel
+        // ================================================================
+
+        (function() {
+            'use strict';
+
+            // ---------- DOM refs ----------
+            const hist1 = document.getElementById('hist1');
+            const hist2 = document.getElementById('hist2');
+            const hist3 = document.getElementById('hist3');
+            const growthRate = document.getElementById('growthRate');
+            const confidence = document.getElementById('confidence');
+            const btnForecast = document.getElementById('btnForecast');
+            const btnSaveSQLite = document.getElementById('btnSaveSQLite');
+            const btnExportExcel = document.getElementById('btnExportExcel');
+
+            const lastRevenue = document.getElementById('lastRevenue');
+            const avgGrowth = document.getElementById('avgGrowth');
+            const forecastM1 = document.getElementById('forecastM1');
+            const totalQuarter = document.getElementById('totalQuarter');
+
+            const tableBody = document.getElementById('tableBody');
+            const aiContent = document.getElementById('aiContent');
+
+            let chartInstance = null;
+
+            // ---------- Hàm chính: dự báo ----------
+            function runForecast() {
+                // 1. Đọc dữ liệu
+                const h1 = parseFloat(hist1.value) || 0;
+                const h2 = parseFloat(hist2.value) || 0;
+                const h3 = parseFloat(hist3.value) || 0;
+                const growth = parseFloat(growthRate.value) || 0;
+                const conf = parseFloat(confidence.value) || 1.0;
+
+                const history = [h1, h2, h3];
+
+                // 2. Tính tăng trưởng trung bình từ lịch sử
+                let growthRates = [];
+                if (h1 > 0 && h2 > 0) growthRates.push((h2 - h1) / h1);
+                if (h2 > 0 && h3 > 0) growthRates.push((h3 - h2) / h2);
+                const avgGrowthRate = growthRates.length > 0 ?
+                    growthRates.reduce((a, b) => a + b, 0) / growthRates.length :
+                    0;
+
+                // 3. Kết hợp tăng trưởng kỳ vọng và lịch sử (trọng số)
+                const effectiveGrowth = (growth / 100) * 0.6 + avgGrowthRate * 0.4;
+                const adjustedGrowth = effectiveGrowth * conf;
+
+                // 4. Dự báo 3 tháng
+                const forecast = [];
+                let current = h3;
+                for (let i = 0; i < 3; i++) {
+                    current = current * (1 + adjustedGrowth);
+                    forecast.push(current);
+                }
+
+                // 5. Cập nhật Status Bar
+                lastRevenue.textContent = h3.toFixed(0);
+                avgGrowth.textContent = (avgGrowthRate * 100).toFixed(1);
+                forecastM1.textContent = forecast[0].toFixed(0);
+                const total = forecast.reduce((a, b) => a + b, 0);
+                totalQuarter.textContent = total.toFixed(0);
+
+                // 6. Bảng
+                const months = ['Tháng 4', 'Tháng 5', 'Tháng 6'];
+                let html = '';
+                for (let i = 0; i < 3; i++) {
+                    const prev = i === 0 ? h3 : forecast[i - 1];
+                    const growthPct = prev > 0 ? ((forecast[i] - prev) / prev * 100) : 0;
+                    html += `<tr>
+                                <td><strong>${months[i]}</strong></td>
+                                <td>${forecast[i].toFixed(0)}</td>
+                                <td>${growthPct >= 0 ? '+' : ''}${growthPct.toFixed(1)}%</td>
+                            </tr>`;
+                }
+                // thêm dòng tổng
+                html += `<tr class="highlight-row">
+                            <td><strong>Tổng</strong></td>
+                            <td><strong>${total.toFixed(0)}</strong></td>
+                            <td></td>
+                        </tr>`;
+                tableBody.innerHTML = html;
+
+                // 7. Biểu đồ
+                renderChart(history, forecast);
+
+                // 8. AI nhận xét
+                generateAI(history, forecast, adjustedGrowth, total);
+            }
+
+            // ---------- Biểu đồ ----------
+            function renderChart(history, forecast) {
+                const ctx = document.getElementById('forecastChart').getContext('2d');
+                if (chartInstance) chartInstance.destroy();
+
+                const labels = ['T1', 'T2', 'T3', 'T4 (dự báo)', 'T5 (dự báo)', 'T6 (dự báo)'];
+                const data = [...history, ...forecast];
+                // phân đoạn: lịch sử (0-2), dự báo (3-5)
+                const histColors = data.map((_, i) => i < 3 ? '#1a5cff' : '#ff8c42');
+                const borderColors = data.map((_, i) => i < 3 ? '#1a5cff' : '#e6762e');
+
+                // Đường trung bình (moving avg 3 tháng)
+                const avgLine = data.map((_, i) => {
+                    if (i < 2) return null;
+                    const sum = data.slice(Math.max(0, i - 2), i + 1).reduce((a, b) => a + b, 0);
+                    const count = Math.min(3, i + 1);
+                    return sum / count;
+                });
+
+                chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Doanh thu (tr VNĐ)',
+                            data: data,
+                            backgroundColor: 'rgba(26, 92, 255, 0.10)',
+                            borderColor: '#1a5cff',
+                            borderWidth: 3,
+                            pointBackgroundColor: histColors,
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
+                            tension: 0.25,
+                            fill: true,
+                        }, {
+                            label: 'Trung bình 3 tháng',
+                            data: avgLine,
+                            borderColor: '#22b573',
+                            borderWidth: 2,
+                            borderDash: [6, 4],
+                            pointRadius: 3,
+                            pointBackgroundColor: '#22b573',
+                            tension: 0.2,
+                            fill: false,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.parsed.y.toFixed(0) + ' tr VNĐ';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: '#eef3f8' },
+                                ticks: { callback: function(v) { return v.toFixed(0); } }
+                            },
+                            x: {
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // ---------- AI nhận xét ----------
+            function generateAI(history, forecast, growth, total) {
+                const last = history[history.length - 1];
+                const firstForecast = forecast[0];
+                const growthPct = ((firstForecast - last) / last * 100);
+
+                let status = '',
+                    color = '',
+                    recommend = '';
+
+                if (growthPct > 5) {
+                    status = 'Tăng trưởng mạnh';
+                    color = 'tag-green';
+                    recommend = 'Tiếp tục đẩy mạnh bán hàng, xem xét mở rộng thị trường.';
+                } else if (growthPct > 0) {
+                    status = 'Tăng trưởng nhẹ';
+                    color = 'tag-yellow';
+                    recommend = 'Duy trì ổn định, tối ưu chi phí vận hành.';
+                } else if (growthPct > -5) {
+                    status = 'Suy giảm nhẹ';
+                    color = 'tag-yellow';
+                    recommend = 'Cần xem xét lại chiến lược giá hoặc sản phẩm.';
+                } else {
+                    status = 'Suy giảm mạnh';
+                    color = 'tag-red';
+                    recommend = 'Cần hành động ngay: cơ cấu lại danh mục, thúc đẩy khuyến mãi.';
+                }
+
+                const totalGrowth = ((forecast[2] - history[0]) / history[0] * 100);
+                const aiHtml = `
+                            <p><span class="label">Trạng thái:</span> <span class="tag ${color}">${status}</span></p>
+                            <p>🔹 Tăng trưởng dự báo tháng đầu: <strong>${growthPct > 0 ? '+' : ''}${growthPct.toFixed(1)}%</strong> so với tháng hiện tại.</p>
+                            <p>🔹 Tổng doanh thu quý tới ước đạt <strong>${total.toFixed(0)} tr VNĐ</strong>, tăng ${totalGrowth > 0 ? '+' : ''}${totalGrowth.toFixed(1)}% so với quý trước.</p>
+                            <p><span class="label">💡 Khuyến nghị:</span> ${recommend}</p>
+                            <p style="margin-top:6px; font-size:13px; color:#4a5b6e;">⚡ Hệ số tăng trưởng hiệu dụng: ${(growth * 100).toFixed(2)}%</p>
+                        `;
+                aiContent.innerHTML = aiHtml;
+            }
+
+            // ---------- Lưu SQLite (mô phỏng) ----------
+            function saveToSQLite() {
+                const h1 = parseFloat(hist1.value) || 0;
+                const h2 = parseFloat(hist2.value) || 0;
+                const h3 = parseFloat(hist3.value) || 0;
+                const growth = parseFloat(growthRate.value) || 0;
+                const conf = parseFloat(confidence.value) || 1.0;
+
+                // Mô phỏng INSERT vào SQLite
+                console.log('🔹 [SQLite] Lưu dữ liệu dự báo:');
+                console.log(`  - Lịch sử: ${h1}, ${h2}, ${h3}`);
+                console.log(`  - Tăng trưởng: ${growth}%, Độ tin cậy: ${conf}`);
+                console.log(`  - Thời gian: ${new Date().toISOString()}`);
+
+                // Trong thực tế: gọi Python API hoặc SQLite WASM
+                // Ở đây hiển thị thông báo
+                alert('✅ Đã lưu dữ liệu vào SQLite (mô phỏng).\nXem console để biết chi tiết.');
+            }
+
+            // ---------- Xuất Excel (mô phỏng) ----------
+            function exportExcel() {
+                const rows = document.querySelectorAll('#tableBody tr');
+                let csv = 'Tháng,Doanh thu (tr VNĐ),Tăng trưởng\n';
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    if (cells.length >= 3) {
+                        csv += `${cells[0].innerText},${cells[1].innerText},${cells[2].innerText}\n`;
+                    } else if (cells.length >= 2) {
+                        csv += `${cells[0].innerText},${cells[1].innerText},\n`;
+                    }
+                });
+
+                // Tạo file .csv và tải xuống
+                const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' }); // BOM cho UTF-8
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `Du_bao_doanh_thu_3thang_${new Date().toISOString().slice(0,10)}.csv`;
+                link.click();
+                URL.revokeObjectURL(link.href);
+
+                // Thông báo
+                alert('📥 Đã xuất file Excel (CSV). Mở bằng Excel để xem.');
+            }
+
+            // ---------- Sự kiện ----------
+            btnForecast.addEventListener('click', runForecast);
+            btnSaveSQLite.addEventListener('click', saveToSQLite);
+            btnExportExcel.addEventListener('click', exportExcel);
+
+            // Chạy lần đầu khi load trang
+            window.addEventListener('DOMContentLoaded', runForecast);
+
+            // Tự động cập nhật khi thay đổi thông số (tiện lợi)
+            [hist1, hist2, hist3, growthRate, confidence].forEach(el => {
+                el.addEventListener('change', runForecast);
+                el.addEventListener('input', runForecast);
+            });
+
+        })();
+    </script>
+
+</body>
+</html>

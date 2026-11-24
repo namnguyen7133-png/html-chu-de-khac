@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dự đoán World Cup 2026</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    </style>
+</head>
+<body>
+    <h2>Bảng A - Nhập số liệu để dự đoán</h2>
+    <table id="tableA">
+        <tr><th>Đội</th><th>Thắng</th><th>Hòa</th><th>Thua</th></tr>
+        <tr><td>Mexico</td><td><input type="number" class="W" value="3"></td><td><input type="number" class="D" value="0"></td><td><input type="number" class="L" value="0"></td></tr>
+        <tr><td>Nam Phi</td><td><input type="number" class="W" value="1"></td><td><input type="number" class="D" value="1"></td><td><input type="number" class="L" value="1"></td></tr>
+    </table>
+    <button onclick="calculate()">Tính toán xếp hạng</button>
+    <div id="result"></div>
+
+    <script>
+        function calculate() {
+            let rows = document.querySelectorAll("#tableA tr");
+            let results = [];
+            for(let i=1; i<rows.length; i++) {
+                let w = parseInt(rows[i].querySelector(".W").value);
+                let d = parseInt(rows[i].querySelector(".D").value);
+                let p = (w * 3) + d;
+                results.push({name: rows[i].cells[0].innerText, points: p});
+            }
+            results.sort((a, b) => b.points - a.points);
+            document.getElementById("result").innerHTML = "Đội dẫn đầu: " + results[0].name + " (" + results[0].points + " điểm)";
+        }
+    </script>
+</body>
+</html>

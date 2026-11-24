@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>BOT TIN TUC - Trang tính5</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>BOT TIN TUC - Trang tính5</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>Cách các nước quy định thời hạn sở hữu chung cư | https://vnexpress.net/cach-cac-nuoc-quy-dinh-thoi-han-so-huu-chung-cu-5103935.html | Mon, 03 Aug 2026 06:00:00 +0700 | Trung Quốc cho phép sở hữu căn hộ tối đa 70 năm, Singapore quy định thời 
+hạn là 99 năm, còn tại Anh lại tùy theo thỏa thuận hai bên. | 🔴 GIẢM</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>Bỗng dưng đứng tên doanh nghiệp, hộ kinh doanh | https://vnexpress.net/bong-dung-dung-ten-doanh-nghiep-ho-kinh-doanh-5102337.html | Mon, 03 Aug 2026 00:10:00 +0700 | Chưa từng kinh doanh, anh Vũ Văn Thành (Hà Nội) bất ngờ nhận thông báo nợ 
+thuế và nguy cơ hoãn xuất cảnh do tên mình bị mạo danh lập doanh nghiệp.</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>ACV giảm hơn 2.300 nhân sự trong nửa năm | https://vnexpress.net/acv-giam-hon-2-300-nhan-su-trong-nua-nam-5104359.html | Mon, 03 Aug 2026 00:00:00 +0700 | Quy mô nhân sự của Tổng công ty Cảng hàng không Việt Nam (ACV) giảm hơn 20% 
+trong nửa đầu năm, từ gần 11.000 người xuống khoảng 8.500 người.</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>Lắp pin mặt trời, dùng xe điện để 'xanh hóa' nhà kho | https://vnexpress.net/lap-pin-mat-troi-dung-xe-dien-de-xanh-hoa-nha-kho-5104295.html | Sun, 02 Aug 2026 19:23:09 +0700 | Nhiều chủ đầu tư nhà kho vận đang tích cực lắp điện mặt trời, dùng xe nâng 
+điện để đáp ứng tiêu chí môi trường, giảm phát thải từ các tập đoàn toàn 
+cầu.</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>Capital One nói đóng 300 tài khoản của Tập đoàn Trump do lo ngại rửa tiền | https://vnexpress.net/capital-one-noi-dong-300-tai-khoan-cua-tap-doan-trump-do-lo-ngai-rua-tien-5104331.html | Sun, 02 Aug 2026 18:32:58 +0700 | Capital One bác đơn kiện của Tập đoàn Trump, khẳng định đóng 300 tài khoản 
+doanh nghiệp do lo ngại rửa tiền chứ không mang mục đích chính trị. | OIL</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>Ông lớn' ngành xổ số lãi nghìn tỷ nửa đầu năm | https://vnexpress.net/ong-lon-nganh-xo-so-lai-nghin-ty-nua-dau-nam-5104288.html | Sun, 02 Aug 2026 16:10:00 +0700 | Xổ số kiến thiết TP HCM lãi trước thuế 1.184 tỷ đồng, mức cao nhất từ trước 
+đến nay tính theo giai đoạn nửa đầu năm. | 🟢 TĂNG</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>Mỹ dự kiến can thiệp cứu đồng yen Nhật sau hơn một thập kỷ | https://vnexpress.net/my-du-kien-can-thiep-cuu-dong-yen-nhat-sau-hon-mot-thap-ky-5104300.html | Sun, 02 Aug 2026 14:09:00 +0700 | Tokyo và Washington dự kiến công bố hành động chung nhằm ngăn đồng yen 
+trượt giá tuần tới, trong bối cảnh đồng tiền này xuống mức thấp nhất bốn 
+thập kỷ. | 🔴 GIẢM</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>Petrolimex thu hơn 5 tỷ USD một quý | https://vnexpress.net/petrolimex-thu-hon-5-ty-usd-mot-quy-5104262.html | Sun, 02 Aug 2026 10:53:17 +0700 | Petrolimex thu kỷ lục 136.000 tỷ đồng, tương đương hơn 5 tỷ USD, trong giai 
+đoạn giá xăng dầu biến động mạnh do ảnh hưởng xung đột Trung Đông.</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>GS Nguyễn Đức Khương: Cần đào tạo tư duy làm chủ công nghệ thay vì để AI dẫn dắt | https://vnexpress.net/gs-nguyen-duc-khuong-can-dao-tao-tu-duy-lam-chu-cong-nghe-thay-vi-de-ai-dan-dat-5104160.html | Sun, 02 Aug 2026 08:00:00 +0700 | Theo GS Nguyễn Đức Khương, công nghệ - chìa khoá để chuyển đổi mô hình tăng 
+trưởng của Việt Nam - chỉ phát huy tác dụng khi đi cùng nguồn nhân lực đủ 
+khả năng hấp thụ.</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>Lợi nhuận nhiều ngân hàng đi lùi | https://vnexpress.net/loi-nhuan-nhieu-ngan-hang-di-lui-5104061.html | Sun, 02 Aug 2026 00:18:06 +0700 | Eximbank, Sacombank, LPBank và Saigonbank là số ít nhà băng lợi nhuận đi 
+xuống trong nửa đầu năm nay, có nơi giảm sâu hơn 70%.</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>EuroCham: Việt Nam là mỏ neo hàng đầu của kinh tế châu Âu ở châu Á | https://vnexpress.net/eurocham-viet-nam-la-mo-neo-hang-dau-cua-kinh-te-chau-au-o-chau-a-5104094.html | Sun, 02 Aug 2026 00:17:46 +0700 | Nhờ EVFTA, Việt Nam trở thành một trong những "mỏ neo kinh tế" quan trọng 
+hàng đầu của châu Âu tại châu Á, theo Chủ tịch EuroCham.</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>Người Mỹ trưởng thành vẫn được cha mẹ hỗ trợ tài chính | https://vnexpress.net/nguoi-my-truong-thanh-van-duoc-cha-me-ho-tro-tai-chinh-5104059.html | Sun, 02 Aug 2026 00:02:00 +0700 | 42% người Mỹ tham gia một khảo sát mới đây cho biết vẫn đang phải dựa vào 
+cha mẹ để trang trải cuộc sống. | USD</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>Eximbank có tổng giám đốc mới | https://vnexpress.net/eximbank-co-tong-giam-doc-moi-5104133.html | Sat, 01 Aug 2026 17:09:14 +0700 | Bà Phạm Thị Huyền Trang, cựu chủ tịch Eximbank, được bổ nhiệm làm Tổng giám 
+đốc nhà băng này từ ngày 1/8.</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>Doanh nghiệp miền Bắc tăng lắp điện mặt trời mái nhà | https://vnexpress.net/doanh-nghiep-mien-bac-tang-lap-dien-mat-troi-mai-nha-5104088.html | Sat, 01 Aug 2026 14:36:24 +0700 | Mỗi ngày, khi dây chuyền sản xuất bắt đầu vận hành cũng là lúc hơn 11 MWp 
+điện mặt trời trên mái nhà xưởng phát điện, giúp doanh nghiệp tiết kiệm 
+khoảng 100 triệu đồng tiền điện.</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>Nhập khẩu điều thô vượt 3 tỷ USD | https://vnexpress.net/nhap-khau-dieu-tho-vuot-3-ty-usd-5104042.html | Sat, 01 Aug 2026 13:16:19 +0700 | Tính đến giữa tháng 7, doanh nghiệp Việt Nam đã chi hơn 3 tỷ USD nhập khẩu 
+điều thô, chủ yếu từ Campuchia, cao nhất so với cùng kỳ từ trước tới nay.</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>Sun Group ra mắt doanh nghiệp dịch vụ mặt đất tại Phú Quốc | https://vnexpress.net/sun-group-ra-mat-doanh-nghiep-dich-vu-mat-dat-tai-phu-quoc-5104052.html | Sat, 01 Aug 2026 12:30:00 +0700 | Sun Group đưa Công ty TNHH Dịch vụ Mặt đất Sân bay Phú Quốc (Sun PhuQuoc 
+Ground Services - SGP) vào hoạt động, đảm nhiệm toàn bộ chuỗi dịch vụ mặt 
+đất. | OIL | 🟢 TĂNG</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>Elon Musk phủ nhận tin bán chi nhánh Tesla tại Trung Quốc | https://vnexpress.net/elon-musk-phu-nhan-tin-ban-chi-nhanh-tesla-tai-trung-quoc-5104054.html | Sat, 01 Aug 2026 11:40:03 +0700 | Người giàu nhất thế giới bác tin đồn Tesla đang chuẩn bị kế hoạch tách mảng 
+kinh doanh tại Trung Quốc để sáp nhập với SpaceX. | 🟢 TĂNG</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>VinFast mở 21 đại lý xe máy điện ở Philippines | https://vnexpress.net/vinfast-mo-21-dai-ly-xe-may-dien-o-philippines-5103996.html | Sat, 01 Aug 2026 09:00:00 +0700 | VinFast khởi đầu hệ sinh thái thuần điện tại thị trường xe hai bánh hàng 
+đầu Đông Nam Á, khai trương 21 đại lý và ra mắt bộ ba sản phẩm mới, hôm 
+31/7.</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>Ông lớn' vật liệu xây dựng Thái Lan tăng doanh thu 126% ở Việt Nam | https://vnexpress.net/ong-lon-vat-lieu-xay-dung-thai-lan-tang-doanh-thu-126-o-viet-nam-5103897.html | Sat, 01 Aug 2026 07:14:36 +0700 | Nhờ tình hình hoạt động cải thiện và tổ hợp hóa dầu vận hành, doanh thu SCG 
+tại Việt Nam đạt 37.120 tỷ đồng nửa đầu năm, tăng đến 126%. | 🟢 TĂNG</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>Lợi nhuận Yeah1 giảm một nửa do thiếu concert | https://vnexpress.net/loi-nhuan-yeah1-giam-mot-nua-do-thieu-concert-5103752.html | Sat, 01 Aug 2026 06:45:26 +0700 | Quý II, Tập đoàn Yeah1 - nhà sản xuất show "Anh trai vượt ngàn chông gai" - 
+lãi 15,6 tỷ đồng, giảm hơn một nửa do thiếu doanh thu concert. | USD</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

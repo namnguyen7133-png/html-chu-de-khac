@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html lang="vi"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Kho Game Mobi</title>
+  <style>
+    /* RESET & BODY */
+    * { margin:0; padding:0; box-sizing:border-box }
+    body {
+      font-family: sans-serif;
+      background: url('/res/images/Background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+    }
+
+    /* TOP BAR */
+    header {
+      display:flex; align-items:center;
+      height:44px; padding:0 12px;
+      background:rgba(255,255,255,0.9);
+      box-shadow:0 1px 0 rgba(0,0,0,0.1);
+    }
+    header button {
+      background:none; border:none;
+      font-size:1.5rem; cursor:pointer;
+    }
+    header .spacer { flex:1 }
+
+    /* BANNER */
+.banner {
+  width: 100%;
+  max-width: 1150px;
+  aspect-ratio: 1242 / 194;
+  max-height: 194px;
+  background: url('/res/images/brand_frame.png') no-repeat center center;
+  background-size: 100% 100%;
+  margin: 0 auto 12px;
+}
+    /* SECTIONS */
+    main { padding:12px }
+    section { margin-bottom:28px }
+    section h2 {
+      font-size:1rem; margin-bottom:12px;
+      padding-left:6px;
+/*      border-left:4px solid #666;*/
+    }
+
+    /* GRID */
+    .game-grid {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+    }
+    @media (max-width:360px) {
+      .game-grid { grid-template-columns:repeat(2,1fr) }
+    }
+
+    /* EACH GAME ITEM */
+    .game-item { text-align:center; transition:transform .1s }
+    .game-item:hover { transform:translateY(-2px) }
+    .game-item a {
+      display: block;            /* make the link fill the figure */
+      text-decoration: none;     /* remove underline */
+      color: inherit;            /* keep your white/text-shadow styles */
+    }
+
+    /* Ensure figcaption and icon-wrapper are unaffected */
+    .game-item a .icon-wrapper,
+    .game-item a figcaption {
+      pointer-events: none;      /* so clicks anywhere inside go to the <a> itself */
+    }
+
+    /* ICON WRAPPER – only top corners rounded */
+    .icon-wrapper {
+      position:relative;
+      width:100%; padding-top:100%; /* square */
+      border-radius:12px 12px 0 0;
+      background-size:cover;
+      background-position:center;
+      overflow:hidden;
+      box-shadow:0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: -10px;
+      z-index: -1;
+    }
+    .icon-wrapper img {
+      position:absolute;
+      top:50%; left:50%;
+      width:80%; /* adjust to taste */
+      transform:translate(-50%,-50%);
+    }
+    /* hook your three bg files: */
+    .icon-wrapper.bg1 {
+      background-image:url('/res/images/khogame_bg_1.png');
+    }
+    .icon-wrapper.bg2 {
+      background-image:url('/res/images/khogame_bg_2.png');
+    }
+    .icon-wrapper.bg3 {
+      background-image:url('/res/images/khogame_bg_3.png');
+    }
+
+    /* TITLE BAR – only bottom corners rounded */
+    figcaption {
+      display:block;
+      width:100%; height:24px; /* adjust if needed */
+      margin:0;                  /* flush up against icon-wrapper */
+      background-size:100% 100%;
+      background-repeat:no-repeat;
+      background-position:center;
+      font-size:0.75rem;
+      line-height:24px;          /* center text */
+      color:#fff;
+      text-shadow:0 1px 2px rgba(0,0,0,0.5);
+      border-radius:0 0 12px 12px;
+    }
+    .title-bg1 {
+      background-image:url('/res/images/khogame_tittle_1.png');
+    }
+    .title-bg2 {
+      background-image:url('/res/images/khogame_tittle_2.png');
+    }
+    .title-bg3 {
+      background-image:url('/res/images/khogame_tittle_3.png');
+    }
+
+    /* ------------------------------------------------
+   TABLET & SMALL DESKTOP (≥ 600px)
+   ------------------------------------------------ */
+@media (min-width: 600px) {
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  .game-grid {
+    /* four columns instead of three */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  /* slightly larger icon containers */
+  .icon-wrapper {
+    border-radius: 16px 16px 0 0;
+  }
+
+  /* taller title bars */
+  figcaption {
+    height: 28px;
+    line-height: 28px;
+    font-size: 0.85rem;
+    border-radius: 0 0 16px 16px;
+  }
+}
+
+/* ------------------------------------------------
+   LARGE DESKTOP (≥ 1024px)
+   ------------------------------------------------ */
+@media (min-width: 1024px) {
+  main {
+    max-width: 1200px;
+  }
+
+  .game-grid {
+    /* five columns on wide screens */
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+  }
+}
+  </style>
+<!-- Google Tag Manager -->
+<script type="text/javascript" async="" src="./Kho Game Mobi_files/js"></script><script async="" src="./Kho Game Mobi_files/gtm.js.tải xuống"></script><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-TXBL6X8T');</script>
+    <!-- End Google Tag Manager -->
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TXBL6X8T"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+  <div class="banner">
+    <!-- <img src="/res/images/app-icon.png" alt="App Icon">
+    <h1>Cờ Tướng, Cờ Úp Online</h1> -->
+  </div>
+
+  <main>
+    <!-- Game Cờ -->
+    <section>
+      <h2>Game Cờ</h2>
+      <div class="game-grid">
+        <!-- 1. Cờ Tướng Ziga -->
+        <figure class="game-item">
+          <a href="https://zigavn.com/co-tuong" target="_blank" rel="noopener">
+          <div class="icon-wrapper bg1">
+            <img src="./Kho Game Mobi_files/CT_butt.png" alt="Cờ Tướng Ziga">
+          </div>
+          <figcaption class="title-bg1">Cờ Tướng Ziga</figcaption>
+          </a>
+        </figure>
+        <!-- 2. Cờ Úp Ziga -->
+        <figure class="game-item">
+          <a href="https://zigavn.com/co-up" target="_blank" rel="noopener">
+          <div class="icon-wrapper bg1">
+            <img src="./Kho Game Mobi_files/CU_butt.png" alt="Cờ Úp Ziga">
+          </div>
+          <figcaption class="title-bg1">Cờ Úp Ziga</figcaption>
+          </a>
+        </figure>
+        <!-- 3. Cờ Tướng Offline -->
+        <figure class="game-item">
+          <!-- <a href="https://cotuongoffline.com/download/?referrer=utm_source%3Dziga_web%26utm_medium%3Dpost%26utm_campaign%3Dziga_web_games&pt=125487723&ct=ziga_web_games&mt=8" target="_blank" rel="noopener"> -->
+          <a href="https://zigavn.com/co-the" target="_blank" rel="noopener">
+          <div class="icon-wrapper bg2">
+            <img src="./Kho Game Mobi_files/Haga Offline.png" alt="Cờ Tướng Offline">
+          </div>
+          <figcaption class="title-bg2">Cờ Tướng Offline</figcaption>
+          </a>
+        </figure>
+        <!-- 4. Cờ Thế Haga -->
+        <figure class="game-item">
+          <a href="https://zigavn.com/co-the" target="_blank" rel="noopener">
+          <div class="icon-wrapper bg2">
+            <img src="./Kho Game Mobi_files/CTH_butt.png" alt="Cờ Thế Haga">
+          </div>
+          <figcaption class="title-bg2">Cờ Thế Haga</figcaption>
+          </a>
+        </figure>
+        <!-- 5. Cờ Vua Haga -->
+        <figure class="game-item">
+          <a href="https://zigavn.com/games/co-vua" target="_blank" rel="noopener">
+          <div class="icon-wrapper bg2">
+            <img src="./Kho Game Mobi_files/chess.png" alt="Cờ Vua Haga">
+          </div>
+          <figcaption class="title-bg2">Cờ Vua Haga</figcaption>
+          </a>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Game Giải Đố -->
+    <section>
+      <h2>Game Giải Đố</h2>
+      <div class="game-grid">
+        <figure class="game-item">
+          <a href="https://zigavn.com/games/tictactoe" target="_blank" rel="noopener">
+          <div class="icon-wrapper bg3">
+            <img src="./Kho Game Mobi_files/tictactoe.png" alt="Tictactoe">
+          </div>
+          <figcaption class="title-bg3">Tictactoe</figcaption>
+          </a>
+        </figure>
+        <figure class="game-item">
+          <a href="https://zigavn.com/games/sudoku" target="_blank" rel="noopener">
+          <div class="icon-wrapper bg3">
+            <img src="./Kho Game Mobi_files/sudoku.png" alt="Sudoku">
+          </div>
+          <figcaption class="title-bg3">Sudoku</figcaption>
+          </a>
+        </figure>
+        <figure class="game-item">
+          <a href="https://zigavn.com/games/minesweeper" target="_blank" rel="noopener">
+          <div class="icon-wrapper bg3">
+            <img src="./Kho Game Mobi_files/minesweeper.png" alt="Minesweeper">
+          </div>
+          <figcaption class="title-bg3">Minesweeper</figcaption>
+          </a>
+        </figure>
+        <figure class="game-item">
+          <a href="https://zigavn.com/games/flower_sort" target="_blank" rel="noopener">
+          <div class="icon-wrapper bg3">
+            <img src="./Kho Game Mobi_files/flower Sort.png" alt="Flowersort">
+          </div>
+          <figcaption class="title-bg3">Flower Sort</figcaption>
+          </a>
+        </figure>
+        <figure class="game-item">
+          <a href="https://zigavn.com/games/8ball" target="_blank" rel="noopener">
+          <div class="icon-wrapper bg3">
+            <img src="./Kho Game Mobi_files/8ball.png" alt="8Ball">
+          </div>
+          <figcaption class="title-bg3">8Ball</figcaption>
+          </a>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Game Nối thú -->
+    <section>
+      <h2>Game Nối thú</h2>
+      <div class="game-grid">
+        <figure class="game-item">
+          <a href="https://zigavn.com/games/onet3d" target="_blank" rel="noopener">
+          <div class="icon-wrapper bg3">
+            <img src="./Kho Game Mobi_files/onet3d.png" alt="Onet 3D">
+          </div>
+          <figcaption class="title-bg3">Onet 3D</figcaption>
+          </a>
+        </figure>
+        <figure class="game-item">
+          <a href="https://zigavn.com/games/pikachu" target="_blank" rel="noopener">
+          <div class="icon-wrapper bg3">
+            <img src="./Kho Game Mobi_files/pikachu.png" alt="Pikachu">
+          </div>
+          <figcaption class="title-bg3">Pikachu</figcaption>
+          </a>
+        </figure>
+        <figure class="game-item">
+          <a href="https://zigavn.com/games/zuma" target="_blank" rel="noopener">
+          <div class="icon-wrapper bg3">
+            <img src="./Kho Game Mobi_files/zuma.png" alt="Zuma">
+          </div>
+          <figcaption class="title-bg3">Zuma</figcaption>
+          </a>
+        </figure>
+      </div>
+    </section>
+  </main>
+
+<script defer="" src="./Kho Game Mobi_files/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;rayId&quot;:&quot;957cadafb9bea8af&quot;,&quot;version&quot;:&quot;2025.6.2&quot;,&quot;r&quot;:1,&quot;token&quot;:&quot;b474a50e07eb424e993013139acd05a8&quot;,&quot;serverTiming&quot;:{&quot;name&quot;:{&quot;cfExtPri&quot;:true,&quot;cfEdge&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfL4&quot;:true,&quot;cfSpeedBrain&quot;:true,&quot;cfCacheStatus&quot;:true}}}" crossorigin="anonymous"></script>
+
+
+</body></html>

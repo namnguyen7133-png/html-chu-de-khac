@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Phím Tắt & Voice Control</title>
+    <style>
+        :root { --primary: #2563eb; --bg: #f0f2f5; --card: #ffffff; --shopee: #ee4d2d; --success: #22c55e; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); padding: 20px; color: #1e293b; margin: 0; }
+        h1 { text-align: center; color: var(--primary); margin-bottom: 20px; font-size: 1.8rem; }
+        
+        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; max-width: 1400px; margin: 0 auto; }
+        .card { background: var(--card); border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 5px solid var(--primary); transition: transform 0.2s; }
+        .card:hover { transform: translateY(-3px); }
+        
+        /* Highlight cho phần Micro */
+        .voice-card { border: 2px solid var(--success); background: #f0fdf4; }
+        .voice-card h2 { color: var(--success); }
+        
+        h2 { margin-top: 0; font-size: 1.1rem; border-bottom: 1px solid #eee; padding-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; line-height: 1.4; border-bottom: 1px dotted #f0f0f0; padding-bottom: 8px; }
+        li:last-child { border-bottom: none; }
+        
+        kbd { background: #e2e8f0; border-radius: 5px; padding: 3px 6px; font-weight: bold; border-bottom: 2px solid #cbd5e1; font-family: monospace; white-space: nowrap; font-size: 0.85rem; }
+        .copy-btn { background: #f1f5f9; border: 1px solid #cbd5e1; cursor: pointer; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; transition: all 0.2s; }
+        .copy-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        .link-section { grid-column: 1 / -1; text-align: center; margin-top: 20px; padding: 25px; background: white; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        .link-section a { margin: 0 15px; text-decoration: none; color: var(--primary); font-weight: bold; padding: 8px 12px; border-radius: 6px; transition: background 0.2s; }
+        .link-section a:hover { background: #eff6ff; text-decoration: underline; }
+        .hint { font-style: italic; color: #64748b; font-size: 0.82rem; display: block; margin-top: 4px; }
+    </style>
+</head>
+<body>
+
+<h1>🚀 Hệ Thống Điều Khiển Nhanh</h1>
+
+<div class="container">
+    <div class="card voice-card">
+        <h2>🎙️ Mẹo Dùng Giọng Nói (Ưu Tiên)</h2>
+        <ul>
+            <li>
+                <div>
+                    <b>Mọi nơi trên Windows:</b>
+                    <span class="hint">Shopee Affiliate, Search, Chat...</span>
+                </div>
+                <kbd>Win</kbd> + <kbd>H</kbd>
+            </li>
+            <li>
+                <div>
+                    <b>Trong Google Docs/Sheets:</b>
+                    <span class="hint">Nhập văn bản dài cực nhanh</span>
+                </div>
+                <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>
+            </li>
+            <li>
+                <div>
+                    <b>Tìm kiếm nhanh:</b>
+                    <span class="hint">Nói "Tai nghe" thay vì gõ tìm</span>
+                </div>
+                <span>🎤 Nói ngay</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card" style="border-top-color: #ef4444;">
+        <h2>⚡ Lệnh Run & Quản lý</h2>
+        <ul>
+            <li><span>Thư mục Startup:</span> <button class="copy-btn" onclick="copyText('shell:startup')">shell:startup</button></li>
+            <li><span>Cài đặt Khởi động:</span> <button class="copy-btn" onclick="copyText('ms-settings:startupapps')">Cấu hình</button></li>
+            <li><span>Task Manager:</span> <kbd>Ctrl+Sft+Esc</kbd></li>
+        </ul>
+    </div>
+
+    <div class="card" style="border-top-color: #f59e0b;">
+        <h2>🛠️ DevTools & Lập trình</h2>
+        <ul>
+            <li><span>Mở Inspect:</span> <kbd>F12</kbd> / <kbd>Ctrl+Sft+I</kbd></li>
+            <li><span>Apps Script Format:</span> <kbd>Alt+Shift+F</kbd></li>
+            <li><span>Git Push:</span> <button class="copy-btn" onclick="copyText('git push origin main')">Push Code</button></li>
+        </ul>
+    </div>
+</div>
+
+<div class="link-section">
+    <h3>🔗 Mở nhanh các trang quan trọng (Profile 6)</h3>
+    <a href="javascript:void(0)" onclick="openLink('https://github.com/new')">🚀 GitHub</a> | 
+    <a href="javascript:void(0)" onclick="openLink('https://affiliate.shopee.vn/offer/product_offer')">🧡 Shopee Affiliate</a> | 
+    <a href="javascript:void(0)" onclick="openLink('https://docs.google.com/spreadsheets/u/0/')">📊 Google Sheets</a> |
+    <a href="javascript:void(0)" onclick="openLink('https://script.google.com/u/0/home/projects/1IikRrd07DeSJo4ckRibOCB6Wp0BuRo7p4ves15CHrWlA8vDvJ1mNAV4A/edit')">📜 Apps Script</a>
+</div>
+
+<script>
+    // Hàm mở link (Đảm bảo file HTML này đang mở bằng Profile 6)
+    function openLink(url) {
+        window.open(url, '_blank');
+    }
+
+    // Hàm copy nội dung chuẩn xác
+    function copyText(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Đã sao chép: ' + text);
+        }).catch(err => {
+            console.error('Lỗi copy: ', err);
+        });
+    }
+</script>
+
+</body>
+</html>

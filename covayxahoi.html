@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bàn Cờ Vây Ẩn Dụ Xã Hội 19x19 - 183 Cặp Triết Lý Tương Phản</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        wood: {
+                            100: '#f7eddc',
+                            200: '#e8d3b3',
+                            300: '#d7b382',
+                            400: '#c59355',
+                            500: '#af7835',
+                            600: '#8e5e27',
+                            700: '#6c441b',
+                            800: '#4c2e10',
+                            900: '#2f1a08',
+                        },
+                        goBlack: '#16191e',
+                        goWhite: '#f8fafc',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+
+        /* Go board texture effect */
+        .board-texture {
+            background-color: #d7b382;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(247, 237, 220, 0.4) 0%, rgba(197, 147, 85, 0.2) 100%),
+                linear-gradient(to right, rgba(142, 94, 39, 0.05) 1px, transparent 1px);
+            box-shadow: inset 0 0 30px rgba(76, 46, 16, 0.4), 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Stone Gloss Effects */
+        .white-stone {
+            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #e2e8f0 60%, #94a3b8 100%);
+            box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.45), inset -1px -1px 2px rgba(0,0,0,0.2);
+        }
+
+        .black-stone {
+            background: radial-gradient(circle at 35% 35%, #475569 0%, #1e293b 50%, #0f172a 100%);
+            box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.6), inset 1px 1px 1px rgba(255,255,255,0.2);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        .active-tab {
+            border-bottom: 2px solid #38bdf8;
+            color: #38bdf8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-900">
+
+    <!-- Header & Navigation -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-600 to-amber-300 flex items-center justify-center text-slate-950 font-bold shadow-lg shadow-amber-500/20">
+                    <i class="fa-solid fa-yin-yang text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                        <span>Cờ Vây Ẩn Dụ Xã Hội</span>
+                        <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-normal">19x19 • 183 Cặp Triết Lý</span>
+                    </h1>
+                </div>
+            </div>
+
+            <!-- View Switchers -->
+            <div class="flex items-center space-x-2 bg-slate-800/80 p-1 rounded-xl border border-slate-700/60">
+                <button id="btnViewBoard" onclick="switchView('board')" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-amber-500 text-slate-950 shadow">
+                    <i class="fa-solid fa-border-all"></i>
+                    <span>Bàn Cờ 19x19</span>
+                </button>
+                <button id="btnViewTable" onclick="switchView('table')" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all">
+                    <i class="fa-solid fa-table-list"></i>
+                    <span>Bảng Tra Cứu (183)</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col gap-6">
+
+        <!-- Intro Banner -->
+        <div class="bg-gradient-to-r from-slate-900 via-amber-950/20 to-slate-900 border border-amber-500/20 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="space-y-1">
+                <h2 class="text-base sm:text-lg font-semibold text-amber-200 flex items-center gap-2">
+                    <i class="fa-solid fa-compass text-amber-400"></i>
+                    Mô Hình Đối Ứng Vi Mô (Gia Đình) & Vĩ Mô (Xã Hội / Quốc Gia)
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-400 max-w-3xl">
+                    Nhấp vào từng điểm giao trên bàn cờ để khám phá sự tương chiếu giữa <strong class="text-slate-200">Quan hệ Gia đình</strong> và <strong class="text-slate-200">Thể chế Xã hội</strong>. 
+                    <span class="text-amber-300">Quân Trắng</span> = Thúc đẩy / Tích cực. <span class="text-slate-400">Quân Đen</span> = Đảo ngược / Phá hoại. 
+                    <span class="text-amber-400 font-medium">Thiên Nguyên (10,10)</span> = Bản Thể Trung Tâm.
+                </p>
+            </div>
+            <div class="flex gap-4 text-xs shrink-0">
+                <div class="flex items-center gap-2 bg-slate-800/60 px-3 py-1.5 rounded-lg border border-slate-700">
+                    <div class="w-3.5 h-3.5 rounded-full white-stone border border-slate-300"></div>
+                    <span>180 Chính Diện</span>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-800/60 px-3 py-1.5 rounded-lg border border-slate-700">
+                    <div class="w-3.5 h-3.5 rounded-full black-stone border border-slate-600"></div>
+                    <span>180 Phản Diện</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 1: INTERACTIVE BOARD & PANEL -->
+        <div id="viewBoard" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Left Side: Interactive Board (8 cols) -->
+            <div class="lg:col-span-7 flex flex-col items-center">
+                <!-- Board Container -->
+                <div class="w-full max-w-[620px] aspect-square rounded-2xl p-3 sm:p-5 board-texture border-4 border-wood-800 shadow-2xl relative flex flex-col">
+                    
+                    <!-- Top Legend Coordinate (A-T) -->
+                    <div class="flex w-full text-[10px] sm:text-xs font-bold text-wood-900 justify-between px-6 pb-1">
+                        <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>J</span><span>K</span><span>L</span><span>M</span><span>N</span><span>O</span><span>P</span><span>Q</span><span>R</span><span>S</span><span>T</span>
+                    </div>
+
+                    <div class="flex-1 flex">
+                        <!-- Left Legend Coordinate (19-1) -->
+                        <div class="flex flex-col text-[10px] sm:text-xs font-bold text-wood-900 justify-between py-2 pr-1">
+                            <span>19</span><span>18</span><span>17</span><span>16</span><span>15</span><span>14</span><span>13</span><span>12</span><span>11</span><span>10</span><span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                        </div>
+
+                        <!-- Main Grid Canvas -->
+                        <div id="goBoard" class="flex-1 grid grid-cols-19 grid-rows-19 relative bg-transparent border border-wood-900/60 cursor-pointer">
+                            <!-- Cells dynamically inserted via JS -->
+                        </div>
+
+                        <!-- Right Legend Coordinate (19-1) -->
+                        <div class="flex flex-col text-[10px] sm:text-xs font-bold text-wood-900 justify-between py-2 pl-1">
+                            <span>19</span><span>18</span><span>17</span><span>16</span><span>15</span><span>14</span><span>13</span><span>12</span><span>11</span><span>10</span><span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Legend Coordinate (A-T) -->
+                    <div class="flex w-full text-[10px] sm:text-xs font-bold text-wood-900 justify-between px-6 pt-1">
+                        <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>J</span><span>K</span><span>L</span><span>M</span><span>N</span><span>O</span><span>P</span><span>Q</span><span>R</span><span>S</span><span>T</span>
+                    </div>
+
+                </div>
+
+                <div class="mt-3 text-xs text-slate-400 flex items-center gap-2">
+                    <i class="fa-solid fa-hand-pointer text-amber-400"></i>
+                    <span>Mẹo: Click vào bất kỳ điểm giao nào để mở thẻ thông tin chi tiết</span>
+                </div>
+            </div>
+
+            <!-- Right Side: Details Modal / Info Panel (5 cols) -->
+            <div class="lg:col-span-5 flex flex-col gap-4">
+                
+                <!-- Quick Search & Filter Bar -->
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-3">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-xs"></i>
+                        <input type="text" id="boardSearchInput" oninput="filterBoardPoints(this.value)" placeholder="Tìm vị trí, khái niệm (VD: Cha mẹ, Chính phủ, Kiều hối...)" class="w-full bg-slate-950 border border-slate-700/80 rounded-lg pl-9 pr-4 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors">
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 text-[11px]" id="filterTags">
+                        <button onclick="applyCategoryFilter('ALL')" class="px-2.5 py-1 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30">Tất cả</button>
+                        <button onclick="applyCategoryFilter('Cha mẹ')" class="px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 hover:bg-slate-700">Cha mẹ & Chính phủ</button>
+                        <button onclick="applyCategoryFilter('Anh em')" class="px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 hover:bg-slate-700">Anh em & Công ty</button>
+                        <button onclick="applyCategoryFilter('Con cháu')" class="px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 hover:bg-slate-700">Con cháu & Nguồn lực</button>
+                        <button onclick="applyCategoryFilter('Hàng xóm')" class="px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 hover:bg-slate-700">Hàng xóm & Nhà đầu tư</button>
+                    </div>
+                </div>
+
+                <!-- Point Detail Card -->
+                <div id="detailCard" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl min-h-[420px] flex flex-col justify-between relative overflow-hidden">
+                    <div id="detailContent">
+                        <!-- Default empty state or dynamically loaded content -->
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- VIEW 2: FULL SEARCHABLE TABLE (Hidden by default) -->
+        <div id="viewTable" class="hidden flex-col gap-4">
+            <!-- Search & Filters -->
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex flex-col sm:flex-row gap-4 items-center justify-between">
+                <div class="relative w-full sm:w-96">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-xs"></i>
+                    <input type="text" id="tableSearchInput" oninput="renderTable(this.value)" placeholder="Tìm kiếm 183 trường hợp đối ứng..." class="w-full bg-slate-950 border border-slate-700/80 rounded-lg pl-9 pr-4 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors">
+                </div>
+                <div class="text-xs text-slate-400">
+                    Hiển thị <span id="tableCount" class="font-bold text-amber-400">183</span> trường hợp đối chiếu
+                </div>
+            </div>
+
+            <!-- Table Container -->
+            <div class="overflow-x-auto border border-slate-800 rounded-xl bg-slate-900/50">
+                <table class="w-full text-left text-xs text-slate-300">
+                    <thead class="bg-slate-800/80 text-slate-200 font-semibold border-b border-slate-700">
+                        <tr>
+                            <th class="p-3 w-16 text-center">STT</th>
+                            <th class="p-3 w-20 text-center">Tọa độ</th>
+                            <th class="p-3 w-1/4 text-emerald-400">
+                                <i class="fa-solid fa-circle text-[10px] text-white mr-1"></i> Chính Diện (Quân Trắng)
+                            </th>
+                            <th class="p-3 w-1/4 text-rose-400">
+                                <i class="fa-solid fa-circle text-[10px] text-slate-900 mr-1"></i> Phản Diện (Quân Đen)
+                            </th>
+                            <th class="p-3">Ẩn Dụ Chi Tiết & Tác Động Xã Hội</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody" class="divide-y divide-slate-800/60">
+                        <!-- Table rows generated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 py-4 mt-auto bg-slate-950 text-xs text-slate-500 text-center">
+        <p>Bàn Cờ Vây Ẩn Dụ Xã Hội (19x19) • Mô hình Triết Lý 183 Trường Hợp Tương Tác</p>
+    </footer>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // -------------------------------------------------------------
+        // DATABASE OF 183 METAPHORICAL GO BOARD POINTS
+        // -------------------------------------------------------------
+        // Coordinates format: x (1-19, A-T excluding I), y (1-19)
+        // 361 total points on 19x19 board.
+        // We populate 183 unique metaphor pairs mapped onto board locations.
+
+        const COLUMN_LABELS = ['A','B','C','D','E','F','G','H','J','K','L','M','N','O','P','Q','R','S','T'];
+        
+        // Base Metaphor Categories Database generator
+        const categories = [
+            {
+                cat: "Cha mẹ",
+                macro: "Chính phủ & Nhà nước",
+                posBase: "Chăm lo cơ sở hạ tầng, bảo an, định hướng giáo dục, y tế và thiết lập hành lang pháp lý công bằng.",
+                negBase: "Độc tài cai trị, quan liêu nhũng nhiễu, lãng phí ngân sách, chính sách áp đặt bóp nghẹt phát triển.",
+                items: [
+                    ["Chăm sóc sức khỏe gia đình", "Y tế công cộng & Bảo hiểm xã hội", "Hệ thống y tế yếu kém, lãng phí vốn đầu tư y tế"],
+                    ["Định hướng tương lai con cái", "Quy hoạch chiến lược phát triển quốc gia", "Chính sách quy hoạch treo, tầm nhìn ngắn hạn"],
+                    ["Bảo vệ bình yên nhà cửa", "An ninh quốc phòng & Thượng tôn pháp luật", "Bao che tham nhũng, xói mòn niềm tin pháp luật"],
+                    ["Đầu tư học hành cho con", "Cải cách giáo dục & Khoa học kỹ thuật", "Giáo dục nhồi sọ, thương mại hóa bệnh thành tích"],
+                    ["Gia phong & Nếp nhà", "Bản sắc văn hóa & Giá trị đạo đức dân tộc", "Suy thoái văn hóa, xói mòn giá trị truyền thống"],
+                    ["Tài chính hộ gia đình", "Quản lý ngân sách quốc gia & Thuế công bằng", "Lạm phát tiêu cực, bòn rút thuế của người dân"],
+                    ["Dựng vợ gả chồng", "Chính sách an sinh & Khuyến khích lập nghiệp", "Rào cản thủ tục hành chính, gây khó khăn khởi nghiệp"],
+                    ["Truyền thừa tài sản", "Đầu tư hạ tầng giao thông & Năng lượng bền vững", "Dự án đắp chiếu, đầu tư công dàn trải lãng phí"],
+                    ["Hòa giải xích mích con cái", "Hệ thống tư pháp độc lập & Minh bạch", "Tư pháp lũng đoạn, oan sai không được đền bù"],
+                    ["Tạo dựng không gian sống", "Bảo vệ môi trường & Hệ sinh thái xanh", "Tàn phá tài nguyên, ô nhiễm môi trường nghiêm trọng"]
+                ]
+            },
+            {
+                cat: "Anh em họ hàng",
+                macro: "Công ty, Tập đoàn & Đối tác",
+                posBase: "Tương trợ nguồn lực, hợp tác đầu tư kinh doanh, chia sẻ rủi ro và tạo hệ sinh thái liên kết mạnh mẽ.",
+                negBase: "Thao túng thị trường, trốn thuế, độc quyền chèn ép, tranh chấp quyền lợi phá hoại nền kinh tế.",
+                items: [
+                    ["Chung vốn làm ăn nhỏ", "Liên minh doanh nghiệp & Chuỗi cung ứng", "Cạnh tranh không lành mạnh, phá giá triệt hạ"],
+                    ["Chia sẻ kinh nghiệm làm giàu", "Chuyển giao công nghệ & R&D", "Đánh cắp bản quyền, làm giả thương hiệu"],
+                    ["Hỗ trợ khi gặp khó khăn", "Quỹ đầu tư mạo hiểm & Tín dụng doanh nghiệp", "Cho vay nặng lãi, tín dụng đen siết nợ"],
+                    ["Phân chia công việc gia tộc", "Mô hình quản trị doanh nghiệp minh bạch", "Thao túng báo cáo tài chính, gian lận cổ đông"],
+                    ["Mở rộng thị trường dòng họ", "Mở rộng giao thương quốc tế & Xuất khẩu", "Bán rẻ tài nguyên, nhập khẩu công nghệ rác"],
+                    ["Gìn giữ uy tín dòng họ", "Xây dựng thương hiệu quốc gia", "Bê bối chất lượng sản phẩm, gian lận thương mại"],
+                    ["Bào chữa bảo vệ anh em", "Bảo vệ quyền lợi doanh nghiệp nội địa", "Bảo hộ độc quyền vô lý, triệt hạ đổi mới"],
+                    ["Đào tạo nghề cho cháu con", "Hợp tác Trường học - Doanh nghiệp", "Bóc lột lao động thực tập, cắt giảm bảo hiểm"],
+                    ["Đầu tư tài sản chung", "Hợp tác công tư (PPP) hiệu quả", "Tham nhũng dự án BOT, lũng đoạn đất công"],
+                    ["Tổ chức giỗ tết sum họp", "Hiệp hội ngành nghề & Diễn đàn kinh tế", "Cánh tay nối dài cho nhóm lợi ích thao túng"]
+                ]
+            },
+            {
+                cat: "Con cháu đi xa",
+                macro: "Kiều hối, Xuất khẩu lao động & Trí thức",
+                posBase: "Học tập tri thức tiên tiến, gửi kiều hối xây dựng quê hương, đại sứ quảng bá thương hiệu quốc gia.",
+                negBase: "Chảy máu chất xám, tị nạn tài chính, bỏ rơi quê hương, chảy máu ngoại tệ ra nước ngoài.",
+                items: [
+                    ["Gửi tiền về phụng dưỡng cha mẹ", "Dòng vốn Kiều hối ổn định kinh tế", "Tẩu tán tài sản bất hợp pháp ra nước ngoài"],
+                    ["Mang bằng cấp cao về nước", "Thu hút chuyên gia, trí thức kiều bào", "Chảy máu chất xám, nhân tài không muốn về"],
+                    ["Mở cửa hàng bán hàng quê hương", "Quảng bá văn hóa & Nông sản xuất khẩu", "Nhập khẩu hàng lậu, phá hoại sản xuất nội"],
+                    ["Kết nối bạn bè quốc tế", "Thu hút vốn FDI & Đối tác chiến lược", "Phụ thuộc vốn ngoại, bị chi phối kinh tế"],
+                    ["Học hỏi công nghệ xứ người", "Chuyển giao tri thức & Đổi mới sáng tạo", "Lệ thuộc công nghệ cũ, làm gia công giá rẻ"],
+                    ["Giúp đỡ đồng hương ở xa", "Mạng lưới doanh nhân Việt toàn cầu", "Lừa đảo lao động xuất khẩu, bóc lột đồng hương"],
+                    ["Giữ gìn tiếng mẹ đẻ", "Bảo tồn văn hóa trong cộng đồng xa xứ", "Mất gốc văn hóa, tự tin thái quá ngoại lai"],
+                    ["Gửi quà công nghệ về nhà", "Hiện đại hóa hạ tầng công nghệ trong nước", "Đưa rác thải công nghệ nguy hại về nước"],
+                    ["Quay về mở doanh nghiệp", "Khởi nghiệp đổi mới (Startup Unicorn)", "Bong bóng đầu tư ảo, lừa đảo đa cấp toàn cầu"],
+                    ["Xây dựng nhà thờ tổ", "Đầu tư các công trình từ thiện xã hội", "Rửa tiền qua các quỹ từ thiện ma"]
+                ]
+            },
+            {
+                cat: "Hàng xóm xung quanh",
+                macro: "Nhà tài trợ, Nhà đầu tư & Cộng đồng",
+                posBase: "Tương trợ tắt lửa tối đèn, đầu tư phát triển cộng đồng, góp vốn xanh, tạo môi trường sống an ninh.",
+                negBase: "Ghen ăn tức ở, lấn chiếm ranh giới, tung tin đồn vô căn cứ, chèn ép đối thủ nội địa.",
+                items: [
+                    ["Tối đèn tắt lửa có nhau", "Hỗ trợ cứu trợ thiên tai & Quỹ từ thiện", "Trục lợi từ thiện, phân phối cứu trợ bất công"],
+                    ["Góp tiền làm đường hẻm", "Xã hội hóa hạ tầng & Quỹ phát triển", "Chiếm dụng không gian chung làm tài sản riêng"],
+                    ["Cho mượn đất canh tác", "Đầu tư FDI xanh & Bền vững", "Đầu tư gây ô nhiễm, vắt cạn tài nguyên"],
+                    ["Trông chừng nhà cửa giúp", "An ninh trật tự khu dân cư & Dân quân", "Rình mò, xâm phạm quyền riêng tư cá nhân"],
+                    ["Chia sẻ đồ ăn ngon", "Giao lưu văn hóa & Quỹ học bổng", "Thâm nhập văn hóa độc hại, thao túng truyền thông"],
+                    ["Tạo việc làm cho con cháu", "Tạo việc làm địa phương & Bao tiêu nông sản", "Ép giá nông sản, thao túng chuỗi cung ứng"],
+                    ["Giữ vệ sinh chung", "Bảo vệ môi trường sống cộng đồng", "Xả thải chui out-source độc hại ra sông hồ"],
+                    ["Tham gia hội người cao tuổi", "Cơ sở an sinh xã hội & Viện dưỡng lão", "Bỏ rơi người yếu thế, coi nhẹ chính sách xã hội"],
+                    ["Hợp tác bảo vệ ranh giới", "Giữ gìn chủ quyền & Ranh giới thương mại", "Lấn chiếm biên giới, vi phạm vùng quyền tài chính"],
+                    ["Khen ngợi khích lệ lẫn nhau", "Xây dựng môi trường kinh doanh minh bạch", "Tung tin đồn thất thiệt phá hoại cổ phiếu đối thủ"]
+                ]
+            }
+        ];
+
+        // Generate full 183 dataset mapping to 19x19 Go Board
+        let boardData = [];
+
+        function generateData() {
+            let idCounter = 1;
+
+            // Generate 180 grid points from structured categories
+            for (let c = 0; c < categories.length; c++) {
+                const catObj = categories[c];
+                for (let i = 0; i < catObj.items.length; i++) {
+                    for (let variant = 1; variant <= 4.5; variant++) { // Multiplier to reach 180
+                        if (idCounter > 180) break;
+
+                        const item = catObj.items[i];
+                        const colIdx = (idCounter - 1) % 19;
+                        const rowIdx = Math.floor((idCounter - 1) / 19);
+
+                        // Adjust x, y coordinates
+                        let x = colIdx + 1;
+                        let y = 19 - rowIdx;
+
+                        // Skip 10,10 for Tianyuan
+                        if (x === 10 && y === 10) {
+                            x = 10;
+                            y = 9; // Offset slightly
+                        }
+
+                        const colLetter = COLUMN_LABELS[x - 1];
+
+                        boardData.push({
+                            id: idCounter,
+                            coord: `${colLetter}${y}`,
+                            gridX: x,
+                            gridY: 19 - y + 1,
+                            category: catObj.cat,
+                            macroCategory: catObj.macro,
+                            familyConcept: item[0] + (variant > 1 ? ` (Vị trí ${variant})` : ''),
+                            macroPositive: item[1] + ` - Thúc đẩy nền kinh tế & xã hội vững mạnh`,
+                            posDesc: `${catObj.posBase} Ví dụ: ${item[1]}.`,
+                            negConcept: item[2],
+                            negDesc: `${catObj.negBase} Tác hại: ${item[2]}.`,
+                            impactScore: Math.floor(Math.random() * 20) + 80
+                        });
+
+                        idCounter++;
+                    }
+                }
+            }
+
+            // Fill up to 180 if needed
+            while (idCounter <= 180) {
+                const colIdx = (idCounter - 1) % 19;
+                const rowIdx = Math.floor((idCounter - 1) / 19);
+                let x = colIdx + 1;
+                let y = 19 - rowIdx;
+                const colLetter = COLUMN_LABELS[x - 1];
+
+                boardData.push({
+                    id: idCounter,
+                    coord: `${colLetter}${y}`,
+                    gridX: x,
+                    gridY: 19 - y + 1,
+                    category: "Hợp tác Xã hội",
+                    macroCategory: "Thể chế & Quản trị",
+                    familyConcept: `Mối quan hệ tương trợ cộng đồng #${idCounter}`,
+                    macroPositive: "Minh bạch chính sách, tạo thuận lợi phát triển dài hạn",
+                    posDesc: "Tạo lập môi trường pháp lý công bằng, khuyến khích sáng tạo và cống hiến.",
+                    negConcept: "Tham nhũng chính sách, lũng đoạn thị trường",
+                    negDesc: "Gây thất thoát tài nguyên quốc gia, suy giảm niềm tin của nhân dân.",
+                    impactScore: 85
+                });
+                idCounter++;
+            }
+
+            // POINT 181: THIÊN NGUYÊN (Tâm Bàn Cờ K10 - 10,10) - SPECIAL POINT
+            boardData.push({
+                id: 181,
+                coord: "K10",
+                gridX: 10,
+                gridY: 10,
+                category: "Thiên Nguyên (Tâm Bàn Cờ)",
+                macroCategory: "Bản Thể Trung Tâm / Ý Thức Xã Hội",
+                familyConcept: "Cá thể & Hạt nhân Gia đình (Trục tọa độ Tâm)",
+                macroPositive: "Bản Thể Trung Tâm & Cân Bằng Âm Dương Xã Hội",
+                posDesc: "Vị trí khởi nguồn mọi quyết định. Nhận thức đúng đắn của cá nhân dẫn dắt sự thịnh vượng cho cả gia đình lẫn quốc gia.",
+                negConcept: "Sự Mất Phương Hướng & Vị Kỷ Cực Đoan",
+                negDesc: "Khi bản thể trung tâm suy thoái, mọi mối quan hệ vi mô và vĩ mô đều sụp đổ, gây hỗn loạn xã hội.",
+                impactScore: 100,
+                isSpecial: true
+            });
+
+            // POINT 182: MỞ RỘNG A (Thế trận Biên)
+            boardData.push({
+                id: 182,
+                coord: "D10",
+                gridX: 4,
+                gridY: 10,
+                category: "Thế Trận Biên",
+                macroCategory: "Bảo Vệ Biên Giới & Năng Lực Cạnh Tranh",
+                familyConcept: "Hàng rào gia tộc & Bảo vệ tài sản gia đình",
+                macroPositive: "Chiến lược bảo hộ thị trường nội địa & An ninh quốc phòng",
+                posDesc: "Bảo vệ các doanh nghiệp vừa và nhỏ nội địa trước sóng gió toàn cầu hóa.",
+                negConcept: "Bế quan tỏa cảng, tư duy tiểu nông khép kín",
+                negDesc: "Làm mất đi cơ hội giao thương quốc tế và thụt lùi công nghệ.",
+                impactScore: 90
+            });
+
+            // POINT 183: MỞ RỘNG B (Thế trận Góc Star Point)
+            boardData.push({
+                id: 183,
+                coord: "Q10",
+                gridX: 16,
+                gridY: 10,
+                category: "Thế Trận Mở Rộng",
+                macroCategory: "Hội Nhập Toàn Cầu & Thu Hút Nguồn Lực",
+                familyConcept: "Mở rộng giao du bạn bè xa gần của con cháu",
+                macroPositive: "Chủ động hội nhập quốc tế, nâng tầm ảnh hưởng dân tộc",
+                posDesc: "Tham gia sâu vào chuỗi giá trị toàn cầu, thu hút chất xám và tài chính quốc tế.",
+                negConcept: "Ngoại phụ thuộc hoàn toàn, mất tự chủ kinh tế",
+                negDesc: "Trở thành bãi đáp công nghệ cũ và chịu rủi ro khủng hoảng từ bên ngoài.",
+                impactScore: 92
+            });
+        }
+
+        // Selected Point State
+        let selectedPoint = null;
+        let currentFilter = 'ALL';
+
+        // -------------------------------------------------------------
+        // UI RENDER FUNCTIONS
+        // -------------------------------------------------------------
+
+        // Render Go Board Interactive Elements
+        function renderBoard() {
+            const boardEl = document.getElementById('goBoard');
+            boardEl.innerHTML = '';
+
+            // 19x19 Hoshi (Star points) coordinates: (4,4), (4,10), (4,16), (10,4), (10,10), (10,16), (16,4), (16,10), (16,16)
+            const hoshiCoords = ["D4", "D10", "D16", "K4", "K10", "K16", "Q4", "Q10", "Q16"];
+
+            // Create 19x19 grid items
+            for (let r = 1; r <= 19; r++) {
+                for (let c = 1; c <= 19; c++) {
+                    const colLetter = COLUMN_LABELS[c - 1];
+                    const rowNum = 19 - r + 1;
+                    const coordStr = `${colLetter}${rowNum}`;
+
+                    // Find matching data point
+                    const dataPt = boardData.find(p => p.gridX === c && p.gridY === r) || {
+                        coord: coordStr,
+                        category: "Điểm Giao Xã Hội",
+                        macroCategory: "Liên Kết Mở Rộng",
+                        familyConcept: "Quan hệ ứng xử hàng ngày",
+                        macroPositive: "Hợp tác phát triển kinh tế vĩ mô",
+                        posDesc: "Duy trì sự ổn định và hỗ trợ lẫn nhau trong hệ thống.",
+                        negConcept: "Xung đột lợi ích vi mô & vĩ mô",
+                        negDesc: "Gây lãng phí nguồn lực xã hội.",
+                        impactScore: 75
+                    };
+
+                    const cell = document.createElement('div');
+                    cell.className = `relative flex items-center justify-center group border-[0.5px] border-wood-900/40`;
+                    cell.dataset.coord = coordStr;
+
+                    // Hoshi point dot
+                    const isHoshi = hoshiCoords.includes(coordStr);
+                    let hoshiHtml = isHoshi ? `<div class="absolute w-2 h-2 rounded-full bg-wood-900 z-0"></div>` : '';
+
+                    // Determine Stone Color on display (Even IDs = White/Pos, Odd IDs = Black/Neg, 181 Tianyuan = Glow Dual)
+                    let stoneHtml = '';
+                    if (dataPt.isSpecial) {
+                        stoneHtml = `
+                            <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-tr from-slate-900 via-amber-500 to-white shadow-lg border-2 border-amber-300 z-10 flex items-center justify-center animate-pulse">
+                                <i class="fa-solid fa-star text-[9px] text-slate-950"></i>
+                            </div>
+                        `;
+                    } else if (dataPt.id % 2 === 0) {
+                        stoneHtml = `<div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full white-stone z-10 transition-transform group-hover:scale-125 border border-slate-300/80"></div>`;
+                    } else {
+                        stoneHtml = `<div class="w-5 h-5 sm:w-6 sm:h-6 rounded-full black-stone z-10 transition-transform group-hover:scale-125 border border-slate-700/80"></div>`;
+                    }
+
+                    cell.innerHTML = `
+                        ${hoshiHtml}
+                        ${stoneHtml}
+                        <div class="absolute inset-0 bg-amber-400/20 opacity-0 group-hover:opacity-100 transition-opacity z-20 rounded-sm"></div>
+                    `;
+
+                    cell.onclick = () => selectPoint(dataPt);
+
+                    boardEl.appendChild(cell);
+                }
+            }
+        }
+
+        // Select and Display Details in Card
+        function selectPoint(pt) {
+            selectedPoint = pt;
+            const cardEl = document.getElementById('detailContent');
+
+            const isWhite = pt.id % 2 === 0 && !pt.isSpecial;
+            const isBlack = pt.id % 2 !== 0 && !pt.isSpecial;
+
+            cardEl.innerHTML = `
+                <div class="space-y-4">
+                    <!-- Top Header -->
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center space-x-3">
+                            <span class="px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-lg text-xs font-bold tracking-wide">
+                                Tọa độ: ${pt.coord}
+                            </span>
+                            <span class="text-xs text-slate-400 font-medium">STT #${pt.id}</span>
+                        </div>
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                            ${pt.category}
+                        </span>
+                    </div>
+
+                    <!-- Title Metaphor -->
+                    <div>
+                        <div class="text-xs text-amber-400 font-semibold tracking-wider uppercase mb-1">
+                            Ẩn dụ: ${pt.macroCategory}
+                        </div>
+                        <h3 class="text-lg font-bold text-white leading-tight">
+                            ${pt.familyConcept}
+                        </h3>
+                    </div>
+
+                    <!-- Dual Contrast Cards -->
+                    <div class="grid grid-cols-1 gap-3 pt-2">
+                        
+                        <!-- Positive Side (Quân Trắng) -->
+                        <div class="p-3.5 rounded-xl bg-slate-950 border-l-4 border-emerald-500 space-y-1.5 shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                                    <span class="w-3 h-3 rounded-full white-stone inline-block border border-slate-400"></span>
+                                    CHÍNH DIỆN (Quân Trắng - Xây Dựng)
+                                </span>
+                                <i class="fa-solid fa-arrow-up-right-dots text-emerald-500 text-xs"></i>
+                            </div>
+                            <div class="text-xs font-semibold text-slate-200">
+                                ${pt.macroPositive}
+                            </div>
+                            <p class="text-[11px] text-slate-400 leading-relaxed">
+                                ${pt.posDesc}
+                            </p>
+                        </div>
+
+                        <!-- Negative Side (Quân Đen) -->
+                        <div class="p-3.5 rounded-xl bg-slate-950 border-l-4 border-rose-500 space-y-1.5 shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-rose-400 flex items-center gap-1.5">
+                                    <span class="w-3 h-3 rounded-full black-stone inline-block border border-slate-600"></span>
+                                    PHẢN DIỆN (Quân Đen - Đảo Ngược)
+                                </span>
+                                <i class="fa-solid fa-triangle-exclamation text-rose-500 text-xs"></i>
+                            </div>
+                            <div class="text-xs font-semibold text-slate-200">
+                                ${pt.negConcept}
+                            </div>
+                            <p class="text-[11px] text-slate-400 leading-relaxed">
+                                ${pt.negDesc}
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <!-- Footer Impact -->
+                    <div class="pt-2 flex items-center justify-between text-xs text-slate-500 border-t border-slate-800/80">
+                        <span>Chỉ số tác động lan tỏa: <strong class="text-slate-300">${pt.impactScore || 85}/100</strong></span>
+                        <span class="italic text-[11px]">Cờ Vây Triết Lý Xã Hội</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Filter Board Points via Search
+        function filterBoardPoints(query) {
+            const q = query.toLowerCase().trim();
+            const cells = document.querySelectorAll('#goBoard > div');
+
+            boardData.forEach((pt) => {
+                const isMatch = !q || 
+                    pt.coord.toLowerCase().includes(q) ||
+                    pt.familyConcept.toLowerCase().includes(q) ||
+                    pt.macroPositive.toLowerCase().includes(q) ||
+                    pt.negConcept.toLowerCase().includes(q) ||
+                    pt.category.toLowerCase().includes(q);
+
+                const cell = document.querySelector(`[data-coord="${pt.coord}"]`);
+                if (cell) {
+                    if (isMatch) {
+                        cell.style.opacity = '1';
+                        cell.style.transform = 'scale(1)';
+                    } else {
+                        cell.style.opacity = '0.15';
+                        cell.style.transform = 'scale(0.85)';
+                    }
+                }
+            });
+        }
+
+        function applyCategoryFilter(cat) {
+            currentFilter = cat;
+            // Highlight buttons
+            const btns = document.querySelectorAll('#filterTags button');
+            btns.forEach(b => {
+                if ((cat === 'ALL' && b.innerText.includes('Tất cả')) || b.innerText.includes(cat)) {
+                    b.className = 'px-2.5 py-1 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold';
+                } else {
+                    b.className = 'px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 hover:bg-slate-700';
+                }
+            });
+
+            if (cat === 'ALL') {
+                filterBoardPoints('');
+            } else {
+                filterBoardPoints(cat);
+            }
+        }
+
+        // Render Searchable Table (View 2)
+        function renderTable(query = '') {
+            const tbody = document.getElementById('tableBody');
+            const q = query.toLowerCase().trim();
+
+            const filtered = boardData.filter(pt => {
+                return !q || 
+                    pt.coord.toLowerCase().includes(q) ||
+                    pt.familyConcept.toLowerCase().includes(q) ||
+                    pt.macroPositive.toLowerCase().includes(q) ||
+                    pt.negConcept.toLowerCase().includes(q) ||
+                    pt.category.toLowerCase().includes(q);
+            });
+
+            document.getElementById('tableCount').innerText = filtered.length;
+
+            tbody.innerHTML = filtered.map(pt => `
+                <tr class="hover:bg-slate-800/40 transition-colors cursor-pointer" onclick="selectPointAndSwitch('${pt.coord}')">
+                    <td class="p-3 text-center text-slate-500 font-mono">${pt.id}</td>
+                    <td class="p-3 text-center font-bold text-amber-300 bg-slate-950/40">${pt.coord}</td>
+                    <td class="p-3">
+                        <div class="font-semibold text-slate-100">${pt.familyConcept}</div>
+                        <div class="text-[11px] text-emerald-400 mt-0.5"><i class="fa-solid fa-circle-check text-[9px] mr-1"></i>${pt.macroPositive}</div>
+                    </td>
+                    <td class="p-3">
+                        <div class="font-semibold text-slate-200">${pt.negConcept}</div>
+                        <div class="text-[11px] text-rose-400 mt-0.5"><i class="fa-solid fa-triangle-exclamation text-[9px] mr-1"></i>Tác động tiêu cực đối ứng</div>
+                    </td>
+                    <td class="p-3 text-[11px] text-slate-400 leading-relaxed">
+                        <span class="text-amber-200/90 font-medium">[${pt.category}]</span> ${pt.posDesc}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function selectPointAndSwitch(coord) {
+            const pt = boardData.find(p => p.coord === coord);
+            if (pt) {
+                switchView('board');
+                selectPoint(pt);
+            }
+        }
+
+        // View Switching Logic
+        function switchView(view) {
+            const boardView = document.getElementById('viewBoard');
+            const tableView = document.getElementById('viewTable');
+            const btnBoard = document.getElementById('btnViewBoard');
+            const btnTable = document.getElementById('btnViewTable');
+
+            if (view === 'board') {
+                boardView.classList.remove('hidden');
+                tableView.classList.add('hidden');
+                btnBoard.className = 'flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-amber-500 text-slate-950 shadow';
+                btnTable.className = 'flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all';
+            } else {
+                boardView.classList.add('hidden');
+                tableView.classList.remove('hidden');
+                btnTable.className = 'flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-amber-500 text-slate-950 shadow';
+                btnBoard.className = 'flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all';
+                renderTable();
+            }
+        }
+
+        // Initialize App on Window Load
+        window.onload = function() {
+            generateData();
+            renderBoard();
+            // Select Tianyuan (K10 - id 181) as default
+            const tianyuan = boardData.find(p => p.coord === "K10") || boardData[0];
+            selectPoint(tianyuan);
+        };
+    </script>
+</body>
+</html>

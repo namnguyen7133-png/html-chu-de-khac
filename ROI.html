@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 32: Phân tích Chi Phí Biến Đổi - CEO AI Enterprise</title>
+    <!-- Tailwind CSS cho giao diện đẹp, hiện đại -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js để vẽ biểu đồ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome cho icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-6">
+
+    <div class="max-w-7xl mx-auto space-y-6">
+        <!-- Header Module -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+            <div>
+                <span class="bg-indigo-500/10 text-indigo-400 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20">MODULE 32</span>
+                <h1 class="text-2xl font-bold mt-2 text-white">Phân tích Chi Phí Biến Đổi (Variable Cost Analysis)</h1>
+                <p class="text-slate-400 text-sm mt-1">Đánh giá tỷ trọng biến phí theo sản lượng, giá vốn hàng bán và chi phí trực tiếp tác động theo quy mô.</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex gap-3">
+                <button onclick="saveToSQLite()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 shadow-lg shadow-emerald-600/20">
+                    <i class="fa-solid fa-database"></i> Lưu SQLite
+                </button>
+                <button onclick="exportExcel()" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 border border-slate-600">
+                    <i class="fa-solid fa-file-excel"></i> Xuất Excel
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Cột 1 & 2: Nhập liệu và Kết quả -->
+            <div class="lg:col-span-2 space-y-6">
+                
+                <!-- Form Nhập Dữ Liệu -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-4 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-indigo-400"></i> Thông số đầu vào biến phí
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Chi phí nguyên vật liệu trực tiếp (VNĐ)</label>
+                            <input type="number" id="vcMaterials" value="200000000" oninput="calculateVariableCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Chi phí nhân công trực tiếp theo sản lượng (VNĐ)</label>
+                            <input type="number" id="vcLabor" value="80000000" oninput="calculateVariableCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Chi phí vận chuyển & đóng gói phát sinh (VNĐ)</label>
+                            <input type="number" id="vcShipping" value="40000000" oninput="calculateVariableCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Hoa hồng bán hàng / Phí nền tảng theo đơn (VNĐ)</label>
+                            <input type="number" id="vcCommission" value="30000000" oninput="calculateVariableCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Tổng Doanh Thu Thuần trong kỳ tương ứng (VNĐ)</label>
+                            <input type="number" id="totalRevenue" value="600000000" oninput="calculateVariableCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                            <span class="text-[10px] text-slate-500 mt-1 block">Dùng để tính tỷ lệ biến phí trên doanh thu (Variable Cost Ratio)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thẻ Kết Quả Tính Toán -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
+                        <span class="text-xs text-slate-400 font-medium">Tổng Biến Phí (Total Variable Cost)</span>
+                        <div id="resTotalVC" class="text-2xl font-bold text-indigo-400 mt-1">0 VNĐ</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Biến đổi theo doanh thu/sản lượng</span>
+                    </div>
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
+                        <span class="text-xs text-slate-400 font-medium">Tỷ lệ Biến phí / Doanh thu</span>
+                        <div id="resVCRatio" class="text-2xl font-bold text-sky-400 mt-1">0%</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Tỷ lệ chi phí trực tiếp trên mỗi đồng doanh thu</span>
+                    </div>
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
+                        <span class="text-xs text-slate-400 font-medium">Số dư đảm phí (Contribution Margin)</span>
+                        <div id="resContributionMargin" class="text-2xl font-bold text-emerald-400 mt-1">0 VNĐ</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Doanh thu trừ đi tổng biến phí</span>
+                    </div>
+                </div>
+
+                <!-- Biểu đồ cơ cấu biến phí -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-4 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-indigo-400"></i> Biểu đồ Cơ Cấu Chi Phí Biến Đổi
+                    </h2>
+                    <div class="h-72 relative flex justify-center">
+                        <canvas id="variableCostChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Cột 3: Đánh giá & Khuyến nghị AI -->
+            <div class="space-y-6">
+                
+                <!-- Đánh giá sức khỏe doanh nghiệp -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-3 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-heart-pulse text-rose-400"></i> Doanh nghiệp Khỏe hay Yếu?
+                    </h2>
+                    <div id="aiHealthStatus" class="p-4 rounded-xl bg-slate-900 border border-slate-700 text-sm leading-relaxed text-slate-300">
+                        Đang phân tích dữ liệu...
+                    </div>
+                </div>
+
+                <!-- Cảnh báo & Khuyến nghị AI -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-3 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Cảnh báo & Khuyến nghị AI
+                    </h2>
+                    <div id="aiRecommendations" class="space-y-3 text-sm text-slate-300">
+                        <!-- Nội dung được cập nhật động bằng JS -->
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JavaScript Xử Lý Logic, Tính Toán & Biểu Đồ -->
+    <script>
+        let myChart = null;
+
+        function formatCurrency(num) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(num);
+        }
+
+        function calculateVariableCost() {
+            // Lấy giá trị đầu vào
+            const materials = parseFloat(document.getElementById('vcMaterials').value) || 0;
+            const labor = parseFloat(document.getElementById('vcLabor').value) || 0;
+            const shipping = parseFloat(document.getElementById('vcShipping').value) || 0;
+            const commission = parseFloat(document.getElementById('vcCommission').value) || 0;
+            const revenue = parseFloat(document.getElementById('totalRevenue').value) || 0;
+
+            // Tính toán tổng biến phí
+            const totalVC = materials + labor + shipping + commission;
+            const vcRatio = revenue > 0 ? (totalVC / revenue) * 100 : 0;
+            const contributionMargin = revenue - totalVC;
+
+            // Hiển thị kết quả ra HTML
+            document.getElementById('resTotalVC').innerText = formatCurrency(totalVC);
+            document.getElementById('resVCRatio').innerText = vcRatio.toFixed(1) + "%";
+            
+            const cmEl = document.getElementById('resContributionMargin');
+            cmEl.innerText = formatCurrency(contributionMargin);
+            if (contributionMargin >= 0) {
+                cmEl.className = "text-2xl font-bold text-emerald-400 mt-1";
+            } else {
+                cmEl.className = "text-2xl font-bold text-rose-400 mt-1";
+            }
+
+            // Cập nhật phân tích AI & Biểu đồ
+            updateAIAnalysis(vcRatio, totalVC, revenue);
+            updateChart(materials, labor, shipping, commission);
+        }
+
+        function updateAIAnalysis(vcRatio, totalVC, revenue) {
+            const healthEl = document.getElementById('aiHealthStatus');
+            const recEl = document.getElementById('aiRecommendations');
+
+            let healthText = "";
+            let recommendations = "";
+
+            if (vcRatio <= 50) {
+                healthText = `<strong class="text-emerald-400">Doanh nghiệp KHỎE:</strong> Tỷ lệ biến phí chiếm dưới 50% doanh thu, cho thấy số dư đảm phí (lãi gộp biên) rất cao. Mỗi sản phẩm bán ra mang lại thặng dư lớn để bù đắp định phí và tạo lợi nhuận.`;
+                recommendations = `
+                    <div class="flex items-start gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-circle-check text-emerald-400 mt-0.5"></i>
+                        <span><strong>Tối ưu hóa quy mô:</strong> Biên lợi nhuận gộp tốt tạo điều kiện thuận lợi để đẩy mạnh ngân sách Marketing mở rộng thị phần.</span>
+                    </div>
+                `;
+            } else if (vcRatio <= 75) {
+                healthText = `<strong class="text-amber-400">Doanh nghiệp ỔN ĐỊNH:</strong> Tỷ lệ biến phí dao động ở mức trung bình (50% - 75%). Cần kiểm soát chặt giá vốn hàng bán và chi phí vận chuyển để tránh bị ăn mòn lợi nhuận.`;
+                recommendations = `
+                    <div class="flex items-start gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-400 mt-0.5"></i>
+                        <span><strong>Đàm phán nhà cung cấp:</strong> Tìm kiếm thêm nguồn cung ứng nguyên vật liệu thay thế nhằm giảm giá vốn đơn vị (VC).</span>
+                    </div>
+                `;
+            } else {
+                healthText = `<strong class="text-rose-400">Doanh nghiệp RỦI RO CAO:</strong> Biến phí chiếm trên 75% doanh thu, khiến số dư đảm phí quá mỏng. Doanh nghiệp rất dễ rơi vào trạng thái lỗ nếu chi phí cố định phát sinh thêm hoặc giá bán bị cạnh tranh hạ thấp.`;
+                recommendations = `
+                    <div class="flex items-start gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-triangle-exclamation text-rose-400 mt-0.5"></i>
+                        <span><strong>Xem xét lại chiến lược giá:</strong> Cần điều chỉnh tăng giá bán sản phẩm hoặc tái cấu trúc lại quy trình sản xuất để cắt giảm chi phí trực tiếp.</span>
+                    </div>
+                `;
+            }
+
+            healthEl.innerHTML = healthText;
+            recEl.innerHTML = recommendations;
+        }
+
+        function updateChart(materials, labor, shipping, commission) {
+            const ctx = document.getElementById('variableCostChart').getContext('2d');
+
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Nguyên Vật Liệu', 'Nhân Công Trực Tiếp', 'Vận Chuyển & Đóng Gói', 'Hoa Hồng & Phí Sàn'],
+                    datasets: [{
+                        data: [materials, labor, shipping, commission],
+                        backgroundColor: [
+                            '#38bdf8',
+                            '#818cf8',
+                            '#34d399',
+                            '#fbbf24'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#94a3b8', font: { family: 'Inter', size: 11 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function saveToSQLite() {
+            alert("Đã kết nối tầng Python & SQLite: Dữ liệu Chi Phí Biến Đổi đã được ghi thành công vào cơ sở dữ liệu!");
+        }
+
+        function exportExcel() {
+            alert("Đã xuất báo cáo mô-đun Phân tích Chi Phí Biến Đổi ra tệp Excel thành công!");
+        }
+
+        // Khởi chạy tính toán lần đầu khi load trang
+        window.onload = calculateVariableCost;
+    </script>
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trắc Nghiệm: Bài Học Từ Web 68</title>
+<style>
+  :root{
+    --bg:#0f172a;
+    --card:#1e293b;
+    --accent:#38bdf8;
+    --good:#22c55e;
+    --bad:#ef4444;
+    --warn:#f59e0b;
+    --text:#e2e8f0;
+    --muted:#94a3b8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    font-family:'Segoe UI',Tahoma,sans-serif;
+    background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);
+    color:var(--text);
+    margin:0;
+    padding:24px;
+    min-height:100vh;
+  }
+  .wrap{max-width:860px;margin:0 auto;}
+  h1{
+    text-align:center;
+    font-size:1.55rem;
+    background:linear-gradient(90deg,#38bdf8,#a78bfa);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    margin-bottom:8px;
+  }
+  .subtitle{
+    text-align:center;
+    color:var(--muted);
+    font-size:.92rem;
+    margin-bottom:24px;
+    line-height:1.5;
+  }
+  .progress-bar{
+    height:8px;
+    background:#334155;
+    border-radius:99px;
+    overflow:hidden;
+    margin-bottom:22px;
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg,#38bdf8,#a78bfa);
+    width:0%;
+    transition:width .4s ease;
+  }
+  .question-card{
+    background:var(--card);
+    border-radius:16px;
+    padding:24px;
+    box-shadow:0 8px 24px rgba(0,0,0,.35);
+    margin-bottom:20px;
+    animation:fade .4s ease;
+  }
+  @keyframes fade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+  .q-number{
+    color:var(--accent);
+    font-size:.82rem;
+    font-weight:700;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .source-tag{
+    display:inline-block;
+    background:#0f172a;
+    color:var(--muted);
+    font-size:.72rem;
+    padding:3px 10px;
+    border-radius:99px;
+    margin-bottom:10px;
+    border:1px solid #334155;
+  }
+  .context{
+    background:#0f172a;
+    border-left:4px solid var(--accent);
+    padding:12px 16px;
+    border-radius:8px;
+    font-size:.9rem;
+    color:var(--muted);
+    line-height:1.6;
+    margin-bottom:16px;
+  }
+  .q-text{
+    font-size:1.05rem;
+    line-height:1.6;
+    margin-bottom:16px;
+    font-weight:600;
+  }
+  .answers{display:flex;flex-direction:column;gap:10px;}
+  .answer{
+    background:#0f172a;
+    border:2px solid #334155;
+    border-radius:10px;
+    padding:13px 15px;
+    cursor:pointer;
+    transition:all .2s;
+    font-size:.93rem;
+    line-height:1.5;
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+  }
+  .answer:hover:not(.disabled){
+    border-color:var(--accent);
+    transform:translateX(4px);
+  }
+  .answer .key{
+    font-weight:700;
+    color:var(--accent);
+    flex-shrink:0;
+  }
+  .answer.correct{
+    border-color:var(--good);
+    background:rgba(34,197,94,.12);
+  }
+  .answer.correct .key{color:var(--good);}
+  .answer.wrong{
+    border-color:var(--bad);
+    background:rgba(239,68,68,.12);
+  }
+  .answer.wrong .key{color:var(--bad);}
+  .answer.disabled{cursor:default;opacity:.85;}
+
+  .feedback{
+    margin-top:16px;
+    padding:16px;
+    border-radius:10px;
+    font-size:.9rem;
+    line-height:1.7;
+    display:none;
+  }
+  .feedback.show{display:block;animation:fade .3s ease;}
+  .feedback.correct-fb{
+    background:rgba(34,197,94,.12);
+    border:1px solid var(--good);
+  }
+  .feedback.wrong-fb{
+    background:rgba(239,68,68,.12);
+    border:1px solid var(--bad);
+  }
+  .feedback h4{margin:0 0 8px 0;font-size:.98rem;}
+  .feedback .advice{
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px dashed #475569;
+    color:var(--warn);
+    font-style:italic;
+  }
+  .next-btn{
+    display:none;
+    margin-top:16px;
+    width:100%;
+    padding:14px;
+    background:linear-gradient(90deg,#38bdf8,#a78bfa);
+    border:none;
+    border-radius:10px;
+    color:#0f172a;
+    font-weight:700;
+    font-size:1rem;
+    cursor:pointer;
+    transition:transform .2s;
+  }
+  .next-btn:hover{transform:scale(1.02);}
+  .next-btn.show{display:block;}
+
+  .result-card{
+    display:none;
+    background:var(--card);
+    border-radius:16px;
+    padding:32px;
+    text-align:center;
+    box-shadow:0 8px 24px rgba(0,0,0,.35);
+    animation:fade .5s ease;
+  }
+  .result-card.show{display:block;}
+  .score{
+    font-size:3rem;
+    font-weight:800;
+    background:linear-gradient(90deg,#38bdf8,#a78bfa);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    margin:10px 0;
+  }
+  .verdict{
+    font-size:1.05rem;
+    line-height:1.8;
+    margin:16px 0;
+  }
+  .final-advice{
+    background:#0f172a;
+    border-left:4px solid var(--warn);
+    padding:16px 20px;
+    border-radius:8px;
+    text-align:left;
+    font-size:.94rem;
+    line-height:1.8;
+    color:var(--text);
+    margin-top:20px;
+  }
+  .restart{
+    margin-top:24px;
+    padding:14px 32px;
+    background:transparent;
+    border:2px solid var(--accent);
+    color:var(--accent);
+    border-radius:10px;
+    font-weight:700;
+    cursor:pointer;
+    transition:all .2s;
+  }
+  .restart:hover{background:var(--accent);color:#0f172a;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🎬 Trắc Nghiệm Bài Học Nhân Sinh</h1>
+  <p class="subtitle">
+    10 câu hỏi dựa trên nội dung các phim/truyện trong Web 68<br>
+    Mỗi câu 5 đáp án · 1 đúng · 4 nhiễu · 1 đáp án "im lặng"
+  </p>
+
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div id="quizArea"></div>
+
+  <div class="result-card" id="resultCard">
+    <h2>📊 Kết Quả Của Bạn</h2>
+    <div class="score" id="scoreText">0/10</div>
+    <div class="verdict" id="verdictText"></div>
+    <div class="final-advice" id="finalAdvice"></div>
+    <button class="restart" onclick="location.reload()">🔄 Làm Lại</button>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    source: "Chủ tịch ăn mặc giản dị bị nhân viên khinh thường",
+    context: "Nhân vật: Chủ tịch Tần Minh Đức, người giàu nhất Giang Thành, mặc áo vải giản dị dẫn vợ con đi mua sắm. Nhân viên cửa hàng trang sức cao cấp nhìn bộ dạng nghèo hèn liền khinh thường, đuổi khách.",
+    q: "Khi bị nhân viên cửa hàng đánh giá thấp vì ăn mặc giản dị, nhân vật nên xử sự thế nào?",
+    answers: [
+      { text: "Lập tức rút thẻ đen kim cương ra để chứng minh ta đây giàu, cho nhân viên biết tay.", correct: false },
+      { text: "Bình tĩnh, giữ phong thái, không cần chứng minh bản thân với kẻ chỉ nhìn bề ngoài.", correct: true },
+      { text: "Im lặng bỏ đi, không nói gì, coi như không có chuyện gì xảy ra.", correct: false },
+      { text: "Mua hết cửa hàng để dằn mặt những nhân viên đã coi thường mình.", correct: false },
+      { text: "Về nhà, mua lại bộ quần áo hàng hiệu để lần sau không bị coi thường nữa.", correct: false }
+    ],
+    explain: "Đáp án đúng là B. Người thực sự có bản lĩnh không cần chứng minh bằng cách khoe khoang. Sự bình tĩnh và phong thái mới là thứ khiến người khác nể phục, còn dùng tiền để dằn mặt chỉ làm mất giá trị bản thân.",
+    advice: "Nếu hoàn cảnh của bạn giống nhân vật — có tiền nhưng bị đánh giá thấp vì ăn mặc — thì đừng vội mua sắm hàng hiệu chỉ để chứng minh. Bạn đang cố chạy theo tầng lớp xã hội khác bằng vẻ bề ngoài. Giá trị thật của bạn nằm ở nhân cách và năng lực, không phải ở món đồ bạn đeo."
+  },
+  {
+    source: "Quả báo nhà chồng",
+    context: "Nhân vật: Lan, 25 tuổi, cưới xa nhà 300 km. Mẹ chồng bà Hiền và chị chồng Kiều lười biếng, bắt Lan làm hết việc nhà. Trường, chồng cô, nhu nhược, nghe lời mẹ và chị, không giúp vợ.",
+    q: "Khi sống chung với gia đình chồng mà mọi việc đổ dồn lên vai mình, Lan nên làm gì?",
+    answers: [
+      { text: "Im lặng chịu đựng, cố gắng làm hết mọi việc để giữ hòa khí gia đình.", correct: false },
+      { text: "Nói chuyện thẳng thắn với chồng, yêu cầu phân chia công việc rõ ràng và tách chi tiêu.", correct: true },
+      { text: "Bỏ về nhà mẹ đẻ ngay lập tức, không cần nói gì thêm.", correct: false },
+      { text: "Thuê giúp việc để đỡ phải làm, dù tốn tiền.", correct: false },
+      { text: "Nhịn nhục làm hết việc, chờ đến Tết về nhà mẹ đẻ rồi tính sau.", correct: false }
+    ],
+    explain: "Đáp án đúng là B. Vấn đề cốt lõi nằm ở chồng chứ không phải mẹ chồng hay chị chồng. Nếu chồng không thay đổi, mọi cố gắng của vợ đều vô nghĩa. Cần nói chuyện thẳng thắn để anh ta hiểu và có trách nhiệm.",
+    advice: "Nếu hoàn cảnh của bạn giống nhân vật — lấy chồng xa, sống chung đại gia đình, bị đối xử bất công — thì đừng cố nhịn nhục để giữ thể diện. Bạn đang cố sống theo khuôn mẫu 'dâu hiền' của tầng lớp khác. Hãy nhớ: bình đẳng trong hôn nhân là điều kiện tiên quyết để hạnh phúc."
+  },
+  {
+    source: "Cô quả quyết ly hôn",
+    context: "Nhân vật: Ninh Chi Hạ, con gái duy nhất của nhà họ Ninh, người thừa kế tập đoàn. Cô lấy Lục Tắc An theo liên hôn. Chồng cô bóc tôm cho nữ trợ lý trước mặt vợ, dẫn cô ta đi dự tiệc. Chi Hạ cho chồng 3 cơ hội, hết cơ hội thì ly hôn.",
+    q: "Khi người bạn đời liên tục vượt quá giới hạn với người khác giới, bạn nên làm gì?",
+    answers: [
+      { text: "Im lặng cho qua, vì hôn nhân nào chẳng có sóng gió, nhịn là tốt nhất.", correct: false },
+      { text: "Cho vài cơ hội, nếu không thay đổi thì dứt khoát ly hôn để bảo vệ bản thân.", correct: true },
+      { text: "Ghen tuông, làm ầm lên cho mọi người biết để chồng xấu hổ mà dừng lại.", correct: false },
+      { text: "Cũng tìm người khác để trả đũa, cho chồng biết cảm giác bị phản bội.", correct: false },
+      { text: "Nhịn nhưng bí mật theo dõi, thu thập bằng chứng để sau này kiện ly hôn.", correct: false }
+    ],
+    explain: "Đáp án đúng là B. Một cuộc hôn nhân lành mạnh cần sự tôn trọng. Nếu đối phương không thay đổi sau khi được nhắc nhở, ly hôn là cách bảo vệ chính mình, thay vì tiếp tục chịu đựng tổn thương.",
+    advice: "Nếu hoàn cảnh của bạn giống nhân vật — có năng lực, độc lập về tài chính, nhưng hôn nhân không hạnh phúc — thì đừng vì áp lực 'phải giữ gia đình' mà tiếp tục chịu đựng. Bạn không cần mua sắm hàng hiệu hay sống theo chuẩn mực của tầng lớp khác để chứng minh mình hạnh phúc. Hạnh phúc thật là sự an yên trong tâm hồn."
+  },
+  {
+    source: "Góa phụ đa tình",
+    context: "Nhân vật: Long, tài xế, có vợ con nhưng vẫn quan hệ với nhiều người phụ nữ khác. Anh mua sâm kỳ vương để bồi bổ, mua quà cho nhân tình, sống buông thả.",
+    q: "Khi có gia đình nhưng vẫn bị cám dỗ bởi những mối quan hệ ngoài luồng, bạn nên làm gì?",
+    answers: [
+      { text: "Dừng lại, tập trung vào gia đình, vì đó là nơi bạn thực sự thuộc về.", correct: true },
+      { text: "Im lặng, coi như không có chuyện gì, miễn là không ai phát hiện.", correct: false },
+      { text: "Tiếp tục vì đàn ông ai chẳng có vài mối quan hệ ngoài luồng.", correct: false },
+      { text: "Mua quà đắt tiền cho vợ để bù đắp, coi như chuộc lỗi.", correct: false },
+      { text: "Cắt liên lạc nhưng giữ bí mật, không cho vợ biết để tránh phiền phức.", correct: false }
+    ],
+    explain: "Đáp án đúng là A. Phản bội là phản bội, dù có che giấu hay bù đắp bằng vật chất. Điều duy nhất đúng đắn là dừng lại và tập trung vào gia đình — nơi bạn đã cam kết gắn bó.",
+    advice: "Nếu hoàn cảnh của bạn giống nhân vật — có vợ con nhưng vẫn bị cám dỗ bởi những mối quan hệ ngoài luồng — thì đừng dùng tiền để mua sắm quà cáp cho nhân tình. Bạn đang cố sống theo kiểu 'đại gia' của tầng lớp khác trong khi trách nhiệm gia đình mới là ưu tiên. Hãy nhớ: hạnh phúc thật không nằm ở số lượng mối quan hệ, mà ở chất lượng của một mối quan hệ."
+  },
+  {
+    source: "Người chồng mù quáng tin nhân tình",
+    context: "Nhân vật: Nam, nông dân, lên thành phố làm việc. Anh bị Hồng, cô gái thành thị, dụ dỗ. Nam bỏ vợ hiền Lan và con gái để theo Hồng. Sau đó Hồng lấy hết tiền, bỏ Nam, khiến anh trắng tay và chết trong cô độc.",
+    q: "Khi bị người khác giới dụ dỗ bằng những lời ngon ngọt, điều gì nên là hành động đúng?",
+    answers: [
+      { text: "Tin tưởng vào người mới vì họ 'hiểu mình' hơn vợ ở quê.", correct: false },
+      { text: "Nhận ra giá trị của gia đình, giữ khoảng cách với kẻ thứ ba, quay về với vợ con.", correct: true },
+      { text: "Im lặng quan sát, không nói gì, để mọi chuyện tự diễn ra.", correct: false },
+      { text: "Tiếp tục vì cho rằng vợ ở quê không biết, không ảnh hưởng gì.", correct: false },
+      { text: "Mua quà cho vợ nhiều hơn để bù đắp, rồi tiếp tục mối quan hệ mới.", correct: false }
+    ],
+    explain: "Đáp án đúng là B. Những lời ngon ngọt của người mới thường là bẫy. Gia đình là nơi ta thực sự thuộc về. Nếu không nhận ra sớm, hậu quả sẽ rất thảm khốc — như trường hợp của Nam.",
+    advice: "Nếu hoàn cảnh của bạn giống nhân vật — có vợ hiền ở quê, lên thành phố bị cám dỗ — thì đừng để những lời ngọt ngào đánh lừa. Bạn đang cố sống theo kiểu 'hiện đại' của tầng lớp thành thị, trong khi giá trị thật nằm ở người vợ tần tảo bên bạn. Hãy nhớ: người thật lòng với bạn không bao giờ cần bạn phải chứng minh bằng tiền bạc."
+  },
+  {
+    source: "Phim Lẻ Hay: Thiên Cơ - Cửu U Nghiệp Hỏa",
+    context: "Nhân vật chính là một người bình thường, bị cuốn vào vòng xoáy của quyền lực và tiền bạc. Các thế lực lớn dùng tiền để mua chuộc, lôi kéo anh ta về phe mình.",
+    q: "Khi bị các thế lực lớn dụ dỗ bằng tiền bạc và quyền lực, nhân vật nên làm gì?",
+    answers: [
+      { text: "Nhận tiền, vì đời người ngắn ngủi, có tiền là có tất cả.", correct: false },
+      { text: "Giữ vững lập trường, không để tiền bạc làm mờ mắt, sống theo lẽ phải.", correct: true },
+      { text: "Im lặng, không nhận cũng không từ chối, chờ xem tình hình thế nào.", correct: false },
+      { text: "Nhận tiền nhưng giả vờ không biết gì, để được lợi mà không mất gì.", correct: false },
+      { text: "Nhận tiền rồi đem đi từ thiện, coi như làm việc tốt.", correct: false }
+    ],
+    explain: "Đáp án đúng là B. Tiền bạc có thể mua được nhiều thứ, nhưng không mua được sự thanh thản trong tâm hồn. Giữ vững lập trường là cách duy nhất để không bị cuốn vào vòng xoáy tội lỗi.",
+    advice: "Nếu hoàn cảnh của bạn giống nhân vật — bị dụ dỗ bởi tiền bạc và quyền lực — thì đừng nhận những thứ không thuộc về mình. Bạn đang cố bước vào tầng lớp xã hội khác bằng con đường tắt. Hãy nhớ: những gì đến dễ dàng thường đi cũng dễ dàng, và cái giá phải trả có thể là cả cuộc đời."
+  },
+  {
+    source: "Phim Lẻ Hay: Thiếu Lâm Tự, Thập Bát La Hán",
+    context: "Nhân vật chính là một võ tăng trẻ, được giao nhiệm vụ bảo vệ một bảo vật quý giá của Thiếu Lâm Tự. Nhiều thế lực muốn cướp bảo vật để bán lấy tiền.",
+    q: "Khi được giao bảo vệ một thứ quý giá, nhân vật nên làm gì trước cám dỗ?",
+    answers: [
+      { text: "Bán bảo vật để lấy tiền, rồi dùng tiền đó làm việc tốt.", correct: false },
+      { text: "Giữ vững trách nhiệm, bảo vệ bảo vật đến cùng, không để lòng tham chi phối.", correct: true },
+      { text: "Im lặng, không nói với ai, tự mình giữ bảo vật.", correct: false },
+      { text: "Đưa bảo vật cho người khác giữ để tránh trách nhiệm.", correct: false },
+      { text: "Giữ bảo vật nhưng thỉnh thoảng lấy ra xem, coi như của mình.", correct: false }
+    ],
+    explain: "Đáp án đúng là B. Trách nhiệm và lòng trung thành là phẩm chất của người quân tử. Bảo vật không thuộc về mình thì không được lấy, dù có thể đổi thành tiền.",
+    advice: "Nếu hoàn cảnh của bạn giống nhân vật — được giao nhiệm vụ quan trọng — thì đừng vì lợi ích trước mắt mà đánh mất phẩm chất. Bạn đang cố sống theo kiểu 'có tiền là có tất cả' của tầng lớp khác. Hãy nhớ: danh dự và trách nhiệm là thứ không gì mua được."
+  },
+  {
+    source: "Phim Lẻ Hay: PHÁP SƯ SĂN MA",
+    context: "Nhân vật chính là một pháp sư trẻ, chuyên săn ma và giúp đỡ người dân. Anh ta có thể dùng phép thuật để kiếm tiền dễ dàng, nhưng chọn sống giản dị và giúp đời.",
+    q: "Khi có khả năng kiếm tiền dễ dàng nhưng phải đánh đổi bằng việc giúp đời, nhân vật nên chọn gì?",
+    answers: [
+      { text: "Kiếm tiền trước, giúp đời sau, vì có tiền mới giúp được nhiều người.", correct: false },
+      { text: "Giúp đời trước, sống giản dị, vì đó là sứ mệnh và ý nghĩa cuộc sống.", correct: true },
+      { text: "Im lặng, không chọn bên nào, sống trung lập.", correct: false },
+      { text: "Kiếm tiền bằng cách bán phép thuật cho người giàu.", correct: false },
+      { text: "Vừa kiếm tiền vừa giúp đời, miễn sao không ai biết.", correct: false }
+    ],
+    explain: "Đáp án đúng là B. Sống có ích cho đời là giá trị cao quý nhất. Tiền bạc có thể mua được nhiều thứ, nhưng không mua được sự thanh thản và ý nghĩa cuộc sống.",
+    advice: "Nếu hoàn cảnh của bạn giống nhân vật — có khả năng kiếm tiền nhưng phải chọn giữa tiền và lý tưởng — thì đừng vì tiền mà đánh mất sứ mệnh. Bạn đang cố sống theo kiểu 'kiếm tiền là trên hết' của tầng lớp khác. Hãy nhớ: cuộc sống chỉ có ý nghĩa khi bạn sống vì điều gì đó lớn hơn bản thân."
+  },
+  {
+    source: "Phim Lẻ Hay: Người Đẹp và Quái Vật",
+    context: "Nhân vật chính là một cô gái nghèo, bị quái vật bắt giữ. Ban đầu cô sợ hãi, nhưng dần nhận ra quái vật có trái tim nhân hậu. Cô học cách nhìn người bằng trái tim, không bằng vẻ bề ngoài.",
+    q: "Khi đánh giá một người, điều gì nên là tiêu chí quan trọng nhất?",
+    answers: [
+      { text: "Vẻ bề ngoài, vì đó là thứ đầu tiên ta nhìn thấy.", correct: false },
+      { text: "Trái tim và nhân cách, vì đó mới là giá trị thật của con người.", correct: true },
+      { text: "Im lặng, không đánh giá ai cả, mặc kệ tất cả.", correct: false },
+      { text: "Tài sản, vì có tiền mới lo được cho gia đình.", correct: false },
+      { text: "Địa vị xã hội, vì đó là thước đo thành công.", correct: false }
+    ],
+    explain: "Đáp án đúng là B. Vẻ bề ngoài có thể đánh lừa, nhưng trái tim và nhân cách mới là thứ quyết định giá trị con người. Nhìn người bằng trái tim là cách sống nhân văn nhất.",
+    advice: "Nếu hoàn cảnh của bạn giống nhân vật — từng đánh giá người khác qua vẻ bề ngoài — thì đừng mua sắm hàng hiệu để 'nâng cấp' bản thân. Bạn đang cố sống theo tầng lớp xã hội khác bằng vẻ ngoài. Hãy nhớ: giá trị thật của bạn nằm ở nhân cách, không phải ở món đồ bạn đeo."
+  },
+  {
+    source: "Phim Lẻ Hay: Thiện Nữ U Hồn",
+    context: "Nhân vật chính là một thư sinh nghèo, gặp một hồn ma xinh đẹp. Ban đầu anh bị vẻ đẹp quyến rũ, nhưng sau đó nhận ra cô gái là ma và phải chọn giữa tình yêu và mạng sống.",
+    q: "Khi bị cuốn hút bởi vẻ bề ngoài của một người, nhân vật nên làm gì?",
+    answers: [
+      { text: "Theo đuổi bằng mọi giá, vì tình yêu không phân biệt gì cả.", correct: false },
+      { text: "Tỉnh táo, tìm hiểu kỹ, đừng để vẻ bề ngoài che mờ lý trí.", correct: true },
+      { text: "Im lặng, không nói gì, để mọi chuyện tự nhiên.", correct: false },
+      { text: "Mua quà đắt tiền để chinh phục người đẹp.", correct: false },
+      { text: "Từ bỏ ngay lập tức, không cần tìm hiểu gì thêm.", correct: false }
+    ],
+    explain: "Đáp án đúng là B. Vẻ bề ngoài có thể đánh lừa. Tỉnh táo và tìm hiểu kỹ là cách để không bị cuốn vào những mối quan hệ nguy hiểm.",
+    advice: "Nếu hoàn cảnh của bạn giống nhân vật — bị cuốn hút bởi vẻ bề ngoài của người khác — thì đừng vội mua quà đắt tiền để chinh phục. Bạn đang cố sống theo kiểu 'dùng tiền để mua tình yêu' của tầng lớp khác. Hãy nhớ: tình yêu thật không được xây dựng bằng vật chất."
+  }
+];
+
+let current = 0;
+let score = 0;
+let answered = false;
+
+const quizArea = document.getElementById('quizArea');
+const progressFill = document.getElementById('progressFill');
+const resultCard = document.getElementById('resultCard');
+const scoreText = document.getElementById('scoreText');
+const verdictText = document.getElementById('verdictText');
+const finalAdvice = document.getElementById('finalAdvice');
+
+function renderQuestion(){
+  answered = false;
+  const q = QUESTIONS[current];
+  progressFill.style.width = ((current / QUESTIONS.length) * 100) + '%';
+
+  quizArea.innerHTML = `
+    <div class="question-card">
+      <div class="q-number">Câu ${current+1} / ${QUESTIONS.length}</div>
+      <div class="source-tag">📽 ${q.source}</div>
+      <div class="context">${q.context}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="answers" id="answersBox">
+        ${q.answers.map((a,i)=>`
+          <div class="answer" data-index="${i}">
+            <span class="key">${String.fromCharCode(65+i)}.</span>
+            <span>${a.text}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <button class="next-btn" id="nextBtn">
+        ${current === QUESTIONS.length - 1 ? '📊 Xem Kết Quả' : '➡️ Câu Tiếp Theo'}
+      </button>
+    </div>
+  `;
+
+  document.querySelectorAll('.answer').forEach(el=>{
+    el.addEventListener('click', ()=> selectAnswer(el));
+  });
+  document.getElementById('nextBtn').addEventListener('click', nextQuestion);
+}
+
+function selectAnswer(el){
+  if(answered) return;
+  answered = true;
+  const idx = parseInt(el.dataset.index);
+  const q = QUESTIONS[current];
+  const isCorrect = q.answers[idx].correct;
+  if(isCorrect) score++;
+
+  document.querySelectorAll('.answer').forEach((a,i)=>{
+    a.classList.add('disabled');
+    if(q.answers[i].correct) a.classList.add('correct');
+    if(i === idx && !isCorrect) a.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback show ' + (isCorrect ? 'correct-fb' : 'wrong-fb');
+  fb.innerHTML = `
+    <h4>${isCorrect ? '✅ Chính xác!' : '❌ Chưa đúng'}</h4>
+    <div>${q.explain}</div>
+    <div class="advice">💡 ${q.advice}</div>
+  `;
+  document.getElementById('nextBtn

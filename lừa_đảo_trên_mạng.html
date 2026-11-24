@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Kiểm Soát & Lưu Trữ Tin Tức</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; padding: 20px; background-color: #f0f2f5; color: #333; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2, h3 { color: #d32f2f; text-align: center; margin-bottom: 20px; }
+        
+        /* Khu vực phân tích */
+        .analyzer-section { background: #fff5f5; padding: 20px; border-radius: 8px; border: 1px solid #ffcdd2; margin-bottom: 30px; }
+        textarea { width: 100%; height: 100px; padding: 12px; border: 1px solid #ddd; border-radius: 4px; resize: none; margin-bottom: 10px; font-size: 14px; box-sizing: border-box; }
+        .button-group { display: flex; gap: 10px; }
+        button { flex: 1; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-analyze { background: #d32f2f; color: white; }
+        .btn-analyze:hover { background: #b71c1c; }
+        .btn-save { background: #2e7d32; color: white; display: none; } /* Chỉ hiện sau khi phân tích */
+        .btn-save:hover { background: #1b5e20; }
+
+        /* Kết quả */
+        #resultArea { margin-top: 15px; padding: 15px; border-radius: 8px; display: none; text-align: center; animation: fadeIn 0.5s; }
+        .percent-box { font-size: 28px; font-weight: bold; margin: 5px 0; }
+        
+        /* Kho lưu trữ */
+        #searchBar { width: 100%; padding: 12px; margin: 20px 0; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; }
+        .news-item { padding: 15px; border-bottom: 1px solid #eee; position: relative; background: #fff; margin-bottom: 5px; border-radius: 4px; }
+        .news-item h3 { text-align: left; color: #333; font-size: 18px; margin: 0 0 10px 0; }
+        .news-item p { margin: 0; color: #666; font-size: 14px; padding-right: 100px; }
+        .tag { display: inline-block; background: #e8ecef; padding: 2px 10px; border-radius: 15px; font-size: 11px; margin-top: 8px; color: #444; }
+        .trust-badge { position: absolute; right: 15px; top: 15px; font-weight: bold; font-size: 14px; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Hệ Thống Phản Biện & Lưu Trữ Tin Tức</h2>
+
+    <div class="analyzer-section">
+        <h3>1. Phân tích nguồn tin mới</h3>
+        <textarea id="newsInput" placeholder="Dán nội dung tin tức hoặc tiêu đề tại đây..."></textarea>
+        <div class="button-group">
+            <button class="btn-analyze" onclick="analyzeNews()">PHÂN TÍCH</button>
+            <button id="btnSave" class="btn-save" onclick="saveNews()">LƯU VÀO DANH SÁCH</button>
+        </div>
+        
+        <div id="resultArea">
+            <div id="resultStatus"></div>
+            <div class="percent-box" id="trustPercent">0%</div>
+            <div id="resultAdvice"></div>
+        </div>
+    </div>
+
+    <h3>2. Kho dữ liệu tin đã lưu</h3>
+    <input type="text" id="searchBar" onkeyup="filterNews()" placeholder="Nhập từ khóa để tìm lại tin cũ...">
+
+    <div id="newsList">
+        <div class="news-item">
+            <span class="trust-badge" style="color: #f44336;">Độ tin cậy: 5%</span>
+            <h3>Sàn đầu tư siêu lợi nhuận Mr. Pips</h3>
+            <p>Dấu hiệu lừa đảo cam kết lãi suất cao, lùa gà bằng hình ảnh sang chảnh.</p>
+            <span class="tag">Lừa đảo</span> <span class="tag">Tài chính</span>
+        </div>
+    </div>
+    
+    <div id="noResult" style="display:none; text-align:center; padding:20px; color:#999;">Không tìm thấy dữ liệu.</div>
+</div>
+
+<script>
+    let currentScore = 0;
+    let currentText = "";
+
+    function analyzeNews() {
+        currentText = document.getElementById('newsInput').value;
+        if (currentText.length < 5) return alert("Nội dung quá ngắn!");
+
+        let score = 75; // Điểm gốc
+        const textLower = currentText.toLowerCase();
+
+        // Danh sách tiêu chí
+        const rules = [
+            { k: "lãi suất", p: 15 }, { k: "cam kết", p: 10 }, { k: "%/ngày", p: 25 },
+            { k: "nhiệm vụ", p: 15 }, { k: "chuyển khoản cá nhân", p: 20 },
+            { k: "theo vtv", b: 15 }, { k: "bộ y tế", b: 15 }, { k: "công an", b: 10 }
+        ];
+
+        rules.forEach(r => {
+            if (textLower.includes(r.k)) {
+                if (r.p) score -= r.p;
+                if (r.b) score += r.b;
+            }
+        });
+
+        currentScore = Math.max(0, Math.min(100, score));
+        
+        // Hiển thị kết quả
+        const area = document.getElementById('resultArea');
+        area.style.display = "block";
+        document.getElementById('trustPercent').innerText = currentScore + "%";
+        document.getElementById('btnSave').style.display = "inline-block";
+
+        if (currentScore > 70) {
+            area.style.backgroundColor = "#e8f5e9";
+            document.getElementById('resultStatus').innerText = "TIN CÓ ĐỘ TIN CẬY CAO";
+        } else if (currentScore > 40) {
+            area.style.backgroundColor = "#fff3e0";
+            document.getElementById('resultStatus').innerText = "CẦN KIỂM CHỨNG LẠI";
+        } else {
+            area.style.backgroundColor = "#ffebee";
+            document.getElementById('resultStatus').innerText = "CẢNH BÁO LỪA ĐẢO/TIN GIẢ";
+        }
+    }
+
+    function saveNews() {
+        const newsList = document.getElementById('newsList');
+        const title = currentText.split('\n')[0].substring(0, 60) + "..."; // Lấy dòng đầu làm tiêu đề
+        const color = currentScore > 70 ? "#4caf50" : (currentScore > 40 ? "#ff9800" : "#f44336");
+        
+        const newItem = document.createElement('div');
+        newItem.className = 'news-item';
+        newItem.innerHTML = `
+            <span class="trust-badge" style="color: ${color};">Độ tin cậy: ${currentScore}%</span>
+            <h3>${title}</h3>
+            <p>${currentText.substring(0, 150)}...</p>
+            <span class="tag">Đã lưu: ${new Date().toLocaleDateString()}</span>
+        `;
+
+        // Thêm vào đầu danh sách
+        newsList.insertBefore(newItem, newsList.firstChild);
+        
+        // Reset form
+        document.getElementById('newsInput').value = "";
+        document.getElementById('resultArea').style.display = "none";
+        document.getElementById('btnSave').style.display = "none";
+        alert("Đã lưu tin thành công vào danh sách phía dưới!");
+    }
+
+    function filterNews() {
+        let input = document.getElementById('searchBar').value.toLowerCase();
+        let items = document.getElementsByClassName('news-item');
+        let has = false;
+        for (let item of items) {
+            if (item.textContent.toLowerCase().includes(input)) {
+                item.style.display = "";
+                has = true;
+            } else {
+                item.style.display = "none";
+            }
+        }
+        document.getElementById('noResult').style.display = has ? "none" : "block";
+    }
+</script>
+
+</body>
+</html>

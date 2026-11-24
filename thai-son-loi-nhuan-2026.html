@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thái Sơn lãi 11.231 tỷ – Phân tích hài hước dễ hiểu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #e11d48;
+      --secondary: #f59e0b;
+      --accent: #10b981;
+      --dark: #0f172a;
+      --light: #f8fafc;
+      --card: #ffffff;
+      --purple: #8b5cf6;
+      --blue: #3b82f6;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #e11d48 0%, #f59e0b 50%, #10b981 100%);
+      padding: 60px 20px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
+      animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 900;
+      color: white;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .hero .subtitle {
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      color: rgba(255,255,255,0.95);
+      font-weight: 600;
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto 24px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(10px);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: 2px solid rgba(255,255,255,0.4);
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: -40px auto 60px;
+      padding: 0 16px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 36px 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .card h2 {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 800;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card p, .card li {
+      font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+      color: #334155;
+      margin-bottom: 14px;
+    }
+
+    .highlight {
+      background: linear-gradient(90deg, #fef3c7, #fde68a);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      color: #92400e;
+    }
+
+    .big-number {
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, #e11d48, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+      margin: 10px 0;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .stat-box {
+      background: linear-gradient(145deg, #f1f5f9, #e2e8f0);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .stat-box:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      box-shadow: 0 10px 25px rgba(225,29,72,0.15);
+    }
+
+    .stat-box .label {
+      font-size: 0.95rem;
+      color: #64748b;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .stat-box .value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .stat-box.green .value { color: #059669; }
+    .stat-box.red .value { color: #dc2626; }
+    .stat-box.orange .value { color: #d97706; }
+    .stat-box.purple .value { color: #7c3aed; }
+
+    .emoji {
+      font-size: 2rem;
+      margin-right: 8px;
+    }
+
+    .joke {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 6px solid #f59e0b;
+      padding: 20px 24px;
+      border-radius: 0 16px 16px 0;
+      margin: 24px 0;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #78350f;
+    }
+
+    .warning {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      border-left: 6px solid #ef4444;
+      padding: 20px 24px;
+      border-radius: 0 16px 16px 0;
+      margin: 24px 0;
+      font-size: 1.15rem;
+      color: #7f1d1d;
+    }
+
+    .success {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      border-left: 6px solid #10b981;
+      padding: 20px 24px;
+      border-radius: 0 16px 16px 0;
+      margin: 24px 0;
+      font-size: 1.15rem;
+      color: #064e3b;
+    }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin: 28px 0;
+    }
+
+    .flow-item {
+      background: white;
+      border: 3px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      text-align: center;
+      min-width: 140px;
+      position: relative;
+    }
+
+    .flow-item.main {
+      border-color: #e11d48;
+      background: #fff1f2;
+      color: #be123c;
+    }
+
+    .flow-arrow {
+      font-size: 1.8rem;
+      color: #94a3b8;
+      align-self: center;
+    }
+
+    ul.checklist {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul.checklist li {
+      position: relative;
+      padding-left: 36px;
+      margin-bottom: 12px;
+    }
+
+    ul.checklist li::before {
+      content: '✅';
+      position: absolute;
+      left: 0;
+      font-size: 1.3rem;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #e11d48;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .card { padding: 24px 18px; }
+      .flow-arrow { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- HERO -->
+  <header class="hero">
+    <h1>🚀 Thái Sơn lãi 11.231 tỷ<br>trong nửa đầu 2026</h1>
+    <p class="subtitle">
+      Công ty con của Vingroup… chỉ có <strong>1 nhân viên</strong> mà lãi bằng cả một tập đoàn vừa!
+    </p>
+    <span class="badge">📊 Phân tích hài hước – dễ hiểu – không khô khan</span>
+  </header>
+
+  <main class="container">
+
+    <!-- CARD 1: Con số sốc -->
+    <section class="card">
+      <h2><span class="emoji">💰</span> Con số làm người ta phải… há hốc</h2>
+      <p>Nửa đầu năm 2026, <strong>Công ty CP Đầu tư Xây dựng Thái Sơn</strong> công bố lợi nhuận sau thuế:</p>
+      <div class="big-number">11.231 tỷ đồng</div>
+      <p>Gấp hơn <span class="highlight">13 lần</span> so với cùng kỳ năm trước (chỉ khoảng 847 tỷ).</p>
+      
+      <div class="joke">
+        😅 Tưởng tượng: Nếu chia đều cho 1 nhân viên duy nhất của công ty thì người này “kiếm” được hơn 11.000 tỷ trong 6 tháng. Lương tháng chắc phải tính bằng… tỷ luôn!
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-box green">
+          <div class="label">Lợi nhuận sau thuế</div>
+          <div class="value">11.231 tỷ</div>
+        </div>
+        <div class="stat-box orange">
+          <div class="label">Tăng so với cùng kỳ</div>
+          <div class="value">+13 lần</div>
+        </div>
+        <div class="stat-box purple">
+          <div class="label">Số nhân viên</div>
+          <div class="value">1 người</div>
+        </div>
+        <div class="stat-box red">
+          <div class="label">Dòng tiền kinh doanh</div>
+          <div class="value">Âm 2.171 tỷ</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARD 2: Doanh thu từ đâu -->
+    <section class="card">
+      <h2><span class="emoji">🏠</span> Doanh thu bán hàng: Bán đất “nóng”</h2>
+      <p>Doanh thu bán hàng đạt hơn <strong>3.752 tỷ</strong>, gấp 7,8 lần cùng kỳ. Gần như toàn bộ đến từ <span class="highlight">chuyển nhượng bất động sản</span> (3.737 tỷ).</p>
+      <p>Sau khi trừ giá vốn, lợi nhuận gộp còn khoảng <strong>1.261 tỷ</strong> – tăng 5,5 lần.</p>
+      
+      <div class="success">
+        💡 Giải thích dễ hiểu: Công ty bán được nhiều dự án/đất trong nửa năm. Giống như bạn bán được mấy căn nhà rồi bỏ túi lãi gộp hơn 1.200 tỷ. Ngon thật!
+      </div>
+    </section>
+
+    <!-- CARD 3: Bí mật lợi nhuận -->
+    <section class="card">
+      <h2><span class="emoji">🎭</span> Bí mật thật sự: Tiền “rơi từ trên trời”</h2>
+      <p>Phần lớn lợi nhuận <strong>không đến từ bán nhà</strong>, mà đến từ <span class="highlight">doanh thu hoạt động tài chính</span>:</p>
+      
+      <div class="big-number" style="font-size: clamp(2rem, 6vw, 3.2rem);">16.337 tỷ</div>
+      <p>Gấp 3,1 lần cùng kỳ. Trong đó:</p>
+      
+      <ul class="checklist">
+        <li><strong>14.740 tỷ</strong> – cổ tức & lợi nhuận chia từ hợp đồng hợp tác kinh doanh (BCC). Tăng gấp <strong>163 lần</strong> so với 90 tỷ năm trước!</li>
+        <li><strong>1.527 tỷ</strong> – lãi tiền gửi, đặt cọc, cho vay.</li>
+      </ul>
+
+      <div class="joke">
+        🤯 14.740 tỷ tiền chia lợi nhuận từ hợp tác kinh doanh… giống như bạn góp vốn với ai đó, rồi cuối kỳ họ “bồi” cho bạn gần 15 nghìn tỷ. Ai mà chẳng muốn hợp tác với Thái Sơn chứ!
+      </div>
+
+      <p>Ở chiều ngược lại, chi phí tài chính khoảng <strong>3.467 tỷ</strong> (chủ yếu lãi vay & trái phiếu). Vẫn còn dư rất nhiều để ghi nhận lãi khủng.</p>
+    </section>
+
+    <!-- CARD 4: Dòng tiền âm -->
+    <section class="card">
+      <h2><span class="emoji">💧</span> Dòng tiền kinh doanh âm – “Lãi trên giấy”?</h2>
+      <p>Đây là điểm cần chú ý nhất:</p>
+      <div class="warning">
+        ⚠️ Dòng tiền thuần từ hoạt động kinh doanh <strong>âm khoảng 2.171 tỷ đồng</strong>. Nghĩa là tiền thật chảy ra nhiều hơn tiền thật chảy vào từ hoạt động chính.
+      </div>
+      
+      <p>Giải thích bằng ngôn ngữ đời thường:</p>
+      <ul class="checklist">
+        <li>Lợi nhuận kế toán (trên báo cáo) rất đẹp vì ghi nhận cổ tức/lợi nhuận chia từ BCC.</li>
+        <li>Nhưng dòng tiền thực tế từ kinh doanh lại âm → tiền “chưa về túi” hoặc đang bị chiếm dụng.</li>
+        <li>Công ty vẫn có lãi lớn, nhưng chất lượng dòng tiền cần theo dõi thêm.</li>
+      </ul>
+
+      <div class="joke">
+        😂 Giống như bạn bán xe cũ, ghi sổ lãi 500 triệu, nhưng người mua chưa trả tiền. Trên giấy thì giàu, trong túi thì… vẫn nghèo!
+      </div>
+    </section>
+
+    <!-- CARD 5: Nợ trái phiếu -->
+    <section class="card">
+      <h2><span class="emoji">📜</span> Nợ trái phiếu “phình to”</h2>
+      <p>Cuối tháng 6/2026, dư nợ trái phiếu của Thái Sơn khoảng <strong>19.392 tỷ đồng</strong> – tăng mạnh so với trước.</p>
+      <p>Vốn chủ sở hữu cũng tăng lên hơn <strong>27.212 tỷ</strong> nhờ lợi nhuận chưa phân phối.</p>
+      
+      <div class="success">
+        📌 Tóm lại: Công ty đang dùng trái phiếu để huy động vốn lớn, đồng thời ghi nhận lợi nhuận khủng từ các hợp đồng hợp tác. Đây là mô hình phổ biến ở nhiều doanh nghiệp bất động sản lớn.
+      </div>
+    </section>
+
+    <!-- CARD 6: Tóm tắt dễ hiểu -->
+    <section class="card">
+      <h2><span class="emoji">🧠</span> Tóm tắt siêu ngắn – siêu dễ hiểu</h2>
+      
+      <div class="flow">
+        <div class="flow-item">Bán BĐS<br>3.752 tỷ</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">Lãi gộp<br>1.261 tỷ</div>
+        <div class="flow-arrow">+</div>
+        <div class="flow-item main">Doanh thu tài chính<br>16.337 tỷ</div>
+        <div class="flow-arrow">−</div>
+        <div class="flow-item">Chi phí tài chính<br>3.467 tỷ</div>
+        <div class="flow-arrow">=</div>
+        <div class="flow-item main">Lãi sau thuế<br>11.231 tỷ</div>
+      </div>
+
+      <p style="margin-top: 24px;"><strong>Kết luận vui:</strong></p>
+      <ul class="checklist">
+        <li>Thái Sơn “kiếm” tiền chủ yếu nhờ chia lợi nhuận từ hợp tác kinh doanh, không phải chỉ bán nhà.</li>
+        <li>1 nhân viên + 11.231 tỷ lãi = câu chuyện viral chắc chắn.</li>
+        <li>Dòng tiền kinh doanh vẫn âm → cần xem kỹ chất lượng lợi nhuận và khả năng trả nợ trái phiếu trong tương lai.</li>
+        <li>Công ty con Vingroup nên kết quả này phản ánh một phần chiến lược tài chính của hệ sinh thái.</li>
+      </ul>
+
+      <div class="joke">
+        🎉 Nếu bạn đang tìm công ty “lãi nhiều mà nhân viên ít” thì Thái Sơn đang dẫn đầu bảng xếp hạng… Việt Nam năm 2026!
+      </div>
+    </section>
+
+    <!-- CARD 7: Lời nhắn -->
+    <section class="card" style="background: linear-gradient(135deg, #0f172a, #1e293b); color: white;">
+      <h2 style="color: white;"><span class="emoji">📢</span> Lời nhắn cuối</h2>
+      <p style="color: #cbd5e1; font-size: 1.2rem;">
+        Số liệu trên lấy từ Báo cáo tài chính hợp nhất giữa niên độ năm 2026 của CTCP Đầu tư Xây dựng Thái Sơn. 
+        Đây chỉ là phân tích mang tính giải thích dễ hiểu, không phải lời khuyên đầu tư.
+      </p>
+      <p style="color: #94a3b8; margin-top: 16px;">
+        Đọc xong thì nhớ: <strong style="color: #fbbf24;">Lãi lớn ≠ Tiền thật ngay lập tức</strong>. 
+        Luôn nhìn thêm dòng tiền và nợ vay nhé!
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Phân tích hài hước • Dữ liệu công khai • Cập nhật tháng 9/2026</p>
+    <p style="margin-top: 8px;">Made with ❤️ & nhiều emoji cho dễ đọc</p>
+  </footer>
+</body>
+</html>

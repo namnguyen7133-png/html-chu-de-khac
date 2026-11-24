@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>TINH SO THEO TEN - Trang tính1</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>TINH SO THEO TEN - Trang tính1</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>Ê | 5.0 | NGUYỄN  | THỊ  | HẠNH | 2 | D</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>Ă | 4.0 | N | T | H | 3 | E</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>Â | 4.0 | G | H | Ạ | 4 | F</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>E | 4.0 | U | Ị | N | 5 | G</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>M | 4.0 | Y | H | 6 | A</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>W | 4.0 | Ễ | 7 | B</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>A | 3.0 | N</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>Đ | 3.0 | 1 | 1 | 1</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>H | 3.0 | 3223131 | 2311 | 3133 | 4 | 2 | 4</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>K | 3.0 | 15 | 7 | 10 | 4 | 3 | 4</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>N | 3.0 | 0 | 4 | 0</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>R | 3.0 | 2 | 5 | 2</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>Y | 3.0 | 5 | 6 | 5</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>Z | 3.0 | 0 | 7 | 0</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>B | 2.0 | 3 | 8 | 3</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>D | 2.0 | 6 | 9 | 6</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>G | 2.0 | 1 | 10 | 1</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>Ô | 2.0 | 4 | 11 | 4</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>Ơ | 2.0 | 6 | 12 | 6</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>P | 2.0 | ĐUÔI | ĐUÔI | THÁNG ĐẦU  | THÁNG ĐẦU </td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td>Q | 2.0 | 1.0 | 6.0 | 8.0 | 8 | 1 | 4 | 8 | 168</td>
+            </tr>
+            <tr>
+                <td><b>22</b></td>
+                <td>T | 2.0 | 1.0 | 5.0 | 9.0 | 11 | 1 | 3 | 9 | 159</td>
+            </tr>
+            <tr>
+                <td><b>23</b></td>
+                <td>U | 2.0 | 1.0 | 8.0 | 6.0 | 2 | 1 | 6 | 6 | 186</td>
+            </tr>
+            <tr>
+                <td><b>24</b></td>
+                <td>V | 2.0 | 1.0 | 9.0 | 5.0 | 11 | 1 | 7 | 5 | 195</td>
+            </tr>
+            <tr>
+                <td><b>25</b></td>
+                <td>X | 2.0 | 2.0 | 8.0 | 5.0 | 1 | 2 | 4 | 5 | 285</td>
+            </tr>
+            <tr>
+                <td><b>26</b></td>
+                <td>J | 2.0 | 2.0 | 5.0 | 8.0 | 10 | 2 | 1 | 8 | 258</td>
+            </tr>
+            <tr>
+                <td><b>27</b></td>
+                <td>C | 1.0 | 2.0 | 7.0 | 6.0 | 4 | 2 | 3 | 6 | 276</td>
+            </tr>
+            <tr>
+                <td><b>28</b></td>
+                <td>I | 1.0 | 2.0 | 6.0 | 7.0 | 7 | 2 | 2 | 7 | 267</td>
+            </tr>
+            <tr>
+                <td><b>29</b></td>
+                <td>L | 1.0 | 2.0 | 4.0 | 9.0 | 1 | 2 | 12 | 9 | 249</td>
+            </tr>
+            <tr>
+                <td><b>30</b></td>
+                <td>O | 1.0 | 2.0 | 9.0 | 4.0 | 10 | 2 | 5 | 4 | 294</td>
+            </tr>
+            <tr>
+                <td><b>31</b></td>
+                <td>S | 1.0 | 3.0 | 5.0 | 7.0 | 9 | 3 | 11 | 7 | 357</td>
+            </tr>
+            <tr>
+                <td><b>32</b></td>
+                <td>Dấu (Huyền, Sắc, Hỏi, Ngã, Nặng) | 1.0 | 3.0 | 7.0 | 5.0 | 3 | 3 | 1 | 5 | 375</td>
+            </tr>
+            <tr>
+                <td><b>33</b></td>
+                <td>3.0 | 8.0 | 4.0 | 12 | 3 | 2 | 4 | 384</td>
+            </tr>
+            <tr>
+                <td><b>34</b></td>
+                <td>3.0 | 4.0 | 8.0 | 12 | 3 | 10 | 8 | 348</td>
+            </tr>
+            <tr>
+                <td><b>35</b></td>
+                <td>4.0 | 2.0 | 9.0 | 5 | 4 | 6 | 9 | 429</td>
+            </tr>
+            <tr>
+                <td><b>36</b></td>
+                <td>4.0 | 9.0 | 2.0 | 8 | 4 | 1 | 2 | 492</td>
+            </tr>
+            <tr>
+                <td><b>37</b></td>
+                <td>4.0 | 8.0 | 3.0 | 11 | 4 | 12 | 3 | 483</td>
+            </tr>
+            <tr>
+                <td><b>38</b></td>
+                <td>4.0 | 3.0 | 8.0 | 2 | 4 | 7 | 8 | 438</td>
+            </tr>
+            <tr>
+                <td><b>39</b></td>
+                <td>5.0 | 2.0 | 8.0 | 4 | 5 | 4 | 8 | 528</td>
+            </tr>
+            <tr>
+                <td><b>40</b></td>
+                <td>5.0 | 8.0 | 2.0 | 10 | 5 | 10 | 2 | 582</td>
+            </tr>
+            <tr>
+                <td><b>41</b></td>
+                <td>5.0 | 1.0 | 9.0 | 7 | 5 | 3 | 9 | 519</td>
+            </tr>
+            <tr>
+                <td><b>42</b></td>
+                <td>5.0 | 9.0 | 1.0 | 7 | 5 | 11 | 1 | 591</td>
+            </tr>
+            <tr>
+                <td><b>43</b></td>
+                <td>5.0 | 3.0 | 7.0 | 1 | 5 | 5 | 7 | 537</td>
+            </tr>
+            <tr>
+                <td><b>44</b></td>
+                <td>5.0 | 7.0 | 3.0 | 1 | 5 | 9 | 3 | 573</td>
+            </tr>
+            <tr>
+                <td><b>45</b></td>
+                <td>6.0 | 7.0 | 2.0 | 12 | 6 | 7 | 2 | 672</td>
+            </tr>
+            <tr>
+                <td><b>46</b></td>
+                <td>6.0 | 2.0 | 7.0 | 3 | 6 | 2 | 7 | 627</td>
+            </tr>
+            <tr>
+                <td><b>47</b></td>
+                <td>6.0 | 8.0 | 1.0 | 9 | 6 | 8 | 1 | 681</td>
+            </tr>
+            <tr>
+                <td><b>48</b></td>
+                <td>6.0 | 1.0 | 8.0 | 6 | 6 | 1 | 8 | 618</td>
+            </tr>
+            <tr>
+                <td><b>49</b></td>
+                <td>7.0 | 2.0 | 6.0 | 2 | 7 | 12 | 6 | 726</td>
+            </tr>
+            <tr>
+                <td><b>50</b></td>
+                <td>7.0 | 6.0 | 2.0 | 2 | 7 | 4 | 2 | 762</td>
+            </tr>
+            <tr>
+                <td><b>51</b></td>
+                <td>7.0 | 5.0 | 3.0 | 5 | 7 | 3 | 3 | 753</td>
+            </tr>
+            <tr>
+                <td><b>52</b></td>
+                <td>7.0 | 3.0 | 5.0 | 11 | 7 | 1 | 5 | 735</td>
+            </tr>
+            <tr>
+                <td><b>53</b></td>
+                <td>8.0 | 2.0 | 5.0 | 1 | 8 | 10 | 5 | 825</td>
+            </tr>
+            <tr>
+                <td><b>54</b></td>
+                <td>8.0 | 5.0 | 2.0 | 4 | 8 | 1 | 2 | 852</td>
+            </tr>
+            <tr>
+                <td><b>55</b></td>
+                <td>8.0 | 1.0 | 6.0 | 4 | 8 | 9 | 6 | 816</td>
+            </tr>
+            <tr>
+                <td><b>56</b></td>
+                <td>8.0 | 6.0 | 1.0 | 1 | 8 | 2 | 1 | 861</td>
+            </tr>
+            <tr>
+                <td><b>57</b></td>
+                <td>8.0 | 4.0 | 3.0 | 7 | 8 | 12 | 3 | 843</td>
+            </tr>
+            <tr>
+                <td><b>58</b></td>
+                <td>8.0 | 3.0 | 4.0 | 10 | 8 | 11 | 4 | 834</td>
+            </tr>
+            <tr>
+                <td><b>59</b></td>
+                <td>8.0 | 2.0 | 5.0 | 1 | 8 | 10 | 5 | 825</td>
+            </tr>
+            <tr>
+                <td><b>60</b></td>
+                <td>8.0 | 5.0 | 2.0 | 4 | 8 | 1 | 2 | 852</td>
+            </tr>
+            <tr>
+                <td><b>61</b></td>
+                <td>9.0 | 1.0 | 5.0 | 3 | 9 | 7 | 5 | 915</td>
+            </tr>
+            <tr>
+                <td><b>62</b></td>
+                <td>9.0 | 5.0 | 1.0 | 3 | 9 | 11 | 1 | 951</td>
+            </tr>
+            <tr>
+                <td><b>63</b></td>
+                <td>9.0 | 2.0 | 4.0 | 12 | 9 | 8 | 4 | 924</td>
+            </tr>
+            <tr>
+                <td><b>64</b></td>
+                <td>9.0 | 4.0 | 2.0 | 6 | 9 | 10 | 2 | 942</td>
+            </tr>
+            <tr>
+                <td><b>65</b></td>
+                <td>6.0 | 8.0 | 1.0 | 168</td>
+            </tr>
+            <tr>
+                <td><b>66</b></td>
+                <td>5.0 | 9.0 | 1.0 | 159</td>
+            </tr>
+            <tr>
+                <td><b>67</b></td>
+                <td>8.0 | 6.0 | 1.0 | 186</td>
+            </tr>
+            <tr>
+                <td><b>68</b></td>
+                <td>9.0 | 5.0 | 1.0 | 195</td>
+            </tr>
+            <tr>
+                <td><b>69</b></td>
+                <td>8.0 | 5.0 | 2.0 | 285</td>
+            </tr>
+            <tr>
+                <td><b>70</b></td>
+                <td>5.0 | 8.0 | 2.0 | 258</td>
+            </tr>
+            <tr>
+                <td><b>71</b></td>
+                <td>7.0 | 6.0 | 2.0 | 276</td>
+            </tr>
+            <tr>
+                <td><b>72</b></td>
+                <td>6.0 | 7.0 | 2.0 | 267</td>
+            </tr>
+            <tr>
+                <td><b>73</b></td>
+                <td>4.0 | 9.0 | 2.0 | 249</td>
+            </tr>
+            <tr>
+                <td><b>74</b></td>
+                <td>9.0 | 4.0 | 2.0 | 294</td>
+            </tr>
+            <tr>
+                <td><b>75</b></td>
+                <td>5.0 | 7.0 | 3.0 | 357</td>
+            </tr>
+            <tr>
+                <td><b>76</b></td>
+                <td>7.0 | 5.0 | 3.0 | 375</td>
+            </tr>
+            <tr>
+                <td><b>77</b></td>
+                <td>8.0 | 4.0 | 3.0 | 384</td>
+            </tr>
+            <tr>
+                <td><b>78</b></td>
+                <td>4.0 | 8.0 | 3.0 | 348</td>
+            </tr>
+            <tr>
+                <td><b>79</b></td>
+                <td>2.0 | 9.0 | 4.0 | 429</td>
+            </tr>
+            <tr>
+                <td><b>80</b></td>
+                <td>9.0 | 2.0 | 4.0 | 492</td>
+            </tr>
+            <tr>
+                <td><b>81</b></td>
+                <td>8.0 | 3.0 | 4.0 | 483</td>
+            </tr>
+            <tr>
+                <td><b>82</b></td>
+                <td>3.0 | 8.0 | 4.0 | 438</td>
+            </tr>
+            <tr>
+                <td><b>83</b></td>
+                <td>2.0 | 8.0 | 5.0 | 528</td>
+            </tr>
+            <tr>
+                <td><b>84</b></td>
+                <td>8.0 | 2.0 | 5.0 | 582</td>
+            </tr>
+            <tr>
+                <td><b>85</b></td>
+                <td>1.0 | 9.0 | 5.0 | 519</td>
+            </tr>
+            <tr>
+                <td><b>86</b></td>
+                <td>9.0 | 1.0 | 5.0 | 591</td>
+            </tr>
+            <tr>
+                <td><b>87</b></td>
+                <td>3.0 | 7.0 | 5.0 | 537</td>
+            </tr>
+            <tr>
+                <td><b>88</b></td>
+                <td>7.0 | 3.0 | 5.0 | 573</td>
+            </tr>
+            <tr>
+                <td><b>89</b></td>
+                <td>7.0 | 2.0 | 6.0 | 672</td>
+            </tr>
+            <tr>
+                <td><b>90</b></td>
+                <td>2.0 | 7.0 | 6.0 | 627</td>
+            </tr>
+            <tr>
+                <td><b>91</b></td>
+                <td>8.0 | 1.0 | 6.0 | 681</td>
+            </tr>
+            <tr>
+                <td><b>92</b></td>
+                <td>1.0 | 8.0 | 6.0 | 618</td>
+            </tr>
+            <tr>
+                <td><b>93</b></td>
+                <td>2.0 | 6.0 | 7.0 | 726</td>
+            </tr>
+            <tr>
+                <td><b>94</b></td>
+                <td>6.0 | 2.0 | 7.0 | 762</td>
+            </tr>
+            <tr>
+                <td><b>95</b></td>
+                <td>5.0 | 3.0 | 7.0 | 753</td>
+            </tr>
+            <tr>
+                <td><b>96</b></td>
+                <td>3.0 | 5.0 | 7.0 | 735</td>
+            </tr>
+            <tr>
+                <td><b>97</b></td>
+                <td>2.0 | 5.0 | 8.0 | 825</td>
+            </tr>
+            <tr>
+                <td><b>98</b></td>
+                <td>5.0 | 2.0 | 8.0 | 852</td>
+            </tr>
+            <tr>
+                <td><b>99</b></td>
+                <td>1.0 | 6.0 | 8.0 | 816</td>
+            </tr>
+            <tr>
+                <td><b>100</b></td>
+                <td>6.0 | 1.0 | 8.0 | 861</td>
+            </tr>
+            <tr>
+                <td><b>101</b></td>
+                <td>4.0 | 3.0 | 8.0 | 843</td>
+            </tr>
+            <tr>
+                <td><b>102</b></td>
+                <td>3.0 | 4.0 | 8.0 | 834</td>
+            </tr>
+            <tr>
+                <td><b>103</b></td>
+                <td>2.0 | 5.0 | 8.0 | 825</td>
+            </tr>
+            <tr>
+                <td><b>104</b></td>
+                <td>5.0 | 2.0 | 8.0 | 852</td>
+            </tr>
+            <tr>
+                <td><b>105</b></td>
+                <td>1.0 | 5.0 | 9.0 | 915</td>
+            </tr>
+            <tr>
+                <td><b>106</b></td>
+                <td>5.0 | 1.0 | 9.0 | 951</td>
+            </tr>
+            <tr>
+                <td><b>107</b></td>
+                <td>2.0 | 4.0 | 9.0 | 924</td>
+            </tr>
+            <tr>
+                <td><b>108</b></td>
+                <td>4.0 | 2.0 | 9.0 | 942</td>
+            </tr>
+            <tr>
+                <td><b>109</b></td>
+                <td>8.0 | 1.0 | 6.0 | 168</td>
+            </tr>
+            <tr>
+                <td><b>110</b></td>
+                <td>9.0 | 1.0 | 5.0 | 159</td>
+            </tr>
+            <tr>
+                <td><b>111</b></td>
+                <td>6.0 | 1.0 | 8.0 | 186</td>
+            </tr>
+            <tr>
+                <td><b>112</b></td>
+                <td>5.0 | 1.0 | 9.0 | 195</td>
+            </tr>
+            <tr>
+                <td><b>113</b></td>
+                <td>5.0 | 2.0 | 8.0 | 285</td>
+            </tr>
+            <tr>
+                <td><b>114</b></td>
+                <td>8.0 | 2.0 | 5.0 | 258</td>
+            </tr>
+            <tr>
+                <td><b>115</b></td>
+                <td>6.0 | 2.0 | 7.0 | 276</td>
+            </tr>
+            <tr>
+                <td><b>116</b></td>
+                <td>7.0 | 2.0 | 6.0 | 267</td>
+            </tr>
+            <tr>
+                <td><b>117</b></td>
+                <td>9.0 | 2.0 | 4.0 | 249</td>
+            </tr>
+            <tr>
+                <td><b>118</b></td>
+                <td>4.0 | 2.0 | 9.0 | 294</td>
+            </tr>
+            <tr>
+                <td><b>119</b></td>
+                <td>7.0 | 3.0 | 5.0 | 357</td>
+            </tr>
+            <tr>
+                <td><b>120</b></td>
+                <td>5.0 | 3.0 | 7.0 | 375</td>
+            </tr>
+            <tr>
+                <td><b>121</b></td>
+                <td>4.0 | 3.0 | 8.0 | 384</td>
+            </tr>
+            <tr>
+                <td><b>122</b></td>
+                <td>8.0 | 3.0 | 4.0 | 348</td>
+            </tr>
+            <tr>
+                <td><b>123</b></td>
+                <td>9.0 | 4.0 | 2.0 | 429</td>
+            </tr>
+            <tr>
+                <td><b>124</b></td>
+                <td>2.0 | 4.0 | 9.0 | 492</td>
+            </tr>
+            <tr>
+                <td><b>125</b></td>
+                <td>3.0 | 4.0 | 8.0 | 483</td>
+            </tr>
+            <tr>
+                <td><b>126</b></td>
+                <td>8.0 | 4.0 | 3.0 | 438</td>
+            </tr>
+            <tr>
+                <td><b>127</b></td>
+                <td>8.0 | 5.0 | 2.0 | 528</td>
+            </tr>
+            <tr>
+                <td><b>128</b></td>
+                <td>2.0 | 5.0 | 8.0 | 582</td>
+            </tr>
+            <tr>
+                <td><b>129</b></td>
+                <td>9.0 | 5.0 | 1.0 | 519</td>
+            </tr>
+            <tr>
+                <td><b>130</b></td>
+                <td>1.0 | 5.0 | 9.0 | 591</td>
+            </tr>
+            <tr>
+                <td><b>131</b></td>
+                <td>7.0 | 5.0 | 3.0 | 537</td>
+            </tr>
+            <tr>
+                <td><b>132</b></td>
+                <td>3.0 | 5.0 | 7.0 | 573</td>
+            </tr>
+            <tr>
+                <td><b>133</b></td>
+                <td>2.0 | 6.0 | 7.0 | 672</td>
+            </tr>
+            <tr>
+                <td><b>134</b></td>
+                <td>7.0 | 6.0 | 2.0 | 627</td>
+            </tr>
+            <tr>
+                <td><b>135</b></td>
+                <td>1.0 | 6.0 | 8.0 | 681</td>
+            </tr>
+            <tr>
+                <td><b>136</b></td>
+                <td>8.0 | 6.0 | 1.0 | 618</td>
+            </tr>
+            <tr>
+                <td><b>137</b></td>
+                <td>6.0 | 7.0 | 2.0 | 726</td>
+            </tr>
+            <tr>
+                <td><b>138</b></td>
+                <td>2.0 | 7.0 | 6.0 | 762</td>
+            </tr>
+            <tr>
+                <td><b>139</b></td>
+                <td>3.0 | 7.0 | 5.0 | 753</td>
+            </tr>
+            <tr>
+                <td><b>140</b></td>
+                <td>5.0 | 7.0 | 3.0 | 735</td>
+            </tr>
+            <tr>
+                <td><b>141</b></td>
+                <td>5.0 | 8.0 | 2.0 | 825</td>
+            </tr>
+            <tr>
+                <td><b>142</b></td>
+                <td>2.0 | 8.0 | 5.0 | 852</td>
+            </tr>
+            <tr>
+                <td><b>143</b></td>
+                <td>6.0 | 8.0 | 1.0 | 816</td>
+            </tr>
+            <tr>
+                <td><b>144</b></td>
+                <td>1.0 | 8.0 | 6.0 | 861</td>
+            </tr>
+            <tr>
+                <td><b>145</b></td>
+                <td>3.0 | 8.0 | 4.0 | 843</td>
+            </tr>
+            <tr>
+                <td><b>146</b></td>
+                <td>4.0 | 8.0 | 3.0 | 834</td>
+            </tr>
+            <tr>
+                <td><b>147</b></td>
+                <td>5.0 | 8.0 | 2.0 | 825</td>
+            </tr>
+            <tr>
+                <td><b>148</b></td>
+                <td>2.0 | 8.0 | 5.0 | 852</td>
+            </tr>
+            <tr>
+                <td><b>149</b></td>
+                <td>5.0 | 9.0 | 1.0 | 915</td>
+            </tr>
+            <tr>
+                <td><b>150</b></td>
+                <td>1.0 | 9.0 | 5.0 | 951</td>
+            </tr>
+            <tr>
+                <td><b>151</b></td>
+                <td>4.0 | 9.0 | 2.0 | 924</td>
+            </tr>
+            <tr>
+                <td><b>152</b></td>
+                <td>2.0 | 9.0 | 4.0 | 942</td>
+            </tr>
+            <tr>
+                <td><b>153</b></td>
+                <td>123</td>
+            </tr>
+            <tr>
+                <td><b>154</b></td>
+                <td>234</td>
+            </tr>
+            <tr>
+                <td><b>155</b></td>
+                <td>345</td>
+            </tr>
+            <tr>
+                <td><b>156</b></td>
+                <td>456</td>
+            </tr>
+            <tr>
+                <td><b>157</b></td>
+                <td>567</td>
+            </tr>
+            <tr>
+                <td><b>158</b></td>
+                <td>678</td>
+            </tr>
+            <tr>
+                <td><b>159</b></td>
+                <td>789</td>
+            </tr>
+            <tr>
+                <td><b>160</b></td>
+                <td>890</td>
+            </tr>
+            <tr>
+                <td><b>161</b></td>
+                <td>901</td>
+            </tr>
+            <tr>
+                <td><b>162</b></td>
+                <td>1234</td>
+            </tr>
+            <tr>
+                <td><b>163</b></td>
+                <td>111</td>
+            </tr>
+            <tr>
+                <td><b>164</b></td>
+                <td>222</td>
+            </tr>
+            <tr>
+                <td><b>165</b></td>
+                <td>333</td>
+            </tr>
+            <tr>
+                <td><b>166</b></td>
+                <td>444</td>
+            </tr>
+            <tr>
+                <td><b>167</b></td>
+                <td>555</td>
+            </tr>
+            <tr>
+                <td><b>168</b></td>
+                <td>666</td>
+            </tr>
+            <tr>
+                <td><b>169</b></td>
+                <td>777</td>
+            </tr>
+            <tr>
+                <td><b>170</b></td>
+                <td>888</td>
+            </tr>
+            <tr>
+                <td><b>171</b></td>
+                <td>999</td>
+            </tr>
+            <tr>
+                <td><b>172</b></td>
+                <td>1111</td>
+            </tr>
+            <tr>
+                <td><b>173</b></td>
+                <td>2222</td>
+            </tr>
+            <tr>
+                <td><b>174</b></td>
+                <td>3333</td>
+            </tr>
+            <tr>
+                <td><b>175</b></td>
+                <td>4444</td>
+            </tr>
+            <tr>
+                <td><b>176</b></td>
+                <td>5555</td>
+            </tr>
+            <tr>
+                <td><b>177</b></td>
+                <td>6666</td>
+            </tr>
+            <tr>
+                <td><b>178</b></td>
+                <td>7777</td>
+            </tr>
+            <tr>
+                <td><b>179</b></td>
+                <td>8888</td>
+            </tr>
+            <tr>
+                <td><b>180</b></td>
+                <td>9999</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

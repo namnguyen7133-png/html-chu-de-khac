@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>TINH SO THEO TEN - ket_qua</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>TINH SO THEO TEN - ket_qua</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>3.0 | 1.0 | Nhi</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>TÔ THỊ HÀ | giờ | 23.0 | THÂN THỊ KIM ANH | phút | 53.0 | NGUYỄN KHẮC NĂNG | ngày | 1; 2; 5; 10 | NGUYỄN KHẮC NĂNG | tuần | 1; 3 | NGUYỄN KHẮC NĂNG | tháng | 1; 5 | NGUYỄN KHẮC NĂNG | năm | 1; 2 | 23.0 | Tốt</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>THÂN THỊ KIM ANH | giờ | 73.0 | NGÔ GIA BÁCH | phút | 73.0 | TÔ THỊ HÀ | ngày | 1 | TÔ THỊ HÀ | tuần | 1; 2; 38 | TÔ THỊ HÀ | tháng | 1; 5; 11 | TÔ THỊ HÀ | năm | 1; 7; 11 | 43.0 | Mã</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>NGUYỄN THỊ MINH HẰNG | giờ | 53.0 | HOÀNG ANH DŨNG | phút | 43.0 | NGUYỄN MINH NAM | ngày | 1; 2; 58 | NGUYỄN MINH NAM | tuần | 1; 7 | NGUYỄN MINH NAM | tháng | 1; 2; 4; 8; 83 | NGUYỄN MINH NAM | năm | 1; 5; 11 | 63.0 | Pháo</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>NGÔ THỊ MAI | giờ | 11.0 | TÔ THỊ HỒNG | phút | 58.0 | THÂN THỊ KIM ANH | ngày | 1; 5 | THÂN THỊ KIM ANH | tuần | 1; 2; 3; 4; 5; 6; 9; 10; 12; 78 | THÂN THỊ KIM ANH | tháng | 1; 2 | THÂN THỊ KIM ANH | năm | 1; 2; 4; 11 | 83.0 | Xe</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>THÂN VĂN TUẤN | giờ | 103.0 | VŨ VĂN HIỆP | phút | 38.0 | NGUYỄN TÔ NGÂN AN | ngày | 1 | NGUYỄN TÔ NGÂN AN | tuần | 1; 2; 3; 6; 103 | NGUYỄN TÔ NGÂN AN | tháng | 1; 2 | NGUYỄN TÔ NGÂN AN | năm | 1; 11 | 103.0 | Tượng</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>THÂN VĂN GIỮ  | phút | 43.0 | NGUYỄN TÔ MINH CHÂU | ngày | 1; 7 | NGUYỄN TÔ MINH CHÂU | tuần | 1 | NGUYỄN TÔ MINH CHÂU | tháng | 1; 2; 3; 4; 5; 6; 8; 10; 12 | NGUYỄN TÔ MINH CHÂU | năm | 1; 2; 5; 10 | 123.0 | Sĩ</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>NGUYỄN TÔ BÍCH NGỌC | ngày | 1 | NGUYỄN TÔ BÍCH NGỌC | tuần | 1; 2 | NGUYỄN TÔ BÍCH NGỌC | tháng | 1; 7; 11 | NGUYỄN TÔ BÍCH NGỌC | năm | 1; 2; 3; 6 | 143.0 | Tướng</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>NGUYỄN THỊ MINH HẰNG | ngày | 1; 7 | NGUYỄN THỊ MINH HẰNG | tuần | 1 | NGUYỄN THỊ MINH HẰNG | tháng | 1; 2; 3; 5; 6; 7; 9; 10; 63 | NGUYỄN THỊ MINH HẰNG | năm | 1; 2; 4</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>NGÔ QUÝ CƯỜNG | ngày | 1; 2; 5; 10; 58 | NGÔ QUÝ CƯỜNG | tuần | 1; 3; 5 | NGÔ QUÝ CƯỜNG | tháng | 1; 2; 11; 58 | NGÔ QUÝ CƯỜNG | năm | 1; 53</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>NGÔ GIA BÁCH | ngày | 1; 2; 3; 6 | NGÔ GIA BÁCH | tuần | 1; 2 | NGÔ GIA BÁCH | tháng | 1; 3; 103 | NGÔ GIA BÁCH | năm | 1; 5</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>NGÔ GIALINH | ngày | 1; 2; 5; 10; 38 | NGÔ GIALINH | tuần | 1; 2; 4; 8 | NGÔ GIALINH | tháng | 1; 3; 5 | NGÔ GIALINH | năm | 1; 3; 7</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>NGUYỄN THỊ MINH PHƯƠNG | ngày | 1; 7; 53 | NGUYỄN THỊ MINH PHƯƠNG | tuần | 1; 53 | NGUYỄN THỊ MINH PHƯƠNG | tháng | 1; 2; 4; 11 | NGUYỄN THỊ MINH PHƯƠNG | năm | 1</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>HOÀNG ANH DŨNG | ngày | 1 | HOÀNG ANH DŨNG | tuần | 1; 11 | HOÀNG ANH DŨNG | tháng | 1; 2; 7 | HOÀNG ANH DŨNG | năm | 1</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>HOÀNG HẢI VINH | ngày | 1; 5 | HOÀNG HẢI VINH | tuần | 1; 3 | HOÀNG HẢI VINH | tháng | 1 | HOÀNG HẢI VINH | năm | 1; 2; 4; 8</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>HOÀNG THIÊN BẠCH ANH | ngày | 1; 3; 5; 9 | HOÀNG THIÊN BẠCH ANH | tuần | 1; 43 | HOÀNG THIÊN BẠCH ANH | tháng | 1; 2; 4; 8 | HOÀNG THIÊN BẠCH ANH | năm | 1; 2; 5; 10</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>TÔ KIM HUỆ | ngày | 1; 2; 4; 5; 10 | TÔ KIM HUỆ | tuần | 1; 2 | TÔ KIM HUỆ | tháng | 1; 7 | TÔ KIM HUỆ | năm | 1; 5</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>NGUYỄN TUẤN ANH | ngày | 1; 5 | NGUYỄN TUẤN ANH | tuần | 1; 2; 3; 4; 6; 8; 9; 12; 93 | NGUYỄN TUẤN ANH | tháng | 1; 3; 9 | NGUYỄN TUẤN ANH | năm | 1; 2; 3; 6; 7</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>NGUYỄN THẾ ANH | ngày | 1 | NGUYỄN THẾ ANH | tuần | 1; 3; 7; 9; 63 | NGUYỄN THẾ ANH | tháng | 1; 2; 4; 8; 38 | NGUYỄN THẾ ANH | năm | 1; 5</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>NGÔ THỊ MAI | ngày | 1; 2; 11 | NGÔ THỊ MAI | tuần | 1 | NGÔ THỊ MAI | tháng | 1; 7 | NGÔ THỊ MAI | năm | 1; 7; 11</td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td>TÔ VIỆT HƯNG | ngày | 1; 2; 3; 4; 6; 7; 12; 28 | TÔ VIỆT HƯNG | tuần | 1; 2; 3; 4; 6; 12 | TÔ VIỆT HƯNG | tháng | 1 | TÔ VIỆT HƯNG | năm | 1; 2; 3; 5; 6; 10</td>
+            </tr>
+            <tr>
+                <td><b>22</b></td>
+                <td>TÔ THỊ HỒNG | ngày | 1 | TÔ THỊ HỒNG | tuần | 1; 3; 5; 43 | TÔ THỊ HỒNG | tháng | 1; 3 | TÔ THỊ HỒNG | năm | 1</td>
+            </tr>
+            <tr>
+                <td><b>23</b></td>
+                <td>VŨ VĂN HIỆP | ngày | 1; 2 | VŨ VĂN HIỆP | tuần | 1; 3; 9 | VŨ VĂN HIỆP | tháng | 1; 3; 11; 33 | VŨ VĂN HIỆP | năm | 1; 2; 4</td>
+            </tr>
+            <tr>
+                <td><b>24</b></td>
+                <td>NGUYỄN THỊ CHI | ngày | 1; 2; 4 | NGUYỄN THỊ CHI | tuần | 1 | NGUYỄN THỊ CHI | tháng | 1; 5 | NGUYỄN THỊ CHI | năm | 1; 2; 4; 5; 8; 10</td>
+            </tr>
+            <tr>
+                <td><b>25</b></td>
+                <td>NGUYỄN TẤN BẮC | ngày | 1; 3; 9 | NGUYỄN TẤN BẮC | tuần | 1 | NGUYỄN TẤN BẮC | tháng | 1; 2; 4; 8; 103 | NGUYỄN TẤN BẮC | năm | 1; 2; 4; 68</td>
+            </tr>
+            <tr>
+                <td><b>26</b></td>
+                <td>NGUYỄN THỊ TÂM | ngày | 1 | NGUYỄN THỊ TÂM | tuần | 1; 2; 3; 4; 6; 12 | NGUYỄN THỊ TÂM | tháng | 1 | NGUYỄN THỊ TÂM | năm | 1</td>
+            </tr>
+            <tr>
+                <td><b>27</b></td>
+                <td>THÂN VĂN GIỮ  | ngày | 1; 2; 3; 4; 5; 6; 7; 8; 10; 12; 28; 93 | THÂN VĂN GIỮ  | tuần | 1; 2; 3; 4; 5; 6; 8; 10; 12; 93 | THÂN VĂN GIỮ  | tháng | 1; 3; 5; 9; 285 | THÂN VĂN GIỮ  | năm | 1</td>
+            </tr>
+            <tr>
+                <td><b>28</b></td>
+                <td>NGUYỄN THỊ BÌNH | ngày | 1 | NGUYỄN THỊ BÌNH | tuần | 1; 2; 3; 6 | NGUYỄN THỊ BÌNH | tháng | 1; 2 | NGUYỄN THỊ BÌNH | năm | 1; 2; 4; 68</td>
+            </tr>
+            <tr>
+                <td><b>29</b></td>
+                <td>THÂN THỊ BÍCH NGUYỆT | ngày | 1; 3; 5; 9 | THÂN THỊ BÍCH NGUYỆT | tuần | 1; 2; 5; 10 | THÂN THỊ BÍCH NGUYỆT | tháng | 1; 2 | THÂN THỊ BÍCH NGUYỆT | năm | 1; 2; 23</td>
+            </tr>
+            <tr>
+                <td><b>30</b></td>
+                <td>THÂN VĂN TUẤN | ngày | 1; 2; 3; 4; 5; 6; 10; 12 | THÂN VĂN TUẤN | tuần | 1; 2; 7; 23; 98 | THÂN VĂN TUẤN | tháng | 1; 2; 7 | THÂN VĂN TUẤN | năm | 1; 43</td>
+            </tr>
+            <tr>
+                <td><b>31</b></td>
+                <td>THÂN YẾN NHI | ngày | 1; 2; 58; 103 | THÂN YẾN NHI | tuần | 1 | THÂN YẾN NHI | tháng | 1; 2; 4; 7; 28; 98 | THÂN YẾN NHI | năm | 1; 2; 4; 8</td>
+            </tr>
+            <tr>
+                <td><b>32</b></td>
+                <td>LÊ THỊ PHƯƠNG | ngày | 1 | LÊ THỊ PHƯƠNG | tuần | 1; 7 | LÊ THỊ PHƯƠNG | tháng | 1 | LÊ THỊ PHƯƠNG | năm | 1; 2; 3; 4; 6; 9; 12</td>
+            </tr>
+            <tr>
+                <td><b>33</b></td>
+                <td>NGUYỄN HOÀI NAM | ngày | 1; 3 | NGUYỄN HOÀI NAM | tuần | 1; 2; 4; 68 | NGUYỄN HOÀI NAM | tháng | 1; 5; 53 | NGUYỄN HOÀI NAM | năm | 1; 2; 11</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

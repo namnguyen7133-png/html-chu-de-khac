@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mạt Chược Hóa Học — Chơi Được</title>
+<style>
+  :root{
+    --bg:#0f172a; --panel:#1e293b; --line:#334155;
+    --gold:#fbbf24; --red:#ef4444; --green:#22c55e;
+    --text:#e2e8f0; --muted:#94a3b8;
+    --kim:#f59e0b; --phi:#22c55e; --dat:#8b5cf6;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:"Segoe UI",Roboto,Arial,sans-serif; background:var(--bg); color:var(--text); width:100%; min-height:100vh;}
+
+  header{padding:20px 4vw; text-align:center; background:linear-gradient(135deg,#1e293b,#0f172a); border-bottom:3px solid var(--gold);}
+  header h1{font-size:clamp(20px,2.6vw,34px); color:var(--gold);}
+  header p{color:var(--muted); margin-top:6px; font-size:14px;}
+
+  .topbar{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; padding:14px 4vw; background:var(--panel); border-bottom:1px solid var(--line);}
+  button{font-family:inherit; font-weight:700; font-size:15px; padding:10px 18px; border:none; border-radius:10px; cursor:pointer; transition:.15s;}
+  button:disabled{opacity:.4; cursor:not-allowed;}
+  .btn-gold{background:var(--gold); color:#000;}
+  .btn-gold:hover:not(:disabled){background:#fcd34d;}
+  .btn-blue{background:#3b82f6; color:#fff;}
+  .btn-blue:hover:not(:disabled){background:#60a5fa;}
+  .btn-green{background:var(--green); color:#000;}
+  .btn-green:hover:not(:disabled){background:#4ade80;}
+  .btn-red{background:var(--red); color:#fff;}
+  .btn-red:hover:not(:disabled){background:#f87171;}
+  .btn-ghost{background:transparent; color:var(--text); border:1px solid var(--line);}
+  .btn-ghost:hover:not(:disabled){background:#334155;}
+
+  .status{padding:12px 4vw; text-align:center; font-size:16px; font-weight:700; color:var(--gold); min-height:44px;}
+
+  .table{display:grid; grid-template-columns:1fr 1fr; gap:18px; padding:0 3vw 20px;}
+  @media (max-width:900px){ .table{grid-template-columns:1fr;} }
+
+  .area{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:16px;}
+  .area h2{font-size:16px; color:var(--gold); margin-bottom:12px; border-bottom:1px dashed var(--line); padding-bottom:6px;}
+
+  .hand{display:flex; flex-wrap:wrap; gap:8px; min-height:90px;}
+  .discard{display:flex; flex-wrap:wrap; gap:8px; min-height:60px;}
+
+  /* ===== QUÂN BÀI ===== */
+  .tile{
+    width:82px; min-height:92px; border-radius:10px; padding:6px 4px; text-align:center;
+    background:linear-gradient(160deg,#f8fafc,#e2e8f0); color:#0f172a;
+    border:2px solid #cbd5e1; position:relative; cursor:pointer;
+    transition:transform .12s, box-shadow .12s;
+    user-select:none;
+  }
+  .tile:hover{transform:translateY(-4px); box-shadow:0 8px 16px rgba(251,191,36,.4);}
+  .tile.selected{outline:3px solid var(--gold); transform:translateY(-6px);}
+  .tile .cnt{position:absolute; top:3px; right:5px; font-size:9px; color:#64748b; font-weight:700;}
+  .tile .mc{font-size:11px; font-weight:900; margin-top:12px; color:#1e293b;}
+  .tile .sym{font-size:22px; font-weight:900; line-height:1;}
+  .tile .name{font-size:9px; font-weight:700; color:#334155; margin-top:2px;}
+  .tile.kim .sym{color:#b45309;} .tile.phi .sym{color:#15803d;} .tile.dat .sym{color:#6d28d9;}
+  .tile.kim{border-color:#fcd34d;} .tile.phi{border-color:#86efac;} .tile.dat{border-color:#c4b5fd;}
+  .tile.gold{background:linear-gradient(160deg,#fef3c7,#fbbf24); border-color:#f59e0b;}
+  .tile.gold .sym{color:#92400e;}
+  .tile.red{background:linear-gradient(160deg,#fee2e2,#f87171); border-color:#ef4444;}
+  .tile.red .sym{color:#7f1d1d;}
+  .tile.green{background:linear-gradient(160deg,#dcfce7,#4ade80); border-color:#22c55e;}
+  .tile.green .sym{color:#14532d;}
+  .tile.small{width:56px; min-height:64px; padding:4px 2px;}
+  .tile.small .mc{font-size:8px; margin-top:8px;}
+  .tile.small .sym{font-size:15px;}
+  .tile.small .name{font-size:7px;}
+  .tile.small .cnt{font-size:7px;}
+
+  .log{background:#0f172a; border:1px solid var(--line); border-radius:14px; margin:0 3vw 40px; padding:14px 18px; max-height:220px; overflow-y:auto;}
+  .log h2{font-size:14px; color:var(--muted); margin-bottom:8px;}
+  .log p{font-size:13px; line-height:1.6; color:var(--text);}
+  .log p b{color:var(--gold);}
+
+  .guide-mini{background:var(--panel); border:1px solid var(--line); border-radius:14px; margin:0 3vw 18px; padding:16px 20px;}
+  .guide-mini h2{font-size:15px; color:var(--gold); margin-bottom:8px;}
+  .guide-mini ul{padding-left:18px;}
+  .guide-mini li{font-size:13px; line-height:1.7; color:var(--text);}
+  .ex{color:#fcd34d; font-weight:700;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🀄 MẠT CHƯỢC HÓA HỌC — CHƠI ĐƯỢC</h1>
+  <p>Bấm <b>Chia bài</b> để bắt đầu. Mỗi quân có tên mạt chược + tên nguyên tố. Đọc to khi đánh để học.</p>
+</header>
+
+<div class="topbar">
+  <button id="btnDeal" class="btn-gold">🀄 Chia bài</button>
+  <button id="btnDraw" class="btn-blue" disabled>⬇️ Bốc bài</button>
+  <button id="btnDiscard" class="btn-red" disabled>⬆️ Đánh quân đã chọn</button>
+  <button id="btnEat" class="btn-green" disabled>🍽️ Ăn quân vừa đánh</button>
+  <button id="btnWin" class="btn-ghost" disabled>🏆 Kiểm tra Ù</button>
+  <button id="btnReset" class="btn-ghost">↺ Chơi lại</button>
+</div>
+
+<div class="status" id="status">Nhấn “Chia bài” để bắt đầu ván mới.</div>
+
+<div class="table">
+  <div class="area">
+    <h2>🖐️ Bài trên tay bạn (<span id="handCount">0</span> quân)</h2>
+    <div class="hand" id="hand"></div>
+  </div>
+  <div class="area">
+    <h2>🗑️ Bài đã đánh (bàn chung)</h2>
+    <div class="discard" id="discard"></div>
+  </div>
+</div>
+
+<div class="guide-mini">
+  <h2>Cách chơi nhanh</h2>
+  <ul>
+    <li>Bấm <b>Chia bài</b>: bạn nhận 13 quân, chồng bốc còn lại úp giữa bàn.</li>
+    <li>Bấm <b>Bốc bài</b> để lấy 1 quân từ chồng (hoặc <b>Ăn quân vừa đánh</b> nếu hợp bộ).</li>
+    <li>Bấm vào một quân trên tay để <b>chọn</b>, rồi bấm <b>Đánh quân đã chọn</b>. Trước khi đánh, đọc to: <span class="ex">“Vạn 1 — H — Hydro”</span>.</li>
+    <li>Mục tiêu: tạo <b>4 bộ + 1 đôi</b> (14 quân). Bộ = 3 quân <b>cùng số khác chất</b>, hoặc <b>cùng chất liền số</b>, hoặc <b>3 quân giống hệt</b>. Đôi = 2 quân giống hệt.</li>
+    <li>Khi đủ 14 quân hợp lệ, bấm <b>Kiểm tra Ù</b> để thắng.</li>
+  </ul>
+</div>
+
+<div class="log" id="log">
+  <h2>📜 Nhật ký ván chơi</h2>
+</div>
+
+<script>
+/* ================= DỮ LIỆU 108 QUÂN ================= */
+const kim = [
+  ["H","Hydro"],["Li","Liti"],["Na","Natri"],["K","Kali"],
+  ["Be","Beri"],["Mg","Magie"],["Ca","Canxi"],["Sr","Stronti"],
+  ["Ba","Bari"],["Rb","Rubidi"],["Cs","Xesi"],["Fr","Franxi"],
+  ["Al","Nhôm"],["Ga","Gali"],["In","Indi"],["Tl","Tali"],
+  ["Sn","Thiếc"],["Pb","Chì"],["Bi","Bitmut"],["Po","Poloni"],
+  ["Cu","Đồng"],["Ag","Bạc"],["Au","Vàng"],["Zn","Kẽm"],
+  ["Cd","Cadimi"],["Hg","Thủy ngân"],["Fe","Sắt"],["Co","Coban"],
+  ["Ni","Niken"],["Mn","Mangan"],["Cr","Crom"],["Ti","Titan"],
+  ["W","Vonfram"],["Mo","Molypden"],["Zr","Zirconi"],["V","Vanadi"]
+];
+const phi = [
+  ["B","Bo"],["C","Cacbon"],["N","Nitơ"],["O","Oxy"],
+  ["F","Flo"],["Si","Silic"],["P","Photpho"],["S","Lưu huỳnh"],
+  ["Cl","Clo"],["Ar","Argon"],["Se","Selen"],["Br","Brom"],
+  ["Kr","Krypton"],["Te","Telu"],["I","Iot"],["Xe","Xenon"],
+  ["Rn","Radon"],["At","Astatin"],["Ge","Germani"],["As","Asen"],
+  ["Sb","Antimon"],["Sc","Scandi"],["Y","Ytri"],["La","Lantan"],
+  ["Ce","Xeri"],["Pr","Praseodym"],["Nd","Neodym"],["Pm","Promethi"],
+  ["Sm","Samari"],["Eu","Europi"],["Gd","Gadolini"],["Tb","Terbi"],
+  ["Dy","Dysprosi"],["Ho","Holmi"],["Er","Erbi"],["Tm","Thuli"]
+];
+const dat = [
+  ["Yb","Ytterbi"],["Lu","Luteti"],["Hf","Hafni"],["Ta","Tantan"],
+  ["Re","Rheni"],["Os","Osmi"],["Ir","Iridi"],["Pt","Platin"],
+  ["Th","Thori"],["Pa","Protactini"],["U","Urani"],["Np","Neptuni"],
+  ["Pu","Plutoni"],["Am","Americi"],["Cm","Curi"],["Bk","Berkeli"],
+  ["Cf","Californi"],["Es","Einsteini"],["Fm","Fermi"],["Md","Mendelevi"],
+  ["No","Nobeli"],["Lr","Lawrenci"],["Rf","Rutherfordi"],["Db","Dubni"],
+  ["Sg","Seaborgi"],["Bh","Bohri"],["Hs","Hassi"],["Mt","Meitneri"],
+  ["Ds","Darmstadti"],["Rg","Roentgeni"],["Cn","Copernici"],["Nh","Nihoni"],
+  ["Fl","Flerovi"],["Mc","Moscovi"],["Lv","Livermori"],["Ts","Tennessine"]
+];
+
+const allSym = [
+"H","He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca",
+"Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb","Sr","Y","Zr",
+"Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe","Cs","Ba","La","Ce","Pr","Nd",
+"Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu","Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg",
+"Tl","Pb","Bi","Po","At","Rn","Fr","Ra","Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es","Fm",
+"Md","No","Lr","Rf","Db","Sg","Bh","Hs","Mt","Ds","Rg","Cn","Nh","Fl","Mc","Lv","Ts","Og"
+];
+const zMap = {}; allSym.forEach((s,i)=> zMap[s]=i+1);
+
+const khiHiem = ["He","Ne","Ar","Kr","Xe","Rn"];
+const kimQuy  = ["Fe","Cu","Ag","Au"];
+const dacBiet = ["C","O","H"];
+
+/* Tạo bộ 108 quân: mỗi nguyên tố 1 quân (giống bộ mạt chược 108 lá số) */
+function buildDeck(){
+  const deck = [];
+  let id = 0;
+  const add = (list, chat) => {
+    list.forEach((item, idx)=>{
+      const [sym, name] = item;
+      const so = Math.floor(idx/4)+1;
+      deck.push({
+        id: id++,
+        sym, name, so, chat,
+        z: zMap[sym],
+        mc: (chat==="kim"?"Vạn ":chat==="phi"?"Bính ":"Điều ") + so
+      });
+    });
+  };
+  add(kim,"kim"); add(phi,"phi"); add(dat,"dat");
+  return deck; // 108 quân
+}
+
+/* ================= TRẠNG THÁI GAME ================= */
+let deck = [], hand = [], discardPile = [], drawnTile = null;
+let selectedId = null;
+let phase = "idle"; // idle | needDiscard | canDraw
+let lastDiscard = null;
+
+const $ = id => document.getElementById(id);
+
+/* ================= HIỂN THỊ ================= */
+function tileHTML(t, small){
+  let extra = "";
+  if(khiHiem.includes(t.sym)) extra = " red";
+  else if(kimQuy.includes(t.sym)) extra = " green";
+  else if(dacBiet.includes(t.sym)) extra = " gold";
+  return `<div class="cnt">Z=${t.z}</div>
+          <div class="mc">${t.mc}</div>
+          <div class="sym">${t.sym}</div>
+          <div class="name">${t.name}</div>`;
+}
+
+function render(){
+  const handEl = $("hand");
+  handEl.innerHTML = "";
+  hand.forEach(t=>{
+    const d = document.createElement("div");
+    let extra = "";
+    if(khiHiem.includes(t.sym)) extra = " red";
+    else if(kimQuy.includes(t.sym)) extra = " green";
+    else if(dacBiet.includes(t.sym)) extra = " gold";
+    d.className = "tile " + t.chat + extra + (t.id===selectedId?" selected":"");
+    d.innerHTML = tileHTML(t,false);
+    d.onclick = ()=>{
+      selectedId = (selectedId===t.id? null : t.id);
+      render();
+    };
+    handEl.appendChild(d);
+  });
+  $("handCount").textContent = hand.length;
+
+  const disEl = $("discard");
+  disEl.innerHTML = "";
+  discardPile.forEach(t=>{
+    const d = document.createElement("div");
+    let extra = "";
+    if(khiHiem.includes(t.sym)) extra = " red";
+    else if(kimQuy.includes(t.sym)) extra = " green";
+    else if(dacBiet.includes(t.sym)) extra = " gold";
+    d.className = "tile small " + t.chat + extra;
+    d.innerHTML = tileHTML(t,true);
+    disEl.appendChild(d);
+  });
+
+  // nút
+  $("btnDraw").disabled = !(phase==="canDraw");
+  $("btnDiscard").disabled = !(phase==="needDiscard" && selectedId!==null);
+  $("btnEat").disabled = !(phase==="canDraw" && lastDiscard!==null);
+  $("btnWin").disabled = !(hand.length===14 || hand.length===13);
+}
+
+function log(msg){
+  const p = document.createElement("p");
+  p.innerHTML = msg;
+  $("log").appendChild(p);
+  $("log").scrollTop = $("log").scrollHeight;
+}
+
+function setStatus(msg){ $("status").textContent = msg; }
+
+/* ================= CHIA BÀI ================= */
+function deal(){
+  deck = buildDeck();
+  // xáo
+  for(let i=deck.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [deck[i],deck[j]] = [deck[j],deck[i]];
+  }
+  hand = deck.splice(0,13);
+  discardPile = [];
+  drawnTile = null;
+  selectedId = null;
+  lastDiscard = null;
+  phase = "canDraw";
+  $("log").innerHTML = "<h2>📜 Nhật ký ván chơi</h2>";
+  log("<b>Ván mới!</b> Bạn có 13 quân. Bấm <b>Bốc bài</b> để lấy quân thứ 14.");
+  setStatus("Lượt bạn: bấm Bốc bài (hoặc Ăn quân vừa đánh nếu có).");
+  render();
+}
+
+/* ================= BỐC ================= */
+function draw(){
+  if(phase!=="canDraw" || deck.length===0) return;
+  const t = deck.pop();
+  hand.push(t);
+  selectedId = t.id;
+  phase = "needDiscard";
+  log(`Bạn bốc được: <b>${t.mc} — ${t.sym} — ${t.name}</b> (Z=${t.z}). Chọn 1 quân để đánh.`);
+  setStatus("Chọn 1 quân trên tay rồi bấm Đánh quân đã chọn.");
+  render();
+}
+
+/* ================= ĐÁNH ================= */
+function discard(){
+  if(phase!=="needDiscard" || selectedId===null) return;
+  const idx = hand.findIndex(t=>t.id===selectedId);
+  if(idx<0) return;
+  const t = hand.splice(idx,1)[0];
+  discardPile.push(t);
+  lastDiscard = t;
+  selectedId = null;
+  phase = "canDraw";
+  log(`Bạn đánh: <b>${t.mc} — ${t.sym} — ${t.name}</b> (Z=${t.z}).`);
+  setStatus("Lượt bạn: bấm Bốc bài (hoặc Ăn quân vừa đánh nếu hợp bộ).");
+  render();
+}
+
+/* ================= ĂN ================= */
+function eat(){
+  if(phase!=="canDraw" || lastDiscard===null) return;
+  // ăn quân vừa đánh: lấy lại quân đó vào tay, phải đánh ra 1 quân khác
+  hand.push(lastDiscard);
+  discardPile.pop();
+  log(`Bạn ăn quân: <b>${lastDiscard.mc} — ${lastDiscard.sym} — ${lastDiscard.name}</b>. Bây giờ phải đánh ra 1 quân.`);
+  lastDiscard = null;
+  phase = "needDiscard";
+  selectedId = null;
+  setStatus("Bạn đã ăn bài. Chọn 1 quân trên tay để đánh.");
+  render();
+}
+
+/* ================= KIỂM TRA Ù ================= */
+/* Kiểm tra 14 quân có tạo được 4 bộ + 1 đôi không */
+function isWinningHand(tiles){
+  if(tiles.length!==14) return false;
+  // thử từng cặp làm đôi
+  const arr = tiles.slice();
+  const n = arr.length;
+  for(let i=0;i<n;i++){
+    for(let j=i+1;j<n;j++){
+      if(sameTile(arr[i],arr[j])){
+        const rest = arr.filter((_,k)=> k!==i && k!==j);
+        if(canFormSets(rest)) return true;
+      }
+    }
+  }
+  return false;
+}
+function sameTile(a,b){
+  return a.sym===b.sym && a.chat===b.chat && a.so===b.so;
+}
+function canFormSets(tiles){
+  if(tiles.length===0) return true;
+  const t = tiles[0];
+  // thử bộ ba giống hệt
+  const same = tiles.filter(x=> sameTile(x,t));
+  if(same.length>=3){
+    const rest = removeTiles(tiles, same.slice(0,3));
+    if(canFormSets(rest)) return true;
+  }
+  // thử bộ số: cùng số khác chất
+  const sameSo = tiles.filter(x=> x.so===t.so);
+  const chats = new Set(sameSo.map(x=>x.chat));
+  if(chats.size>=3){
+    const pick = [];
+    const used = new Set();
+    for(const x of sameSo){
+      if(!used.has(x.chat)){ pick.push(x); used.add(x.chat); }
+    }
+    const rest = removeTiles(tiles, pick.slice(0,3));
+    if(canFormSets(rest)) return true;
+  }
+  // thử bộ dãy: cùng chất, số liên tiếp
+  const sameChat = tiles.filter(x=> x.chat===t.chat);
+  const bySo = {};
+  sameChat.forEach(x=>{ if(!bySo[x.so]) bySo[x.so]=x; });
+  if(bySo[t.so+1] && bySo[t.so+2]){
+    const rest = removeTiles(tiles, [t, bySo[t.so+1], bySo[t.so+2]]);
+    if(canFormSets(rest)) return true;
+  }
+  return false;
+}
+function removeTiles(arr, toRemove){
+  const res = arr.slice();
+  toRemove.forEach(r=>{
+    const idx = res.findIndex(x=> x.id===r.id);
+    if(idx>=0) res.splice(idx,1);
+  });
+  return res;
+}
+
+function checkWin(){
+  if(hand.length!==14){
+    setStatus("Cần đúng 14 quân mới kiểm tra ù. Hiện có " + hand.length + " quân.");
+    return;
+  }
+  if(isWinningHand(hand)){
+    setStatus("🎉 Ù! Bạn đã tạo được 4 bộ + 1 đôi. Thắng ván!");
+    log("<b>🎉 Ù! Bạn thắng ván này!</b>");
+    phase = "idle";
+  } else {
+    setStatus("Chưa ù. Tay bài chưa tạo đủ 4 bộ + 1 đôi. Tiếp tục bốc/đánh.");
+    log("Kiểm tra ù: chưa hợp lệ.");
+  }
+  render();
+}
+
+/* ================= GẮN NÚT ================= */
+$("btnDeal").onclick = deal;
+$("btnDraw").onclick = draw;
+$("btnDiscard").onclick = discard;
+$("btnEat").onclick = eat;
+$("btnWin").onclick = checkWin;
+$("btnReset").onclick = ()=>{
+  hand=[]; discardPile=[]; deck=[]; selectedId=null; lastDiscard=null; phase="idle";
+  $("log").innerHTML = "<h2>📜 Nhật ký ván chơi</h2>";
+  setStatus("Nhấn “Chia bài” để bắt đầu ván mới.");
+  render();
+};
+
+render();
+</script>
+</body>
+</html>

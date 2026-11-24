@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Tổng Hợp Transcript Hàng Loạt</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f8fafc; padding: 20px; color: #0f172a; margin: 0; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .header { background: #1e3a8a; color: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; }
+        .search-box { margin: 20px 0; text-align: center; background: #ffffff; padding: 15px; border-radius: 8px; border: 1px solid #cbd5e1; }
+        .search-box input { width: 60%; padding: 10px 15px; font-size: 15px; border: 2px solid #3b82f6; border-radius: 6px; outline: none; }
+        .movie-card { background: white; border: 1px solid #cbd5e1; border-radius: 8px; padding: 15px; margin-bottom: 20px; }
+        .movie-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px; margin-bottom: 8px; }
+        .movie-title { font-size: 16px; font-weight: bold; color: #1e3a8a; text-decoration: none; }
+        .badge { background: #dbeafe; color: #1e40af; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th, td { border-bottom: 1px solid #e2e8f0; padding: 10px; text-align: left; vertical-align: top; }
+        th { background: #f1f5f9; }
+        .btn-play { background: #ef4444; color: white; text-decoration: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h2 style="margin:0;">📁 KHO TỔNG HỢP TRANSCRIPT HÀNG LOẠT</h2>
+    </div>
+    <div class="search-box">
+        <input type="text" id="globalSearchInput" placeholder="🔍 Nhập từ khóa để tìm kiếm..." onkeyup="filterTable()">
+    </div>
+    
+</div>
+<script>
+function filterTable() {
+    var input = document.getElementById("globalSearchInput");
+    var filter = input.value.toLowerCase().trim();
+    var rows = document.querySelectorAll(".searchable-row");
+    rows.forEach(function(row) {
+        var text = row.innerText.toLowerCase();
+        if (filter === "" || text.indexOf(filter) > -1) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+}
+</script>
+</body>
+</html>

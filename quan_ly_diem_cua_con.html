@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Quản Lý Điểm Thưởng & Thời Gian Chơi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans p-4 md:p-6">
+
+    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden p-6 md:p-8">
+        <h1 class="text-2xl md:text-3xl font-bold text-center text-indigo-600 mb-2">QUẢN LÝ TÍCH LŨY ĐIỂM & THỜI GIAN CHƠI</h1>
+        <p class="text-center text-slate-500 mb-6">Hệ thống quản lý điểm số cho nhiều học sinh / thành viên</p>
+
+        <!-- Chọn thành viên & Giai đoạn -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-slate-100 p-4 rounded-xl">
+            <div class="md:col-span-1">
+                <label class="block text-sm font-medium text-slate-600 mb-1">Chọn thành viên:</label>
+                <div class="flex space-x-2">
+                    <select id="memberSelect" onchange="onMemberChanged()" class="w-full border rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 font-semibold text-indigo-600">
+                        <!-- Danh sách tên sẽ được tự động điền vào đây -->
+                    </select>
+                    <button onclick="addNewMemberPrompt()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-lg text-sm font-bold transition" title="Thêm học sinh mới">+</button>
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Giai đoạn giáo dục:</label>
+                <select id="stageSelect" class="w-full border rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="1">Giai đoạn 1: Tuần làm quen</option>
+                    <option value="2">Giai đoạn 2: Vận hành chính thức</option>
+                    <option value="3">Giai đoạn 3: Họp tổng kết</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Ngày bắt đầu:</label>
+                <input type="date" id="startDate" class="w-full border rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Ngày kết thúc:</label>
+                <input type="date" id="endDate" class="w-full border rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+        </div>
+
+        <!-- Bảng tổng kết -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 text-center">
+                <span class="block text-slate-500 text-sm">Tổng điểm thực nhận</span>
+                <span id="totalPoints" class="text-2xl font-bold text-emerald-600">0</span> <span class="text-emerald-600 font-semibold">điểm</span>
+            </div>
+            <div class="bg-sky-50 border border-sky-100 rounded-xl p-4 text-center">
+                <span class="block text-slate-500 text-sm">Thời gian chơi quy đổi</span>
+                <span id="totalPlayTime" class="text-2xl font-bold text-sky-600">0</span> <span class="text-sky-600 font-semibold">phút</span>
+            </div>
+            <div class="bg-rose-50 border border-rose-100 rounded-xl p-4 text-center">
+                <span class="block text-slate-500 text-sm">Tổng điểm phạt / Trả phí</span>
+                <span id="totalPenalty" class="text-2xl font-bold text-rose-600">0</span> <span class="text-rose-600 font-semibold">điểm</span>
+            </div>
+        </div>
+
+        <!-- 🎯 Bảng Đề Xuất: Cần làm gì để đổi giờ chơi? -->
+        <div class="bg-indigo-50 border border-indigo-100 p-5 rounded-2xl mb-8">
+            <h2 class="text-lg font-semibold text-indigo-700 mb-3">🎯 Bảng Đề Xuất: Cần làm việc gì để đổi giờ chơi?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Chọn mục tiêu muốn đổi:</label>
+                    <select id="goalTarget" onchange="calculateGoal()" class="w-full border rounded-lg px-3 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="25">1 Giờ Điện thoại (25 điểm)</option>
+                        <option value="25">1 Giờ Xem TV (25 điểm)</option>
+                        <option value="50">2 Giờ Giải trí (50 điểm)</option>
+                        <option value="100">1 Ngày Trọn Vẹn (100 điểm)</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2 flex items-end">
+                    <p class="text-xs text-indigo-900 italic bg-white p-2.5 rounded-lg border border-indigo-100 w-full">
+                        💡 Để đạt mục tiêu này, cần hoàn thành <strong><span id="goalPointsNeeded">25</span> điểm</strong>. Gợi ý quy đổi công việc:
+                    </p>
+                </div>
+            </div>
+            <div id="goalSuggestions" class="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm"></div>
+        </div>
+
+        <!-- 1. Chế độ thưởng -->
+        <div class="space-y-4 mb-8">
+            <h2 class="text-lg font-semibold text-emerald-700 border-b pb-2">🟢 Chế độ thưởng</h2>
+            <div id="rewardList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+        </div>
+
+        <!-- 2. Chế độ phạt -->
+        <div class="space-y-4 mb-8">
+            <h2 class="text-lg font-semibold text-rose-700 border-b pb-2">🔴 Chế độ phạt</h2>
+            <div id="penaltyList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+        </div>
+
+        <!-- 3. Các khoản phải tự trả -->
+        <div class="space-y-4 mb-8">
+            <h2 class="text-lg font-semibold text-amber-700 border-b pb-2">🟡 Các khoản phải tự trả (Theo giờ)</h2>
+            <div id="serviceList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+        </div>
+
+        <!-- 4. Thêm việc khác ngoài danh mục -->
+        <div class="pt-6 border-t border-slate-200 mb-8">
+            <h2 class="text-lg font-semibold text-slate-700 mb-4">➕ Thêm việc khác ngoài danh mục</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                <input type="text" id="customName" placeholder="Tên việc..." class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <select id="customType" class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="reward">Thưởng (+)</option>
+                    <option value="penalty">Phạt (-)</option>
+                </select>
+                <input type="number" id="customPoints" placeholder="Số điểm" class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <button onclick="addCustomTask()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg py-2 transition">Thêm</button>
+            </div>
+            <div id="customTaskList" class="mt-4 space-y-2"></div>
+        </div>
+
+        <!-- 5. Bảng Nhật Ký Giao Dịch -->
+        <div class="bg-slate-900 text-slate-100 p-5 rounded-2xl mb-8 shadow-inner">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="font-bold text-lg text-indigo-400">📜 Nhật ký ghi nhận (Minh bạch - Có thời gian)</h3>
+                <button onclick="clearHistory()" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-300 px-3 py-1 rounded transition">Xóa nhật ký</button>
+            </div>
+            <div id="historyLogList" class="space-y-2 max-h-48 overflow-y-auto text-sm pr-2">
+                <p class="text-slate-400 italic">Chưa có giao dịch nào được ghi nhận...</p>
+            </div>
+        </div>
+
+        <!-- Nút thao tác -->
+        <div class="mt-8 flex justify-center space-x-4">
+            <button onclick="saveData()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-6 py-2 rounded-lg transition shadow">💾 Lưu dữ liệu thành viên này</button>
+            <button onclick="resetCalculator()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium px-6 py-2 rounded-lg transition">🔄 Đặt lại thành viên này</button>
+        </div>
+    </div>
+
+    <script>
+        const defaultTasksTemplate = [
+            { id: 1, name: "Quét nhà", type: "reward", points: 5, count: 0 },
+            { id: 2, name: "Thu quần áo", type: "reward", points: 10, count: 0 },
+            { id: 3, name: "Dọn ghế sofa", type: "reward", points: 5, count: 0 },
+            { id: 4, name: "Đổ rác", type: "reward", points: 5, count: 0 },
+            { id: 5, name: "Lau bàn", type: "reward", points: 5, count: 0 },
+            { id: 6, name: "Thu dọn giường", type: "reward", points: 5, count: 0 },
+            { id: 7, name: "Lấy hàng chuyển phát", type: "reward", points: 10, count: 0 },
+            { id: 8, name: "Giặt tất", type: "reward", points: 5, count: 0 },
+            { id: 9, name: "Sắp xếp giày dép", type: "reward", points: 5, count: 0 },
+            { id: 10, name: "Thu dọn đồ chơi", type: "reward", points: 5, count: 0 },
+            { id: 11, name: "Không kén ăn", type: "reward", points: 5, count: 0 },
+            { id: 12, name: "Phơi quần áo", type: "reward", points: 5, count: 0 },
+            { id: 13, name: "Lau nhà", type: "reward", points: 5, count: 0 },
+            { id: 14, name: "Rửa bát", type: "reward", points: 10, count: 0 },
+            { id: 15, name: "Chạy việc / làm việc vặt", type: "reward", points: 5, count: 0 },
+            { id: 16, name: "Tự giác hoàn thành bài tập", type: "reward", points: 15, count: 0 },
+            { id: 17, name: "Mỗi ngày nhảy dây / luyện bóng", type: "reward", points: 15, count: 0 },
+            { id: 18, name: "Duy trì tất cả việc trên trong 1 tuần", type: "reward", points: 25, count: 0 },
+            { id: 19, name: "Nổi nóng", type: "penalty", points: 10, count: 0 },
+            { id: 20, name: "Trì hoãn", type: "penalty", points: 10, count: 0 },
+            { id: 21, name: "Nói dối", type: "penalty", points: 10, count: 0 },
+            { id: 22, name: "Cãi lại", type: "penalty", points: 10, count: 0 },
+            { id: 23, name: "Điện thoại (giờ)", type: "service", points: 25, count: 0 },
+            { id: 24, name: "Xem TV (giờ)", type: "service", points: 25, count: 0 }
+        ];
+
+        let memberList = [];
+        let allData = {};
+        let currentMember = "";
+
+        function initApp() {
+            let savedList = localStorage.getItem('school_member_list_v2');
+            if (savedList) {
+                memberList = JSON.parse(savedList);
+            } else {
+                // Mặc định lấy các bạn đã lưu trước đó nếu có
+                memberList = ["Nguyễn TM Châu", "Nguyễn TB Ngọc"];
+            }
+
+            refreshSelectDropdown();
+
+            if (memberList.length > 0) {
+                currentMember = memberList[0];
+                document.getElementById('memberSelect').value = currentMember;
+                loadMemberData(currentMember);
+            }
+        }
+
+        function refreshSelectDropdown() {
+            const select = document.getElementById('memberSelect');
+            select.innerHTML = '';
+            memberList.forEach(name => {
+                let opt = document.createElement('option');
+                opt.value = name;
+                opt.innerText = name;
+                select.appendChild(opt);
+            });
+        }
+
+        function addNewMemberPrompt() {
+            let newName = prompt("Nhập họ tên học sinh / thành viên mới:");
+            if (newName && newName.trim() !== "") {
+                newName = newName.trim();
+                if (!memberList.includes(newName)) {
+                    memberList.push(newName);
+                    localStorage.setItem('school_member_list_v2', JSON.stringify(memberList));
+                }
+                refreshSelectDropdown();
+                document.getElementById('memberSelect').value = newName;
+                onMemberChanged();
+            }
+        }
+
+        function onMemberChanged() {
+            currentMember = document.getElementById('memberSelect').value;
+            loadMemberData(currentMember);
+        }
+
+        function loadMemberData(name) {
+            let saved = localStorage.getItem('school_data_' + name);
+            if (saved) {
+                allData[name] = JSON.parse(saved);
+            } else {
+                allData[name] = {
+                    stage: "1",
+                    startDate: "",
+                    endDate: "",
+                    tasks: JSON.parse(JSON.stringify(defaultTasksTemplate)),
+                    customTasks: [],
+                    historyLogs: []
+                };
+            }
+
+            let data = allData[name];
+            document.getElementById('stageSelect').value = data.stage || "1";
+            document.getElementById('startDate').value = data.startDate || "";
+            document.getElementById('endDate').value = data.endDate || "";
+
+            renderLists(data);
+            renderCustomTasks(data);
+            renderHistoryLogs(data);
+            calculateTotals(data);
+            calculateGoal();
+        }
+
+        function renderLists(data) {
+            const rewardContainer = document.getElementById('rewardList');
+            const penaltyContainer = document.getElementById('penaltyList');
+            const serviceContainer = document.getElementById('serviceList');
+
+            rewardContainer.innerHTML = '';
+            penaltyContainer.innerHTML = '';
+            serviceContainer.innerHTML = '';
+
+            data.tasks.forEach(task => {
+                let html = `
+                    <div class="flex items-center justify-between p-3 rounded-xl border bg-white shadow-sm">
+                        <div>
+                            <span class="font-medium text-slate-700 text-sm block">${task.name}</span>
+                            <span class="text-xs text-slate-500">${task.points} điểm ${task.type === 'service' ? '/ giờ' : ''}</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="updateCount(${task.id}, -1, false)" class="w-7 h-7 bg-slate-100 border rounded-lg font-bold text-slate-600 hover:bg-slate-200">-</button>
+                            <span class="w-6 text-center font-bold text-sm">${task.count}</span>
+                            <button onclick="updateCount(${task.id}, 1, false)" class="w-7 h-7 bg-slate-100 border rounded-lg font-bold text-slate-600 hover:bg-slate-200">+</button>
+                        </div>
+                    </div>
+                `;
+                if (task.type === 'reward') rewardContainer.innerHTML += html;
+                else if (task.type === 'penalty') penaltyContainer.innerHTML += html;
+                else if (task.type === 'service') serviceContainer.innerHTML += html;
+            });
+        }
+
+        function renderCustomTasks(data) {
+            const container = document.getElementById('customTaskList');
+            container.innerHTML = '';
+            data.customTasks.forEach(task => {
+                const badgeColor = task.type === 'reward' ? 'text-emerald-600' : 'text-rose-600';
+                container.innerHTML += `
+                    <div class="flex items-center justify-between p-3 rounded-xl border bg-slate-50">
+                        <div>
+                            <span class="font-medium text-sm block">${task.name} <span class="text-xs ${badgeColor}">(${task.type === 'reward' ? 'Thưởng' : 'Phạt'})</span></span>
+                            <span class="text-xs text-slate-500">${task.points} điểm</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="updateCount(${task.id}, -1, true)" class="w-7 h-7 bg-white border rounded-lg font-bold text-slate-600 hover:bg-slate-100">-</button>
+                            <span class="w-6 text-center font-bold text-sm">${task.count}</span>
+                            <button onclick="updateCount(${task.id}, 1, true)" class="w-7 h-7 bg-white border rounded-lg font-bold text-slate-600 hover:bg-slate-100">+</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderHistoryLogs(data) {
+            const container = document.getElementById('historyLogList');
+            if (!data.historyLogs || data.historyLogs.length === 0) {
+                container.innerHTML = `<p class="text-slate-400 italic">Chưa có giao dịch nào được ghi nhận cho ${currentMember}...</p>`;
+                return;
+            }
+            container.innerHTML = '';
+            data.historyLogs.forEach(log => {
+                let colorClass = log.includes('Cộng') || log.includes('Thưởng') ? 'text-emerald-400' : 'text-rose-400';
+                container.innerHTML += `<div class="border-b border-slate-800 pb-1 ${colorClass}">${log}</div>`;
+            });
+        }
+
+        function updateCount(id, delta, isCustom) {
+            let data = allData[currentMember];
+            const nowTime = new Date().toLocaleString('vi-VN');
+
+            if (!isCustom) {
+                const task = data.tasks.find(t => t.id === id);
+                if (task) {
+                    task.count += delta;
+                    if (task.count < 0) task.count = 0;
+                    let actionText = delta > 0 ? `Cộng (+${task.points}đ)` : `Trừ (-${task.points}đ)`;
+                    data.historyLogs.unshift(`[${nowTime}] ${actionText}: ${task.name}`);
+                }
+            } else {
+                const task = data.customTasks.find(t => t.id === id);
+                if (task) {
+                    task.count += delta;
+                    if (task.count < 0) task.count = 0;
+                    let actionText = delta > 0 ? `Cộng (+${task.points}đ)` : `Trừ (-${task.points}đ)`;
+                    data.historyLogs.unshift(`[${nowTime}] ${actionText} (Ngoài danh mục): ${task.name}`);
+                }
+            }
+
+            renderLists(data);
+            renderCustomTasks(data);
+            renderHistoryLogs(data);
+            calculateTotals(data);
+        }
+
+        function addCustomTask() {
+            const name = document.getElementById('customName').value.trim();
+            const type = document.getElementById('customType').value;
+            const points = parseFloat(document.getElementById('customPoints').value);
+            const nowTime = new Date().toLocaleString('vi-VN');
+
+            if (!name || isNaN(points)) {
+                alert("Vui lòng nhập tên việc và số điểm hợp lệ!");
+                return;
+            }
+
+            let data = allData[currentMember];
+            data.customTasks.push({ id: Date.now(), name, type, points, count: 1 });
+            data.historyLogs.unshift(`[${nowTime}] Thêm việc mới [${type === 'reward' ? 'Thưởng' : 'Phạt'}]: ${name} (${points}đ)`);
+
+            document.getElementById('customName').value = '';
+            document.getElementById('customPoints').value = '';
+
+            renderCustomTasks(data);
+            renderHistoryLogs(data);
+            calculateTotals(data);
+        }
+
+        function calculateTotals(data) {
+            let totalReward = 0, totalDeduction = 0;
+            data.tasks.forEach(t => {
+                if (t.type === 'reward') totalReward += t.points * t.count;
+                else if (t.type === 'penalty' || t.type === 'service') totalDeduction += t.points * t.count;
+            });
+            data.customTasks.forEach(t => {
+                if (t.type === 'reward') totalReward += t.points * t.count;
+                else totalDeduction += t.points * t.count;
+            });
+
+            let finalPoints = totalReward - totalDeduction;
+            if (finalPoints < 0) finalPoints = 0;
+            let playMinutes = Math.round((finalPoints / 25) * 60);
+
+            document.getElementById('totalPoints').innerText = finalPoints;
+            document.getElementById('totalPlayTime').innerText = playMinutes;
+            document.getElementById('totalPenalty').innerText = totalDeduction;
+        }
+
+        function calculateGoal() {
+            const targetPoints = parseInt(document.getElementById('goalTarget').value) || 25;
+            document.getElementById('goalPointsNeeded').innerText = targetPoints;
+            const container = document.getElementById('goalSuggestions');
+            container.innerHTML = '';
+
+            const sampleTasks = [
+                { name: "Quét nhà", points: 5 },
+                { name: "Rửa bát", points: 10 },
+                { name: "Tự giác học bài", points: 15 },
+                { name: "Thu quần áo", points: 10 }
+            ];
+
+            sampleTasks.forEach(st => {
+                let neededCount = Math.ceil(targetPoints / st.points);
+                container.innerHTML += `
+                    <div class="bg-white p-2.5 rounded-xl border border-indigo-100 text-center shadow-sm">
+                        <span class="block text-xs font-semibold text-slate-700">${st.name}</span>
+                        <span class="text-indigo-600 font-bold text-base">Cần ${neededCount} lần</span>
+                        <span class="block text-[10px] text-slate-400">(${st.points}đ/lần)</span>
+                    </div>
+                `;
+            });
+        }
+
+        function saveData() {
+            let data = allData[currentMember];
+            data.stage = document.getElementById('stageSelect').value;
+            data.startDate = document.getElementById('startDate').value;
+            data.endDate = document.getElementById('endDate').value;
+
+            localStorage.setItem('school_data_' + currentMember, JSON.stringify(data));
+            localStorage.setItem('school_member_list_v2', JSON.stringify(memberList));
+            alert("✅ Đã lưu thành công dữ liệu cho: " + currentMember);
+        }
+
+        function clearHistory() {
+            let data = allData[currentMember];
+            if (confirm("Bạn có muốn xóa nhật ký của " + currentMember + " không?")) {
+                data.historyLogs = [];
+                renderHistoryLogs(data);
+            }
+        }
+
+        function resetCalculator() {
+            if (confirm("Bạn có chắc muốn đặt lại toàn bộ điểm và lịch sử của " + currentMember + " không?")) {
+                localStorage.removeItem('school_data_' + currentMember);
+                allData[currentMember] = {
+                    stage: "1",
+                    startDate: "",
+                    endDate: "",
+                    tasks: JSON.parse(JSON.stringify(defaultTasksTemplate)),
+                    customTasks: [],
+                    historyLogs: []
+                };
+                loadMemberData(currentMember);
+            }
+        }
+
+        // Khởi chạy
+        initApp();
+    </script>
+</body>
+</html>

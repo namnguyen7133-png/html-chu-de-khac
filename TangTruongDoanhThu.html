@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Module 10 - Debt Ratio (Tỷ số nợ) | CEO AI Enterprise</title>
+
+    <!-- ============================================================
+    MODULE 10: DEBT RATIO (Tỷ số nợ)
+    Tác giả: CEO AI Enterprise Team
+    Mô tả: Tính toán và phân tích tỷ số nợ, đánh giá mức độ
+            sử dụng đòn bẩy tài chính và rủi ro của doanh nghiệp.
+    ============================================================ -->
+
+    <!-- Thư viện Chart.js cho biểu đồ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+
+    <!-- Thư viện SheetJS để xuất Excel -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js">
+    </script>
+
+    <style>
+        /* ---------- RESET & FONT ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f9;
+            padding: 30px 20px;
+            color: #1a2639;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* ---------- HEADER ---------- */
+        .module-header {
+            background: linear-gradient(135deg, #3d1a2e, #6a2a4a);
+            color: white;
+            padding: 25px 35px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(60, 20, 40, 0.25);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .module-header h1 {
+            font-weight: 600;
+            font-size: 28px;
+            letter-spacing: 0.5px;
+        }
+
+        .module-header .badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .module-header .badge span {
+            color: #f7b8d4;
+            font-weight: 700;
+        }
+
+        /* ---------- GRID LAYOUT ---------- */
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 920px) {
+            .grid-2col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ---------- CARDS ---------- */
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px 28px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.25s;
+            border: 1px solid #e8edf4;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 28px rgba(0, 20, 50, 0.10);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #3d1a2e;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #eef3f9;
+            padding-bottom: 12px;
+        }
+
+        .card-title .icon {
+            font-size: 22px;
+        }
+
+        /* ---------- FORM ---------- */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            color: #2c405a;
+            margin-bottom: 5px;
+        }
+
+        .form-group .hint {
+            font-size: 12px;
+            color: #7a8aa3;
+            font-weight: 400;
+            margin-left: 6px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #dce3ed;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #fafcff;
+            transition: border 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #7a2a5a;
+            box-shadow: 0 0 0 4px rgba(122, 42, 90, 0.12);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ---------- BUTTONS ---------- */
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: #6a2a4a;
+            color: white;
+            box-shadow: 0 6px 14px rgba(106, 42, 74, 0.30);
+        }
+
+        .btn-primary:hover {
+            background: #521a3a;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(106, 42, 74, 0.35);
+        }
+
+        .btn-success {
+            background: #1e7e34;
+            color: white;
+            box-shadow: 0 6px 14px rgba(30, 126, 52, 0.25);
+        }
+
+        .btn-success:hover {
+            background: #15692b;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #6a2a4a;
+            color: #6a2a4a;
+        }
+
+        .btn-outline:hover {
+            background: #6a2a4a;
+            color: white;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        /* ---------- KẾT QUẢ ---------- */
+        .result-box {
+            background: #faf2f8;
+            border-radius: 14px;
+            padding: 18px 22px;
+            margin-top: 20px;
+            border-left: 6px solid #6a2a4a;
+        }
+
+        .result-box .value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #3d1a2e;
+        }
+
+        .result-box .label {
+            font-size: 14px;
+            color: #4a6380;
+            font-weight: 500;
+        }
+
+        .result-box .sub {
+            font-size: 14px;
+            color: #4a6380;
+            margin-top: 6px;
+        }
+
+        /* ---------- AI ANALYSIS ---------- */
+        .ai-box {
+            background: linear-gradient(145deg, #faf2f8, #f5e8f0);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-top: 18px;
+            border: 1px solid #e8c8da;
+        }
+
+        .ai-box .ai-label {
+            font-weight: 700;
+            color: #3d1a2e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .ai-box .ai-label .spark {
+            color: #f5b342;
+        }
+
+        .ai-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .ai-box ul li {
+            padding: 6px 0 6px 24px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%236a2a4a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>') left center no-repeat;
+            background-size: 16px;
+            color: #1a2c44;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .ai-box ul li strong {
+            color: #3d1a2e;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .status-healthy {
+            background: #d4edda;
+            color: #0b5e2e;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-neutral {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        /* ---------- BIỂU ĐỒ ---------- */
+        .chart-wrapper {
+            position: relative;
+            height: 220px;
+            margin-top: 10px;
+        }
+
+        /* ---------- BẢNG DỮ LIỆU ---------- */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            font-size: 14px;
+        }
+
+        .data-table th {
+            background: #f5e8f0;
+            color: #3d1a2e;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eef3f9;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table .highlight {
+            font-weight: 700;
+            color: #6a2a4a;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-10 {
+            margin-top: 10px;
+        }
+        .mt-16 {
+            margin-top: 16px;
+        }
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* Scroll mượt */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #eef3f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b0c8dd;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8aaac9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ============================================================
+        HEADER MODULE
+        ============================================================ -->
+        <header class="module-header">
+            <div>
+                <h1>📊 Module 10 · Debt Ratio (Tỷ số nợ)</h1>
+                <p style="opacity:0.8; margin-top:4px; font-size:15px;">
+                    Đo lường mức độ sử dụng đòn bẩy tài chính và rủi ro của doanh nghiệp
+                </p>
+            </div>
+            <div class="badge">
+                ⚡ Trạng thái: <span>Sẵn sàng</span> &nbsp;|&nbsp; 📌 v1.0
+            </div>
+        </header>
+
+        <!-- ============================================================
+        HÀNG 1: NHẬP LIỆU + KẾT QUẢ
+        ============================================================ -->
+        <div class="grid-2col">
+            <!-- CỘT TRÁI: FORM NHẬP -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📥</span> Nhập dữ liệu tài chính
+                </div>
+
+                <div class="form-group">
+                    <label for="period">📅 Kỳ báo cáo</label>
+                    <select id="period">
+                        <option value="Q1 2026">Q1 2026</option>
+                        <option value="Q2 2026" selected>Q2 2026</option>
+                        <option value="Q3 2026">Q3 2026</option>
+                        <option value="Q4 2026">Q4 2026</option>
+                        <option value="Năm 2026">Năm 2026</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="total_debt">
+                            💰 Tổng nợ phải trả
+                            <span class="hint">(Total Liabilities)</span>
+                        </label>
+                        <input type="number" id="total_debt" value="450000000000" step="1000000000" />
+                    </div>
+                    <div class="form-group">
+                        <label for="total_assets">
+                            🏢 Tổng tài sản
+                            <span class="hint">(Total Assets)</span>
+                        </label>
+                        <input type="number" id="total_assets" value="850000000000" step="1000000000" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="current_debt">
+                            📋 Nợ ngắn hạn
+                            <span class="hint">(Current Liabilities)</span>
+                        </label>
+                        <input type="number" id="current_debt" value="180000000000" step="1000000000" />
+                    </div>
+                    <div class="form-group">
+                        <label for="long_term_debt">
+                            📋 Nợ dài hạn
+                            <span class="hint">(Long-term Liabilities)</span>
+                        </label>
+                        <input type="number" id="long_term_debt" value="270000000000" step="1000000000" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="equity">
+                        💎 Vốn chủ sở hữu
+                        <span class="hint">(Total Equity)</span>
+                    </label>
+                    <input type="number" id="equity" value="400000000000" step="1000000000" />
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="calculateDebtRatio()">🚀 Tính Tỷ số nợ</button>
+                    <button class="btn btn-success" onclick="saveToSQLite()">💾 Lưu SQLite</button>
+                    <button class="btn btn-outline" onclick="exportExcel()">📊 Xuất Excel</button>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI: KẾT QUẢ CHÍNH -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📊</span> Kết quả Tỷ số nợ
+                </div>
+
+                <div id="resultArea">
+                    <div class="result-box" style="border-left-color: #6a2a4a;">
+                        <div class="label">📌 Tỷ số nợ (Debt Ratio)</div>
+                        <div class="value" id="debtRatioValue">---</div>
+                        <div class="sub" id="debtRatioSub">Nhập số liệu và bấm "Tính"</div>
+                    </div>
+
+                    <!-- Chỉ số phụ -->
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:16px;">
+                        <div style="background:#faf2f8; border-radius:12px; padding:14px 16px; border:1px solid #e8c8da;">
+                            <div style="font-size:13px; color:#4a6380;">📊 Tỷ số nợ/VCSH</div>
+                            <div style="font-size:22px; font-weight:700; color:#3d1a2e;" id="debtEquityRatio">---</div>
+                        </div>
+                        <div style="background:#faf2f8; border-radius:12px; padding:14px 16px; border:1px solid #e8c8da;">
+                            <div style="font-size:13px; color:#4a6380;">💰 Nợ dài hạn / Tổng nợ</div>
+                            <div style="font-size:22px; font-weight:700; color:#3d1a2e;" id="longTermDebtRatio">---</div>
+                        </div>
+                    </div>
+
+                    <!-- Trạng thái sức khỏe -->
+                    <div id="statusArea" class="mt-16">
+                        <span class="status-badge status-neutral">⏳ Chưa có dữ liệu</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        HÀNG 2: PHÂN TÍCH AI + BIỂU ĐỒ
+        ============================================================ -->
+        <div class="grid-2col">
+            <!-- CỘT TRÁI: AI phân tích -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🧠</span> Phân tích &amp; Khuyến nghị AI
+                </div>
+                <div id="aiAnalysisArea">
+                    <div class="ai-box">
+                        <div class="ai-label">
+                            <span class="spark">✦</span> Trí tuệ nhân tạo phân tích
+                        </div>
+                        <ul id="aiRecommendations">
+                            <li>⏳ Nhập dữ liệu và nhấn "Tính" để nhận phân tích.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Bảng tóm tắt dữ liệu -->
+                <div style="margin-top:18px;">
+                    <div style="font-weight:600; font-size:15px; color:#3d1a2e; margin-bottom:8px;">📋 Tóm tắt dữ liệu</div>
+                    <table class="data-table" id="summaryTable">
+                        <thead>
+                            <tr><th>Chỉ số</th><th>Giá trị</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Tổng nợ phải trả</td><td id="tblTotalDebt">---</td></tr>
+                            <tr><td>Nợ ngắn hạn</td><td id="tblCurrentDebt">---</td></tr>
+                            <tr><td>Nợ dài hạn</td><td id="tblLongTermDebt">---</td></tr>
+                            <tr><td>Tổng tài sản</td><td id="tblTotalAssets">---</td></tr>
+                            <tr><td>Vốn chủ sở hữu</td><td id="tblEquity">---</td></tr>
+                            <tr style="font-weight:700; background:#faf2f8;"><td>Tỷ số nợ</td><td id="tblDebtRatio">---</td></tr>
+                            <tr style="font-weight:700; background:#faf2f8;"><td>Tỷ số nợ/VCSH</td><td id="tblDebtEquity">---</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI: BIỂU ĐỒ -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📈</span> Biểu đồ cơ cấu vốn
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="debtChart"></canvas>
+                </div>
+                <div style="margin-top:12px; font-size:13px; color:#4a6380; text-align:center;">
+                    Cơ cấu vốn: Nợ và Vốn chủ sở hữu
+                </div>
+                <!-- Ghi chú -->
+                <div style="margin-top:14px; background:#faf2f8; border-radius:12px; padding:12px 16px; border:1px dashed #d8b0c8;">
+                    <span style="font-weight:600;">💡 Công thức:</span>
+                    <span style="color:#3d1a2e; font-family:monospace; font-size:14px;">
+                        Tỷ số nợ = (Tổng nợ / Tổng tài sản) × 100%
+                    </span>
+                    <span style="display:block; font-size:13px; color:#4a6380; margin-top:4px;">
+                        Tỷ số nợ/VCSH = Tổng nợ / Vốn chủ sở hữu
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        HÀNG 3: THÔNG TIN MODULE
+        ============================================================ -->
+        <div style="margin-top:10px; text-align:center; font-size:13px; color:#6f88a0; border-top:1px solid #dce6f0; padding-top:20px;">
+            <span>🧩 Module 10 / 100 · CEO AI Enterprise</span>
+            <span style="margin:0 12px;">|</span>
+            <span>⚡ Python + SQLite + HTML Dashboard</span>
+            <span style="margin:0 12px;">|</span>
+            <span>📅 Phiên bản 1.0 · Sẵn sàng tích hợp</span>
+        </div>
+
+    </div>
+
+    <!-- ============================================================
+    JAVASCRIPT - LOGIC CHÍNH
+    ============================================================ -->
+    <script>
+        /**
+         * ============================================================
+         * MODULE 10: DEBT RATIO (Tỷ số nợ)
+         * ============================================================
+         * Tác giả: CEO AI Enterprise Team
+         * Mô tả: 
+         *   - Tính Debt Ratio = (Total Debt / Total Assets) * 100%
+         *   - Tính Debt to Equity = Total Debt / Total Equity
+         *   - Phân tích cơ cấu vốn, đánh giá rủi ro tài chính
+         *   - Đưa ra khuyến nghị AI về quản lý nợ và đòn bẩy
+         *   - Hỗ trợ lưu SQLite (giả lập) và xuất Excel
+         * ============================================================
+         */
+
+        // ---- Biến toàn cục ----
+        let chartInstance = null;
+
+        // ---- Hàm định dạng tiền tệ ----
+        function formatCurrency(value) {
+            if (value === undefined || value === null || isNaN(value)) return '---';
+            const num = Number(value);
+            if (num >= 1e9) return (num / 1e9).toFixed(1) + ' tỷ';
+            if (num >= 1e6) return (num / 1e6).toFixed(1) + ' tr';
+            return num.toLocaleString('vi-VN') + ' đ';
+        }
+
+        /**
+         * Hàm chính: TÍNH TỶ SỐ NỢ
+         */
+        function calculateDebtRatio() {
+            // ---- 1. Đọc dữ liệu đầu vào ----
+            const period = document.getElementById('period').value;
+            const totalDebt = parseFloat(document.getElementById('total_debt').value) || 0;
+            const currentDebt = parseFloat(document.getElementById('current_debt').value) || 0;
+            const longTermDebt = parseFloat(document.getElementById('long_term_debt').value) || 0;
+            const totalAssets = parseFloat(document.getElementById('total_assets').value) || 0;
+            const equity = parseFloat(document.getElementById('equity').value) || 0;
+
+            // Tính tổng nợ từ current + long term (nếu có)
+            const calculatedTotalDebt = currentDebt + longTermDebt;
+            const finalTotalDebt = totalDebt > 0 ? totalDebt : calculatedTotalDebt;
+
+            // ---- 2. Tính các chỉ số ----
+            const debtRatio = totalAssets > 0 ? (finalTotalDebt / totalAssets) * 100 : 0;
+            const debtEquityRatio = equity > 0 ? finalTotalDebt / equity : 0;
+            const longTermRatio = finalTotalDebt > 0 ? (longTermDebt / finalTotalDebt) * 100 : 0;
+            const equityRatio = totalAssets > 0 ? (equity / totalAssets) * 100 : 0;
+
+            // ---- 3. Cập nhật hiển thị kết quả ----
+            document.getElementById('debtRatioValue').textContent = debtRatio.toFixed(1) + '%';
+            document.getElementById('debtRatioSub').textContent = `Kỳ: ${period} · Tổng nợ: ${formatCurrency(finalTotalDebt)}`;
+
+            document.getElementById('debtEquityRatio').textContent = debtEquityRatio.toFixed(2) + 'x';
+            document.getElementById('longTermDebtRatio').textContent = longTermRatio.toFixed(1) + '%';
+
+            // Cập nhật bảng tóm tắt
+            document.getElementById('tblTotalDebt').textContent = formatCurrency(finalTotalDebt);
+            document.getElementById('tblCurrentDebt').textContent = formatCurrency(currentDebt);
+            document.getElementById('tblLongTermDebt').textContent = formatCurrency(longTermDebt);
+            document.getElementById('tblTotalAssets').textContent = formatCurrency(totalAssets);
+            document.getElementById('tblEquity').textContent = formatCurrency(equity);
+            document.getElementById('tblDebtRatio').textContent = debtRatio.toFixed(1) + '%';
+            document.getElementById('tblDebtEquity').textContent = debtEquityRatio.toFixed(2) + 'x';
+
+            // ---- 4. Đánh giá trạng thái sức khỏe ----
+            let statusClass = '';
+            let statusText = '';
+            let riskLevel = '';
+
+            if (debtRatio < 30) {
+                statusClass = 'status-healthy';
+                statusText = '✅ Rất an toàn — Tỷ số nợ < 30%';
+                riskLevel = 'Thấp';
+            } else if (debtRatio >= 30 && debtRatio < 50) {
+                statusClass = 'status-healthy';
+                statusText = '✅ An toàn — Tỷ số nợ 30-50%';
+                riskLevel = 'Trung bình thấp';
+            } else if (debtRatio >= 50 && debtRatio < 65) {
+                statusClass = 'status-warning';
+                statusText = '⚠️ Cảnh báo — Tỷ số nợ 50-65%';
+                riskLevel = 'Trung bình';
+            } else if (debtRatio >= 65 && debtRatio < 80) {
+                statusClass = 'status-warning';
+                statusText = '⚠️ Rủi ro — Tỷ số nợ 65-80%';
+                riskLevel = 'Cao';
+            } else if (debtRatio >= 80) {
+                statusClass = 'status-danger';
+                statusText = '🔴 Nguy hiểm — Tỷ số nợ ≥ 80%';
+                riskLevel = 'Rất cao';
+            } else {
+                statusClass = 'status-neutral';
+                statusText = '⏳ Không có dữ liệu';
+                riskLevel = 'Không xác định';
+            }
+
+            document.getElementById('statusArea').innerHTML = `
+                <span class="status-badge ${statusClass}">${statusText}</span>
+                <span style="margin-left:12px; font-size:13px; color:#4a6380;">
+                    🎯 Mức rủi ro: <strong>${riskLevel}</strong>
+                </span>
+            `;
+
+            // ---- 5. Phân tích AI & Khuyến nghị ----
+            const aiList = document.getElementById('aiRecommendations');
+            let recommendations = [];
+
+            // Phân tích tỷ số nợ
+            if (debtRatio < 30) {
+                recommendations.push('🌟 <strong>Tỷ số nợ rất thấp</strong> — doanh nghiệp ít sử dụng đòn bẩy tài chính.');
+                recommendations.push('💡 <strong>Cơ hội:</strong> Có thể vay thêm vốn để mở rộng kinh doanh nếu cần thiết, lợi thế cạnh tranh về chi phí vốn.');
+            } else if (debtRatio < 50) {
+                recommendations.push('✅ <strong>Tỷ số nợ ở mức an toàn</strong> — doanh nghiệp đang sử dụng đòn bẩy hợp lý.');
+                recommendations.push('⚖️ <strong>Đánh giá:</strong> Cơ cấu vốn cân bằng giữa rủi ro và lợi nhuận.');
+            } else if (debtRatio < 65) {
+                recommendations.push('⚠️ <strong>Tỷ số nợ ở mức trung bình cao</strong> — cần theo dõi sát sao.');
+                recommendations.push('📊 <strong>Lưu ý:</strong> Áp lực trả nợ tăng, ảnh hưởng đến dòng tiền và khả năng đầu tư.');
+            } else if (debtRatio < 80) {
+                recommendations.push('🔻 <strong>Tỷ số nợ cao</strong> — doanh nghiệp đang sử dụng nhiều đòn bẩy tài chính.');
+                recommendations.push('🚨 <strong>Rủi ro:</strong> Dễ bị tác động bởi biến động lãi suất và khủng hoảng kinh tế.');
+            } else {
+                recommendations.push('🚫 <strong>Tỷ số nợ rất cao</strong> — doanh nghiệp gần như phụ thuộc hoàn toàn vào nợ.');
+                recommendations.push('🆘 <strong>Cảnh báo nguy hiểm:</strong> Nguy cơ mất khả năng thanh toán cao. Cần tái cấu trúc vốn ngay lập tức.');
+            }
+
+            // Phân tích cơ cấu nợ
+            if (longTermRatio > 70) {
+                recommendations.push('📈 <strong>Nợ dài hạn chiếm ưu thế</strong> (>70%) — áp lực trả nợ ngắn hạn thấp, phù hợp với đầu tư dài hạn.');
+            } else if (longTermRatio > 40) {
+                recommendations.push('⚖️ <strong>Cơ cấu nợ cân bằng</strong> — vừa có nợ ngắn hạn và dài hạn hợp lý.');
+            } else {
+                recommendations.push('📊 <strong>Nợ ngắn hạn chiếm ưu thế</strong> (>60%) — rủi ro thanh khoản cao, cần quản lý dòng tiền chặt chẽ.');
+            }
+
+            // Phân tích tỷ số nợ/VCSH
+            if (debtEquityRatio < 0.5) {
+                recommendations.push('🏦 <strong>Tỷ số nợ/VCSH thấp</strong> — doanh nghiệp có nền tảng vốn chủ sở hữu vững chắc.');
+            } else if (debtEquityRatio < 1.0) {
+                recommendations.push('💪 <strong>Tỷ số nợ/VCSH ở mức chấp nhận</strong> — vốn chủ sở hữu vẫn lớn hơn nợ.');
+            } else if (debtEquityRatio < 2.0) {
+                recommendations.push('⚠️ <strong>Tỷ số nợ/VCSH cao</strong> — nợ gấp 1-2 lần vốn chủ sở hữu, rủi ro tăng.');
+            } else {
+                recommendations.push('🔴 <strong>Tỷ số nợ/VCSH rất cao</strong> — nợ gấp nhiều lần vốn, tình huống nguy hiểm.');
+            }
+
+            // Khuyến nghị chiến lược
+            if (debtRatio < 40) {
+                recommendations.push('🎯 <strong>Chiến lược:</strong> Tận dụng đòn bẩy tài chính để tăng ROE và mở rộng quy mô.');
+            } else if (debtRatio < 55) {
+                recommendations.push('📌 <strong>Chiến lược:</strong> Duy trì tỷ số nợ hiện tại, tập trung cải thiện hiệu quả sử dụng vốn.');
+            } else if (debtRatio < 70) {
+                recommendations.push('🔄 <strong>Chiến lược:</strong> Giảm dần nợ bằng cách tăng vốn chủ sở hữu hoặc giảm đầu tư vốn.');
+            } else {
+                recommendations.push('🚨 <strong>Chiến lược khẩn cấp:</strong> Tái cấu trúc nợ, đàm phán gia hạn thanh toán, tăng cường dòng tiền.');
+            }
+
+            // Thêm lưu ý về tổng nợ
+            if (totalDebt > 0 && calculatedTotalDebt > 0 && totalDebt !== calculatedTotalDebt) {
+                recommendations.push(`📘 <strong>Lưu ý:</strong> Tổng nợ nhập (${formatCurrency(totalDebt)}) khác với tổng nợ tính từ ngắn hạn + dài hạn (${formatCurrency(calculatedTotalDebt)}). Sử dụng giá trị tổng nợ đã nhập.`);
+            }
+
+            // Render danh sách AI
+            aiList.innerHTML = recommendations.map(item => `<li>${item}</li>`).join('');
+
+            // ---- 6. Vẽ biểu đồ ----
+            renderChart(period, finalTotalDebt, equity, debtRatio);
+
+            // ---- 7. (Giả lập) Lưu vào SQLite ----
+        }
+
+        /**
+         * Vẽ biểu đồ cơ cấu vốn (Doughnut Chart)
+         */
+        function renderChart(period, totalDebt, equity, debtRatio) {
+            const ctx = document.getElementById('debtChart').getContext('2d');
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            const debtColor = debtRatio > 65 ? 'rgba(220, 53, 69, 0.85)' : 
+                              debtRatio > 50 ? 'rgba(255, 193, 7, 0.85)' : 
+                              'rgba(40, 167, 69, 0.85)';
+
+            chartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Nợ phải trả', 'Vốn chủ sở hữu'],
+                    datasets: [{
+                        data: [totalDebt, equity],
+                        backgroundColor: [
+                            debtColor,
+                            'rgba(54, 162, 235, 0.7)'
+                        ],
+                        borderColor: [
+                            debtRatio > 65 ? '#dc3545' : debtRatio > 50 ? '#ffc107' : '#28a745',
+                            '#1a7a9e'
+                        ],
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 16,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                                    return `${label}: ${formatCurrency(value)} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '65%',
+                }
+            });
+        }
+
+        /**
+         * LƯU VÀO SQLITE (giả lập)
+         */
+        function saveToSQLite() {
+            const period = document.getElementById('period').value;
+            const totalDebt = parseFloat(document.getElementById('total_debt').value) || 0;
+            const currentDebt = parseFloat(document.getElementById('current_debt').value) || 0;
+            const longTermDebt = parseFloat(document.getElementById('long_term_debt').value) || 0;
+            const totalAssets = parseFloat(document.getElementById('total_assets').value) || 0;
+            const equity = parseFloat(document.getElementById('equity').value) || 0;
+            
+            const finalTotalDebt = totalDebt > 0 ? totalDebt : (currentDebt + longTermDebt);
+            const debtRatio = totalAssets > 0 ? (finalTotalDebt / totalAssets) * 100 : 0;
+            const debtEquityRatio = equity > 0 ? finalTotalDebt / equity : 0;
+
+            const data = {
+                module: '10_DebtRatio',
+                period: period,
+                totalDebt: finalTotalDebt,
+                currentDebt: currentDebt,
+                longTermDebt: longTermDebt,
+                totalAssets: totalAssets,
+                equity: equity,
+                debtRatio: debtRatio,
+                debtEquityRatio: debtEquityRatio,
+                timestamp: new Date().toISOString()
+            };
+
+            console.log('💾 [SQLite] Dữ liệu đã được lưu:', data);
+            showToast('✅ Đã lưu dữ liệu vào SQLite (giả lập)!', 'success');
+        }
+
+        /**
+         * XUẤT EXCEL
+         */
+        function exportExcel() {
+            const period = document.getElementById('period').value;
+            const totalDebt = parseFloat(document.getElementById('total_debt').value) || 0;
+            const currentDebt = parseFloat(document.getElementById('current_debt').value) || 0;
+            const longTermDebt = parseFloat(document.getElementById('long_term_debt').value) || 0;
+            const totalAssets = parseFloat(document.getElementById('total_assets').value) || 0;
+            const equity = parseFloat(document.getElementById('equity').value) || 0;
+            
+            const finalTotalDebt = totalDebt > 0 ? totalDebt : (currentDebt + longTermDebt);
+            const debtRatio = totalAssets > 0 ? (finalTotalDebt / totalAssets) * 100 : 0;
+            const debtEquityRatio = equity > 0 ? finalTotalDebt / equity : 0;
+
+            const wsData = [
+                ['Module 10 - Debt Ratio (Tỷ số nợ)'],
+                ['Kỳ báo cáo', period],
+                [],
+                ['Chỉ số', 'Giá trị'],
+                ['Tổng nợ phải trả', formatCurrency(finalTotalDebt)],
+                ['Nợ ngắn hạn', formatCurrency(currentDebt)],
+                ['Nợ dài hạn', formatCurrency(longTermDebt)],
+                ['Tổng tài sản', formatCurrency(totalAssets)],
+                ['Vốn chủ sở hữu', formatCurrency(equity)],
+                ['Tỷ số nợ', debtRatio.toFixed(1) + '%'],
+                ['Tỷ số nợ/VCSH', debtEquityRatio.toFixed(2) + 'x'],
+                [],
+                ['Ngày xuất', new Date().toLocaleString('vi-VN')]
+            ];
+
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            XLSX.utils.book_append_sheet(wb, ws, 'DebtRatio');
+            XLSX.writeFile(wb, `DebtRatio_${period.replace(/\s/g, '_')}.xlsx`);
+
+            showToast('📊 Đã xuất file Excel thành công!', 'info');
+        }
+
+        /**
+         * HIỂN THỊ TOAST
+         */
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.style.position = 'fixed';
+            toast.style.bottom = '30px';
+            toast.style.right = '30px';
+            toast.style.padding = '16px 28px';
+            toast.style.borderRadius = '14px';
+            toast.style.fontWeight = '500';
+            toast.style.fontSize = '15px';
+            toast.style.boxShadow = '0 8px 30px rgba(0,0,0,0.15)';
+            toast.style.zIndex = '9999';
+            toast.style.transition = 'all 0.3s ease';
+            toast.style.background = type === 'success' ? '#d4edda' : '#cce5ff';
+            toast.style.color = type === 'success' ? '#0b5e2e' : '#004085';
+            toast.style.border = '1px solid ' + (type === 'success' ? '#b7d4c0' : '#b8d4f0');
+            toast.textContent = message;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(20px)';
+                setTimeout(() => toast.remove(), 400);
+            }, 3200);
+        }
+
+        /**
+         * TỰ ĐỘNG TÍNH KHI TRANG LOAD
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateDebtRatio();
+        });
+
+        /**
+         * ============================================================
+         * MỞ RỘNG: Kết nối với Python và SQLite sau này
+         * ============================================================
+         * Để tích hợp với Python backend, ta có thể sử dụng fetch() 
+         * để gửi dữ liệu đến API Python (Flask/FastAPI).
+         * 
+         * Ví dụ:
+         *   async function saveToDB(data) {
+         *       const response = await fetch('/api/save_debt_ratio', {
+         *           method: 'POST',
+         *           headers: { 'Content-Type': 'application/json' },
+         *           body: JSON.stringify(data)
+         *       });
+         *       return response.json();
+         *   }
+         * ============================================================
+         */
+    </script>
+
+</body>
+</html>

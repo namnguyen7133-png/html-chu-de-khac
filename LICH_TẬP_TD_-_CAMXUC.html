@@ -1,0 +1,1936 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>LICH TẬP TD - CAMXUC</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>LICH TẬP TD - CAMXUC</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>1 | 180 | Giờ việc nhà | 4 | 0 | Trưa | 10 | 3 | 180 | 24 | TI | Khởi động trước khi tập: | 1.0 | 1.0 | 24.0</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>Trưa | 10 | 0 | Giờ bộ môn  | 4 | 13 | Chiều | 13 | 5 | 50 | 1 | SUU | 3.0 | Xoay vai – 1-2 phút | 2.0 | 3.0 | 24.0 | 5.0 | I. Cảm xúc thường gặp khi bị gài bẫy, tổn thương tình cảm</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>khỏe dần | 36 ngày học Võ | 13:00:00 | 562 | 27% | 3 | Tối | 18 | 5 | 90 | 2 | SUU | 5.0 | Vòng tay – 1-2 phút | 2.0 | 5.0 | 24.0 | 5.0 | Cảm xúc | Miêu tả</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>khỏe dần | 36 ngày học Võ | 13:00:00 | 562 | 27% | 12 | Đêm | 23 | 6 | 10 | 3 | DAN | 6.0 | Xoay cổ tay, cổ chân – 1 phút | 1.0 | 6.0 | 24.0 | 5.0 | Tức giận bị dồn ép | Cảm thấy không công bằng, muốn phản kháng nhưng dễ mất kiểm soát</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>khỏe dần | 17 nhạc nước ngoài | 13:00:00 | 99 | 22% | 29 | 60 | 4 | DAN | 11.0 | Chạy tại chỗ nhẹ – 3-5 phút | 5.0 | 11.0 | 24.0 | 5.0 | Bất lực - tủi thân | Cố gắng nhưng mọi thứ như chống lại mình</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>khỏe dần | 21 nhạc thư giãn | 13:00:00 | 60 | 24% | 5 | MAO | CHÂN TAY LẠNH | MÙA ĐÔNG KHÔNG RA SỚM  | 1 THÁNG KHỎE  | 5.0 | Hoang mang - nghi ngờ bản thân | “Mình sai hay người ta quá độc?”</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>khỏe dần | Hướng dẫn tự vệ chống đao kiếm | 13:00:00 | 578 | 34% | 6 | MAO | XOA BÓP LÒNG BÀN CHÂN  | THỞ SÂU | 5.0 | Cay đắng | Khi nhận ra mình bị lừa, bị khai thác lòng tin</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>yếu dần | 13:00:00 | 224 | 91% | 7 | THIN | ĐI BỘ QUANH SÂN | NGỒI THIỀN HƯỚNG MẶT TRỜI | Bài Tập | Thời Gian | 1.0 | 12.0 | 0.0 | Mô Tả | 5.0 | Lạnh dần cảm xúc | Không còn tin vào tình yêu hay sự tử tế nữa</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>yếu dần | 13:00:00 | 1445 | 85% | 8 | THIN | KÉO GIÃN | TẬP NHẸ | 13.0 | Xoa mặt theo chiều kim đồng hồ | 1.0 | 13.0 | 0.0 | Dùng lòng bàn tay chà xát làm nóng, rồi xoa đều mặt, ấn nhẹ thái dương. | 5.0 | Tỉnh táo - kiên cường lại | Bắt đầu học cách phòng thân, bảo vệ giá trị bản thân</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>yếu dần | 13:00:00 | 168 | 68% | 9 | TY | Xoa bụng (vòng tròn quanh rốn) | 1.0 | 14.0 | 0.0 | Xoa bụng theo chiều kim đồng hồ để kích thích tiêu hóa. | 1.0 | 🇵🇱 Ba Lan</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>yếu dần | 13:00:00 | 134 | 94% | 10 | TY | TRẰN TRỌC | ĐI BỘ NHANH 20' | KHI CÔNG  | 3 THÁNG NGỦ NGON  | Day huyệt Dũng Tuyền (giữa gan bàn chân) | 1.0 | 15.0 | 0.0 | Dùng ngón tay cái ấn và xoay nhẹ lên huyệt ở lòng bàn chân. | 1.0 | https://youtu.be/2cAZBViBcUY?si=Y8AOsykMrsONUXNs</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>khỏe dần | 13:00:00 | 6747 | 33% | 11 | NGO | TẬP TẠ NHẸ | THÁI CỰC  | YOGA | 17.0 | Co duỗi đầu gối, mắt cá, ngón chân | 2.0 | 17.0 | 0.0 | Gập duỗi nhẹ nhàng từng chân, xoay cổ chân, ngón chân. | 1.0 | Dawid Podsiadło – “Nie ma fal”</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>yếu dần | 13:00:00 | 674 | 73% | 12 | NGO | Nâng đầu – gập cằm sát ngực | 2.0 | 19.0 | 0.0 | Tăng lưu thông máu cho vùng cổ gáy, nhẹ nhàng không gồng. | 1.0 | Tâm trạng: Bị cuốn trôi, không thể kiểm soát cảm xúc</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>yếu dần | 13:00:00 | 674 | 73% | 13 | MUI | Xoa vùng thắt lưng và mông | 2.0 | 21.0 | 0.0 | Dùng tay massage nhẹ vùng lưng và mông – giảm đau, thư giãn thần kinh tọa. | 2.0 | � Lời bài hát & bản dịch tiếng Ah: citeturn0search9 -📺 Video lyric chính tức: citeturn0search0</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>yếu dần | 13:00:00 | 674 | 73% | 14 | MUI | 24.0 | Nằm kéo gối về ngực (gối trái – phải) | 3.0 | 24.0 | 0.0 | Một chân gập kéo về bụng, đổi bên – giúp co giãn vùng háng và bụng. | 2.0 | 🇩🇪 Đức</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>khỏe dần | 30 P ĐI BỘ 2 LẦN NGÀY | 13:00:00 | 674 | 40% | 15 | THAN | KHÔNG TẬP NẶNG | ĐẾN TỐI | Xoay người trái – phải khi nằm ngửa | 3.0 | 27.0 | 0.0 | Tay dang ngang, chân gập, xoay nhẹ thân dưới trái-phải. | 2.0 | https://youtu.be/IxdFN1dVf0U?si=9LRwmyH1Qz7N0YQH</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>khỏe dần | nhạc nhảy | 13:00:00 | 2024 | 20% | 16 | THAN | MỆT MỎI | Nằm hít thở sâu chậm, ấn bụng theo nhịp | 3.0 | 30.0 | 0.0 | Tập trung hít sâu bằng mũi, thở ra bằng miệng – giúp thư giãn sâu. | 2.0 | Rammstein – “Ohne dich”</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>yếu dần | nhạc YOGA | 13:00:00 | 1349 | 80% | 17 | DAU | ĐI BỘ NHẸ 30' | CẢI THIỆN SỨC KHỎE  | Gập gối – nâng hông (bridge nhẹ) | 3.0 | 33.0 | 0.0 | Nằm ngửa, gập gối, nâng hông nhẹ nhàng – giúp kích hoạt vùng cơ sàn chậu. | 2.0 | Tâm trạng: Cô đơn, đau lòng sau chia ly</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>khỏe dần | nhạc thư giãn | 13:00:00 | 2024 | 20% | 18 | DAU | HÍT THỞ CHẬM | 38.0 | Kegel nằm (siết cơ sàn chậu) | 5.0 | 38.0 | 0.0 | Siết cơ như đang nín tiểu – giữ 3-5 giây, thả lỏng – lặp lại. | 3.0 | 🎵 Lời bài hát tiếg Đức: citeturn0search10 - 📺 Vide lyric: citeturn0search0</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>khỏe dần | XY | 13:00:00 | 285 | 28% | 19 | TUAT | NGỒI THIỀN | 40.0 | Bài Tập | Thời Gian | 2.0 | 40.0 | 0.0 | Mô Tả | 3.0 | 🇯🇵 Nhật Bản</td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td>13:00:00 | 20 | TUAT | KÉO GIÃN | Tình huống | Dấu hiệu cảm xúc | Hướng xử lý | Tần suất nhắc nhở | 12.0 | 03/08/2026 | 41.0 | Kéo giãn cơ háng | 1.0 | 41.0 | 0.0 | Ngồi thẳng, chân mở rộng, nghiêng người về phía trước để kéo dãn cơ háng. | 3.0 | https://youtu.be/cC-GC5XSUMc?si=AxtVKLawbogPFgVf</td>
+            </tr>
+            <tr>
+                <td><b>22</b></td>
+                <td>13:00:00 | 21 | HOI | Nhân viên đến họp với dáng uể oải | Giọng trầm, ít nói, chán nản | Hỏi han, động viên, tìm nguyên nhân | Hàng tuần | 12.0 | 3/3/1971 | Không ra đường  | Hip Circles | 1.0 | 42.0 | 0.0 | Đứng, xoay hông theo vòng tròn (theo chiều kim đồng hồ rồi đổi chiều). | 3.0 | Aimer – “I beg you</td>
+            </tr>
+            <tr>
+                <td><b>23</b></td>
+                <td>13:00:00 | 22 | HOI | Khách hàng nói chuyện nhanh, lớn giọng | Nhấn mạnh từ ngữ, có thể giận dữ | Bình tĩnh lắng nghe, không cắt ngang | Khi gặp khách hàng | 23/9/1981 | 732.0 | 3/3/1971 | 11 | Plank với đá chân chéo | 1.0 | 43.0 | 0.0 | Giữ tư thế plank, đá chân ra ngoài, đổi chân liên tục. | 3.0 | Tâm trạng: Khi bạn cảm thấy bị dẫm nát, vẫn van xin yêu thương</td>
+            </tr>
+            <tr>
+                <td><b>24</b></td>
+                <td>13:00:00 | Bản thân căng thẳng khi ra quyết định | Hồi hộp, tim đập nhanh | Hít thở sâu, ghi ra lợi ích/rủi ro | Hàng ngày | 16385 | 20242 | 14 | 45.0 | Leg Raises | 2.0 | 45.0 | 0.0 | Nằm ngửa, nâng chân thẳng lên cao rồi hạ xuống từ từ. | 4.0 | 🎵 Lời bài hát & bản dịchtiếng Anh: citeturn0search11</td>
+            </tr>
+            <tr>
+                <td><b>25</b></td>
+                <td>13:00:00 | Nhân viên phấn khích sau khi thành công | Cười nhiều, nói nhanh | Chúc mừng, khích lệ tinh thần | Hàng tháng | 29149212 | Đo BPM | nhạc tập thể dục  | Kegel (Cơ sàn chậu) | 2.0 | 47.0 | 0.0 | Siết và thả cơ sàn chậu (cơ dùng để ngừng tiểu giữa chừng). | 4.0 | https://youtu.be/a5qyIGurSio?si=P-m617BBKkrdItul</td>
+            </tr>
+            <tr>
+                <td><b>26</b></td>
+                <td>13:00:00 | 24/8/2026 | 880 | 1 | 23 | 11.0 | 2 | Sáng | khỏe dần | Khởi động | 880 | 8% | 0.0 | 50.0 | Bridge (Cầu) | 3.0 | 50.0 | 0.0 | Nằm ngửa, nâng hông lên, giữ tư thế cầu thẳng, hạ xuống. | 4.0 | Yorushika – “Just a Sunny Day for Yo”</td>
+            </tr>
+            <tr>
+                <td><b>27</b></td>
+                <td>13:00:00 | 5/8/2026 | 722 | 2 | 28 | 14.0 | 26 | Đêm | yếu dần | Giải trí | 722 | 92% | 2.0 | Squats (Ngồi xổm) | 3.0 | 53.0 | 0.0 | Hạ cơ thể xuống như thể ngồi trên ghế, giữ thẳng lưng rồi đứng lên. | 4.0 | Tâm trạng: Cay đắng ngọt ngào, yêu đơn phương hoặc bị bỏ rơi</td>
+            </tr>
+            <tr>
+                <td><b>28</b></td>
+                <td>13:00:00 | Sia | 23/8/2026 | 613 | 3 | 33 | 16.0 | 13 | Chiều | khỏe dần | nhạc không lời | 613 | 39% | 5.0 | Lunge (Bước dài) | 3.0 | 56.0 | 0.0 | Bước chân dài về phía trước, hạ thấp cơ thể, sau đó quay lại. | 5.0 | 🎵 Lời bài hát & bản dịc tiếng Anh: citeturn0search20</td>
+            </tr>
+            <tr>
+                <td><b>29</b></td>
+                <td>13:00:00 | Niệm khúc cuối | Ngô Thụy Miên | 15/8/2026 | 532 | 4 | 38 | 19.0 | 26 | Tối | yếu dần | Nhà đẹp, cảnh đẹp | 532 | 68% | 4.0 | 61.0 | Thịt nướng xá xíu | 5.0 | 61.0 | 1.0 | Đứng thẳng, tạ ở tay, hạ xuống nâng tạ lên lại. | 5.0 | 🇫🇷 Pháp</td>
+            </tr>
+            <tr>
+                <td><b>30</b></td>
+                <td>13:00:00 | Hãy yêu nhau đi | Trịnh Công Sơn | 14/8/2026 | 470 | 5 | 43 | 21.0 | 32 | Tối | yếu dần | Học Thẩm mỹ, nghệ thuật | 470 | 74% | 6.0 | Deadlift (Chết) | 5.0 | 66.0 | 1.0 | Đứng, hạ cơ thể xuống và nâng tạ lên, giữ lưng thẳng. | 5.0 | https://youtu.be/Qj8XNWG2Pds?si=P_e5HPGpQUe4XS9Q</td>
+            </tr>
+            <tr>
+                <td><b>31</b></td>
+                <td>13:00:00 | Bài hát | Ca sĩ/Nhóm nhạc | 7/8/2026 | 381 | 6 | 53 | 26.0 | 49 | Đêm | yếu dần | phim Ma, ảo thuật, viễn tưởng | 381 | 92% | 5.0 | Hip Thrust (Nâng hông) | 5.0 | 71.0 | 1.0 | Đặt tạ lên hông, dùng mông nâng hông lên, giữ thẳng lưng. | 5.0 | Formidble lyrics</td>
+            </tr>
+            <tr>
+                <td><b>32</b></td>
+                <td>13:00:00 | Hỏi han, động viên, tìm nguyên nhân | Hàng tuần | Nhạc không lời nhẹ nhàng | 20/1/2027 | 41 | 7 | 486 | 243.0 | 316 | Tối | yếu dần | 486 Tập dưỡng sinh | 41 | 65% | 1.0 | 81.0 | Squats (Ngồi xổm) | 10.0 | 81.0 | 1.0 | Tăng thêm độ khó với các biến thể của Squats. | 5.0 | Tâm trạng: Một kẻ say thất tình điên loạn giữa phố</td>
+            </tr>
+            <tr>
+                <td><b>33</b></td>
+                <td>13:00:00 |  Kiss the Rain - Yiruma |  The Ludlows - James Horner | 11/8/2026 | 674 | 8 | 30 | 15.0 | 22 | Tối | yếu dần | 30 ngày Tập múi bụng | 674 | 73% | 2.0 | Chạy bộ nhẹ | 10.0 | 91.0 | 1.0 | Tăng cường sức khỏe tim mạch và cơ bắp chân. | 5.0 | 🎵 Lời bài hát & bản ịch tiếng Anh: citeturn0sarch21</td>
+            </tr>
+            <tr>
+                <td><b>34</b></td>
+                <td>13:00:00 | https://youtu.be/xTnGh5GqcnA?si=uSJSDiNhlvLL7A2A | 9/11/2026 | 112 | 9 | 180 | 90.0 | 82 | Chiều | khỏe dần | 180 ngày Học May | 112 | 45% | 0.0 | 91.0 | 1.0</td>
+            </tr>
+            <tr>
+                <td><b>35</b></td>
+                <td>Bình tĩnh lắng nghe, không cắt ngang | Khi gặp khách hàng | Nhạc cà phê thư giãn | Take Five - Dave Brubeck, Autumn Leaves - Bill Evans, Blue in Green - Miles Davis, Wave - Antonio Carlos Jobim, Moanin' - Art Blakey | 528 Hz (cân bằng) | 21/11/2026 | 105 | 10 | 192 | 96.0 | 82 | Chiều | khỏe dần | 192  ngày mở hàng kinh doanh | 105 | 42% | 1.0 | Bài tập cơ háng không chỉ giúp tăng cường sức mạnh vùng cơ này mà còn có tác dụng cải thiện bản lĩnh đàn ông, tăng khả năng sinh lý và hỗ trợ sức khỏe tổng thể. Dưới đây là một số bài tập cơ háng đơn giản và nâng cao mà bạn có thể thực hiện để cải thiện sức mạnh, sự dẻo dai và tăng cường bản lĩnh của đàn ông. | 2.0 | 93.0 | 1.0 | 6.0 | � Video lyric: citeturn0search2</td>
+            </tr>
+            <tr>
+                <td><b>36</b></td>
+                <td> Blue in Green - Miles Davis |  Wave - Antonio Carlos Jobim | 29/8/2026 | 562 | 11 | 36 | 18.0 | 10 | Trưa | khỏe dần | 36 ngày học Võ | 562 | 27% | 2.0 | 93.0 | 1.0 | 6.0 | https://youtu.be/rEgRzLXqWUI?si=wmw6Bkx0Ksnmc9kC</td>
+            </tr>
+            <tr>
+                <td><b>37</b></td>
+                <td>https://youtu.be/v18eH-JILJY?si=Ry7dswA5riSNHbjP | 29/8/2026 | 562 | 12 | 36 | 18.0 | 10 | Trưa | khỏe dần | 36 ngày học Võ | 562 | 27% | 2.0 | 95.0 | 1. Bài tập Kegel (Tăng cường cơ sàn chậu) | 2.0 | 95.0 | 1.0 | AE127 | https://youtu.be/A3yCcXgbKrE?si=0KjnyNHBYTxkZySV | 6.0 | DernièreDanse lyrics lời việt</td>
+            </tr>
+            <tr>
+                <td><b>38</b></td>
+                <td>11/8/2026 | 374 | 13 | 54 | 27.0 | 46 | Đêm | yếu dần | 54 tài chính | 374 | 85% | 6.0 | 95.0 | 1.0 | https://youtu.be/LIbLxu7ogp4?si=pslwg3Hx68pdcxaw | 6.0 | 🇰🇷 Hàn Quốc</td>
+            </tr>
+            <tr>
+                <td><b>39</b></td>
+                <td>Khách hàng nói chuyện nhanh, lớn giọng | 11/8/2026 | 374 | 14 | 54 | 27.0 | 46 | Đêm | yếu dần | 54 Kinh tế | 374 | 85% | 6.0 | Mục đích: Cải thiện sức mạnh cơ sàn chậu, giúp kiểm soát sự cương cứng và tăng khả năng kéo dài thời gian quan hệ. | 2.0 | 97.0 | 1.0 | 7.0 | https://youtu.be/EKqKkzXqEkw?si=LQVk_WupfUSUwkm7</td>
+            </tr>
+            <tr>
+                <td><b>40</b></td>
+                <td>20 | Unstoppable | 5/10/2026 | 130 | 15 | 155 | 77.0 | 92 | Chiều | yếu dần | Trùng nhập | 130 | 59% | 2.0 | 97.0 | 1.0 | 7.0 | Baek Yerin – “Squae (2017)”</td>
+            </tr>
+            <tr>
+                <td><b>41</b></td>
+                <td>40 | 11/8/2026 | 749 | 16 | 27 | 13.0 | 19 | Tối | yếu dần | Bài tập thể dục chữa bệnh bvsk | 749 | 70% | 5.0 | Cách thực hiện: | 2.0 | 99.0 | 1.0</td>
+            </tr>
+            <tr>
+                <td><b>42</b></td>
+                <td>40 | Bài hát  | Ca sĩ  | Quốc gia  | Cảm xúc  | 4/10/2026 | 187 | 17 | 108 | 54.0 | 46 | Chiều | khỏe dần | KINH DOM  | 187 | 42% | 3.0 | 99.0 | 1.0 | 7.0 | 📺 Vido lyric chính thức: citeturn0search14</td>
+            </tr>
+            <tr>
+                <td><b>43</b></td>
+                <td>Trạng thái cảm xúc | Độ tuổi | 1 | 99 Luftballons                   |  Nena                   |  Đức               |  Lo lắng, phản kháng, buồn bã | https://youtu.be/ZLIn0JNC57c?si=_RgCyFTS_OYoEz7t | 44 | 15/11/1991 | 26/12/2026 | 71 | 18 | 285 | 142.0 | 7 | Sáng | khỏe dần | VỊT LỘN  | 71 | 2% | 7.0 | Xác định cơ sàn chậu bằng cách ngừng tiểu giữa chừng. Cơ sàn chậu chính là cơ bạn sử dụng để làm điều này. | 2.0 | 101.0 | 1.0 | 7.0 | https://youtu.be/MkKgDq93drQ?si=95gqyhtxgO3Os6kM</td>
+            </tr>
+            <tr>
+                <td><b>44</b></td>
+                <td>Nhân viên đến họp với dáng uể oải | Giọng trầm, ít nói, chán nản | 2 | Du Hast                          |  Rammstein              |  Đức               |  Giận dữ, mạnh mẽ, quyết liệt | https://youtu.be/hN4OXPZtHtI?si=l8YQ6SjocHHQMmdH | 51 | 22/3/1984 | 25/8/2026 | 67 | 19 | 298 | 149.0 | 276 | Đêm | yếu dần | JOY TOUCH | 67 | 92% | 3.0 | 101.0 | 1.0 | 7.0 | Untiled, 2014 lyric, lời việt, karaoke </td>
+            </tr>
+            <tr>
+                <td><b>45</b></td>
+                <td>River Flows in You - Yiruma |  Comptine d'un autre été - Yann Tiersen | 3 | Atemlos durch die Nacht          |  Helene Fischer         |  Đức               |  Hạnh phúc, phấn khích, yêu đời | https://youtu.be/k9MWLkio2D4?si=JqHKrbrapKWQh_Oy | 21/11/2026 | 63 | 20 | 318 | 159.0 | 208 | Tối | yếu dần | TIM | 63 | 65% | 7.0 | Siết cơ sàn chậu lại và giữ trong 3-5 giây. | 2.0 | 103.0 | 1.0</td>
+            </tr>
+            <tr>
+                <td><b>46</b></td>
+                <td>AY38 | 4 | Manchmal möchte ich schon mit dir  |  Roland Kaiser        |  Đức               |  Lãng mạn, tiếc nuối, khao khát | https://youtu.be/k1K6pK5Fbsg?si=OXY1ICqs1h4nbuNq | 12 vòng tròn hợp âm tương ứng với 12 tông nhạc trong âm giai bình quân (Equal Temperament) bao gồm: | Độ tuổi | Bài hát | Ca sĩ/Nhóm nhạc | 10/9/2026 | 11 | 21 | 1690 | 845.0 | 1652 | Đêm | yếu dần | ĐẦU ỐC | 11 | 97% | 3.0 | 103.0 | 1.0 | 8.0 | 🎵 Lời bài hát bản dịch tiếng Anh: citeturn0search22</td>
+            </tr>
+            <tr>
+                <td><b>47</b></td>
+                <td>Khách hàng nói chuyện nhanh, lớn giọng | Nhấn mạnh từ ngữ, có thể giận dữ | 5 | Tage wie diese                   |  Die Toten Hosen        |  Đức               |  Vui vẻ, đoàn kết, hy vọng | https://youtu.be/5vgrZcppZLs?si=KItPy9zcEWMp08tj | <10 | Bé yêu biển lắm | Xuân Mai | 20/9/2028 | 10 | 22 | 1911 | 955.0 | 1132 | Chiều | yếu dần | XAY SÓNG | 10 | 59% | 2.0 | Thả lỏng trong 3-5 giây. | 2.0 | 105.0 | 1.0 | 8.0 | 🇺🇸 Mỹ</td>
+            </tr>
+            <tr>
+                <td><b>48</b></td>
+                <td>Take Five - Dave Brubeck |  Autumn Leaves - Bill Evans | 6 | Bochum                           |  Herbert Grönemeyer     |  Đức               |  Tự hào, hoài niệm, yêu thương | 12 vòng tròn hợp âm (Circle of Fifths) | 20 | Unstoppable | Sia | 28/7/2027 | 26 | 23 | 763 | 381.0 | 404 | Chiều | yếu dần | NÔN | 26 | 52% | 2.0 | 105.0 | 1.0 | 8.0 | https://youtu.be/Cjudlh8Mb3M?si=XzGb9nT0_I0D43sT</td>
+            </tr>
+            <tr>
+                <td><b>49</b></td>
+                <td>528 Hz (cân bằng) | 7 | Lili Marleen                     |  Marlene Dietrich       |  Đức               |  Buồn bã, cô đơn, nhớ nhung | 30 | Đường đến ngày vinh quang | Bức Tường | 24/7/2037 | 4 | 24 | 4850 | 2425.0 | 842 | Sáng | khỏe dần | THẮT LƯNG | 4 | 17% | 4.0 | Lặp lại 10-15 lần mỗi lượt. Bạn có thể làm 3-4 lượt trong ngày. | 75 | 2.0 | 107.0 | 1.0 | 8.0 | JohnnyCash – Hurt lyric, lời việt, karaoke </td>
+            </tr>
+            <tr>
+                <td><b>50</b></td>
+                <td>8 | Schrei nach Liebe                |  Die Ärzte              |  Đức               |  Phẫn nộ, thất vọng, kêu gọi | Mỗi vòng tròn hợp âm là một tập hợp các hợp âm dựa trên một tông chính. | 40 | Niệm khúc cuối | Ngô Thụy Miên | 8/1/2027 | 99 | 25 | 204 | 102.0 | 46 | Trưa | khỏe dần | 17 nhạc nước ngoài | 99 | 22% | 3.0 | 110.0 | 2. Squats (Ngồi xổm) | 3.0 | 110.0 | 1.0</td>
+            </tr>
+            <tr>
+                <td><b>51</b></td>
+                <td>Khách hàng nói chuyện nhanh, lớn giọng | 9 | Ohne Dich                        |  Rammstein              |  Đức               |  Đau đớn, mất mát, tuyệt vọng | 50 | My Way | Frank Sinatra | 27/11/2026 | 86 | 26 | 234 | 117.0 | 118 | Chiều | yếu dần | 18  nhạc vàng | 86 | 50% | 6.0 | 110.0 | 1.0 | 9.0 | 🎵 Lời bài hát: cieturn0searc15</td>
+            </tr>
+            <tr>
+                <td><b>52</b></td>
+                <td>Khi gặp khách hàng | 10 | Irgendwie, Irgendwo, Irgendwann  |  Nena                   |  Đức               |  Lãng mạn, mơ mộng, hy vọng | 1 | C major (Đô trưởng): C - G - Dm - Am - F - Em - Bdim | Căng thẳng, lo âu | 31/3/2027 | 76 | 27 | 266 | 133.0 | 26 | Sáng | khỏe dần | 19 nhạc trẻ | 76 | 9% | 4.0 | Mục đích: Tăng cường cơ đùi, mông, cơ hông và cải thiện khả năng sinh lý. | 3.0 | 113.0 | 1.0</td>
+            </tr>
+            <tr>
+                <td><b>53</b></td>
+                <td>Sol trưởng (G) | 11 | Manchmal                         |  Quadro Nuevo           |  Đức               |  Bình yên, suy tư, nhẹ nhàng | Độ tuổi | Bài hát | Ca sĩ/Nhóm nhạc | 8/1/2027 | 67 | 28 | 300 | 150.0 | 142 | Chiều | khỏe dần | 20 nhạc CM | 67 | 47% | 3.0 | 113.0 | 1.0 | 9.0 | 📺 Video lyric: citeturn0search23</td>
+            </tr>
+            <tr>
+                <td><b>54</b></td>
+                <td>12 | Das Lied von der Loreley         |  Heinrich Heine (truyền thống)  |  Đức               |  Bí ẩn, mê hoặc, u sầu | 2 | G major (Sol trưởng): G - D - Em - Bm - C - Am - F#dim | <10 | Happy | Pharrell Williams | 14/4/2027 | 60 | 29 | 336 | 168.0 | 82 | Trưa | khỏe dần | 21 nhạc thư giãn | 60 | 24% | 4.0 | Cách thực hiện: | 3.0 | 116.0 | 1.0 | 9.0 | https://youtu.be/JgTU2aoHigU?si=WHLq4o35qpwWZDIZ</td>
+            </tr>
+            <tr>
+                <td><b>55</b></td>
+                <td>6 | 20 | Let It Be | The Beatles | 27/6/2027 | 54 | 30 | 374 | 187.0 | 46 | Sáng | khỏe dần | 22  nhạc test loa | 54 | 12% | 6.0 | 116.0 | 1.0 | 9.0 | Taylor Swift – All Too Well (Talor's Version) lyric, lời việt, karaoke </td>
+            </tr>
+            <tr>
+                <td><b>56</b></td>
+                <td>B major (Si trưởng): B - F# - G#m - D#m - E - C#m - A#dim | 1 | Mam tylko ciebie                 |  Taco Hemingway         |  Ba Lan            |  Lãng mạn, nhớ nhung, sâu lắng | 3 | D major (Rê trưởng): D - A - Bm - F#m - G - Em - C#dim | 30 | Bài ca tuổi trẻ | Tam Ka PKL | 23/8/2026 | 920 | 31 | 22 | 11.0 | 2 | Sáng | khỏe dần | Bài 1-2-3 Thầy DDN | 920 | 9% | 0.0 | Đứng thẳng, hai chân rộng bằng vai. | 3.0 | 119.0 | 1.0</td>
+            </tr>
+            <tr>
+                <td><b>57</b></td>
+                <td>B = 493.88 Hz | 2 | Viva La Vida                     |  Coldplay               |  Anh               |  Tự do, hoài niệm, hùng vĩ | 40 | Và tôi cũng yêu em | Đức Huy | 5/8/2026 | 1686 | 32 | 12 | 6.0 | 10 | Đêm | yếu dần | Model talking tuyệt đỉnh | 1686 | 83% | 6.0 | 119.0 | 1.0 | 9.0 | � Video lyric chính thức: citeturn0search16</td>
+            </tr>
+            <tr>
+                <td><b>58</b></td>
+                <td>3 | Faded                            |  Alan Walker            |  Na Uy             |  Cô đơn, mơ hồ, uể oải | 4 | A major (La trưởng): A - E - F#m - C#m - D - Bm - G#dim | 50 | What a Wonderful World | Louis Armstrong | 5/8/2026 | 481 | 33 | 42 | 21.0 | 40 | Đêm | yếu dần | ĐINH ĐÃNG NGOẠI THÀNH | 481 | 95% | 1.0 | Hạ cơ thể xuống như thể bạn đang ngồi trên ghế, giữ lưng thẳng. | 3.0 | 122.0 | 2.0 | 9.0 | 🇨🇳 Trung Quốc</td>
+            </tr>
+            <tr>
+                <td><b>59</b></td>
+                <td>4 | La Vie en Rose                   |  Édith Piaf             |  Pháp              |  Lãng mạn, hạnh phúc, dịu dàng | Giận dữ, mất kiên nhẫn | 7/8/2026 | 381 | 34 | 53 | 26.0 | 49 | Đêm | yếu dần | Võ Vovinam cơ bản | 381 | 92% | 5.0 | 122.0 | 2.0 | 9.0 | https://youtu.be/3EtC63RlP4o?si=9txKlqKO3HdYokDu</td>
+            </tr>
+            <tr>
+                <td><b>60</b></td>
+                <td>8 | 5 | Dancing Queen                    |  ABBA                   |  Thụy Điển         |  Vui vẻ, phấn khích, lạc quan | 5 | E major (Mi trưởng): E - B - C#m - G#m - A - F#m - D#dim | Độ tuổi | Bài hát | Ca sĩ/Nhóm nhạc | 26/8/2026 | 578 | 35 | 35 | 17.0 | 12 | Trưa | khỏe dần | Hướng dẫn tự vệ chống đao kiếm | 578 | 34% | 2.0 | Dừng lại khi đùi song song với mặt đất. | 3.0 | 125.0 | 2.0 | 9.0 | LiRonghao – Li Bai lyric, lời việt, karaoke </td>
+            </tr>
+            <tr>
+                <td><b>61</b></td>
+                <td>5. Tháng 8 – 9: Cách mạng tháng 8 (19/8), Quốc khánh (2/9) | 6 | Volare                           |  Domenico Modugno       |  Ý                 |  Tự do, mơ mộng, yêu đời | <10 | Baby Shark | Pinkfong | 5/8/2026 | 963 | 36 | 21 | 10.0 | 19 | Đêm | yếu dần | Võ tự vệ phòng thân | 963 | 90% | 3.0 | 125.0 | 2.0</td>
+            </tr>
+            <tr>
+                <td><b>62</b></td>
+                <td>Bài hát phù hợp: | 7 | Sweet Dreams (Are Made of This)  |  Eurythmics             |  Anh               |  Bí ẩn, khao khát, mạnh mẽ | 6 | B major (Si trưởng): B - F# - G#m - D#m - E - C#m - A#dim | 20 | Heal The World | Michael Jackson | 30/10/2026 | 189 | 37 | 107 | 53.0 | 19 | Sáng | khỏe dần | Võ nông dân Trịnh Bắc | 189 | 17% | 5.0 | Đẩy cơ thể lên trở lại. | 3.0 | 128.0 | 2.0 | 10.0 | 🎵 Lời ài hát & bản dịch tiếng Anh: citeturn0search17</td>
+            </tr>
+            <tr>
+                <td><b>63</b></td>
+                <td>Tiến quân ca – Quốc ca đầy hào hùng. | 8 | Tainted Love                     |  Soft Cell              |  Anh               |  Đau đớn, ám ảnh, giằng xé | 30 | Beautiful Day | U2 | 11/8/2026 | 224 | 38 | 90 | 45.0 | 82 | Trưa | yếu dần | 224 | 91% | 0.0 | 128.0 | 2.0 | 10.0 | https://youtu.be/Ez9Cgi5fC4w?si=vnrKx1UTvoVX6Y7v</td>
+            </tr>
+            <tr>
+                <td><b>64</b></td>
+                <td>9 | Bailando                         |  Enrique Iglesias       |  Tây Ban Nha       |  Niềm vui, đam mê, quyến rũ | 7 | F# major (Fa# trưởng): F# - C# - D#m - A#m - B - G#m - E#dim | 40 | Hãy yêu nhau đi | Trịnh Công Sơn | 5/8/2026 | 1445 | 39 | 14 | 7.0 | 12 | Trưa | yếu dần | 1445 | 85% | 5.0 | Lặp lại 15-20 lần mỗi lượt, thực hiện 3 lượt. | 100 | 3.0 | 131.0 | 2.0 | 10.0 | G.E.M. – Goodbye Karaoke, lyric, Việt, </td>
+            </tr>
+            <tr>
+                <td><b>65</b></td>
+                <td>10 | Euphoria                         |  Loreen                 |  Thụy Điển         |  Hưng phấn, hy vọng, mãnh liệt | 50 | Imagine | John Lennon | 10/9/2026 | 168 | 40 | 120 | 60.0 | 82 | Trưa | yếu dần | 168 | 68% | 0.0 | 134.0 | 3. Bridge (Cầu) | 3.0 | 134.0 | 2.0</td>
+            </tr>
+            <tr>
+                <td><b>66</b></td>
+                <td>11 | Ode to Joy (Symphony No. 9)      |  Ludwig van Beethoven   |  Đức               |  Hạnh phúc, đoàn kết, vĩ đại | 8 | C# major (Đô# trưởng): C# - G# - A#m - E#m - F# - D#m - B#dim | Hưng phấn, năng lượng cao | 11/8/2026 | 134 | 41 | 150 | 75.0 | 142 | Trưa | yếu dần | 134 | 94% | 6.0 | 134.0 | 2.0 | 10.0 | 🎵 Lờibài hát & bản dịch tiếng Anh: citeturn0search6</td>
+            </tr>
+            <tr>
+                <td><b>67</b></td>
+                <td>12 | Hallelujah                       |  Leonard Cohen          |  Canada (gốc châu Âu)  |  Suy tư, buồn bã, sâu sắc | Độ tuổi | Bài hát | Ca sĩ/Nhóm nhạc | 5/8/2026 | 6747 | 42 | 3 | 1.0 | 1 | Trưa | khỏe dần | 6747 | 33% | 3.0 | Mục đích: Tăng cường cơ mông, cơ hông và cơ bụng dưới, giúp cải thiện khả năng kiểm soát và sức mạnh cơ thể. | 3.0 | 137.0 | 2.0 | 10.0 | 🇬🇧 Anh</td>
+            </tr>
+            <tr>
+                <td><b>68</b></td>
+                <td>9 | Ab major (Lab trưởng): Ab - Eb - Fm - Cm - Db - Bbm - Gdim | <10 | Một con vịt | Xuân Mai | 11/8/2026 | 674 | 43 | 30 | 15.0 | 22 | Trưa | yếu dần | 674 | 73% | 2.0 | 137.0 | 2.0 | 10.0 | https://youtu.be/GDxX1vVby0w?si=SEj8gWdjuXmd3tsK</td>
+            </tr>
+            <tr>
+                <td><b>69</b></td>
+                <td>1 |  Lemon              |  Kenshi Yonezu             | Nhật |  Hạnh phúc   | 20 | Bay | Thu Minh | 11/8/2026 | 674 | 44 | 30 | 15.0 | 22 | Trưa | yếu dần | 674 | 73% | 2.0 | Cách thực hiện: | 3.0 | 140.0 | 2.0 | 10.0 | Adee – Love inthe Dark lyrics, karaoke, Việt </td>
+            </tr>
+            <tr>
+                <td><b>70</b></td>
+                <td>2 |  Pretender          |  Official HIGE DANDism     | Nhật |  Hạnh phúc   | Eb major (Mib trưởng): Eb - Bb - Cm - Gm - Ab - Fm - Ddim | 30 | Firework | Katy Perry | 11/8/2026 | 674 | 45 | 30 | 15.0 | 22 | Trưa | yếu dần | 674 | 73% | 2.0 | 140.0 | 2.0</td>
+            </tr>
+            <tr>
+                <td><b>71</b></td>
+                <td>3 |  Koi                |  Gen Hoshino               | Nhật |  Hạnh phúc   | 40 | Sống như những đóa hoa | Tạ Quang Thắng | 11/8/2026 | 674 | 46 | 30 | 15.0 | 12 | Trưa | khỏe dần | 30 P ĐI BỘ 2 LẦN NGÀY | 674 | 40% | 2.0 | Nằm ngửa trên sàn, hai chân cong, bàn chân đặt phẳng trên sàn. | 3.0 | 143.0 | 2.0 | 11.0 | 📺 Video lyric: citeturn0search1</td>
+            </tr>
+            <tr>
+                <td><b>72</b></td>
+                <td>4 |  Yoru ni Kakeru     |  YOASOBI                   | Nhật |  Buồn        | 10 | Bb major (Si♭ trưởng): Bb - F - Gm - Dm - Eb - Cm - Adim | 50 | Don’t Stop Me Now | Queen | 11/8/2026 | 2024 | 47 | 10 | 5.0 | 2 | Trưa | khỏe dần | nhạc nhảy | 2024 | 20% | 0.0 | 143.0 | 2.0 | 11.0 | https://youtu.be/rIA_K-6BdS4?si=mTYDT6S7BkVV3-EF</td>
+            </tr>
+            <tr>
+                <td><b>73</b></td>
+                <td>5 |  First Love         |  Utada Hikaru              | Nhật |  Buồn        | 3. Công thức chọn bài ngẫu nhiên trong Google Sheets | 11/8/2026 | 1349 | 48 | 15 | 7.0 | 12 | Trưa | yếu dần | nhạc YOGA | 1349 | 80% | 5.0 | Đặt tay bên người. | 3.0 | 146.0 | 2.0 | 11.0 | Codplay – TheScientist lyric, karaoke, Việt </td>
+            </tr>
+            <tr>
+                <td><b>74</b></td>
+                <td>Cô gái mở đường – Trẻ trung, sôi động, ngợi ca những nữ thanh niên xung phong. | 6 |  Nandemonaiya       |  RADWIMPS                  | Nhật |  Buồn        | 11 | F major (Fa trưởng): F - C - Dm - Am - Bb - Gm - Edim | 11/8/2026 | 2024 | 49 | 10 | 5.0 | 2 | Trưa | khỏe dần | nhạc thư giãn | 2024 | 20% | 0.0 | 146.0 | 2.0</td>
+            </tr>
+            <tr>
+                <td><b>75</b></td>
+                <td>4. Tháng 6 – 7: Ngày Gia đình Việt Nam (28/6), Ngày Thương binh Liệt sĩ (27/7) | 7 |  Unravel            |  TK from Ling Tosite Sigure  | Nhật |  Tan vỡ     | 12 tần số tương ứng (tần số cơ bản của nốt chủ trong mỗi tông - Hz) | Bạn có thể dùng công thức này để lấy một bài hát ngẫu nhiên mỗi ngày: | 6/10/2026 | 285 | 50 | 71 | 35.0 | 20 | Trưa | khỏe dần | XY | 285 | 28% | 5.0 | Dùng sức cơ mông và hông để nâng hông lên cao, giữ cho cơ thể tạo thành một đường thẳng từ đầu đến gối. | 3.0 | 149.0 | 2.0 | 12.0 | 📺 Video lyric: citeturn0search18</td>
+            </tr>
+            <tr>
+                <td><b>76</b></td>
+                <td>Bài hát phù hợp: | 8 |  Secret Base        |  Zone                      | Nhật |  Tan vỡ     | 149.0 | 2.0 | 12.0 | 🇷🇺 Nga</td>
+            </tr>
+            <tr>
+                <td><b>77</b></td>
+                <td>Gánh mẹ – Nhắc nhớ công ơn mẹ cha. | 9 |  Gurenge            |  LiSA                      | Nhật |  Mạnh mẽ     | Theo tiêu chuẩn A4 = 440Hz, các tần số của các nốt chủ (root note) trong mỗi vòng tròn hợp âm là: | #ERROR! | Giữ trong 3-5 giây, sau đó hạ xuống. | 3.0 | 152.0 | 2.0 | 12.0 | https://youtu.be/j0rNm_PpHEk?si=1qG3T5jDWbhH6E43</td>
+            </tr>
+            <tr>
+                <td><b>78</b></td>
+                <td>3. Khi Đang Yêu Hoặc Cảm Thấy Ấm Áp, Hạnh Phúc | 10 |  Inferno            |  Mrs. GREEN APPLE          | Nhật |  Mạnh mẽ     | 152.0 | 2.0 | 12.0 | DimaBilan – Nevr Let You Go lyrics, karaoke, Việt </td>
+            </tr>
+            <tr>
+                <td><b>79</b></td>
+                <td>💖 Dành cho lúc bạn cảm thấy yêu đời, muốn thể hiện tình cảm. | 11 |  Haru no Tonari     |  YUI                       | Nhật |  Hoài niệm  | 1 | C = 261.63 Hz | Thay B2:D bằng vùng chứa dữ liệu của bạn. | Lặp lại 15-20 lần mỗi lượt, thực hiện 3 lượt. | 3.0 | 155.0 | 2.0</td>
+            </tr>
+            <tr>
+                <td><b>80</b></td>
+                <td>Elvis Presley – Can't Help Falling in Love → Khi đang yêu, muốn hát tặng người thương. | 12 |  Platinum           |  Maaya Sakamoto            | Nhật |  Hoài niệm  | 155.0 | 4. Lunge (Bước dài) | 155.0 | 2.0 | 13.0 | 🎵 Lời bài hát: citeturn0earch8</td>
+            </tr>
+            <tr>
+                <td><b>81</b></td>
+                <td>Adele – Someone Like You → Khi nhớ về một mối tình cũ nhưng đầy trân trọng. | 13 | - Lemon (C-G-Am-F) | Nhật | 2 | G = 392.00 Hz | Công thức này sẽ chọn ngẫu nhiên một bài hát từ danh sách. | 155.0 | 2.0 | 13.0 | https://youtu.be/SIRHqDNpLMo?si=QjxmiZuk0H73iU1K</td>
+            </tr>
+            <tr>
+                <td><b>82</b></td>
+                <td>Frank Sinatra – My Way → Khi muốn tự hào về những gì mình đã trải qua. | 14 | - Pretender (G-D-Em-C) | Nhật | Mục đích: Cải thiện sự ổn định và sức mạnh của cơ háng, cơ đùi và mông. | 3.0 | 158.0 | 2.0 | 13.0 | ivert – Life lyrics, karaoke, Việt </td>
+            </tr>
+            <tr>
+                <td><b>83</b></td>
+                <td>15 | - Koi (F-C-Dm-Bb) | Nhật | 3 | D = 293.66 Hz | Bạn có cần thêm gì không? | 158.0 | 2.0</td>
+            </tr>
+            <tr>
+                <td><b>84</b></td>
+                <td>16 | - Yoru ni Kakeru (Am-F-C-G) | Nhật | Cách thực hiện: | 3.0 | 161.0 | 2.0 | 13.0 | 📺 Video lyric: citeturn0search0</td>
+            </tr>
+            <tr>
+                <td><b>85</b></td>
+                <td>17 | - Nandemonaiya (Am-F-C-G) | Nhật | 4 | A = 440.00 Hz | 161.0 | 2.0</td>
+            </tr>
+            <tr>
+                <td><b>86</b></td>
+                <td>18 | - First Love (C-Am-F-G) | Nhật | <10 | Đứng thẳng, hai tay đặt ở hông hoặc trước mặt. | 3.0 | 164.0 | 2.0</td>
+            </tr>
+            <tr>
+                <td><b>87</b></td>
+                <td>19 | - Unravel (Am-F-C-G) | Nhật | 5 | E = 329.63 Hz | 164.0 | 2.0 | 1.0 | 1. Ông – Nghề Quản lý, Lãnh đạo</td>
+            </tr>
+            <tr>
+                <td><b>88</b></td>
+                <td>20 | Unstoppable | Sia | Bước một chân dài về phía trước, hạ cơ thể xuống cho đến khi đùi trước song song với mặt đất. | 3.0 | 167.0 | 2.0 | 1.0 | https://youtu.be/qlbAGXsaZ8k?si=wHwxaruuRW7ETej9</td>
+            </tr>
+            <tr>
+                <td><b>89</b></td>
+                <td>1 |  **Tiểu Hạnh Vận** (小幸运)  |  Hebe Tien (Điền Phúc Chân)  | Trung |  Hạnh phúc, ngọt ngào  | 6 | B = 493.88 Hz | 167.0 | 2.0 | 1.0 | Der Weg – Herbert Grönemeyer (Đức)</td>
+            </tr>
+            <tr>
+                <td><b>90</b></td>
+                <td>2 |  **Quang Niên** (光年之外)  |  G.E.M. Đặng Tử Kỳ  | Trung |  Lãng mạn, bay bổng  | Đẩy cơ thể lên và quay lại vị trí ban đầu. | 3.0 | 170.0 | 2.0 | 1.0 | https://youtu.be/YXfVwyVDna4?si=PpE8CXj8mmghBov1</td>
+            </tr>
+            <tr>
+                <td><b>91</b></td>
+                <td>3 |  **Dục Phong** (起风了)  |  Ngô Thanh Phong  | Trung |  Hoài niệm, xúc động  | 7 | F# = 369.99 Hz | 170.0 | 2.0 | 1.0 | My Way – Frank Sinatra (Mỹ)</td>
+            </tr>
+            <tr>
+                <td><b>92</b></td>
+                <td>4 |  **Hoa Chi Đạo** (花之舞)  |  Hoa Trước (FLORIA)  | Trung |  Nhẹ nhàng, tinh khôi  | Trạng thái cảm xúc | Độ tuổi | Bài hát | Ca sĩ/Nhóm nhạc | Tình huống phù hợp | Lặp lại với chân còn lại. | 3.0 | 173.0 | 2.0 | 1.0 | https://youtu.be/vVRZU51ak8U?si=s6Ec8ixcX_7NoaOb</td>
+            </tr>
+            <tr>
+                <td><b>93</b></td>
+                <td>5 |  **Đồng Hoa Trấn** (童话镇)  |  Trần Du Thông  | Trung |  Ngây thơ, kỳ ảo  | 8 | C# = 277.18 Hz | Buồn, chán nản | <10 | Bé yêu biển lắm | Xuân Mai | Khi trẻ buồn, cần động viên | https://youtu.be/pL8L9O0J7kE?si=HCb7o8AT7QFyySxV | 173.0 | 2.0 | 1.0 | Con Te Partirò – Andrea Bocelli (Ý)</td>
+            </tr>
+            <tr>
+                <td><b>94</b></td>
+                <td>6 |  **Ly Biệt Khúc** (离别的钢琴曲)  |  Thạch Tiến  | Trung |  Buồn, sâu lắng  | 20 | Unstoppable | Sia | Khi gặp khó khăn, muốn khẳng định bản thân | https://youtu.be/UiaN0MigJjs?si=8TFZQvYdsV7xA2kY | Lặp lại 10-15 lần mỗi chân, thực hiện 3 lượt. | 3.0 | 176.0 | 2.0 | 1.0 | https://youtu.be/Jitikc0zMFE?si=xW-nZoxnl8MfzkPn</td>
+            </tr>
+            <tr>
+                <td><b>95</b></td>
+                <td>7 |  **Dạ Khúc** (夜曲)  |  Châu Kiệt Luân  | Trung |  U uất, tâm trạng  | 9 | Ab = 415.30 Hz | 30 | Đường đến ngày vinh quang | Bức Tường | Khi mất động lực trong công việc | https://youtu.be/tJ2measnTc0?si=X-T6rQARyP3h70QP | 181.0 | 5. Hip Thrust (Nâng hông) | 5.0 | 181.0 | 3.0 | 1.0 | Zinda – Bhaag Milkha Bhaag OST (Ấn Độ)</td>
+            </tr>
+            <tr>
+                <td><b>96</b></td>
+                <td>8 |  **Mộng Hồn Dạ** (梦魂夜)  |  Hứa Tung  | Trung |  Ma mị, ám ảnh  | 40 | Niệm khúc cuối | Ngô Thụy Miên | Khi nhớ về những kỷ niệm | https://youtu.be/poQu_CNY1sg?si=y3zYBa5IMYqnLs85 | 181.0 | 3.0 | 1.0 | https://youtu.be/a_LOFpJNG5Q?si=tsE0O0pV1GYprFov</td>
+            </tr>
+            <tr>
+                <td><b>97</b></td>
+                <td>9 |  **Phong Bạo** (风暴)  |  Vương Phong  | Trung |  Mạnh mẽ, quyết liệt  | 10 | Eb = 311.13 Hz | 50 | My Way | Frank Sinatra | Khi suy ngẫm về cuộc sống | https://youtu.be/YXfVwyVDna4?si=cy_riKKuQAGSy6dF | Mục đích: Tăng cường cơ mông, cơ đùi trong và cơ háng. | 5.0 | 186.0 | 3.0 | 1.0 | L'envie – Johnny Hallyday (Pháp)</td>
+            </tr>
+            <tr>
+                <td><b>98</b></td>
+                <td>10 |  **Ngã Bất Tương Tín** (我不相信)  |  Trương Quốc Vinh  | Trung |  Đau khổ, tuyệt vọng  | Căng thẳng, lo âu | <10 | Happy | Pharrell Williams | Khi trẻ căng thẳng vì học tập | 186.0 | 3.0 | 2.0 | 2. Bà – Nghề Đông y, Chăm sóc</td>
+            </tr>
+            <tr>
+                <td><b>99</b></td>
+                <td>11 |  **Thiên Thiên** (天天)  |  Đào Triết  | Trung |  Nhẹ nhàng, bình yên  | 11 | Bb = 466.16 Hz | 20 | Let It Be | The Beatles | Khi cần thư giãn, tìm giải pháp nhẹ nhàng | Cách thực hiện: | 5.0 | 191.0 | 3.0 | 2.0 | https://youtu.be/Hp6HnNT6E8U?si=BT9LqGqVWHzB7BUN</td>
+            </tr>
+            <tr>
+                <td><b>100</b></td>
+                <td>12 |  **Tuyết Chi Mộng** (雪之梦)  |  Bandari (Băng Đào Lợi)  | Trung |  Thư thái, mộng mơ  | 30 | Bài ca tuổi trẻ | Tam Ka PKL | Khi áp lực công việc quá lớn | 191.0 | 3.0 | 2.0 | Tình Mẫu Tử – Tống Tổ Anh (Trung Quốc)</td>
+            </tr>
+            <tr>
+                <td><b>101</b></td>
+                <td>13 | - **Tiểu Hạnh Vận** (C - G - Am - F) | Trung | 12 | F = 349.23 Hz | 40 | Và tôi cũng yêu em | Đức Huy | Khi cần giải tỏa căng thẳng trong gia đình | Ngồi trên sàn, lưng tựa vào ghế hoặc một vật cao (ví dụ như ghế dài). | 5.0 | 196.0 | 3.0 | 2.0 | https://youtu.be/HG5X2kPVPlo?si=8WWcJAOUNsqb2BuG</td>
+            </tr>
+            <tr>
+                <td><b>102</b></td>
+                <td>14 | - **Quang Niên** (G - D - Em - C) | Trung | 50 | What a Wonderful World | Louis Armstrong | Khi cảm thấy cuộc sống bộn bề, cần bình tâm | 196.0 | 3.0 | 2.0 | Je t'aime – Lara Fabian (Pháp)</td>
+            </tr>
+            <tr>
+                <td><b>103</b></td>
+                <td>15 | - **Dục Phong** (Am - F - C - G) | Trung | Các tần số này thuộc hệ thống âm bình quân (Equal Temperament), có thể thay đổi trong các hệ thống khác như Just Intonation hoặc Pythagorean Tuning. | Giận dữ, mất kiên nhẫn | <10 | Baby Shark | Pinkfong | Khi trẻ quấy khóc, không chịu hợp tác | Đặt một chiếc bánh tạ hoặc vật nặng lên hông nếu muốn tăng cường độ. | 5.0 | 201.0 | 3.0 | 2.0 | https://youtu.be/YTzIm4M__oU?si=zQN-gjOW-iAUYzro</td>
+            </tr>
+            <tr>
+                <td><b>104</b></td>
+                <td>16 | - **Ly Biệt Khúc** (Am - F - C - G) | Trung | 20 | Heal The World | Michael Jackson | Khi cảm thấy bức xúc với xã hội, muốn thay đổi | 201.0 | 3.0 | 2.0 | Caruso – Lucio Dalla (Ý)</td>
+            </tr>
+            <tr>
+                <td><b>105</b></td>
+                <td>17 | - **Dạ Khúc** (Am - F - C - G) | Trung | 30 | Beautiful Day | U2 | Khi gặp thất bại nhưng cần giữ vững tinh thần | Dùng chân đẩy mạnh để nâng hông lên, giữ tư thế thẳng từ đầu đến gối. | 5.0 | 206.0 | 3.0 | 2.0 | https://youtu.be/38kTyQjQLFE?si=i6ZdJouYwyjzxtZS</td>
+            </tr>
+            <tr>
+                <td><b>106</b></td>
+                <td>18 | - **Ngã Bất Tương Tín** (Bm - G - D - A) | Trung | 40 | Hãy yêu nhau đi | Trịnh Công Sơn | Khi cảm thấy mất kết nối với người khác | 206.0 | 3.0 | 2.0 | Luka Chuppi – Rang De Basanti OST (Ấn Độ)</td>
+            </tr>
+            <tr>
+                <td><b>107</b></td>
+                <td>1 | 50 | Imagine | John Lennon | Khi mong muốn một thế giới hòa bình hơn | Giữ trong 3-5 giây, sau đó hạ xuống. | 5.0 | 211.0 | 3.0 | 2.0 | https://youtu.be/Gyw0R6BwE5g?si=4CJsaGvsP0TllxPo</td>
+            </tr>
+            <tr>
+                <td><b>108</b></td>
+                <td>Hưng phấn, năng lượng cao | <10 | Một con vịt | Xuân Mai | Khi trẻ vui chơi, muốn nhảy múa | 211.0 | 3.0 | 2.0 | Because I'm a Girl – KISS (Hàn Quốc)</td>
+            </tr>
+            <tr>
+                <td><b>109</b></td>
+                <td>🔹 Đặc điểm: Nhịp rất chậm, thư giãn, có thể là khi bạn đang nghỉ ngơi, suy tư, hoặc tâm trạng nhẹ nhàng. | 20 | Bay | Thu Minh | Khi muốn khuấy động không khí | Lặp lại 10-15 lần mỗi lượt, thực hiện 3 lượt. | 5.0 | 216.0 | 3.0 | 3.0 | 3. Bạn – Nghề Thợ may, Dệt vải</td>
+            </tr>
+            <tr>
+                <td><b>110</b></td>
+                <td>🔹 Bài hát phù hợp: | Tên bài hát | Ca sĩ | Trạng thái cảm xúc | 30 | Firework | Katy Perry | Khi cần tự tin thể hiện bản thân | 222.0 | 6. Plank với đá chân chéo | 6.0 | 222.0 | 3.0 | 3.0 | https://youtu.be/auK4ioOQ3Lo?si=FtEa_fmMY_UdE13O</td>
+            </tr>
+            <tr>
+                <td><b>111</b></td>
+                <td>Xin Gọi Nhau Là Cố Nhân (Hợp âm C, Dm) – Thư giãn, dễ thể hiện với nhịp chậm. | https://youtu.be/OhRfoAApA_I?si=VcVIphTuLS28H9sp | 1 | La Vie en Rose | Édith Piaf | pháp  | Lãng mạn, ngọt ngào | 40 | Sống như những đóa hoa | Tạ Quang Thắng | Khi muốn sống tích cực, tràn đầy cảm hứng | 222.0 | 3.0 | 3.0 | Sen no Kaze ni Natte – Masafumi Akikawa (Nhật Bản)</td>
+            </tr>
+            <tr>
+                <td><b>112</b></td>
+                <td>Giọt Lệ Đài Trang (Hợp âm C, Am) – Nhịp chậm, dễ ngân và tạo cảm giác nhẹ nhàng. | https://youtu.be/spZII3nkDb4?si=zKmg1u37tQEy4Hv6 | 2 | Ne Me Quitte Pas | Jacques Brel | pháp  | Đau buồn, khẩn thiết | 50 | Don’t Stop Me Now | Queen | Khi cảm thấy tràn đầy năng lượng sống | Mục đích: Tăng cường cơ sàn chậu, cơ bụng và cơ háng. | 6.0 | 228.0 | 3.0 | 3.0 | https://youtu.be/qXRPQ9mhDdc?si=7vihnCO2twNjsvK1</td>
+            </tr>
+            <tr>
+                <td><b>113</b></td>
+                <td>Lại Nhớ Người Yêu (Hợp âm G, F) – Nhẹ nhàng, trữ tình, không cần quá nhiều lực. | https://youtu.be/KrIj7ORoEDQ?si=U7s6aPiDREPAqTGr | 3 | Je Veux | Zaz | pháp  | Tự do, vui tươi | 228.0 | 3.0 | 3.0 | Luce (Tramonti A Nord Est) – Elisa (Ý)</td>
+            </tr>
+            <tr>
+                <td><b>114</b></td>
+                <td>Túy Ca (Hợp âm Em, Am) – Nhịp chậm, không quá nhanh, dễ luyến láy. | https://youtu.be/iNAjA_sNuEI?si=uwOHo0XAxlp8Bc55 | 4 | Sous le Vent | Garou & Céline Dion | pháp  | Động lực, mạnh mẽ | Cách thực hiện: | 6.0 | 234.0 | 3.0 | 3.0 | https://youtu.be/1aCWGqUcP3o?si=hOuolqQfG8Cd2dDA</td>
+            </tr>
+            <tr>
+                <td><b>115</b></td>
+                <td>📌 Thời điểm mở: Khi bạn cảm thấy thư giãn, cần thời gian để suy nghĩ, hoặc cảm xúc nhẹ nhàng. | 5 | Dernière Danse | Indila | pháp  | Bi thương, nội tâm | 40 | Niệm khúc cuối | Ngô Thụy Miên | Khi nhớ về những kỷ niệm | 234.0 | 3.0 | 3.0 | Madhuban Mein Radhika (Ấn Độ)</td>
+            </tr>
+            <tr>
+                <td><b>116</b></td>
+                <td>BPM từ 10–60: Xin Gọi Nhau Là Cố Nhân, Giọt Lệ Đài Trang | 6 | Voilà | Barbara Pravi | pháp  | Quyết đoán, khẳng định bản thân | 40 | Hãy yêu nhau đi | Trịnh Công Sơn | Khi cảm thấy mất kết nối với người khác | Vào tư thế plank, hai tay chống xuống đất, cơ thể tạo thành một đường thẳng từ đầu đến chân. | 6.0 | 240.0 | 4.0 | 3.0 | https://youtu.be/ILvkzMkOS5o?si=sW3_sT0YhDuxpN08</td>
+            </tr>
+            <tr>
+                <td><b>117</b></td>
+                <td>7 | Je t’aime… moi non plus | Serge Gainsbourg & Jane Birkin | pháp  | Quyến rũ, mâu thuẫn | Trạng thái cảm xúc | Độ tuổi | Bài hát | Ca sĩ/Nhóm nhạc | Tình huống phù hợp | 240.0 | 4.0 | 3.0 | Ne me quitte pas – Jacques Brel (Pháp)</td>
+            </tr>
+            <tr>
+                <td><b>118</b></td>
+                <td>8 | Tous les mêmes | Stromae | pháp  | Mỉa mai, châm biếm, hài hước | Đá một chân ra ngoài rồi đưa trở lại, sau đó đổi chân. | 6.0 | 246.0 | 4.0 | 3.0 | https://youtu.be/hJv2T2e2GlA?si=nuZXLMWxJeYn4_Ja</td>
+            </tr>
+            <tr>
+                <td><b>119</b></td>
+                <td>9 | Papaoutai | Stromae | pháp  | Cô đơn, tìm kiếm cha | Tên bài hát                     |  Ca sĩ/Nghệ sĩ          |  BPM | Tình huống | Dấu hiệu cảm xúc | Hướng xử lý | Tần suất nhắc nhở | Nhạc phù hợp | Danh sách bài nhạc | 246.0 | 4.0 | 3.0 | Người thợ may – Đỗ Bảo (Việt Nam)</td>
+            </tr>
+            <tr>
+                <td><b>120</b></td>
+                <td>10 | Je suis malade | Serge Lama | pháp  | Tuyệt vọng, cảm xúc vỡ òa | 60 | 70 | Duyên Phận                      |  Như Quỳnh             |  60-70 | Nhân viên đến họp với dáng uể oải | Giọng trầm, ít nói, chán nản | Hỏi han, động viên, tìm nguyên nhân | Hàng tuần | Nhạc không lời nhẹ nhàng | River Flows in You - Yiruma, Comptine d'un autre été - Yann Tiersen, Kiss the Rain - Yiruma, The Ludlows - James Horner, A Morning of the Slag Ravine - Joe Hisaishi | River Flows in You - Yiruma | Tiếp tục thực hiện động tác trong 30 giây đến 1 phút. | 6.0 | 252.0 | 4.0 | 4.0 | 4. Vợ – Nghề Điều dưỡng, Y tá, Chăm sóc sức khỏe</td>
+            </tr>
+            <tr>
+                <td><b>121</b></td>
+                <td>11 | Aux Champs-Élysées | Joe Dassin | pháp  | Hoài niệm, vui vẻ | 70 | 80 | Mưa Rừng                       |  Hà Phương             |  70-80 | Khách hàng nói chuyện nhanh, lớn giọng | Nhấn mạnh từ ngữ, có thể giận dữ | Bình tĩnh lắng nghe, không cắt ngang | Khi gặp khách hàng | Nhạc cà phê thư giãn | Take Five - Dave Brubeck, Autumn Leaves - Bill Evans, Blue in Green - Miles Davis, Wave - Antonio Carlos Jobim, Moanin' - Art Blakey |  Comptine d'un autre été - Yann Tiersen | 252.0 | 4.0 | 4.0 | https://youtu.be/8gT4motV4Tc?si=YjtYoUCLnQqjfsPr</td>
+            </tr>
+            <tr>
+                <td><b>122</b></td>
+                <td>12 | L’Amour Existe Encore | Céline Dion | pháp  | Hy vọng, cảm xúc sâu sắc | 80 | 90 | Hà Nội Mùa Thu                 |  Mỹ Linh               |  80-90 | Bản thân căng thẳng khi ra quyết định | Hồi hộp, tim đập nhanh | Hít thở sâu, ghi ra lợi ích/rủi ro | Hàng ngày | Nhạc thiền, nhạc nhẹ | Weightless - Marconi Union, Clair de Lune - Debussy, Gymnopédie No.1 - Erik Satie, Spiegel im Spiegel - Arvo Pärt, Pure Shores - All Saints |  Kiss the Rain - Yiruma | Lặp lại 3 lượt. | 6.0 | 258.0 | 4.0 | 4.0 | You Are My Everything – Gummy (Hàn Quốc)</td>
+            </tr>
+            <tr>
+                <td><b>123</b></td>
+                <td>13 | Formidable | Stromae | pháp  | Chua chát, thất tình | 100 | 110 | Để Mị Nói Cho Mà Nghe          |  Hoàng Thùy Linh       |  100-110 | Nhân viên phấn khích sau khi thành công | Cười nhiều, nói nhanh | Chúc mừng, khích lệ tinh thần | Hàng tháng | Nhạc sôi động, truyền cảm hứng | Don't Stop Me Now - Queen, Happy - Pharrell Williams, Can't Stop the Feeling - Justin Timberlake, Uptown Funk - Mark Ronson ft. Bruno Mars, We Will Rock You - Queen |  The Ludlows - James Horner | 265.0 | 7. Leg Raises (Nâng chân) | 7.0 | 265.0 | 4.0 | 4.0 | https://youtu.be/iKuHOgpWo2w?si=5V6CSbmD6TBEsRCW</td>
+            </tr>
+            <tr>
+                <td><b>124</b></td>
+                <td>14 | Parce qu'on vient de loin | Corneille | pháp  | Cảm hứng, vượt khó | 110 | Anh Nhà Ở Đâu Thế              |  AMEE ft. B Ray        | 110 |  A Morning of the Slag Ravine - Joe Hisaishi | 265.0 | 4.0 | 4.0 | Come un pittore – Modà (Ý)</td>
+            </tr>
+            <tr>
+                <td><b>125</b></td>
+                <td>15 | Voilà Voilà | Rachid Taha | pháp  | Giận dữ, phản kháng xã hội | 100 | 120 | Cơn Mưa Ngang Qua              |  Sơn Tùng M-TP         |  100-120 | Mục đích: Tăng cường cơ hông, cơ bụng dưới và cơ sàn chậu. | 7.0 | 272.0 | 4.0 | 4.0 | https://youtu.be/6aXqX_4EDoo?si=q_fUWW3LZRssMBdU</td>
+            </tr>
+            <tr>
+                <td><b>126</b></td>
+                <td>16 | Belle | Garou, Daniel Lavoie, Patrick Fiori | pháp  | Say mê, ám ảnh | 130 | 140 | Bống Bống Bang Bang            |  365 DaBand            |  130-140 | Nhân viên đến họp với dáng uể oải | Giọng trầm, ít nói, chán nản | Hỏi han, động viên, tìm nguyên nhân | Hàng tuần | Nhạc không lời nhẹ nhàng | River Flows in You - Yiruma, Comptine d'un autre été - Yann Tiersen, Kiss the Rain - Yiruma, The Ludlows - James Horner, A Morning of the Slag Ravine - Joe Hisaishi | 272.0 | 4.0 | 4.0 | Kal Ho Naa Ho – Sonu Nigam (Ấn Độ)</td>
+            </tr>
+            <tr>
+                <td><b>127</b></td>
+                <td>17 | J’envoie valser | Zazie | pháp  | Dịu dàng, khát khao tự do trong tình yêu | 130 | Hãy Trao Cho Anh               |  Sơn Tùng M-TP         | 130 | Cách thực hiện: | 7.0 | 279.0 | 4.0 | 4.0 | https://youtu.be/6TpNzoXz-D0?si=ctjqz-1lir7QI94W</td>
+            </tr>
+            <tr>
+                <td><b>128</b></td>
+                <td>18 | Les feuilles mortes | Yves Montand | pháp  | Buồn bã, hoài niệm | 140 | 150 | Boom Boom                      |  Hoàng Thùy Linh       |  140-150 | River Flows in You - Yiruma |  Comptine d'un autre été - Yann Tiersen |  Kiss the Rain - Yiruma |  The Ludlows - James Horner |  A Morning of the Slag Ravine - Joe Hisaishi | 279.0 | 4.0 | 4.0 | Sous le vent – Garou & Céline Dion (Pháp)</td>
+            </tr>
+            <tr>
+                <td><b>129</b></td>
+                <td>19 | Moi Lolita | Alizée | pháp  | Bí ẩn, quyến rũ | 160 | 170 | See Tình (Cukak Remix)         |  Hoàng Thùy Linh       |  160-170 | Nằm ngửa trên sàn, hai chân thẳng. | 7.0 | 286.0 | 4.0 | 4.0 | https://youtu.be/oni0tO_HN30?si=IuW-WwV2tu_-_ITj</td>
+            </tr>
+            <tr>
+                <td><b>130</b></td>
+                <td>20 | L’Aigle Noir | Barbara | pháp  | Buồn sâu, đầy biểu tượng | 170 | 180 | Chạy Ngay Đi (Remix)           |  Sơn Tùng M-TP         |  170-180 | 286.0 | 4.0 | 4.0 | You Raise Me Up – Josh Groban (Mỹ)</td>
+            </tr>
+            <tr>
+                <td><b>131</b></td>
+                <td>80 | 180 | 200 | Việt Nam Tôi (Remix)           |  Đen Vâu               |  180-200 | Nâng chân lên cao khoảng 45 độ, giữ thẳng và không cong gối. | 7.0 | 293.0 | 4.0 | 5.0 | 5. Con gái 1 – Y học, Nghiên cứu, Học thuật</td>
+            </tr>
+            <tr>
+                <td><b>132</b></td>
+                <td>Hà Nội Mùa Thu                 |  Mỹ Linh               |  80-90 | Tên bài hát | Ca sĩ | Nội dung liên quan | 200 | 250 | Tình Nhạt Phai (Remix EDM)     |  DJ King Lady          |  200-250 | Tình huống | Dấu hiệu cảm xúc | Hướng xử lý | Tần suất nhắc nhở | Nhạc phù hợp | Danh sách bài nhạc | Tần số (Hz) | 293.0 | 4.0 | 5.0 | https://youtu.be/Sr3X0DCXI-M?si=DcpuBmDVUVok-eD6</td>
+            </tr>
+            <tr>
+                <td><b>133</b></td>
+                <td>Someone Like You               |  Adele                  |  80-90 | https://youtu.be/dRMARPP5Vd8?si=_eyhtE34PXeBNQU3 | 1 | Papaoutai | Stromae | pháp  | Người con trai luôn tìm cha – thể hiện khoảng cách, lạnh nhạt trong gia đình. | 200 | 250 | Đừng Về Trễ (Remix)            |  Touliver              |  200-250 | Nhân viên đến họp với dáng uể oải | Giọng trầm, ít nói, chán nản | Hỏi han, động viên, tìm nguyên nhân | Hàng tuần | Nhạc không lời nhẹ nhàng | River Flows in You - Yiruma, Comptine d'un autre été - Yann Tiersen, Kiss the Rain - Yiruma, The Ludlows - James Horner, A Morning of the Slag Ravine - Joe Hisaishi | 432 Hz (thư giãn) | Hạ chân xuống từ từ mà không để chân chạm đất. | 7.0 | 300.0 | 5.0 | 5.0 | A Million Dreams – The Greatest Showman OST (Mỹ)</td>
+            </tr>
+            <tr>
+                <td><b>134</b></td>
+                <td>LK Thành Phố Buồn & Đừng Xa Anh Đêm Nay  |  Tuấn Vũ & Phượng Mai  |  80-90 | https://youtu.be/P__34xBpNIA?si=xSwljo36qJydU605 | 2 | Formidable | Stromae | pháp  | Một người đàn ông tuyệt vọng sau tan vỡ – có thể là kết quả của mâu thuẫn tình cảm gia đình. | Khách hàng nói chuyện nhanh, lớn giọng | Nhấn mạnh từ ngữ, có thể giận dữ | Bình tĩnh lắng nghe, không cắt ngang | Khi gặp khách hàng | Nhạc cà phê thư giãn | Take Five - Dave Brubeck, Autumn Leaves - Bill Evans, Blue in Green - Miles Davis, Wave - Antonio Carlos Jobim, Moanin' - Art Blakey | 528 Hz (cân bằng) | 300.0 | 5.0 | 5.0 | https://youtu.be/5lFGyYvF0Y4?si=z-ULViiQ_wG4A2_J</td>
+            </tr>
+            <tr>
+                <td><b>135</b></td>
+                <td>Ai Ra Xứ Huế                   |  Quang Lê              |  80-90 | https://youtu.be/5kp0dw4MuWs?si=qHJTAlTf4WAOqjKO | 3 | Je suis malade | Serge Lama | pháp  | Người hát đau đớn vì tình yêu và gia đình tan vỡ – cảm xúc vỡ òa như khi có xung đột lớn. | Tên bài hát                     |  Ca sĩ/Nghệ sĩ          |  BPM | Bản thân căng thẳng khi ra quyết định | Hồi hộp, tim đập nhanh | Hít thở sâu, ghi ra lợi ích/rủi ro | Hàng ngày | Nhạc thiền, nhạc nhẹ | Weightless - Marconi Union, Clair de Lune - Debussy, Gymnopédie No.1 - Erik Satie, Spiegel im Spiegel - Arvo Pärt, Pure Shores - All Saints | 396 Hz (giảm lo âu) | 1 | Những bài hát hào hùng, sôi nổi, khích lệ tinh thần | Lặp lại 15-20 lần mỗi lượt, thực hiện 3 lượt. | 7.0 | 307.0 | 5.0 | 5.0 | Vois Sur Ton Chemin – Les Choristes (Pháp)</td>
+            </tr>
+            <tr>
+                <td><b>136</b></td>
+                <td>https://youtu.be/dVvlmpo5g9k?si=nsdag0Lf5aZBFQCJ | 4 | Famille | Jean-Jacques Goldman | pháp  | Lột tả nhiều mặt mâu thuẫn – thương, ghét, gần, xa trong gia đình – có đoạn nói đến những “quy tắc kỳ cục”. | 60 | 70 | Hallelujah                     |  Leonard Cohen          |  60-70 | Nhân viên phấn khích sau khi thành công | Cười nhiều, nói nhanh | Chúc mừng, khích lệ tinh thần | Hàng tháng | Nhạc sôi động, truyền cảm hứng | Don't Stop Me Now - Queen, Happy - Pharrell Williams, Can't Stop the Feeling - Justin Timberlake, Uptown Funk - Mark Ronson ft. Bruno Mars, We Will Rock You - Queen | 963 Hz (tăng năng lượng) | 315.0 | 8. Deadlift (Chết) | 8.0 | 315.0 | 5.0 | 5.0 | https://youtu.be/zlCfkUuzDaw?si=dpv6KhEQbEC-xwwo</td>
+            </tr>
+            <tr>
+                <td><b>137</b></td>
+                <td>https://youtu.be/DHEoFWh2PjM?si=LgBbMEVFoFQO5Ncc | 5 | Mon Vieux | Daniel Guichard | pháp  | Hồi tưởng về người cha – không trực tiếp nói về xích mích, nhưng có cảm xúc tiếc nuối về khoảng cách và hiểu lầm. | 70 | 80 | Yesterday                      |  The Beatles            |  70-80 | 1 | Tiến quân ca – Hùng tráng, mạnh mẽ, khơi dậy lòng yêu nước. | 315.0 | 5.0 | 5.0 | Volare – Dean Martin (Ý)</td>
+            </tr>
+            <tr>
+                <td><b>138</b></td>
+                <td>https://youtu.be/HDXJ2wzg5sQ?si=Ku09DBOWRZNMez0X | 6 | Carmen | Stromae | pháp  | Một bài phê phán xã hội mạng và các mối quan hệ độc hại – tuy không nói về gia đình, nhưng có thể gợi liên tưởng về những mối quan hệ căng thẳng. | 80 | 90 | Someone Like You               |  Adele                  |  80-90 | Mục đích: Tăng cường cơ hông, cơ lưng dưới, cơ đùi và cơ sàn chậu. | 8.0 | 323.0 | 5.0 | 5.0 | https://youtu.be/O3EnBKu56ac?si=pFcWy2SdsUkL-l3v</td>
+            </tr>
+            <tr>
+                <td><b>139</b></td>
+                <td>90 | 100 | Shape of You                   |  Ed Sheeran             |  90-100 | Khách hàng nói chuyện nhanh, lớn giọng | Nhấn mạnh từ ngữ, có thể giận dữ | Bình tĩnh lắng nghe, không cắt ngang | Khi gặp khách hàng | Nhạc cà phê thư giãn | Take Five - Dave Brubeck, Autumn Leaves - Bill Evans, Blue in Green - Miles Davis, Wave - Antonio Carlos Jobim, Moanin' - Art Blakey | 528 Hz (cân bằng) | 2 | Chiến thắng Điện Biên – Sôi nổi, hào hùng, tái hiện chiến thắng lẫy lừng. | 323.0 | 5.0 | 5.0 | Phir Se Ud Chala – Rockstar OST (Ấn Độ)</td>
+            </tr>
+            <tr>
+                <td><b>140</b></td>
+                <td>100 | 110 | Uptown Funk                    |  Mark Ronson ft. Bruno Mars  |  100-110 | Cách thực hiện: | 8.0 | 331.0 | 5.0 | 5.0 | https://youtu.be/jhrhHtFfIgs?si=ePaaE4a749FI_d6m</td>
+            </tr>
+            <tr>
+                <td><b>141</b></td>
+                <td>110 | 120 | Billie Jean                    |  Michael Jackson        |  110-120 | Take Five - Dave Brubeck |  Autumn Leaves - Bill Evans |  Blue in Green - Miles Davis |  Wave - Antonio Carlos Jobim |  Moanin' - Art Blakey | 3 | Bác đang cùng chúng cháu hành quân – Ấm áp, xúc động, gần gũi hình ảnh Bác Hồ. | 331.0 | 5.0 | 5.0 | Hikari – Utada Hikaru (Nhật Bản)</td>
+            </tr>
+            <tr>
+                <td><b>142</b></td>
+                <td>10 | 120 | 130 | Sweet Child O' Mine            |  Guns N' Roses          |  120-130 | Đứng thẳng, hai chân rộng bằng vai, tay cầm tạ hoặc thanh xà. | 8.0 | 339.0 | 5.0 | 6.0 | 6. Con gái 2 – Đầu bếp, Ẩm thực, Làm bánh</td>
+            </tr>
+            <tr>
+                <td><b>143</b></td>
+                <td> U sầu, day dứt            | Hồng Nhan                      |  Jack                  |  90-100 | Tên bài hát (TV/TA) | Ca sĩ | Trạng thái cảm xúc | 130 | 140 | Dancing Queen                  |  ABBA                   |  130-140 | 528 Hz (cân bằng) | 4 | Hành khúc ngày và đêm – Khí thế, quyết tâm, động viên tinh thần chiến sĩ. | 339.0 | 5.0 | 6.0 | https://youtu.be/qr33XO5lWAI?si=LOVHq_qS4MN2Dj7f</td>
+            </tr>
+            <tr>
+                <td><b>144</b></td>
+                <td>1 | Katyusha (Cô gái Katyusha) | Dân ca Nga | Nga | Yêu nước, lãng mạn | 140 | 150 | Can't Stop the Feeling!        |  Justin Timberlake      |  140-150 | Hạ cơ thể xuống, cong đầu gối một chút, lưng thẳng, nâng thanh xà hoặc tạ lên đến khi đứng thẳng. | 8.0 | 347.0 | 5.0 | 6.0 | La Vie en Rose – Édith Piaf (Pháp)</td>
+            </tr>
+            <tr>
+                <td><b>145</b></td>
+                <td>2 | Đôi mắt đen (Dark Eyes) | Dân ca Nga | Nga | Quyến rũ, đắm say | 150 | 160 | Sweet Dreams (Are Made of This)  |  Eurythmics           |  150-160 | 5 | Lên đàng – Hào hứng, khuyến khích thế hệ trẻ lên đường vì Tổ quốc. | 347.0 | 5.0 | 6.0 | https://youtu.be/RDU7dE7JJCY?si=zkNaaNB3Fl_jeUat</td>
+            </tr>
+            <tr>
+                <td><b>146</b></td>
+                <td>8 | 3 | Những đêm Moskva (Moscow Nights) | Vladimir Troshin | Nga | Bình yên, hoài niệm | 160 | 170 | Sandstorm                      |  Darude                 |  160-170 | Dưới đây là bảng đã điều chỉnh, sử dụng các ký hiệu hợp âm quen thuộc với bạn: | Hạ tạ xuống và lặp lại động tác. | 8.0 | 355.0 | 5.0 | 6.0 | Funiculì, Funiculà – Luciano Pavarotti (Ý)</td>
+            </tr>
+            <tr>
+                <td><b>147</b></td>
+                <td> Hạnh phúc, năng động      | Dancing Queen                  |  ABBA                   |  130-140 | 4 | Những con hạc (Cranes) | Mark Bernes | Nga | Bi thương, tưởng nhớ chiến tranh | 170 | 180 | Levels                         |  Avicii                 |  170-180 | 6 | Cô gái mở đường – Trẻ trung, sôi động, ngợi ca những nữ thanh niên xung phong. | 355.0 | 5.0 | 6.0 | https://youtu.be/J7v3n_OKlec?si=UxCL56Zg-hvFlRyx</td>
+            </tr>
+            <tr>
+                <td><b>148</b></td>
+                <td>5 | Một triệu bông hồng đỏ (Million Scarlet Roses) | Alla Pugacheva | Nga | Lãng mạn, hy sinh vì tình yêu | 180 | 200 | Animals                        |  Martin Garrix          |  180-200 | Tình huống | Dấu hiệu cảm xúc | Hợp âm | Bậc quãng gợi ý | Hướng xử lý | Tần suất nhắc nhở | 7 | Những bài hát trữ tình cách mạng, sâu lắng, xúc động | Lặp lại 10-15 lần mỗi lượt, thực hiện 3 lượt. | 8.0 | 363.0 | 6.0 | 6.0 | Badtameez Dil – Yeh Jawaani Hai Deewani (Ấn Độ)</td>
+            </tr>
+            <tr>
+                <td><b>149</b></td>
+                <td>6 | Tôi tự do (I Am Free) | Aria (ban nhạc rock) | Nga | Mạnh mẽ, nổi loạn | 200 | 250 | Faded (Remix)                  |  Alan Walker            |  200-250 | Nhân viên đến họp với dáng uể oải | Giọng trầm, ít nói, chán nản | La thứ (Am) | I - IV - V - I | Hỏi han, động viên, tìm nguyên nhân | Hàng tuần | 372.0 | 9. Seated Groin Stretch (Kéo dãn cơ háng) | 9.0 | 372.0 | 6.0 | 6.0 | https://youtu.be/vkScipiINdA?si=AFc_kCevKYmN04Sl</td>
+            </tr>
+            <tr>
+                <td><b>150</b></td>
+                <td>16 | 7 | Cây thông sinh ra trong rừng (The Fir Tree Was Born in the Forest) | Dân ca thiếu nhi | Nga | Vui nhộn, trẻ thơ | 200 | 300 | Through the Fire and Flames    |  DragonForce            |  200-300 | Khách hàng nói chuyện nhanh, lớn giọng | Nhấn mạnh từ ngữ, có thể giận dữ | Sol trưởng (G) | I - V - IV - I | Bình tĩnh lắng nghe, không cắt ngang | Khi gặp khách hàng | 7 | Tình ca – Dạt dào tình yêu quê hương đất nước. | 372.0 | 6.0 | 6.0 | Ice Cream – BLACKPINK ft. Selena Gomez (Hàn Quốc/Mỹ)</td>
+            </tr>
+            <tr>
+                <td><b>151</b></td>
+                <td>8 | Ngôi sao tên là Mặt Trời (A Star Called Sun) | Kino | Nga | Trầm tư, suy ngẫm về xã hội | Bản thân căng thẳng khi ra quyết định | Hồi hộp, tim đập nhanh | Rê trưởng (D) | I - VI - IV - V | Hít thở sâu, ghi ra lợi ích/rủi ro | Hàng ngày | Mục đích: Tăng độ linh hoạt và giảm căng cơ háng. | 9.0 | 381.0 | 6.0 | 6.0 | https://youtu.be/7r51cVHa5ek?si=v0fSFw691OQ2rJws</td>
+            </tr>
+            <tr>
+                <td><b>152</b></td>
+                <td> Tham vọng, thành công      |  **Hall of Fame**               |  The Script ft. will.i.am   |  Tham vọng, thành công      |  Pop rock                             | 9 | Nhóm máu (Blood Type) | Kino | Nga | Căng thẳng, phản chiến | Tên bài hát                     |  Ca sĩ/Nghệ sĩ          |  BPM | Nhân viên phấn khích sau khi thành công | Cười nhiều, nói nhanh | Đô trưởng (C) | I - III - V - I | Chúc mừng, khích lệ tinh thần | Hàng tháng | 8 | Quảng Bình quê ta ơi – Tự hào, thiết tha về quê hương anh dũng. | 381.0 | 6.0 | 6.0 | Chiếc bụng đói – Voi Biển (Việt Nam)</td>
+            </tr>
+            <tr>
+                <td><b>153</b></td>
+                <td> Nhạc an ủi                       |  *"Everybody Hurts"*              |  R.E.M.                     | 79 |  Alternative Rock    |  Nhạc an ủi                       | 10 | Hoa hồng trắng (White Roses) | Laskoviy Mai | Nga | Cô đơn, đau thương | 60 | 70 | Duyên Phận                      |  Như Quỳnh             |  60-70 | Nhân viên lo lắng trước khi trình bày | Nói nhỏ, đắn đo, tránh giao tiếp mắt | Si thứ (Bm) | I - V - VI - IV | Hướng dẫn cách chuẩn bị, động viên | Trước buổi trình bày | Cách thực hiện: | 9.0 | 390.0 | 6.0 | 7.0 | 7. Con gái 3 – Mỹ thuật, thủ công, nghệ thuật hoa</td>
+            </tr>
+            <tr>
+                <td><b>154</b></td>
+                <td> Nhạc chế vui nhộn               |  **Con bị cấm điện thoại**      |  *"No Phone"*                     |  KYLE ft. Quinn XCII        | 102 |  Pop/Rap             |  Nhạc chế vui nhộn               | 11 | Tuyết (Snow) | Maksim | Nga | Buồn, tan vỡ tình yêu | 70 | 80 | Nỗi Buồn Hoa Phượng            |  Thanh Tuyền           |  70-80 | Nhân viên mất động lực làm việc | Than phiền, ít chủ động | Fa trưởng (F) / Rê thứ (Dm) | I - IV - V - VI | Lắng nghe, tìm cách tạo động lực | Hàng tháng | 9 | Đất nước trọn niềm vui – Xúc động, vui mừng ngày đất nước thống nhất. | 390.0 | 6.0 | 7.0 | https://youtu.be/LZkvhpgX6g4?si=8uG6zKDiWo0-fvPN</td>
+            </tr>
+            <tr>
+                <td><b>155</b></td>
+                <td> Con thích đá bóng            |  "Ước mơ của bé" (Nhạc thiếu nhi)   | 12 | Ba con ngựa trắng (Three White Horses) | OST Phép màu mùa đông | Nga | Nhẹ nhàng, mơ mộng | 70 | 80 | Chuyến Đò Vĩ Tuyến             |  Hương Lan             |  70-80 | Nhóm làm việc căng thẳng do mâu thuẫn | Tranh luận gay gắt, giọng cao | Mi trưởng (E) / Đô# thứ (C#m) | I - VI - IV - V | Can thiệp, làm trung gian hòa giải | Khi cần thiết | Ngồi thẳng trên sàn, chân mở rộng sang hai bên. | 9.0 | 399.0 | 6.0 | 7.0 | Aquarela do Brasil – Gal Costa (Brazil)</td>
+            </tr>
+            <tr>
+                <td><b>156</b></td>
+                <td>13 | Mẹ ơi (Mama) | Anastasia | Nga | Biết ơn, tình mẫu tử | 80 | 90 | LK Thành Phố Buồn & Đừng Xa Anh Đêm Nay  |  Tuấn Vũ & Phượng Mai  |  80-90 | 10 | Miền Trung nhớ Bác – Bồi hồi, sâu lắng nhớ Bác Hồ kính yêu. | 399.0 | 6.0 | 7.0 | https://youtu.be/1JhYYUWOBBs?si=NWNj-gsqYaFUlIM7</td>
+            </tr>
+            <tr>
+                <td><b>157</b></td>
+                <td>14 | Lời cầu nguyện (Prayer) | Polina Gagarina | Nga | Vượt qua nghịch cảnh, hy vọng | 80 | 90 | Ai Ra Xứ Huế                   |  Quang Lê              |  80-90 | Nhẹ nhàng nghiêng người về phía trước cho đến khi bạn cảm thấy căng ở cơ háng. | 9.0 | 408.0 | 6.0 | 7.0 | Aux Champs-Elysées – Joe Dassin (Pháp)</td>
+            </tr>
+            <tr>
+                <td><b>158</b></td>
+                <td>15 | Chỉ huy đại đội (The Commander) | Lyube | Nga | Mạnh mẽ, trách nhiệm, quân đội | 90 | 100 | Tình Lỡ                         |  Lệ Quyên              |  90-100 | Khách hàng nói chuyện nhanh, lớn giọng | Nhấn mạnh từ ngữ, có thể giận dữ | Sol trưởng (G) | I - V - IV - I | Bình tĩnh lắng nghe, không cắt ngang | Khi gặp khách hàng | 11 | Làng tôi – Nhẹ nhàng, da diết về làng quê trong chiến tranh. | 408.0 | 6.0 | 7.0 | https://youtu.be/XwVnYo1zS3M?si=R919vLTe8D08_aur</td>
+            </tr>
+            <tr>
+                <td><b>159</b></td>
+                <td>16 | Người ta không chối bỏ tình yêu | Alla Pugacheva | Nga | Dằn vặt, tình yêu bi kịch | 90 | 100 | Sầu Lẻ Bóng                    |  Chế Linh              |  90-100 | 12 | Những bài hát về người lính, tình đồng đội | Giữ tư thế trong 30 giây đến 1 phút. | 9.0 | 417.0 | 6.0 | 7.0 | Il Mondo – Jimmy Fontana (Ý)</td>
+            </tr>
+            <tr>
+                <td><b>160</b></td>
+                <td>17 | Thư gửi mẹ (Letter to Mother) | Muslim Magomaev | Nga | Cảm động, nhớ thương | 100 | 110 | Mưa Nửa Đêm                    |  Thái Châu             |  100-110 | Khi gặp khách hàng | 417.0 | 6.0 | 7.0 | https://youtu.be/fKApKn9gqtM?si=uE1U0rPkDa6uau5M</td>
+            </tr>
+            <tr>
+                <td><b>161</b></td>
+                <td>18 | Bài ru (Lullaby) | Nhiều ca sĩ | Nga | Dịu dàng, mẫu tử | 100 | 110 | LK Xuân Này Con Không Về & Người Ngoài Phố  |  Trường Vũ & Ngọc Huyền  |  100-110 | 12 | Nơi đảo xa – Thiêng liêng, ca ngợi những người lính biển. | Lặp lại 2-3 lần. | 9.0 | 426.0 | 7.0 | 7.0 | Jiya Re – Jab Tak Hai Jaan OST (Ấn Độ)</td>
+            </tr>
+            <tr>
+                <td><b>162</b></td>
+                <td>19 | Khúc tiễn biệt Slavyanka (Farewell of Slavyanka) | Dân ca quân đội | Nga | Hùng tráng, chia ly | 110 | 120 | Đoạn Tuyệt                      |  Phi Nhung             |  110-120 | Sol trưởng (G) | 436.0 | 10. Hip Circles (Xoay hông) | 10.0 | 436.0 | 7.0 | 7.0 | https://youtu.be/fKApKn9gqtM?si=SKLT2akgEaDL5TP3</td>
+            </tr>
+            <tr>
+                <td><b>163</b></td>
+                <td>20 | Tình yêu như giấc mơ (Love Like a Dream) | Alla Pugacheva | Nga | Mộng mơ, u sầu | 13 | Chào em cô gái Lam Hồng – Trẻ trung, khích lệ tinh thần thanh niên. | 436.0 | 7.0 | 7.0 | Paprika – Foorin (Nhật Bản)</td>
+            </tr>
+            <tr>
+                <td><b>164</b></td>
+                <td>14 | Mục đích: Tăng cường sự linh hoạt và sức mạnh cơ háng. | 10.0 | 446.0 | 7.0</td>
+            </tr>
+            <tr>
+                <td><b>165</b></td>
+                <td>- Pretender (G-D-Em-C) | Nhật | Tên bài hát                     |  Ca sĩ/Nghệ sĩ          |  Cảm xúc                   |  BPM | 14 | Anh vẫn hành quân – Tha thiết, động viên tinh thần chiến sĩ. | 446.0 | 7.0</td>
+            </tr>
+            <tr>
+                <td><b>166</b></td>
+                <td>- **Quang Niên** (G - D - Em - C) | Trung | Dưới đây là bảng tổng hợp các tình huống cảm xúc, gồm cả với con, bố mẹ, vợ, và khách hàng, đi kèm cách tạo cảm xúc, và bài hát Việt – quốc tế đại diện 5 châu. Có thể dùng để in ra, hoặc mình có thể xuất ra file nếu bạn cần. | 1 |  Vui vẻ, tự tin            | Để Mị Nói Cho Mà Nghe          |  Hoàng Thùy Linh       |  Vui vẻ, tự tin            |  100-110 | 1.0 | Khi đo nhịp tim (BPM) từ 10 đến 500, việc lựa chọn bài hát phù hợp sẽ phụ thuộc vào nhịp độ và cảm xúc mà bạn muốn thể hiện. Dưới đây là sự lựa chọn bài hát theo từng phạm vi BPM của bạn, kết hợp với các hợp âm từ C đến B: | Cách thực hiện: | 10.0 | 456.0 | 7.0</td>
+            </tr>
+            <tr>
+                <td><b>167</b></td>
+                <td>Parce qu'on vient de loin | Corneille | pháp  | Cảm hứng, vượt khó | 2 |  Hạnh phúc, tò mò         | Anh Nhà Ở Đâu Thế              |  AMEE ft. B Ray        |  Hạnh phúc, tò mò         | 110 | 15 | Tự nguyện – Lý tưởng, nhiệt huyết của thanh niên vì nước. | 456.0 | 7.0</td>
+            </tr>
+            <tr>
+                <td><b>168</b></td>
+                <td>Lời cầu nguyện (Prayer) | Polina Gagarina | Nga | Vượt qua nghịch cảnh, hy vọng | Tình huống | Người liên quan | Cảm xúc cần tạo | Cách làm cụ thể | Bài hát Việt | Bài hát quốc tế (5 châu) | 3 |  Nhớ nhung, nhẹ nhàng      | Cơn Mưa Ngang Qua              |  Sơn Tùng M-TP         |  Nhớ nhung, nhẹ nhàng      |  100-120 | 1.0 | 1. BPM từ 10 đến 60 (Nhịp Rất Chậm, Thư Giãn, Nghĩa Tĩnh) | Đứng thẳng, hai chân rộng bằng vai. | 10.0 | 466.0 | 7.0</td>
+            </tr>
+            <tr>
+                <td><b>169</b></td>
+                <td>1 | Con hỏi câu khó | Con | Đồng hành, tò mò | Hỏi lại: “Con nghĩ sao?”, kể chuyện tương tự | Con đường đến trường | What a Wonderful World – Louis Armstrong (Mỹ - Châu Mỹ) | 4 |  Sôi động, yêu đời         | Hãy Trao Cho Anh               |  Sơn Tùng M-TP         |  Sôi động, yêu đời         | 130 | 466.0 | 7.0</td>
+            </tr>
+            <tr>
+                <td><b>170</b></td>
+                <td>2 | Xin tiền | Con | Tôn trọng, đồng cảm | Hỏi lý do, cùng con lên kế hoạch dùng tiền | Cha già rồi đúng không | Count on Me – Bruno Mars (Mỹ) | 5 |  Vui tươi, lạc quan        | See Tình                        |  Hoàng Thùy Linh       |  Vui tươi, lạc quan        |  120-130 | 1.0 | 🔹 Đặc điểm: Nhịp rất chậm, thư giãn, có thể là khi bạn đang nghỉ ngơi, suy tư, hoặc tâm trạng nhẹ nhàng. | Đặt hai tay lên hông và bắt đầu xoay hông theo vòng tròn. | 10.0 | 476.0 | 7.0</td>
+            </tr>
+            <tr>
+                <td><b>171</b></td>
+                <td>3 | Không muốn đi học | Con | An toàn, chia sẻ | Ôm con, kể ba mẹ từng như vậy | Nhật ký của mẹ | Heal the World – Michael Jackson (Mỹ) | 6 |  Kịch tính, mạnh mẽ        | Chạy Ngay Đi                   |  Sơn Tùng M-TP         |  Kịch tính, mạnh mẽ        |  130-140 | 1.0 | 🔹 Bài hát phù hợp: | 16 | 1. Chủ đề nghề nghiệp, lao động | 476.0 | 7.0</td>
+            </tr>
+            <tr>
+                <td><b>172</b></td>
+                <td>4 | Lười việc nhà | Con | Hứng khởi, hợp tác | Biến thành trò chơi, thi đua | Rửa mặt như mèo | Happy – Pharrell Williams (Mỹ) | 7 |  Ấm áp, đoàn viên          | Một Nhà                        |  Da LAB                |  Ấm áp, đoàn viên          |  90-100 | Xoay theo chiều kim đồng hồ trong 30 giây rồi đổi chiều. | 10.0 | 486.0 | 8.0</td>
+            </tr>
+            <tr>
+                <td><b>173</b></td>
+                <td>5 | Được khen, điểm cao | Con | Tự hào, nhẹ nhàng | Khen thật lòng: “Ba/mẹ rất tự hào!” | Tôi thấy hoa vàng… | We Are the Champions – Queen (Anh - Châu Âu) | 8 |  Hoài niệm, buồn nhẹ       | Em Của Ngày Hôm Qua            |  Sơn Tùng M-TP         |  Hoài niệm, buồn nhẹ       |  100-110 | 1.0 | Xin Gọi Nhau Là Cố Nhân (Hợp âm C, Dm) – Thư giãn, dễ thể hiện với nhịp chậm. | 16 | Bài ca người thợ mỏ – Hào hùng, tự hào về công nhân ngành than.</td>
+            </tr>
+            <tr>
+                <td><b>174</b></td>
+                <td>9 | 6 | Mang điểm kém | Con | Bình tĩnh, gợi mở | Không trách, hỏi nguyên nhân cùng con xem lại | Lắng nghe con | Let It Be – The Beatles (Anh) | 9 |  Buồn bã, tiếc nuối  | Sài Gòn Đau Lòng Quá           |  Hứa Kim Tuyền ft. Hoàng Duyên  |  Buồn bã, tiếc nuối  |  80-90 | Lặp lại 2-3 lượt. | 24.0</td>
+            </tr>
+            <tr>
+                <td><b>175</b></td>
+                <td>#REF! | 7 | Bị trách, bị trêu | Con | Tin tưởng, đồng hành | Nghe con nói, xác nhận cảm xúc | Ước mơ thần tiên | Stronger – Kelly Clarkson (Mỹ) | 10 |  U sầu, day dứt            | Hồng Nhan                      |  Jack                  |  U sầu, day dứt            |  90-100 | 1.0 | Giọt Lệ Đài Trang (Hợp âm C, Am) – Nhịp chậm, dễ ngân và tạo cảm giác nhẹ nhàng. | 17 | Cô gái vót chông – Hình ảnh những cô gái Tây Nguyên kiên cường. | Lưu ý khi tập: | 24.0</td>
+            </tr>
+            <tr>
+                <td><b>176</b></td>
+                <td>8 | Ồn ào, nghịch phá | Con | Hài hước, định hướng | Đưa ra giới hạn nhẹ nhàng như “Đội trưởng dọn dẹp!” | Cả nhà thương nhau | Let’s Clean Up Song – Cocomelon (Mỹ) | 11 |  Đau lòng, bất lực        | Bạc Phận                        |  Jack ft. K-ICM        |  Đau lòng, bất lực        |  100-110</td>
+            </tr>
+            <tr>
+                <td><b>177</b></td>
+                <td>9 | Đánh chửi nhau | Con | Dừng – Bình tĩnh – Kết nối | Chia tách, nghe từng người, gợi làm lành | Bạn ơi lắng nghe | Lean on Me – Bill Withers (Mỹ) | 12 |  Suy tư, sâu lắng          | Trốn Tìm                       |  Đen Vâu ft. MTV       |  Suy tư, sâu lắng          |  110-120 | 1.0 | Lại Nhớ Người Yêu (Hợp âm G, F) – Nhẹ nhàng, trữ tình, không cần quá nhiều lực. | 18 | Những ánh sao đêm – Tươi vui, ca ngợi công nhân lao động xây dựng đất nước. | Tập đều đặn: Để thấy được hiệu quả, hãy thực hiện các bài tập này ít nhất 3-4 lần mỗi tuần. | 24.0</td>
+            </tr>
+            <tr>
+                <td><b>178</b></td>
+                <td>10 | Bố mẹ nói chuyện không hợp ý | Bố mẹ 80t | Kính trọng, lắng nghe | Giảm giọng, nhắc lại ý bằng từ nhẹ nhàng hơn | Bông hồng cài áo | A Thousand Years – Christina Perri (Mỹ) | 13 |  Năng động, phấn khích     | Hai Phút Hơn                   |  Pháo ft. Kaiz         |  Năng động, phấn khích     |  140-150</td>
+            </tr>
+            <tr>
+                <td><b>179</b></td>
+                <td>10 | 11 | Vợ lo lắng, mệt mỏi | Vợ 44t | An ủi, đồng hành | Ôm nhẹ, chia sẻ việc nhà, nói: “Để anh làm phần này cho em nghỉ chút nhé” | Một nhà | Je t’aime – Lara Fabian (Canada – Châu Mỹ gốc Bỉ) | 14 |  Bình yên, thư giãn        | Gác Lại Âu Lo                  |  Da LAB ft. Miu Lê     |  Bình yên, thư giãn        |  80-90 | 1.0 | Túy Ca (Hợp âm Em, Am) – Nhịp chậm, không quá nhanh, dễ luyến láy. | 19 | Người lái đò trên sông Pô Kô – Hình ảnh người chiến sĩ lái đò tiếp sức cho chiến trường. | Khởi động trước khi tập: Đảm bảo khởi động kỹ lưỡng để tránh chấn thương. | 24.0</td>
+            </tr>
+            <tr>
+                <td><b>180</b></td>
+                <td>10. Thuỵ Sĩ | 12 | Khách hàng khó tính | Khách hàng | Lắng nghe, chuyên nghiệp | Nhắc lại yêu cầu của họ, nói: “Tôi hiểu điều anh/chị đang cần là…” | Vươn tới tầm cao | One Love – Bob Marley (Jamaica – Châu Mỹ)</td>
+            </tr>
+            <tr>
+                <td><b>181</b></td>
+                <td>“Tout l’univers” – Gjon’s Tears (Eurovision 2021) | 13 | Khách hàng vui, hợp tác | Khách hàng | Gắn kết, chuyên nghiệp | Giao tiếp thân thiện, cảm ơn họ đã chọn mình | Việt Nam trong tôi | Waka Waka – Shakira (Châu Phi – Colombia) | 1.0 | 📌 Thời điểm mở: Khi bạn cảm thấy thư giãn, cần thời gian để suy nghĩ, hoặc cảm xúc nhẹ nhàng. | 20 | Tôi là người thợ lò – Khí thế mạnh mẽ, tự hào về nghề mỏ. | Tăng dần độ khó: Nếu bạn cảm thấy bài tập trở nên dễ dàng, có thể thêm tạ hoặc kéo dài thời gian giữ tư thế để tăng cường độ. | 24.0</td>
+            </tr>
+            <tr>
+                <td><b>182</b></td>
+                <td>Một bản nhạc bùng nổ cảm xúc, đau đớn nhưng thanh thoát – có thể làm đoạn cao trào. | 14 | Kể chuyện cảm động | Bất kỳ | Xúc động, lắng đọng | Nhắc chuyện gia đình, hy sinh, quá khứ | Ba kể con nghe | Tears in Heaven – Eric Clapton (Anh) | Tên bài hát                     |  Ca sĩ/Nghệ sĩ          |  Cảm xúc                   |  BPM</td>
+            </tr>
+            <tr>
+                <td><b>183</b></td>
+                <td>15 | Truyền cảm hứng vượt khó | Bất kỳ | Hy vọng, sức mạnh | Kể chuyện người vượt nghịch cảnh, dẫn chứng thật | Đường đến ngày vinh quang | Try Everything – Shakira (Châu Mỹ) | 1 |  Buồn bã, sâu lắng         | Hallelujah                     |  Leonard Cohen          |  Buồn bã, sâu lắng         |  60-70 | 2.0 | 2. BPM từ 60 đến 100 (Nhịp Chậm, Phù Hợp Với Tâm Trạng Sâu Lắng, Cảm Xúc Mạnh) | 21 | Hãy yên lòng mẹ ơi – Xúc động, hình ảnh người lính hứa với mẹ trước khi lên đường. | Kết hợp các bài tập này với chế độ ăn uống lành mạnh và đủ dinh dưỡng để giúp cải thiện sức khỏe, tăng cường sức mạnh và khả năng sinh lý. | 24.0</td>
+            </tr>
+            <tr>
+                <td><b>184</b></td>
+                <td>2 |  Hoài niệm, nhẹ nhàng      | Yesterday                      |  The Beatles            |  Hoài niệm, nhẹ nhàng      |  70-80</td>
+            </tr>
+            <tr>
+                <td><b>185</b></td>
+                <td>3 |  Đau lòng, tiếc nuối       | Someone Like You               |  Adele                  |  Đau lòng, tiếc nuối       |  80-90 | 2.0 | 🔹 Đặc điểm: Nhịp chậm nhưng không quá trầm, giúp thể hiện cảm xúc sâu sắc. | 22 | Bài ca xây dựng – Hào hứng, vui tươi về công nhân ngành xây dựng.</td>
+            </tr>
+            <tr>
+                <td><b>186</b></td>
+                <td>4 |  Vui vẻ, yêu đời           | Shape of You                   |  Ed Sheeran             |  Vui vẻ, yêu đời           |  90-100 | 2.0 | 🔹 Bài hát phù hợp:</td>
+            </tr>
+            <tr>
+                <td><b>187</b></td>
+                <td>5 |  Sôi động, phấn khích  | Uptown Funk                    |  Mark Ronson ft. Bruno Mars  |  Sôi động, phấn khích  |  100-110 | 23 | Đường tàu mùa xuân – Nhẹ nhàng, lạc quan về những người công nhân ngành đường sắt.</td>
+            </tr>
+            <tr>
+                <td><b>188</b></td>
+                <td>1 | 1. Ba Lan (Poland) | 6 |  Kịch tính, cuốn hút       | Billie Jean                    |  Michael Jackson        |  Kịch tính, cuốn hút       |  110-120 | 2.0 | Thành Phố Buồn (Hợp âm C, Em) – Nhịp chậm, dễ thể hiện cảm xúc.</td>
+            </tr>
+            <tr>
+                <td><b>189</b></td>
+                <td>7 |  Nhớ nhung, mạnh mẽ        | Sweet Child O' Mine            |  Guns N' Roses          |  Nhớ nhung, mạnh mẽ        |  120-130 | 24 | Giai điệu Tổ quốc – Trầm lắng, ca ngợi mọi tầng lớp lao động góp phần xây dựng đất nước.</td>
+            </tr>
+            <tr>
+                <td><b>190</b></td>
+                <td>Vợ đòi ly hôn  | 1 | “Nieznajomy” – Dawid Podsiadło | 8 |  Hạnh phúc, năng động      | Dancing Queen                  |  ABBA                   |  Hạnh phúc, năng động      |  130-140 | 2.0 | Ai Cho Tôi Tình Yêu (Hợp âm F, G) – Nhịp đều, dễ cảm nhận và hát theo. | 24 | 2. Chủ đề khuyên con, tình cảm gia đình</td>
+            </tr>
+            <tr>
+                <td><b>191</b></td>
+                <td>5 | 9 |  Lạc quan, vui tươi        | Can't Stop the Feeling!        |  Justin Timberlake      |  Lạc quan, vui tươi        |  140-150</td>
+            </tr>
+            <tr>
+                <td><b>192</b></td>
+                <td>I. Cảm xúc thường gặp khi bị gài bẫy, tổn thương tình cảm | 1 | Tựa là “Người lạ” – đầy sự xa cách, tổn thương và nội tâm đau đáu. Rất hợp để diễn sự đổ vỡ giữa cha chồng và con dâu. | 10 |  Bí ẩn, kích thích         | Sweet Dreams (Are Made of This)  |  Eurythmics           |  Bí ẩn, kích thích         |  150-160 | 2.0 | Hoa Nở Về Đêm (Hợp âm Am, F) – Chậm rãi, nhẹ nhàng nhưng cũng đủ để truyền tải cảm xúc. | 25 | Lời ru trên nương – Dịu dàng, hình ảnh người mẹ dân tộc ru con giữa núi rừng.</td>
+            </tr>
+            <tr>
+                <td><b>193</b></td>
+                <td>Cảm xúc | 2 | 2. Nhật Bản (Japan) | 11 |  Năng lượng, hưng phấn     | Sandstorm                      |  Darude                 |  Năng lượng, hưng phấn     |  160-170</td>
+            </tr>
+            <tr>
+                <td><b>194</b></td>
+                <td>Tức giận bị dồn ép | 12 |  Hào hứng, truyền cảm hứng | Levels                         |  Avicii                 |  Hào hứng, truyền cảm hứng |  170-180 | 2.0 | Chuyện Tình Lan Và Điệp (Hợp âm G, C) – Nhịp độ này dễ điều chỉnh cảm xúc. | 26 | Khúc hát ru người mẹ trẻ – Da diết, xúc động về tình mẹ con trong chiến tranh.</td>
+            </tr>
+            <tr>
+                <td><b>195</b></td>
+                <td>Bất lực - tủi thân | 2 | “Shinunoga E-Wa” – Fujii Kaze | 13 |  Căng thẳng, mạnh mẽ       | Animals                        |  Martin Garrix          |  Căng thẳng, mạnh mẽ       |  180-200</td>
+            </tr>
+            <tr>
+                <td><b>196</b></td>
+                <td>Hoang mang - nghi ngờ bản thân | 14 |  Suy tư, điện tử           | Faded (Remix)                  |  Alan Walker            |  Suy tư, điện tử           |  200-250 | 2.0 | 📌 Thời điểm mở: Khi bạn muốn thể hiện tình cảm sâu lắng, hoặc khi có tâm trạng nhẹ nhàng nhưng sâu sắc. | 27 | Gánh mẹ – Lắng đọng, nhắc nhở con về công ơn mẹ.</td>
+            </tr>
+            <tr>
+                <td><b>197</b></td>
+                <td>Cay đắng | 2 | Nhạc buồn mà mãnh liệt, có chiều sâu tâm lý, nói về tình yêu đến mức sẵn sàng chết, nhưng cũng thể hiện nỗi dằn vặt bên trong. | 15 |  Kịch tính, dữ dội         | Through the Fire and Flames    |  DragonForce            |  Kịch tính, dữ dội         |  200-300</td>
+            </tr>
+            <tr>
+                <td><b>198</b></td>
+                <td>Lạnh dần cảm xúc | 3 | 3. Hàn Quốc (Korea) | 3.0 | 3. BPM từ 100 đến 130 (Nhịp Trung Bình, Phù Hợp Với Các Tình Huống Tâm Trạng Phấn Chấn) | 28 | Chưa có bao giờ đẹp như hôm nay – Tươi vui, kể về niềm tin cha mẹ dành cho con cái trong tương lai.</td>
+            </tr>
+            <tr>
+                <td><b>199</b></td>
+                <td>Tỉnh táo - kiên cường lại</td>
+            </tr>
+            <tr>
+                <td><b>200</b></td>
+                <td>🎵 Lời bài hát & bản dịc tiếng Anh: citeturn0search20 | 3 | “Love Scenario” – iKON |  **Tên bài hát**                 |  **Ca sĩ/Nhóm nhạc**       |  **Cảm xúc**                | 3.0 | 🔹 Đặc điểm: Nhịp độ vừa phải, dễ dàng kết hợp với những bài hát vừa có cảm xúc vừa có sự năng động. | 29 | Mẹ yêu con – Xúc động, thể hiện tình mẫu tử thiêng liêng.</td>
+            </tr>
+            <tr>
+                <td><b>201</b></td>
+                <td>🇫🇷 Pháp | ------------------------------- | -------------------------- | -------------------------- | 3.0 | 🔹 Bài hát phù hợp:</td>
+            </tr>
+            <tr>
+                <td><b>202</b></td>
+                <td>https://youtu.be/Qj8XNWG2Pds?si=P_e5HPGpQUe4XS9Q | 3 | Như một đoạn kết đau buồn của một mối quan hệ, dùng làm nền cho cảnh "đối đầu nhưng không thể rũ bỏ ký ức". | 1 |  Gia đình, hạnh phúc       |  Một Nhà                       |  Da LAB                    |  Gia đình, hạnh phúc      </td>
+            </tr>
+            <tr>
+                <td><b>203</b></td>
+                <td>Formidble lyrics | 2 |  Vui tươi, năng lượng      |  Vui Lên Đi                    |  Hồ Ngọc Hà                |  Vui tươi, năng lượng      | 3.0 | Đêm Buồn Tỉnh Lẻ (Hợp âm Dm, C) – Nhịp độ vừa phải, dễ dàng thể hiện cảm xúc buồn.</td>
+            </tr>
+            <tr>
+                <td><b>204</b></td>
+                <td>Tâm trạng: Một kẻ say thất tình điên loạn giữa phố | 3 | “Blue & Grey” – BTS | 3 |  Hy vọng, hành trình       |  Đi Để Trở Về                  |  Soobin Hoàng Sơn          |  Hy vọng, hành trình       | 1 | 1. Tháng 1 – 2: Chào Xuân, Mừng Đảng – Mừng Xuân</td>
+            </tr>
+            <tr>
+                <td><b>205</b></td>
+                <td>🎵 Lời bài hát & bản ịch tiếng Anh: citeturn0sarch21 | 4 |  Tình yêu ngọt ngào        |  Em Là                         |  MONO                      |  Tình yêu ngọt ngào        | 3.0 | Chuyện Ba Người (Hợp âm G, C) – Phù hợp với nhịp độ vừa phải, không quá nhanh.</td>
+            </tr>
+            <tr>
+                <td><b>206</b></td>
+                <td>3 | Phù hợp với nhân vật con trai, người đứng giữa, rối loạn cảm xúc. | 5 |  Yêu đắm say               |  Hơn Cả Yêu                    |  Đức Phúc                  |  Yêu đắm say               | 1 | Bài hát phù hợp:</td>
+            </tr>
+            <tr>
+                <td><b>207</b></td>
+                <td>4 | 4. Pháp (France) | 6 |  Đau khổ, chia ly          |  Chạy Ngay Đi                  |  Sơn Tùng M-TP             |  Đau khổ, chia ly          | 3.0 | Sầu Tím Thiệp Hồng (Hợp âm F, B) – Phù hợp với cảm xúc nhẹ nhàng, dễ luyến láy.</td>
+            </tr>
+            <tr>
+                <td><b>208</b></td>
+                <td>7 |  Tình tan vỡ               |  Sau Lời Từ Khước              |  Phan Mạnh Quỳnh           |  Tình tan vỡ               | 1 | Chào mùa xuân – Vui tươi, chào đón năm mới.</td>
+            </tr>
+            <tr>
+                <td><b>209</b></td>
+                <td>4 | “Dernière danse” – Indila | 8 |  Hoài niệm, nhớ người cũ  |  Tháng Tư Là Lời Nói Dối Của Em  |  Mỹ Tâm                   |  Hoài niệm, nhớ người cũ  | 3.0 | Nửa Đêm Ngoài Phố (Hợp âm Am, Dm) – Nhịp vừa phải, phù hợp với giọng hát có cảm xúc mạnh.</td>
+            </tr>
+            <tr>
+                <td><b>210</b></td>
+                <td>9 |  Tuổi trẻ, kỷ niệm         |  Chúng Ta Của Hiện Tại         |  Sơn Tùng M-TP             |  Tuổi trẻ, kỷ niệm         | 2 | Mùa xuân trên TP Hồ Chí Minh – Rộn ràng, đầy sức sống.</td>
+            </tr>
+            <tr>
+                <td><b>211</b></td>
+                <td>4 | Mang sắc thái bi kịch, da diết, như tiếng thở cuối cùng trước cơn bão trong gia đình. | 10 |  Cô đơn, trống trải        |  Một Mình                      |  Trịnh Đình Quang          |  Cô đơn, trống trải        | 3.0 | 📌 Thời điểm mở: Khi bạn có cảm xúc mạnh mẽ nhưng vẫn cần sự nhẹ nhàng, hoặc khi có tâm trạng vui tươi.</td>
+            </tr>
+            <tr>
+                <td><b>212</b></td>
+                <td>11 |  Mất phương hướng          |  Lạc Trôi                      |  Sơn Tùng M-TP             |  Mất phương hướng          | 2 | Đường tàu mùa xuân – Hình ảnh lao động đầu năm.</td>
+            </tr>
+            <tr>
+                <td><b>213</b></td>
+                <td>4 | “Ne me quitte pas” – Jacques Brel | 12 |  Động lực, vươn lên        |  Đường Đến Ngày Vinh Quang     |  Bức Tường                 |  Động lực, vươn lên        | 4.0 | 4. BPM từ 130 đến 160 (Nhịp Nhanh, Năng Lượng Cao, Tình Cảm Mạnh Mẽ)</td>
+            </tr>
+            <tr>
+                <td><b>214</b></td>
+                <td>13 |  Mạnh mẽ, tự tin           |  Không Thể Say                 |  Hồ Ngọc Hà                |  Mạnh mẽ, tự tin           | 2 | Khi nào mở: Dịp Tết Nguyên Đán, các buổi gặp mặt đầu xuân.</td>
+            </tr>
+            <tr>
+                <td><b>215</b></td>
+                <td>4 | Dành cho người mẹ, một khúc ca cổ điển đau đớn và tuyệt vọng. | 14 |  Tự hào, lạc quan          |  Việt Nam Ơi                   |  MIN                       |  Tự hào, lạc quan          | 4.0 | 🔹 Đặc điểm: Nhịp nhanh, đòi hỏi sự năng động và cảm xúc mạnh mẽ. | 3 | 2. Tháng 3: Ngày Quốc tế Phụ nữ (8/3), Ngày thành lập Đoàn (26/3)</td>
+            </tr>
+            <tr>
+                <td><b>216</b></td>
+                <td>5 | 5. Mỹ (USA) | 15 |  Hy vọng, tương lai        |  Ngày Khác                     |  Trung Quân                |  Hy vọng, tương lai        | 4.0 | 🔹 Bài hát phù hợp:</td>
+            </tr>
+            <tr>
+                <td><b>217</b></td>
+                <td>3 | Bài hát phù hợp:</td>
+            </tr>
+            <tr>
+                <td><b>218</b></td>
+                <td>5 | “Hurt” – Johnny Cash (hoặc bản gốc của Nine Inch Nails) |  **Tên bài hát**                |  **Ca sĩ/Nhóm nhạc**        |  **Cảm xúc chính**          |  **Ghi chú** (Nhạc buồn/vui/sôi động)  | 4.0 | Mười Năm Tình Cũ (Hợp âm C, F) – Nhịp nhanh hơn, phù hợp với cảm xúc yêu thương mạnh mẽ.</td>
+            </tr>
+            <tr>
+                <td><b>219</b></td>
+                <td>------------------------------- | --------------------------- | --------------------------- | -------------------------------------- | 3 | Cô gái mở đường – Ca ngợi nữ thanh niên thời chiến.</td>
+            </tr>
+            <tr>
+                <td><b>220</b></td>
+                <td>5 | Trầm, ám ảnh, mang chiều sâu nội tâm – như thể đang kể một tội lỗi bị giấu kín. | 1 |  Vui vẻ, tích cực           |  **Happy**                      |  Pharrell Williams          |  Vui vẻ, tích cực           |  Pop, nhạc sôi động                   | 4.0 | Hàn Mặc Tử (Hợp âm Bm, G) – Phù hợp khi bạn muốn thể hiện sự đau buồn mạnh mẽ.</td>
+            </tr>
+            <tr>
+                <td><b>221</b></td>
+                <td>2 |  Lạc quan, yêu đời          |  **Don't Worry, Be Happy**      |  Bobby McFerrin             |  Lạc quan, yêu đời          |  Jazz, acoustic nhẹ nhàng             | 3 | Bài ca hy vọng – Trẻ trung, khuyến khích thế hệ trẻ.</td>
+            </tr>
+            <tr>
+                <td><b>222</b></td>
+                <td>5 | “Family Portrait” – Pink | 3 |  Phấn chấn, nhảy múa        |  **Can't Stop the Feeling!**    |  Justin Timberlake          |  Phấn chấn, nhảy múa        |  Pop, disco                           | 4.0 | Không Giờ Rồi (Hợp âm Dm, Am) – Nhịp nhanh, có quãng cao, tạo không khí mạnh mẽ.</td>
+            </tr>
+            <tr>
+                <td><b>223</b></td>
+                <td>4 |  Tự tin, sôi động           |  **Uptown Funk**                |  Mark Ronson ft. Bruno Mars  |  Tự tin, sôi động           |  Funk, pop                            | 3 | Tự nguyện – Lý tưởng thanh niên cống hiến.</td>
+            </tr>
+            <tr>
+                <td><b>224</b></td>
+                <td>5 | Trực tiếp về một gia đình tan vỡ, đau lòng, giằng xé – rất phù hợp. | 5 |  Tình yêu, quyến rũ         |  **Shape of You**               |  Ed Sheeran                 |  Tình yêu, quyến rũ         |  Pop, tropical house                  | 4.0 | Tình Bơ Vơ (Hợp âm Em, B) – Cần lực và cảm xúc, nhịp khá nhanh.</td>
+            </tr>
+            <tr>
+                <td><b>225</b></td>
+                <td>6 | 6. Anh (UK) | 6 |  Lãng mạn, ngọt ngào        |  **Perfect**                    |  Ed Sheeran                 |  Lãng mạn, ngọt ngào        |  Ballad, acoustic                     | 3 | Khi nào mở: Các chương trình dành cho phụ nữ, thanh niên.</td>
+            </tr>
+            <tr>
+                <td><b>226</b></td>
+                <td>7 |  Yêu say đắm, chân thành    |  **All of Me**                  |  John Legend                |  Yêu say đắm, chân thành    |  Ballad, piano                        | 4.0 | 📌 Thời điểm mở: Khi bạn cảm thấy cần bộc lộ sự mạnh mẽ, sự quyết tâm hoặc những cảm xúc đột ngột, cao trào. | 4 | 3. Tháng 4 – 5: Giải phóng miền Nam (30/4), Quốc tế Lao động (1/5), Chiến thắng Điện Biên (7/5), Sinh nhật Bác (19/5)</td>
+            </tr>
+            <tr>
+                <td><b>227</b></td>
+                <td>6 | “The Scientist” – Coldplay | 8 |  Buồn, chia ly              |  **Someone Like You**           |  Adele                      |  Buồn, chia ly              |  Ballad, soul                        </td>
+            </tr>
+            <tr>
+                <td><b>228</b></td>
+                <td>9 |  Đau khổ, nuối tiếc         |  **Say Something**              |  A Great Big World          |  Đau khổ, nuối tiếc         |  Piano ballad                         | 5.0 | 5. BPM từ 160 đến 200 (Nhịp Vừa Phải, Có Sức Năng, Dễ Thể Hiện Cảm Xúc Mạnh) | 4 | Bài hát phù hợp:</td>
+            </tr>
+            <tr>
+                <td><b>229</b></td>
+                <td>6 | Buồn bã, nhiều tầng lớp cảm xúc, tiếc nuối vì đã không thể hiểu nhau. | 10 |  Nỗi đau, hoài niệm         |  **Hurt**                       |  Johnny Cash                |  Nỗi đau, hoài niệm         |  Country, acoustic                   </td>
+            </tr>
+            <tr>
+                <td><b>230</b></td>
+                <td>11 |  Buồn, suy tư               |  **The Scientist**              |  Coldplay                   |  Buồn, suy tư               |  Alternative rock                     | 5.0 | 🔹 Đặc điểm: Nhịp độ vừa phải, có sự năng động nhưng vẫn giữ được cảm xúc mạnh mẽ. | 4 | Đất nước trọn niềm vui – Hân hoan ngày thống nhất.</td>
+            </tr>
+            <tr>
+                <td><b>231</b></td>
+                <td>6 | “Tears Dry On Their Own” – Amy Winehouse | 12 |  An ủi, hy vọng             |  **Fix You**                    |  Coldplay                   |  An ủi, hy vọng             |  Rock ballad                          | 5.0 | 🔹 Bài hát phù hợp:</td>
+            </tr>
+            <tr>
+                <td><b>232</b></td>
+                <td>13 |  Giằng xé nội tâm           |  **Demons**                     |  Imagine Dragons            |  Giằng xé nội tâm           |  Alternative rock                     | 4 | Chiến thắng Điện Biên – Tái hiện chiến thắng lịch sử.</td>
+            </tr>
+            <tr>
+                <td><b>233</b></td>
+                <td>6 | Cho nhân vật con dâu, nếu muốn thể hiện sự mạnh mẽ sau một cuộc đối đầu dữ dội. | 14 |  Mạnh mẽ, vượt qua thử thách  |  **Believer**                   |  Imagine Dragons            |  Mạnh mẽ, vượt qua thử thách  |  Rock, EDM                           | 5.0 | Tình Nhạt Phai (Hợp âm C, G) – Nhịp khá nhanh, thể hiện sự day dứt.</td>
+            </tr>
+            <tr>
+                <td><b>234</b></td>
+                <td>7 | 7. Trung Quốc | 15 |  Động lực, kiên cường       |  **Fight Song**                 |  Rachel Platten             |  Động lực, kiên cường       |  Pop, inspirational                   | 5 | Bác Hồ một tình yêu bao la – Tưởng nhớ công lao của Bác.</td>
+            </tr>
+            <tr>
+                <td><b>235</b></td>
+                <td>16 |  Tham vọng, thành công      |  **Hall of Fame**               |  The Script ft. will.i.am   |  Tham vọng, thành công      |  Pop rock                             | 5.0 | Chuyến Tàu Hoàng Hôn (Hợp âm F, Am) – Nhịp nhanh, dễ điều chỉnh cảm xúc.</td>
+            </tr>
+            <tr>
+                <td><b>236</b></td>
+                <td>7 | “演员” (Actor) – 薛之谦 (Xue Zhiqian) | 17 |  Nhớ thương, hoài niệm    |  **See You Again**              |  Wiz Khalifa ft. Charlie Puth  |  Nhớ thương, hoài niệm    |  Hip-hop, ballad                      | 5 | Khi nào mở: Chương trình kỷ niệm, diễu hành, sự kiện về Bác Hồ.</td>
+            </tr>
+            <tr>
+                <td><b>237</b></td>
+                <td>18 |  Nhớ về quá khứ             |  **Memories**                   |  Maroon 5                   |  Nhớ về quá khứ             |  Pop, nhẹ nhàng                       | 5.0 | Vùng Lá Me Bay (Hợp âm C, G) – Nhịp nhẹ nhàng, có thể vừa hát vừa cảm nhận. | 6 | 4. Tháng 6 – 7: Ngày Gia đình Việt Nam (28/6), Ngày Thương binh Liệt sĩ (27/7)</td>
+            </tr>
+            <tr>
+                <td><b>238</b></td>
+                <td>7 | Bài hát về việc cả hai đều đang “diễn” trong một mối quan hệ đã rạn vỡ – quá đúng cho cảnh mẹ và con trai đoán già đoán non. | 19 |  Tiếc nuối, buông bỏ        |  **Let Her Go**                 |  Passenger                  |  Tiếc nuối, buông bỏ        |  Folk, acoustic                      </td>
+            </tr>
+            <tr>
+                <td><b>239</b></td>
+                <td>20 |  Hoài niệm, nuối tiếc       |  **Yesterday**                  |  The Beatles                |  Hoài niệm, nuối tiếc       |  Classic rock                         | 5.0 | Hạ Trắng (Hợp âm Dm, G) – Phù hợp với cảm xúc sâu sắc, nhưng không quá căng thẳng. | 6 | Bài hát phù hợp:</td>
+            </tr>
+            <tr>
+                <td><b>240</b></td>
+                <td>7 | “匆匆那年” – 王菲 (Faye Wong)</td>
+            </tr>
+            <tr>
+                <td><b>241</b></td>
+                <td>5.0 | 📌 Thời điểm mở: Khi bạn có tâm trạng phấn chấn, cần thể hiện sự mạnh mẽ, quyết đoán. | 6 | Gánh mẹ – Nhắc nhớ công ơn mẹ cha.</td>
+            </tr>
+            <tr>
+                <td><b>242</b></td>
+                <td>7 | Một chút hồi tưởng, xót xa, và mất mát – có thể dùng trong cảnh quá khứ lộ ra.</td>
+            </tr>
+            <tr>
+                <td><b>243</b></td>
+                <td>8 | 8. Nga |  **Cảm xúc/Tình huống**        |  **Bài hát**                      |  **Nghệ sĩ**                |  **BPM**  |  **Thể loại**        |  **Ghi chú**                      | 6.0 | 6. BPM từ 200 đến 500 (Nhịp Rất Nhanh, Cần Sự Mạnh Mẽ, Năng Động) | 7 | Mẹ yêu con – Ca ngợi tình mẫu tử.</td>
+            </tr>
+            <tr>
+                <td><b>244</b></td>
+                <td>------------------------------- | ---------------------------------- | --------------------------- | --------- | -------------------- | ----------------------------------</td>
+            </tr>
+            <tr>
+                <td><b>245</b></td>
+                <td>8 | “Очи чёрные” (Dark Eyes) – dân ca Nga | 1 |  Nhịp đập mạnh, khí thế tranh luận  |  **Các con cãi nhau**           |  *"We Will Rock You"*             |  Queen                      | 81 |  Rock                |  Nhịp đập mạnh, khí thế tranh luận  | 6.0 | 🔹 Đặc điểm: Nhịp độ nhanh, rất cần sự năng lượng cao và cảm xúc mạnh mẽ. Tuy nhiên, nhạc vàng không phải là thể loại phổ biến cho nhịp này. Các bài hát cần phải có những đoạn cao trào hoặc đoạn dồn dập. | 7 | Hát về anh – Tri ân các chiến sĩ, thương binh.</td>
+            </tr>
+            <tr>
+                <td><b>246</b></td>
+                <td>2 |  Giai điệu bướng bỉnh             |  *"Bad Guy"*                      |  Billie Eilish              | 135 |  Pop/Electro         |  Giai điệu bướng bỉnh             | 6.0 | 🔹 Bài hát phù hợp:</td>
+            </tr>
+            <tr>
+                <td><b>247</b></td>
+                <td>8 | U ám, sâu thẳm – dùng làm nhạc nền khi bí mật hé lộ hoặc khi cha vợ gọi điện. | 3 |  Âm thanh dữ dội như la mắng      |  **Mẹ quát con**                |  *"Thunderstruck"*                |  AC/DC                      | 133 |  Hard Rock           |  Âm thanh dữ dội như la mắng      | 7 | Khi nào mở: Các chương trình tri ân, họp mặt gia đình.</td>
+            </tr>
+            <tr>
+                <td><b>248</b></td>
+                <td>4 |  Khí thế kịch tính                |  *"O Fortuna"*                    |  Carl Orff                  | 80 |  Classical           |  Khí thế kịch tính                | 6.0 | Chúc Tết (Hợp âm G, C) – Nhạc sôi động, có phần vui tươi, nhịp nhanh. | 8 | 5. Tháng 8 – 9: Cách mạng tháng 8 (19/8), Quốc khánh (2/9)</td>
+            </tr>
+            <tr>
+                <td><b>249</b></td>
+                <td>8 | “Молитва” – Полина Гагарина (Polina Gagarina) | 5 |  Giai điệu buồn, day dứt          |  **Các con than khóc, tranh chấp**  |  *"Hurt"*                     |  Johnny Cash                | 72 |  Country/Acoustic    |  Giai điệu buồn, day dứt         </td>
+            </tr>
+            <tr>
+                <td><b>250</b></td>
+                <td>6 |  Nhạc buồn, tâm trạng             |  *"Someone Like You"*             |  Adele                      | 68 |  Ballad              |  Nhạc buồn, tâm trạng             | 6.0 | Về Quê (Hợp âm Dm, G) – Đầy năng lượng, phù hợp với nhịp nhanh. | 8 | Bài hát phù hợp:</td>
+            </tr>
+            <tr>
+                <td><b>251</b></td>
+                <td>8 | Như một lời cầu nguyện giữa giông bão gia đình. | 7 |  Nhịp nhanh, vui tươi             |  **Các con vui vẻ đùa chơi**    |  *"Happy"*                        |  Pharrell Williams          | 160 |  Pop                 |  Nhịp nhanh, vui tươi            </td>
+            </tr>
+            <tr>
+                <td><b>252</b></td>
+                <td>9 | 9. Brazil | 8 |  Nhạc nhảy sôi động               |  *"Can't Stop the Feeling!"*      |  Justin Timberlake          | 113 |  Pop/Dance           |  Nhạc nhảy sôi động               | 6.0 | Tình Yêu Màu Nắng (Hợp âm Em, D) – Nhịp nhanh, tạo không khí vui tươi, dễ hát. | 8 | Tiến quân ca – Quốc ca đầy hào hùng.</td>
+            </tr>
+            <tr>
+                <td><b>253</b></td>
+                <td>9 |  Chủ đề phản kháng trường học     |  **Các con ghét đi học**        |  *"School's Out"*                 |  Alice Cooper               | 128 |  Rock                |  Chủ đề phản kháng trường học    </td>
+            </tr>
+            <tr>
+                <td><b>254</b></td>
+                <td>9 | “Ai Se Eu Te Pego” – Michel Teló | 10 |  Ca từ về áp lực giáo dục         |  *"Another Brick in the Wall"*    |  Pink Floyd                 | 104 |  Progressive Rock    |  Ca từ về áp lực giáo dục         | 6.0 | 📌 Thời điểm mở: Khi bạn cảm thấy tràn đầy năng lượng, muốn biểu diễn hoặc hát một cách mạnh mẽ và sôi động. | 9 | Lên đàng – Khích lệ tinh thần yêu nước.</td>
+            </tr>
+            <tr>
+                <td><b>255</b></td>
+                <td>11 |  Nhạc điện tử sôi động            |  **Các con thích chơi game**    |  *"Levels"*                       |  Avicii                     | 126 |  EDM                 |  Nhạc điện tử sôi động           </td>
+            </tr>
+            <tr>
+                <td><b>256</b></td>
+                <td>9 | Nếu bạn muốn tạo hiệu ứng nghịch lý hài hước: giai điệu vui, nhưng tình huống căng thẳng – như kiểu dối trá mà bề ngoài vẫn tươi cười. | 12 |  Giai điệu phiêu lưu              |  *"The Nights"*                   |  Avicii                     | 125 |  EDM/Pop             |  Giai điệu phiêu lưu              | 6.0 | Tóm lại: | 9 | Bác đang cùng chúng cháu hành quân – Gần gũi, sâu lắng.</td>
+            </tr>
+            <tr>
+                <td><b>257</b></td>
+                <td>13 |  Nhạc ăn mừng                     |  **Các con được điểm cao**      |  *"Celebration"*                  |  Kool & The Gang            | 120 |  Funk/Disco          |  Nhạc ăn mừng                    </td>
+            </tr>
+            <tr>
+                <td><b>258</b></td>
+                <td>9 | “Flor de Lis” – Djavan | 14 |  Khí thế tích cực                 |  *"I Gotta Feeling"*              |  The Black Eyed Peas        | 128 |  Pop/Dance           |  Khí thế tích cực                 | 1.0 | BPM từ 10–60: Xin Gọi Nhau Là Cố Nhân, Giọt Lệ Đài Trang | 9 | Khi nào mở: Lễ chào cờ, chương trình kỷ niệm.</td>
+            </tr>
+            <tr>
+                <td><b>259</b></td>
+                <td>15 |  Giai điệu trầm lắng, u uất       |  **Bị cô giáo mắng/phạt**       |  *"The Sound of Silence"*         |  Simon & Garfunkel          | 100 |  Folk                |  Giai điệu trầm lắng, u uất       | 10 | 6. Tháng 10 – 11: Ngày Phụ nữ Việt Nam (20/10), Ngày Nhà giáo Việt Nam (20/11)</td>
+            </tr>
+            <tr>
+                <td><b>260</b></td>
+                <td>9 | Nhẹ nhàng, sâu lắng, phù hợp cho đoạn kết sau giông bão. | 16 |  Nhạc an ủi                       |  *"Everybody Hurts"*              |  R.E.M.                     | 79 |  Alternative Rock    |  Nhạc an ủi                       | 2.0 | BPM từ 60–100: Thành Phố Buồn, Ai Cho Tôi Tình Yêu</td>
+            </tr>
+            <tr>
+                <td><b>261</b></td>
+                <td>10 | 10. Thuỵ Sĩ | 17 |  Ca từ về cảm giác bị hiểu lầm    |  **Bức xúc vì bị trêu chọc**    |  *"Numb"*                         |  Linkin Park                | 110 |  Rock/Alternative    |  Ca từ về cảm giác bị hiểu lầm    | 10 | Bài hát phù hợp:</td>
+            </tr>
+            <tr>
+                <td><b>262</b></td>
+                <td>18 |  Tâm trạng bế tắc                 |  *"In the End"*                   |  Linkin Park                | 105 |  Nu-Metal            |  Tâm trạng bế tắc                 | 3.0 | BPM từ 100–130: Đêm Buồn Tỉnh Lẻ, Sầu Tím Thiệp Hồng</td>
+            </tr>
+            <tr>
+                <td><b>263</b></td>
+                <td>10 | “Tout l’univers” – Gjon’s Tears (Eurovision 2021) | 10 | Cô gái Sài Gòn đi tải đạn – Tự hào về phụ nữ Việt Nam.</td>
+            </tr>
+            <tr>
+                <td><b>264</b></td>
+                <td> **Ghi chú**                      |  **Cảm xúc/Tình huống**        |  **Bài hát**                      |  **Nghệ sĩ**                |  **BPM**  |  **Thể loại**        |  **Ghi chú**                      | 4.0 | BPM từ 130–160: Mười Năm Tình Cũ, Hàn Mặc Tử</td>
+            </tr>
+            <tr>
+                <td><b>265</b></td>
+                <td>10 | Một bản nhạc bùng nổ cảm xúc, đau đớn nhưng thanh thoát – có thể làm đoạn cao trào. | ---------------------------------- | ------------------------------- | ---------------------------------- | --------------------------- | --------- | -------------------- | ---------------------------------- | 11 | Người thầy – Tôn vinh nghề giáo.</td>
+            </tr>
+            <tr>
+                <td><b>266</b></td>
+                <td>1 |  Giai điệu bướng bỉnh, ngái ngủ  |  **Con không muốn dậy sớm**     |  *"Wake Me Up"*                   |  Avicii                     | 124 |  EDM                 |  Giai điệu bướng bỉnh, ngái ngủ  | 5.0 | BPM từ 160–200: Tình Nhạt Phai, Vùng Lá Me Bay</td>
+            </tr>
+            <tr>
+                <td><b>267</b></td>
+                <td>2 |  Nhạc buồn, nuối tiếc            |  **Con bị mất đồ chơi**         |  *"Tears in Heaven"*              |  Eric Clapton               | 63 |  Ballad              |  Nhạc buồn, nuối tiếc            | 11 | Khi nào mở: Lễ tri ân, tôn vinh phụ nữ, giáo viên.</td>
+            </tr>
+            <tr>
+                <td><b>268</b></td>
+                <td>3 |  Vui tươi, ngọt ngào             |  **Con được ăn kem**            |  *"Ice Cream"*                    |  BLACKPINK & Selena Gomez   | 120 |  K-pop/Pop           |  Vui tươi, ngọt ngào             | 6.0 | BPM từ 200–500: Chúc Tết, Tình Yêu Màu Nắng | 12 | 7. Tháng 12: Ngày thành lập Quân đội (22/12), Giáng sinh & Năm mới</td>
+            </tr>
+            <tr>
+                <td><b>269</b></td>
+                <td>1 | 1. “Still” – Jupiter Jones | 4 |  Nhạc thiếu nhi vui nhộn         |  **Con bị ngã đau**             |  *"Ouch!"*                        |  Kids Bop                   | 100 |  Pop                 |  Nhạc thiếu nhi vui nhộn        </td>
+            </tr>
+            <tr>
+                <td><b>270</b></td>
+                <td>5 |  Nhạc ma quái (chơi khăm)        |  **Con thấy sợ bóng tối**       |  *"Thriller"*                     |  Michael Jackson            | 118 |  Pop/Horror          |  Nhạc ma quái (chơi khăm)        | 7.0 | Tùy theo nhịp tim của bạn hiện tại, bạn có thể chọn bài hát phù hợp để thể hiện cảm xúc. Bạn muốn thử bài hát nào? | 12 | Bài hát phù hợp:</td>
+            </tr>
+            <tr>
+                <td><b>271</b></td>
+                <td>1 | Chữ Việt: Xtin – Giúp-pi-tơ Giôn | 6 |  Ca từ về sở hữu                 |  **Con bị bạn giành đồ chơi**   |  *"Mine"*                         |  Taylor Swift               | 92 |  Pop/Country         |  Ca từ về sở hữu                </td>
+            </tr>
+            <tr>
+                <td><b>272</b></td>
+                <td>7 |  Năng lượng thể thao             |  **Con thích đá bóng**          |  *"Waka Waka"*                    |  Shakira                    | 125 |  Latin/Pop           |  Năng lượng thể thao             | 12 | Anh vẫn hành quân – Ca ngợi tinh thần bộ đội.</td>
+            </tr>
+            <tr>
+                <td><b>273</b></td>
+                <td>1 | Ballad cực buồn, nói về nỗi nhớ, sự mất mát và những điều không thể nói thành lời. | 8 |  Giai điệu phản kháng vui nhộn   |  **Con bị ép ăn rau**           |  *"No"*                           |  Meghan Trainor             | 95 |  Pop                 |  Giai điệu phản kháng vui nhộn  </td>
+            </tr>
+            <tr>
+                <td><b>274</b></td>
+                <td>9 |  Niềm vui hân hoan               |  **Con được đi công viên**      |  *"Happier"*                      |  Marshmello ft. Bastille    | 100 |  EDM/Pop             |  Niềm vui hân hoan               | 12 | Nơi đảo xa – Nhắc về những người lính biển.</td>
+            </tr>
+            <tr>
+                <td><b>275</b></td>
+                <td>1 | Rất hợp cho cảnh mẹ hoặc con trai im lặng chịu đựng, đoán già đoán non. | 10 |  Tự trào, bất cần                |  **Con bị điểm kém**            |  *"Loser"*                        |  Big Bang                   | 110 |  K-pop               |  Tự trào, bất cần               </td>
+            </tr>
+            <tr>
+                <td><b>276</b></td>
+                <td>2 | 2. “Ohne dich” – Rammstein | 11 |  Sáng tạo, màu sắc               |  **Con thích vẽ tranh**         |  *"Colors"*                       |  Halsey                     | 90 |  Pop                 |  Sáng tạo, màu sắc               | 12 | Khi nào mở: Gặp mặt cựu chiến binh, tổng kết cuối năm.</td>
+            </tr>
+            <tr>
+                <td><b>277</b></td>
+                <td>12 |  Truyền cảm hứng tự tin          |  **Con bị bắt nạt**             |  *"Scars to Your Beautiful"*      |  Alessia Cara               | 105 |  Pop                 |  Truyền cảm hứng tự tin         </td>
+            </tr>
+            <tr>
+                <td><b>278</b></td>
+                <td>2 | Chữ Việt: Ô-nơ đích – Ram-stanh (Không có em) | 13 |  Giai điệu phiêu lưu             |  **Con thích khám phá**         |  *"Adventure of a Lifetime"*      |  Coldplay                   | 113 |  Pop/Rock            |  Giai điệu phiêu lưu             | 12 | Bạn có muốn mình bổ sung danh sách bài hát cho các dịp sinh hoạt gia đình, giáo dục con cái không?</td>
+            </tr>
+            <tr>
+                <td><b>279</b></td>
+                <td>14 |  Nhạc trẻ, tâm trạng             |  **Con giận bố mẹ**             |  *"Love Yourself"*                |  Justin Bieber              | 100 |  Pop                 |  Nhạc trẻ, tâm trạng            </td>
+            </tr>
+            <tr>
+                <td><b>280</b></td>
+                <td>2 | Giai điệu u ám, mãnh liệt, nói về cô đơn và nỗi đau khi mất một người. | 15 |  Khí thế mạnh mẽ                 |  **Con thích làm siêu anh hùng** |  *"Hero"*                        |  Skillet                    | 95 |  Rock                |  Khí thế mạnh mẽ                </td>
+            </tr>
+            <tr>
+                <td><b>281</b></td>
+                <td>16 |  Nhạc chế vui nhộn               |  **Con bị cấm điện thoại**      |  *"No Phone"*                     |  KYLE ft. Quinn XCII        | 102 |  Pop/Rap             |  Nhạc chế vui nhộn               | Với giọng nam baritone C2–E5 như bạn, mình sẽ chọn các bài hát cách mạng có quãng giọng phù hợp, giúp bạn hát thoải mái mà không bị quá cao hay quá thấp.</td>
+            </tr>
+            <tr>
+                <td><b>282</b></td>
+                <td>2 | Hợp với cảnh con dâu rời đi hoặc bị tổn thương, cha chồng tuyệt vọng. | 17 |  Nhẹ nhàng, thư giãn             |  **Con thích ngắm mưa**         |  *"Raindrops Keep Fallin' on My Head"*  |  B.J. Thomas       | 80 |  Pop                 |  Nhẹ nhàng, thư giãn            </td>
+            </tr>
+            <tr>
+                <td><b>283</b></td>
+                <td>3 | 3. “Guten Tag” – Wir sind Helden | 18 |  Giai điệu lo lắng               |  **Con bị lạc**                 |  *"Where Is the Love?"*           |  Black Eyed Peas            | 95 |  Hip-hop/Pop         |  Giai điệu lo lắng               | 1 | 1. Giọng Nam (Baritone C2 – E5) – Hát đơn</td>
+            </tr>
+            <tr>
+                <td><b>284</b></td>
+                <td>19 |  Giai điệu tò mò, khám phá       |  **Con thích làm khoa học**     |  *"The Scientist"*                |  Coldplay                   | 146 |  Rock                |  Giai điệu tò mò, khám phá      </td>
+            </tr>
+            <tr>
+                <td><b>285</b></td>
+                <td>3 | Chữ Việt: Gu-ten tag – Vi-xin Heo-đen (Xin chào) | 20 |  Nhạc buồn, xúc động             |  **Con bị mất pet**             |  *"How to Save a Life"*           |  The Fray                   | 112 |  Rock                |  Nhạc buồn, xúc động             | 1 | Hào hùng, mạnh mẽ:</td>
+            </tr>
+            <tr>
+                <td><b>286</b></td>
+                <td>21 | Nhạc thiếu nhi vui nhộn |  "Baby Shark" (150 BPM) – Siêu sôi động.</td>
+            </tr>
+            <tr>
+                <td><b>287</b></td>
+                <td>3 | Mang âm hưởng nổi loạn, phản kháng xã hội, rất phù hợp cho con dâu phản kháng lại gia đình chồng. | 22 | Nhạc ru ngủ |  "Twinkle Twinkle Little Star" (60 BPM) – Bản remix piano. | 1 | Tiến quân ca – Quốc ca Việt Nam, dễ hát trong tông trung.</td>
+            </tr>
+            <tr>
+                <td><b>288</b></td>
+                <td>4 | 4. “Ich will” – Rammstein | 23 | Nhạc giận dữ cấp độ cao |  "Rolling in the Deep" (Adele, 105 BPM</td>
+            </tr>
+            <tr>
+                <td><b>289</b></td>
+                <td>1 | Lên đàng – Quãng giọng vừa, phù hợp chất giọng baritone.</td>
+            </tr>
+            <tr>
+                <td><b>290</b></td>
+                <td>4 | Chữ Việt: Ích vin – Ram-stanh (Tôi muốn) | 1 |  Các con cãi nhau             |  "Giận mà thương" (Nhạc thiếu nhi)  </td>
+            </tr>
+            <tr>
+                <td><b>291</b></td>
+                <td>2 |  Mẹ quát con                  |  "Mẹ yêu ơi" (Xuân Mai)             | 1 | Hành khúc ngày và đêm – Nhịp điệu rõ ràng, nam tính.</td>
+            </tr>
+            <tr>
+                <td><b>292</b></td>
+                <td>4 | Cực kỳ kịch tính và mạnh mẽ, có thể dùng cho cảnh bộc lộ quyền lực, đòi công lý hoặc sự thật – ví dụ cha vợ gọi điện, truy tìm sự thật. | 3 |  Các con than khóc, tranh chấp  |  "Khóc nhè" (Nhạc thiếu nhi)      </td>
+            </tr>
+            <tr>
+                <td><b>293</b></td>
+                <td>5 | 5. “Haus am See” – Peter Fox | 4 |  Các con vui vẻ đùa chơi      |  "Em đi chơi thuyền" (Nhạc thiếu nhi)  | 1 | Bài ca hy vọng – Giai điệu sáng, thể hiện tinh thần lạc quan.</td>
+            </tr>
+            <tr>
+                <td><b>294</b></td>
+                <td>5 |  Các con ghét đi học          |  "Ngày đầu tiên đi học" (Nguyễn Ngọc Thiện) </td>
+            </tr>
+            <tr>
+                <td><b>295</b></td>
+                <td>5 | Chữ Việt: Hau-x am-x sê – Pi-tơ Phốc (Ngôi nhà bên hồ) | 6 |  Các con thích chơi game      |  "Gamer" (Khắc Hưng ft. AMEE)       | 1 | Anh vẫn hành quân – Trầm hùng, phù hợp với giọng baritone.</td>
+            </tr>
+            <tr>
+                <td><b>296</b></td>
+                <td>7 |  Các con được điểm cao        |  "Con ngoan trò giỏi" (Nhạc thiếu nhi) </td>
+            </tr>
+            <tr>
+                <td><b>297</b></td>
+                <td>5 | Giai điệu nhẹ nhàng, nói về khao khát một gia đình ấm êm, yên bình. | 8 |  Bị cô giáo mắng/phạt         |  "Cô giáo em" (Remix buồn)          | 1 | Trữ tình, sâu lắng:</td>
+            </tr>
+            <tr>
+                <td><b>298</b></td>
+                <td>9 |  Bức xúc vì bị trêu chọc      |  "Đừng trêu tôi" (Nhạc thiếu nhi)  </td>
+            </tr>
+            <tr>
+                <td><b>299</b></td>
+                <td>10 |  Con không muốn dậy sớm       |  "Dậy đi thôi" (Lê Xuân Thọ)        | 1 | Bác Hồ một tình yêu bao la – Giai điệu mềm mại, dễ hát.</td>
+            </tr>
+            <tr>
+                <td><b>300</b></td>
+                <td>11 |  Con bị mất đồ chơi           |  "Đồ chơi của em" (Nhạc thiếu nhi) </td>
+            </tr>
+            <tr>
+                <td><b>301</b></td>
+                <td>12 |  Con được ăn kem              |  "Kem xôi" (Nhạc thiếu nhi)         | 1 | Miền Trung nhớ Bác – Quãng trung, dễ luyến láy.</td>
+            </tr>
+            <tr>
+                <td><b>302</b></td>
+                <td>13 |  Con bị ngã đau               |  "Xoa dịu nỗi đau" (Nhạc thiếu nhi) </td>
+            </tr>
+            <tr>
+                <td><b>303</b></td>
+                <td>14 |  Con thấy sợ bóng tối         |  "Đêm hội trăng rằm" (Nhạc thiếu nhi)  | 1 | Đất nước trọn niềm vui – Quãng rộng nhưng không quá khó.</td>
+            </tr>
+            <tr>
+                <td><b>304</b></td>
+                <td>15 |  Con bị bạn giành đồ chơi     |  "Chia sẻ" (Nhạc thiếu nhi)        </td>
+            </tr>
+            <tr>
+                <td><b>305</b></td>
+                <td>16 |  Con thích đá bóng            |  "Ước mơ của bé" (Nhạc thiếu nhi)   | 1 | Gánh mẹ – Ấm áp, cảm xúc.</td>
+            </tr>
+            <tr>
+                <td><b>306</b></td>
+                <td>17 |  Con bị ép ăn rau             |  "Bé tập ăn rau" (Nhạc thiếu nhi)  </td>
+            </tr>
+            <tr>
+                <td><b>307</b></td>
+                <td>18 |  Con được đi công viên        |  "Chúng ta cùng đi chơi" (Nhạc thiếu nhi)  | 1 | Lời ru trên nương – Nhẹ nhàng, phù hợp giọng nam trầm.</td>
+            </tr>
+            <tr>
+                <td><b>308</b></td>
+                <td>19 |  Con bị điểm kém              |  "Cố lên con nhé" (Nhạc thiếu nhi)  | 2 | 2. Giọng Nữ (Trong khoảng C2 – E5) – Hát đơn</td>
+            </tr>
+            <tr>
+                <td><b>309</b></td>
+                <td>20 |  Con thích vẽ tranh           |  "Bé họa sĩ" (Nhạc thiếu nhi)      </td>
+            </tr>
+            <tr>
+                <td><b>310</b></td>
+                <td>21 |  Con bị bắt nạt               |  "Mạnh mẽ lên con" (Nhạc thiếu nhi)  | 2 | Hào hùng, khí thế:</td>
+            </tr>
+            <tr>
+                <td><b>311</b></td>
+                <td>22 |  Con thích khám phá           |  "Bé yêu thiên nhiên" (Nhạc thiếu nhi) </td>
+            </tr>
+            <tr>
+                <td><b>312</b></td>
+                <td>23 |  Con giận bố mẹ              |  "Ba kể con nghe" (Xuân Mai)        | 2 | Cô gái mở đường – Sôi động, phù hợp với nữ trung và nữ cao.</td>
+            </tr>
+            <tr>
+                <td><b>313</b></td>
+                <td>24 |  Con thích làm siêu anh hùng  |  "Siêu nhân của mẹ" (Nhạc thiếu nhi) </td>
+            </tr>
+            <tr>
+                <td><b>314</b></td>
+                <td>25 |  Con bị cấm điện thoại        |  "Con thích chơi" (Phiên bản buồn)  | 2 | Chào em cô gái Lam Hồng – Rõ lời, nhịp mạnh, dễ hát.</td>
+            </tr>
+            <tr>
+                <td><b>315</b></td>
+                <td>26 |  Con thích ngắm mưa           |  "Mưa rơi" (Nhạc thiếu nhi)        </td>
+            </tr>
+            <tr>
+                <td><b>316</b></td>
+                <td>27 |  Con bị lạc                   |  "Mẹ ơi con ở đâu" (Nhạc thiếu nhi)  | 2 | Tự nguyện – Quãng trung, không quá cao.</td>
+            </tr>
+            <tr>
+                <td><b>317</b></td>
+                <td>28 |  Con thích làm khoa học       |  "Nhà khoa học nhí" (Nhạc thiếu nhi) </td>
+            </tr>
+            <tr>
+                <td><b>318</b></td>
+                <td>29 |  Con bị mất pet               |  "Chú chó nhỏ" (Nhạc thiếu nhi)     | 2 | Cô gái Sài Gòn đi tải đạn – Nhiệt huyết, vui tươi.</td>
+            </tr>
+            <tr>
+                <td><b>319</b></td>
+                <td>2 | Trữ tình, nhẹ nhàng:</td>
+            </tr>
+            <tr>
+                <td><b>320</b></td>
+                <td>2 | Mẹ yêu con – Mượt mà, dễ hát với nữ trung.</td>
+            </tr>
+            <tr>
+                <td><b>321</b></td>
+                <td>2 | Những ánh sao đêm – Trữ tình, thể hiện tốt cảm xúc.</td>
+            </tr>
+            <tr>
+                <td><b>322</b></td>
+                <td>2 | Khúc hát ru người mẹ trẻ – Da diết, không quá khó.</td>
+            </tr>
+            <tr>
+                <td><b>323</b></td>
+                <td>2 | Gánh mẹ – Phù hợp với giọng nữ sâu lắng.</td>
+            </tr>
+            <tr>
+                <td><b>324</b></td>
+                <td>3 | 3. Song ca nam – nữ (Dễ hát, hòa giọng tốt)</td>
+            </tr>
+            <tr>
+                <td><b>325</b></td>
+                <td>3 | Tình cảm, sâu lắng:</td>
+            </tr>
+            <tr>
+                <td><b>326</b></td>
+                <td>3 | Tình ca – Phù hợp cả nam và nữ, dễ phối bè.</td>
+            </tr>
+            <tr>
+                <td><b>327</b></td>
+                <td>3 | Nơi đảo xa – Đậm chất tự sự, dễ chia câu hát.</td>
+            </tr>
+            <tr>
+                <td><b>328</b></td>
+                <td>3 | Tự nguyện – Nam nữ đều hát được, dễ phối bè.</td>
+            </tr>
+            <tr>
+                <td><b>329</b></td>
+                <td>3 | Sôi động, hòa giọng dễ dàng:</td>
+            </tr>
+            <tr>
+                <td><b>330</b></td>
+                <td>3 | Nối vòng tay lớn – Hợp cho nhóm đông người.</td>
+            </tr>
+            <tr>
+                <td><b>331</b></td>
+                <td>3 | Đất nước trọn niềm vui – Thích hợp cho không khí vui vẻ.</td>
+            </tr>
+            <tr>
+                <td><b>332</b></td>
+                <td>3 | Bài ca xây dựng – Nhịp nhanh, phù hợp cả hai giọng.</td>
+            </tr>
+            <tr>
+                <td><b>333</b></td>
+                <td>4 | Dưới đây là hướng dẫn chọn bài hát phù hợp với từng cảm xúc của bạn khi hát:</td>
+            </tr>
+            <tr>
+                <td><b>334</b></td>
+                <td>4 | 1. Khi Cảm Thấy Mạnh Mẽ, Quyết Tâm, Cần Động Lực</td>
+            </tr>
+            <tr>
+                <td><b>335</b></td>
+                <td>4 | 🔥 Dành cho lúc muốn nâng cao tinh thần, tự tin, hoặc cổ vũ bản thân và người khác.</td>
+            </tr>
+            <tr>
+                <td><b>336</b></td>
+                <td>4 | Bon Jovi – It’s My Life → Khi bạn muốn khẳng định bản thân, chiến đấu vì ước mơ.</td>
+            </tr>
+            <tr>
+                <td><b>337</b></td>
+                <td>4 | Survivor – Eye of the Tiger → Khi cần động lực tập thể dục, làm việc, chiến đấu.</td>
+            </tr>
+            <tr>
+                <td><b>338</b></td>
+                <td>4 | Queen – We Will Rock You → Khi muốn tạo không khí mạnh mẽ, sôi động.</td>
+            </tr>
+            <tr>
+                <td><b>339</b></td>
+                <td>4 | Linkin Park – In the End → Khi bạn muốn xả stress, thể hiện sự kiên cường.</td>
+            </tr>
+            <tr>
+                <td><b>340</b></td>
+                <td>5 | 2. Khi Muốn Thư Giãn, Bình Tĩnh, Hoài Niệm</td>
+            </tr>
+            <tr>
+                <td><b>341</b></td>
+                <td>5 | 🌿 Dành cho những lúc muốn thư giãn, tĩnh tâm, hoặc nhớ về những kỷ niệm đẹp.</td>
+            </tr>
+            <tr>
+                <td><b>342</b></td>
+                <td>5 | The Beatles – Let It Be → Khi cần sự an ủi, muốn thả lỏng tâm trạng.</td>
+            </tr>
+            <tr>
+                <td><b>343</b></td>
+                <td>5 | John Lennon – Imagine → Khi bạn muốn hòa bình, suy ngẫm về cuộc sống.</td>
+            </tr>
+            <tr>
+                <td><b>344</b></td>
+                <td>5 | Scorpions – Wind of Change → Khi bạn cảm nhận sự thay đổi, hoài niệm.</td>
+            </tr>
+            <tr>
+                <td><b>345</b></td>
+                <td>5 | Richard Marx – Right Here Waiting → Khi nhớ về ai đó, một tình cảm xa xôi.</td>
+            </tr>
+            <tr>
+                <td><b>346</b></td>
+                <td>6 | 3. Khi Đang Yêu Hoặc Cảm Thấy Ấm Áp, Hạnh Phúc</td>
+            </tr>
+            <tr>
+                <td><b>347</b></td>
+                <td>6 | 💖 Dành cho lúc bạn cảm thấy yêu đời, muốn thể hiện tình cảm.</td>
+            </tr>
+            <tr>
+                <td><b>348</b></td>
+                <td>6 | Elvis Presley – Can't Help Falling in Love → Khi đang yêu, muốn hát tặng người thương.</td>
+            </tr>
+            <tr>
+                <td><b>349</b></td>
+                <td>6 | Adele – Someone Like You → Khi nhớ về một mối tình cũ nhưng đầy trân trọng.</td>
+            </tr>
+            <tr>
+                <td><b>350</b></td>
+                <td>6 | Frank Sinatra – My Way → Khi muốn tự hào về những gì mình đã trải qua.</td>
+            </tr>
+            <tr>
+                <td><b>351</b></td>
+                <td>7 | 4. Khi Buồn, Cần Giải Tỏa Cảm Xúc</td>
+            </tr>
+            <tr>
+                <td><b>352</b></td>
+                <td>7 | 😢 Dành cho những lúc đau lòng, muốn thả lỏng cảm xúc.</td>
+            </tr>
+            <tr>
+                <td><b>353</b></td>
+                <td>7 | Eric Clapton – Tears in Heaven → Khi nhớ về người đã khuất, cảm xúc lắng đọng.</td>
+            </tr>
+            <tr>
+                <td><b>354</b></td>
+                <td>7 | The Righteous Brothers – Unchained Melody → Khi cảm thấy cô đơn trong tình yêu.</td>
+            </tr>
+            <tr>
+                <td><b>355</b></td>
+                <td>7 | Bill Withers – Ain’t No Sunshine → Khi buồn, cảm thấy thiếu vắng ai đó.</td>
+            </tr>
+            <tr>
+                <td><b>356</b></td>
+                <td>8 | 5. Khi Muốn Tạo Không Khí Hoành Tráng, Hào Hùng</td>
+            </tr>
+            <tr>
+                <td><b>357</b></td>
+                <td>8 | 🎉 Dành cho hát karaoke cùng bạn bè, hát trong các buổi họp mặt.</td>
+            </tr>
+            <tr>
+                <td><b>358</b></td>
+                <td>8 | Queen – We Are the Champions → Khi ăn mừng chiến thắng, tự hào về thành tích.</td>
+            </tr>
+            <tr>
+                <td><b>359</b></td>
+                <td>8 | Metallica – Nothing Else Matters → Khi muốn thể hiện sự nam tính, mạnh mẽ.</td>
+            </tr>
+            <tr>
+                <td><b>360</b></td>
+                <td>8 | The Beatles – Hey Jude → Khi muốn hát cùng mọi người, tạo không khí kết nối.</td>
+            </tr>
+            <tr>
+                <td><b>361</b></td>
+                <td>8 | Bạn đang có cảm xúc nào và muốn hát bài gì ngay lúc này?</td>
+            </tr>
+            <tr>
+                <td><b>362</b></td>
+                <td>9 | 1. Khi Giọng Bạn Ở Tần Số Thấp (C2–G3) – Khi Nói Chuyện Bình Thường, Thoải Mái</td>
+            </tr>
+            <tr>
+                <td><b>363</b></td>
+                <td>9 | 🔹 Đặc điểm: Giọng trầm, ấm, tự nhiên, không cần nhiều lực.</td>
+            </tr>
+            <tr>
+                <td><b>364</b></td>
+                <td>9 | 🔹 Bài hát phù hợp:</td>
+            </tr>
+            <tr>
+                <td><b>365</b></td>
+                <td>9 | Elvis Presley – Can't Help Falling in Love → Nhẹ nhàng, chậm rãi, dễ hát.</td>
+            </tr>
+            <tr>
+                <td><b>366</b></td>
+                <td>9 | Frank Sinatra – My Way → Trầm ấm, nam tính, không cần quãng cao.</td>
+            </tr>
+            <tr>
+                <td><b>367</b></td>
+                <td>9 | Bill Withers – Ain’t No Sunshine → Nhẹ nhàng, sâu lắng.</td>
+            </tr>
+            <tr>
+                <td><b>368</b></td>
+                <td>9 | Scorpions – Wind of Change → Tông trung, dễ kiểm soát.</td>
+            </tr>
+            <tr>
+                <td><b>369</b></td>
+                <td>9 | 📌 Thời điểm mở: Khi thư giãn, nói chuyện nhẹ nhàng, hoặc hát theo giọng tự nhiên.</td>
+            </tr>
+            <tr>
+                <td><b>370</b></td>
+                <td>10 | 2. Khi Giọng Bạn Ở Tần Số Trung (G3–C4) – Khi Cười, Nói To Hơn Một Chút</td>
+            </tr>
+            <tr>
+                <td><b>371</b></td>
+                <td>10 | 🔹 Đặc điểm: Giọng sáng hơn, có năng lượng, dễ chuyển sang hát.</td>
+            </tr>
+            <tr>
+                <td><b>372</b></td>
+                <td>10 | 🔹 Bài hát phù hợp:</td>
+            </tr>
+            <tr>
+                <td><b>373</b></td>
+                <td>10 | The Beatles – Hey Jude → Quãng trung, dễ hát theo tự nhiên.</td>
+            </tr>
+            <tr>
+                <td><b>374</b></td>
+                <td>10 | Queen – We Are the Champions → Không quá thấp, có cao trào nhưng dễ kiểm soát.</td>
+            </tr>
+            <tr>
+                <td><b>375</b></td>
+                <td>10 | Richard Marx – Right Here Waiting → Tình cảm, phù hợp khi giọng ở mức trung bình.</td>
+            </tr>
+            <tr>
+                <td><b>376</b></td>
+                <td>10 | John Lennon – Imagine → Nhẹ nhàng, dễ giữ hơi thở.</td>
+            </tr>
+            <tr>
+                <td><b>377</b></td>
+                <td>10 | 📌 Thời điểm mở: Khi đang nói chuyện với nhóm bạn, bắt đầu muốn vào nhịp hát.</td>
+            </tr>
+            <tr>
+                <td><b>378</b></td>
+                <td>11 | 3. Khi Giọng Bạn Cao Hơn Bình Thường (C4–G4) – Khi Hô, Cổ Vũ, Phấn Khích</td>
+            </tr>
+            <tr>
+                <td><b>379</b></td>
+                <td>11 | 🔹 Đặc điểm: Giọng sáng rõ, có lực, gần với giọng hát mạnh.</td>
+            </tr>
+            <tr>
+                <td><b>380</b></td>
+                <td>11 | 🔹 Bài hát phù hợp:</td>
+            </tr>
+            <tr>
+                <td><b>381</b></td>
+                <td>11 | Bon Jovi – It’s My Life → Khí thế, phù hợp khi giọng lên cao tự nhiên.</td>
+            </tr>
+            <tr>
+                <td><b>382</b></td>
+                <td>11 | Survivor – Eye of the Tiger → Đầy năng lượng, không quá khó lên cao.</td>
+            </tr>
+            <tr>
+                <td><b>383</b></td>
+                <td>11 | Queen – We Will Rock You → Hô hào, dễ hát với giọng khỏe.</td>
+            </tr>
+            <tr>
+                <td><b>384</b></td>
+                <td>11 | The Beatles – Let It Be → Hơi cao hơn mức nói bình thường nhưng dễ điều chỉnh.</td>
+            </tr>
+            <tr>
+                <td><b>385</b></td>
+                <td>11 | 📌 Thời điểm mở: Khi cổ vũ, hô hào, hoặc muốn hát cùng bạn bè trong không khí vui vẻ.</td>
+            </tr>
+            <tr>
+                <td><b>386</b></td>
+                <td>12 | 4. Khi Giọng Bạn Ở Tần Số Cao (G4–E5) – Khi La Hét, Hát Mạnh, Cảm Xúc Mạnh</td>
+            </tr>
+            <tr>
+                <td><b>387</b></td>
+                <td>12 | 🔹 Đặc điểm: Giọng căng, cao trào, cần hơi khỏe.</td>
+            </tr>
+            <tr>
+                <td><b>388</b></td>
+                <td>12 | 🔹 Bài hát phù hợp:</td>
+            </tr>
+            <tr>
+                <td><b>389</b></td>
+                <td>12 | Metallica – Nothing Else Matters → Giọng nam tính, cao trào mạnh.</td>
+            </tr>
+            <tr>
+                <td><b>390</b></td>
+                <td>12 | Queen – Bohemian Rhapsody → Đầy thử thách nhưng phù hợp với giọng cao.</td>
+            </tr>
+            <tr>
+                <td><b>391</b></td>
+                <td>12 | Linkin Park – In the End → Có đoạn rap và gào thét, phù hợp khi cảm xúc mạnh.</td>
+            </tr>
+            <tr>
+                <td><b>392</b></td>
+                <td>12 | Scorpions – Still Loving You → Trữ tình nhưng có cao trào mạnh.</td>
+            </tr>
+            <tr>
+                <td><b>393</b></td>
+                <td>12 | 📌 Thời điểm mở: Khi bạn muốn giải tỏa cảm xúc, hét theo nhạc, hoặc thể hiện giọng cao.</td>
+            </tr>
+            <tr>
+                <td><b>394</b></td>
+                <td>Tóm lại:</td>
+            </tr>
+            <tr>
+                <td><b>395</b></td>
+                <td>9 | ✅ Giọng thấp (C2–G3) → Nhạc chậm, nhẹ nhàng (My Way, Wind of Change).</td>
+            </tr>
+            <tr>
+                <td><b>396</b></td>
+                <td>10 | ✅ Giọng trung (G3–C4) → Nhạc tình cảm, dễ hát (Hey Jude, Imagine).</td>
+            </tr>
+            <tr>
+                <td><b>397</b></td>
+                <td>11 | ✅ Giọng cao hơn bình thường (C4–G4) → Nhạc sôi động, khí thế (It’s My Life, We Will Rock You).</td>
+            </tr>
+            <tr>
+                <td><b>398</b></td>
+                <td>12 | ✅ Giọng cao (G4–E5) → Nhạc cần lực mạnh, cao trào (Nothing Else Matters, In the End).</td>
+            </tr>
+            <tr>
+                <td><b>399</b></td>
+                <td>Với giọng nam baritone C2–E5, bạn có thể hát rất nhiều bài nhạc vàng phù hợp với tông giọng tự nhiên mà không cần cố gắng quá nhiều. Dưới đây là danh sách bài hát theo từng trạng thái giọng của bạn:</td>
+            </tr>
+            <tr>
+                <td><b>400</b></td>
+                <td>1 | 1. Khi Giọng Bạn Ở Tần Số Thấp (C2–G3) – Nói chuyện bình thường, giọng trầm ấm</td>
+            </tr>
+            <tr>
+                <td><b>401</b></td>
+                <td>1 | 🔹 Bài hát phù hợp: Nhạc chậm, dễ ngân, không cần lên cao quá nhiều.</td>
+            </tr>
+            <tr>
+                <td><b>402</b></td>
+                <td>1 | Túy Ca – Nhẹ nhàng, phù hợp giọng trầm ấm.</td>
+            </tr>
+            <tr>
+                <td><b>403</b></td>
+                <td>1 | Giọt Lệ Đài Trang – Giọng trầm, luyến láy dễ hát.</td>
+            </tr>
+            <tr>
+                <td><b>404</b></td>
+                <td>1 | Xin Gọi Nhau Là Cố Nhân – Giai điệu buồn, sâu lắng, dễ thể hiện cảm xúc.</td>
+            </tr>
+            <tr>
+                <td><b>405</b></td>
+                <td>1 | Lại Nhớ Người Yêu – Nhạc chậm, dễ kiểm soát hơi thở.</td>
+            </tr>
+            <tr>
+                <td><b>406</b></td>
+                <td>1 | Duyên Kiếp – Nhẹ nhàng, không cần quá nhiều quãng giọng.</td>
+            </tr>
+            <tr>
+                <td><b>407</b></td>
+                <td>1 | 📌 Thời điểm mở: Khi đang thư giãn, nói chuyện bình thường và muốn hát nhẹ nhàng.</td>
+            </tr>
+            <tr>
+                <td><b>408</b></td>
+                <td>2 | 2. Khi Giọng Bạn Ở Tần Số Trung (G3–C4) – Khi nói chuyện có lực hơn, thoải mái hơn</td>
+            </tr>
+            <tr>
+                <td><b>409</b></td>
+                <td>2 | 🔹 Bài hát phù hợp: Nhạc có nhịp rõ ràng, nhưng không quá cao.</td>
+            </tr>
+            <tr>
+                <td><b>410</b></td>
+                <td>2 | Thành Phố Buồn – Giọng trung, dễ ngân.</td>
+            </tr>
+            <tr>
+                <td><b>411</b></td>
+                <td>2 | Ai Cho Tôi Tình Yêu – Nhạc vàng kinh điển, dễ vào cảm xúc.</td>
+            </tr>
+            <tr>
+                <td><b>412</b></td>
+                <td>2 | Hoa Nở Về Đêm – Trầm buồn nhưng không quá khó hát.</td>
+            </tr>
+            <tr>
+                <td><b>413</b></td>
+                <td>2 | Mưa Rừng – Hợp với giọng nam trầm, không cần lên nốt cao nhiều.</td>
+            </tr>
+            <tr>
+                <td><b>414</b></td>
+                <td>2 | Chuyện Tình Lan Và Điệp – Dễ hát, không quá phức tạp.</td>
+            </tr>
+            <tr>
+                <td><b>415</b></td>
+                <td>2 | 📌 Thời điểm mở: Khi đang hát karaoke cùng bạn bè, muốn thể hiện cảm xúc rõ ràng.</td>
+            </tr>
+            <tr>
+                <td><b>416</b></td>
+                <td>3 | 3. Khi Giọng Bạn Cao Hơn Bình Thường (C4–G4) – Khi hô, hô hào, giọng khỏe hơn</td>
+            </tr>
+            <tr>
+                <td><b>417</b></td>
+                <td>3 | 🔹 Bài hát phù hợp: Nhạc có cao trào, cần lực nhiều hơn một chút.</td>
+            </tr>
+            <tr>
+                <td><b>418</b></td>
+                <td>3 | Đêm Buồn Tỉnh Lẻ – Dễ thể hiện với giọng khỏe.</td>
+            </tr>
+            <tr>
+                <td><b>419</b></td>
+                <td>3 | Chuyện Ba Người – Có đoạn cao trào, nhưng vẫn dễ hát.</td>
+            </tr>
+            <tr>
+                <td><b>420</b></td>
+                <td>3 | Vùng Lá Me Bay – Nhạc vàng nhưng có đoạn cao.</td>
+            </tr>
+            <tr>
+                <td><b>421</b></td>
+                <td>3 | Sầu Tím Thiệp Hồng – Hơi cao hơn nhạc vàng thông thường nhưng dễ kiểm soát.</td>
+            </tr>
+            <tr>
+                <td><b>422</b></td>
+                <td>3 | 📌 Thời điểm mở: Khi cảm xúc mạnh hơn, muốn thể hiện giọng rõ nét.</td>
+            </tr>
+            <tr>
+                <td><b>423</b></td>
+                <td>4 | 4. Khi Giọng Bạn Ở Tần Số Cao (G4–E5) – Khi hét, cảm xúc mạnh, giọng căng hơn</td>
+            </tr>
+            <tr>
+                <td><b>424</b></td>
+                <td>4 | 🔹 Bài hát phù hợp: Nhạc có cao trào, cần nội lực.</td>
+            </tr>
+            <tr>
+                <td><b>425</b></td>
+                <td>4 | Nửa Đêm Ngoài Phố – Đoạn cuối lên cao, dễ thể hiện khi giọng khỏe.</td>
+            </tr>
+            <tr>
+                <td><b>426</b></td>
+                <td>4 | Hàn Mặc Tử – Cao trào mạnh, hợp với người có giọng tốt.</td>
+            </tr>
+            <tr>
+                <td><b>427</b></td>
+                <td>4 | Mười Năm Tình Cũ – Cần độ vang, dễ hát khi giọng lên cao.</td>
+            </tr>
+            <tr>
+                <td><b>428</b></td>
+                <td>4 | Không Giờ Rồi – Hơi cao nhưng dễ luyến láy, cần cảm xúc mạnh.</td>
+            </tr>
+            <tr>
+                <td><b>429</b></td>
+                <td>4 | 📌 Thời điểm mở: Khi đang cảm xúc mãnh liệt, muốn thể hiện giọng ở mức cao nhất.</td>
+            </tr>
+            <tr>
+                <td><b>430</b></td>
+                <td>Tóm lại:</td>
+            </tr>
+            <tr>
+                <td><b>431</b></td>
+                <td>9 | ✅ Giọng trầm thấp (C2–G3) → Túy Ca, Giọt Lệ Đài Trang, Xin Gọi Nhau Là Cố Nhân</td>
+            </tr>
+            <tr>
+                <td><b>432</b></td>
+                <td>10 | ✅ Giọng trung bình (G3–C4) → Thành Phố Buồn, Ai Cho Tôi Tình Yêu, Hoa Nở Về Đêm</td>
+            </tr>
+            <tr>
+                <td><b>433</b></td>
+                <td>11 | ✅ Giọng khỏe hơn bình thường (C4–G4) → Đêm Buồn Tỉnh Lẻ, Chuyện Ba Người, Vùng Lá Me Bay</td>
+            </tr>
+            <tr>
+                <td><b>434</b></td>
+                <td>12 | ✅ Giọng cao nhất (G4–E5) → Hàn Mặc Tử, Mười Năm Tình Cũ, Không Giờ Rồi</td>
+            </tr>
+            <tr>
+                <td><b>435</b></td>
+                <td>Khi tần số Hz của giọng nói được đo, các giá trị có thể giúp xác định quãng giọng và cảm xúc phù hợp với các bài hát có hợp âm từ C đến B. Dưới đây là cách bạn có thể chọn bài hát phù hợp dựa trên tần số giọng nói của bạn, từ C (hợp âm trầm) đến B (hợp âm cao):</td>
+            </tr>
+            <tr>
+                <td><b>436</b></td>
+                <td>1 | 1. Tần Số Giọng Nói: 85Hz – 130Hz (Giọng Trầm, Nam Giới, Giọng Nói Thấp)</td>
+            </tr>
+            <tr>
+                <td><b>437</b></td>
+                <td>1 | 🔹 Đặc điểm: Giọng trầm, thấp, có thể là giọng nam baritone hoặc bass. Tần số thấp này có thể mang lại cảm giác ấm áp, trầm lắng, nhưng có thể thiếu độ vang khi hát ở quãng cao.</td>
+            </tr>
+            <tr>
+                <td><b>438</b></td>
+                <td>1 | 🔹 Bài hát phù hợp với hợp âm C đến B (Trầm, Tĩnh Lặng):</td>
+            </tr>
+            <tr>
+                <td><b>439</b></td>
+                <td>1 | Giọt Lệ Đài Trang (Hợp âm C, Am) → Nhẹ nhàng, phù hợp với giọng trầm, dễ ngân.</td>
+            </tr>
+            <tr>
+                <td><b>440</b></td>
+                <td>1 | Xin Gọi Nhau Là Cố Nhân (Hợp âm C, Dm) → Sâu lắng, cảm xúc, không cần lên quá cao.</td>
+            </tr>
+            <tr>
+                <td><b>441</b></td>
+                <td>1 | Lại Nhớ Người Yêu (Hợp âm G, F) → Quá trình hát không cần quãng giọng quá cao.</td>
+            </tr>
+            <tr>
+                <td><b>442</b></td>
+                <td>1 | Túy Ca (Hợp âm Em, Am) → Trầm, dễ luyến láy, phù hợp cho giọng thấp.</td>
+            </tr>
+            <tr>
+                <td><b>443</b></td>
+                <td>1 | 📌 Thời điểm mở: Khi bạn cảm thấy tâm trạng yên bình, nhẹ nhàng, hoặc đang thư giãn.</td>
+            </tr>
+            <tr>
+                <td><b>444</b></td>
+                <td>2 | 2. Tần Số Giọng Nói: 130Hz – 200Hz (Giọng Trung Bình, Đủ Độ Phát Âm, Thể Hiện Năng Lượng)</td>
+            </tr>
+            <tr>
+                <td><b>445</b></td>
+                <td>2 | 🔹 Đặc điểm: Giọng ở mức trung bình, dễ lên cao và thể hiện năng lượng. Phù hợp với những bài hát có cả những đoạn lên cao và xuống thấp.</td>
+            </tr>
+            <tr>
+                <td><b>446</b></td>
+                <td>2 | 🔹 Bài hát phù hợp với hợp âm C đến B (Trung Bình, Đầy Năng Lượng):</td>
+            </tr>
+            <tr>
+                <td><b>447</b></td>
+                <td>2 | Thành Phố Buồn (Hợp âm C, Em) → Hợp với giọng nam trung, không quá cao.</td>
+            </tr>
+            <tr>
+                <td><b>448</b></td>
+                <td>2 | Ai Cho Tôi Tình Yêu (Hợp âm F, G) → Phù hợp với những đoạn nhẹ nhàng và những đoạn cảm xúc lên cao.</td>
+            </tr>
+            <tr>
+                <td><b>449</b></td>
+                <td>2 | Hoa Nở Về Đêm (Hợp âm Am, F) → Trữ tình, dễ dàng thể hiện cảm xúc.</td>
+            </tr>
+            <tr>
+                <td><b>450</b></td>
+                <td>2 | Chuyện Tình Lan Và Điệp (Hợp âm G, C) → Dễ dàng kiểm soát, không quá khó lên cao.</td>
+            </tr>
+            <tr>
+                <td><b>451</b></td>
+                <td>2 | 📌 Thời điểm mở: Khi bạn cảm thấy cần thể hiện tình cảm, nhưng không muốn hát quá căng thẳng.</td>
+            </tr>
+            <tr>
+                <td><b>452</b></td>
+                <td>3 | 3. Tần Số Giọng Nói: 200Hz – 350Hz (Giọng Cao, Có Sức Lực, Cần Đoạn Cao Hơn)</td>
+            </tr>
+            <tr>
+                <td><b>453</b></td>
+                <td>3 | 🔹 Đặc điểm: Giọng cao, dễ dàng thể hiện các đoạn cao trào trong bài hát, có sức mạnh và vang.</td>
+            </tr>
+            <tr>
+                <td><b>454</b></td>
+                <td>3 | 🔹 Bài hát phù hợp với hợp âm C đến B (Cao, Có Độ Lực):</td>
+            </tr>
+            <tr>
+                <td><b>455</b></td>
+                <td>3 | Đêm Buồn Tỉnh Lẻ (Hợp âm Dm, C) → Phù hợp với những quãng cao, mạnh mẽ.</td>
+            </tr>
+            <tr>
+                <td><b>456</b></td>
+                <td>3 | Chuyện Ba Người (Hợp âm G, C) → Có đoạn cao trào, hợp với giọng khỏe.</td>
+            </tr>
+            <tr>
+                <td><b>457</b></td>
+                <td>3 | Sầu Tím Thiệp Hồng (Hợp âm F, B) → Đoạn cao và trữ tình, dễ ngân.</td>
+            </tr>
+            <tr>
+                <td><b>458</b></td>
+                <td>3 | Nửa Đêm Ngoài Phố (Hợp âm Am, Dm) → Căng thẳng và thể hiện cảm xúc mạnh mẽ.</td>
+            </tr>
+            <tr>
+                <td><b>459</b></td>
+                <td>3 | 📌 Thời điểm mở: Khi bạn cảm thấy cần giải tỏa cảm xúc mạnh mẽ, hát với năng lượng cao.</td>
+            </tr>
+            <tr>
+                <td><b>460</b></td>
+                <td>4 | 4. Tần Số Giọng Nói: 350Hz – 500Hz (Giọng Rất Cao, Cần Giọng Mạnh Mẽ, Thể Hiện Cảm Xúc Mạnh)</td>
+            </tr>
+            <tr>
+                <td><b>461</b></td>
+                <td>4 | 🔹 Đặc điểm: Giọng cao nhất, dễ dàng lên các nốt cao, cần sức mạnh và kĩ thuật để kiểm soát hơi thở và quãng giọng.</td>
+            </tr>
+            <tr>
+                <td><b>462</b></td>
+                <td>4 | 🔹 Bài hát phù hợp với hợp âm C đến B (Cao, Đầy Cảm Xúc):</td>
+            </tr>
+            <tr>
+                <td><b>463</b></td>
+                <td>4 | Hàn Mặc Tử (Hợp âm Bm, G) → Quá trình lên nốt cao mạnh mẽ, đòi hỏi cảm xúc mạnh.</td>
+            </tr>
+            <tr>
+                <td><b>464</b></td>
+                <td>4 | Mười Năm Tình Cũ (Hợp âm C, F) → Cần cảm xúc mạnh và độ luyến láy.</td>
+            </tr>
+            <tr>
+                <td><b>465</b></td>
+                <td>4 | Không Giờ Rồi (Hợp âm Dm, Am) → Quá trình hát cần năng lượng cao, giai điệu không quá thấp.</td>
+            </tr>
+            <tr>
+                <td><b>466</b></td>
+                <td>4 | Tình Bơ Vơ (Hợp âm Em, B) → Có phần ngân dài, cao trào.</td>
+            </tr>
+            <tr>
+                <td><b>467</b></td>
+                <td>4 | 📌 Thời điểm mở: Khi bạn cảm thấy muốn giải tỏa cảm xúc mạnh mẽ, hoặc cần thể hiện giọng đầy nội lực.</td>
+            </tr>
+            <tr>
+                <td><b>468</b></td>
+                <td>Tóm lại:</td>
+            </tr>
+            <tr>
+                <td><b>469</b></td>
+                <td>1 | Tần số thấp (85Hz–130Hz) → Xin Gọi Nhau Là Cố Nhân, Túy Ca, Giọt Lệ Đài Trang</td>
+            </tr>
+            <tr>
+                <td><b>470</b></td>
+                <td>2 | Tần số trung (130Hz–200Hz) → Thành Phố Buồn, Ai Cho Tôi Tình Yêu, Hoa Nở Về Đêm</td>
+            </tr>
+            <tr>
+                <td><b>471</b></td>
+                <td>3 | Tần số cao (200Hz–350Hz) → Đêm Buồn Tỉnh Lẻ, Chuyện Ba Người, Sầu Tím Thiệp Hồng</td>
+            </tr>
+            <tr>
+                <td><b>472</b></td>
+                <td>4 | Tần số rất cao (350Hz–500Hz) → Hàn Mặc Tử, Mười Năm Tình Cũ, Không Giờ Rồi</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

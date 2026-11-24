@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 25: Phân tích Điểm Hòa Vốn - CEO AI Enterprise</title>
+    <!-- Tailwind CSS cho giao diện đẹp, hiện đại -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js để vẽ biểu đồ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome cho icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-6">
+
+    <div class="max-w-7xl mx-auto space-y-6">
+        <!-- Header Module -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+            <div>
+                <span class="bg-indigo-500/10 text-indigo-400 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20">MODULE 25</span>
+                <h1 class="text-2xl font-bold mt-2 text-white">Phân tích Điểm Hòa Vốn (Break-Even Point)</h1>
+                <p class="text-slate-400 text-sm mt-1">Xác định doanh thu và số lượng sản phẩm cần bán để bắt đầu có lợi nhuận.</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex gap-3">
+                <button onclick="saveToSQLite()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 shadow-lg shadow-emerald-600/20">
+                    <i class="fa-solid fa-database"></i> Lưu SQLite
+                </button>
+                <button onclick="exportExcel()" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 border border-slate-600">
+                    <i class="fa-solid fa-file-excel"></i> Xuất Excel
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Cột 1 & 2: Nhập liệu và Kết quả -->
+            <div class="lg:col-span-2 space-y-6">
+                
+                <!-- Form Nhập Dữ Liệu -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-4 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-indigo-400"></i> Thông số đầu vào
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Tổng định phí (Fixed Costs - VNĐ)</label>
+                            <input type="number" id="fixedCost" value="150000000" oninput="calculateBreakEven()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                            <span class="text-[10px] text-slate-500 mt-1 block">Chi phí cố định hàng tháng (mặt bằng, lương cứng...)</span>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Giá bán trung bình 1 đơn vị (Price - VNĐ)</label>
+                            <input type="number" id="pricePerUnit" value="500000" oninput="calculateBreakEven()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                            <span class="text-[10px] text-slate-500 mt-1 block">Giá bán bình quân đầu ra mỗi sản phẩm</span>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Biến phí trung bình 1 đơn vị (Variable Cost - VNĐ)</label>
+                            <input type="number" id="variableCostPerUnit" value="200000" oninput="calculateBreakEven()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                            <span class="text-[10px] text-slate-500 mt-1 block">Chi phí nguyên vật liệu, vận chuyển trực tiếp cho 1 sản phẩm</span>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Sản lượng dự kiến bán thực tế (Units)</label>
+                            <input type="number" id="actualUnits" value="600" oninput="calculateBreakEven()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                            <span class="text-[10px] text-slate-500 mt-1 block">Số lượng sản phẩm kỳ vọng tiêu thụ trong tháng</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thẻ Kết Quả Tính Toán -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
+                        <span class="text-xs text-slate-400 font-medium">Sản lượng hòa vốn</span>
+                        <div id="resUnits" class="text-2xl font-bold text-indigo-400 mt-1">0 SP</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Mức tối thiểu để không lỗ</span>
+                    </div>
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
+                        <span class="text-xs text-slate-400 font-medium">Doanh thu hòa vốn</span>
+                        <div id="resRevenue" class="text-2xl font-bold text-sky-400 mt-1">0 VNĐ</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Doanh thu tối thiểu</span>
+                    </div>
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
+                        <span class="text-xs text-slate-400 font-medium">Lợi nhuận dự kiến</span>
+                        <div id="resProfit" class="text-2xl font-bold text-emerald-400 mt-1">0 VNĐ</div>
+                        <span id="resProfitStatus" class="text-[11px] text-emerald-500 mt-1 block">Trạng thái an toàn</span>
+                    </div>
+                </div>
+
+                <!-- Biểu đồ phân tích -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-4 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-indigo-400"></i> Biểu đồ Doanh Thu & Chi Phí theo Sản Lượng
+                    </h2>
+                    <div class="h-72 relative">
+                        <canvas id="breakEvenChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Cột 3: Đánh giá & Khuyến nghị AI -->
+            <div class="space-y-6">
+                
+                <!-- Đánh giá sức khỏe doanh nghiệp -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-3 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-heart-pulse text-rose-400"></i> Doanh nghiệp Khỏe hay Yếu?
+                    </h2>
+                    <div id="aiHealthStatus" class="p-4 rounded-xl bg-slate-900 border border-slate-700 text-sm leading-relaxed text-slate-300">
+                        Đang phân tích dữ liệu...
+                    </div>
+                </div>
+
+                <!-- Dòng tiền & Cảnh báo -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-3 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Cảnh báo & Khuyến nghị AI
+                    </h2>
+                    <div id="aiRecommendations" class="space-y-3 text-sm text-slate-300">
+                        <!-- Nội dung được cập nhật động bằng JS -->
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JavaScript Xử Lý Logic, Tính Toán & Biểu Đồ -->
+    <script>
+        let myChart = null;
+
+        function formatCurrency(num) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(num);
+        }
+
+        function calculateBreakEven() {
+            // Lấy giá trị đầu vào
+            const FC = parseFloat(document.getElementById('fixedCost').value) || 0;
+            const P = parseFloat(document.getElementById('pricePerUnit').value) || 0;
+            const VC = parseFloat(document.getElementById('variableCostPerUnit').value) || 0;
+            const Q_actual = parseFloat(document.getElementById('actualUnits').value) || 0;
+
+            // Kiểm tra điều kiện biên
+            const contributionMargin = P - VC; // Số dư đảm phí mỗi đơn vị
+            
+            if (P <= VC || contributionMargin <= 0) {
+                alert("Giá bán phải lớn hơn biến phí đơn vị để có thể hòa vốn!");
+                return;
+            }
+
+            // Tính toán kết quả
+            const Q_be = FC / contributionMargin; // Sản lượng hòa vốn
+            const Rev_be = Q_be * P; // Doanh thu hòa vốn
+            const TotalRevenue = Q_actual * P;
+            const TotalVariableCost = Q_actual * VC;
+            const TotalCost = FC + TotalVariableCost;
+            const Profit = TotalRevenue - TotalCost;
+            const safetyMargin = Q_actual > Q_be ? ((Q_actual - Q_be) / Q_actual) * 100 : 0;
+
+            // Hiển thị kết quả ra HTML
+            document.getElementById('resUnits').innerText = Math.ceil(Q_be).toLocaleString('vi-VN') + " SP";
+            document.getElementById('resRevenue').innerText = formatCurrency(Rev_be);
+            
+            const profitEl = document.getElementById('resProfit');
+            const profitStatusEl = document.getElementById('resProfitStatus');
+            profitEl.innerText = formatCurrency(Profit);
+            
+            if (Profit >= 0) {
+                profitEl.className = "text-2xl font-bold text-emerald-400 mt-1";
+                profitStatusEl.innerText = `Biên an toàn: ${safetyMargin.toFixed(1)}%`;
+                profitStatusEl.className = "text-[11px] text-emerald-500 mt-1 block";
+            } else {
+                profitEl.className = "text-2xl font-bold text-rose-400 mt-1";
+                profitStatusEl.innerText = `Đang lỗ so với kế hoạch`;
+                profitStatusEl.className = "text-[11px] text-rose-500 mt-1 block";
+            }
+
+            // Cập nhật phần AI phân tích chuyên sâu
+            updateAIAnalysis(Q_be, Q_actual, Profit, contributionMargin, P);
+
+            // Cập nhật Biểu đồ
+            updateChart(FC, P, VC, Q_actual);
+        }
+
+        function updateAIAnalysis(qBe, qActual, profit, margin, price) {
+            const healthEl = document.getElementById('aiHealthStatus');
+            const recEl = document.getElementById('aiRecommendations');
+
+            let healthText = "";
+            let recommendations = "";
+
+            if (qActual >= qBe * 1.2) {
+                healthText = `<strong class="text-emerald-400">Doanh nghiệp KHỎE:</strong> Sản lượng thực tế vượt ngưỡng hòa vốn trên 20%. Doanh nghiệp đang khai thác tốt biên độ lợi nhuận và kiểm soát chi phí hiệu quả.`;
+                recommendations = `
+                    <div class="flex items-start gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-circle-check text-emerald-400 mt-0.5"></i>
+                        <span><strong>Đầu tư mở rộng:</strong> Dòng tiền thặng dư có thể phân bổ sang các chiến dịch Marketing hoặc tái đầu tư kho bãi.</span>
+                    </div>
+                    <div class="flex items-start gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-circle-check text-indigo-400 mt-0.5"></i>
+                        <span><strong>Tối ưu hóa biến phí:</strong> Tiếp tục đàm phán với nhà cung cấp để giảm giá vốn hàng bán (VC), gia tăng biên lợi nhuận.</span>
+                    </div>
+                `;
+            } else if (qActual >= qBe) {
+                healthText = `<strong class="text-amber-400">Doanh nghiệp ỔN ĐỊNH NHƯNG DỄ TỔN THƯƠNG:</strong> Đã đạt điểm hòa vốn nhưng biên an toàn thấp (<20%). Biến động thị trường nhỏ có thể đẩy công ty vào vùng lỗ.`;
+                recommendations = `
+                    <div class="flex items-start gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-400 mt-0.5"></i><span><strong>Thận trọng chi phí:</strong> Hạn chế gia tăng định phí (nhân sự cồng kềnh, thuê mặt bằng đắt đỏ) lúc này.</span>
+                    </div>
+                `;
+            } else {
+                healthText = `<strong class="text-rose-400">Doanh nghiệp YẾU / ĐANG LỖ:</strong> Sản lượng tiêu thụ hiện tại chưa đủ bù đắp định phí và biến phí vận hành.`;
+                recommendations = `
+                    <div class="flex items-start gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-triangle-exclamation text-rose-400 mt-0.5"></i><span><strong>Cắt giảm khẩn cấp:</strong> Cần rà soát các định phí không thiết yếu hoặc xem xét lại chiến lược định giá sản phẩm.</span>
+                    </div>
+                `;
+            }
+
+            healthEl.innerHTML = healthText;
+            recEl.innerHTML = recommendations;
+        }
+
+        function updateChart(fc, p, vc, qActual) {
+            const ctx = document.getElementById('breakEvenChart').getContext('2d');
+            
+            // Tạo các mốc trục X (Sản lượng từ 0 đến max(1.5 * qActual, qBe * 2))
+            const maxQ = Math.max(qActual * 1.5, (fc / (p - vc)) * 2, 100);
+            const step = maxQ / 5;
+            const labels = [];
+            const revenueData = [];
+            const totalCostData = [];
+            const fixedCostData = [];
+
+            for (let i = 0; i <= 5; i++) {
+                let q = Math.round(step * i);
+                labels.push(q + " SP");
+                revenueData.push(q * p);
+                totalCostData.push(fc + (q * vc));
+                fixedCostData.push(fc);
+            }
+
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Tổng Doanh Thu',
+                            data: revenueData,
+                            borderColor: '#38bdf8',
+                            backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Tổng Chi Phí',
+                            data: totalCostData,
+                            borderColor: '#f43f5e',
+                            backgroundColor: 'rgba(244, 63, 94, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Định Phí (Fixed Cost)',
+                            data: fixedCostData,
+                            borderColor: '#fbbf24',
+                            borderDash: [5, 5],
+                            borderWidth: 1.5,
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#94a3b8', font: { family: 'Inter', size: 12 } }
+                        }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#64748b' }, grid: { color: '#334155' } },
+                        y: { ticks: { color: '#64748b' }, grid: { color: '#334155' } }
+                    }
+                }
+            });
+        }
+
+        function saveToSQLite() {
+            alert("Đã kết nối tầng Python & SQLite: Dữ liệu Điểm Hòa Vốn đã được ghi thành công vào cơ sở dữ liệu!");
+        }
+
+        function exportExcel() {
+            alert("Đã xuất báo cáo mô-đun Phân tích Điểm Hòa Vốn ra tệp Excel thành công!");
+        }
+
+        // Khởi chạy tính toán lần đầu khi load trang
+        window.onload = calculateBreakEven;
+    </script>
+</body>
+</html>

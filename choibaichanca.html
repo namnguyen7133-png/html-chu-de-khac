@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chắn Cạ · Lục Thập Hoa Giáp · 120 quân</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Noto Serif', 'Roboto', system-ui, sans-serif;
+        }
+        body {
+            background: #2d4a2d;
+            background-image: radial-gradient(circle at 20% 30%, #3e6b3e, #1e321e);
+            min-height: 100vh;
+            margin: 0;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .game-container {
+            max-width: 1400px;
+            width: 100%;
+            background: #1e3a1e;
+            border-radius: 48px 48px 32px 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), inset 0 2px 4px #a7c5a7;
+            padding: 24px 24px 32px;
+            border: 4px solid #b59b5e;
+        }
+        .game-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 0 12px;
+            color: #f7eac6;
+            text-shadow: 2px 2px 0 #1a2a1a;
+        }
+        .game-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            margin: 0;
+            color: #f3d37c;
+            text-shadow: 3px 3px 0 #2b3b1b;
+        }
+        .game-header h1 small {
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            color: #d4c28b;
+            margin-left: 16px;
+        }
+        .stats {
+            display: flex;
+            gap: 24px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .stats span {
+            background: #2d4a2d;
+            padding: 6px 16px;
+            border-radius: 40px;
+            border: 2px solid #b59b5e;
+            box-shadow: inset 0 1px 4px #00000066;
+        }
+        .table-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 12px;
+        }
+        .player-area, .opponent-area {
+            background: #2d4a2d;
+            border-radius: 32px;
+            padding: 18px 12px;
+            box-shadow: inset 0 0 0 2px #7d9f7d, inset 0 0 20px #00000055;
+            border: 2px solid #b59b5e;
+            min-height: 220px;
+            position: relative;
+        }
+        .opponent-area {
+            background: #294229;
+        }
+        .area-label {
+            position: absolute;
+            top: -12px;
+            left: 24px;
+            background: #b59b5e;
+            color: #1e2e1e;
+            padding: 4px 20px;
+            border-radius: 40px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 0 #5a4a2a;
+            border: 1px solid #f3e3b0;
+        }
+        .hand {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            align-items: center;
+            min-height: 100px;
+            margin-top: 12px;
+        }
+        .card {
+            width: 86px;
+            height: 118px;
+            background: #fcf9ee;
+            border-radius: 12px;
+            border: 2px solid #5a4a2a;
+            box-shadow: 0 6px 0 #3d2e1a, 0 8px 12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 4px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            font-weight: 600;
+            color: #1e2e1e;
+            user-select: none;
+            position: relative;
+            font-size: 0.75rem;
+            line-height: 1.2;
+            text-align: center;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 0 #3d2e1a, 0 14px 18px black;
+        }
+        .card.selected {
+            transform: translateY(-12px);
+            box-shadow: 0 0 0 4px #f3d37c, 0 12px 0 #3d2e1a, 0 16px 24px black;
+            background: #fffae6;
+        }
+        .card .canchi {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #2b3b1b;
+            text-transform: uppercase;
+        }
+        .card .nghia {
+            font-size: 0.6rem;
+            color: #5a4a2a;
+            font-style: italic;
+            line-height: 1.1;
+            max-height: 36px;
+            overflow: hidden;
+        }
+        .card .menh {
+            font-size: 0.7rem;
+            background: #d4c28b;
+            padding: 2px 6px;
+            border-radius: 12px;
+            border: 1px solid #8a7a4a;
+            color: #1e2e1e;
+            font-weight: 700;
+        }
+        .card .menh.nam {
+            background: #a7c5e0;
+        }
+        .card .menh.nu {
+            background: #e0a7c5;
+        }
+        .card.red {
+            background: #fff0e6;
+            border-color: #a02b1a;
+        }
+        .card.red .canchi {
+            color: #a02b1a;
+        }
+        .card.back {
+            background: repeating-linear-gradient(45deg, #3d5a3d, #3d5a3d 8px, #2b4a2b 8px, #2b4a2b 16px);
+            border-color: #b59b5e;
+            color: #b59b5e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: 800;
+            text-shadow: 2px 2px 0 #1e2e1e;
+            box-shadow: 0 6px 0 #5a4a2a, 0 8px 12px rgba(0, 0, 0, 0.5);
+            cursor: default;
+        }
+        .card.back:hover {
+            transform: none;
+            box-shadow: 0 6px 0 #5a4a2a, 0 8px 12px rgba(0, 0, 0, 0.5);
+        }
+        .card.hidden {
+            background: #294229;
+            border-color: #7d9f7d;
+            color: #b59b5e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            box-shadow: inset 0 0 0 2px #5a4a2a;
+        }
+        .card.hidden:hover {
+            transform: none;
+            box-shadow: inset 0 0 0 2px #5a4a2a;
+        }
+        .card .corner {
+            position: absolute;
+            top: 2px;
+            left: 4px;
+            font-size: 0.65rem;
+            font-weight: 900;
+            color: #b59b5e;
+            opacity: 0.8;
+        }
+        .card.red .corner {
+            color: #a02b1a;
+        }
+        .action-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin: 18px 0 12px;
+            align-items: center;
+        }
+        .btn {
+            background: #b59b5e;
+            border: none;
+            border-radius: 60px;
+            padding: 12px 32px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            color: #1e2e1e;
+            box-shadow: 0 6px 0 #5a4a2a, 0 8px 12px black;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+            border: 2px solid #f3e3b0;
+            text-transform: uppercase;
+        }
+        .btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 0 0 #5a4a2a, 0 4px 8px black;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            transform: translateY(6px);
+            box-shadow: 0 0 0 #5a4a2a, 0 4px 8px black;
+            pointer-events: none;
+        }
+        .btn.small {
+            padding: 8px 20px;
+            font-size: 1rem;
+            border-radius: 40px;
+        }
+        .btn.primary {
+            background: #f3d37c;
+            border-color: #fcf3c0;
+        }
+        .btn.danger {
+            background: #c05a4a;
+            color: #fcf3c0;
+        }
+        .btn.info {
+            background: #7d9f7d;
+            color: #fcf3c0;
+        }
+        .status-panel {
+            background: #1e2e1e;
+            border-radius: 40px;
+            padding: 16px 24px;
+            color: #f3e3b0;
+            font-size: 1rem;
+            border: 2px solid #b59b5e;
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            box-shadow: inset 0 0 12px black;
+            min-height: 70px;
+        }
+        .log {
+            font-size: 0.9rem;
+            color: #d4c28b;
+            font-style: italic;
+            max-width: 60%;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 6px 12px;
+            background: #142014;
+            border-radius: 24px;
+            border: 1px solid #5a4a2a;
+        }
+        .x-
+        .combo-highlight {
+            background: #f3d37c55;
+            border-radius: 8px;
+            padding: 0 4px;
+        }
+        .rules-link {
+            color: #f3d37c;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000000cc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            backdrop-filter: blur(4px);
+        }
+        .modal-content {
+            background: #1e3a1e;
+            padding: 32px 48px;
+            border-radius: 48px;
+            border: 4px solid #b59b5e;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: #f3e3b0;
+            box-shadow: 0 20px 40px black;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        .modal-content h2 {
+            color: #f3d37c;
+            margin-top: 0;
+            border-bottom: 2px solid #b59b5e;
+            padding-bottom: 12px;
+        }
+        .modal-content ul {
+            padding-left: 24px;
+        }
+        .modal-content li {
+            margin-bottom: 8px;
+        }
+        .hidden {
+            display: none !important;
+        }
+        @media (max-width: 1100px) {
+            .card { width: 70px; height: 100px; }
+            .card .canchi { font-size: 0.85rem; }
+            .card .nghia { font-size: 0.5rem; }
+        }
+        @media (max-width: 800px) {
+            .table-area { grid-template-columns: 1fr; }
+            .card { width: 64px; height: 92px; }
+            .game-header h1 { font-size: 1.5rem; }
+        }
+        .badge {
+            background: #c05a4a;
+            color: #fcf3c0;
+            border-radius: 24px;
+            padding: 2px 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <div class="game-header">
+        <h1>CHẮN CẠ <small>LỤC THẬP HOA GIÁP</small></h1>
+        <div class="stats">
+            <span>🃏 <span id="deckCount">120</span></span>
+            <span>👤 <span id="playerCount">0</span></span>
+            <span>🤖 <span id="opponentCount">0</span></span>
+            <span>🎯 <span id="scoreDisplay">0</span></span>
+        </div>
+    </div>
+
+    <div class="table-area">
+        <div class="player-area">
+            <div class="area-label">👤 BẠN</div>
+            <div class="hand" id="playerHand"></div>
+        </div>
+        <div class="opponent-area">
+            <div class="area-label">🤖 ĐỐI THỦ</div>
+            <div class="hand" id="opponentHand"></div>
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <button class="btn primary" id="dealBtn">🎲 CHIA BÀI</button>
+        <button class="btn" id="drawBtn" disabled>📥 RÚT BÀI</button>
+        <button class="btn" id="discardBtn" disabled>🗑️ ĐÁNH BÀI</button>
+        <button class="btn info" id="chiuBtn" disabled>⚡ CHÍU</button>
+        <button class="btn info" id="uxuongBtn" disabled>🎉 Ù / XƯỚNG</button>
+        <button class="btn small" id="rulesBtn">📜 LUẬT CHƠI</button>
+    </div>
+
+    <div class="status-panel">
+        <div class="log" id="logMessage">Nhấn "CHIA BÀI" để bắt đầu ván chắn cạ 120 quân.</div>
+        <div><span class="badge" id="turnIndicator">Lượt: Bạn</span></div>
+    </div>
+</div>
+
+<!-- Modal luật chơi -->
+<div class="modal hidden" id="rulesModal">
+    <div class="modal-content">
+        <h2>📜 LUẬT CHƠI CHẮN CẠ · LỤC THẬP HOA GIÁP</h2>
+        <p><strong>Bộ bài 120 quân:</strong> Gồm 60 Can Chi (Giáp Tý → Quý Hợi) nhân đôi (mỗi quân 2 bản). Mỗi quân có Ngũ Hành, Âm Dương, Can, Chi, Tạng Phủ, Mệnh Nam/Nữ.</p>
+        <h3>🎴 CÁCH CHƠI CƠ BẢN</h3>
+        <ul>
+            <li><strong>Chia bài:</strong> Mỗi người 20 quân, còn lại là nọc (bài chung).</li>
+            <li><strong>Rút bài:</strong> Đến lượt, bạn rút 1 quân từ nọc. Nếu ăn được (tạo thành Chắn hoặc Cạ) thì có thể đánh ra 1 quân rác. Nếu không ăn được, bạn phải đánh 1 quân trên tay xuống.</li>
+            <li><strong>Chắn:</strong> 2 quân giống hệt nhau (cùng Can Chi).</li>
+            <li><strong>Cạ:</strong> 2 quân cùng hàng (cùng Can hoặc cùng Chi) nhưng khác Can Chi. Ví dụ: Giáp Tý và Giáp Sửu (cùng Can Giáp) hoặc Giáp Tý và Bính Tý (cùng Chi Tý).</li>
+            <li><strong>Chíu:</strong> Khi bạn có 2 quân giống hệt, và đối thủ đánh ra quân thứ 3 → bạn có thể "chíu" (ăn) quân đó để tạo thành 3 quân giống nhau (tính là chắn).</li>
+            <li><strong>Ù:</strong> Khi tất cả 20 quân trên tay đều tạo thành Chắn hoặc Cạ hợp lệ (không có quân rác).</li>
+            <li><strong>Xướng:</strong> Khi ù, bạn phải xướng tên các bộ (Chắn, Cạ, Chíu...) theo quy định. Trong game mô phỏng này, hệ thống tự động kiểm tra và hiển thị kết quả.</li>
+        </ul>
+        <h3>⚡ CHÍU</h3>
+        <p>Khi đối thủ đánh ra quân X, nếu bạn có đúng 2 quân X trên tay, bạn có thể nhấn "CHÍU" để ăn. Sau khi chíu, bạn phải đánh trả 1 quân.</p>
+        <h3>🎉 Ù VÀ XƯỚNG</h3>
+        <p>Ù khi 20 quân chia thành 10 bộ (Chắn/Cạ) hợp lệ. Hệ thống sẽ tự động kiểm tra và thông báo. Nếu ù, bạn thắng và nhận điểm.</p>
+        <h3>🏆 TÍNH ĐIỂM</h3>
+        <ul>
+            <li>Ù thường: +10 điểm</li>
+            <li>Ù có Chíu: +15 điểm</li>
+            <li>Ù có Xướng (bộ đặc biệt): +20 điểm</li>
+        </ul>
+        <p style="margin-top:20px; color:#d4c28b;"><em>Game mô phỏng đơn giản hóa luật chắn cạ, tập trung vào trải nghiệm 120 quân Lục Thập Hoa Giáp.</em></p>
+        <button class="btn primary" id="closeRulesBtn" style="margin-top:16px;">ĐÓNG</button>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ====================== DỮ LIỆU 60 CAN CHI ======================
+        const CAN_CHI_DATA = [
+            { canchi: "Giáp Tý", nghia: "Ốc Thượng Chi Thử (Chuột ở nóc nhà)", menh: "Kim +", nguHanh: "Hải Trung Kim (Vàng trong biển)", menhNu: "Đoài Kim", menhNam: "Cấn Thổ", can: "Giáp", chi: "Tý", tang: "GAN" },
+            { canchi: "Ất Sửu", nghia: "Hải Nội Chi Ngưu (Trâu trong biển)", menh: "Kim -", nguHanh: "Hải Trung Kim (Vàng trong biển)", menhNu: "Càn Kim", menhNam: "Ly Hoả", can: "Ất", chi: "Sửu", tang: "PHỔI" },
+            { canchi: "Bính Dần", nghia: "Sơn Lâm Chi Hổ (Hổ trong rừng)", menh: "Hỏa +", nguHanh: "Lư Trung Hỏa (Lửa trong lò)", menhNu: "Khôn Thổ", menhNam: "Khảm Thuỷ", can: "Bính", chi: "Dần", tang: "DỒI" },
+            { canchi: "Đinh Mão", nghia: "Vọng Nguyệt Chi Thố (Thỏ ngắm trăng)", menh: "Hỏa -", nguHanh: "Lư Trung Hỏa (Lửa trong lò)", menhNu: "Tốn Mộc", menhNam: "Khôn Thổ", can: "Đinh", chi: "Mão", tang: "DẠ DÀY" },
+            { canchi: "Mậu Thìn", nghia: "Thanh Ôn Chi Long (Rồng ôn hoà)", menh: "Mộc +", nguHanh: "Đại Lâm Mộc (Gỗ rừng già)", menhNu: "Chấn Mộc", menhNam: "Chấn Mộc", can: "Mậu", chi: "Thìn", tang: "TỤY, LÁ NÁCH" },
+            { canchi: "Kỷ Tỵ", nghia: "Phúc Khí Chi Xà (Rắn có phúc)", menh: "Mộc -", nguHanh: "Đại Lâm Mộc (Gỗ rừng già)", menhNu: "Khôn Thổ", menhNam: "Tốn Mộc", can: "Kỷ", chi: "Tỵ", tang: "TIM" },
+            { canchi: "Canh Ngọ", nghia: "Thất Lý Chi Mã (Ngựa trong nhà)", menh: "Thổ +", nguHanh: "Lộ Bàng Thổ (Đất đường đi)", menhNu: "Đoài Kim", menhNam: "Cấn Thổ", can: "Canh", chi: "Ngọ", tang: "LÒNG" },
+            { canchi: "Tân Mùi", nghia: "Đắc Lộc Chi Dương (Dê có lộc)", menh: "Thổ -", nguHanh: "Lộ Bàng Thổ (Đất đường đi)", menhNu: "Càn Kim", menhNam: "Ly Hoả", can: "Tân", chi: "Mùi", tang: "BÀNG QUANG" },
+            { canchi: "Nhâm Thân", nghia: "Thanh Tú Chi Hầu (Khỉ thanh tú)", menh: "Kim +", nguHanh: "Kiếm Phong Kim (Vàng mũi kiếm)", menhNu: "Khôn Thổ", menhNam: "Khảm Thuỷ", can: "Nhâm", chi: "Thân", tang: "THẬN" },
+            { canchi: "Quý Dậu", nghia: "Lâu Túc Kê (Gà nhà gác)", menh: "Kim -", nguHanh: "Kiếm Phong Kim (Vàng mũi kiếm)", menhNu: "Tốn Mộc", menhNam: "Khôn Thổ", can: "Quý", chi: "Dậu", tang: "TIM" },
+            { canchi: "Giáp Tuất", nghia: "Thủ Thân Chi Cẩu (Chó giữ mình)", menh: "Hỏa +", nguHanh: "Sơn Đầu Hỏa (Lửa trên núi)", menhNu: "Chấn Mộc", menhNam: "Chấn Mộc", can: "Giáp", chi: "Tuất", tang: "KINH MẠCH, TÁ TRÀNG" },
+            { canchi: "Ất Hợi", nghia: "Quá Vãng Chi Trư (Lợn hay đi)", menh: "Hỏa -", nguHanh: "Sơn Đầu Hỏa (Lửa trên núi)", menhNu: "Khôn Thổ", menhNam: "Tốn Mộc", can: "Ất", chi: "Hợi", tang: "TÚI, MẬT" },
+            { canchi: "Bính Tý", nghia: "Điền Nội Chi Thử (Chuột trong ruộng)", menh: "Thủy +", nguHanh: "Giản Hạ Thủy (Nước khe suối)", menhNu: "Khảm Thuỷ", menhNam: "Khôn Thổ", can: "Bính", chi: "Tý", tang: "GAN" },
+            { canchi: "Đinh Sửu", nghia: "Hồ Nội Chi Ngưu (Trâu trong hồ nước)", menh: "Thủy -", nguHanh: "Giản Hạ Thủy (Nước khe suối)", menhNu: "Ly Hoả", menhNam: "Càn Kim", can: "Đinh", chi: "Sửu", tang: "PHỔI" },
+            { canchi: "Mậu Dần", nghia: "Quá Sơn Chi Hổ (Hổ qua rừng)", menh: "Thổ +", nguHanh: "Thành Đầu Thổ (Đất trên thành)", menhNu: "Cấn Thổ", menhNam: "Đoài Kim", can: "Mậu", chi: "Dần", tang: "DỒI" },
+            { canchi: "Kỷ Mão", nghia: "Sơn Lâm Chi Thố (Thỏ ở rừng)", menh: "Thổ -", nguHanh: "Thành Đầu Thổ (Đất trên thành)", menhNu: "Đoài Kim", menhNam: "Cấn Thổ", can: "Kỷ", chi: "Mão", tang: "DẠ DÀY" },
+            { canchi: "Canh Thìn", nghia: "Thứ Tính Chi Long (Rồng khoan dung)", menh: "Kim +", nguHanh: "Bạch Lạp Kim (Vàng sáp ong)", menhNu: "Càn Kim", menhNam: "Ly Hoả", can: "Canh", chi: "Thìn", tang: "TỤY" },
+            { canchi: "Tân Tỵ", nghia: "Đông Tàng Chi Xà (Rắn ngủ đông)", menh: "Kim -", nguHanh: "Bạch Lạp Kim (Vàng sáp ong)", menhNu: "Khôn Thổ", menhNam: "Khảm Thuỷ", can: "Tân", chi: "Tỵ", tang: "TIM" },
+            { canchi: "Nhâm Ngọ", nghia: "Quân Trung Chi Mã (Ngựa chiến)", menh: "Mộc +", nguHanh: "Dương Liễu Mộc (Gỗ cây dương)", menhNu: "Tốn Mộc", menhNam: "Khôn Thổ", can: "Nhâm", chi: "Ngọ", tang: "LÒNG" },
+            { canchi: "Quý Mùi", nghia: "Quần Nội Chi Dương (Dê trong đàn)", menh: "Mộc -", nguHanh: "Dương Liễu Mộc (Gỗ cây dương)", menhNu: "Chấn Mộc", menhNam: "Chấn Mộc", can: "Quý", chi: "Mùi", tang: "BÀNG QUANG" },
+            { canchi: "Giáp Thân", nghia: "Quá Thụ Chi Hầu (Khỉ leo cây)", menh: "Thủy +", nguHanh: "Tuyền Trung Thủy (Nước trong suối)", menhNu: "Khôn Thổ", menhNam: "Tốn Mộc", can: "Giáp", chi: "Thân", tang: "THẬN" },
+            { canchi: "Ất Dậu", nghia: "Xướng Ngọ Chi Kê (Gà gáy trưa)", menh: "Thủy -", nguHanh: "Tuyền Trung Thủy (Nước trong suối)", menhNu: "Khảm Thuỷ", menhNam: "Khôn Thổ", can: "Ất", chi: "Dậu", tang: "TIM" },
+            { canchi: "Bính Tuất", nghia: "Tự Miên Chi Cẩu (Chó đang ngủ)", menh: "Thổ +", nguHanh: "Ốc Thượng Thổ (Đất nóc nhà)", menhNu: "Ly Hoả", menhNam: "Càn Kim", can: "Bính", chi: "Tuất", tang: "KINH MẠCH" },
+            { canchi: "Đinh Hợi", nghia: "Quá Sơn Chi Trư (Lợn qua núi)", menh: "Thổ -", nguHanh: "Ốc Thượng Thổ (Đất nóc nhà)", menhNu: "Cấn Thổ", menhNam: "Đoài Kim", can: "Đinh", chi: "Hợi", tang: "MẬT" },
+            { canchi: "Mậu Tý", nghia: "Thương Nội Chi Trư (Chuột trong kho)", menh: "Hỏa +", nguHanh: "Thích Lịch Hỏa (Lửa sấm sét)", menhNu: "Đoài Kim", menhNam: "Cấn Thổ", can: "Mậu", chi: "Tý", tang: "GAN" },
+            { canchi: "Kỷ Sửu", nghia: "Lâm Nội Chi Ngưu (Trâu trong chuồng)", menh: "Hỏa -", nguHanh: "Thích Lịch Hỏa (Lửa sấm sét)", menhNu: "Càn Kim", menhNam: "Ly Hoả", can: "Kỷ", chi: "Sửu", tang: "PHỔI" },
+            { canchi: "Canh Dần", nghia: "Xuất Sơn Chi Hổ (Hổ xuống núi)", menh: "Mộc +", nguHanh: "Tùng Bách Mộc (Gỗ tùng bách)", menhNu: "Khôn Thổ", menhNam: "Khảm Thuỷ", can: "Canh", chi: "Dần", tang: "DỒI" },
+            { canchi: "Tân Mão", nghia: "Ẩn Huyệt Chi Thố (Thỏ trong hang)", menh: "Mộc -", nguHanh: "Tùng Bách Mộc (Gỗ tùng bách)", menhNu: "Tốn Mộc", menhNam: "Khôn Thổ", can: "Tân", chi: "Mão", tang: "DẠ DÀY" },
+            { canchi: "Nhâm Thìn", nghia: "Hành Vũ Chi Long (Rồng phun mưa)", menh: "Thủy +", nguHanh: "Trường Lưu Thủy (Nước chảy mạnh)", menhNu: "Chấn Mộc", menhNam: "Chấn Mộc", can: "Nhâm", chi: "Thìn", tang: "TỤY" },
+            { canchi: "Quý Tỵ", nghia: "Thảo Trung Chi Xà (Rắn trong cỏ)", menh: "Thủy -", nguHanh: "Trường Lưu Thủy (Nước chảy mạnh)", menhNu: "Khôn Thổ", menhNam: "Tốn Mộc", can: "Quý", chi: "Tỵ", tang: "TIM" },
+            { canchi: "Giáp Ngọ", nghia: "Vân Trung Chi Mã (Ngựa trong mây)", menh: "Kim +", nguHanh: "Sa Trung Kim (Vàng trong cát)", menhNu: "Khảm Thuỷ", menhNam: "Khôn Thổ", can: "Giáp", chi: "Ngọ", tang: "LÒNG" },
+            { canchi: "Ất Mùi", nghia: "Kính Trọng Chi Dương (Dê được quý mến)", menh: "Kim -", nguHanh: "Sa Trung Kim (Vàng trong cát)", menhNu: "Ly Hoả", menhNam: "Càn Kim", can: "Ất", chi: "Mùi", tang: "BÀNG QUANG" },
+            { canchi: "Bính Thân", nghia: "Sơn Thượng Chi Hầu (Khỉ trên núi)", menh: "Hỏa +", nguHanh: "Sơn Hạ Hỏa (Lửa trên núi)", menhNu: "Cấn Thổ", menhNam: "Đoài Kim", can: "Bính", chi: "Thân", tang: "THẬN" },
+            { canchi: "Đinh Dậu", nghia: "Độc Lập Chi Kê (Gà độc thân)", menh: "Hỏa -", nguHanh: "Sơn Hạ Hỏa (Lửa trên núi)", menhNu: "Đoài Kim", menhNam: "Cấn Thổ", can: "Đinh", chi: "Dậu", tang: "TIM" },
+            { canchi: "Mậu Tuất", nghia: "Tiến Sơn Chi Cẩu (Chó vào núi)", menh: "Mộc +", nguHanh: "Bình Địa Mộc (Gỗ đồng bằng)", menhNu: "Càn Kim", menhNam: "Ly Hoả", can: "Mậu", chi: "Tuất", tang: "KINH MẠCH" },
+            { canchi: "Kỷ Hợi", nghia: "Đạo Viện Chi Trư (Lợn trong tu viện)", menh: "Mộc -", nguHanh: "Bình Địa Mộc (Gỗ đồng bằng)", menhNu: "Khôn Thổ", menhNam: "Khảm Thuỷ", can: "Kỷ", chi: "Hợi", tang: "MẬT" },
+            { canchi: "Canh Tý", nghia: "Lương Thượng Chi Thử (Chuột trên xà)", menh: "Thổ +", nguHanh: "Bích Thượng Thổ (Đất tò vò)", menhNu: "Tốn Mộc", menhNam: "Khôn Thổ", can: "Canh", chi: "Tý", tang: "GAN" },
+            { canchi: "Tân Sửu", nghia: "Lộ Đồ Chi Ngưu (Trâu trên đường)", menh: "Thổ -", nguHanh: "Bích Thượng Thổ (Đất tò vò)", menhNu: "Chấn Mộc", menhNam: "Chấn Mộc", can: "Tân", chi: "Sửu", tang: "PHỔI" },
+            { canchi: "Nhâm Dần", nghia: "Quá Lâm Chi Hổ (Hổ qua rừng)", menh: "Kim +", nguHanh: "Kim Bạch Kim (Vàng pha bạc)", menhNu: "Khôn Thổ", menhNam: "Tốn Mộc", can: "Nhâm", chi: "Dần", tang: "DỒI" },
+            { canchi: "Quý Mão", nghia: "Quá Lâm Chi Thố (Thỏ qua rừng)", menh: "Kim -", nguHanh: "Kim Bạch Kim (Vàng pha bạc)", menhNu: "Khảm Thuỷ", menhNam: "Khôn Thổ", can: "Quý", chi: "Mão", tang: "DẠ DÀY" },
+            { canchi: "Giáp Thìn", nghia: "Phục Đầm Chi Lâm (Rồng ẩn ở đầm)", menh: "Hỏa +", nguHanh: "Phú Đăng Hỏa (Lửa đèn to)", menhNu: "Ly Hoả", menhNam: "Càn Kim", can: "Giáp", chi: "Thìn", tang: "TỤY" },
+            { canchi: "Ất Tỵ", nghia: "Xuất Huyệt Chi Xà (Rắn rời hang)", menh: "Hỏa -", nguHanh: "Phú Đăng Hỏa (Lửa đèn to)", menhNu: "Cấn Thổ", menhNam: "Đoài Kim", can: "Ất", chi: "Tỵ", tang: "TIM" },
+            { canchi: "Bính Ngọ", nghia: "Hành Lộ Chi Mã (Ngựa chạy trên đường)", menh: "Thủy +", nguHanh: "Thiên Hà Thủy (Nước trên trời)", menhNu: "Đoài Kim", menhNam: "Cấn Thổ", can: "Bính", chi: "Ngọ", tang: "LÒNG" },
+            { canchi: "Đinh Mùi", nghia: "Thất Quần Chi Dương (Dê lạc đàn)", menh: "Thủy -", nguHanh: "Thiên Hà Thủy (Nước trên trời)", menhNu: "Càn Kim", menhNam: "Ly Hoả", can: "Đinh", chi: "Mùi", tang: "BÀNG QUANG" },
+            { canchi: "Mậu Thân", nghia: "Độc Lập Chi Hầu (Khỉ độc thân)", menh: "Thổ +", nguHanh: "Đại Trạch Thổ (Đất nền nhà)", menhNu: "Khôn Thổ", menhNam: "Khảm Thuỷ", can: "Mậu", chi: "Thân", tang: "THẬN" },
+            { canchi: "Kỷ Dậu", nghia: "Báo Hiệu Chi Kê (Gà gáy)", menh: "Thổ -", nguHanh: "Đại Trạch Thổ (Đất nền nhà)", menhNu: "Tốn Mộc", menhNam: "Khôn Thổ", can: "Kỷ", chi: "Dậu", tang: "TIM" },
+            { canchi: "Canh Tuất", nghia: "Tự Quan Chi Cẩu (Chó nhà chùa)", menh: "Kim +", nguHanh: "Thoa Xuyến Kim (Vàng trang sức)", menhNu: "Chấn Mộc", menhNam: "Chấn Mộc", can: "Canh", chi: "Tuất", tang: "KINH MẠCH" },
+            { canchi: "Tân Hợi", nghia: "Khuyên Dưỡng Chi Trư (Lợn nuôi nhốt)", menh: "Kim -", nguHanh: "Thoa Xuyến Kim (Vàng trang sức)", menhNu: "Khôn Thổ", menhNam: "Tốn Mộc", can: "Tân", chi: "Hợi", tang: "MẬT" },
+            { canchi: "Nhâm Tý", nghia: "Sơn Thượng Chi Thử (Chuột trên núi)", menh: "Mộc +", nguHanh: "Tang Đố Mộc (Gỗ cây dâu)", menhNu: "Khảm Thuỷ", menhNam: "Khôn Thổ", can: "Nhâm", chi: "Tý", tang: "GAN" },
+            { canchi: "Quý Sửu", nghia: "Lan Ngoại Chi Ngưu (Trâu ngoài chuồng)", menh: "Mộc -", nguHanh: "Tang Đố Mộc (Gỗ cây dâu)", menhNu: "Ly Hoả", menhNam: "Càn Kim", can: "Quý", chi: "Sửu", tang: "PHỔI" },
+            { canchi: "Giáp Dần", nghia: "Lập Định Chi Hổ (Hổ tự lập)", menh: "Thủy +", nguHanh: "Đại Khe Thủy (Nước khe lớn)", menhNu: "Cấn Thổ", menhNam: "Đoài Kim", can: "Giáp", chi: "Dần", tang: "DỒI" },
+            { canchi: "Ất Mão", nghia: "Đắc Đạo Chi Thố (Thỏ đắc đạo)", menh: "Thủy -", nguHanh: "Đại Khe Thủy (Nước khe lớn)", menhNu: "Đoài Kim", menhNam: "Cấn Thổ", can: "Ất", chi: "Mão", tang: "DẠ DÀY" },
+            { canchi: "Bính Thìn", nghia: "Thiên Thượng Chi Long (Rồng trên trời)", menh: "Thổ +", nguHanh: "Sa Trung Thổ (Đất pha cát)", menhNu: "Càn Kim", menhNam: "Ly Hoả", can: "Bính", chi: "Thìn", tang: "TỤY" },
+            { canchi: "Đinh Tỵ", nghia: "Đầm Nội Chi Xà (Rắn trong đầm)", menh: "Thổ -", nguHanh: "Sa Trung Thổ (Đất pha cát)", menhNu: "Khôn Thổ", menhNam: "Khảm Thuỷ", can: "Đinh", chi: "Tỵ", tang: "TIM" },
+            { canchi: "Mậu Ngọ", nghia: "Cứu Nội Chi Mã (Ngựa trong chuồng)", menh: "Hỏa +", nguHanh: "Thiên Thượng Hỏa (Lửa trên trời)", menhNu: "Tốn Mộc", menhNam: "Khôn Thổ", can: "Mậu", chi: "Ngọ", tang: "LÒNG" },
+            { canchi: "Kỷ Mùi", nghia: "Thảo Dã Chi Dương (Dê đồng cỏ)", menh: "Hỏa -", nguHanh: "Thiên Thượng Hỏa (Lửa trên trời)", menhNu: "Chấn Mộc", menhNam: "Chấn Mộc", can: "Kỷ", chi: "Mùi", tang: "BÀNG QUANG" },
+            { canchi: "Canh Thân", nghia: "Thực Quả Chi Hầu (Khỉ ăn hoa quả)", menh: "Mộc +", nguHanh: "Thạch Lựu Mộc (Gỗ cây lựu đá)", menhNu: "Khôn Thổ", menhNam: "Tốn Mộc", can: "Canh", chi: "Thân", tang: "THẬN" },
+            { canchi: "Tân Dậu", nghia: "Long Tàng Chi Kê (Gà trong lồng)", menh: "Mộc -", nguHanh: "Thạch Lựu Mộc (Gỗ cây lựu đá)", menhNu: "Khảm Thuỷ", menhNam: "Khôn Thổ", can: "Tân", chi: "Dậu", tang: "TIM" },
+            { canchi: "Nhâm Tuất", nghia: "Cố Gia Chi Khuyển (Chó về nhà)", menh: "Thủy +", nguHanh: "Đại Hải Thủy (Nước biển lớn)", menhNu: "Ly Hoả", menhNam: "Càn Kim", can: "Nhâm", chi: "Tuất", tang: "KINH MẠCH" },
+            { canchi: "Quý Hợi", nghia: "Lâm Hạ Chi Trư (Lợn trong rừng)", menh: "Thủy -", nguHanh: "Đại Hải Thủy (Nước biển lớn)", menhNu: "Cấn Thổ", menhNam: "Đoài Kim", can: "Quý", chi: "Hợi", tang: "MẬT" }
+        ];
+
+        // Tạo bộ 120 quân (mỗi can chi 2 bản)
+        function createDeck() {
+            const deck = [];
+            CAN_CHI_DATA.forEach((item, idx) => {
+                // Bản 1
+                deck.push({ ...item, id: `${item.canchi}-0`, uid: idx * 2 });
+                // Bản 2
+                deck.push({ ...item, id: `${item.canchi}-1`, uid: idx * 2 + 1 });
+            });
+            return deck;
+        }
+
+        // ====================== BIẾN TOÀN CỤC ======================
+        let deck = [];                 // nọc
+        let playerHand = [];
+        let opponentHand = [];
+        let playerScore = 0;
+        let turn = 'player';           // 'player' | 'opponent'
+        let selectedCard = null;       // quân bài đang chọn trên tay
+        let gamePhase = 'idle';        // 'idle' | 'playing'
+        let hasDrawnThisTurn = false;
+        let lastDiscard = null;        // quân bài vừa đánh ra (để chíu)
+        let logMessages = [];
+
+        // DOM elements
+        const playerHandEl = document.getElementById('playerHand');
+        const opponentHandEl = document.getElementById('opponentHand');
+        const deckCountEl = document.getElementById('deckCount');
+        const playerCountEl = document.getElementById('playerCount');
+        const opponentCountEl = document.getElementById('opponentCount');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const dealBtn = document.getElementById('dealBtn');
+        const drawBtn = document.getElementById('drawBtn');
+        const discardBtn = document.getElementById('discardBtn');
+        const chiuBtn = document.getElementById('chiuBtn');
+        const uxuongBtn = document.getElementById('uxuongBtn');
+        const rulesBtn = document.getElementById('rulesBtn');
+        const rulesModal = document.getElementById('rulesModal');
+        const closeRulesBtn = document.getElementById('closeRulesBtn');
+        const logMessageEl = document.getElementById('logMessage');
+        const turnIndicator = document.getElementById('turnIndicator');
+
+        // ====================== HÀM TIỆN ÍCH ======================
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function addLog(msg) {
+            logMessages.push(msg);
+            if (logMessages.length > 8) logMessages.shift();
+            logMessageEl.textContent = logMessages[logMessages.length - 1] || '...';
+        }
+
+        function updateUI() {
+            deckCountEl.textContent = deck.length;
+            playerCountEl.textContent = playerHand.length;
+            opponentCountEl.textContent = opponentHand.length;
+            scoreDisplay.textContent = playerScore;
+            turnIndicator.textContent = `Lượt: ${turn === 'player' ? 'Bạn' : 'Đối thủ'}`;
+
+            // Render player hand
+            playerHandEl.innerHTML = '';
+            playerHand.forEach((card, index) => {
+                const cardEl = createCardElement(card, index, true);
+                if (selectedCard && selectedCard.uid === card.uid) {
+                    cardEl.classList.add('selected');
+                }
+                playerHandEl.appendChild(cardEl);
+            });
+
+            // Render opponent hand (úp)
+            opponentHandEl.innerHTML = '';
+            opponentHand.forEach((card, index) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'card back';
+                cardEl.textContent = '🀫';
+                opponentHandEl.appendChild(cardEl);
+            });
+
+            // Bật/tắt nút
+            const isPlayerTurn = (turn === 'player' && gamePhase === 'playing');
+            drawBtn.disabled = !(isPlayerTurn && !hasDrawnThisTurn && deck.length > 0);
+            discardBtn.disabled = !(isPlayerTurn && hasDrawnThisTurn && selectedCard !== null);
+            chiuBtn.disabled = !(isPlayerTurn && lastDiscard && playerHand.filter(c => c.canchi === lastDiscard.canchi).length >= 2 && hasDrawnThisTurn === false);
+            uxuongBtn.disabled = !(isPlayerTurn && checkU(playerHand));
+
+            // Hiển thị nút ù nếu đủ điều kiện
+            if (isPlayerTurn && checkU(playerHand)) {
+                uxuongBtn.style.background = '#f3d37c';
+                uxuongBtn.style.boxShadow = '0 0 20px #f3d37c';
+            } else {
+                uxuongBtn.style.background = '';
+                uxuongBtn.style.boxShadow = '';
+            }
+        }
+
+        function createCardElement(card, index, isPlayer) {
+            const div = document.createElement('div');
+            div.className = 'card';
+            if (card.menh.includes('Hỏa') || card.menh.includes('Thủy')) {
+                // đỏ cho hỏa, xanh cho thủy? Thực tế chắn cạ phân biệt màu, nhưng ta tô đỏ cho hành Hỏa
+            }
+            // Tô đỏ nếu mệnh có Hỏa +
+            if (card.menh.includes('Hỏa')) {
+                div.classList.add('red');
+            }
+
+            // Nội dung
+            div.innerHTML = `
+                <div class="corner">${card.menh}</div>
+                <div class="canchi">${card.canchi}</div>
+                <div class="nghia">${card.nghia}</div>
+                <div class="menh ${card.menh.includes('+') ? 'nam' : 'nu'}">${card.menh}</div>
+            `;
+
+            if (isPlayer) {
+                div.addEventListener('click', () => {
+                    if (gamePhase !== 'playing' || turn !== 'player') return;
+                    if (selectedCard && selectedCard.uid === card.uid) {
+                        selectedCard = null;
+                    } else {
+                        selectedCard = card;
+                    }
+                    updateUI();
+                });
+            }
+            return div;
+        }
+
+        // Kiểm tra bộ bài có thể tạo thành Chắn/Cạ hợp lệ
+        function isValidCombination(cards) {
+            if (cards.length !== 2) return false;
+            // Chắn: cùng canchi
+            if (cards[0].canchi === cards[1].canchi) return true;
+            // Cạ: cùng can hoặc cùng chi
+            if (cards[0].can === cards[1].can) return true;
+            if (cards[0].chi === cards[1].chi) return true;
+            return false;
+        }
+
+        // Kiểm tra ù: tất cả 20 quân tạo thành 10 bộ Chắn/Cạ
+        function checkU(hand) {
+            if (hand.length !== 20) return false;
+
+            // Sử dụng backtracking để kiểm tra
+            const used = new Array(hand.length).fill(false);
+
+            function backtrack(count) {
+                if (count === 10) return true;
+                // Tìm quân chưa dùng đầu tiên
+                let firstIdx = -1;
+                for (let i = 0; i < hand.length; i++) {
+                    if (!used[i]) { firstIdx = i; break; }
+                }
+                if (firstIdx === -1) return count === 10;
+
+                // Thử ghép với các quân khác chưa dùng
+                for (let j = firstIdx + 1; j < hand.length; j++) {
+                    if (used[j]) continue;
+                    if (isValidCombination([hand[firstIdx], hand[j]])) {
+                        used[firstIdx] = true;
+                        used[j] = true;
+                        if (backtrack(count + 1)) return true;
+                        used[firstIdx] = false;
+                        used[j] = false;
+                    }
+                }
+                return false;
+            }
+
+            return backtrack(0);
+        }
+
+        // Kiểm tra xướng (đơn giản hóa: có ít nhất 3 chắn hoặc 2 chíu)
+        function checkXuong(hand) {
+            // Đếm số chắn (cặp giống hệt)
+            const counts = {};
+            hand.forEach(c => { counts[c.canchi] = (counts[c.canchi] || 0) + 1; });
+            let chanCount = 0;
+            Object.values(counts).forEach(v => { chanCount += Math.floor(v / 2); });
+            return chanCount >= 3;
+        }
+
+        // ====================== GAME FLOW ======================
+        function startNewGame() {
+            // Reset
+            deck = shuffle(createDeck());
+            playerHand = [];
+            opponentHand = [];
+            selectedCard = null;
+            lastDiscard = null;
+            hasDrawnThisTurn = false;
+            gamePhase = 'playing';
+            logMessages = [];
+
+            // Chia 20 quân mỗi người
+            for (let i = 0; i < 20; i++) {
+                playerHand.push(deck.pop());
+                opponentHand.push(deck.pop());
+            }
+
+            turn = 'player'; // người chơi đi trước
+            addLog('Ván mới bắt đầu! Bạn có 20 quân. Hãy rút bài từ nọc.');
+            updateUI();
+        }
+
+        // Rút bài
+        function drawCard() {
+            if (turn !== 'player' || gamePhase !== 'playing' || hasDrawnThisTurn || deck.length === 0) return;
+            const card = deck.pop();
+            playerHand.push(card);
+            hasDrawnThisTurn = true;
+            selectedCard = null;
+            addLog(`Bạn rút được: ${card.canchi} (${card.menh})`);
+            updateUI();
+        }
+
+        // Đánh bài
+        function discardCard() {
+            if (turn !== 'player' || gamePhase !== 'playing' || !hasDrawnThisTurn || selectedCard === null) return;
+            const idx = playerHand.findIndex(c => c.uid === selectedCard.uid);
+            if (idx === -1) return;
+            const card = playerHand.splice(idx, 1)[0];
+            lastDiscard = card;
+            addLog(`Bạn đánh: ${card.canchi} (${card.menh})`);
+            selectedCard = null;
+            hasDrawnThisTurn = false;
+            // Chuyển lượt cho đối thủ
+            turn = 'opponent';
+            updateUI();
+            // Đối thủ tự động chơi sau 1 giây
+            setTimeout(opponentTurn, 800);
+        }
+
+        // Lượt đối thủ (AI đơn giản)
+        function opponentTurn() {
+            if (gamePhase !== 'playing' || turn !== 'opponent') return;
+
+            // Đối thủ rút bài
+            if (deck.length === 0) {
+                addLog('Hết nọc! Hòa.');
+                gamePhase = 'idle';
+                updateUI();
+                return;
+            }
+            const drawn = deck.pop();
+            opponentHand.push(drawn);
+            addLog(`Đối thủ rút bài.`);
+
+            // Kiểm tra chíu: nếu lastDiscard và đối thủ có 2 quân giống hệt
+            if (lastDiscard) {
+                const sameCards = opponentHand.filter(c => c.canchi === lastDiscard.canchi);
+                if (sameCards.length >= 2) {
+                    // Chíu
+                    const toRemove = sameCards.slice(0, 2);
+                    toRemove.forEach(c => {
+                        const i = opponentHand.findIndex(x => x.uid === c.uid);
+                        if (i !== -1) opponentHand.splice(i, 1);
+                    });
+                    // Đối thủ ăn chíu: bỏ 2 quân, nhận lastDiscard (nhưng lastDiscard đã bị đánh ra, ta coi như đối thủ giữ 3 quân giống nhau -> đơn giản hóa: đối thủ đánh ra 1 quân bất kỳ)
+                    addLog(`Đối thủ CHÍU ${lastDiscard.canchi}!`);
+                    // Đối thủ đánh ra 1 quân rác (quân đầu tiên)
+                    if (opponentHand.length > 0) {
+                        const discard = opponentHand.shift();
+                        addLog(`Đối thủ đánh: ${discard.canchi}`);
+                        lastDiscard = discard;
+                    }
+                    turn = 'player';
+                    hasDrawnThisTurn = false;
+                    updateUI();
+                    return;
+                }
+            }
+
+            // Đánh ra 1 quân (chọn ngẫu nhiên)
+            const discardIdx = Math.floor(Math.random() * opponentHand.length);
+            const discard = opponentHand.splice(discardIdx, 1)[0];
+            lastDiscard = discard;
+            addLog(`Đối thủ đánh: ${discard.canchi}`);
+
+            // Kiểm tra xem đối thủ có ù không (đơn giản: không xử lý)
+            turn = 'player';
+            hasDrawnThisTurn = false;
+            updateUI();
+        }
+
+        // Chíu
+        function chiu() {
+            if (turn !== 'player' || gamePhase !== 'playing' || !lastDiscard || hasDrawnThisTurn) return;
+            const sameCards = playerHand.filter(c => c.canchi === lastDiscard.canchi);
+            if (sameCards.length < 2) {
+                addLog('Không đủ 2 quân giống hệt để chíu!');
+                return;
+            }
+            // Xóa 2 quân
+            const toRemove = sameCards.slice(0, 2);
+            toRemove.forEach(c => {
+                const idx = playerHand.findIndex(x => x.uid === c.uid);
+                if (idx !== -1) playerHand.splice(idx, 1);
+            });
+            addLog(`Bạn CHÍU ${lastDiscard.canchi}!`);
+            // Sau chíu, phải đánh ra 1 quân
+            hasDrawnThisTurn = true; // giả lập như đã rút
+            selectedCard = null;
+            lastDiscard = null;
+            updateUI();
+        }
+
+        // Ù / Xướng
+        function uXuong() {
+            if (turn !== 'player' || gamePhase !== 'playing') return;
+            if (!checkU(playerHand)) {
+                addLog('Bài chưa đủ điều kiện ù!');
+                return;
+            }
+            const isXuong = checkXuong(playerHand);
+            const baseScore = 10;
+            const bonus = isXuong ? 10 : 0;
+            playerScore += baseScore + bonus;
+            addLog(`🎉 BẠN Ù! ${isXuong ? 'CÓ XƯỚNG!' : ''} +${baseScore + bonus} điểm.`);
+            gamePhase = 'idle';
+            updateUI();
+            setTimeout(() => {
+                if (confirm('Bạn đã ù! Chơi ván mới?')) {
+                    startNewGame();
+                }
+            }, 300);
+        }
+
+        // ====================== EVENT LISTENERS ======================
+        dealBtn.addEventListener('click', () => {
+            if (gamePhase === 'playing' && playerHand.length > 0) {
+                if (!confirm('Ván đang chơi, bạn có chắc muốn chia lại?')) return;
+            }
+            startNewGame();
+        });
+
+        drawBtn.addEventListener('click', drawCard);
+        discardBtn.addEventListener('click', discardCard);
+        chiuBtn.addEventListener('click', chiu);
+        uxuongBtn.addEventListener('click', uXuong);
+
+        rulesBtn.addEventListener('click', () => {
+            rulesModal.classList.remove('hidden');
+        });
+        closeRulesBtn.addEventListener('click', () => {
+            rulesModal.classList.add('hidden');
+        });
+        rulesModal.addEventListener('click', (e) => {
+            if (e.target === rulesModal) rulesModal.classList.add('hidden');
+        });
+
+        // Khởi tạo ban đầu: hiển thị bộ bài trống
+        deck = createDeck();
+        updateUI();
+        addLog('Nhấn "CHIA BÀI" để bắt đầu ván chắn cạ 120 quân Lục Thập Hoa Giáp.');
+    })();
+</script>
+</body>
+</html>

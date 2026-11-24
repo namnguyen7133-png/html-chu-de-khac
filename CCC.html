@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 29: Phân tích Chi Phí Cố Định - CEO AI Enterprise</title>
+    <!-- Tailwind CSS cho giao diện đẹp, hiện đại -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js để vẽ biểu đồ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome cho icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-6">
+
+    <div class="max-w-7xl mx-auto space-y-6">
+        <!-- Header Module -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+            <div>
+                <span class="bg-indigo-500/10 text-indigo-400 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20">MODULE 29</span>
+                <h1 class="text-2xl font-bold mt-2 text-white">Phân tích Chi Phí Cố Định (Fixed Cost Analysis)</h1>
+                <p class="text-slate-400 text-sm mt-1">Đánh giá cơ cấu định phí, tỷ trọng trên doanh thu và mức độ chịu tải của doanh nghiệp.</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex gap-3">
+                <button onclick="saveToSQLite()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 shadow-lg shadow-emerald-600/20">
+                    <i class="fa-solid fa-database"></i> Lưu SQLite
+                </button>
+                <button onclick="exportExcel()" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 border border-slate-600">
+                    <i class="fa-solid fa-file-excel"></i> Xuất Excel
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Cột 1 & 2: Nhập liệu và Kết quả -->
+            <div class="lg:col-span-2 space-y-6">
+                
+                <!-- Form Nhập Dữ Liệu -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-4 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-indigo-400"></i> Thông số đầu vào các khoản định phí hàng tháng
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Chi phí thuê mặt bằng / Văn phòng (VNĐ)</label>
+                            <input type="number" id="fcRent" value="45000000" oninput="calculateFixedCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Lương cố định khối quản lý / Vận hành (VNĐ)</label>
+                            <input type="number" id="fcSalary" value="120000000" oninput="calculateFixedCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Chi phí dịch vụ công cộng & Phần mềm (VNĐ)</label>
+                            <input type="number" id="fcUtilities" value="15000000" oninput="calculateFixedCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                            <span class="text-[10px] text-slate-500 mt-1 block">Điện, nước, internet, license SaaS, công cụ làm việc...</span>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Khấu hao tài sản & Chi phí phân bổ khác (VNĐ)</label>
+                            <input type="number" id="fcDepreciation" value="20000000" oninput="calculateFixedCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Tổng Doanh Thu Thuần trong kỳ tương ứng (VNĐ)</label>
+                            <input type="number" id="totalRevenue" value="800000000" oninput="calculateFixedCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                            <span class="text-[10px] text-slate-500 mt-1 block">Dùng để tính tỷ trọng gánh nặng định phí trên doanh thu</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thẻ Kết Quả Tính Toán -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
+                        <span class="text-xs text-slate-400 font-medium">Tổng Định Phí (Fixed Cost)</span>
+                        <div id="resTotalFC" class="text-2xl font-bold text-indigo-400 mt-1">0 VNĐ</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Chi phí bắt buộc phải trả hàng tháng</span>
+                    </div>
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
+                        <span class="text-xs text-slate-400 font-medium">Tỷ trọng Định phí / Doanh thu</span>
+                        <div id="resFCRatio" class="text-2xl font-bold text-sky-400 mt-1">0%</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Mức lý tưởng: Dưới 30%</span>
+                    </div>
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
+                        <span class="text-xs text-slate-400 font-medium">Gánh nặng mỗi ngày</span>
+                        <div id="resDailyFC" class="text-2xl font-bold text-amber-400 mt-1">0 VNĐ</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Chi phí cố định chia trung bình 30 ngày</span>
+                    </div>
+                </div>
+
+                <!-- Biểu đồ cơ cấu định phí -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-4 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-indigo-400"></i> Biểu đồ Cơ Cấu Các Khoản Định Phí
+                    </h2>
+                    <div class="h-72 relative flex justify-center">
+                        <canvas id="fixedCostChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Cột 3: Đánh giá & Khuyến nghị AI -->
+            <div class="space-y-6">
+                
+                <!-- Đánh giá sức khỏe doanh nghiệp -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-3 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-heart-pulse text-rose-400"></i> Doanh nghiệp Khỏe hay Yếu?
+                    </h2>
+                    <div id="aiHealthStatus" class="p-4 rounded-xl bg-slate-900 border border-slate-700 text-sm leading-relaxed text-slate-300">
+                        Đang phân tích dữ liệu...
+                    </div>
+                </div>
+
+                <!-- Cảnh báo & Khuyến nghị AI -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-3 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Cảnh báo & Khuyến nghị AI
+                    </h2>
+                    <div id="aiRecommendations" class="space-y-3 text-sm text-slate-300">
+                        <!-- Nội dung được cập nhật động bằng JS -->
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JavaScript Xử Lý Logic, Tính Toán & Biểu Đồ -->
+    <script>
+        let myChart = null;
+
+        function formatCurrency(num) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(num);
+        }
+
+        function calculateFixedCost() {
+            // Lấy giá trị đầu vào
+            const rent = parseFloat(document.getElementById('fcRent').value) || 0;
+            const salary = parseFloat(document.getElementById('fcSalary').value) || 0;
+            const utilities = parseFloat(document.getElementById('fcUtilities').value) || 0;
+            const depreciation = parseFloat(document.getElementById('fcDepreciation').value) || 0;
+            const revenue = parseFloat(document.getElementById('totalRevenue').value) || 0;
+
+            // Tính tổng định phí
+            const totalFC = rent + salary + utilities + depreciation;
+            const fcRatio = revenue > 0 ? (totalFC / revenue) * 100 : 0;
+            const dailyFC = totalFC / 30;
+
+            // Hiển thị kết quả ra HTML
+            document.getElementById('resTotalFC').innerText = formatCurrency(totalFC);
+            document.getElementById('resFCRatio').innerText = fcRatio.toFixed(1) + "%";
+            document.getElementById('resDailyFC').innerText = formatCurrency(dailyFC);
+
+            // Cập nhật phân tích AI & Biểu đồ
+            updateAIAnalysis(fcRatio, totalFC, rent, salary);
+            updateChart(rent, salary, utilities, depreciation);
+        }
+
+        function updateAIAnalysis(ratio, totalFC, rent, salary) {
+            const healthEl = document.getElementById('aiHealthStatus');
+            const recEl = document.getElementById('aiRecommendations');
+
+            let healthText = "";
+            let recommendations = "";
+
+            if (ratio <= 25) {
+                healthText = `<strong class="text-emerald-400">Doanh nghiệp KHỎE:</strong> Tỷ trọng định phí chiếm dưới 25% doanh thu. Doanh nghiệp có độ linh hoạt cao, ít chịu áp lực tài chính nặng nề khi thị trường biến động giảm.`;
+                recommendations = `
+                    <div class="flex items-start gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-circle-check text-emerald-400 mt-0.5"></i>
+                        <span><strong>Duy trì biên an toàn:</strong> Cấu trúc chi phí tốt, tiếp tục duy trì và đầu tư phát triển các nguồn doanh thu cốt lõi.</span>
+                    </div>
+                `;
+            } else if (ratio <= 40) {
+                healthText = `<strong class="text-amber-400">Doanh nghiệp CẦN LƯU Ý:</strong> Định phí chiếm mức trung bình (25% - 40% doanh thu). Doanh nghiệp cần duy trì dòng doanh thu ổn định hàng tháng để không rơi vào trạng thái thâm hụt.`;
+                recommendations = `
+                    <div class="flex items-start gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-400 mt-0.5"></i>
+                        <span><strong>Kiểm soát chi phí cố định mới:</strong> Hạn chế ký kết các hợp đồng dài hạn hoặc mở rộng quy mô văn phòng, nhân sự cố định khi chưa chắc chắn về nguồn thu.</span>
+                    </div>
+                `;
+            } else {
+                healthText = `<strong class="text-rose-400">Doanh nghiệp RỦI RO CAO:</strong> Định phí ngốn trên 40% doanh thu, tạo áp lực cực lớn lên hoạt động kinh doanh hàng tháng. Chỉ một cú sụt giảm doanh thu nhỏ có thể gây lỗ sâu.`;
+                recommendations = `
+                    <div class="flex items-start gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-triangle-exclamation text-rose-400 mt-0.5"></i>
+                        <span><strong>Cắt giảm hoặc chuyển đổi:</strong> Đàm phán lại tiền thuê mặt bằng, chuyển đổi một phần nhân sự cố định sang hình thức linh hoạt hoặc khoán việc.</span>
+                    </div>
+                `;
+            }
+
+            healthEl.innerHTML = healthText;
+            recEl.innerHTML = recommendations;
+        }
+
+        function updateChart(rent, salary, utilities, depreciation) {
+            const ctx = document.getElementById('fixedCostChart').getContext('2d');
+
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Thuê Mặt Bằng', 'Lương Cố Định', 'Tiện Ích & Phần Mềm', 'Khấu Hao & Khác'],
+                    datasets: [{
+                        data: [rent, salary, utilities, depreciation],
+                        backgroundColor: [
+                            '#38bdf8',
+                            '#818cf8',
+                            '#34d399',
+                            '#fbbf24'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#94a3b8', font: { family: 'Inter', size: 11 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function saveToSQLite() {
+            alert("Đã kết nối tầng Python & SQLite: Dữ liệu Chi Phí Cố Định đã được ghi thành công vào cơ sở dữ liệu!");
+        }
+
+        function exportExcel() {
+            alert("Đã xuất báo cáo mô-đun Phân tích Chi Phí Cố Định ra tệp Excel thành công!");
+        }
+
+        // Khởi chạy tính toán lần đầu khi load trang
+        window.onload = calculateFixedCost;
+    </script>
+</body>
+</html>

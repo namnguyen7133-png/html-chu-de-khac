@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Công cụ Tra Cứu Dữ Liệu</title>
+<style>
+* {box-sizing:border-box; font-family:Arial, sans-serif;}
+body {max-width:1100px; margin:0 auto; padding:15px; background:#f5f5f5;}
+h2 {text-align:center; color:#2c3e50;}
+
+/* === NÚT TAB === */
+.tab-bar {display:flex; background:#34495e; border-radius:6px 6px 0 0; overflow:hidden; flex-wrap:wrap;}
+.tab-btn {padding:10px 20px; background:transparent; color:#fff; border:none; cursor:pointer; font-size:15px;}
+.tab-btn.active {background:#2980b9; font-weight:bold;}
+.tab-btn:hover {background:#3d566e;}
+
+/* === NỘI DUNG TAB === */
+.tab-content {display:none; background:#fff; padding:20px; border:1px solid #ddd; border-top:none; border-radius:0 0 6px 6px;}
+.tab-content.active {display:block;}
+
+/* === KHUNG CHUNG === */
+.box {background:#f8f9fa; padding:15px; border-radius:6px; margin-bottom:15px; border:1px solid #e9ecef;}
+input, button, select {padding:8px 12px; margin:4px 0; border:1px solid #ccc; border-radius:4px; font-size:14px;}
+button {background:#27ae60; color:#fff; border:none; cursor:pointer; margin-right:8px;}
+button:hover {background:#219653;}
+button.red {background:#e74c3c;}
+button.red:hover {background:#c0392b;}
+button.blue {background:#3498db;}
+button.blue:hover {background:#2980b9;}
+
+.preview, .result-box {margin-top:10px; padding:12px; background:#fafafa; border:1px solid #eee; border-radius:4px; min-height:50px; white-space:pre-wrap; font-family:monospace; font-size:13px;}
+.color-row {display:flex; align-items:center; gap:10px; margin:4px 0;}
+.color-swatch {width:20px; height:20px; border:1px solid #999; border-radius:3px;}
+table {border-collapse:collapse; width:100%; margin-top:10px; font-size:13px;}
+th, td {border:1px solid #ddd; padding:6px 8px; text-align:left;}
+th {background:#f1f1f1;}
+</style>
+</head>
+<body>
+
+<h2>🔧 CÔNG CỤ TRA CỨU DỮ LIỆU</h2>
+
+<!-- NÚT TAB -->
+<div class="tab-bar">
+<button class="tab-btn active" onclick="switchTab('tab1')">📋 Tab 1: Tải Dữ Liệu</button>
+<button class="tab-btn" onclick="switchTab('tab2')">🔢 Tab 2: Tính Tuổi & Tra Màu</button>
+<button class="tab-btn" onclick="switchTab('tab3')">🌤️ Tab 3: Thời Tiết & Quần Áo</button>
+</div>
+<!-- ===== TAB 1: TẢI DỮ LIỆU ===== -->
+<div id="tab1" class="tab-content active">
+<h3>📋 Tải tệp dữ liệu</h3>
+
+<div class="box">
+<h4>① Danh sách người</h4>
+<p><small>Định dạng: <code>Tên | Ngày sinh | Giờ sinh | Giới tính | Ngày mất | Giờ mất</code><br>VD: <code>Nguyễn Văn A | 15/03/1990 | 08:30 | Nam |  | </code> — để trống nếu chưa có</small></p>
+<input type="file" id="fileNguoi" accept=".txt,.csv" onchange="docFileNguoi(this)">
+<div id="previewNguoi" class="preview">(chưa có dữ liệu)</div>
+<button class="red" onclick="xoaNguoi()">Xóa</button>
+</div>
+
+<div class="box">
+<h4>② Bảng mã tháng</h4>
+<p><small>Định dạng: <code>Số gốc = Số chuyển</code> hoặc <code>Số gốc | Số chuyển</code><br>VD: <code>0=3</code> hoặc <code>1 | 5</code></small></p>
+<input type="file" id="fileThang" accept=".txt,.csv" onchange="docFileThang(this)">
+<div id="previewThang" class="preview">(chưa có dữ liệu)</div>
+<button class="red" onclick="xoaThang()">Xóa</button>
+</div>
+
+<div class="box">
+<h4>③ 7 Bảng màu</h4>
+<p><small>Mỗi bảng: <code>Số = Tên_màu_không_dấu</code> hoặc <code>Số | Tên_màu_không_dấu</code><br>VD: <code>1 = DO</code> hoặc <code>2 | XANH_DUONG</code></small></p>
+<div id="khungMau">
+<script>for(let i=1;i<=7;i++)document.write(`<div style="margin:6px 0;"><strong>Bảng ${i}:</strong> <input type="file" accept=".txt,.csv" onchange="docFileMau(this,${i})"> <span id="tenMau${i}">(chưa chọn)</span></div>`);</script>
+</div>
+<div id="previewMau" class="preview">(chưa có dữ liệu)</div>
+<button class="red" onclick="xoaTatCaMau()">Xóa tất cả màu</button>
+</div>
+</div>
+
+<!-- ===== TAB 2: TÍNH TUỔI & TRA MÀU ===== -->
+<div id="tab2" class="tab-content">
+<h3>🔢 Tính tuổi & tra màu</h3>
+
+<div class="box">
+<h4>Chọn người & Ngày tính</h4>
+<select id="chonNguoi">
+<option value="">-- Chọn người từ danh sách --</option>
+</select>
+&nbsp;&nbsp;
+Ngày muốn tính: <input type="text" id="ngayTinh" placeholder="dd/mm/yyyy" value="">
+<button onclick="tinhTuoi()">▶ Tính & Tra</button>
+</div>
+
+<div class="box">
+<h4>Kết quả tính tuổi</h4>
+<div id="ketQuaTuoi" class="result-box">Chưa tính</div>
+</div>
+
+<div class="box">
+<h4>🔤 Tra số → Bảng mã tháng → 7 Bảng màu</h4>
+<div id="ketQuaMau" class="result-box">Chưa có kết quả</div>
+<button class="blue" onclick="copyKetQuaMau()">📋 Copy kết quả</button>
+</div>
+</div>
+
+<!-- ===== TAB 3: THỜI TIẾT & QUẦN ÁO ===== -->
+<div id="tab3" class="tab-content">
+<h3>🌤️ Thời tiết & gợi ý quần áo</h3>
+
+<div class="box">
+<h4>① Bảng quy tắc nhiệt độ → Loại quần áo</h4>
+<p><small>Định dạng: <code>Nhiệt độ = Loại</code> hoặc <code>Nhiệt độ | Loại</code><br>VD: <code>25 = ao_thun</code> hoặc <code>18-22 | ao_da</code></small></p>
+<input type="file" id="fileQuyTac" accept=".txt,.csv" onchange="docFileQuyTac(this)">
+<div id="previewQuyTac" class="preview">(chưa có dữ liệu)</div>
+</div>
+
+<div class="box">
+<h4>② Tủ quần áo có sẵn</h4>
+<p><small>Định dạng: <code>Màu sắc | Loại | Chủng loại</code><br>VD: <code>TRẮNG | ao_thun | Áo thun cotton</code></small></p>
+<input type="file" id="fileTuQuanAo" accept=".txt,.csv" onchange="docFileTuQuanAo(this)">
+<div id="previewTuQuanAo" class="preview">(chưa có dữ liệu)</div>
+</div>
+
+<div class="box">
+<h4>③ Tra cứu theo nhiệt độ</h4>
+Nhiệt độ hiện tại: <input type="number" id="nhietDo" placeholder="°C" min="1" max="45"> °C
+<button onclick="traQuanAo()">🔍 Tra cứu</button>
+<div id="ketQuaQuanAo" class="result-box">Chưa tra cứu</div>
+<button class="blue" onclick="copyKetQuaQuanAo()">📋 Copy kết quả</button>
+</div>
+</div>
+
+</body>
+</html>
+<script>
+// === DỮ LIỆU TOÀN CỤC ===
+let dsNguoi = [];       // [{ten, ngaySinh, gioSinh, gioiTinh, ngayMat, gioMat}]
+let bangMaThang = {};   // {soGoc: soMoi}
+let bangMau = {1:{},2:{},3:{},4:{},5:{},6:{},7:{}}; // {so: {ten, hex}}
+let quyTacNhietDo = {}; // {nhietDo: loaiQuanAo}
+let tuQuanAo = [];      // [{mau, loai, chungLoai}]
+
+const MAU_HEX = {
+  'DO':'#FF0000', 'XANH_DUONG':'#0066CC', 'XANH_LA':'#00CC00', 'TRANG':'#FFFFFF',
+  'DEN':'#000000', 'VANG':'#FFFF00', 'CAM':'#FF9900', 'HONG':'#FF66CC',
+  'TIM':'#9933CC', 'GHI':'#808080', 'NAU':'#8B4513', 'XANH_TROI':'#87CEEB',
+  'XANH_BIEN':'#0066CC', 'LAM':'#0000FF', 'NGOC':'#40E0D0', 'LUC':'#00FF00'
+};
+
+let textCopyMau = '';
+let textCopyQuanAo = '';
+
+// === CHUYỂN TAB ===
+function switchTab(id){
+  document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// === TIỆN ÍCH ĐỌC FILE ===
+function docFile(txt){
+  if(!txt) return [];
+  const dong = txt.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
+  const kq = [];
+  dong.forEach(d=>{
+    d = d.trim();
+    if(!d || d.startsWith('#')) return;
+    let phanTach;
+    if(d.indexOf('|') !== -1) phanTach = d.split('|');
+    else if(d.indexOf('=') !== -1) phanTach = d.split('=');
+    else phanTach = d.split(/\s+/);
+    phanTach = phanTach.map(s=>s.trim());
+    if(phanTach.length >= 1 && phanTach.some(x=>x)) kq.push(phanTach);
+  });
+  return kq;
+}
+
+function chuyenNgay(str){
+  if(!str) return null;
+  const m = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+  if(!m) return null;
+  return new Date(parseInt(m[3]), parseInt(m[2])-1, parseInt(m[1]));
+}
+
+function maMau(tenKhongDau){
+  return MAU_HEX[tenKhongDau.toUpperCase()] || hslMau(tenKhongDau);
+}
+
+function hslMau(str){
+  let h=0;
+  for(let i=0;i<str.length;i++) h = (h<<5)-h + str.charCodeAt(i);
+  h = Math.abs(h)%360;
+  const s=0.6, l=0.5;
+  const c=(1-Math.abs(2*l-1))*s;
+  const x=c*(1-Math.abs((h/60)%2-1));
+  const m=l-c/2;
+  let r=0,g=0,b=0;
+  if(h<60){r=c;g=x;}else if(h<120){r=x;g=c;}else if(h<180){g=c;b=x;}
+  else if(h<240){g=x;b=c;}else if(h<300){r=x;b=c;}else{r=c;b=x;}
+  const hex=x=>Math.round((x+m)*255).toString(16).padStart(2,'0');
+  return '#'+hex(r)+hex(g)+hex(b);
+}
+
+// ===== TAB 1: XỬ LÝ DỮ LIỆU =====
+function docFileNguoi(input){
+  if(!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const dong = docFile(e.target.result);
+    dsNguoi = dong.map(d=>({
+      ten: d[0]||'',
+      ngaySinh: d[1]||'',
+      gioSinh: d[2]||'',
+      gioiTinh: d[3]||'',
+      ngayMat: d[4]||'',
+      gioMat: d[5]||''
+    }));
+    let html = dsNguoi.map(n=>`${n.ten} | ${n.ngaySinh} | ${n.gioSinh} | ${n.gioiTinh} | ${n.ngayMat} | ${n.gioMat}`).join('\n');
+    document.getElementById('previewNguoi').textContent = html;
+    capNhatDanhSachNguoi();
+  };
+  reader.readAsText(input.files[0], 'UTF-8');
+  input.value = '';
+}
+
+function capNhatDanhSachNguoi(){
+  const sel = document.getElementById('chonNguoi');
+  sel.innerHTML = '<option value="">-- Chọn người từ danh sách --</option>';
+  dsNguoi.forEach((n,i)=>{
+    const op = document.createElement('option');
+    op.value = i;
+    op.textContent = n.ten || `Người ${i+1}`;
+    sel.appendChild(op);
+  });
+}
+
+function xoaNguoi(){ dsNguoi=[]; document.getElementById('previewNguoi').textContent='(chưa có dữ liệu)'; capNhatDanhSachNguoi(); }
+
+function docFileThang(input){
+  if(!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    bangMaThang = {};
+    const dong = docFile(e.target.result);
+    dong.forEach(d=>{
+      if(d.length>=2){
+        const soGoc = d[0].trim();
+        const soMoi = d[1].trim();
+        if(/^\d+$/.test(soGoc)) bangMaThang[parseInt(soGoc)] = soMoi;
+      }
+    });
+    document.getElementById('previewThang').textContent = Object.entries(bangMaThang).map(([k,v])=>`${k} → ${v}`).join('\n');
+  };
+  reader.readAsText(input.files[0], 'UTF-8');
+  input.value = '';
+}
+
+function xoaThang(){ bangMaThang={}; document.getElementById('previewThang').textContent='(chưa có dữ liệu)'; }
+
+function docFileMau(input, soThuTu){
+  if(!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    bangMau[soThuTu] = {};
+    const dong = docFile(e.target.result);
+    dong.forEach(d=>{
+      if(d.length>=2){
+        const so = d[0].trim();
+        const ten = d[1].trim().toUpperCase().replace(/\s+/g,'_');
+        if(/^\d+$/.test(so)){
+          bangMau[soThuTu][parseInt(so)] = {ten: ten, hex: maMau(ten)};
+        }
+      }
+    });
+    document.getElementById(`tenMau${soThuTu}`).textContent = '✅ ' + input.files[0].name;
+    capNhatPreviewMau();
+  };
+  reader.readAsText(input.files[0], 'UTF-8');
+  input.value = '';
+}
+
+function capNhatPreviewMau(){
+  let html='';
+  for(let i=1;i<=7;i++){
+    const m = bangMau[i];
+    html += `--- BẢNG ${i} ---\n`;
+    for(let s in m) html += `${s} | ${m[s].ten} | ${m[s].hex}\n`;
+  }
+  document.getElementById('previewMau').textContent = html || '(chưa có dữ liệu)';
+}
+
+function xoaTatCaMau(){
+  for(let i=1;i<=7;i++) bangMau[i]={};
+  for(let i=1;i<=7;i++) document.getElementById(`tenMau${i}`).textContent = '(chưa chọn)';
+  document.getElementById('previewMau').textContent = '(chưa có dữ liệu)';
+}
+
+// ===== TAB 2: TÍNH TUỔI & TRA MÀU =====
+function tinhTuoi(){
+  const idx = document.getElementById('chonNguoi').value;
+  if(idx === '') return alert('Vui lòng chọn người');
+  const nguoi = dsNguoi[idx];
+  const ngayTinhStr = document.getElementById('ngayTinh').value;
+  const ngaySinh = chuyenNgay(nguoi.ngaySinh);
+  const ngayTinh = chuyenNgay(ngayTinhStr);
+  if(!ngaySinh) return alert('Ngày sinh không hợp lệ: ' + nguoi.ngaySinh);
+  if(!ngayTinh) return alert('Ngày tính không hợp lệ: dd/mm/yyyy');
+  
+  let y = ngayTinh.getFullYear() - ngaySinh.getFullYear();
+  let m = ngayTinh.getMonth() - ngaySinh.getMonth();
+  let d = ngayTinh.getDate() - ngaySinh.getDate();
+  if(d < 0){ m--; d += new Date(ngayTinh.getFullYear(), ngayTinh.getMonth(), 0).getDate(); }
+  if(m < 0){ y--; m += 12; }
+  
+  const chuoiSo = `${y} tuổi, ${m} tháng, ${d} ngày`;
+  const tachSo = [];
+  `${y}${m}${d}`.split('').forEach(c=>{ if(/\d/.test(c)) tachSo.push(parseInt(c)); });
+  
+  document.getElementById('ketQuaTuoi').innerHTML = 
+`Tên: ${nguoi.ten}
+Ngày sinh: ${nguoi.ngaySinh} — Ngày tính: ${ngayTinhStr}
+────────────────────
+Tuổi: ${y} tuổi | ${m} tháng | ${d} ngày
+Chuỗi số tách: [${tachSo.join(', ')}]`;
+
+  traBangThangVaMau(tachSo, nguoi.ten);
+}
+
+function traBangThangVaMau(danhSachSo, tenNguoi){
+  let html = `<strong>👤 ${tenNguoi}</strong>\nChuỗi số gốc: [${danhSachSo.join(', ')}]\n`;
+  textCopyMau = `${tenNguoi}\nChuỗi số gốc: [${danhSachSo.join(', ')}]\n`;
+  
+  const soDaTra = danhSachSo.map(s=>{
+    const ketQua = bangMaThang[s];
+    return ketQua !== undefined ? ketQua : s;
+  });
+  
+  html += `→ Qua bảng mã tháng: [${soDaTra.join(', ')}]\n\n`;
+  textCopyMau += `→ Qua bảng mã tháng: [${soDaTra.join(', ')}]\n\n`;
+  
+  for(let bang=1;bang<=7;bang++){
+    html += `═══ BẢNG MÀU ${bang} ═══\n`;
+    textCopyMau += `=== BẢNG MÀU ${bang} ===\n`;
+    soDaTra.forEach((giatri, viTri)=>{
+      const s = parseInt(giatri);
+      let thongTin = `${danhSachSo[viTri]} → ${giatri} → `;
+      let mau = bangMau[bang][s];
+      if(mau){
+        thongTin += `${mau.ten} (${mau.hex})`;
+        html += `<span style="background:${mau.hex};padding:2px 6px;border:1px solid #ccc;">${thongTin}</span>\n`;
+      }else{
+        thongTin += `không tìm thấy`;
+        html += `${thongTin}\n`;
+      }
+      textCopyMau += thongTin + '\n';
+    });
+    html += '\n';
+    textCopyMau += '\n';
+  }
+  document.getElementById('ketQuaMau').innerHTML = html;
+}
+
+function copyKetQuaMau(){
+  if(!textCopyMau) return alert('Chưa có kết quả để copy');
+  navigator.clipboard.writeText(textCopyMau).then(()=>alert('✅ Đã copy!')).catch(()=>alert('❌ Lỗi copy'));
+}
+
+// ===== TAB 3: THỜI TIẾT & QUẦN ÁO =====
+function docFileQuyTac(input){
+  if(!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    quyTacNhietDo = {};
+    const dong = docFile(e.target.result);
+    dong.forEach(d=>{
+      if(d.length>=2){
+        const nhiet = d[0].trim();
+        const loai = d[1].trim();
+        quyTacNhietDo[nhiet] = loai;
+      }
+    });
+    document.getElementById('previewQuyTac').textContent = 
+      Object.entries(quyTacNhietDo).map(([n,l])=>`${n} → ${l}`).join('\n');
+  };
+  reader.readAsText(input.files[0], 'UTF-8');
+  input.value = '';
+}
+
+function docFileTuQuanAo(input){
+  if(!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    tuQuanAo = docFile(e.target.result).map(d=>({
+      mau: d[0]||'',
+      loai: d[1]||'',
+      chungLoai: d[2]||''
+    }));
+    document.getElementById
+('previewTuQuanAo').textContent = 
+      tuQuanAo.map(x=>`${x.mau} | ${x.loai} | ${x.chungLoai}`).join('\n');
+  };
+  reader.readAsText(input.files[0], 'UTF-8');
+  input.value = '';
+}
+
+function layLoaiTheoNhietDo(n){
+  // Kiểm tra khoảng: 18-22
+  for(let k in quyTacNhietDo){
+    const m = k.match(/^(\d+)\s*-\s*(\d+)$/);
+    if(m){
+      const min=parseInt(m[1]), max=parseInt(m[2]);
+      if(n>=min && n<=max) return quyTacNhietDo[k];
+    }else{
+      // Kiểm tra số chính xác
+      if(parseInt(k)===n) return quyTacNhietDo[k];
+    }
+  }
+  return null;
+}
+
+function traQuanAo(){
+  const nhiet = parseInt(document.getElementById('nhietDo').value);
+  if(!nhiet || nhiet<1 || nhiet>45) return alert('Nhiệt độ từ 1 đến 45°C');
+  
+  const loaiCanTim = layLoaiTheoNhietDo(nhiet);
+  let html = `🌡️ Nhiệt độ: ${nhiet}°C\n`;
+  textCopyQuanAo = `Nhiệt độ: ${nhiet}°C\n`;
+  
+  if(!loaiCanTim){
+    html += '❌ Không có quy tắc cho nhiệt độ này';
+    textCopyQuanAo += 'Không có quy tắc cho nhiệt độ này';
+    document.getElementById('ketQuaQuanAo').textContent = html;
+    return;
+  }
+  
+  html += `→ Loại quần áo cần dùng: <strong>${loaiCanTim}</strong>\n\n✅ Trong tủ có:\n`;
+  textCopyQuanAo += `Loại quần áo cần dùng: ${loaiCanTim}\n\nTrong tủ có:\n`;
+  
+  const ketQua = tuQuanAo.filter(x=>
+    x.loai.trim().toLowerCase() === loaiCanTim.trim().toLowerCase()
+  );
+  
+  if(!ketQua.length){
+    html += '⚠️ Chưa có loại này trong tủ';
+    textCopyQuanAo += 'Chưa có loại này trong tủ';
+  }else{
+    ketQua.forEach((x,i)=>{
+      html += `${i+1}. ${x.mau} | ${x.loai} | ${x.chungLoai}\n`;
+      textCopyQuanAo += `${i+1}. ${x.mau} | ${x.loai} | ${x.chungLoai}\n`;
+    });
+  }
+  
+  document.getElementById('ketQuaQuanAo').innerHTML = html;
+}
+
+function copyKetQuaQuanAo(){
+  if(!textCopyQuanAo) return alert('Chưa có kết quả để copy');
+  navigator.clipboard.writeText(textCopyQuanAo).then(()=>alert('✅ Đã copy!')).catch(()=>alert('❌ Lỗi copy'));
+}
+</script>

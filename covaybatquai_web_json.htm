@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bàn Cờ Vây Thoại Phim & Triết Lý Đối Xứng</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; }
+        .board-texture {
+            background-color: #d7b382;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(247, 237, 220, 0.4) 0%, rgba(197, 147, 85, 0.2) 100%),
+                linear-gradient(to right, rgba(142, 94, 39, 0.05) 1px, transparent 1px);
+            box-shadow: inset 0 0 30px rgba(76, 46, 16, 0.4), 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+        .white-stone {
+            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #e2e8f0 60%, #94a3b8 100%);
+            box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.45), inset -1px -1px 2px rgba(0,0,0,0.2);
+        }
+        .black-stone {
+            background: radial-gradient(circle at 35% 35%, #475569 0%, #1e293b 50%, #0f172a 100%);
+            box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.6), inset 1px 1px 1px rgba(255,255,255,0.2);
+        }
+        
+        .go-grid-19 {
+            display: grid !important;
+            grid-template-columns: repeat(19, minmax(0, 1fr)) !important;
+            grid-template-rows: repeat(19, minmax(0, 1fr)) !important;
+        }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-slate-900">
+
+    <!-- Header & Navigation -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-600 to-amber-300 flex items-center justify-center text-slate-950 font-bold shadow-lg shadow-amber-500/20">
+                    <i class="fa-solid fa-yin-yang text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                        <span>Cờ Vây Thoại Phim</span>
+                        <span id="badgeInfo" class="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-normal">Chế độ Mặc Định (19x19)</span>
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Nút Nạp JSON -->
+            <div class="flex items-center space-x-3">
+                <label class="cursor-pointer flex items-center space-x-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg transition-all">
+                    <i class="fa-solid fa-file-arrow-up"></i>
+                    <span>Nạp File JSON Thoại</span>
+                    <input type="file" id="jsonInput" accept=".json" class="hidden" onchange="handleImportJSON(event)">
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col gap-6">
+
+        <!-- THANH CHUYỂN VÁN CỜ -->
+        <div id="vanControlBar" class="hidden bg-slate-900 border border-amber-500/30 rounded-xl p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xl">
+            <div class="flex items-center gap-3">
+                <span class="text-xs text-amber-300 font-bold"><i class="fa-solid fa-layer-group mr-1"></i> Điều Hướng Ván Cờ:</span>
+                <button onclick="doiVan(-1)" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs text-white border border-slate-700 transition">
+                    <i class="fa-solid fa-chevron-left mr-1"></i> Ván Trước
+                </button>
+                <span id="txtVanHienTai" class="text-xs font-bold px-3 py-1 bg-amber-500/20 text-amber-400 rounded-lg border border-amber-500/40">Ván 1</span>
+                <button onclick="doiVan(1)" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs text-white border border-slate-700 transition">
+                    Ván Sau <i class="fa-solid fa-chevron-right ml-1"></i>
+                </button>
+            </div>
+            <div class="text-xs text-slate-400" id="txtThongTinTong">Tổng số: 0 điểm thoại</div>
+        </div>
+
+        <!-- BÀN CỜ VÀ PANEL CHI TIẾT -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Left Side: Interactive Board 19x19 (7 cols) -->
+            <div class="lg:col-span-7 flex flex-col items-center">
+                <div class="w-full max-w-[620px] aspect-square rounded-2xl p-3 sm:p-5 board-texture border-4 border-wood-800 shadow-2xl relative flex flex-col">
+                    
+                    <!-- Top Legend Coordinate (A-T) -->
+                    <div class="flex w-full text-[10px] sm:text-xs font-bold text-wood-900 justify-between px-6 pb-1">
+                        <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>J</span><span>K</span><span>L</span><span>M</span><span>N</span><span>O</span><span>P</span><span>Q</span><span>R</span><span>S</span><span>T</span>
+                    </div>
+
+                    <div class="flex-1 flex overflow-hidden">
+                        <!-- Left Legend Coordinate (19-1) -->
+                        <div class="flex flex-col text-[10px] sm:text-xs font-bold text-wood-900 justify-between py-2 pr-1">
+                            <span>19</span><span>18</span><span>17</span><span>16</span><span>15</span><span>14</span><span>13</span><span>12</span><span>11</span><span>10</span><span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                        </div>
+
+                        <!-- Main Grid Canvas 19x19 -->
+                        <div id="goBoard" class="flex-1 go-grid-19 relative bg-transparent border border-wood-900/60 cursor-pointer"></div>
+
+                        <!-- Right Legend Coordinate (19-1) -->
+                        <div class="flex flex-col text-[10px] sm:text-xs font-bold text-wood-900 justify-between py-2 pl-1">
+                            <span>19</span><span>18</span><span>17</span><span>16</span><span>15</span><span>14</span><span>13</span><span>12</span><span>11</span><span>10</span><span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Legend Coordinate (A-T) -->
+                    <div class="flex w-full text-[10px] sm:text-xs font-bold text-wood-900 justify-between px-6 pt-1">
+                        <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>J</span><span>K</span><span>L</span><span>M</span><span>N</span><span>O</span><span>P</span><span>Q</span><span>R</span><span>S</span><span>T</span>
+                    </div>
+
+                </div>
+
+                <div class="mt-3 text-xs text-slate-400 flex items-center gap-2">
+                    <i class="fa-solid fa-hand-pointer text-amber-400"></i>
+                    <span>Mẹo: Click vào bất kỳ quân cờ nào để xem nội dung thoại, mốc thời gian và xem phim YouTube</span>
+                </div>
+            </div>
+
+            <!-- Right Side: Details Panel (5 cols) -->
+            <div class="lg:col-span-5 flex flex-col gap-4">
+                <div id="detailCard" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl min-h-[480px] flex flex-col justify-between relative overflow-hidden">
+                    <div class="text-slate-500 italic text-center py-24">
+                        <i class="fa-solid fa-hand-pointer text-3xl mb-3 block opacity-40"></i>
+                        Nhấp vào một quân cờ trên bàn để xem chi tiết thoại phim và triết lý đối xứng.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 py-4 mt-auto bg-slate-950 text-xs text-slate-500 text-center">
+        <p>Bàn Cờ Vây Thoại Phim • Mô hình Tích Lũy Đa Ván (361 điểm/ván)</p>
+    </footer>
+
+    <!-- JavaScript Xử Lý Giao Diện & Dữ Liệu Đã Cập Nhật -->
+    <script>
+        const COLUMN_LABELS = ['A','B','C','D','E','F','G','H','J','K','L','M','N','O','P','Q','R','S','T'];
+        
+        let jsonThoaiPhim = [];
+        let boardDataDefault = [];
+        let currentVan = 1;
+        let maxVan = 1;
+
+        function generateDefaultData() {
+            boardDataDefault = [];
+            let idCounter = 1;
+            for (let r = 1; r <= 19; r++) {
+                for (let c = 1; c <= 19; c++) {
+                    let x = c;
+                    let y = 19 - r + 1;
+                    const colLetter = COLUMN_LABELS[x - 1];
+                    boardDataDefault.push({
+                        stt_tong: idCounter,
+                        coord: `${colLetter}${y}`,
+                        chinh_dien: `Mẫu câu thoại hoặc triết lý tại tọa độ ${colLetter}${y} (Điểm số ${idCounter}).`,
+                        phan_dien: `Mặt phản diện đối ứng của điểm ${colLetter}${y}.`,
+                        thoi_gian: "00:00:00",
+                        link_play: "#",
+                        tieu_de_phim: "Bản mẫu hệ thống bàn cờ"
+                    });
+                    idCounter++;
+                }
+            }
+        }
+
+        function handleImportJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const rawData = JSON.parse(e.target.result);
+                    let list = [];
+                    if (Array.isArray(rawData)) {
+                        list = rawData;
+                    } else if (rawData.records) {
+                        list = rawData.records;
+                    } else {
+                        list = Object.values(rawData).flat();
+                    }
+
+                    // Chuẩn hóa trường tọa độ từ các tên biến phổ biến trong JSON
+                    jsonThoaiPhim = list.map((item, index) => {
+                        let cStr = item.coord || item.position || item.toa_do || item.vitri || item.pos || "";
+                        // Nếu item chỉ lưu tọa độ dạng chuỗi hoặc số thứ tự, ta ánh xạ lại cho chuẩn
+                        if (!cStr && item.stt_tong) {
+                            let idx = (item.stt_tong - 1) % 361;
+                            let col = idx % 19;
+                            let row = 19 - Math.floor(idx / 19);
+                            cStr = `${COLUMN_LABELS[col]}${row}`;
+                        }
+                        return {
+                            ...item,
+                            stt_tong: item.stt_tong || item.id || (index + 1),
+                            coord: cStr.toUpperCase(),
+                            chinh_dien: item.chinh_dien || item.content || item.noi_dung || item.thoai_goc || "Không có nội dung thoại.",
+                            phan_dien: item.phan_dien || item.doi_ung || item.phan_dien_text || "Mặt đối lập tương đương."
+                        };
+                    });
+
+                    maxVan = Math.ceil(jsonThoaiPhim.length / 361);
+                    if (maxVan < 1) maxVan = 1;
+                    currentVan = 1;
+
+                    document.getElementById('vanControlBar').classList.remove('hidden');
+                    document.getElementById('badgeInfo').innerText = `Đã nạp: ${jsonThoaiPhim.length} câu thoại`;
+                    
+                    alert(`✅ Nạp file JSON thành công!\n- Tổng số câu thoại: ${jsonThoaiPhim.length}\n- Chia thành: ${maxVan} ván cờ vây.`);
+                    
+                    updateVanUI();
+                    renderBoard();
+                    
+                    // Tự động chọn điểm đầu tiên của ván
+                    const startIdx = 0;
+                    if (jsonThoaiPhim[startIdx]) {
+                        selectPoint(jsonThoaiPhim[startIdx]);
+                    }
+                } catch (err) {
+                    alert('Lỗi định dạng file JSON: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function doiVan(direction) {
+            currentVan += direction;
+            if (currentVan > maxVan) currentVan = 1;
+            if (currentVan < 1) currentVan = maxVan;
+            updateVanUI();
+            renderBoard();
+        }
+
+        function updateVanUI() {
+            document.getElementById('txtVanHienTai').innerText = `Ván ${currentVan} / ${maxVan}`;
+            document.getElementById('txtThongTinTong').innerText = `Tổng số: ${jsonThoaiPhim.length} điểm thoại`;
+        }
+
+        function renderBoard() {
+            const boardEl = document.getElementById('goBoard');
+            boardEl.innerHTML = '';
+            const hoshiCoords = ["D4", "D10", "D16", "K4", "K10", "K16", "Q4", "Q10", "Q16"];
+
+            let activeData = [];
+            if (jsonThoaiPhim.length > 0) {
+                const startIdx = (currentVan - 1) * 361;
+                const endIdx = startIdx + 361;
+                activeData = jsonThoaiPhim.slice(startIdx, endIdx);
+            } else {
+                activeData = boardDataDefault;
+            }
+
+            for (let r = 1; r <= 19; r++) {
+                for (let c = 1; c <= 19; c++) {
+                    const colLetter = COLUMN_LABELS[c - 1];
+                    const rowNum = 19 - r + 1;
+                    const coordStr = `${colLetter}${rowNum}`;
+
+                    // Tìm dữ liệu tương ứng theo tọa độ (không phân biệt hoa thường)
+                    const dataPt = activeData.find(p => p.coord && p.coord.toUpperCase() === coordStr);
+                    const cell = document.createElement('div');
+                    
+                    const isHoshi = hoshiCoords.includes(coordStr);
+                    let hoshiHtml = isHoshi ? `<div class="absolute w-2 h-2 rounded-full bg-wood-900 z-0"></div>` : '';
+
+                    if (dataPt) {
+                        cell.className = `relative flex items-center justify-center group border-[0.5px] border-wood-900/40 w-full h-full cursor-pointer`;
+                        const idNum = Number(dataPt.stt_tong) || 1;
+                        let stoneHtml = (idNum % 2 === 0) 
+                            ? `<div class="w-[80%] h-[80%] rounded-full white-stone z-10 transition-transform group-hover:scale-125 border border-slate-300/80"></div>`
+                            : `<div class="w-[80%] h-[80%] rounded-full black-stone z-10 transition-transform group-hover:scale-125 border border-slate-700/80"></div>`;
+
+                        cell.innerHTML = `${hoshiHtml}${stoneHtml}<div class="absolute inset-0 bg-amber-400/20 opacity-0 group-hover:opacity-100 transition-opacity z-20 rounded-sm"></div>`;
+                        cell.onclick = () => selectPoint(dataPt);
+                    } else {
+                        cell.className = `relative flex items-center justify-center border-[0.5px] border-wood-900/40 w-full h-full opacity-40`;
+                        cell.innerHTML = hoshiHtml;
+                    }
+
+                    boardEl.appendChild(cell);
+                }
+            }
+        }
+
+        function selectPoint(pt) {
+            const cardEl = document.getElementById('detailCard');
+
+            let extraInfo = '';
+            if (pt.thoi_gian && pt.link_play && pt.link_play !== "#") {
+                extraInfo = `
+                    <div class="bg-slate-950 p-3.5 rounded-xl border border-amber-500/30 space-y-2">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-amber-400 font-semibold"><i class="fa-solid fa-clock mr-1"></i> Mốc thời gian:</span>
+                            <span class="text-white font-mono bg-slate-900 px-2 py-0.5 rounded">${pt.thoi_gian}</span>
+                        </div>
+                        <div class="text-[11px] text-slate-400 truncate">🎬 Phim: <strong class="text-slate-200">${pt.tieu_de_phim || 'Nguồn thoại gốc'}</strong></div>
+                        <a href="${pt.link_play}" target="_blank" class="w-full flex items-center justify-center gap-2 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg text-xs font-bold transition shadow-lg">
+                            <i class="fa-brands fa-youtube text-sm"></i> Xem đoạn này trên YouTube
+                        </a>
+                    </div>
+                `;
+            }
+
+            cardEl.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-lg text-xs font-bold font-mono">
+                            Tọa độ: ${pt.coord || 'N/A'}
+                        </span>
+                        <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                            Ván ${currentVan} (STT #${pt.stt_tong || '1'})
+                        </span>
+                    </div>
+
+                    <div>
+                        <div class="text-xs text-amber-400 font-semibold tracking-wider uppercase mb-1">Nội dung thoại gốc</div>
+                        <h3 class="text-sm font-bold text-white leading-relaxed">
+                            ${pt.chinh_dien}
+                        </h3>
+                    </div>
+
+                    ${extraInfo}
+
+                    <div class="grid grid-cols-1 gap-3 pt-1">
+                        <div class="p-3.5 rounded-xl bg-slate-950 border-l-4 border-emerald-500 space-y-1">
+                            <div class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded-full white-stone inline-block border border-slate-400"></span>
+                                CHÍNH DIỆN (Thoại gốc)
+                            </div>
+                            <p class="text-[11px] text-slate-300 leading-relaxed">${pt.chinh_dien}</p>
+                        </div>
+
+                        <div class="p-3.5 rounded-xl bg-slate-950 border-l-4 border-rose-500 space-y-1">
+                            <div class="text-xs font-bold text-rose-400 flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded-full black-stone inline-block border border-slate-600"></span>
+                                PHẢN DIỆN (Đối ứng)
+                            </div>
+                            <p class="text-[11px] text-slate-300 leading-relaxed">${pt.phan_dien}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.onload = function() {
+            generateDefaultData();
+            renderBoard();
+            const defaultPt = boardDataDefault.find(p => p.coord === "K10") || boardDataDefault[0];
+            selectPoint(defaultPt);
+        };
+    </script>
+</body>
+</html>

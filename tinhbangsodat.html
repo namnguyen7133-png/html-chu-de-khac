@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hệ Thống Phân Tích Dữ Liệu</title>
+  <style>
+    :root {
+      --bg-color: #121212;
+      --panel-bg: #1e1e1e;
+      --tab-bg: #2d2d2d;
+      --tab-active: #0d6efd;
+      --text-color: #e0e0e0;
+      --border-color: #333333;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .header-bar {
+      padding: 10px 15px;
+      background-color: var(--panel-bg);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .tab-header {
+      display: flex;
+      background-color: #181818;
+      border-bottom: 1px solid var(--border-color);
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 10px 12px;
+      background-color: var(--tab-bg);
+      color: #aaa;
+      border: none;
+      border-right: 1px solid var(--border-color);
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .tab-btn.active {
+      background-color: var(--tab-active);
+      color: #fff;
+    }
+    .tab-content {
+      flex: 1;
+      overflow: auto;
+      display: none;
+      padding: 15px;
+    }
+    .tab-content.active { display: block; }
+    .tab-toolbar {
+      padding: 10px;
+      background-color: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      margin-bottom: 15px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .btn {
+      padding: 7px 14px;
+      background-color: #2b2b2b;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn:hover { background-color: #3d3d3d; }
+    .btn-primary { background-color: #0d6efd; }
+    .btn-primary:hover { background-color: #0b5ed7; }
+    .btn-success { background-color: #198754; }
+    .btn-success:hover { background-color: #157347; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 7px 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #252525;
+      color: #4dabf7;
+      position: sticky;
+      top: 0;
+    }
+    tr:nth-child(even) { background-color: #181818; }
+    .note {
+      background: #202a35;
+      border: 1px solid #2a3a4a;
+      padding: 10px 14px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      color: #c9d7e8;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .match-cell { color:#8ce99a; font-weight:700; }
+    .status { font-size:12px; color:#8ce99a; margin-left:10px; }
+    input[type="file"] { display: none; }
+    .file-label {
+      display: inline-block;
+      padding: 7px 14px;
+      background-color: #0d6efd;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .file-label:hover { background-color: #0b5ed7; }
+    .time-info {
+      background: #1a2530;
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      border: 1px solid #2a3a4a;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-bar">
+    <h2 style="font-size:17px; color:#4dabf7;">📊 Hệ Thống Phân Tích Dữ Liệu</h2>
+    <span id="statusMsg" class="status"></span>
+  </div>
+
+  <div class="tab-header">
+    <button class="tab-btn active" onclick="switchTab('tab1')">1. Xuôi-Chữ-Ngược</button>
+    <button class="tab-btn" onclick="switchTab('tab2')">2. Danh Sách Tên</button>
+    <button class="tab-btn" onclick="switchTab('tab3')">3. Phân Tích Chi Tiết</button>
+    <button class="tab-btn" onclick="switchTab('tab4')">4. Tổng Xuôi</button>
+    <button class="tab-btn" onclick="switchTab('tab5')">5. Tổng Ngược</button>
+    <button class="tab-btn" onclick="switchTab('tab6')">6. Ngày Giờ Hiện Tại</button>
+    <button class="tab-btn" onclick="switchTab('tab7')">7. Tuổi & Đối Chiếu</button>
+    <button class="tab-btn" onclick="switchTab('tab8')">8. Bảng Mã Tháng</button>
+    <button class="tab-btn" onclick="switchTab('tab9')">9. Đối Chiếu Tháng</button>
+  </div>
+
+  <!-- TAB 1: XUÔI - CHỮ - NGƯỢC -->
+  <div id="tab1" class="tab-content active">
+    <div class="note">
+      <strong>📄 Định dạng file TXT Tab 1:</strong> Cột 1 (Xuôi) | Cột 2 (Ký tự/Chữ) | Cột 3 (Ngược)<br>
+      Ví dụ: <code>| 1 | 0 | 114 |</code> hoặc <code>1 | 0 | 114</code>.
+    </div>
+    <div class="tab-toolbar">
+      <label class="file-label">
+        📂 Chọn file Bảng Xuôi-Chữ-Ngược
+        <input type="file" id="fileTab1" onchange="loadTab1(this)">
+      </label>
+      <span id="tab1Name" style="font-size:13px; color:#aaa;">Chưa chọn file</span>
+    </div>
+    <table id="tableTab1">
+      <thead><tr><th>Xuôi (Cột 1)</th><th>Chữ/Ký tự (Cột 2)</th><th>Ngược (Cột 3)</th></tr></thead>
+      <tbody id="bodyTab1"><tr><td colspan="3" style="text-align:center; color:#777;">Chưa có dữ liệu</td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- TAB 2: DANH SÁCH TÊN -->
+  <div id="tab2" class="tab-content">
+    <div class="note">
+      <strong>📄 Định dạng file TXT:</strong> Họ Tên|Ngày Sinh|Giờ Sinh|Giới Tính<br>
+      Ví dụ: <code>NGUYỄN THỊ MINH HẰNG|7/1/1974|7|G</code>
+    </div>
+    <div class="tab-toolbar">
+      <label class="file-label">
+        📂 Chọn file Danh Sách Tên
+        <input type="file" id="fileTab2" onchange="loadTab2(this)">
+      </label>
+      <span id="tab2Name" style="font-size:13px; color:#aaa;">Chưa chọn file</span>
+    </div>
+    <table id="tableTab2">
+      <thead><tr><th>STT</th><th>Họ Tên</th><th>Ngày Sinh</th><th>Giờ Sinh</th><th>Giới Tính</th></tr></thead>
+      <tbody id="bodyTab2"><tr><td colspan="5" style="text-align:center; color:#777;">Chưa có dữ liệu</td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- TAB 3: PHÂN TÍCH CHI TIẾT -->
+  <div id="tab3" class="tab-content">
+    <div class="tab-toolbar">
+      <button class="btn btn-success" onclick="phanTichChiTiet()">▶ Phân Tích Chi Tiết</button>
+    </div>
+    <table id="tableTab3">
+      <thead><tr><th>STT</th><th>Họ Tên</th><th>Phần</th><th>Chữ</th><th>Giá trị Xuôi</th><th>Tổng Xuôi</th><th>Giá trị Ngược</th><th>Tổng Ngược</th></tr></thead>
+      <tbody id="bodyTab3"><tr><td colspan="8" style="text-align:center; color:#777;">Nhập dữ liệu ở Tab 1 & 2 rồi bấm nút phân tích</td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- TAB 4: TỔNG XUÔI -->
+  <div id="tab4" class="tab-content">
+    <div class="tab-toolbar">
+      <button class="btn btn-success" onclick="tinhTongXuoi()">▶ Tính Tổng Xuôi</button>
+    </div>
+    <table id="tableTab4">
+      <thead><tr><th>STT</th><th>Họ Tên</th><th>Tổng Họ</th><th>Tổng Đệm</th><th>Tổng Tên</th><th>Tổng Cộng</th></tr></thead>
+      <tbody id="bodyTab4"><tr><td colspan="6" style="text-align:center; color:#777;">Nhập dữ liệu rồi bấm nút tính</td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- TAB 5: TỔNG NGƯỢC -->
+  <div id="tab5" class="tab-content">
+    <div class="tab-toolbar">
+      <button class="btn btn-success" onclick="tinhTongNguoc()">▶ Tính Tổng Ngược</button>
+    </div>
+    <table id="tableTab5">
+      <thead><tr><th>STT</th><th>Họ Tên</th><th>Tổng Họ</th><th>Tổng Đệm</th><th>Tổng Tên</th><th>Tổng Cộng</th></tr></thead>
+      <tbody id="bodyTab5"><tr><td colspan="6" style="text-align:center; color:#777;">Nhập dữ liệu rồi bấm nút tính</td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- TAB 6: NGÀY GIỜ HIỆN TẠI -->
+  <div id="tab6" class="tab-content">
+    <div class="time-info" id="timeInfo">
+      <strong>🕐 Thời gian hiện tại:</strong> <span id="currentTime">—</span><br>
+      <strong>📅 Ngày/Tháng/Năm:</strong> <span id="currentDate">—</span><br>
+      <strong>🔢 Các số theo Ngày/Giờ:</strong> <span id="dateNumbers">—</span>
+    </div>
+    <div class="tab-toolbar">
+      <button class="btn btn-success" onclick="capNhatThoiGian()">🔄 Cập Nhật Thời Gian</button>
+      <button class="btn btn-primary" onclick="soSanhTab6()">▶ So Sánh Với Tổng</button>
+    </div>
+    <table id="tableTab6">
+      <thead><tr><th>STT</th><th>Họ Tên</th><th>Tổng Xuôi</th><th>Trùng Ngày/Giờ</th><th>Tổng Ngược</th><th>Trùng Ngày/Giờ</th></tr></thead>
+      <tbody id="bodyTab6"><tr><td colspan="6" style="text-align:center; color:#777;">Bấm "Cập Nhật Thời Gian" rồi "So Sánh Với Tổng"</td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- TAB 7: TUỔI & ĐỐI CHIẾU -->
+  <div id="tab7" class="tab-content">
+    <div class="note">
+      <strong>📋 Chức năng:</strong> Tính tuổi hiện tại mỗi người + tách số trong tuổi đối chiếu với số Ngày/Giờ ở Tab 6
+    </div>
+    <div class="tab-toolbar">
+      <button class="btn btn-success" onclick="tinhTuoiVaDoiChieu()">▶ Tính Tuổi & Đối Chiếu</button>
+    </div>
+    <table id="tableTab7">
+      <thead><tr><th>STT</th><th>Họ Tên</th><th>Ngày Sinh</th><th>Tuổi Hiện Tại</th><th>Số tách ra từ Tuổi</th><th>Trùng Ngày/Giờ</th></tr></thead>
+      <tbody id="bodyTab7"><tr><td colspan="6" style="text-align:center; color:#777;">Nhập dữ liệu rồi bấm nút</td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- TAB 8: BẢNG MÃ THÁNG -->
+  <div id="tab8" class="tab-content">
+    <div class="note">
+      <strong>📄 Định dạng file TXT:</strong> MãTháng GiáTrị<br>
+      Ví dụ: <code>11 4</code>
+    </div>
+    <div class="tab-toolbar">
+      <label class="file-label">
+        📂 Chọn file Bảng Mã Tháng
+        <input type="file" id="fileTab8" onchange="loadTab8(this)">
+      </label>
+      <span id="tab8Name" style="font-size:13px; color:#aaa;">Chưa chọn file</span>
+    </div>
+    <table id="tableTab8">
+      <thead><tr><th>Mã Tháng</th><th>Giá Trị</th></tr></thead>
+      <tbody id="bodyTab8"><tr><td colspan="2" style="text-align:center; color:#777;">Chưa có dữ liệu</td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- TAB 9: ĐỐI CHIẾU THÁNG -->
+  <div id="tab9" class="tab-content">
+    <div class="note">
+      <strong>📋 Chức năng:</strong> Tách số từ Tổng Xuôi & Tổng Ngược → đối chiếu với Bảng Mã Tháng
+    </div>
+    <div class="tab-toolbar">
+      <button class="btn btn-success" onclick="doiChieuThang()">▶ Tách Số & Đối Chiếu</button>
+      <button class="btn btn-primary" onclick="xuatKetQua()">💾 Xuất Kết Quả TXT</button>
+    </div>
+    <table id="tableTab9">
+      <thead><tr>
+        <th>STT</th><th>Họ Tên</th>
+        <th>Tổng Xuôi</th><th>Số tách ra</th><th>Trùng Mã Tháng</th>
+        <th>Tổng Ngược</th><th>Số tách ra</th><th>Trùng Mã Tháng</th>
+      </tr></thead>
+      <tbody id="bodyTab9"><tr><td colspan="8" style="text-align:center; color:#777;">Nhập đủ dữ liệu rồi bấm nút</td></tr></tbody>
+    </table>
+  </div>
+
+<script>
+// Dữ liệu toàn cục
+let forwardMap = {};
+let reverseMap = {};
+let monthMap = {};
+let personList = [];
+let tab3Results = [];
+let tab4Results = [];
+let tab5Results = [];
+let tab6Numbers = [];
+let tab9Results = [];
+
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+function showStatus(msg) {
+  document.getElementById('statusMsg').textContent = msg;
+  setTimeout(() => document.getElementById('statusMsg').textContent = '', 4000);
+}
+
+function removeDiacritics(str) {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+}
+
+// Đọc file hỗ trợ đa mã hóa (UTF-8, ANSI, Windows-1258...)
+function readFileContent(file, callback) {
+  const altReader = new FileReader();
+  altReader.onload = function(e) {
+    const buffer = e.target.result;
+    let text = '';
+    try {
+      const decoder = new TextDecoder('utf-8', { fatal: false });
+      text = decoder.decode(buffer);
+    } catch (err) {
+      const decoderFallback = new TextDecoder('windows-1258', { fatal: false });
+      text = decoderFallback.decode(buffer);
+    }
+    callback(text);
+  };
+  altReader.readAsArrayBuffer(file);
+}
+
+// ===== TAB 1: ĐỌC BẢNG (Tự động lọc bỏ dấu | thừa ở đầu/cuối dòng) =====
+function loadTab1(input) {
+  const file = input.files[0];
+  if (!file) return;
+  document.getElementById('tab1Name').textContent = '✓ ' + file.name;
+  
+  readFileContent(file, function(content) {
+    forwardMap = {};
+    reverseMap = {};
+    const lines = content.split(/\r?\n/);
+    
+    lines.forEach(line => {
+      line = line.trim();
+      if (!line || line.startsWith('#')) return;
+      
+      // Cắt bỏ dấu | thừa ở đầu và cuối dòng nếu có
+      if (line.startsWith('|')) line = line.substring(1);
+      if (line.endsWith('|')) line = line.slice(0, -1);
+      line = line.trim();
+      
+      let parts = line.split('|').map(s => s.trim()).filter(s => s !== '');
+      if (parts.length < 3) {
+        // Fallback nếu dùng tab hoặc khoảng trắng
+        parts = line.split(/\s+/).filter(Boolean);
+      }
+      
+      if (parts.length >= 3) {
+        // Cột 1 (parts[0]) = Số Xuôi, Cột 2 (parts[1]) = Chữ/Ký tự, Cột 3 (parts[2]) = Số Ngược
+        const xuoiStr = parts[0];
+        const chu = parts[1].toUpperCase();
+        const nguocStr = parts[2];
+        
+        const xuoiVal = parseInt(xuoiStr, 10);
+        const nguocVal = parseInt(nguocStr, 10);
+        
+        if (!isNaN(xuoiVal) && !isNaN(nguocVal)) {
+          forwardMap[chu] = xuoiVal;
+          reverseMap[chu] = nguocVal;
+        }
+      }
+    });
+    
+    renderTab1();
+    showStatus('✅ Đã tải Bảng Xuôi-Chữ-Ngược thành công!');
+  });
+}
+
+function renderTab1() {
+  const tbody = document.getElementById('bodyTab1');
+  tbody.innerHTML = '';
+  const seen = new Set();
+  for (let chu in forwardMap) {
+    if (seen.has(chu)) continue;
+    seen.add(chu);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${forwardMap[chu]}</strong></td>
+      <td><strong>${chu}</strong></td>
+      <td>${reverseMap[chu] !== undefined ? reverseMap[chu] : '—'}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+}
+
+// ===== TAB 2: DANH SÁCH TÊN =====
+function loadTab2(input) {
+  const file = input.files[0];
+  if (!file) return;
+  document.getElementById('tab2Name').textContent = '✓ ' + file.name;
+  
+  readFileContent(file, function(content) {
+    personList = [];
+    const lines = content.split(/\r?\n/);
+    lines.forEach(line => {
+      line = line.trim();
+      if (!line || line.startsWith('#')) return;
+      if (line.startsWith('|')) line = line.substring(1);
+      if (line.endsWith('|')) line = line.slice(0, -1);
+      
+      const cols = line.split('|').map(s => s.trim());
+      const filtered = cols.filter(c => c !== '');
+      if (filtered[0]) {
+        personList.push({
+          name: filtered[0],
+          dob: filtered[1] || '',
+          hob: filtered[2] || '',
+          gender: filtered[3] || ''
+        });
+      }
+    });
+    renderTab2();
+    showStatus('✅ Đã tải Danh Sách Tên thành công!');
+  });
+}
+
+function renderTab2() {
+  const tbody = document.getElementById('bodyTab2');
+  tbody.innerHTML = '';
+  personList.forEach((p, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${i+1}</td><td><strong>${p.name}</strong></td><td>${p.dob}</td><td>${p.hob}</td><td>${p.gender}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ===== HÀM TÍNH TỔNG THEO BẢNG ÁNH XẠ =====
+function calcWordValue(word, map) {
+  let total = 0;
+  const clean = removeDiacritics(word);
+  let detail = '';
+  for (let ch of clean) {
+    const val = map[ch];
+    if (val !== undefined && !isNaN(val)) {
+      total += val;
+      detail += `${ch}(${val}) + `;
+    } else {
+      detail += `${ch}(0) + `;
+    }
+  }
+  if (detail.endsWith(' + ')) detail = detail.slice(0, -3);
+  return { total, detail };
+}
+
+function calcNameParts(name, map) {
+  const parts = name.trim().split(/\s+/);
+  const ho = parts[0] || '';
+  const ten = parts.length > 1 ? parts[parts.length - 1] : '';
+  const dem = parts.length > 2 ? parts.slice(1, -1).join(' ') : '';
+
+  const hoVal = calcWordValue(ho, map);
+  const demVal = calcWordValue(dem, map);
+  const tenVal = calcWordValue(ten, map);
+
+  return {
+    ho, dem, ten,
+    hoTotal: hoVal.total, hoDetail: hoVal.detail,
+    demTotal: demVal.total, demDetail: demVal.detail,
+    tenTotal: tenVal.total, tenDetail: tenVal.detail,
+    total: hoVal.total + demVal.total + tenVal.total
+  };
+}
+
+// ===== TAB 3: PHÂN TÍCH CHI TIẾT =====
+function phanTichChiTiet() {
+  if (Object.keys(forwardMap).length === 0 || personList.length === 0) {
+    alert('⚠️ Vui lòng nhập Bảng Xuôi-Chữ-Ngược (Tab 1) và Danh Sách Tên (Tab 2) trước!');
+    return;
+  }
+  const tbody = document.getElementById('bodyTab3');
+  tbody.innerHTML = '';
+  tab3Results = [];
+
+  personList.forEach((p, idx) => {
+    const xuoi = calcNameParts(p.name, forwardMap);
+    const nguoc = calcNameParts(p.name, reverseMap);
+    tab3Results.push({ name: p.name, xuoi, nguoc });
+
+    const rows = [
+      { part: 'Họ', word: xuoi.ho, xDetail: xuoi.hoDetail, xTotal: xuoi.hoTotal, nDetail: nguoc.hoDetail, nTotal: nguoc.hoTotal },
+      { part: 'Đệm', word: xuoi.dem, xDetail: xuoi.demDetail, xTotal: xuoi.demTotal, nDetail: nguoc.demDetail, nTotal: nguoc.demTotal },
+      { part: 'Tên', word: xuoi.ten, xDetail: xuoi.tenDetail, xTotal: xuoi.tenTotal, nDetail: nguoc.tenDetail, nTotal: nguoc.tenTotal }
+    ];
+
+    rows.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${idx+1}</td>
+        <td><strong>${p.name}</strong></td>
+        <td>${r.part}</td>
+        <td>${r.word}</td>
+        <td>${r.xDetail} = <strong>${r.xTotal}</strong></td>
+        <td><strong style="color:#4dabf7">${r.xTotal}</strong></td>
+        <td>${r.nDetail} = <strong>${r.nTotal}</strong></td>
+        <td><strong style="color:#ff6b6b">${r.nTotal}</strong></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  });
+  showStatus('✅ Đã phân tích chi tiết');
+}
+
+// ===== TAB 4: TỔNG XUÔI =====
+function tinhTongXuoi() {
+  if (Object.keys(forwardMap).length === 0 || personList.length === 0) {
+    alert('⚠️ Vui lòng nhập Bảng Xuôi-Chữ-Ngược và Danh Sách Tên trước!');
+    return;
+  }
+  if (tab3Results.length === 0) phanTichChiTiet();
+
+  const tbody = document.getElementById('bodyTab4');
+  tbody.innerHTML = '';
+  tab4Results = [];
+
+  personList.forEach((p, idx) => {
+    const xuoi = calcNameParts(p.name, forwardMap);
+    tab4Results.push({ name: p.name, ...xuoi });
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${idx+1}</td>
+      <td><strong>${p.name}</strong></td>
+      <td>${xuoi.hoTotal}</td>
+      <td>${xuoi.demTotal}</td>
+      <td>${xuoi.tenTotal}</td>
+      <td><strong style="color:#4dabf7; font-size:16px">${xuoi.total}</strong></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  showStatus('✅ Đã tính Tổng Xuôi');
+}
+
+// ===== TAB 5: TỔNG NGƯỢC =====
+function tinhTongNguoc() {
+  if (Object.keys(reverseMap).length === 0 || personList.length === 0) {
+    alert('⚠️ Vui lòng nhập Bảng Xuôi-Chữ-Ngược và Danh Sách Tên trước!');
+    return;
+  }
+  if (tab3Results.length === 0) phanTichChiTiet();
+
+  const tbody = document.getElementById('bodyTab5');
+  tbody.innerHTML = '';
+  tab5Results = [];
+
+  personList.forEach((p, idx) => {
+    const nguoc = calcNameParts(p.name, reverseMap);
+    tab5Results.push({ name: p.name, ...nguoc });
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${idx+1}</td>
+      <td><strong>${p.name}</strong></td>
+      <td>${nguoc.hoTotal}</td>
+      <td>${nguoc.demTotal}</td>
+      <td>${nguoc.tenTotal}</td>
+      <td><strong style="color:#ff6b6b; font-size:16px">${nguoc.total}</strong></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  showStatus('✅ Đã tính Tổng Ngược');
+}
+
+// ===== TAB 6: NGÀY GIỜ HIỆN TẠI =====
+function capNhatThoiGian() {
+  const now = new Date();
+  const day = now.getDate();
+  const month = now.getMonth() + 1;
+  const year = now.getFullYear();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+
+  document.getElementById('currentTime').textContent = 
+    `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}`;
+  document.getElementById('currentDate').textContent = 
+    `${day}/${month}/${year}`;
+
+  tab6Numbers = [];
+  const allStr = `${day}${month}${year}${hours}${minutes}`;
+  for (let i = 0; i < allStr.length; i++) {
+    tab6Numbers.push(parseInt(allStr[i], 10));
+  }
+  tab6Numbers.push(day, month, year, hours, minutes);
+
+  document.getElementById('dateNumbers').textContent = 
+    [...new Set(tab6Numbers)].sort((a,b) => a-b).join(', ');
+
+  showStatus('✅ Đã cập nhật thời gian');
+}
+
+function soSanhTab6() {
+  if (tab6Numbers.length === 0) {
+    alert('⚠️ Bấm "Cập Nhật Thời Gian" trước!');
+    return;
+  }
+  if (tab4Results.length === 0) tinhTongXuoi();
+  if (tab5Results.length === 0) tinhTongNguoc();
+
+  const tbody = document.getElementById('bodyTab6');
+  tbody.innerHTML = '';
+
+  function tachVaKiemTra(total) {
+    const s = String(total);
+    const digits = s.split('').map(d => parseInt(d, 10));
+    const found = [...new Set(digits.filter(d => tab6Numbers.includes(d)))];
+    return { digits: digits.join(' '), matches: found.join(', ') || 'Không trùng' };
+  }
+
+  personList.forEach((p, idx) => {
+    const t4 = tab4Results[idx]?.total || 0;
+    const t5 = tab5Results[idx]?.total || 0;
+    const info4 = tachVaKiemTra(t4);
+    const info5 = tachVaKiemTra(t5);
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${idx+1}</td>
+      <td><strong>${p.name}</strong></td>
+      <td><strong style="color:#4dabf7; font-size:16px">${t4}</strong><br>(${info4.digits})</td>
+      <td class="match-cell">${info4.matches}</td>
+      <td><strong style="color:#ff6b6b; font-size:16px">${t5}</strong><br>(${info5.digits})</td>
+      <td class="match-cell">${info5.matches}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  showStatus('✅ Đã so sánh xong');
+}
+
+// ===== TAB 7: TÍNH TUỔI & ĐỐI CHIẾU =====
+function tinhTuoiVaDoiChieu() {
+  if (tab6Numbers.length === 0) {
+    alert('⚠️ Vào Tab 6 → bấm "Cập Nhật Thời Gian" trước!');
+    return;
+  }
+  const tbody = document.getElementById('bodyTab7');
+  tbody.innerHTML = '';
+  const today = new Date();
+
+  personList.forEach((p, idx) => {
+    if (!p.dob) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${idx+1}</td>
+        <td><strong>${p.name}</strong></td>
+        <td>${p.dob || '—'}</td>
+        <td>Không có ngày sinh</td>
+        <td>—</td>
+        <td>—</td>
+      `;
+      tbody.appendChild(tr);
+      return;
+    }
+
+    const parts = p.dob.split(/[\/\-]/);
+    if (parts.length < 3) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${idx+1}</td>
+        <td><strong>${p.name}</strong></td>
+        <td>${p.dob}</td>
+        <td>Định dạng sai</td>
+        <td>—</td>
+        <td>—</td>
+      `;
+      tbody.appendChild(tr);
+      return;
+    }
+
+    const birthDay = parseInt(parts[0], 10);
+    const birthMonth = parseInt(parts[1], 10);
+    const birthYear = parseInt(parts[2], 10);
+    const birthDate = new Date(birthYear, birthMonth - 1, birthDay);
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    const ageStr = String(age);
+    const ageDigits = ageStr.split('').map(d => parseInt(d, 10));
+    const matches = [...new Set(ageDigits.filter(d => tab6Numbers.includes(d)))];
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${idx+1}</td>
+      <td><strong>${p.name}</strong></td>
+      <td>${p.dob}</td>
+      <td><strong style="color:#ffd433; font-size:16px">${age} tuổi</strong></td>
+      <td>${ageDigits.join(' ')}</td>
+      <td class="match-cell">${matches.length ? matches.join(', ') : 'Không trùng'}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  showStatus('✅ Đã tính tuổi & đối chiếu');
+}
+
+// ===== TAB 8: BẢNG MÃ THÁNG =====
+function loadTab8(input) {
+  const file = input.files[0];
+  if (!file) return;
+  document.getElementById('tab8Name').textContent = '✓ ' + file.name;
+  
+  readFileContent(file, function(content) {
+    monthMap = {};
+    const lines = content.split(/\r?\n/);
+    lines.forEach(line => {
+      line = line.trim();
+      if (!line || line.startsWith('#')) return;
+      if (line.startsWith('|')) line = line.substring(1);
+      if (line.endsWith('|')) line = line.slice(0, -1);
+
+      const parts = line.split(/\s+/).filter(Boolean);
+      if (parts.length >= 2) {
+        const ma = parts[0];
+        const gt = parts[1];
+        monthMap[ma] = gt;
+      }
+    });
+    renderTab8();
+    showStatus('✅ Đã tải Bảng Mã Tháng thành công!');
+  });
+}
+
+function renderTab8() {
+  const tbody = document.getElementById('bodyTab8');
+  tbody.innerHTML = '';
+  for (let ma in monthMap) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><strong>${ma}</strong></td><td>${monthMap[ma]}</td>`;
+    tbody.appendChild(tr);
+  }
+}
+
+// ===== TAB 9: ĐỐI CHIẾU THÁNG =====
+function doiChieuThang() {
+  if (Object.keys(monthMap).length === 0) {
+    alert('⚠️ Vui lòng nhập Bảng Mã Tháng ở Tab 8 trước!');
+    return;
+  }
+  if (tab4Results.length === 0) tinhTongXuoi();
+  if (tab5Results.length === 0) tinhTongNguoc();
+
+  const tbody = document.getElementById('bodyTab9');
+  tbody.innerHTML = '';
+  tab9Results = [];
+
+  function tachVaTim(total) {
+    const s = String(total);
+    const digits = s.split('').join(' ');
+    const found = [];
+    for (let len = 1; len <= s.length; len++) {
+      for (let i = 0; i <= s.length - len; i++) {
+        const chunk = s.substring(i, i + len);
+        if (monthMap[chunk] !== undefined) {
+          found.push({ ma: chunk, gt: monthMap[chunk] });
+        }
+      }
+    }
+    const unique = [];
+    const seen = new Set();
+    found.forEach(f => {
+      if (!seen.has(f.ma)) { seen.add(f.ma); unique.push(f); }
+    });
+    return { digits, matches: unique };
+  }
+
+  personList.forEach((p, idx) => {
+    const t4 = tab4Results[idx]?.total || 0;
+    const t5 = tab5Results[idx]?.total || 0;
+    const info4 = tachVaTim(t4);
+    const info5 = tachVaTim(t5);
+
+    tab9Results.push({
+      name: p.name,
+      total4: t4, digits4: info4.digits, matches4: info4.matches,
+      total5: t5, digits5: info5.digits, matches5: info5.matches
+    });
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${idx+1}</td>
+      <td><strong>${p.name}</strong></td>
+      <td><strong style="color:#4dabf7; font-size:16px">${t4}</strong></td>
+      <td>${info4.digits}</td>
+      <td class="match-cell">${info4.matches.length ? info4.matches.map(m => m.ma + ' → ' + m.gt).join('; ') : 'Không trùng'}</td>
+      <td><strong style="color:#ff6b6b; font-size:16px">${t5}</strong></td>
+      <td>${info5.digits}</td>
+      <td class="match-cell">${info5.matches.length ? info5.matches.map(m => m.ma + ' → ' + m.gt).join('; ') : 'Không trùng'}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  showStatus('✅ Đã đối chiếu tháng');
+}
+
+function xuatKetQua() {
+  if (tab9Results.length === 0) {
+    alert('⚠️ Chưa có dữ liệu để xuất! Bấm "Tách Số & Đối Chiếu" trước.');
+    return;
+  }
+  let txt = 'Họ Tên|Tổng Xuôi|Số tách ra|Trùng Mã Tháng|Tổng Ngược|Số tách ra|Trùng Mã Tháng\n';
+  tab9Results.forEach(r => {
+    txt += [
+      r.name,
+      r.total4,
+      r.digits4,
+      r.matches4.length ? r.matches4.map(m => m.ma + '=' + m.gt).join(' | ') : 'Không trùng',
+      r.total5,
+      r.digits5,
+      r.matches5.length ? r.matches5.map(m => m.ma + '=' + m.gt).join(' | ') : 'Không trùng'
+    ].join('|') + '\n';
+  });
+  const blob = new Blob(['\ufeff', txt], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'KET_QUA_DOI_CHIEU_THANG.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showStatus('✅ Đã xuất file');
+}
+
+</script>
+</body>
+</html>

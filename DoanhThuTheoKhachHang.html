@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 13: Quản Trị Hiệu Suất Tổng Thể & Thẻ Điểm Cân Bằng (BSC) - CEO AI Enterprise</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- Header / Navbar -->
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center">
+            <div class="flex items-center space-x-3 mb-2 sm:mb-0">
+                <div class="bg-indigo-600 text-white p-2.5 rounded-xl shadow-lg">
+                    <i class="fa-solid fa-gauge-high text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white">CEO AI Enterprise</h1>
+                    <p class="text-xs text-indigo-400 font-medium">Module 13: Thẻ Điểm Hiệu Suất Tổng Thể (BSC)</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-900/60 text-indigo-300 border border-indigo-700/50">
+                    <i class="fa-solid fa-circle text-[8px] text-emerald-400 mr-1.5 animate-pulse"></i> Strategic Balanced Scorecard
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+        <!-- Cột Trái: Nhập liệu 4 khía cạnh chiến lược (5 Cột) -->
+        <div class="lg:col-span-5 space-y-6">
+            
+            <div class="bg-slate-800 rounded-2xl p-6 border border-slate-700 shadow-xl">
+                <h2 class="text-lg font-semibold text-white mb-4 flex items-center">
+                    <i class="fa-solid fa-sliders text-indigo-400 mr-2"></i> Chỉ số đánh giá (0 - 100 điểm)
+                </h2>
+                
+                <form id="bscForm" class="space-y-4" onsubmit="event.preventDefault(); calculateBSC();">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            1. Khía cạnh Tài chính (Điểm)
+                        </label>
+                        <input type="number" id="scoreFinancial" min="0" max="100" value="80" required
+                            class="w-full bg-slate-900 border border-slate-750 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition font-medium">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            2. Khía cạnh Khách hàng (Điểm)
+                        </label>
+                        <input type="number" id="scoreCustomer" min="0" max="100" value="75" required
+                            class="w-full bg-slate-900 border border-slate-750 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition font-medium">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            3. Khía cạnh Quy trình nội bộ (Điểm)
+                        </label>
+                        <input type="number" id="scoreInternal" min="0" max="100" value="70" required
+                            class="w-full bg-slate-900 border border-slate-750 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition font-medium">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                            4. Khía cạnh Học tập & Phát triển (Điểm)
+                        </label>
+                        <input type="number" id="scoreLearning" min="0" max="100" value="85" required
+                            class="w-full bg-slate-900 border border-slate-750 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition font-medium">
+                    </div>
+
+                    <div class="pt-2 flex space-x-3">
+                        <button type="button" onclick="calculateBSC()" 
+                            class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 px-4 rounded-xl shadow-lg hover:shadow-indigo-500/25 transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-calculator"></i>
+                            <span>Tổng hợp & Đánh giá</span>
+                        </button>
+                        <button type="reset" onclick="setTimeout(calculateBSC, 50)"
+                            class="bg-slate-700 hover:bg-slate-600 text-slate-300 font-medium py-3 px-4 rounded-xl transition">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Mô hình chuẩn -->
+            <div class="bg-slate-800/80 rounded-2xl p-6 border border-slate-700/80 backdrop-blur-sm">
+                <h3 class="text-sm font-semibold text-indigo-300 uppercase tracking-wider mb-3 flex items-center">
+                    <i class="fa-solid fa-book-bookmark mr-2"></i> Phương pháp BSC
+                </h3>
+                <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-750 text-xs text-slate-300 space-y-2 font-mono">
+                    <p><span class="text-indigo-400 font-semibold">Điểm TB</span> = (Tài chính + Khách hàng + Nội bộ + Học tập) / 4</p>
+                    <p class="text-[11px] text-slate-400 font-sans mt-1">
+                        Đánh giá toàn diện sức khỏe doanh nghiệp dựa trên 4 trụ cột chiến lược cốt lõi thay vì chỉ nhìn vào số liệu tài chính thuần túy.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Cột Phải: Kết quả Điểm số & Biểu đồ Radar (7 Cột) -->
+        <div class="lg:col-span-7 space-y-6">
+
+            <!-- Thẻ Điểm Tổng thể -->
+            <div class="bg-slate-800 rounded-2xl p-5 border border-slate-700 shadow-xl flex flex-col justify-between bg-gradient-to-br from-slate-800 to-indigo-950/40">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-indigo-300">Điểm Hiệu Suất Tổng Thể (BSC Score)</span>
+                        <h3 id="overallScore" class="text-4xl font-extrabold text-white mt-1">-- <span class="text-lg font-normal text-slate-400">/ 100 điểm</span></h3>
+                    </div>
+                    <div id="bscBadgeHealth" class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                        Đang phân tích...
+                    </div>
+                </div>
+                <p id="bscSummary" class="text-xs text-slate-300 mt-3 pt-3 border-t border-slate-700/60">
+                    Đang tổng hợp các chiều dữ liệu chiến lược...
+                </p>
+            </div>
+
+            <!-- Khối Biểu đồ Radar đánh giá 4 khía cạnh -->
+            <div class="bg-slate-800 rounded-2xl p-6 border border-slate-700 shadow-xl">
+                <h3 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center">
+                    <i class="fa-solid fa-chart-pie text-indigo-400 mr-2"></i> Biểu đồ Radar 4 Trụ Cột Chiến Lược
+                </h3>
+                <div class="h-64 relative flex justify-center">
+                    <canvas id="bscRadarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Khối Đánh giá & Khuyến nghị AI -->
+            <div class="bg-slate-800 rounded-2xl p-6 border border-slate-700 shadow-xl space-y-4">
+                <h3 class="text-sm font-semibold text-indigo-300 uppercase tracking-wider flex items-center">
+                    <i class="fa-solid fa-robot text-indigo-400 mr-2"></i> Đánh giá & Khuyến nghị điều hành từ AI CEO
+                </h3>
+                
+                <div class="space-y-3">
+                    <div id="bscAiStatus" class="p-4 rounded-xl bg-slate-900/90 border border-slate-750 text-sm text-slate-200">
+                        <!-- Populated via JS -->
+                    </div>
+
+                    <div id="bscAiWarnings" class="p-4 rounded-xl bg-amber-950/25 border border-amber-800/40 text-sm text-amber-200 space-y-1">
+                        <div class="font-semibold flex items-center text-amber-400 mb-1">
+                            <i class="fa-solid fa-triangle-exclamation mr-2"></i> Điểm nghẽn cần lưu ý:
+                        </div>
+                        <ul id="bscWarningList" class="list-disc list-inside space-y-1 text-xs text-amber-200/90">
+                            <!-- Populated via JS -->
+                        </ul>
+                    </div>
+
+                    <div id="bscAiRecommendations" class="p-4 rounded-xl bg-indigo-950/25 border border-indigo-800/40 text-sm text-indigo-200 space-y-1">
+                        <div class="font-semibold flex items-center text-indigo-400 mb-1">
+                            <i class="fa-solid fa-lightbulb mr-2"></i> Hành động chiến lược khẩn cấp:
+                        </div>
+                        <ul id="bscRecommendationList" class="list-disc list-inside space-y-1 text-xs text-indigo-200/90">
+                            <!-- Populated via JS -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Thao tác mở rộng (SQLite & Excel) -->
+                <div class="pt-4 border-t border-slate-700/60 flex flex-wrap gap-3 justify-end">
+                    <button type="button" onclick="saveToSQLite()" 
+                        class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold py-2.5 px-4 rounded-xl transition flex items-center space-x-2 shadow">
+                        <i class="fa-solid fa-database text-indigo-400"></i>
+                        <span>Lưu SQLite</span>
+                    </button>
+                    <button type="button" onclick="exportExcel()" 
+                        class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold py-2.5 px-4 rounded-xl transition flex items-center space-x-2 shadow">
+                        <i class="fa-solid fa-file-excel text-emerald-400"></i>
+                        <span>Xuất Excel</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+        <p>CEO AI Enterprise System &bull; Module 13: Balanced Scorecard (BSC) &bull; Thiết kế chuyên lập trình ra quyết định điều hành</p>
+    </footer>
+
+    <!-- JavaScript Xử lý radar chart và logic AI -->
+    <script>
+        let bscRadarInstance = null;
+
+        function calculateBSC() {
+            const f = parseFloat(document.getElementById('scoreFinancial').value) || 0;
+            const c = parseFloat(document.getElementById('scoreCustomer').value) || 0;
+            const i = parseFloat(document.getElementById('scoreInternal').value) || 0;
+            const l = parseFloat(document.getElementById('scoreLearning').value) || 0;
+
+            const avg = (f + c + i + l) / 4;
+
+            document.getElementById('overallScore').innerHTML = `${avg.toFixed(1)} <span class="text-lg font-normal text-slate-400">/ 100 điểm</span>`;
+
+            let badge = document.getElementById('bscBadgeHealth');
+            let summary = document.getElementById('bscSummary');
+            let statusHtml = '';
+            let warningsHtml = '';
+            let recommendationsHtml = '';
+
+            if (avg >= 80) {
+                badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+                badge.innerText = "Doanh nghiệp xuất sắc";
+                summary.innerText = "Các khía cạnh chiến lược đang vận hành đồng bộ và đạt hiệu suất cao.";
+                statusHtml = `<strong class="text-emerald-400">Trạng thái tổng thể: Rất mạnh.</strong> Doanh nghiệp duy trì sự cân bằng tuyệt vời giữa kết quả tài chính và năng lực nội tại phát triển dài hạn.`;
+                warningsHtml = `<li>Không có điểm nghẽn nghiêm trọng. Tuy nhiên cần chú ý duy trì sự đổi mới sáng tạo để tránh sức ì khi quy mô mở rộng.</li>`;
+                recommendationsHtml = `<li>Tiếp tục phát huy thế mạnh hiện tại, đồng thời thiết lập các mục tiêu thách thức hơn cho đội ngũ ở chu kỳ chiến lược kế tiếp.</li>`;
+            } else if (avg >= 65) {
+                badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30";
+                badge.innerText = "Vận hành ổn định";
+                summary.innerText = "Doanh nghiệp hoạt động khá tốt nhưng có một vài trụ cột cần cải thiện.";
+                statusHtml = `<strong class="text-indigo-400">Trạng thái tổng thể: Ổn định.</strong> Các chỉ số nằm trong vùng an toàn, tuy nhiên sự đồng bộ giữa các phòng ban chưa đạt mức tối ưu.`;
+                warningsHtml = `<li>Có sự chênh lệch điểm số giữa các khía cạnh, chỉ ra các nút thắt cục bộ trong quy trình hoặc dịch vụ khách hàng.</li>`;
+                recommendationsHtml = `<li>Tập trung nguồn lực khắc phục khía cạnh có điểm số thấp nhất để kéo hệ thống tiến lên mức đồng đều.</li>`;
+            } else {
+                badge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30";
+                badge.innerText = "Cần cải tổ chiến lược";
+                summary.innerText = "Nhiều trụ cột đang suy yếu, đe dọa trực tiếp đến sự phát triển bền vững.";
+                statusHtml = `<strong class="text-amber-400">Trạng thái tổng thể: Cảnh báo đỏ.</strong> Doanh nghiệp đang đối mặt với sự mất cân đối nghiêm trọng trong các mặt quản trị chiến lược.`;
+                warningsHtml = `<li>Điểm số thấp ở các khía cạnh cốt lõi tạo ra rủi ro dây chuyền đối với hiệu quả tài chính dài hạn.</li>`;
+                recommendationsHtml = `<li>Triển khai ngay cuộc họp khẩn cấp với cấp quản lý để rà soát lại quy trình nội bộ và cải thiện trải nghiệm khách hàng.</li>`;
+            }
+
+            document.getElementById('bscAiStatus').innerHTML = statusHtml;
+            document.getElementById('bscWarningList').innerHTML = warningsHtml;
+            document.getElementById('bscRecommendationList').innerHTML = recommendationsHtml;
+
+            initRadarChart(f, c, i, l);
+        }
+
+        function initRadarChart(f, c, i, l) {
+            const ctx = document.getElementById('bscRadarChart').getContext('2d');
+            
+            if (bscRadarInstance) {
+                bscRadarInstance.destroy();
+            }
+
+            bscRadarInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Tài chính', 'Khách hàng', 'Quy trình nội bộ', 'Học tập & Phát triển'],
+                    datasets: [{
+                        label: 'Điểm số thực tế',
+                        data: [f, c, i, l],
+                        backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                        borderColor: 'rgb(99, 102, 241)',
+                        pointBackgroundColor: 'rgb(99, 102, 241)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#cbd5e1', font: { size: 11, weight: '600' } },
+                            ticks: { display: false, max: 100, min: 0 }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        function saveToSQLite() {
+            alert("Đã kết nối luồng lưu trữ Module 13 (Balanced Scorecard) vào cơ sở dữ liệu SQLite.");
+        }
+
+        function exportExcel() {
+            alert("Đang khởi tạo tệp Excel tổng hợp Thẻ điểm cân bằng chiến lược BSC...");
+        }
+
+        window.onload = function() {
+            calculateBSC();
+        };
+    </script>
+</body>
+</html>

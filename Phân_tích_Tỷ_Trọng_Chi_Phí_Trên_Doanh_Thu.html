@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>46_Phân tích Tỷ Trọng Chi Phí Trên Doanh Thu - CEO AI Enterprise</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-500 text-slate-950 p-2 rounded-lg font-bold text-xl flex items-center justify-center w-10 h-10 shadow-lg shadow-indigo-500/20">
+                    <i class="fa-solid fa-chart-column"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white">CEO AI Enterprise</h1>
+                    <p class="text-xs text-slate-400">Module 46: Phân Tích Tỷ Trọng Chi Phí Trên Doanh Thu (Cost Structure Ratio)</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button onclick="exportToExcel()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-2 rounded-lg text-sm font-medium transition flex items-center space-x-2 border border-slate-600">
+                    <i class="fa-solid fa-file-excel text-emerald-400"></i>
+                    <span>Xuất Excel</span>
+                </button>
+                <button onclick="saveToSQLite()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center space-x-2 shadow-lg shadow-indigo-600/30">
+                    <i class="fa-solid fa-database"></i>
+                    <span>Lưu SQLite</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
+
+        <!-- CỘT TRÁI: FORM NHẬP LIỆU & CÔNG THỨC -->
+        <div class="lg:col-span-1 space-y-6">
+            <!-- Form Nhập Liệu -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl">
+                <h2 class="text-lg font-semibold text-white mb-4 flex items-center space-x-2 border-b border-slate-700 pb-3">
+                    <i class="fa-solid fa-sliders text-indigo-400"></i>
+                    <span>Dữ Liệu Doanh Thu & Chi Phí</span>
+                </h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Tổng Doanh Thu Thuần (VNĐ)</label>
+                        <input type="number" id="total_revenue" value="5000000000" oninput="calculateCostStructure()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Giá Vốn Hàng Bán - COGS (VNĐ)</label>
+                        <input type="number" id="cogs" value="2000000000" oninput="calculateCostStructure()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Chi Phí Nhân Sự / Lương (VNĐ)</label>
+                        <input type="number" id="labor_cost" value="1200000000" oninput="calculateCostStructure()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Chi Phí Marketing & Bán Hàng (VNĐ)</label>
+                        <input type="number" id="marketing_cost" value="600000000" oninput="calculateCostStructure()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Chi Phí Mặt Bằng & Tiện Ích (VNĐ)</label>
+                        <input type="number" id="facility_cost" value="300000000" oninput="calculateCostStructure()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Chi Phí Quản Lý & Khác (VNĐ)</label>
+                        <input type="number" id="other_opex" value="400000000" oninput="calculateCostStructure()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition text-sm">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Khối Công Thức -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl">
+                <h2 class="text-lg font-semibold text-white mb-3 flex items-center space-x-2 border-b border-slate-700 pb-3">
+                    <i class="fa-solid fa-square-root-variable text-indigo-400"></i>
+                    <span>Cơ Sở Tính Toán</span>
+                </h2>
+                <div class="text-xs text-slate-300 space-y-2">
+                    <p><b>Tỷ Trọng Khoản Mục:</b> $\frac{\text{Chi Phí Khoản Mục}}{\text{Tổng Doanh Thu Thuần}} \times 100\%$</p>
+                    <p><b>Tổng Chi Phí:</b> $\Sigma (\text{COGS} + \text{Nhân sự} + \text{Marketing} + \text{Mặt bằng} + \text{Quản lý})$</p>
+                    <p><b>Tỷ Lợi Nhuận Trước Thuế (EBT Margin):</b> $100\% - \text{Tổng Tỷ Trọng Chi Phí}$</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CỘT PHẢI: KẾT QUẢ, BIỂU ĐỒ & ĐÁNH GIÁ AI -->
+        <div class="lg:col-span-2 space-y-6">
+            
+            <!-- Thẻ Kết Quả Nhanh -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow-lg">
+                    <p class="text-xs font-medium text-slate-400">Tổng Chi Phí Hoạt Động</p>
+                    <h3 id="res_total_cost" class="text-2xl font-bold text-white mt-1">0 VNĐ</h3>
+                    <span id="res_total_ratio" class="text-xs font-semibold px-2 py-0.5 rounded-full mt-2 inline-block bg-slate-700 text-slate-300">--</span>
+                </div>
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow-lg">
+                    <p class="text-xs font-medium text-slate-400">Biên Lợi Nhuận Dự Kiến</p>
+                    <h3 id="res_margin" class="text-2xl font-bold text-emerald-400 mt-1">0%</h3>
+                    <span class="text-xs text-slate-400 mt-2 inline-block">EBT Margin</span>
+                </div>
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow-lg">
+                    <p class="text-xs font-medium text-slate-400">Đánh Giá Sức Khỏe</p>
+                    <h3 id="res_health" class="text-xl font-bold text-indigo-400 mt-1">Đang phân tích...</h3>
+                    <span class="text-xs text-slate-400 mt-2 inline-block">Cấu trúc chi phí</span>
+                </div>
+            </div>
+
+            <!-- Biểu Đồ Trực Quan -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl">
+                <h2 class="text-lg font-semibold text-white mb-4 flex items-center space-x-2 border-b border-slate-700 pb-3">
+                    <i class="fa-solid fa-chart-pie text-indigo-400"></i>
+                    <span>Tỷ Trọng Các Khoản Mục Trên Doanh Thu (%)</span>
+                </h2>
+                <div class="relative h-64 w-full">
+                    <canvas id="costStructureChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Khối AI Phân Tích, Cảnh Báo & Khuyến Nghị -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl space-y-6">
+                <h2 class="text-lg font-semibold text-white flex items-center space-x-2 border-b border-slate-700 pb-3">
+                    <i class="fa-solid fa-robot text-indigo-400"></i>
+                    <span>Phân Tích Chuyên Sâu & Khuyến Nghị Từ AI</span>
+                </h2>
+
+                <!-- Doanh nghiệp khỏe hay yếu -->
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-indigo-400 flex items-center space-x-2">
+                        <i class="fa-solid fa-stethoscope"></i>
+                        <span>1. Doanh nghiệp đang khỏe hay yếu?</span>
+                    </h3>
+                    <p id="ai_health_desc" class="text-sm text-slate-300 leading-relaxed bg-slate-900/50 p-3.5 rounded-xl border border-slate-700/50">
+                        Đang cập nhật dữ liệu đánh giá...
+                    </p>
+                </div>
+
+                <!-- Tiền đang chảy đi đâu -->
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-sky-400 flex items-center space-x-2">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                        <span>2. Tiền đang chảy đi đâu?</span>
+                    </h3>
+                    <p id="ai_money_flow" class="text-sm text-slate-300 leading-relaxed bg-slate-900/50 p-3.5 rounded-xl border border-slate-700/50">
+                        Đang cập nhật phân tích dòng tiền...
+                    </p>
+                </div>
+
+                <!-- Nên đầu tư hay cắt giảm -->
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-amber-400 flex items-center space-x-2">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        <span>3. Nên đầu tư hay cắt giảm?</span>
+                    </h3>
+                    <p id="ai_action" class="text-sm text-slate-300 leading-relaxed bg-slate-900/50 p-3.5 rounded-xl border border-slate-700/50">
+                        Đang tổng hợp khuyến nghị chiến lược...
+                    </p>
+                </div>
+
+                <!-- Dự báo tương lai -->
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-purple-400 flex items-center space-x-2">
+                        <i class="fa-solid fa-crystal-ball"></i>
+                        <span>4. Dự báo tương lai & Cảnh báo rủi ro</span>
+                    </h3>
+                    <p id="ai_forecast" class="text-sm text-slate-300 leading-relaxed bg-slate-900/50 p-3.5 rounded-xl border border-slate-700/50">
+                        Đang chạy mô hình dự báo...
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-800 border-t border-slate-700 mt-12 py-4 text-center text-xs text-slate-400">
+        CEO AI Enterprise Decision Support System &copy; 2026. All rights reserved.
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        let costChartInstance = null;
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+        }
+
+        function calculateCostStructure() {
+            const revenue = parseFloat(document.getElementById('total_revenue').value) || 1;
+            const cogs = parseFloat(document.getElementById('cogs').value) || 0;
+            const labor = parseFloat(document.getElementById('labor_cost').value) || 0;
+            const marketing = parseFloat(document.getElementById('marketing_cost').value) || 0;
+            const facility = parseFloat(document.getElementById('facility_cost').value) || 0;
+            const other = parseFloat(document.getElementById('other_opex').value) || 0;
+
+            const totalCost = cogs + labor + marketing + facility + other;
+            const totalRatio = (totalCost / revenue) * 100;
+            const ebtMargin = 100 - totalRatio;
+
+            // Tỷ trọng từng khoản mục
+            const cogsRatio = (cogs / revenue) * 100;
+            const laborRatio = (labor / revenue) * 100;
+            const marketingRatio = (marketing / revenue) * 100;
+            const facilityRatio = (facility / revenue) * 100;
+            const otherRatio = (other / revenue) * 100;
+
+            // Hiển thị kết quả nhanh
+            document.getElementById('res_total_cost').innerText = formatCurrency(totalCost);
+            
+            const totalRatioElem = document.getElementById('res_total_ratio');
+            totalRatioElem.innerText = `Chiếm ${totalRatio.toFixed(1)}% Doanh thu`;
+
+            const marginElem = document.getElementById('res_margin');
+            marginElem.innerText = ebtMargin.toFixed(2) + '%';
+            if (ebtMargin < 10) {
+                marginElem.className = "text-2xl font-bold text-rose-400 mt-1";
+            } else if (ebtMargin < 20) {
+                marginElem.className = "text-2xl font-bold text-amber-400 mt-1";
+            } else {
+                marginElem.className = "text-2xl font-bold text-emerald-400 mt-1";
+            }
+
+            // Đánh giá sức khỏe & AI Insights
+            let healthText = "Tối ưu";
+            let healthColor = "text-emerald-400";
+            let healthDesc = "";
+            let moneyFlowDesc = "";
+            let actionDesc = "";
+            let forecastDesc = "";
+
+            // Tìm chi phí chiếm tỷ trọng cao nhất
+            const costItems = [
+                { name: "Giá vốn hàng bán (COGS)", val: cogs, ratio: cogsRatio },
+                { name: "Chi phí nhân sự", val: labor, ratio: laborRatio },
+                { name: "Chi phí Marketing", val: marketing, ratio: marketingRatio },
+                { name: "Chi phí mặt bằng", val: facility, ratio: facilityRatio },
+                { name: "Chi phí quản lý khác", val: other, ratio: otherRatio }
+            ];
+            costItems.sort((a, b) => b.val - a.val);
+            const highestCost = costItems[0];
+
+            if (ebtMargin >= 20) {
+                healthText = "Rất khỏe mạnh";
+                healthColor = "text-emerald-400";
+                healthDesc = `Cấu trúc chi phí của doanh nghiệp cực kỳ lành mạnh. Tổng chi phí chỉ chiếm ${totalRatio.toFixed(1)}% doanh thu, mang lại biên lợi nhuận trước thuế cao (${ebtMargin.toFixed(1)}%). Doanh nghiệp có không gian đệm tài chính an toàn.`;
+            } else if (ebtMargin >= 10) {
+                healthText = "Ổn định";
+                healthColor = "text-indigo-400";
+                healthDesc = `Cấu trúc chi phí ở mức chấp nhận được với biên lợi nhuận ${ebtMargin.toFixed(1)}%. Tuy nhiên, một số khoản mục chi phí đang tiệm cận ngưỡng nhạy cảm, đòi hỏi phải theo dõi sát sao.`;
+            } else if (ebtMargin > 0) {
+                healthText = "Cảnh báo mỏng";
+                healthColor = "text-amber-400";
+                healthDesc = `Biên lợi nhuận trước thuế quá mỏng (${ebtMargin.toFixed(1)}%). Tổng chi phí đang ngốn tới ${totalRatio.toFixed(1)}% doanh thu, khiến doanh nghiệp rất dễ rơi vào trạng thái thua lỗ nếu doanh thu sụt giảm nhẹ.`;
+            } else {
+                healthText = "Báo động đỏ";
+                healthColor = "text-rose-400";
+                healthDesc = `Doanh nghiệp đang vận hành trong tình trạng <b>thâm hụt cấu trúc</b>. Tổng chi phí vượt quá 100% doanh thu (${totalRatio.toFixed(1)}%), dẫn đến kinh doanh thua lỗ trực tiếp.`;
+            }
+
+            document.getElementById('res_health').innerText = healthText;
+            document.getElementById('res_health').className = `text-xl font-bold mt-1 ${healthColor}`;
+
+            // 2. Tiền đang chảy đi đâu
+            moneyFlowDesc = `Dòng tiền chi ra đang bị nuốt chửng chủ yếu bởi khoản mục <b>${highestCost.name}</b> với giá trị ${formatCurrency(highestCost.val)}, chiếm tới <b>${highestCost.ratio.toFixed(1)}%</b> tổng doanh thu. Cùng với đó, các chi phí cố định (nhân sự, mặt bằng) đang tạo áp lực lớn lên thanh khoản hàng tháng.`;
+            document.getElementById('ai_money_flow').innerHTML = moneyFlowDesc;
+
+            // 3. Nên đầu tư hay cắt giảm
+            if (ebtMargin < 15) {
+                actionDesc = `<b>Khuyến nghị CẮT GIẢM & TÁI CẤU TRÚC:</b> Cần ngay lập tức tối ưu hóa điểm nghẽn chi phí lớn nhất (${highestCost.name}). Rà soát lại định biên nhân sự, đàm phán lại giá thuê mặt bằng hoặc tối ưu hóa chuỗi cung ứng để hạ giá vốn (COGS).`;
+            } else {
+                actionDesc = `<b>Khuyến nghị ĐẦU TƯ TĂNG TRƯỞNG:</b> Với biên lợi nhuận tốt, có thể cân nhắc tăng tỷ trọng ngân sách cho Marketing hoặc R&D để thúc đẩy mở rộng thị phần, miễn là ROAS/ROI của các hoạt động này được kiểm soát chặt chẽ.`;
+            }
+            document.getElementById('ai_action').innerHTML = actionDesc;
+
+            // 4. Dự báo tương lai
+            if (ebtMargin < 10) {
+                forecastDesc = `Dự báo trong 2-3 quý tới, nếu không thực hiện tái cấu trúc cấu trúc chi phí, rủi ro cạn kiệt dòng tiền và âm vốn lưu động là rất cao. Doanh nghiệp cần khẩn cấp lập phương án cắt giảm chi phí tối thiểu 10-15%.`;
+            } else {
+                forecastDesc = `Dự báo mô hình chi phí hiện tại sẽ tiếp tục duy trì dòng tiền ổn định, giúp doanh nghiệp tích lũy nguồn vốn tự có để chuẩn bị cho các đợt mở rộng quy mô lớn trong tương lai.`;
+            }
+            document.getElementById('ai_forecast').innerHTML = forecastDesc;
+
+            // Cập nhật biểu đồ
+            updateChart([cogsRatio, laborRatio, marketingRatio, facilityRatio, otherRatio]);
+        }
+
+        function updateChart(dataValues) {
+            const ctx = document.getElementById('costStructureChart').getContext('2d');
+            
+            if (costChartInstance) {
+                costChartInstance.destroy();
+            }
+
+            costChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Giá Vốn (COGS)', 'Nhân Sự', 'Marketing', 'Mặt Bằng', 'Quản Lý Khác'],
+                    datasets: [{
+                        label: 'Tỷ Trọng (% Doanh Thu)',
+                        data: dataValues,
+                        backgroundColor: [
+                            '#818cf8',
+                            '#38bdf8',
+                            '#34d399',
+                            '#fbbf24',
+                            '#f43f5e'
+                        ],
+                        borderWidth: 0,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8', font: { size: 11 } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#94a3b8', font: { size: 11 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function saveToSQLite() {
+            const data = {
+                revenue: document.getElementById('total_revenue').value,
+                cogs: document.getElementById('cogs').value,
+                labor: document.getElementById('labor_cost').value,
+                marketing: document.getElementById('marketing_cost').value,
+                facility: document.getElementById('facility_cost').value,
+                other: document.getElementById('other_opex').value,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('module_46_data', JSON.stringify(data));
+            alert("Đã lưu dữ liệu thành công vào cơ sở dữ liệu SQLite (Local Storage)!");
+        }
+
+        function exportToExcel() {
+            let csv = "Khoản Mục Chi Phí,Giá Trị (VNĐ)\n";
+            csv += `Tổng Doanh Thu Thuần,${document.getElementById('total_revenue').value}\n`;
+            csv += `Giá Vốn Hàng Bán (COGS),${document.getElementById('cogs').value}\n`;
+            csv += `Chi Phí Nhân Sự,${document.getElementById('labor_cost').value}\n`;
+            csv += `Chi Phí Marketing,${document.getElementById('marketing_cost').value}\n`;
+            csv += `Chi Phí Mặt Bằng,${document.getElementById('facility_cost').value}\n`;
+            csv += `Chi Phí Quản Lý Khác,${document.getElementById('other_opex').value}\n`;
+
+            const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', '46_Phan_Tich_Ty_Trong_Chi_Phi_Tren_Doanh_Thu.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        window.onload = function() {
+            calculateCostStructure();
+        };
+    </script>
+</body>
+</html>

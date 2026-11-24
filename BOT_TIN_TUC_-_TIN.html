@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>BOT TIN TUC - TIN</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>BOT TIN TUC - TIN</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>Date Created | Title | URL | ⚪ KHÁC</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>Mon, 03 Aug 2026 06:00:00 +0700 | Cách các nước quy định thời hạn sở hữu chung cư | https://vnexpress.net/cach-cac-nuoc-quy-dinh-thoi-han-so-huu-chung-cu-5103935.html | Phân tích tin sau theo tư duy Cashflow: Cách các nước quy định thời hạn sở hữu chung cư Link: https://vnexpress.net/cach-cac-nuoc-quy-dinh-thoi-han-so-huu-chung-cu-5103935.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | 0.0 | 2.0 | 0.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'Cách các nước quy định thời hạn sở hữu chung cư'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>Mon, 03 Aug 2026 00:10:00 +0700 | Bỗng dưng đứng tên doanh nghiệp, hộ kinh doanh | https://vnexpress.net/bong-dung-dung-ten-doanh-nghiep-ho-kinh-doanh-5102337.html | Phân tích tin sau theo tư duy Cashflow: Bỗng dưng đứng tên doanh nghiệp, hộ kinh doanh Link: https://vnexpress.net/bong-dung-dung-ten-doanh-nghiep-ho-kinh-doanh-5102337.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | 0.0 | 2.0 | 0.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'Bỗng dưng đứng tên doanh nghiệp, hộ kinh doanh'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>Mon, 03 Aug 2026 00:00:00 +0700 | ACV giảm hơn 2.300 nhân sự trong nửa năm | https://vnexpress.net/acv-giam-hon-2-300-nhan-su-trong-nua-nam-5104359.html | Phân tích tin sau theo tư duy Cashflow: ACV giảm hơn 2.300 nhân sự trong nửa năm Link: https://vnexpress.net/acv-giam-hon-2-300-nhan-su-trong-nua-nam-5104359.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | PHÂN TÍCH ĐI | -1.0 | 3.0 | -3.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'ACV giảm hơn 2.300 nhân sự trong nửa năm'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>Sun, 02 Aug 2026 19:23:09 +0700 | Lắp pin mặt trời, dùng xe điện để 'xanh hóa' nhà kho | https://vnexpress.net/lap-pin-mat-troi-dung-xe-dien-de-xanh-hoa-nha-kho-5104295.html | Phân tích tin sau theo tư duy Cashflow: Lắp pin mặt trời, dùng xe điện để 'xanh hóa' nhà kho Link: https://vnexpress.net/lap-pin-mat-troi-dung-xe-dien-de-xanh-hoa-nha-kho-5104295.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | 0.0 | 2.0 | 0.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'Lắp pin mặt trời, dùng xe điện để 'xanh hóa' nhà kho'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>Sun, 02 Aug 2026 18:32:58 +0700 | Capital One nói đóng 300 tài khoản của Tập đoàn Trump do lo ngại rửa tiền | https://vnexpress.net/capital-one-noi-dong-300-tai-khoan-cua-tap-doan-trump-do-lo-ngai-rua-tien-5104331.html | USD | Phân tích tin sau theo tư duy Cashflow: Capital One nói đóng 300 tài khoản của Tập đoàn Trump do lo ngại rửa tiền Link: https://vnexpress.net/capital-one-noi-dong-300-tai-khoan-cua-tap-doan-trump-do-lo-ngai-rua-tien-5104331.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | 0.0 | 2.0 | 0.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'Capital One nói đóng 300 tài khoản của Tập đoàn Trump do lo ngại rửa tiền'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>Sun, 02 Aug 2026 16:10:00 +0700 | Ông lớn' ngành xổ số lãi nghìn tỷ nửa đầu năm | https://vnexpress.net/ong-lon-nganh-xo-so-lai-nghin-ty-nua-dau-nam-5104288.html | Phân tích tin sau theo tư duy Cashflow: Ông lớn' ngành xổ số lãi nghìn tỷ nửa đầu năm Link: https://vnexpress.net/ong-lon-nganh-xo-so-lai-nghin-ty-nua-dau-nam-5104288.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | 0.0 | 2.0 | 0.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'Ông lớn' ngành xổ số lãi nghìn tỷ nửa đầu năm'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>Sun, 02 Aug 2026 14:09:00 +0700 | Mỹ dự kiến can thiệp cứu đồng yen Nhật sau hơn một thập kỷ | https://vnexpress.net/my-du-kien-can-thiep-cuu-dong-yen-nhat-sau-hon-mot-thap-ky-5104300.html | Phân tích tin sau theo tư duy Cashflow: Mỹ dự kiến can thiệp cứu đồng yen Nhật sau hơn một thập kỷ Link: https://vnexpress.net/my-du-kien-can-thiep-cuu-dong-yen-nhat-sau-hon-mot-thap-ky-5104300.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | 0.0 | 2.0 | 0.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'Mỹ dự kiến can thiệp cứu đồng yen Nhật sau hơn một thập kỷ'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>Sun, 02 Aug 2026 10:53:17 +0700 | Petrolimex thu hơn 5 tỷ USD một quý | https://vnexpress.net/petrolimex-thu-hon-5-ty-usd-mot-quy-5104262.html | Phân tích tin sau theo tư duy Cashflow: Petrolimex thu hơn 5 tỷ USD một quý Link: https://vnexpress.net/petrolimex-thu-hon-5-ty-usd-mot-quy-5104262.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | 0.0 | 2.0 | 0.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'Petrolimex thu hơn 5 tỷ USD một quý'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>Sun, 02 Aug 2026 08:00:00 +0700 | GS Nguyễn Đức Khương: Cần đào tạo tư duy làm chủ công nghệ thay vì để AI dẫn dắt | https://vnexpress.net/gs-nguyen-duc-khuong-can-dao-tao-tu-duy-lam-chu-cong-nghe-thay-vi-de-ai-dan-dat-5104160.html | Phân tích tin sau theo tư duy Cashflow: GS Nguyễn Đức Khương: Cần đào tạo tư duy làm chủ công nghệ thay vì để AI dẫn dắt Link: https://vnexpress.net/gs-nguyen-duc-khuong-can-dao-tao-tu-duy-lam-chu-cong-nghe-thay-vi-de-ai-dan-dat-5104160.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | 0.0 | 2.0 | 0.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'GS Nguyễn Đức Khương: Cần đào tạo tư duy làm chủ công nghệ thay vì để AI dẫn dắt'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>Sun, 02 Aug 2026 00:18:06 +0700 | Lợi nhuận nhiều ngân hàng đi lùi | https://vnexpress.net/loi-nhuan-nhieu-ngan-hang-di-lui-5104061.html | Phân tích tin sau theo tư duy Cashflow: Lợi nhuận nhiều ngân hàng đi lùi Link: https://vnexpress.net/loi-nhuan-nhieu-ngan-hang-di-lui-5104061.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | 0.0 | 2.0 | 0.0 | Ngân hàng | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'Lợi nhuận nhiều ngân hàng đi lùi'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>Sun, 02 Aug 2026 00:17:46 +0700 | EuroCham: Việt Nam là mỏ neo hàng đầu của kinh tế châu Âu ở châu Á | https://vnexpress.net/eurocham-viet-nam-la-mo-neo-hang-dau-cua-kinh-te-chau-au-o-chau-a-5104094.html | 🟢 TĂNG | Phân tích tin sau theo tư duy Cashflow: EuroCham: Việt Nam là mỏ neo hàng đầu của kinh tế châu Âu ở châu Á Link: https://vnexpress.net/eurocham-viet-nam-la-mo-neo-hang-dau-cua-kinh-te-chau-au-o-chau-a-5104094.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | 0.0 | 2.0 | 0.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'EuroCham: Việt Nam là mỏ neo hàng đầu của kinh tế châu Âu ở châu Á'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>Sun, 02 Aug 2026 00:02:00 +0700 | Người Mỹ trưởng thành vẫn được cha mẹ hỗ trợ tài chính | https://vnexpress.net/nguoi-my-truong-thanh-van-duoc-cha-me-ho-tro-tai-chinh-5104059.html | USD | 🟢 TĂNG | Phân tích tin sau theo tư duy Cashflow: Người Mỹ trưởng thành vẫn được cha mẹ hỗ trợ tài chính Link: https://vnexpress.net/nguoi-my-truong-thanh-van-duoc-cha-me-ho-tro-tai-chinh-5104059.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | 0.0 | 2.0 | 0.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'Người Mỹ trưởng thành vẫn được cha mẹ hỗ trợ tài chính'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>Sat, 01 Aug 2026 17:09:14 +0700 | Eximbank có tổng giám đốc mới | https://vnexpress.net/eximbank-co-tong-giam-doc-moi-5104133.html | Phân tích tin sau theo tư duy Cashflow: Eximbank có tổng giám đốc mới Link: https://vnexpress.net/eximbank-co-tong-giam-doc-moi-5104133.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | 0.0 | 2.0 | 0.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'Eximbank có tổng giám đốc mới'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>Sat, 01 Aug 2026 14:36:24 +0700 | Doanh nghiệp miền Bắc tăng lắp điện mặt trời mái nhà | https://vnexpress.net/doanh-nghiep-mien-bac-tang-lap-dien-mat-troi-mai-nha-5104088.html | Phân tích tin sau theo tư duy Cashflow: Doanh nghiệp miền Bắc tăng lắp điện mặt trời mái nhà Link: https://vnexpress.net/doanh-nghiep-mien-bac-tang-lap-dien-mat-troi-mai-nha-5104088.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | PHÂN TÍCH ĐI | 1.0 | 3.0 | 3.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'Doanh nghiệp miền Bắc tăng lắp điện mặt trời mái nhà'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>Sat, 01 Aug 2026 13:16:19 +0700 | Nhập khẩu điều thô vượt 3 tỷ USD | https://vnexpress.net/nhap-khau-dieu-tho-vuot-3-ty-usd-5104042.html | Phân tích tin sau theo tư duy Cashflow: Nhập khẩu điều thô vượt 3 tỷ USD Link: https://vnexpress.net/nhap-khau-dieu-tho-vuot-3-ty-usd-5104042.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | 0.0 | 2.0 | 0.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'Nhập khẩu điều thô vượt 3 tỷ USD'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>Sat, 01 Aug 2026 12:30:00 +0700 | Sun Group ra mắt doanh nghiệp dịch vụ mặt đất tại Phú Quốc | https://vnexpress.net/sun-group-ra-mat-doanh-nghiep-dich-vu-mat-dat-tai-phu-quoc-5104052.html | 🟢 TĂNG | Phân tích tin sau theo tư duy Cashflow: Sun Group ra mắt doanh nghiệp dịch vụ mặt đất tại Phú Quốc Link: https://vnexpress.net/sun-group-ra-mat-doanh-nghiep-dich-vu-mat-dat-tai-phu-quoc-5104052.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | 0.0 | 2.0 | 0.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'Sun Group ra mắt doanh nghiệp dịch vụ mặt đất tại Phú Quốc'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>Sat, 01 Aug 2026 11:40:03 +0700 | Elon Musk phủ nhận tin bán chi nhánh Tesla tại Trung Quốc | https://vnexpress.net/elon-musk-phu-nhan-tin-ban-chi-nhanh-tesla-tai-trung-quoc-5104054.html | 🔴 GIẢM | Phân tích tin sau theo tư duy Cashflow: Elon Musk phủ nhận tin bán chi nhánh Tesla tại Trung Quốc Link: https://vnexpress.net/elon-musk-phu-nhan-tin-ban-chi-nhanh-tesla-tai-trung-quoc-5104054.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | 0.0 | 2.0 | 0.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'Elon Musk phủ nhận tin bán chi nhánh Tesla tại Trung Quốc'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>Sat, 01 Aug 2026 09:00:00 +0700 | VinFast mở 21 đại lý xe máy điện ở Philippines | https://vnexpress.net/vinfast-mo-21-dai-ly-xe-may-dien-o-philippines-5103996.html | Phân tích tin sau theo tư duy Cashflow: VinFast mở 21 đại lý xe máy điện ở Philippines Link: https://vnexpress.net/vinfast-mo-21-dai-ly-xe-may-dien-o-philippines-5103996.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | 0.0 | 2.0 | 0.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'VinFast mở 21 đại lý xe máy điện ở Philippines'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>Sat, 01 Aug 2026 07:14:36 +0700 | Ông lớn' vật liệu xây dựng Thái Lan tăng doanh thu 126% ở Việt Nam | https://vnexpress.net/ong-lon-vat-lieu-xay-dung-thai-lan-tang-doanh-thu-126-o-viet-nam-5103897.html | Phân tích tin sau theo tư duy Cashflow: Ông lớn' vật liệu xây dựng Thái Lan tăng doanh thu 126% ở Việt Nam Link: https://vnexpress.net/ong-lon-vat-lieu-xay-dung-thai-lan-tang-doanh-thu-126-o-viet-nam-5103897.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | PHÂN TÍCH ĐI | 1.0 | 3.0 | 3.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'Ông lớn' vật liệu xây dựng Thái Lan tăng doanh thu 126% ở Việt Nam'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td>Sat, 01 Aug 2026 06:45:26 +0700 | Lợi nhuận Yeah1 giảm một nửa do thiếu concert | https://vnexpress.net/loi-nhuan-yeah1-giam-mot-nua-do-thieu-concert-5103752.html | USD | 🔴 GIẢM | Phân tích tin sau theo tư duy Cashflow: Lợi nhuận Yeah1 giảm một nửa do thiếu concert Link: https://vnexpress.net/loi-nhuan-yeah1-giam-mot-nua-do-thieu-concert-5103752.html - Đây là tài sản hay tiêu sản? Ảnh hưởng dòng tiền thế nào? Có nên mua/bán/đứng ngoài? | Phân tích | Phân tích Gemini | Phân tích DeepSeek | PHÂN TÍCH ĐI | -1.0 | 3.0 | -3.0 | Khác | ⚪ KHÁC | Hãy phân tích tác động tài chính của tin tức sau đối với danh mục: 'Lợi nhuận Yeah1 giảm một nửa do thiếu concert'. Đánh giá mức độ ảnh hưởng từ -2 đến +2 và đưa ra hành động (Mua/Bán/Nắm giữ).</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

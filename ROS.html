@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 09 - Công nợ (Accounts Receivable & Payable) | CEO AI Enterprise</title>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- SheetJS (xlsx) để xuất Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #5b21b6;
+            --primary-light: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #0ea5e9;
+            --bg: #f5f3ff;
+            --card: #ffffff;
+            --text: #4c1d95;
+            --text-muted: #c4b5fd;
+            --border: #ddd6fe;
+            --shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #f5f3ff 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 28px 32px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .header-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        /* Form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .form-group label .hint {
+            font-weight: 400;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        .form-group input, .form-group select {
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #faf5ff;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        /* Result Cards */
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--border);
+            transition: transform 0.2s;
+        }
+
+        .result-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .result-card .label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .result-card .value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .result-card.positive .value { color: var(--success); }
+        .result-card.negative .value { color: var(--danger); }
+        .result-card.warning .value { color: var(--warning); }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        .status-healthy {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* AI Analysis */
+        .ai-section {
+            background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+            border-left: 5px solid var(--primary);
+        }
+
+        .ai-content {
+            display: grid;
+            gap: 16px;
+        }
+
+        .ai-item {
+            background: white;
+            padding: 16px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .ai-item h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-item p {
+            color: #334155;
+            font-size: 0.95rem;
+        }
+
+        /* Chart */
+        .chart-container {
+            position: relative;
+            height: 320px;
+            margin-top: 10px;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            color: #0c4a6e;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+
+        /* Formula box */
+        .formula-box {
+            background: #faf5ff;
+            border: 1px dashed var(--primary);
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--primary-dark);
+            line-height: 1.8;
+        }
+
+        /* Benchmark table */
+        .benchmark-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .benchmark-table th,
+        .benchmark-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .benchmark-table th {
+            background: #f5f3ff;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .benchmark-table tr:hover {
+            background: #faf5ff;
+        }
+
+        /* History table */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-table th {
+            background: #f5f3ff;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .history-table tr:hover {
+            background: #faf5ff;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.35rem; }
+            .result-card .value { font-size: 1.25rem; }
+            .btn { width: 100%; justify-content: center; }
+        }
+
+        .hidden { display: none; }
+
+        /* Section divider */
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 20px 0 12px;
+            padding-left: 8px;
+            border-left: 3px solid var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ==================== HEADER ==================== -->
+        <header class="header">
+            <div>
+                <h1>
+                    <span>📋</span>
+                    Module 09 – Công nợ (Accounts Receivable & Payable)
+                </h1>
+                <div class="header-subtitle">Phân tích công nợ phải thu & phải trả – DSO, DPO và sức khỏe dòng tiền từ khách hàng & nhà cung cấp</div>
+            </div>
+            <div class="badge">CEO AI Enterprise • Module độc lập</div>
+        </header>
+
+        <!-- ==================== GIẢI THÍCH NHANH ==================== -->
+        <div class="card">
+            <div class="card-title">📖 Công nợ là gì?</div>
+            <p style="margin-bottom: 12px;">
+                <strong>Công nợ</strong> bao gồm hai phía quan trọng:
+            </p>
+            <ul style="margin-left: 20px; margin-bottom: 12px;">
+                <li><strong>Công nợ phải thu (Accounts Receivable – AR)</strong>: Tiền khách hàng còn nợ mình.</li>
+                <li><strong>Công nợ phải trả (Accounts Payable – AP)</strong>: Tiền mình còn nợ nhà cung cấp.</li>
+            </ul>
+            <p style="margin-bottom: 12px;">
+                Hai chỉ số then chốt:
+            </p>
+            <div class="formula-box">
+                DSO (Days Sales Outstanding) = (Công nợ phải thu ÷ Doanh thu) × Số ngày trong kỳ<br>
+                DPO (Days Payable Outstanding) = (Công nợ phải trả ÷ Giá vốn hàng bán) × Số ngày trong kỳ
+            </div>
+            <div class="alert alert-info">
+                <span>💡</span>
+                <div>
+                    <strong>Ý nghĩa:</strong> DSO thấp = Thu tiền khách hàng nhanh. DPO cao = Được nhà cung cấp cho nợ lâu (tốt cho dòng tiền, nhưng cần giữ quan hệ tốt).
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== FORM NHẬP LIỆU ==================== -->
+        <div class="card">
+            <div class="card-title">📥 Nhập dữ liệu</div>
+            
+            <div class="section-label">Công nợ phải thu (Accounts Receivable)</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Công nợ phải thu cuối kỳ
+                        <span class="hint">– Tổng tiền khách hàng còn nợ</span>
+                    </label>
+                    <input type="number" id="ar" placeholder="Ví dụ: 3500000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Doanh thu thuần trong kỳ
+                        <span class="hint">– Doanh thu tín dụng (nên dùng)</span>
+                    </label>
+                    <input type="number" id="revenue" placeholder="Ví dụ: 18000000000" step="any">
+                </div>
+            </div>
+
+            <div class="section-label">Công nợ phải trả (Accounts Payable)</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Công nợ phải trả cuối kỳ
+                        <span class="hint">– Tổng tiền còn nợ nhà cung cấp</span>
+                    </label>
+                    <input type="number" id="ap" placeholder="Ví dụ: 2200000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Giá vốn hàng bán (COGS)
+                        <span class="hint">– Cost of Goods Sold trong kỳ</span>
+                    </label>
+                    <input type="number" id="cogs" placeholder="Ví dụ: 11000000000" step="any">
+                </div>
+            </div>
+
+            <div class="section-label">Thông tin kỳ</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Số ngày trong kỳ
+                        <span class="hint">– 30 (tháng) / 90 (quý) / 365 (năm)</span>
+                    </label>
+                    <select id="days">
+                        <option value="30">30 ngày (Tháng)</option>
+                        <option value="90" selected>90 ngày (Quý)</option>
+                        <option value="365">365 ngày (Năm)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Kỳ báo cáo
+                        <span class="hint">– Tháng / Quý / Năm</span>
+                    </label>
+                    <input type="text" id="period" placeholder="Ví dụ: Quý 2/2026" value="Quý hiện tại">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="calculateCongNo()">
+                    <span>🧮</span> Tính toán Công nợ
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <span>🔄</span> Làm mới
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== KẾT QUẢ ==================== -->
+        <div id="resultSection" class="hidden">
+            <!-- Kết quả số -->
+            <div class="card">
+                <div class="card-title">📊 Kết quả tính toán</div>
+                
+                <div id="statusBadge" class="status-badge"></div>
+
+                <div class="result-grid">
+                    <div class="result-card" id="dsoCard">
+                        <div class="label">DSO (Ngày thu tiền)</div>
+                        <div class="value" id="dsoValue">—</div>
+                    </div>
+                    <div class="result-card" id="dpoCard">
+                        <div class="label">DPO (Ngày trả tiền)</div>
+                        <div class="value" id="dpoValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Công nợ phải thu</div>
+                        <div class="value" id="arValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Công nợ phải trả</div>
+                        <div class="value" id="apValue">—</div>
+                    </div>
+                </div>
+
+                <div class="result-grid">
+                    <div class="result-card" id="netCard">
+                        <div class="label">Công nợ ròng (AR − AP)</div>
+                        <div class="value" id="netValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Tỷ lệ AR / Doanh thu</div>
+                        <div class="value" id="arRatioValue">—</div>
+                    </div>
+                </div>
+
+                <div class="formula-box" id="formulaDetail">
+                    <!-- Công thức chi tiết sẽ được điền bằng JS -->
+                </div>
+
+                <!-- Bảng chuẩn tham khảo -->
+                <h4 style="margin: 20px 0 10px; color: var(--primary);">📌 Tham chiếu mức DSO & DPO phổ biến</h4>
+                <table class="benchmark-table">
+                    <thead>
+                        <tr>
+                            <th>Chỉ số</th>
+                            <th>Mức tốt</th>
+                            <th>Mức trung bình</th>
+                            <th>Mức cần cải thiện</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>DSO</strong></td>
+                            <td style="color:#059669;font-weight:600;">&lt; 30 ngày</td>
+                            <td style="color:#d97706;font-weight:600;">30 – 45 ngày</td>
+                            <td style="color:#dc2626;font-weight:600;">&gt; 45 ngày</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DPO</strong></td>
+                            <td style="color:#059669;font-weight:600;">30 – 45 ngày</td>
+                            <td style="color:#d97706;font-weight:600;">&lt; 30 hoặc 45 – 60</td>
+                            <td style="color:#dc2626;font-weight:600;">&gt; 60 ngày (rủi ro quan hệ)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Biểu đồ -->
+            <div class="card">
+                <div class="card-title">📈 Biểu đồ DSO & DPO</div>
+                <div class="chart-container">
+                    <canvas id="congNoChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Cảnh báo -->
+            <div id="alertBox"></div>
+
+            <!-- AI Phân tích & Khuyến nghị -->
+            <div class="card ai-section">
+                <div class="card-title">🤖 Phân tích AI & Khuyến nghị</div>
+                <div class="ai-content" id="aiContent">
+                    <!-- Nội dung AI sẽ được sinh bằng JS -->
+                </div>
+            </div>
+
+            <!-- Nút hành động -->
+            <div class="card">
+                <div class="card-title">💾 Lưu trữ & Xuất dữ liệu</div>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="saveToLocalStorage()">
+                        <span>💾</span> Lưu vào SQLite (Local)
+                    </button>
+                    <button class="btn btn-info" onclick="exportToExcel()">
+                        <span>📥</span> Xuất Excel
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewHistory()">
+                        <span>📋</span> Xem lịch sử đã lưu
+                    </button>
+                </div>
+
+                <!-- Bảng lịch sử -->
+                <div id="historySection" class="hidden" style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 10px; color: var(--primary);">Lịch sử tính toán đã lưu</h4>
+                    <div style="overflow-x: auto;">
+                        <table class="history-table" id="historyTable">
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Kỳ</th>
+                                    <th>DSO</th>
+                                    <th>DPO</th>
+                                    <th>AR</th>
+                                    <th>AP</th>
+                                    <th>Công nợ ròng</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            CEO AI Enterprise • Module 09 – Công nợ (Accounts Receivable & Payable) • Có thể chạy độc lập • Sẵn sàng kết nối Python + SQLite
+        </div>
+    </div>
+
+    <script>
+        /**
+         * =====================================================
+         * MODULE 09 – CÔNG NỢ (Accounts Receivable & Payable)
+         * CEO AI Enterprise
+         * =====================================================
+         * 
+         * Công thức chính:
+         * DSO = (Accounts Receivable / Revenue) × Số ngày trong kỳ
+         * DPO = (Accounts Payable / COGS) × Số ngày trong kỳ
+         * Công nợ ròng = AR − AP
+         * 
+         * Module được thiết kế:
+         * - Chạy độc lập (standalone)
+         * - Dễ ghép vào Dashboard sau này
+         * - Có sẵn chỗ kết nối Python + SQLite thật
+         * - Lưu tạm bằng localStorage (mô phỏng SQLite)
+         * - Xuất Excel bằng SheetJS
+         */
+
+        // Biến toàn cục
+        let currentResult = null;
+        let congNoChartInstance = null;
+
+        /**
+         * Định dạng số tiền Việt Nam
+         */
+        function formatCurrency(value) {
+            if (value === null || value === undefined || isNaN(value)) return '—';
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        /**
+         * Định dạng số ngắn gọn
+         */
+        function formatShort(value) {
+            if (Math.abs(value) >= 1e9) {
+                return (value / 1e9).toFixed(2) + ' tỷ';
+            } else if (Math.abs(value) >= 1e6) {
+                return (value / 1e6).toFixed(1) + ' triệu';
+            }
+            return formatCurrency(value);
+        }
+
+        /**
+         * Hàm tính toán chính
+         */
+        function calculateCongNo() {
+            const ar = parseFloat(document.getElementById('ar').value);
+            const revenue = parseFloat(document.getElementById('revenue').value);
+            const ap = parseFloat(document.getElementById('ap').value);
+            const cogs = parseFloat(document.getElementById('cogs').value);
+            const days = parseFloat(document.getElementById('days').value);
+            const period = document.getElementById('period').value.trim() || 'Kỳ hiện tại';
+
+            // Kiểm tra dữ liệu
+            if (isNaN(ar) || isNaN(revenue) || isNaN(ap) || isNaN(cogs)) {
+                alert('⚠️ Vui lòng nhập đầy đủ tất cả các chỉ tiêu bắt buộc!');
+                return;
+            }
+
+            if (revenue <= 0 || cogs <= 0) {
+                alert('⚠️ Doanh thu và Giá vốn hàng bán phải lớn hơn 0!');
+                return;
+            }
+
+            // Tính DSO & DPO
+            const dso = (ar / revenue) * days;
+            const dpo = (ap / cogs) * days;
+            const netAR = ar - ap;
+            const arRatio = (ar / revenue) * 100;
+
+            // Lưu kết quả
+            currentResult = {
+                period: period,
+                ar: ar,
+                revenue: revenue,
+                ap: ap,
+                cogs: cogs,
+                days: days,
+                dso: dso,
+                dpo: dpo,
+                netAR: netAR,
+                arRatio: arRatio,
+                timestamp: new Date().toISOString()
+            };
+
+            // Hiển thị
+            displayResults(currentResult);
+            generateAIAnalysis(currentResult);
+            renderChart(currentResult);
+
+            document.getElementById('resultSection').classList.remove('hidden');
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        /**
+         * Hiển thị kết quả số
+         */
+        function displayResults(data) {
+            document.getElementById('dsoValue').textContent = data.dso.toFixed(1) + ' ngày';
+            document.getElementById('dpoValue').textContent = data.dpo.toFixed(1) + ' ngày';
+            document.getElementById('arValue').textContent = formatCurrency(data.ar);
+            document.getElementById('apValue').textContent = formatCurrency(data.ap);
+            document.getElementById('netValue').textContent = formatCurrency(data.netAR);
+            document.getElementById('arRatioValue').textContent = data.arRatio.toFixed(1) + '%';
+
+            // Màu sắc DSO
+            const dsoCard = document.getElementById('dsoCard');
+            dsoCard.classList.remove('positive', 'negative', 'warning');
+            if (data.dso < 30) {
+                dsoCard.classList.add('positive');
+            } else if (data.dso <= 45) {
+                dsoCard.classList.add('warning');
+            } else {
+                dsoCard.classList.add('negative');
+            }
+
+            // Màu sắc DPO
+            const dpoCard = document.getElementById('dpoCard');
+            dpoCard.classList.remove('positive', 'negative', 'warning');
+            if (data.dpo >= 30 && data.dpo <= 45) {
+                dpoCard.classList.add('positive');
+            } else if (data.dpo < 30 || (data.dpo > 45 && data.dpo <= 60)) {
+                dpoCard.classList.add('warning');
+            } else {
+                dpoCard.classList.add('negative');
+            }
+
+            // Màu sắc Công nợ ròng
+            const netCard = document.getElementById('netCard');
+            netCard.classList.remove('positive', 'negative', 'warning');
+            if (data.netAR <= 0) {
+                netCard.classList.add('positive'); // AP >= AR là tốt cho dòng tiền
+            } else {
+                netCard.classList.add('warning');
+            }
+
+            // Status badge tổng hợp
+            const badge = document.getElementById('statusBadge');
+            if (data.dso < 30 && data.dpo >= 30 && data.dpo <= 50) {
+                badge.className = 'status-badge status-healthy';
+                badge.textContent = '🟢 Công nợ khỏe mạnh – Thu tiền nhanh, trả tiền hợp lý';
+            } else if (data.dso <= 45 && data.dpo <= 60) {
+                badge.className = 'status-badge status-warning';
+                badge.textContent = '🟡 Công nợ ở mức chấp nhận được – Cần theo dõi sát';
+            } else {
+                badge.className = 'status-badge status-danger';
+                badge.textContent = '🔴 Công nợ có vấn đề – Cần hành động ngay';
+            }
+
+            // Công thức chi tiết
+            document.getElementById('formulaDetail').innerHTML = `
+                DSO = (${formatCurrency(data.ar)} ÷ ${formatCurrency(data.revenue)}) × ${data.days} = <strong>${data.dso.toFixed(1)} ngày</strong><br>
+                DPO = (${formatCurrency(data.ap)} ÷ ${formatCurrency(data.cogs)}) × ${data.days} = <strong>${data.dpo.toFixed(1)} ngày</strong><br>
+                Công nợ ròng = ${formatCurrency(data.ar)} − ${formatCurrency(data.ap)} = <strong>${formatCurrency(data.netAR)}</strong>
+            `;
+        }
+
+        /**
+         * Sinh phân tích AI (rule-based)
+         */
+        function generateAIAnalysis(data) {
+            const container = document.getElementById('aiContent');
+            let html = '';
+
+            // 1. Doanh nghiệp đang khỏe hay yếu?
+            let healthText = '';
+            let healthIcon = '';
+            if (data.dso < 30 && data.dpo >= 30 && data.dpo <= 50) {
+                healthIcon = '✅';
+                healthText = `Doanh nghiệp đang <strong>khỏe về quản lý công nợ</strong>. Thu tiền khách hàng nhanh (DSO ${data.dso.toFixed(1)} ngày) và vẫn giữ được quan hệ tốt với nhà cung cấp (DPO ${data.dpo.toFixed(1)} ngày). Đây là trạng thái lý tưởng cho dòng tiền.`;
+            } else if (data.dso <= 45) {
+                healthIcon = '⚠️';
+                healthText = `Tình hình công nợ ở mức <strong>trung bình</strong>. DSO ${data.dso.toFixed(1)} ngày chưa quá xấu nhưng vẫn còn dư địa cải thiện. Cần theo dõi chặt chẽ các khoản phải thu sắp đến hạn.`;
+            } else {
+                healthIcon = '🚨';
+                healthText = `Doanh nghiệp đang <strong>yếu về thu hồi công nợ</strong>. DSO lên tới ${data.dso.toFixed(1)} ngày nghĩa là tiền bị khách hàng chiếm dụng khá lâu, gây áp lực lớn lên dòng tiền và vốn lưu động.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>${healthIcon} 1. Doanh nghiệp đang khỏe hay yếu?</h4>
+                    <p>${healthText}</p>
+                </div>
+            `;
+
+            // 2. Tiền đang chảy đi đâu?
+            let flowText = '';
+            if (data.netAR > 0) {
+                flowText = `Tiền đang bị <strong>chiếm dụng bởi khách hàng</strong> nhiều hơn số tiền mình chiếm dụng được từ nhà cung cấp (Công nợ ròng dương ${formatCurrency(data.netAR)}). Doanh nghiệp đang “cho khách hàng vay” một khoản đáng kể.`;
+            } else {
+                flowText = `Doanh nghiệp đang <strong>chiếm dụng vốn từ nhà cung cấp</strong> nhiều hơn số tiền khách hàng chiếm dụng mình (Công nợ ròng âm hoặc bằng 0). Đây là vị thế tốt cho dòng tiền ngắn hạn.`;
+            }
+
+            if (data.dso > 45) {
+                flowText += ` Đặc biệt, DSO cao cho thấy tiền đang “nằm im” khá lâu ở phía khách hàng.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>💸 2. Tiền đang chảy đi đâu?</h4>
+                    <p>${flowText}</p>
+                </div>
+            `;
+
+            // 3. Nên đầu tư hay cắt giảm / hành động gì?
+            let actionText = '';
+            if (data.dso > 45) {
+                actionText = `<strong>Ưu tiên số 1: Đẩy mạnh thu hồi công nợ</strong>. Rà soát danh sách khách hàng chậm trả, áp dụng chính sách nhắc nợ rõ ràng, xem xét chiết khấu thanh toán sớm, hoặc thắt chặt điều khoản tín dụng với khách hàng rủi ro cao.`;
+            } else if (data.dso > 30) {
+                actionText = `<strong>Nên cải thiện tốc độ thu tiền</strong>. Mục tiêu đưa DSO xuống dưới 30 ngày. Có thể áp dụng chính sách thưởng/phạt thanh toán, hoặc chuyển một phần khách hàng sang hình thức trả trước / trả ngay.`;
+            } else {
+                actionText = `<strong>Duy trì kỷ luật thu tiền hiện tại</strong>. DSO đang tốt. Tập trung giữ vững quy trình và không nới lỏng điều khoản tín dụng một cách dễ dãi.`;
+            }
+
+            if (data.dpo > 60) {
+                actionText += ` Đồng thời, <strong>DPO quá cao</strong> có thể làm xấu đi quan hệ với nhà cung cấp – nên đàm phán lại để cân bằng.`;
+            } else if (data.dpo < 25) {
+                actionText += ` DPO đang thấp – có thể đàm phán kéo dài thời hạn thanh toán với nhà cung cấp để cải thiện dòng tiền (nếu không ảnh hưởng chiết khấu).`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>🎯 3. Nên hành động gì?</h4>
+                    <p>${actionText}</p>
+                </div>
+            `;
+
+            // 4. Dự báo tương lai
+            let forecastText = '';
+            if (data.dso < 30 && data.dpo >= 30 && data.dpo <= 50) {
+                forecastText = `Nếu duy trì được kỷ luật thu – trả như hiện tại, doanh nghiệp sẽ tiếp tục có dòng tiền ổn định và giảm phụ thuộc vào vốn vay ngắn hạn. Đây là nền tảng tốt để mở rộng kinh doanh mà không bị nghẽn vốn lưu động.`;
+            } else if (data.dso > 45) {
+                forecastText = `Nếu không cải thiện DSO, tiền sẽ tiếp tục bị chiếm dụng, dẫn đến thiếu hụt vốn lưu động, buộc phải vay thêm hoặc cắt giảm đầu tư. Rủi ro nợ xấu cũng tăng theo thời gian. Cần có kế hoạch thu hồi rõ ràng trong 1–2 quý tới.`;
+            } else {
+                forecastText = `Tình hình công nợ ở mức chấp nhận được. Nếu chủ động cải thiện thêm DSO và tối ưu DPO, doanh nghiệp sẽ giải phóng được thêm một lượng tiền mặt đáng kể, tăng sức mạnh tài chính trong các kỳ tới.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>🔮 4. Điều gì sẽ xảy ra trong tương lai?</h4>
+                    <p>${forecastText}</p>
+                </div>
+            `;
+
+            // Cảnh báo bổ sung
+            let alerts = '';
+            if (data.dso > 60) {
+                alerts += `
+                    <div class="alert alert-danger">
+                        <span>🚨</span>
+                        <div><strong>Cảnh báo nghiêm trọng:</strong> DSO trên 60 ngày. Rủi ro nợ xấu và thiếu hụt dòng tiền rất cao. Cần rà soát ngay từng khoản phải thu quá hạn.</div>
+                    </div>
+                `;
+            } else if (data.dso > 45) {
+                alerts += `
+                    <div class="alert alert-warning">
+                        <span>⚠️</span>
+                        <div><strong>Cảnh báo:</strong> DSO trên 45 ngày. Nên đẩy mạnh công tác thu hồi và xem xét lại chính sách bán chịu.</div>
+                    </div>
+                `;
+            }
+
+            if (data.dpo > 60) {
+                alerts += `
+                    <div class="alert alert-warning">
+                        <span>⚠️</span>
+                        <div><strong>Lưu ý:</strong> DPO trên 60 ngày. Việc chiếm dụng vốn nhà cung cấp quá lâu có thể ảnh hưởng đến quan hệ và nguồn cung trong tương lai.</div>
+                    </div>
+                `;
+            }
+
+            if (data.dso < 30 && data.dpo >= 30 && data.dpo <= 45) {
+                alerts += `
+                    <div class="alert alert-success">
+                        <span>🎉</span>
+                        <div><strong>Tín hiệu tốt:</strong> Cả DSO và DPO đều ở mức lý tưởng. Doanh nghiệp đang quản lý công nợ rất hiệu quả.</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('alertBox').innerHTML = alerts;
+            container.innerHTML = html;
+        }
+
+        /**
+         * Vẽ biểu đồ
+         */
+        function renderChart(data) {
+            const ctx = document.getElementById('congNoChart').getContext('2d');
+
+            if (congNoChartInstance) {
+                congNoChartInstance.destroy();
+            }
+
+            congNoChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['DSO (Ngày thu tiền)', 'DPO (Ngày trả tiền)', 'Mức tốt DSO (<30)', 'Mức tốt DPO (30-45)'],
+                    datasets: [{
+                        label: 'Số ngày',
+                        data: [
+                            data.dso,
+                            data.dpo,
+                            30,
+                            37.5  // điểm giữa mức tốt DPO
+                        ],
+                        backgroundColor: [
+                            data.dso < 30 ? 'rgba(16, 185, 129, 0.8)' : data.dso <= 45 ? 'rgba(245, 158, 11, 0.8)' : 'rgba(239, 68, 68, 0.8)',
+                            data.dpo >= 30 && data.dpo <= 45 ? 'rgba(16, 185, 129, 0.8)' : 'rgba(245, 158, 11, 0.8)',
+                            'rgba(148, 163, 184, 0.4)',
+                            'rgba(148, 163, 184, 0.4)'
+                        ],
+                        borderColor: [
+                            data.dso < 30 ? 'rgb(5, 150, 105)' : data.dso <= 45 ? 'rgb(217, 119, 6)' : 'rgb(220, 38, 38)',
+                            data.dpo >= 30 && data.dpo <= 45 ? 'rgb(5, 150, 105)' : 'rgb(217, 119, 6)',
+                            'rgb(100, 116, 139)',
+                            'rgb(100, 116, 139)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        barPercentage: 0.6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.toFixed(1) + ' ngày';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + ' ngày';
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(124, 58, 237, 0.08)'
+                            }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * Lưu vào localStorage (mô phỏng SQLite)
+         */
+        function saveToLocalStorage() {
+            if (!currentResult) {
+                alert('⚠️ Chưa có dữ liệu để lưu. Hãy tính toán trước!');
+                return;
+            }
+
+            let history = JSON.parse(localStorage.getItem('ceo_ai_congno_history') || '[]');
+
+            history.unshift({
+                id: Date.now(),
+                ...currentResult
+            });
+
+            if (history.length > 50) history = history.slice(0, 50);
+
+            localStorage.setItem('ceo_ai_congno_history', JSON.stringify(history));
+
+            alert('✅ Đã lưu thành công vào bộ nhớ cục bộ (mô phỏng SQLite)!\n\nSau này khi kết nối Python backend, dữ liệu sẽ được ghi vào database SQLite thật.');
+        }
+
+        /**
+         * Xem lịch sử đã lưu
+         */
+        function viewHistory() {
+            const history = JSON.parse(localStorage.getItem('ceo_ai_congno_history') || '[]');
+            const section = document.getElementById('historySection');
+            const tbody = document.getElementById('historyBody');
+
+            if (history.length === 0) {
+                alert('📭 Chưa có dữ liệu nào được lưu.');
+                return;
+            }
+
+            tbody.innerHTML = history.map(item => `
+                <tr>
+                    <td>${new Date(item.timestamp).toLocaleString('vi-VN')}</td>
+                    <td>${item.period}</td>
+                    <td style="color: ${item.dso < 30 ? '#059669' : item.dso <= 45 ? '#d97706' : '#dc2626'}; font-weight: 600;">
+                        ${item.dso.toFixed(1)} ngày
+                    </td>
+                    <td style="font-weight: 600;">${item.dpo.toFixed(1)} ngày</td>
+                    <td>${formatCurrency(item.ar)}</td>
+                    <td>${formatCurrency(item.ap)}</td>
+                    <td style="color: ${item.netAR <= 0 ? '#059669' : '#d97706'}; font-weight: 600;">
+                        ${formatCurrency(item.netAR)}
+                    </td>
+                </tr>
+            `).join('');
+
+            section.classList.remove('hidden');
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /**
+         * Xuất Excel
+         */
+        function exportToExcel() {
+            if (!currentResult) {
+                alert('⚠️ Chưa có dữ liệu để xuất. Hãy tính toán trước!');
+                return;
+            }
+
+            const wb = XLSX.utils.book_new();
+
+            const data = [
+                ['MODULE 09 – CÔNG NỢ (Accounts Receivable & Payable)', ''],
+                ['CEO AI Enterprise', ''],
+                ['', ''],
+                ['Kỳ báo cáo', currentResult.period],
+                ['Số ngày trong kỳ', currentResult.days],
+                ['Thời gian xuất', new Date().toLocaleString('vi-VN')],
+                ['', ''],
+                ['Chỉ tiêu', 'Giá trị'],
+                ['Công nợ phải thu (AR)', currentResult.ar],
+                ['Doanh thu thuần', currentResult.revenue],
+                ['Công nợ phải trả (AP)', currentResult.ap],
+                ['Giá vốn hàng bán (COGS)', currentResult.cogs],
+                ['DSO (Ngày)', currentResult.dso.toFixed(2)],
+                ['DPO (Ngày)', currentResult.dpo.toFixed(2)],
+                ['Công nợ ròng (AR − AP)', currentResult.netAR],
+                ['Tỷ lệ AR / Doanh thu (%)', currentResult.arRatio.toFixed(2)],
+                ['', ''],
+                ['Công thức DSO', 'DSO = (AR / Doanh thu) × Số ngày'],
+                ['Công thức DPO', 'DPO = (AP / COGS) × Số ngày'],
+                ['', ''],
+                ['Ghi chú', 'File được xuất từ Module 09 – CEO AI Enterprise']
+            ];
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            ws['!cols'] = [{ wch: 40 }, { wch: 25 }];
+            XLSX.utils.book_append_sheet(wb, ws, 'CongNo');
+
+            // Sheet lịch sử
+            const history = JSON.parse(localStorage.getItem('ceo_ai_congno_history') || '[]');
+            if (history.length > 0) {
+                const histData = [
+                    ['Thời gian', 'Kỳ', 'DSO', 'DPO', 'AR', 'AP', 'Công nợ ròng']
+                ];
+                history.forEach(item => {
+                    histData.push([
+                        new Date(item.timestamp).toLocaleString('vi-VN'),
+                        item.period,
+                        item.dso.toFixed(2),
+                        item.dpo.toFixed(2),
+                        item.ar,
+                        item.ap,
+                        item.netAR
+                    ]);
+                });
+                const ws2 = XLSX.utils.aoa_to_sheet(histData);
+                ws2['!cols'] = [{ wch: 22 }, { wch: 14 }, { wch: 10 }, { wch: 10 }, { wch: 16 }, { wch: 16 }, { wch: 16 }];
+                XLSX.utils.book_append_sheet(wb, ws2, 'Lịch sử');
+            }
+
+            const fileName = `CongNo_${currentResult.period.replace(/[\/\s]/g, '_')}_${new Date().toISOString().slice(0,10)}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+        }
+
+        /**
+         * Làm mới form
+         */
+        function resetForm() {
+            document.getElementById('ar').value = '';
+            document.getElementById('revenue').value = '';
+            document.getElementById('ap').value = '';
+            document.getElementById('cogs').value = '';
+            document.getElementById('days').value = '90';
+            document.getElementById('period').value = 'Quý hiện tại';
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('historySection').classList.add('hidden');
+            currentResult = null;
+
+            if (congNoChartInstance) {
+                congNoChartInstance.destroy();
+                congNoChartInstance = null;
+            }
+        }
+
+        /**
+         * =====================================================
+         * CHỖ DÀNH CHO TƯƠNG LAI – KẾT NỐI PYTHON + SQLITE
+         * =====================================================
+         * 
+         * Khi sẵn sàng kết nối backend:
+         * 
+         * async function saveToSQLite() {
+         *     const response = await fetch('/api/congno/save', {
+         *         method: 'POST',
+         *         headers: { 'Content-Type': 'application/json' },
+         *         body: JSON.stringify(currentResult)
+         *     });
+         *     ...
+         * }
+         * 
+         * Python sẽ ghi vào bảng:
+         * CREATE TABLE cong_no (
+         *     id INTEGER PRIMARY KEY,
+         *     period TEXT,
+         *     ar REAL,
+         *     revenue REAL,
+         *     ap REAL,
+         *     cogs REAL,
+         *     days INTEGER,
+         *     dso REAL,
+         *     dpo REAL,
+         *     net_ar REAL,
+         *     created_at TEXT
+         * );
+         */
+    </script>
+</body>
+</html>

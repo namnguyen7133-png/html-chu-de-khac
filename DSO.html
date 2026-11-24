@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Module 27 - Dự báo Doanh thu 12 tháng</title>
+    <!-- Chart.js v3 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js">
+    </script>
+    <style>
+        /* ---------- RESET & FONTS ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #f4f7fc;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .module-container {
+            max-width: 1400px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.08);
+            padding: 40px 35px 45px;
+            transition: all 0.2s;
+        }
+
+        /* ---------- HEADER ---------- */
+        .module-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eef3f8;
+            padding-bottom: 20px;
+        }
+
+        .module-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0b1e33;
+            letter-spacing: -0.3px;
+        }
+
+        .module-header h1 span {
+            background: #0b1e33;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 40px;
+            margin-left: 14px;
+            letter-spacing: 0.3px;
+        }
+
+        .module-badge {
+            background: #eaf2ff;
+            color: #1a5cff;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* ---------- GRID LAYOUT ---------- */
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .row-full {
+            grid-column: 1 / -1;
+        }
+
+        .row-3col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        /* ---------- CARDS ---------- */
+        .card {
+            background: #fafcff;
+            border-radius: 24px;
+            padding: 24px 26px 28px;
+            border: 1px solid #eef3f8;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            transition: 0.15s;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #2c3e50;
+            letter-spacing: 0.3px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title i {
+            font-style: normal;
+            background: #eef3f8;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            color: #4a5b6e;
+        }
+
+        /* ---------- FORM ---------- */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            font-weight: 500;
+            font-size: 14px;
+            color: #1f2a3a;
+        }
+
+        .input-group .hint {
+            font-size: 12px;
+            color: #7a8a9e;
+            margin-top: -2px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .input-row .input-group {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #dde6ef;
+            border-radius: 16px;
+            font-size: 15px;
+            background: #ffffff;
+            transition: 0.2s;
+            outline: none;
+            color: #0b1e33;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #1a5cff;
+            box-shadow: 0 0 0 4px rgba(26, 92, 255, 0.08);
+        }
+
+        .btn {
+            background: #0b1e33;
+            color: #fff;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #1a5cff;
+        }
+
+        .btn-primary:hover {
+            background: #0f47cc;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(26, 92, 255, 0.25);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #1a5cff;
+            border: 1.5px solid #1a5cff;
+        }
+
+        .btn-outline:hover {
+            background: #f0f5ff;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        /* ---------- AI BOX ---------- */
+        .ai-box {
+            background: #f0f7fe;
+            border-radius: 20px;
+            padding: 20px 24px;
+            border-left: 6px solid #1a5cff;
+            margin-top: 16px;
+        }
+
+        .ai-box h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0b1e33;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .ai-box p {
+            font-size: 14.5px;
+            line-height: 1.6;
+            color: #1f2a3a;
+            margin-bottom: 6px;
+        }
+
+        .ai-box .label {
+            font-weight: 600;
+            color: #0b1e33;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .tag-green {
+            background: #d4f0e0;
+            color: #0e6b3e;
+        }
+
+        .tag-yellow {
+            background: #fff1cf;
+            color: #9e6f0a;
+        }
+
+        .tag-red {
+            background: #fde2e2;
+            color: #b91c1c;
+        }
+
+        .tag-blue {
+            background: #dce7ff;
+            color: #1a5cff;
+        }
+
+        /* ---------- CHART WRAPPER ---------- */
+        .chart-wrapper {
+            position: relative;
+            height: 260px;
+            margin-top: 6px;
+        }
+
+        /* ---------- TABLE ---------- */
+        .table-wrap {
+            overflow-x: auto;
+            margin-top: 10px;
+            max-height: 320px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+        }
+
+        th {
+            text-align: left;
+            padding: 10px 8px 8px 0;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 2px solid #e2eaf2;
+            position: sticky;
+            top: 0;
+            background: #fafcff;
+            z-index: 2;
+        }
+
+        td {
+            padding: 8px 8px 8px 0;
+            border-bottom: 1px solid #edf2f7;
+            color: #1f2a3a;
+        }
+
+        td:last-child,
+        th:last-child {
+            text-align: right;
+        }
+
+        .highlight-row {
+            background: #f8faff;
+            font-weight: 600;
+        }
+
+        .seasonal-badge {
+            font-size: 11px;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: #eef3f8;
+            color: #4a5b6e;
+        }
+
+        /* ---------- STATUS BAR ---------- */
+        .status-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 40px;
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 16px 24px;
+            margin-top: 20px;
+            border: 1px solid #eef3f8;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .status-item .num {
+            font-weight: 700;
+            font-size: 20px;
+            color: #0b1e33;
+        }
+
+        .status-item .lbl {
+            font-size: 14px;
+            color: #5b6f84;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 1024px) {
+            .row-3col {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 820px) {
+            .row,
+            .row-3col {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .module-container {
+                padding: 24px 16px;
+            }
+            .module-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+
+        /* ---------- SCROLLBAR ---------- */
+        ::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0f4fa;
+            border-radius: 12px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd8e6;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="module-container" id="app">
+
+        <!-- ===== HEADER ===== -->
+        <div class="module-header">
+            <div>
+                <h1>
+                    📈 Dự báo Doanh thu 12 tháng
+                    <span>27</span>
+                </h1>
+                <div style="font-size:14px; color:#5b6f84; margin-top:6px;">
+                    Dự báo doanh thu dài hạn với mô hình tăng trưởng và yếu tố mùa vụ
+                </div>
+            </div>
+            <div class="module-badge">⚡ AI + SQLite sẵn sàng</div>
+        </div>
+
+        <!-- ===== ROW 1: NHẬP LIỆU ===== -->
+        <div class="row-3col">
+            <!-- Cột 1: Dữ liệu lịch sử -->
+            <div class="card">
+                <div class="card-title">
+                    📊 Dữ liệu lịch sử
+                    <i>12 tháng</i>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Q1 (tr VNĐ)</label>
+                        <input type="number" id="q1" value="2500" step="50" />
+                    </div>
+                    <div class="input-group">
+                        <label>Q2</label>
+                        <input type="number" id="q2" value="2800" step="50" />
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Q3</label>
+                        <input type="number" id="q3" value="3100" step="50" />
+                    </div>
+                    <div class="input-group">
+                        <label>Q4</label>
+                        <input type="number" id="q4" value="3400" step="50" />
+                    </div>
+                </div>
+                <div style="margin-top:6px; font-size:13px; color:#7a8a9e;">
+                    ⚡ Doanh thu theo quý của năm trước (4 quý)
+                </div>
+            </div>
+
+            <!-- Cột 2: Tham số tăng trưởng -->
+            <div class="card">
+                <div class="card-title">
+                    🎯 Tham số tăng trưởng
+                    <i>kỳ vọng</i>
+                </div>
+
+                <div class="input-group">
+                    <label>Tăng trưởng hàng năm kỳ vọng (%)</label>
+                    <input type="number" id="annualGrowth" value="12" step="0.5" />
+                    <div class="hint">Dựa trên kế hoạch chiến lược hoặc xu hướng ngành</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Điều chỉnh mùa vụ</label>
+                    <select id="seasonality">
+                        <option value="1.0">Không mùa vụ (1.0)</option>
+                        <option value="1.15" selected>Nhẹ (1.15)</option>
+                        <option value="1.35">Mạnh (1.35)</option>
+                    </select>
+                    <div class="hint">Ảnh hưởng của yếu tố mùa vụ đến doanh thu</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Hệ số lạc quan</label>
+                    <select id="optimism">
+                        <option value="0.7">Thận trọng</option>
+                        <option value="1.0" selected>Trung tính</option>
+                        <option value="1.3">Lạc quan</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Cột 3: Tham số bổ sung -->
+            <div class="card">
+                <div class="card-title">
+                    🔧 Điều kiện thị trường
+                    <i>rủi ro & cơ hội</i>
+                </div>
+
+                <div class="input-group">
+                    <label>Rủi ro thị trường (%)</label>
+                    <input type="number" id="marketRisk" value="5" step="0.5" />
+                    <div class="hint">Tỷ lệ % có thể ảnh hưởng tiêu cực</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Cơ hội tăng trưởng đột biến (%)</label>
+                    <input type="number" id="opportunity" value="3" step="0.5" />
+                    <div class="hint">Cơ hội từ sản phẩm mới, thị trường mới</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Chi phí vốn (cho chiết khấu)</label>
+                    <input type="number" id="wacc" value="10" step="0.5" />
+                    <div class="hint">Dùng để tính giá trị hiện tại</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ROW 2: NÚT ===== -->
+        <div class="row row-full">
+            <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;">
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btnForecast">🔮 Dự báo 12 tháng</button>
+                    <button class="btn btn-outline" id="btnSaveSQLite">💾 Lưu SQLite</button>
+                    <button class="btn btn-outline" id="btnExportExcel">📥 Xuất Excel</button>
+                </div>
+                <div style="font-size:13px; color:#7a8a9e; background:#f4f7fc; padding:6px 18px; border-radius:40px;">
+                    Module 27 · Dự báo 12 tháng
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== STATUS BAR ===== -->
+        <div class="status-bar" id="statusBar">
+            <div class="status-item">
+                <span class="lbl">Doanh thu năm hiện tại</span>
+                <span class="num" id="currentYearRevenue">11.800</span>
+                <span class="lbl">tr VNĐ</span>
+            </div>
+            <div class="status-item">
+                <span class="lbl">Dự báo năm tới</span>
+                <span class="num" id="nextYearRevenue">13.450</span>
+                <span class="lbl">tr VNĐ</span>
+            </div>
+            <div class="status-item">
+                <span class="lbl">Tăng trưởng YoY</span>
+                <span class="num" id="yoyGrowth">14,0</span>
+                <span class="lbl">%</span>
+            </div>
+            <div class="status-item">
+                <span class="lbl">NPV (Giá trị hiện tại)</span>
+                <span class="num" id="npvValue">12.230</span>
+                <span class="lbl">tr VNĐ</span>
+            </div>
+        </div>
+
+        <!-- ===== ROW 3: BIỂU ĐỒ + BẢNG ===== -->
+        <div class="row">
+            <!-- Biểu đồ -->
+            <div class="card">
+                <div class="card-title">
+                    📉 Xu hướng 12 tháng
+                    <i>Quý gần nhất → 12 tháng tới</i>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="forecastChart"></canvas>
+                </div>
+                <div style="margin-top:12px; font-size:13px; color:#5b6f84; display:flex; gap:18px; flex-wrap:wrap;">
+                    <span>🔵 Lịch sử (quý)</span>
+                    <span>🟠 Dự báo (tháng)</span>
+                    <span>🟢 Xu hướng</span>
+                </div>
+            </div>
+
+            <!-- Bảng + AI -->
+            <div class="card">
+                <div class="card-title">
+                    📋 Dự báo chi tiết theo tháng
+                    <i>12 tháng</i>
+                </div>
+                <div class="table-wrap" style="max-height:280px;">
+                    <table id="forecastTable">
+                        <thead>
+                            <tr>
+                                <th>Tháng</th>
+                                <th>Doanh thu (tr VNĐ)</th>
+                                <th>% tăng trưởng</th>
+                                <th>Mùa vụ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- JavaScript sẽ điền -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- AI NHẬN XÉT -->
+                <div class="ai-box" id="aiBox">
+                    <h4>🧠 AI Nhận xét & Khuyến nghị chiến lược</h4>
+                    <div id="aiContent">
+                        <p><span class="label">Trạng thái:</span> <span class="tag tag-green">Tăng trưởng bền vững</span></p>
+                        <p>Dự báo doanh thu tăng trưởng ổn định trong 12 tháng tới.</p>
+                        <p><span class="label">Khuyến nghị:</span> Đầu tư mở rộng sản xuất, tăng cường marketing.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <div style="margin-top:28px; border-top:1px solid #eef3f8; padding-top:22px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:14px; color:#7a8a9e;">
+            <div>© CEO AI Enterprise · Module 27 · Dự báo doanh thu 12 tháng</div>
+            <div>⚡ Dữ liệu lưu trữ SQLite · Xuất Excel · Tích hợp Dashboard</div>
+        </div>
+
+    </div>
+
+    <script>
+        // ================================================================
+        // MODULE 27 – DỰ BÁO DOANH THU 12 THÁNG
+        // Mô hình: Tăng trưởng kép + yếu tố mùa vụ + điều chỉnh rủi ro
+        // ================================================================
+
+        (function() {
+            'use strict';
+
+            // ---------- DOM refs ----------
+            const q1 = document.getElementById('q1');
+            const q2 = document.getElementById('q2');
+            const q3 = document.getElementById('q3');
+            const q4 = document.getElementById('q4');
+            const annualGrowth = document.getElementById('annualGrowth');
+            const seasonality = document.getElementById('seasonality');
+            const optimism = document.getElementById('optimism');
+            const marketRisk = document.getElementById('marketRisk');
+            const opportunity = document.getElementById('opportunity');
+            const wacc = document.getElementById('wacc');
+
+            const btnForecast = document.getElementById('btnForecast');
+            const btnSaveSQLite = document.getElementById('btnSaveSQLite');
+            const btnExportExcel = document.getElementById('btnExportExcel');
+
+            const currentYearRevenue = document.getElementById('currentYearRevenue');
+            const nextYearRevenue = document.getElementById('nextYearRevenue');
+            const yoyGrowth = document.getElementById('yoyGrowth');
+            const npvValue = document.getElementById('npvValue');
+
+            const tableBody = document.getElementById('tableBody');
+            const aiContent = document.getElementById('aiContent');
+
+            let chartInstance = null;
+
+            // ---------- Hàm chính: dự báo ----------
+            function runForecast() {
+                // 1. Đọc dữ liệu
+                const q_vals = [
+                    parseFloat(q1.value) || 0,
+                    parseFloat(q2.value) || 0,
+                    parseFloat(q3.value) || 0,
+                    parseFloat(q4.value) || 0
+                ];
+
+                const annualGrowthRate = (parseFloat(annualGrowth.value) || 0) / 100;
+                const seasonFactor = parseFloat(seasonality.value) || 1.0;
+                const optimismFactor = parseFloat(optimism.value) || 1.0;
+                const riskFactor = 1 - (parseFloat(marketRisk.value) || 0) / 100;
+                const oppFactor = 1 + (parseFloat(opportunity.value) || 0) / 100;
+                const waccRate = (parseFloat(wacc.value) || 10) / 100;
+
+                // 2. Tính tổng doanh thu năm hiện tại
+                const currentYearTotal = q_vals.reduce((a, b) => a + b, 0);
+
+                // 3. Dự báo 12 tháng tới
+                // Chia nhỏ từ quý sang tháng: lấy trung bình quý, áp dụng tăng trưởng hàng tháng
+                const monthlyGrowth = Math.pow(1 + annualGrowthRate * optimismFactor * oppFactor * riskFactor, 1 / 12) - 1;
+
+                // Lấy doanh thu trung bình tháng của quý cuối cùng làm baseline
+                const baseMonthly = q_vals[3] / 3; // Q4 / 3 tháng
+
+                const forecast = [];
+                let current = baseMonthly;
+
+                // Mô phỏng 12 tháng
+                for (let i = 0; i < 12; i++) {
+                    // Áp dụng tăng trưởng hàng tháng
+                    current = current * (1 + monthlyGrowth);
+
+                    // Áp dụng yếu tố mùa vụ (sin wave mô phỏng)
+                    const seasonalEffect = 1 + (seasonFactor - 1) * Math.sin((i / 12) * 2 * Math.PI + Math.PI / 2);
+                    let value = current * seasonalEffect;
+
+                    // Đảm bảo không âm
+                    value = Math.max(value, 0);
+                    forecast.push(value);
+                }
+
+                // 4. Tổng doanh thu dự báo năm tới
+                const nextYearTotal = forecast.reduce((a, b) => a + b, 0);
+
+                // 5. Tính NPV (giá trị hiện tại của dòng doanh thu)
+                let npv = 0;
+                for (let i = 0; i < forecast.length; i++) {
+                    npv += forecast[i] / Math.pow(1 + waccRate, (i + 1) / 12);
+                }
+
+                // 6. Cập nhật Status Bar
+                currentYearRevenue.textContent = currentYearTotal.toFixed(0);
+                nextYearRevenue.textContent = nextYearTotal.toFixed(0);
+                const yoy = ((nextYearTotal - currentYearTotal) / currentYearTotal * 100);
+                yoyGrowth.textContent = yoy.toFixed(1);
+                npvValue.textContent = npv.toFixed(0);
+
+                // 7. Bảng chi tiết 12 tháng
+                const monthNames = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
+                let html = '';
+                let cumulativeTotal = 0;
+
+                for (let i = 0; i < 12; i++) {
+                    cumulativeTotal += forecast[i];
+                    const prev = i === 0 ? baseMonthly : forecast[i - 1];
+                    const growthPct = prev > 0 ? ((forecast[i] - prev) / prev * 100) : 0;
+
+                    // Xác định mùa vụ
+                    let seasonTag = '';
+                    const month = i + 1;
+                    if (month >= 1 && month <= 3) seasonTag = 'Q1';
+                    else if (month >= 4 && month <= 6) seasonTag = 'Q2';
+                    else if (month >= 7 && month <= 9) seasonTag = 'Q3';
+                    else seasonTag = 'Q4';
+
+                    html += `<tr>
+                                <td><strong>${monthNames[i]}</strong> <span class="seasonal-badge">${seasonTag}</span></td>
+                                <td>${forecast[i].toFixed(0)}</td>
+                                <td>${growthPct >= 0 ? '+' : ''}${growthPct.toFixed(1)}%</td>
+                                <td>${(forecast[i] / (cumulativeTotal / (i+1)) * 100).toFixed(0)}%</td>
+                            </tr>`;
+                }
+
+                // Dòng tổng
+                html += `<tr class="highlight-row">
+                            <td><strong>TỔNG NĂM</strong></td>
+                            <td><strong>${nextYearTotal.toFixed(0)}</strong></td>
+                            <td>+${yoy.toFixed(1)}% YoY</td>
+                            <td>100%</td>
+                        </tr>`;
+                tableBody.innerHTML = html;
+
+                // 8. Biểu đồ
+                renderChart(q_vals, forecast);
+
+                // 9. AI nhận xét
+                generateAI(q_vals, forecast, yoy, nextYearTotal, npv);
+            }
+
+            // ---------- Biểu đồ ----------
+            function renderChart(historyQuarters, forecastMonthly) {
+                const ctx = document.getElementById('forecastChart').getContext('2d');
+                if (chartInstance) chartInstance.destroy();
+
+                // Tạo dữ liệu: 4 quý lịch sử + 12 tháng dự báo
+                const labels = ['Q1', 'Q2', 'Q3', 'Q4', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11',
+                    'T12'
+                ];
+
+                // Lịch sử (quý) và dự báo (tháng) - không cùng scale, vẽ riêng
+                const histData = [...historyQuarters];
+                // Thêm null cho phần dự báo
+                for (let i = 0; i < 12; i++) {
+                    histData.push(null);
+                }
+
+                const forecastData = [];
+                // Thêm null cho phần lịch sử
+                for (let i = 0; i < 4; i++) {
+                    forecastData.push(null);
+                }
+                // Thêm dữ liệu dự báo
+                for (let i = 0; i < 12; i++) {
+                    forecastData.push(forecastMonthly[i]);
+                }
+
+                // Đường xu hướng (moving average 3 tháng)
+                const trendData = [];
+                for (let i = 0; i < 4 + 12; i++) {
+                    if (i < 4) {
+                        trendData.push(null);
+                    } else {
+                        const start = i - 2;
+                        const end = i + 1;
+                        const slice = [];
+                        for (let j = start; j < end; j++) {
+                            if (j >= 4 && j < 4 + 12) {
+                                slice.push(forecastMonthly[j - 4]);
+                            }
+                        }
+                        if (slice.length === 3) {
+                            trendData.push(slice.reduce((a, b) => a + b, 0) / 3);
+                        } else {
+                            trendData.push(null);
+                        }
+                    }
+                }
+
+                chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Lịch sử (quý)',
+                            data: histData,
+                            borderColor: '#1a5cff',
+                            backgroundColor: 'rgba(26, 92, 255, 0.10)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#1a5cff',
+                            pointRadius: 6,
+                            tension: 0.2,
+                            fill: false,
+                        }, {
+                            label: 'Dự báo 12 tháng',
+                            data: forecastData,
+                            borderColor: '#ff8c42',
+                            backgroundColor: 'rgba(255, 140, 66, 0.08)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#ff8c42',
+                            pointRadius: 4,
+                            tension: 0.3,
+                            fill: true,
+                        }, {
+                            label: 'Xu hướng (MA3)',
+                            data: trendData,
+                            borderColor: '#22b573',
+                            borderWidth: 2,
+                            borderDash: [6, 4],
+                            pointRadius: 2,
+                            pointBackgroundColor: '#22b573',
+                            tension: 0.2,
+                            fill: false,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        if (context.parsed.y === null) return 'Không có dữ liệu';
+                                        return context.parsed.y.toFixed(0) + ' tr VNĐ';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: '#eef3f8' },
+                                ticks: { callback: function(v) { return v.toFixed(0); } }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { maxTicksLimit: 16 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // ---------- AI nhận xét ----------
+            function generateAI(history, forecast, yoy, total, npv) {
+                const lastQuarterAvg = history[3] / 3;
+                const firstMonth = forecast[0];
+                const lastMonth = forecast[11];
+
+                const growthFirst = ((firstMonth - lastQuarterAvg) / lastQuarterAvg * 100);
+                const growthLast = ((lastMonth - forecast[10]) / forecast[10] * 100);
+
+                let status = '',
+                    color = '',
+                    recommend = '';
+
+                if (yoy > 20) {
+                    status = 'Tăng trưởng mạnh mẽ';
+                    color = 'tag-green';
+                    recommend = 'Đẩy mạnh đầu tư mở rộng, tuyển dụng nhân sự chất lượng cao.';
+                } else if (yoy > 10) {
+                    status = 'Tăng trưởng tốt';
+                    color = 'tag-green';
+                    recommend = 'Duy trì đà tăng trưởng, tối ưu hóa chi phí vận hành.';
+                } else if (yoy > 0) {
+                    status = 'Tăng trưởng nhẹ';
+                    color = 'tag-yellow';
+                    recommend = 'Cần thúc đẩy doanh số, xem xét chiến lược sản phẩm mới.';
+                } else {
+                    status = 'Suy giảm';
+                    color = 'tag-red';
+                    recommend = 'Cần tái cấu trúc chiến lược, cắt giảm chi phí, tìm kiếm thị trường mới.';
+                }
+
+                // Đánh giá mùa vụ
+                const maxMonth = Math.max(...forecast);
+                const minMonth = Math.min(...forecast);
+                const volatility = ((maxMonth - minMonth) / (maxMonth + minMonth) * 100).toFixed(1);
+
+                const aiHtml = `
+                            <p><span class="label">Trạng thái doanh nghiệp:</span> <span class="tag ${color}">${status}</span></p>
+                            <p>🔹 Tăng trưởng YoY: <strong>${yoy > 0 ? '+' : ''}${yoy.toFixed(1)}%</strong></p>
+                            <p>🔹 Tổng doanh thu dự kiến: <strong>${total.toFixed(0)} tr VNĐ</strong></p>
+                            <p>🔹 Biến động mùa vụ: <strong>${volatility}%</strong> (chênh lệch giữa tháng cao nhất và thấp nhất)</p>
+                            <p>🔹 NPV (Giá trị hiện tại): <strong>${npv.toFixed(0)} tr VNĐ</strong> với WACC ${(parseFloat(wacc.value) || 10).toFixed(1)}%</p>
+                            <p><span class="label">💡 Khuyến nghị chiến lược:</span> ${recommend}</p>
+                            <p style="margin-top:6px; font-size:13px; color:#4a5b6e;">⚡ Dự báo dựa trên tăng trưởng kép + mùa vụ + điều chỉnh rủi ro (${parseFloat(marketRisk.value) || 0}%)</p>
+                        `;
+                aiContent.innerHTML = aiHtml;
+            }
+
+            // ---------- Lưu SQLite (mô phỏng) ----------
+            function saveToSQLite() {
+                console.log('🔹 [SQLite] Lưu dữ liệu dự báo 12 tháng:');
+                console.log(`  - Quý: ${q1.value}, ${q2.value}, ${q3.value}, ${q4.value}`);
+                console.log(`  - Tăng trưởng: ${annualGrowth.value}%, Mùa vụ: ${seasonality.value}`);
+                console.log(`  - Thời gian: ${new Date().toISOString()}`);
+                alert('✅ Đã lưu dữ liệu vào SQLite (mô phỏng).\nXem console để biết chi tiết.');
+            }
+
+            // ---------- Xuất Excel (mô phỏng) ----------
+            function exportExcel() {
+                const rows = document.querySelectorAll('#tableBody tr');
+                let csv = 'Tháng,Doanh thu (tr VNĐ),Tăng trưởng,Phân bổ\n';
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    if (cells.length >= 4) {
+                        csv +=
+                            `${cells[0].innerText.replace(/<[^>]*>/g, '').trim()},${cells[1].innerText},${cells[2].innerText},${cells[3].innerText}\n`;
+                    } else if (cells.length >= 2) {
+                        csv += `${cells[0].innerText},${cells[1].innerText},,\n`;
+                    }
+                });
+
+                const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `Du_bao_doanh_thu_12thang_${new Date().toISOString().slice(0,10)}.csv`;
+                link.click();
+                URL.revokeObjectURL(link.href);
+                alert('📥 Đã xuất file Excel (CSV). Mở bằng Excel để xem.');
+            }
+
+            // ---------- Sự kiện ----------
+            btnForecast.addEventListener('click', runForecast);
+            btnSaveSQLite.addEventListener('click', saveToSQLite);
+            btnExportExcel.addEventListener('click', exportExcel);
+
+            // Chạy lần đầu khi load trang
+            window.addEventListener('DOMContentLoaded', runForecast);
+
+            // Tự động cập nhật khi thay đổi thông số
+            [q1, q2, q3, q4, annualGrowth, seasonality, optimism, marketRisk, opportunity, wacc].forEach(el => {
+                el.addEventListener('change', runForecast);
+                el.addEventListener('input', runForecast);
+            });
+
+        })();
+    </script>
+
+</body>
+</html>

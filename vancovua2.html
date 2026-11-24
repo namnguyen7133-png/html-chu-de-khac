@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bàn Cờ Thiết Kế Nội Thất Nhà 10 Phòng - Cổ Điển vs Tân Hiện Đại</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        classic: {
+                            800: '#581c87',
+                            900: '#3b0764',
+                            accent: '#d97706',
+                            border: '#b45309'
+                        },
+                        modern: {
+                            800: '#065f46',
+                            900: '#064e3b',
+                            accent: '#10b981',
+                            border: '#059669'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        serif: ['Playfair Display', 'Georgia', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons & Google Serif Font -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* Chess cell custom styles */
+        .cell-classic-light { background-color: #2e1065; }
+        .cell-classic-dark { background-color: #1e1b4b; }
+        .cell-modern-light { background-color: #064e3b; }
+        .cell-modern-dark { background-color: #022c22; }
+
+        /* Light mode grid colors */
+        html:not(.dark) .cell-classic-light { background-color: #f3e8ff; color: #3b0764; }
+        html:not(.dark) .cell-classic-dark { background-color: #e9d5ff; color: #3b0764; }
+        html:not(.dark) .cell-modern-light { background-color: #d1fae5; color: #064e3b; }
+        html:not(.dark) .cell-modern-dark { background-color: #a7f3d0; color: #064e3b; }
+
+        .cell-classic-light:hover, .cell-classic-dark:hover {
+            background-color: #7e22ce !important;
+            color: #ffffff !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+        }
+
+        .cell-modern-light:hover, .cell-modern-dark:hover {
+            background-color: #047857 !important;
+            color: #ffffff !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Font Size Scaling Classes */
+        .text-scale-sm { font-size: 0.875rem; }
+        .text-scale-md { font-size: 1rem; }
+        .text-scale-lg { font-size: 1.125rem; }
+
+        .modal-animate {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100 bg-slate-50 text-slate-900" id="appBody">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-30 bg-slate-900/90 dark:bg-slate-900/90 bg-white/90 backdrop-blur-md border-b border-slate-800 dark:border-slate-800 border-slate-200 shadow-xl transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                
+                <!-- Title & Subtitle -->
+                <div class="flex items-center space-x-3">
+                    <div class="p-2.5 bg-gradient-to-br from-amber-500 to-amber-700 rounded-xl shadow-lg text-slate-950 font-bold">
+                        <i class="fa-solid fa-couch text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-extrabold font-serif tracking-tight text-amber-500 dark:text-amber-400 flex items-center gap-2">
+                            BÀN CỜ BÀI TRÍ NHÀ 10 PHÒNG
+                        </h1>
+                        <p class="text-xs sm:text-sm text-slate-400 dark:text-slate-400 text-slate-600">32 Khó khăn Cổ điển (Cột A-D) vs 32 Thuận lợi Tân Hiện đại (Cột E-H)</p>
+                    </div>
+                </div>
+
+                <!-- Filters & Controls Toolbar -->
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                    <!-- Search Input -->
+                    <div class="relative flex-1 min-w-[180px] sm:w-56">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Tìm phòng, từ khóa..." 
+                            class="w-full pl-8 pr-7 py-1.5 bg-slate-800 dark:bg-slate-800 bg-slate-100 border border-slate-700 dark:border-slate-700 border-slate-300 rounded-lg text-xs sm:text-sm text-slate-100 dark:text-slate-100 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 transition-all">
+                        <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
+                            <i class="fa-solid fa-circle-xmark text-xs"></i>
+                        </button>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <select id="roomFilter" onchange="handleSearch()" class="bg-slate-800 dark:bg-slate-800 bg-slate-100 border border-slate-700 dark:border-slate-700 border-slate-300 text-slate-200 dark:text-slate-200 text-slate-800 rounded-lg text-xs sm:text-sm px-2.5 py-1.5 focus:outline-none focus:border-amber-500">
+                        <option value="ALL">Tất cả khu vực phòng</option>
+                        <option value="LIVING">Tiếp khách (Phòng khách/Sảnh)</option>
+                        <option value="DINING">Ăn uống (Phòng ăn/Bếp)</option>
+                        <option value="BEDROOM">Phòng ngủ (Master/Phụ)</option>
+                        <option value="REST">Thư giãn/Giải trí/Thờ tự</option>
+                    </select>
+
+                    <!-- View Mode Toggle -->
+                    <div class="flex bg-slate-800 dark:bg-slate-800 bg-slate-200 p-1 rounded-lg border border-slate-700 dark:border-slate-700 border-slate-300">
+                        <button id="btnGridView" onclick="switchView('grid')" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-500 text-slate-950 shadow-sm flex items-center gap-1">
+                            <i class="fa-solid fa-border-all"></i> <span class="hidden sm:inline">Bàn Cờ</span>
+                        </button>
+                        <button id="btnListView" onclick="switchView('list')" class="px-2.5 py-1 rounded-md text-xs font-semibold text-slate-300 dark:text-slate-300 text-slate-700 hover:text-white flex items-center gap-1">
+                            <i class="fa-solid fa-list-ul"></i> <span class="hidden sm:inline">Danh Sách</span>
+                        </button>
+                    </div>
+
+                    <!-- Font Size Scaling -->
+                    <div class="flex items-center bg-slate-800 dark:bg-slate-800 bg-slate-200 rounded-lg p-1 border border-slate-700 dark:border-slate-700 border-slate-300 text-xs">
+                        <button onclick="changeFontSize('sm')" class="px-2 py-0.5 rounded hover:bg-slate-700 text-slate-300" title="Chữ nhỏ">A-</button>
+                        <button onclick="changeFontSize('md')" class="px-2 py-0.5 rounded hover:bg-slate-700 text-slate-300 font-bold" title="Chữ vừa">A</button>
+                        <button onclick="changeFontSize('lg')" class="px-2 py-0.5 rounded hover:bg-slate-700 text-slate-300 text-sm font-extrabold" title="Chữ lớn">A+</button>
+                    </div>
+
+                    <!-- Dark/Light Theme Toggle -->
+                    <button onclick="toggleTheme()" class="p-2 bg-slate-800 dark:bg-slate-800 bg-slate-200 border border-slate-700 dark:border-slate-700 border-slate-300 rounded-lg text-amber-400 hover:text-amber-300 transition-colors" title="Chuyển chế độ Sáng/Tối">
+                        <i id="themeIcon" class="fa-solid fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-5 flex-1 w-full">
+
+        <!-- Board Section Header Legend -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <!-- Left Side Legend (Classic) -->
+            <div class="p-3.5 rounded-xl bg-gradient-to-r from-purple-950/80 to-slate-900 border border-purple-800/50 flex items-center justify-between shadow-lg">
+                <div class="flex items-center space-x-3">
+                    <span class="w-8 h-8 rounded-lg bg-purple-700 text-white flex items-center justify-center font-bold text-sm shadow-md">
+                        <i class="fa-solid fa-crown"></i>
+                    </span>
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-purple-300 uppercase tracking-wide font-serif">PHONG CÁCH CỔ ĐIỂM (Cột A - D)</h2>
+                        <p class="text-xs text-slate-300">32 Khó khăn bài trí nhà 10 phòng & Giải pháp xử lý</p>
+                    </div>
+                </div>
+                <span class="text-xs font-semibold px-2 py-0.5 bg-purple-900/80 text-purple-200 rounded border border-purple-700/50">Ô 01 - 32</span>
+            </div>
+
+            <!-- Right Side Legend (Neoclassical / Modern) -->
+            <div class="p-3.5 rounded-xl bg-gradient-to-r from-emerald-950/80 to-slate-900 border border-emerald-800/50 flex items-center justify-between shadow-lg">
+                <div class="flex items-center space-x-3">
+                    <span class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shadow-md">
+                        <i class="fa-solid fa-gem"></i>
+                    </span>
+                    <div>
+                        <h2 class="text-sm sm:text-base font-bold text-emerald-300 uppercase tracking-wide font-serif">TÂN CỔ ĐIỂN & HIỆN ĐẠI (Cột E - H)</h2>
+                        <p class="text-xs text-slate-300">32 Thuận lợi, Tránh rủi ro & Tối ưu bài trí nhà 10 phòng</p>
+                    </div>
+                </div>
+                <span class="text-xs font-semibold px-2 py-0.5 bg-emerald-900/80 text-emerald-200 rounded border border-emerald-700/50">Ô 33 - 64</span>
+            </div>
+        </div>
+
+        <!-- VIEW 1: CHESSBOARD GRID (8x8) -->
+        <div id="chessboardContainer" class="w-full overflow-x-auto pb-4">
+            <div class="min-w-[720px] md:min-w-0 bg-slate-900 dark:bg-slate-900 bg-white p-3 sm:p-4 rounded-2xl border border-slate-800 dark:border-slate-800 border-slate-200 shadow-2xl transition-colors">
+                
+                <!-- Column Labels (A-H) -->
+                <div class="grid grid-cols-8 gap-1.5 sm:gap-2 mb-2 text-center text-xs font-extrabold text-slate-400">
+                    <div class="text-purple-400">CỘT A</div><div class="text-purple-400">CỘT B</div>
+                    <div class="text-purple-400">CỘT C</div><div class="text-purple-400">CỘT D</div>
+                    <div class="text-emerald-400">CỘT E</div><div class="text-emerald-400">CỘT F</div>
+                    <div class="text-emerald-400">CỘT G</div><div class="text-emerald-400">CỘT H</div>
+                </div>
+
+                <!-- 8x8 Chessboard Grid -->
+                <div id="chessboardGrid" class="grid grid-cols-8 gap-1.5 sm:gap-2 aspect-square max-w-full">
+                    <!-- Dynamic rendering via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 2: LIST VIEW (Hidden by default) -->
+        <div id="listViewContainer" class="hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Left Column List: Classic -->
+                <div class="bg-slate-900 dark:bg-slate-900 bg-white p-4 sm:p-5 rounded-2xl border border-purple-900/40 shadow-xl">
+                    <h3 class="text-base font-bold text-purple-400 mb-4 pb-2 border-b border-purple-800/40 flex items-center gap-2 font-serif">
+                        <i class="fa-solid fa-crown text-purple-500"></i> 32 Khó Khăn & Giải Pháp Bài Trí Cổ Điển
+                    </h3>
+                    <div id="classicList" class="space-y-2.5">
+                        <!-- Dynamic JS -->
+                    </div>
+                </div>
+
+                <!-- Right Column List: Neoclassical & Modern -->
+                <div class="bg-slate-900 dark:bg-slate-900 bg-white p-4 sm:p-5 rounded-2xl border border-emerald-900/40 shadow-xl">
+                    <h3 class="text-base font-bold text-emerald-400 mb-4 pb-2 border-b border-emerald-800/40 flex items-center gap-2 font-serif">
+                        <i class="fa-solid fa-gem text-emerald-500"></i> 32 Thuận Lợi & Tránh Rủi Ro Tân Hiện Đại
+                    </h3>
+                    <div id="modernList" class="space-y-2.5">
+                        <!-- Dynamic JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Info -->
+    <footer class="bg-slate-900 dark:bg-slate-900 bg-slate-100 border-t border-slate-800 dark:border-slate-800 border-slate-200 py-4 text-center text-xs text-slate-400 transition-colors mt-6">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="font-medium text-slate-300 dark:text-slate-300 text-slate-700">Cẩm Nang Kiến Trúc Bài Trí Nội Thất Căn Hộ / Biệt Thự 10 Phòng Chi Tiết</p>
+            <p class="mt-1 text-slate-500">Phân tích toàn diện: Phòng khách chính, Sảnh đón, Phòng ăn lớn, Bếp gia đình, 4 Phòng ngủ, Phòng giải trí/Karaoke, Phòng thờ tự.</p>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE MODAL / DIALOG -->
+    <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 hidden modal-animate bg-slate-950/80 backdrop-blur-md">
+        <div class="bg-slate-900 dark:bg-slate-900 bg-white border border-slate-700 dark:border-slate-700 border-slate-300 rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden relative transform transition-all scale-95 opacity-0 text-slate-100 dark:text-slate-100 text-slate-900" id="modalContent">
+            
+            <!-- Modal Header -->
+            <div id="modalHeader" class="p-4 sm:p-5 border-b border-slate-800 dark:border-slate-800 border-slate-200 flex items-start justify-between">
+                <div class="flex items-center gap-3 pr-6">
+                    <span id="modalCoord" class="px-2.5 py-1 rounded-lg text-xs font-black tracking-wider text-slate-950 bg-amber-400 shrink-0 shadow">
+                        A1 (Ô 01)
+                    </span>
+                    <div>
+                        <span id="modalCategory" class="text-xs font-semibold uppercase tracking-wider block text-amber-400">PHÒNG KHÁCH CỔ ĐIỂM</span>
+                        <h3 id="modalTitle" class="text-base sm:text-lg font-bold font-serif leading-snug mt-0.5">Tên chủ đề bài trí</h3>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-amber-400 p-2 rounded-lg hover:bg-slate-800 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div id="modalBodyText" class="p-4 sm:p-6 overflow-y-auto space-y-4 text-scale-md leading-relaxed">
+                
+                <!-- Section 1: Challenge / Advantage -->
+                <div id="modalSec1Bg" class="p-4 rounded-xl border">
+                    <h4 id="modalSec1Header" class="text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i> PHÂN TÍCH KHÓ KHĂN / BỐI CẢNH
+                    </h4>
+                    <p id="modalContext" class="text-xs sm:text-sm leading-relaxed">Nội dung chi tiết...</p>
+                </div>
+
+                <!-- Section 2: Solution / Risk Avoidance -->
+                <div id="modalSec2Bg" class="p-4 rounded-xl border">
+                    <h4 id="modalSec2Header" class="text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-compass-drafting"></i> GIẢI PHÁP THI CÔNG & BÀI TRÍ KHÔNG GIAN
+                    </h4>
+                    <p id="modalSolution" class="text-xs sm:text-sm leading-relaxed whitespace-pre-line">Nội dung giải pháp...</p>
+                </div>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-3.5 border-t border-slate-800 dark:border-slate-800 border-slate-200 bg-slate-950/50 dark:bg-slate-950/50 bg-slate-100 flex items-center justify-between text-xs text-slate-400">
+                <span class="italic"><i class="fa-solid fa-lightbulb text-amber-400"></i> Bấm ESC hoặc nhấp bên ngoài để đóng</span>
+                <button onclick="closeModal()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg transition-colors">
+                    Đóng cửa sổ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT DATA & LOGIC -->
+    <script>
+        // Array of Chess Coordinates: Rows 1-8, Cols A-H
+        const cols = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+
+        // COMPLETE 64-SQUARE DESIGN DATASET FOR 10-ROOM HOME
+        const designData = [
+            // ==================== CỔ ĐIỂM (CỘT A - D: Ô 01 - 32) ====================
+            // --- CỘT A (Hàng 1-8: Ô 1 - 8) ---
+            {
+                id: 1, col: 'A', row: 1, coord: 'A1', type: 'classic', roomTag: 'LIVING',
+                title: 'Trần Cổ Điển Bị Cảm Giác U Tối, Đè Nén',
+                short: 'Trần phào chỉ gỗ/thạch cao quá dày làm lùn phòng khách',
+                context: 'Trong phòng khách cổ điển lớn, việc dùng hệ vòm cuốn hoa văn dày đặc và phào chỉ gỗ gõ đỏ đậm màu khiến trần nhà bị kéo thấp, tạo cảm giác bức bối nặng nề.',
+                solution: '1. Sơn hoa văn trần màu kem nhạt/trắng ngà kết hợp dát vàng lá 18K ở gân viền để bắt sáng.\n2. Lắp giếng trời lấy sáng tự nhiên hoặc dùng trần xuyên sáng Barrisol ẩn sau vòm chỉ.\n3. Đèn chùm pha lê Baccarat thả trung tâm tối thiểu cao cách sàn 2.8m.'
+            },
+            {
+                id: 2, col: 'A', row: 2, coord: 'A2', type: 'classic', roomTag: 'LIVING',
+                title: 'Bộ Sofa Gỗ Cổ Điển Quá Đồ Sộ Cản Trở Lối Đi',
+                short: 'Bộ bàn ghế chạm rồng phụng gây nghẽn sảnh tiếp khách',
+                context: 'Sofa tân cổ/cổ điển chạm khắc nguyên khối kích thước khổng lồ chiếm hết 70% diện tích sảnh chính, làm mất luồng giao thông kết nối với các phòng khác.',
+                solution: '1. Tuân thủ tỷ lệ 1/3: Diện tích bộ ghế không vượt quá 35% diện tích phòng.\n2. Bài trí theo hình chữ U mở về hướng cửa chính để đón tài lộc.\n3. Chừa khoảng lùi tối thiểu 1.2m quanh bàn trà để di chuyển sang phòng ăn và cầu thang.'
+            },
+            {
+                id: 3, col: 'A', row: 3, coord: 'A3', type: 'classic', roomTag: 'LIVING',
+                title: 'Sảnh Đón Cổ Điển Tối Và Bí Khí',
+                short: 'Sảnh tiếp đón thiếu ánh sáng tự nhiên và thông gió',
+                context: 'Sảnh vào nhà 10 phòng phong cách cổ điển thường trang trí cột Corinthian và vách ốp gỗ kín làm cản trở gió trời và ánh sáng, gây u uất khi bước vào.',
+                solution: '1. Đặt gương cầu lớn mạ vàng đối diện vách trang trí để phản chiếu ánh sáng.\n2. Dùng cửa chính gỗ kết hợp kính hoa đồng đúc nghệ thuật lấy sáng tự nhiên.\n3. Bố trí hệ thống đèn rãnh hắt trần (cob light) dải sáng ấm 3000K.'
+            },
+            {
+                id: 4, col: 'A', row: 4, coord: 'A4', type: 'classic', roomTag: 'DINING',
+                title: 'Bàn Ăn Cổ Điển 12 Ghế Quá Dài Khó Tương Tác',
+                short: 'Khoảng cách giữa các thành viên gia đình quá xa',
+                context: 'Phòng ăn cổ điển bài trí bàn ăn dài chạm khắc rườm rà khiến không khí bữa ăn gia đình bị lạnh lẽo, người ngồi hai đầu bàn khó gắp thức ăn và trò chuyện.',
+                solution: '1. Chuyển sang bàn ăn tròn cổ điển mâm xoay tủy cơ mạ vàng cho 10-12 người.\n2. Lắp đèn chùm nến tỏa ánh sáng vàng ấm ngay tâm bàn ăn.\n3. Bố trí tủ rượu âm tường hai bên để tối ưu hóa không gian xung quanh.'
+            },
+            {
+                id: 5, col: 'A', row: 5, coord: 'A5', type: 'classic', roomTag: 'DINING',
+                title: 'Mùi Thức Ăn Bám Vào Rèm Thảm Cổ Điển Quá Nặng',
+                short: 'Rèm nhung thảm gấm phòng ăn ám mùi dầu mỡ',
+                context: 'Bếp ăn cổ điển dùng rèm gấm dày và thảm lông dệt thủ công rất dễ hấp thụ mùi mắm, dầu mỡ khi nấu nướng, cực kỳ khó vệ sinh.',
+                solution: '1. Lắp hệ thống máy hút mùi công suất lớn âm tủ cổ điển (>1200 m3/h).\n2. Dùng thảm sợi tổng hợp chống bám bẩn hoặc sàn đá Marble Ý lát thảm hoa văn.\n3. Thiết kế vách kính vòm cổ điển ngăn giữa bếp nấu và phòng ăn.'
+            },
+            {
+                id: 6, col: 'A', row: 6, coord: 'A6', type: 'classic', roomTag: 'BEDROOM',
+                title: 'Giường Hoàng Gia Master Quá Nặng Cực Khó Di Chuyển',
+                short: 'Giường ngủ bọc da chạm trổ dày cộc khó lau dọn gầm',
+                context: 'Phòng ngủ Master cổ điển dùng giường gỗ gõ chạm trổ nặng hàng trăm kg, chân bệ sát sàn làm bụi bẩn tích tụ dưới gầm không thể vệ sinh.',
+                solution: '1. Chọn thiết kế chân giường cao tối thiểu 15cm với hoa văn chân quỳ để robot hút bụi chui vào.\n2. Sử dụng đệm lò xo túi cao cấp nâng đỡ cột sống.\n3. Ốp nệm bọc da may nhún Button-tufting phía đầu giường để tựa lưng đọc sách.'
+            },
+            {
+                id: 7, col: 'A', row: 7, coord: 'A7', type: 'classic', roomTag: 'BEDROOM',
+                title: 'Tủ Quần Áo Cổ Điển Cánh Mở Chiếm Cực Nhiều Diện Tích',
+                short: 'Mở cánh tủ va chạm vào bàn trang điểm và tab đầu giường',
+                context: 'Tủ quần áo 6 cánh gỗ tự nhiên cổ điển có góc mở rộng 90 độ bị vướng vào bàn trang điểm, làm chật hẹp phòng ngủ gia chủ.',
+                solution: '1. Thiết kế phòng thay đồ độc lập (Walk-in closet) nối liền phòng tắm Master.\n2. Dùng cửa tủ kính hoa văn cổ điển khung mạ đồng.\n3. Bố trí đèn LED cảm ứng chiếu sáng từng khoang tủ khi mở cánh.'
+            },
+            {
+                id: 8, col: 'A', row: 8, coord: 'A8', type: 'classic', roomTag: 'REST',
+                title: 'Phòng Thờ Cổ Điển Bị Trầm Mặc, Bụi Khói Tích Tụ',
+                short: 'Trần phòng thờ bị đen do khói hương bám vào phào chỉ',
+                context: 'Phòng thờ bài trí hoành tráng với hoành phi câu đối và gỗ gụ tối màu, khói hương làm ố đen trần thạch cao đắt tiền.',
+                solution: '1. Ốp tấm chống khói bằng gỗ mạ vàng ngay trên đỉnh bát hương.\n2. Bố trí quạt hút gió âm trần xử lý khói ra ban công ngoài.\n3. Dùng hệ đèn LED hắt khe tường tạo không khí trang nghiêm mà không nóng bức.'
+            },
+
+            // --- CỘT B (Hàng 1-8: Ô 9 - 16) ---
+            {
+                id: 9, col: 'B', row: 1, coord: 'B1', type: 'classic', roomTag: 'LIVING',
+                title: 'Lò Sưởi Trang Trí Cổ Điển Chiếm Mất Vị Trí TV',
+                short: 'Khó kết hợp lò sưởi giả với màn hình tivi hiện đại',
+                context: 'Lò sưởi đá Cẩm thạch là tâm điểm cổ điển nhưng làm mất mảng tường treo TV 85 inch, tạo sự xung đột giữa cổ điển và công nghệ.',
+                solution: '1. Đặt TV âm vòm đá ngay phía trên lò sưởi giả trang trí.\n2. Dùng màn hình TV khung tranh (The Frame) hiển thị bức họa cổ điển khi tắt.\n3. Giấu toàn bộ dàn loa trong các cột giả Ionic hai bên.'
+            },
+            {
+                id: 10, col: 'B', row: 2, coord: 'B2', type: 'classic', roomTag: 'DINING',
+                title: 'Tủ Rượu Cổ Điển Bị Bụi Bám Hoa Văn Rườm Rà',
+                short: 'Tủ trưng bày gốm sứ chạm khắc tốn hàng giờ lau chùi',
+                context: 'Tủ rượu gỗ tự nhiên chạm phù điêu nổi nhiều chi tiết nhỏ trong phòng ăn rất dễ bám bụi, lau chùi cực kỳ vất vả.',
+                solution: '1. Dùng tủ rượu mặt kính cường lực khung mạ PVD vàng chải.\n2. Lắp hệ thống phun sương chống bụi nhẹ hoặc phòng điều hòa trung tâm khép kín.\n3. Đèn LED thanh 4000K chiếu phản quang các chai rượu quý.'
+            },
+            {
+                id: 11, col: 'B', row: 3, coord: 'B3', type: 'classic', roomTag: 'BEDROOM',
+                title: 'Phòng Ngủ Khách Cổ Điển Cảm Giác Lạnh Lẽo Thiếu Ấm Củng',
+                short: 'Nội thất gỗ đậm màu khiến khách lưu trú cảm thấy e ngại',
+                context: 'Phòng ngủ dành cho khách trong nhà 10 phòng dùng tông màu nâu trầm và tranh chân dung cổ điển gây cảm giác âm u, thiếu tự nhiên.',
+                solution: '1. Đổi tone màu chủ đạo sang kem phấn, trắng ngọc trai và xám ấm.\n2. Trang bị thảm dạ trải sàn mềm mại và ga trải giường tơ lụa tơ tằm.\n3. Dùng tranh cảnh quan thiên nhiên Phục Hưng màu sắc tươi sáng.'
+            },
+            {
+                id: 12, col: 'B', row: 4, coord: 'B4', type: 'classic', roomTag: 'REST',
+                title: 'Phòng Giải Trí/Karaoke Cổ Điển Bị Vấn Đề Về Âm Thanh',
+                short: 'Tường đá và vòm thạch cao gây dội âm nghẹt tai',
+                context: 'Phòng Karaoke/Chiếu phim cổ điển dùng nhiều vách đá Marble và trần phẳng làm âm thanh bị dội vang, ù tai nặng.',
+                solution: '1. Dùng vách bọc nỉ tiêu âm nhung cúc bọc mạ vàng tân cổ điển.\n2. Trải thảm tiêu âm dày 15mm toàn bộ diện tích sàn.\n3. Thiết kế trần thạch cao tiêu âm đục lỗ ẩn sau các ô trang trí vòm.'
+            },
+            {
+                id: 13, col: 'B', row: 5, coord: 'B5', type: 'classic', roomTag: 'BEDROOM',
+                title: 'Phòng Ngủ Trẻ Em Cổ Điển Quá Già Nua So Với Tuổi',
+                short: 'Trẻ nhỏ không thích không gian hoàng gia cứng nhắc',
+                context: 'Trang trí phòng ngủ con cái theo phong cách cổ điển với giường cột chạm trổ khiến trẻ cảm thấy tù túng, không phù hợp tâm lý.',
+                solution: '1. Tiết giảm hoa văn, chỉ giữ lại đường chỉ khung tường tinh tế (Rococo nhẹ).\n2. Phối màu pastel pastel hồng/xanh cô-ban kết hợp dát bạc trang nhã.\n3. Bố trí góc học tập tích hợp ánh sáng chống cận thị.'
+            },
+            {
+                id: 14, col: 'B', row: 6, coord: 'B6', type: 'classic', roomTag: 'REST',
+                title: 'Phòng Đọc Sách/Làm Việc Cổ Điển Bị Thiếu Ánh Sáng',
+                short: 'Đèn bàn cổ điển chao vải không đủ độ sáng làm việc',
+                context: 'Phòng làm việc gia chủ dùng toàn bộ gỗ óc chó tối màu và đèn chao vải màu cam làm mắt rất nhanh mỏi khi đọc tài liệu.',
+                solution: '1. Bổ sung hệ đèn âm trần chiếu điểm (Spotlight) chỉ số hoàn màu CRI > 95.\n2. Thiết kế cửa sổ mở rộng hướng ra sân vườn lấy ánh sáng tự nhiên.\n3. Ghế làm việc bọc da thật chân xoay ẩn dưới vỏ gỗ cổ điển.'
+            },
+            {
+                id: 15, col: 'B', row: 7, coord: 'B7', type: 'classic', roomTag: 'REST',
+                title: 'Phòng Gym/Spa Gia Đình Cổ Điển Bị Ẩm Mốc Vách Gỗ',
+                short: 'Độ ẩm từ phòng xông hơi làm cong vênh gỗ trang trí',
+                context: 'Khu vực Spa/Xông hơi trong nhà 10 phòng ốp gỗ chạm khắc cổ điển bị hơi nước làm bong tróc sơn và mục nát.',
+                solution: '1. Dùng đá Tuyết Sơn hoặc đá Granite chống thấm tuyệt đối cho vách.\n2. Lắp quạt thông gió công nghiệp hút ẩm liên tục.\n3. Thay gỗ tự nhiên bằng chất liệu nhựa giả gỗ Composite cao cấp chịu nước.'
+            },
+            {
+                id: 16, col: 'B', row: 8, coord: 'B8', type: 'classic', roomTag: 'LIVING',
+                title: 'Cầu Thang Đại Sảnh Cổ Điển Chiếm Hết Không Gian',
+                short: 'Cầu thang uốn cong hoành tráng làm hẹp lối đi',
+                context: 'Cầu thang đôi phong cách lâu đài với lan can nhôm đúc đồ xộ chiếm mất 40% diện tích tầng trệt, làm hẹp các phòng chức năng khác.',
+                solution: '1. Thiết kế cầu thang xoắn ốc một vế nếp gấp tinh tế.\n2. Dùng lan can sắt nghệ thuật mạ vàng tay vịn gỗ gụ bo tròn gọn gàng.\n3. Tận dụng gầm cầu thang làm tủ hầm rượu trang trí chiếu sáng LED.'
+            },
+
+            // --- CỘT C (Hàng 1-8: Ô 17 - 24) ---
+            {
+                id: 17, col: 'C', row: 1, coord: 'C1', type: 'classic', roomTag: 'DINING',
+                title: 'Đảo Bếp Cổ Điển Lớn Làm Vướng Luồng Nấu Nướng',
+                short: 'Khoảng cách giữa bếp nấu, chậu rửa và đảo bếp quá xa',
+                context: 'Tam giác bếp (Rửa - Nấu - Tủ lạnh) bị đảo bếp cổ điển bằng đá nặng nề cản trở, người nấu phải di chuyển rất mệt mỏi.',
+                solution: '1. Thu hẹp đảo bếp thành bàn Bar soạn đồ ăn nhẹ gọn gàng.\n2. Bố trí khoảng trống di chuyển giữa các trạm tối thiểu 1.2m.\n3. Mặt đảo bếp dùng đá Quartz nhân tạo chống bám bẩn ố màu.'
+            },
+            {
+                id: 18, col: 'C', row: 2, coord: 'C2', type: 'classic', roomTag: 'LIVING',
+                title: 'Đèn Chùm Cổ Điển Nặng Hàng Trăm Kg Nguy Cơ Rơi Rỡ',
+                short: 'Khó khăn trong thi công kết cấu treo đèn chùm khổng lồ',
+                context: 'Đèn pha lê cổ điển đường kính 2.5m treo ở thông tầng phòng khách có trọng lượng lớn, nguy cơ mất an toàn nếu trần thạch cao yếu.',
+                solution: '1. Gia cố ty treo bằng khung thép chịu lực trực tiếp vào sàn bê tông tầng trên.\n2. Lắp tời điện thu thả tự động để hạ đèn xuống khi vệ sinh/thay bóng.\n3. Dùng bóng LED đui E14 tiết kiệm điện thay cho bóng sợi đốt nóng bức.'
+            },
+            {
+                id: 19, col: 'C', row: 3, coord: 'C3', type: 'classic', roomTag: 'BEDROOM',
+                title: 'Rèm Cửa 3 Lớp Cổ Điển Bắt Bụi Và Nặng Nề',
+                short: 'Rèm yếm yếm phụng kéo nặng tay và tích tụ dị ứng',
+                context: 'Rèm cửa phòng ngủ cổ điển gồm lớp nhung, lớp gấm và voan có trọng lượng lớn, thanh treo dễ bị cong võng và khó giặt giũ.',
+                solution: '1. Lắp động cơ rèm tự động điều khiển qua Smartphone hoặc giọng nói.\n2. Dùng chất liệu vải Polyester giả gấm cao cấp chống bám bụi.\n3. Bố trí hộp rèm âm trần che toàn bộ hệ thống thanh ray kéo.'
+            },
+            {
+                id: 20, col: 'C', row: 4, coord: 'C4', type: 'classic', roomTag: 'REST',
+                title: 'Phòng Bida/Club Cổ Điển Thiếu Khoảng Chọc Cơ',
+                short: 'Cột giả cổ điển gây cản trở gậy bida khi đánh bóng',
+                context: 'Đặt bàn Bida phăng/Snooker trong phòng giải trí cổ điển nhưng các cột đắp nổi trang trí trên tường làm gậy bida va đập liên tục.',
+                solution: '1. Yêu cầu khoảng trống từ mép bàn bida đến vách tường tối thiểu 1.5m.\n2. Chuyển các chi tiết cột đắp nổi thành tranh vẽ tường hiệu ứng 3D tĩnh.\n3. Đèn thả bàn bida kiểu dáng tân cổ điển ánh sáng dịu chống chói.'
+            },
+            {
+                id: 21, col: 'C', row: 5, coord: 'C5', type: 'classic', roomTag: 'BEDROOM',
+                title: 'Phòng Tắm Master Cổ Điển Bị Trơn Trượt Đá Granite',
+                short: 'Sàn đá bóng kính nguy hiểm khi bắn nước từ bồn tắm',
+                context: 'Phòng tắm gia chủ lát đá Marble bóng lộn tạo vẻ sang trọng nhưng khi xà phòng và nước văng ra gây nguy cơ trượt ngã nghiêm trọng.',
+                solution: '1. Dùng đá Marble xử lý bề mặt khò nhám hoặc xẻ rãnh chống trượt.\n2. Bố trí vách kính tắm đứng cách ly hoàn toàn khu vực khô và ướt.\n3. Lắp hệ thống sưởi sàn âm sàn dải hồng ngoại ấm áp.'
+            },
+            {
+                id: 22, col: 'C', row: 6, coord: 'C6', type: 'classic', roomTag: 'DINING',
+                title: 'Thiết Bị Bếp Hiện Đại Lệch Tông Với Tủ Bếp Cổ Điển',
+                short: 'Lò vi sóng, tủ lạnh Beko hiện đại phá vỡ nét tân cổ',
+                context: 'Các thiết bị gia dụng vỏ inox sáng bóng đặt cạnh tủ gỗ gõ đỏ chạm hoa lá tây nhìn rất thô kệch, mất thẩm mỹ đồng bộ.',
+                solution: '1. Dùng dòng thiết bị âm tủ hoàn toàn (Built-in) có cánh gỗ che bên ngoài.\n2. Chọn các dòng bếp phong cách Vintage cổ điển chuyên biệt.\n3. Tủ lạnh side-by-side bọc vỏ gỗ cùng màu hệ tủ bếp.'
+            },
+            {
+                id: 23, col: 'C', row: 7, coord: 'C7', type: 'classic', roomTag: 'REST',
+                title: 'Sảnh Hành Lang Nối 10 Phòng Như Mê Cung Tối',
+                short: 'Hành lang dài sâu thun thút gây cảm giác hoang vu',
+                context: 'Nhà 10 phòng rộng lớn có hành lang nối dài ốp gỗ trầm, không có cửa sổ tạo cảm giác như hầm mộ cổ đại.',
+                solution: '1. Treo bộ sưu tập tranh sơn dầu phong cảnh có đèn soi tranh (Picture light).\n2. Lát gạch thảm viền Corinthian định hướng bước đi.\n3. Đặt các đôn gỗ tròn trưng bày bình hoa gốm sứ tươi tắn dọc hành lang.'
+            },
+            {
+                id: 24, col: 'C', row: 8, coord: 'C8', type: 'classic', roomTag: 'LIVING',
+                title: 'Chi Phí Thi Công Dát Vàng Cổ Điển Bị Phội Chi Sống',
+                short: 'Chi phí đắp phào chỉ và dát vàng vượt vượt ngân sách',
+                context: 'Chủ nhà hoảng hốt khi chi phí đắp phù điêu thạch cao thủ công và phủ vàng lá 24K đắt gấp 3 lần dự kiến ban đầu.',
+                solution: '1. Thay thế phào thạch cao bằng phào PU đúc sẵn độ nét cao nhẹ và rẻ hơn.\n2. Chỉ dát vàng điểm xuyết ở các góc hoa văn then chốt thay vì dát tràn lan.\n3. Ký hợp đồng trọn gói cố định khối lượng thi công với nhà thầu.'
+            },
+
+            // --- CỘT D (Hàng 1-8: Ô 25 - 32) ---
+            {
+                id: 25, col: 'D', row: 1, coord: 'D1', type: 'classic', roomTag: 'BEDROOM',
+                title: 'Gương Bàn Trang Điểm Đối Diện Giường Ngủ',
+                short: 'Phạm phong thủy cổ điển gây chập chập giấc ngủ',
+                context: 'Bàn trang điểm khung đồng cổ điển đặt đối diện thẳng vào giường ngủ Master khiến gia chủ giật mình khi tỉnh giấc ban đêm.',
+                solution: '1. Đặt bàn trang điểm song song với cạnh giường ngủ.\n2. Thiết kế gương trang điểm dạng cánh gập hai bên ẩn gương khi không dùng.\n3. Bổ sung ánh sáng đèn LED viền gương nhiệt độ màu 4000K để trang điểm chuẩn xác.'
+            },
+            {
+                id: 26, col: 'D', row: 2, coord: 'D2', type: 'classic', roomTag: 'LIVING',
+                title: 'Màu Sơn Tường Cổ Điển Bị Ố Vàng Theo Thời Gian',
+                short: 'Tường sơn nước mạ vàng bị ẩm mốc xỉn màu',
+                context: 'Tường phòng khách dùng sơn hiệu ứng stucco mạ vàng bị thời tiết nóng ẩm miền nhiệt đới làm bong tróc, mốc đen.',
+                solution: '1. Dùng giấy dán tường Ý/Đức phủ lớp Vinyl cao cấp chống nước lau chùi được.\n2. Sơn lót chống thấm 3 lớp trước khi phủ sơn trang trí.\n3. Duy trì độ ẩm phòng dưới 60% bằng hệ thống điều hòa trung tâm VRV.'
+            },
+            {
+                id: 27, col: 'D', row: 3, coord: 'D3', type: 'classic', roomTag: 'DINING',
+                title: 'Âm Thanh Bị Vang Khi Tổ Chức Tiệc Tiệc Lớn',
+                short: 'Tiếng bát đĩa trò chuyện dội lại trong phòng ăn lớn',
+                context: 'Phòng ăn 10 phòng rộng 60m2 lát đá toàn bộ làm tiếng dao nón, bát đĩa va chạm cộng hưởng gây nhức đầu.',
+                solution: '1. Treo rèm vải gấm dày ở các ô cửa sổ xung quanh phòng ăn.\n2. Bố trí các mảng tường ốp gỗ bọc da nhung ở phân khu chính.\n3. Dùng khăn trải bàn bàn ăn bằng vải dệt cao cấp để giảm tiếng va đập.'
+            },
+            {
+                id: 28, col: 'D', row: 4, coord: 'D4', type: 'classic', roomTag: 'BEDROOM',
+                title: 'Đệm Giường Cổ Điển Quá Cao Khó Lên Xuống',
+                short: 'Tổng chiều cao đệm và vai giường vượt quá 75cm',
+                context: 'Giường ngủ cổ điển có vai giường cao kết hợp đệm lò xo 30cm làm người lớn tuổi và trẻ nhỏ rất khó trèo lên xuống.',
+                solution: '1. Khống chế tổng chiều cao từ mặt sàn đến mặt đệm chuẩn 55cm - 60cm.\n2. Dùng đệm Cao su thiên nhiên hoặc lò xo mỏng cao cấp.\n3. Bố trí đôn để chân bọc nỉ đồng bộ ở đuôi giường.'
+            },
+            {
+                id: 29, col: 'D', row: 5, coord: 'D5', type: 'classic', roomTag: 'REST',
+                title: 'Phòng Cigar & Wine Lounge Thiếu Hệ Thống Lọc Khói',
+                short: 'Mùi thuốc lá Cì-gà ám nặng sang các phòng ngủ lân cận',
+                context: 'Thiết kế phòng thưởng trà/Cigar riêng biệt trong nhà 10 phòng nhưng khói thuốc luồn qua khe cửa làm hôi cả ngôi nhà.',
+                solution: '1. Thi công hệ thống áp suất âm (Negative Pressure) cho riêng phòng Cigar.\n2. Lắp máy lọc không khí tầng than hoạt tính công nghiệp.\n3. Dùng cửa gạt tự động có doăng cao su cách áp kín tuyệt đối.'
+            },
+            {
+                id: 30, col: 'D', row: 6, coord: 'D6', type: 'classic', roomTag: 'REST',
+                title: 'Thiếu Sự Linh Hoạt Khi Muốn Thay Đổi Nội Thất',
+                short: 'Nội thất cổ điển gắn chết vào kết cấu tường trần',
+                context: 'Các mảng ốp gỗ, phào chỉ đóng cố định làm gia chủ muốn thay đổi bố trí lại phòng sau vài năm là điều gần như không thể.',
+                solution: '1. Sử dụng hệ panel ốp tường mô-đun tháo lắp linh hoạt.\n2. Ưu tiên đồ nội thất rời (Freestanding) có tính cơ động cao.\n3. Giữ nền tường màu trung tính để dễ phối lại màu đồ gỗ.'
+            },
+            {
+                id: 31, col: 'D', row: 7, coord: 'D7', type: 'classic', roomTag: 'LIVING',
+                title: 'Đèn Trang Trí Cổ Điển Tiêu Tốn Quá Nhiều Điện Năng',
+                short: 'Hàng trăm bóng đèn trang trí tỏa nhiệt làm tốn điện',
+                context: 'Một căn biệt thự 10 phòng cổ điển mở hết hệ thống đèn trang trí tiêu tốn hàng ngàn W điện mỗi giờ và làm phòng nóng lên.',
+                solution: '1. Thay toàn bộ bóng đốt sang bóng LED Filament giả cổ tiết kiệm 85% điện.\n2. Chia kịch bản chiếu sáng Smart Home (Đón khách, Thư giãn, Ban đêm).\n3. Lắp cảm biến chuyển động tự tắt đèn ở các khu vực hành lang.'
+            },
+            {
+                id: 32, col: 'D', row: 8, coord: 'D8', type: 'classic', roomTag: 'BEDROOM',
+                title: 'Phòng Thay Đồ Master Thiếu Thông Giống Bảo Quản Đồ Da',
+                short: 'Túi xách Hermes, áo lông thú bị mốc do thiếu khí',
+                context: 'Phòng thay đồ cổ điển làm bằng gỗ tự nhiên kín khép góc bị tích tụ độ ẩm khiến các đồ hiệu đắt tiền bị mốc hỏng.',
+                solution: '1. Lắp tủ chăm sóc quần áo thông minh (Styler) âm tường.\n2. Cài đặt hệ thống cấp gió tươi và hút ẩm tự động 24/7 duy trì 50% humidity.\n3. Dùng mặt cánh tủ bằng kính hút chân không bảo vệ đồ hiệu.'
+            },
+
+            // ==================== TÂN CỔ ĐIỂN & HIỆN ĐẠI (CỘT E - H: Ô 33 - 64) ====================
+            // --- CỘT E (Hàng 1-8: Ô 33 - 40) ---
+            {
+                id: 33, col: 'E', row: 1, coord: 'E1', type: 'modern', roomTag: 'LIVING',
+                title: 'Không Gian Mở Tối Ưu Ánh Sáng Cho Phòng Khách',
+                short: 'Vách kính Panorama kết nối thiên nhiên thoáng đãng',
+                context: 'Phong cách Tân Hiện Đại giải phóng các bức tường gạch dày, thay bằng vách kính vòm nhẹ nhàng đón trọn ánh sáng mặt trời.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Dùng kính Low-E cản tia UV và cản nhiệt hiệu quả.\n2. Bố trí sofa cong chất liệu Bouclé màu kem ôm lấy tầm nhìn sân vườn.\n3. Lắp rèm âm trần điều khiển tự động 2 lớp thông minh.'
+            },
+            {
+                id: 34, col: 'E', row: 2, coord: 'E2', type: 'modern', roomTag: 'DINING',
+                title: 'Bếp Tân Hiện Đại Kết Nối Đảo Bếp Đá Sintered Stone',
+                short: 'Mặt đá nung kết chống xước, chống thấm hóa chất tuyệt đối',
+                context: 'Đảo bếp kết hợp bàn ăn phong cách hiện đại giúp việc nội trợ trở nên thanh lịch, dễ dàng lau chùi dọn dẹp chỉ trong 5 phút.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Chọn đá nung kết (Sintered Stone) chịu nhiệt độ trực tiếp 1000 độ C.\n2. Tích hợp bếp từ âm sàn mặt đá và ổ cắm nâng hạ thông minh.\n3. Bố trí ghế Bar chân mạ mờ tinh tế cho bữa sáng nhanh.'
+            },
+            {
+                id: 35, col: 'E', row: 3, coord: 'E3', type: 'modern', roomTag: 'BEDROOM',
+                title: 'Phòng Ngủ Master Smart-Bed Nâng Hạ Lưng Thư Giãn',
+                short: 'Giường công nghệ kết hợp đường chỉ tân cổ nhẹ nhàng',
+                context: 'Sự kết hợp hoàn hảo giữa vách ốp nỉ tân cổ điển sang trọng và hệ khung giường điều khiển thông minh giúp gia chủ ngủ ngon giấc.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Giường điều chỉnh góc nâng chân và lưng chống đau mỏi cột sống.\n2. Tích hợp loa Bluetooth âm tường phát nhạc sóng não alpha trước khi ngủ.\n3. Công tắc kịch bản "Chờ ngủ" tắt toàn bộ đèn chỉ giữ lại LED chân tường.'
+            },
+            {
+                id: 36, col: 'E', row: 4, coord: 'E4', type: 'modern', roomTag: 'REST',
+                title: 'Phòng Chiếu Phim Gia Đình Chuẩn Dolby Atmos',
+                short: 'Vách ốp gỗ Akupanel kết hợp nỉ hiện đại thẩm mỹ cao',
+                context: 'Phòng giải trí tân hiện đại vừa đảm bảo thẩm mỹ đẳng cấp với nẹp inox mạ PVD vừa đạt tiêu chuẩn âm thanh phòng chiếu phim 4K.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Sử dụng tấm vách tiêu âm Akupanel vân gỗ sồi tự nhiên bọc nỉ.\n2. Ghế sofa Recliner bọc da bò Ý có chế độ massage không trọng lực.\n3. Máy chiếu laser chiếu ngắn 150 inch độ phân giải siêu nét.'
+            },
+            {
+                id: 37, col: 'E', row: 5, coord: 'E5', type: 'modern', roomTag: 'BEDROOM',
+                title: 'Phòng Ngủ Con Cá Tính Với Nội Thất Đa Năng',
+                short: 'Giường tầng tích hợp bàn học và tủ quần áo trượt',
+                context: 'Tối ưu diện tích phòng ngủ nhỏ trong nhà 10 phòng theo kiểu tân hiện đại tươi sáng, giúp trẻ thỏa sức sáng tạo.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Dùng gỗ công nghiệp An Cường chuẩn E1 chống độc hại tuyệt đối.\n2. Thiết kế bo tròn tất cả các góc cạnh bàn ghế tránh va chạm cho trẻ.\n3. Tường sơn đẻ lau chùi xóa vết bẩn màu phấn sinh động.'
+            },
+            {
+                id: 38, col: 'E', row: 6, coord: 'E6', type: 'modern', roomTag: 'REST',
+                title: 'Phòng Thờ Tân Cổ Điển Nhẹ Nhàng Bằng Gỗ Óc Chó',
+                short: 'Trang nghiêm mà không nặng nề U tối',
+                context: 'Thiết kế phòng thờ tân cổ hiện đại dùng gỗ Óc Chó (Walnut) với đường nét tối giản, hoa văn sen đúc tinh xảo tạo cảm giác ấm áp.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Bàn thờ treo hoặc vách thờ nhị cấp có vách CNC chắn khói hiện đại.\n2. Đèn trần hình vuông gỗ ánh sáng ấm 3000K tỏa đều dịu nhẹ.\n3. Bố trí vách ngăn đôi ngăn cách không gian thờ với hành lang ngoài.'
+            },
+            {
+                id: 39, col: 'E', row: 7, coord: 'E7', type: 'modern', roomTag: 'REST',
+                title: 'Phòng Tập Gym & Yoga Tráng Gương Khung Đèn LED',
+                short: 'Sàn cao su EPDM giảm chấn va đập hiệu quả',
+                context: 'Phòng tập thể thao tại gia tràn ngập năng lượng với hệ tường gương vô cực chiếu sáng LED tân hiện đại khơi gợi cảm hứng.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Lát sàn cao su EPDM chuyên dụng chống trơn và cách âm tầng dưới.\n2. Lắp quạt trần không cánh đối lưu không khí liên tục.\n3. Hệ thống loa âm trần Bose đa vùng tiếp năng lượng tập luyện.'
+            },
+            {
+                id: 40, col: 'E', row: 8, coord: 'E8', type: 'modern', roomTag: 'LIVING',
+                title: 'Sảnh Đón Thông Tầng Với Đèn Thả Nghệ Thuật Dynamic',
+                short: 'Ấn tượng thị giác mạnh mẽ ngay từ bước chân đầu tiên',
+                context: 'Sảnh thông tầng 10 phòng phong cách tân hiện đại trang trí hệ đèn thả thủy tinh thổi thủ công có thể điều chỉnh độ cao linh hoạt.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Dùng đá Lát nền thảm hoa văn cắt CNC kỹ thuật số chuẩn xác.\n2. Bố trí chậu cây cảnh đại thụ trong nhà (Cây Bàng Đài Loan/Kim Ngân).\n3. Tường ốp đá xuyên sáng Onyx tự nhiên tạo điểm nhấn rực rỡ ban đêm.'
+            },
+
+            // --- CỘT F (Hàng 1-8: Ô 41 - 48) ---
+            {
+                id: 41, col: 'F', row: 1, coord: 'F1', type: 'modern', roomTag: 'DINING',
+                title: 'Tủ Rượu Kính Kịch Trần Đèn LED Cảm Ứng Chuyển Động',
+                short: 'Điểm nhấn thời thượng nối liền phòng khách và phòng ăn',
+                context: 'Tủ rượu hiện đại cánh kính viền nhôm Anode đen mờ giúp khoe trọn những chai rượu đắt giá mà không bị bám bụi bẩn.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Dùng kính xám khói hoặc kính trà chống tia UV làm hỏng chất lượng rượu.\n2. Đèn LED thanh hắt dải nhiệt độ màu 3500K tôn vẻ đẹp pha lê.\n3. Khóa từ thông minh bảo vệ các chai rượu quý hiếm.'
+            },
+            {
+                id: 42, col: 'F', row: 2, coord: 'F2', type: 'modern', roomTag: 'BEDROOM',
+                title: 'Phòng Tắm Master Kính Điện Thông Minh Đổi Màu',
+                short: 'Chuyển đổi trong suốt sang mờ đục chỉ bằng 1 nút chạm',
+                context: 'Vách kính vòi sen phòng tắm Master hiện đại tạo cảm giác không gian rộng mở nhưng vẫn bảo đảm riêng tư tuyệt đối khi cần.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Lắp vách kính chuyển đổi trạng thái Switchable Smart Glass.\n2. Bồn tắm nằm góc đúc thạch anh liền khối massage thủy lực.\n3. Thiết bị vệ sinh mạ đen mờ Matte Black chống bám vôi nước.'
+            },
+            {
+                id: 43, col: 'F', row: 3, coord: 'F3', type: 'modern', roomTag: 'REST',
+                title: 'Ban Công Thư Giãn Biến Thành Vườn Treo Babylon',
+                short: 'Hệ cây xanh tưới tự động kết nối phòng nghỉ ngơi',
+                context: 'Khu vực ban công nối liền phòng thư giãn được biến thành ốc đảo xanh với bộ bàn ghế mây nhựa khung nhôm chịu thời tiết tốt.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Lắp hệ thống tưới nhỏ giọt hẹn giờ tự động qua Wifi.\n2. Sàn vỉ gỗ nhựa Composite ngoài trời không cong vênh mối mọt.\n3. Đèn nấm trang trí năng lượng mặt trời tiết kiệm điện.'
+            },
+            {
+                id: 44, col: 'F', row: 4, coord: 'F4', type: 'modern', roomTag: 'LIVING',
+                title: 'Hệ Thống Điều Hòa Âm Trần Nối Ống Gió Thẩm Mỹ',
+                short: 'Ẩn hoàn toàn dàn lạnh sau phào chỉ tân cổ hiện đại',
+                context: 'Không còn những chiếc điều hòa treo tường thô kệch, không gian 10 phòng sử dụng cửa gió sơn tĩnh điện tiệp màu tường trần.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Chọn cửa gió vạt mép Liner dài thẩm mỹ hiện đại.\n2. Tích hợp bộ lọc không khí Nanoe-X diệt khuẩn chống bụi mịn PM2.5.\n3. Cảm biến nhiệt độ 3D điều hướng luồng gió tránh thổi trực tiếp vào người.'
+            },
+            {
+                id: 45, col: 'F', row: 5, coord: 'F5', type: 'modern', roomTag: 'BEDROOM',
+                title: 'Phòng Thay Đồ Kính Trong Suốt Hiện Đại (Glass Closet)',
+                short: 'Trải nghiệm như mua sắm tại Boutique xa xỉ',
+                context: 'Phòng thay đồ Tân Hiện Đại sử dụng hệ tủ kính hệ nhôm Slim nhập khẩu, tôn vinh bộ sưu tập thời trang cao cấp của gia chủ.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Hệ thống chiếu sáng thông minh hắt sáng từng ngăn kéo phụ kiện.\n2. Bàn đảo để trang sức bọc nỉ bọc mặt kính cường lực chống xước.\n3. Tích hợp gương soi toàn thân đèn LED viền định hình.'
+            },
+            {
+                id: 46, col: 'F', row: 6, coord: 'F6', type: 'modern', roomTag: 'DINING',
+                title: 'Bếp Mở Hiện Đại Kết Hợp Máy Hút Mùi Đảo Độc Lập',
+                short: 'Thiết kế thời thượng như nhà hàng 5 sao',
+                context: 'Giải phóng bức tường bếp bí bách, bếp mở kết nối trực tiếp với bàn ăn giúp người nấu vừa làm bếp vừa tương tác với gia đình.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Lắp máy hút mùi đảo trang trí thả trần công suất cực lớn 1400m3/h.\n2. Sử dụng phụ kiện bếp Kesseböhmer nâng hạ thông minh.\n3. Chậu rửa bát đúc liền khối chất liệu đá Granite màu đen xám.'
+            },
+            {
+                id: 47, col: 'F', row: 7, coord: 'F7', type: 'modern', roomTag: 'REST',
+                title: 'Phòng Làm Việc Hiện Đại Công Nghệ Cách Âm Tuyệt Đối',
+                short: 'Tập trung cao độ với vách kính bọc da cách âm 45dB',
+                context: 'Nơi xử lý công việc riêng tư trong nhà 10 phòng được trang bị vách kính double-glazing cách âm tối đa, chống mọi tiếng ồn bên ngoài.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Bàn làm việc nâng hạ độ cao Ergonomic chống đau lưng mỏi cổ.\n2. Rèm cầu vồng điều chỉnh ánh sáng linh hoạt khi họp Online.\n3. Tủ tài liệu mật mã vân tay ẩn sau mảng vách ốp gỗ.'
+            },
+            {
+                id: 48, col: 'F', row: 8, coord: 'F8', type: 'modern', roomTag: 'BEDROOM',
+                title: 'Phòng Ngủ Khách Hiện Đại Tối Giản Tiện Nghi',
+                short: 'Sự thoải mái tối đa như khách sạn cao cấp',
+                context: 'Phòng ngủ khách tân hiện đại ưu tiên sự tối giản nhưng đầy đủ tiện nghi: Bàn làm việc nhỏ, minibar và nhà vệ sinh khép kín.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Tông màu trung tính (Xám ghi - Kem ngọc) tạo cảm giác dễ chịu.\n2. Đệm cao su non êm ái chống sụt nún chấn động.\n3. Ổ cắm USB/Type-C tích hợp ngay hai bên tựa đầu giường.'
+            },
+
+            // --- CỘT G (Hàng 1-8: Ô 49 - 56) ---
+            {
+                id: 49, col: 'G', row: 1, coord: 'G1', type: 'modern', roomTag: 'LIVING',
+                title: 'Tường Ốp Vách Nẹp Inox PVD Vàng Hồng Sang Trọng',
+                short: 'Sự pha trộn tinh tế giữa đường nét hiện đại và ánh kim',
+                context: 'Vách tường sau Sofa phòng khách dùng các tấm ốp gỗ phủ Melamine kết hợp chỉ inox PVD bóng gương tạo hiệu ứng bắt mắt.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Dùng inox 304 mạ PVD chống bay màu xỉn ố theo thời gian.\n2. Kết hợp đá Marble đối vân (Bookmatch) ở mảng trung tâm.\n3. Đèn rãnh LED hắt viền tôn lên đường nét hình học sắc sảo.'
+            },
+            {
+                id: 50, col: 'G', row: 2, coord: 'G2', type: 'modern', roomTag: 'DINING',
+                title: 'Bàn Ăn Mặt Đá Cẩm Thạch Chân Nhôm Đúc Nghệ Thuật',
+                short: 'Thiết kế chân bàn vát góc phá cách hiện đại',
+                context: 'Bàn ăn 10 người tân hiện đại mang vẻ đẹp thanh thoát, chân bàn đúc hình khối độc đáo thay thế chân gỗ truyền thống.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Mặt đá phủ lớp Nano chống thấm ố dấm trà cà phê tuyệt đối.\n2. Ghế ăn bọc da Microfiber cao cấp mềm mại như da thật.\n3. Đèn thả hình vòng tròn đồng tâm chiếu sáng tập trung.'
+            },
+            {
+                id: 51, col: 'G', row: 3, coord: 'G3', type: 'modern', roomTag: 'BEDROOM',
+                title: 'Sử Dụng Sàn Gỗ Xương Cá Kỹ Thuật (Engineered Wood)',
+                short: 'Không lo cong vênh co ngót do thời tiết miền Bắc',
+                context: 'Lát sàn phòng ngủ kiểu xương cá Herringbone mang lại vẻ đẹp tân cổ điển sang trọng mà độ bền gấp 3 lần gỗ tự nhiên.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Dùng gỗ Engineered mặt Oak tự nhiên dày 3mm cốt Plywood chịu nước.\n2. Trải lớp xốp tráng bạc lót sàn chống ẩm ốc hơi nước từ lòng đất.\n3. Phủ sơn UV 6 lớp chống trầy xước vật nuôi.'
+            },
+            {
+                id: 52, col: 'G', row: 4, coord: 'G4', type: 'modern', roomTag: 'REST',
+                title: 'Phòng Spa & Sauna Đá Muối Himalaya Tại Gia',
+                short: 'Chăm sóc sức khỏe toàn diện cho cả gia đình',
+                context: 'Phòng thư giãn tích hợp phòng xông hơi khô gỗ Thông Canada nhập khẩu và tường đá muối hồng Himalaya giàu khoáng chất.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Máy xông hơi Harvia Phần Lan điều khiển nhiệt độ chính xác qua App.\n2. Sàn gỗ xẻ rãnh chống đọng nước thoát sàn nhanh chóng.\n3. Hệ thống đèn LED trị liệu sắc màu (Chromotherapy) thư giãn thần kinh.'
+            },
+            {
+                id: 53, col: 'G', row: 5, coord: 'G5', type: 'modern', roomTag: 'LIVING',
+                title: 'Cửa Trượt Bán Tự Động Kính Cường Lực Khung Slim',
+                short: 'Nối liền phòng khách với giếng trời cảnh quan',
+                context: 'Hệ cửa trượt khung nhôm Slim siêu mỏng giúp mở rộng tầm nhìn tối đa ra tiểu cảnh hòn bộ ngoài trời.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Sử dụng thanh ray trượt giảm chấn hai đầu chống kẹp tay.\n2. Kính dán an toàn 2 lớp 10.38mm chống đập vỡ đột nhập.\n3. Lắp cảm biến tự động đóng cửa khi trời mưa.'
+            },
+            {
+                id: 54, col: 'G', row: 6, coord: 'G6', type: 'modern', roomTag: 'BEDROOM',
+                title: 'Tủ Đầu Giường Tích Hợp Sạc Không Dây & Loa Âm',
+                short: 'Công nghệ tiện ích hiện đại ngay tầm tay',
+                context: 'Tab đầu giường tân hiện đại bọc da Ý loại bỏ dây sạc lằng nhằng, gia chỉ chỉ cần đặt điện thoại lên mặt tủ là tự sạc pin.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Tích hợp két sắt khóa vân tay bảo mật ngay khoang dưới tab.\n2. Đèn ngủ cảm ứng vẫy tay điều chỉnh độ sáng 3 cấp độ.\n3. Chất liệu gỗ bọc da công nghiệp phủ chống xước.'
+            },
+            {
+                id: 55, col: 'G', row: 7, coord: 'G7', type: 'modern', roomTag: 'DINING',
+                title: 'Thùng Rác Tự Động Phân Loại Âm Tủ Bếp Smart',
+                short: 'Giữ căn bếp 10 phòng luôn thơm tho không mùi',
+                context: 'Hệ thống rác thải bếp hiện đại tự động đóng mở khi đưa tay lại gần, phân loại rác hữu cơ và vô cơ khép kín.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Tích hợp bộ khử trùng tia UV diệt vi khuẩn trong hộc rác.\n2. Ray trượt mở toàn phần chịu tải trọng 30kg mượt mà.\n3. Vỏ thùng inox 304 không gỉ dễ tháo rời cọ rửa.'
+            },
+            {
+                id: 56, col: 'G', row: 8, coord: 'G8', type: 'modern', roomTag: 'REST',
+                title: 'Sảnh Cầu Thang Kính Tay Vịn Gỗ Bo Cong Hiện Đại',
+                short: 'Thanh thoát nâng tầm vẻ đẹp kiến trúc không gian',
+                context: 'Thay thế các trụ cầu thang gỗ nặng nề bằng kính cường lực 12mm trong suốt giúp ngôi nhà 10 phòng ngập tràn ánh sáng.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Dùng chân báng inox 304 bắt hông cầu thang để tối ưu chiều rộng bậc.\n2. Đèn LED âm từng bậc thang tự động sáng khi có bước chân đi lên.\n3. Tay vịn gỗ Óc Chó bo tròn mềm mại chuẩn nhân trắc học.'
+            },
+
+            // --- CỘT H (Hàng 1-8: Ô 57 - 64) ---
+            {
+                id: 57, col: 'H', row: 1, coord: 'H1', type: 'modern', roomTag: 'LIVING',
+                title: 'Hệ Thống Nhà Thông Minh (Smart Home) Toàn Cầu',
+                short: 'Điều khiển 10 phòng chỉ qua 1 màn hình cảm ứng',
+                context: 'Kiểm soát toàn bộ hệ thống chiếu sáng, điều hòa, rèm cửa, âm thanh đa vùng của 10 phòng qua điện thoại hoặc giọng nói.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Dùng chuẩn kết nối không dây Zigbee/KNX độ ổn định cao.\n2. Phân quyền truy cập điều khiển riêng cho từng thành viên gia đình.\n3. Kịch bản "Rời nhà" tự đóng rèm, tắt điện, bật báo động chống trộm.'
+            },
+            {
+                id: 58, col: 'H', row: 2, coord: 'H2', type: 'modern', roomTag: 'DINING',
+                title: 'Hệ Cấp Giớ Tươi & Lọc Bụi Trung Tâm Cho Phòng Ăn',
+                short: 'Không khí luôn tươi mới như ở nghỉ dưỡng cao cấp',
+                context: 'Giúp không khí phòng ăn luôn giàu O2, loại bỏ hoàn toàn mùi thức ăn thừa vướng lại sau các bữa tiệc đông người.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Dùng máy cấp gió tươi thu hồi nhiệt ERV tiết kiệm điện.\n2. Hệ thống màng lọc HEPA cấp H13 lọc sạch 99.97% hạt bụi.\n3. Độ ồn vận hành siêu êm dưới 30dB không gây ảnh hưởng.'
+            },
+            {
+                id: 59, col: 'H', row: 3, coord: 'H3', type: 'modern', roomTag: 'BEDROOM',
+                title: 'Phòng Ngủ Master Sơn Hiệu Ứng Bê Tông Tân Cổ',
+                short: 'Vẻ đẹp mộc mạc thời thượng đầy cá tính',
+                context: 'Sự kết hợp giữa bức tường sơn hiệu ứng bê tông xám nhạt hiện đại với đường phào chỉ thạch cao màu kem tạo diện mạo cuốn hút.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Sơn phủ lớp Wax bảo vệ chống bám bẩn và chống nước.\n2. Phối cùng đồ nội thất chất liệu đồng thau và da màu bò ấm.\n3. Ánh sáng đèn LED hắt góc chân tường tạo chiều sâu.'
+            },
+            {
+                id: 60, col: 'H', row: 4, coord: 'H4', type: 'modern', roomTag: 'REST',
+                title: 'Phòng Trưng Bày Bán Đồ Đồng Hồ & Mô Hình Hobbist',
+                short: 'Không gian đam mê xa xỉ của chủ nhân',
+                context: 'Thiết kế tủ trưng bày kính chống đạn kết hợp khóa vân tay và hệ thống xoay đồng hồ tự động (Watch Winder) âm tường.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Kính siêu trong Ultra-clear glass độ xuyên sáng 99% không biến màu.\n2. Đèn chiếu điểm LED không tỏa nhiệt UV tránh hỏng chất liệu da.\n3. Tích hợp két sắt chống cháy tiêu chuẩn quốc tế.'
+            },
+            {
+                id: 51, col: 'H', row: 5, coord: 'H5', type: 'modern', roomTag: 'BEDROOM',
+                title: 'Sử Dụng Công Nghệ Khóa Cửa Khuôn Mặt 3D Face-ID',
+                short: 'An ninh tuyệt đối cho các phòng riêng tư',
+                context: 'Bảo vệ phòng ngủ Master và phòng làm việc trong nhà 10 phòng bằng khóa cửa thông minh nhận diện khuôn mặt chống làm giả.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Khóa tích hợp camera chuông cửa quan sát người gọi qua Smartphone.\n2. Thân khóa tự động khóa chốt khi khép cửa.\n3. Cảnh báo cạy khóa trực tiếp về trung tâm điều khiển.'
+            },
+            {
+                id: 62, col: 'H', row: 6, coord: 'H6', type: 'modern', roomTag: 'DINING',
+                title: 'Máy Rửa Bát Âm Tủ Bán Tự Động Mở Cửa Tự Khô',
+                short: 'Giải phóng sức lao động hoàn hảo cho nữ chủ nhân',
+                context: 'Căn bếp hiện đại trang bị máy rửa bát 16 bộ sấy khí nóng Zeolith giúp bát đĩa khô ráo diệt khuẩn 99.9%.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Ốp cánh gỗ đồng bộ với toàn bộ hệ tủ bếp xung quanh.\n2. Bố trí máy rửa bát ngay cạnh chậu rửa để dọn đồ dễ dàng.\n3. Dùng muối làm mềm nước chống đóng cặn vôi thiết bị.'
+            },
+            {
+                id: 63, col: 'H', row: 7, coord: 'H7', type: 'modern', roomTag: 'REST',
+                title: 'Thảm Trải Sàn Sợi Bamboo Lụa Tân Hiện Đại',
+                short: 'Cảm giác êm ái tự nhiên thân thiện môi trường',
+                context: 'Thảm trải sàn khu vực Sofa phòng khách dệt từ sợi tre tự nhiên mềm mịn như lụa, không tích điện và không rụng lông.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Chọn thảm có lớp đế cao su Latex chống trượt xô lệch.\n2. Họa tiết hình học trừu tượng phối màu kem xám tinh tế.\n3. Dễ dàng vệ sinh bằng máy hút bụi định kỳ.'
+            },
+            {
+                id: 64, col: 'H', row: 8, coord: 'H8', type: 'modern', roomTag: 'LIVING',
+                title: 'Quạt Trần Không Cánh Tích Hợp Đèn LED Mạ PVD',
+                short: 'Giải pháp làm mát êm ái thẩm mỹ đỉnh cao',
+                context: 'Sự kết hợp hoàn hảo giữa thiết bị làm mát và đèn trang trí phòng khách tân hiện đại, không sợ va chạm nguy hiểm.',
+                solution: 'TRÁNH RỦI RO & BÀI TRÍ:\n1. Động cơ DC Inverter vận hành siêu êm ái tiết kiệm điện.\n2. Đổi 3 màu ánh sáng đèn (Trắng - Trung tính - Vàng) linh hoạt.\n3. Đảo chiều quay quạt hút ẩm vào mùa nồm ẩm miền Bắc.'
+            }
+        ];
+
+        // Global State
+        let currentView = 'grid';
+        let filteredData = [...designData];
+
+        // Initial setup on load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChessboard();
+            renderListView();
+
+            // Modal ESC listener
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeModal();
+            });
+
+            // Backdrop click listener
+            document.getElementById('detailModal').addEventListener('click', (e) => {
+                if (e.target.id === 'detailModal') closeModal();
+            });
+        });
+
+        // Render 8x8 Chessboard Grid
+        function renderChessboard() {
+            const grid = document.getElementById('chessboardGrid');
+            grid.innerHTML = '';
+
+            for (let index = 0; index < 64; index++) {
+                const item = designData[index];
+                const row = Math.floor(index / 8);
+                const col = index % 8;
+                const isEvenCell = (row + col) % 2 === 0;
+                const isClassic = item.type === 'classic';
+
+                let bgClass = '';
+                if (isClassic) {
+                    bgClass = isEvenCell ? 'cell-classic-light text-purple-100' : 'cell-classic-dark text-purple-200';
+                } else {
+                    bgClass = isEvenCell ? 'cell-modern-light text-emerald-100' : 'cell-modern-dark text-emerald-200';
+                }
+
+                const numStr = item.id < 10 ? `0${item.id}` : `${item.id}`;
+
+                const cell = document.createElement('div');
+                cell.className = `${bgClass} p-2 rounded-xl border border-slate-800/60 cursor-pointer transition-all duration-200 flex flex-col justify-between relative group overflow-hidden select-none min-h-[75px] sm:min-h-[95px]`;
+                cell.setAttribute('onclick', `openModal(${item.id})`);
+                cell.setAttribute('data-id', item.id);
+
+                cell.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] sm:text-xs font-black px-1.5 py-0.2 rounded ${
+                            isClassic ? 'bg-purple-500/30 text-purple-300 border border-purple-400/30' : 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/30'
+                        }">
+                            ${item.coord} (${numStr})
+                        </span>
+                        <i class="fa-solid ${isClassic ? 'fa-crown text-purple-400/40 group-hover:text-amber-400' : 'fa-gem text-emerald-400/40 group-hover:text-emerald-300'} text-xs transition-colors"></i>
+                    </div>
+                    
+                    <div class="my-0.5">
+                        <h4 class="text-xs font-bold line-clamp-2 leading-tight group-hover:text-amber-300 transition-colors">
+                            ${item.title}
+                        </h4>
+                    </div>
+
+                    <div class="text-[9px] text-slate-400 dark:text-slate-400 text-slate-500 line-clamp-1 italic">
+                        ${isClassic ? 'Cổ điển • Khó khăn' : 'Tân hiện đại • Ưu điểm'}
+                    </div>
+
+                    <div class="absolute bottom-0 left-0 right-0 h-0.5 ${isClassic ? 'bg-purple-400/0 group-hover:bg-amber-400' : 'bg-emerald-400/0 group-hover:bg-emerald-400'} transition-all"></div>
+                `;
+
+                grid.appendChild(cell);
+            }
+        }
+
+        // Render List View
+        function renderListView() {
+            const classicList = document.getElementById('classicList');
+            const modernList = document.getElementById('modernList');
+
+            classicList.innerHTML = '';
+            modernList.innerHTML = '';
+
+            filteredData.forEach(item => {
+                const isClassic = item.type === 'classic';
+
+                const card = document.createElement('div');
+                card.className = `p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
+                    isClassic 
+                        ? 'bg-slate-800/60 border-purple-900/40 hover:bg-purple-950/40 hover:border-purple-500/50' 
+                        : 'bg-slate-800/60 border-emerald-900/40 hover:bg-emerald-950/40 hover:border-emerald-500/50'
+                }`;
+                card.setAttribute('onclick', `openModal(${item.id})`);
+
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3 pr-2">
+                        <span class="w-8 h-8 rounded-lg text-xs font-black flex items-center justify-center shrink-0 ${
+                            isClassic ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                        }">
+                            ${item.coord}
+                        </span>
+                        <div>
+                            <h4 class="text-xs sm:text-sm font-bold text-slate-100 dark:text-slate-100 text-slate-900 hover:text-amber-400 transition-colors">${item.title}</h4>
+                            <p class="text-[11px] text-slate-400 line-clamp-1">${item.short}</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-500 shrink-0"></i>
+                `;
+
+                if (isClassic) {
+                    classicList.appendChild(card);
+                } else {
+                    modernList.appendChild(card);
+                }
+            });
+
+            if (classicList.children.length === 0) {
+                classicList.innerHTML = '<p class="text-xs text-slate-500 italic p-2">Không tìm thấy nội dung Cổ điển phù hợp.</p>';
+            }
+            if (modernList.children.length === 0) {
+                modernList.innerHTML = '<p class="text-xs text-slate-500 italic p-2">Không tìm thấy nội dung Tân Hiện Đại phù hợp.</p>';
+            }
+        }
+
+        // Open Modal Dialog
+        function openModal(id) {
+            const item = designData.find(x => x.id === id);
+            if (!item) return;
+
+            const isClassic = item.type === 'classic';
+            const modal = document.getElementById('detailModal');
+            const modalContent = document.getElementById('modalContent');
+
+            document.getElementById('modalCoord').innerText = `${item.coord} (Ô ${item.id < 10 ? '0' + item.id : item.id})`;
+            document.getElementById('modalCoord').className = `px-2.5 py-1 rounded-lg text-xs font-black tracking-wider shrink-0 shadow ${
+                isClassic ? 'bg-purple-500 text-slate-950' : 'bg-emerald-500 text-slate-950'
+            }`;
+
+            // Room Category Title Tag Mapping
+            const roomNames = {
+                'LIVING': 'KHU VỰC TIẾP KHÁCH / SẢNH CHÍNH',
+                'DINING': 'KHU VỰC PHÒNG ĂN & BẾP NẤU',
+                'BEDROOM': 'KHU VỰC PHÒNG NGỦ & NGHỈ NƠI',
+                'REST': 'KHU VỰC THƯ GIÃN / CỦA/ THỜ TỰ'
+            };
+
+            document.getElementById('modalCategory').innerText = `${isClassic ? 'CỔ ĐIỂM TRUYỀN THỐNG' : 'TÂN CỔ ĐIỂN & HIỆN ĐẠI'} - ${roomNames[item.roomTag] || 'NHÀ 10 PHÒNG'}`;
+            document.getElementById('modalCategory').className = `text-xs font-bold uppercase tracking-wider block ${
+                isClassic ? 'text-purple-400' : 'text-emerald-400'
+            }`;
+
+            document.getElementById('modalTitle').innerText = item.title;
+
+            // Section 1 Box Setup
+            document.getElementById('modalSec1Bg').className = `p-4 rounded-xl border ${
+                isClassic 
+                    ? 'bg-purple-950/30 border-purple-800/40 text-purple-200' 
+                    : 'bg-emerald-950/30 border-emerald-800/40 text-emerald-200'
+            }`;
+            document.getElementById('modalSec1Header').innerText = isClassic 
+                ? 'KHÓ KHĂN & PHÂN TÍCH BỐI CẢNH KIẾN TRÚC' 
+                : 'THUẬN LỢI & ƯU ĐIỂM NỔI BẬT';
+            document.getElementById('modalSec1Header').className = `text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2 ${
+                isClassic ? 'text-purple-300' : 'text-emerald-300'
+            }`;
+            document.getElementById('modalContext').innerText = item.context;
+
+            // Section 2 Box Setup
+            document.getElementById('modalSec2Bg').className = `p-4 rounded-xl border ${
+                isClassic 
+                    ? 'bg-slate-800/50 border-amber-500/30 text-slate-200' 
+                    : 'bg-slate-800/50 border-emerald-500/30 text-slate-200'
+            }`;
+            document.getElementById('modalSec2Header').innerText = isClassic 
+                ? 'GIẢI PHÁP THI CÔNG & BÀI TRÍ XỬ LÝ KHÓ KHĂN' 
+                : 'CÁCH TRÁNH RỦI RO & BÀI TRÍ TỐI ƯU KHÔNG GIAN';
+            document.getElementById('modalSec2Header').className = `text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2 ${
+                isClassic ? 'text-amber-400' : 'text-emerald-400'
+            }`;
+            document.getElementById('modalSolution').innerText = item.solution;
+
+            // Show Modal
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        // Close Modal
+        function closeModal() {
+            const modal = document.getElementById('detailModal');
+            const modalContent = document.getElementById('modalContent');
+
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        // Switch View Mode (Grid vs List)
+        function switchView(view) {
+            currentView = view;
+            const gridContainer = document.getElementById('chessboardContainer');
+            const listContainer = document.getElementById('listViewContainer');
+            const btnGrid = document.getElementById('btnGridView');
+            const btnList = document.getElementById('btnListView');
+
+            if (view === 'grid') {
+                gridContainer.classList.remove('hidden');
+                listContainer.classList.add('hidden');
+
+                btnGrid.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-500 text-slate-950 shadow-sm flex items-center gap-1';
+                btnList.className = 'px-2.5 py-1 rounded-md text-xs font-semibold text-slate-300 dark:text-slate-300 text-slate-700 hover:text-white flex items-center gap-1';
+            } else {
+                gridContainer.classList.add('hidden');
+                listContainer.classList.remove('hidden');
+
+                btnList.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-500 text-slate-950 shadow-sm flex items-center gap-1';
+                btnGrid.className = 'px-2.5 py-1 rounded-md text-xs font-semibold text-slate-300 dark:text-slate-300 text-slate-700 hover:text-white flex items-center gap-1';
+            }
+        }
+
+        // Filter and Search Logic
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const roomVal = document.getElementById('roomFilter').value;
+            const clearBtn = document.getElementById('clearSearchBtn');
+
+            if (query.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            filteredData = designData.filter(item => {
+                const matchesQuery = item.title.toLowerCase().includes(query) ||
+                                     item.short.toLowerCase().includes(query) ||
+                                     item.context.toLowerCase().includes(query) ||
+                                     item.solution.toLowerCase().includes(query) ||
+                                     item.coord.toLowerCase().includes(query) ||
+                                     item.id.toString() === query;
+
+                const matchesRoom = (roomVal === 'ALL') || (item.roomTag === roomVal);
+
+                return matchesQuery && matchesRoom;
+            });
+
+            // Dim/Highlight Grid Cells
+            const cells = document.querySelectorAll('#chessboardGrid > div');
+            cells.forEach(cell => {
+                const id = parseInt(cell.getAttribute('data-id'));
+                const matches = filteredData.some(x => x.id === id);
+
+                if (query === '' && roomVal === 'ALL') {
+                    cell.style.opacity = '1';
+                    cell.style.filter = 'none';
+                } else if (matches) {
+                    cell.style.opacity = '1';
+                    cell.style.filter = 'drop-shadow(0 0 8px rgba(245, 158, 11, 0.8))';
+                } else {
+                    cell.style.opacity = '0.15';
+                    cell.style.filter = 'grayscale(100%)';
+                }
+            });
+
+            renderListView();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('roomFilter').value = 'ALL';
+            handleSearch();
+        }
+
+        // Font Size Scaling
+        function changeFontSize(scale) {
+            const bodyText = document.getElementById('modalBodyText');
+            if (scale === 'sm') {
+                bodyText.className = 'p-4 sm:p-6 overflow-y-auto space-y-4 text-scale-sm leading-relaxed';
+            } else if (scale === 'md') {
+                bodyText.className = 'p-4 sm:p-6 overflow-y-auto space-y-4 text-scale-md leading-relaxed';
+            } else if (scale === 'lg') {
+                bodyText.className = 'p-4 sm:p-6 overflow-y-auto space-y-4 text-scale-lg leading-relaxed';
+            }
+        }
+
+        // Dark / Light Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.className = 'fa-solid fa-sun text-amber-500';
+            } else {
+                html.classList.add('dark');
+                icon.className = 'fa-solid fa-moon text-amber-400';
+            }
+        }
+    </script>
+</body>
+</html>

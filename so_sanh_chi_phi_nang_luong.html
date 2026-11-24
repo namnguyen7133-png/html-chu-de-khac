@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công Cụ Tính & So Sánh Chi Phí Điện - Than</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        },
+                        amberCustom: '#f59e0b',
+                        emeraldCustom: '#10b981'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for tab content */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between">
+
+    <!-- Header Section -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2.5 bg-sky-500/10 border border-sky-500/30 rounded-xl text-sky-400">
+                    <i data-lucide="zap" class="w-7 h-7"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-sky-400 to-emerald-400 bg-clip-text text-transparent">
+                        So Sánh Chi Phí Năng Lượng
+                    </h1>
+                    <p class="text-xs text-slate-400">Đun Điện Hoàn Toàn vs. Đun Than + Điện Sinh Hoạt</p>
+                </div>
+            </div>
+            
+            <!-- Quick Total Summary Pill -->
+            <div class="flex items-center gap-2 bg-slate-800/90 border border-slate-700/60 rounded-full px-4 py-1.5 text-xs sm:text-sm">
+                <span class="text-slate-400">EVN Bậc 6 hiện hành:</span>
+                <span class="font-semibold text-emerald-400">Biểu giá 6 Bậc (+8% VAT)</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+        
+        <!-- Tab Navigation Buttons -->
+        <div class="flex flex-wrap sm:flex-nowrap gap-2 bg-slate-900 p-1.5 rounded-2xl border border-slate-800 mb-6">
+            <button id="btn-tab1" onclick="switchTab('tab1')" 
+                class="flex-1 min-w-[140px] py-3 px-4 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 bg-sky-600 text-white shadow-lg shadow-sky-600/20">
+                <i data-lucide="zap" class="w-4 h-4"></i>
+                Tab 1: Đun Hoàn Toàn Điện
+            </button>
+            <button id="btn-tab2" onclick="switchTab('tab2')" 
+                class="flex-1 min-w-[140px] py-3 px-4 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60">
+                <i data-lucide="flame" class="w-4 h-4"></i>
+                Tab 2: Đun Than + Điện
+            </button>
+            <button id="btn-tab3" onclick="switchTab('tab3')" 
+                class="flex-1 min-w-[140px] py-3 px-4 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60">
+                <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                Tab 3: Bảng So Sánh Tổng Quan
+            </button>
+        </div>
+
+        <!-- TAB 1 CONTENT: ĐUN HOÀN TOÀN BẰNG ĐIỆN -->
+        <div id="tab1" class="space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Input Controls -->
+                <div class="lg:col-span-1 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-5">
+                    <div class="flex items-center gap-2 text-sky-400 font-semibold border-b border-slate-800 pb-3">
+                        <i data-lucide="sliders" class="w-5 h-5"></i>
+                        <span>Tùy Chỉnh Tiêu Thụ Điện</span>
+                    </div>
+
+                    <!-- Mode Select: Input Money or kWh -->
+                    <div class="space-y-2">
+                        <label class="text-xs text-slate-400 font-medium">Chế Độ Nhập Dữ Liệu</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button id="t1-mode-kwh" onclick="setTab1Mode('kwh')" class="py-2 px-3 text-xs rounded-lg border border-sky-500 bg-sky-500/10 text-sky-300 font-medium">Nhập kWh điện</button>
+                            <button id="t1-mode-money" onclick="setTab1Mode('money')" class="py-2 px-3 text-xs rounded-lg border border-slate-700 bg-slate-800 text-slate-400 font-medium">Nhập Tiền (VNĐ)</button>
+                        </div>
+                    </div>
+
+                    <!-- Input kWh Slider & Text -->
+                    <div id="t1-input-kwh-group" class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs text-slate-300">Tổng Điện Tiêu Thụ / Tháng</label>
+                            <span class="text-lg font-bold text-sky-400"><span id="t1-kwh-display">1000</span> <span class="text-xs text-slate-400">kWh</span></span>
+                        </div>
+                        <input type="range" id="t1-kwh-range" min="50" max="2500" step="10" value="1000" oninput="updateTab1FromKwh(this.value)" class="w-full accent-sky-500 bg-slate-800 rounded-lg h-2 cursor-pointer">
+                        <div class="flex justify-between text-[10px] text-slate-500">
+                            <span>50 kWh</span>
+                            <span>1.000 kWh</span>
+                            <span>2.500 kWh</span>
+                        </div>
+                    </div>
+
+                    <!-- Input Money Slider & Quick Presets -->
+                    <div id="t1-input-money-group" class="space-y-3 hidden">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs text-slate-300">Tiền Điện Mong Muốn (Có VAT)</label>
+                            <span class="text-lg font-bold text-emerald-400"><span id="t1-money-display">3.500.000</span> <span class="text-xs text-slate-400">VNĐ</span></span>
+                        </div>
+                        <input type="range" id="t1-money-range" min="500000" max="6000000" step="50000" value="3500000" oninput="updateTab1FromMoney(this.value)" class="w-full accent-emerald-500 bg-slate-800 rounded-lg h-2 cursor-pointer">
+                        
+                        <!-- Quick buttons for 3tr, 4tr -->
+                        <div class="flex gap-2 pt-1">
+                            <button onclick="setTab1PresetMoney(3000000)" class="flex-1 py-1.5 px-2 text-xs bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 text-slate-300">3 Triệu</button>
+                            <button onclick="setTab1PresetMoney(3500000)" class="flex-1 py-1.5 px-2 text-xs bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 text-slate-300">3.5 Triệu</button>
+                            <button onclick="setTab1PresetMoney(4000000)" class="flex-1 py-1.5 px-2 text-xs bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 text-slate-300">4 Triệu</button>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-slate-950/60 rounded-xl border border-slate-800/80 text-xs text-slate-400 space-y-1">
+                        <p class="flex items-center gap-1.5 text-slate-300 font-medium">
+                            <i data-lucide="info" class="w-4 h-4 text-sky-400"></i> Ghi chú phương án:
+                        </p>
+                        <p>Dùng hoàn toàn điện cho đun nấu (bếp từ, hồng ngoại, ấm siêu tốc) kết hợp thiết bị sinh hoạt làm tổng lượng điện vượt cao chạm mốc Bậc 5 và Bậc 6.</p>
+                    </div>
+                </div>
+
+                <!-- Calculation Summary & EVN Tier Breakdown -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Grand Total Banner -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                            <span class="text-xs text-slate-400 block mb-1">Tổng Số Điện (kWh)</span>
+                            <span id="t1-card-kwh" class="text-2xl font-bold text-sky-400">1.000 kWh</span>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                            <span class="text-xs text-slate-400 block mb-1">Tiền Điện Chưa Thuế</span>
+                            <span id="t1-card-subtotal" class="text-2xl font-bold text-slate-200">3.056.400 đ</span>
+                        </div>
+                        <div class="bg-gradient-to-br from-slate-900 to-sky-950 border border-sky-500/30 p-4 rounded-2xl">
+                            <span class="text-xs text-sky-300 block mb-1">TỔNG CỘNG (+8% VAT)</span>
+                            <span id="t1-card-total" class="text-2xl font-bold text-sky-400">3.300.912 đ</span>
+                        </div>
+                    </div>
+
+                    <!-- EVN Tier Table Detail -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+                        <h3 class="text-sm font-semibold text-slate-200 flex items-center justify-between">
+                            <span>Chi Tiết Phân Phối Biểu Giá Điện 6 Bậc EVN</span>
+                            <span class="text-xs text-slate-400 font-normal">Đơn giá chưa thuế</span>
+                        </h3>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs sm:text-sm">
+                                <thead>
+                                    <tr class="border-b border-slate-800 text-slate-400">
+                                        <th class="pb-2 font-medium">Bậc Đơn Giá</th>
+                                        <th class="pb-2 font-medium">Khung kWh</th>
+                                        <th class="pb-2 font-medium">Đơn Giá</th>
+                                        <th class="pb-2 font-medium">Số kWh Tính</th>
+                                        <th class="pb-2 font-medium text-right">Thành Tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="t1-tier-table" class="divide-y divide-slate-800/50 text-slate-300">
+                                    <!-- Dynamic rows via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2 CONTENT: ĐUN THAN + ĐIỆN SINH HOẠT -->
+        <div id="tab2" class="space-y-6 hidden">
+            <!-- Coal Method Configuration Header -->
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-100 flex items-center gap-2">
+                            <i data-lucide="flame" class="w-5 h-5 text-amber-500"></i>
+                            Tùy Chọn Chế Độ Đun Than & Chi Phí Than/Dầu
+                        </h3>
+                        <p class="text-xs text-slate-400">Chọn chế độ đun để tính toán tổng chi phí nhiên liệu thô</p>
+                    </div>
+
+                    <!-- Mode Toggle -->
+                    <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+                        <button id="t2-mode-continuous" onclick="setCoalMode('continuous')" class="py-2 px-3 rounded-lg font-medium transition-all bg-amber-500/20 text-amber-400 border border-amber-500/40">
+                            🔥 Ủ Than Liên Tục 24/7 (124 viên)
+                        </button>
+                        <button id="t2-mode-intermittent" onclick="setCoalMode('intermittent')" class="py-2 px-3 rounded-lg font-medium transition-all text-slate-400 hover:text-slate-200">
+                            ⚡ 2 Ngày Đun 1 Lần (16 viên)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Price Inputs Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 pt-2 border-t border-slate-800/80 text-xs">
+                    <div>
+                        <label class="text-slate-400 block mb-1">Giá 1 viên than (đ)</label>
+                        <input type="number" id="t2-price-coal" value="5000" onchange="calculateTab2()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-amber-500">
+                    </div>
+                    <div>
+                        <label class="text-slate-400 block mb-1">Giá 1 chai dầu nhóm 1L (đ)</label>
+                        <input type="number" id="t2-price-oil" value="45000" onchange="calculateTab2()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-200 focus:outline-none focus:border-amber-500">
+                    </div>
+                    <div>
+                        <label class="text-slate-400 block mb-1">Số viên than/tháng</label>
+                        <input type="number" id="t2-coal-count" value="124" readonly class="w-full bg-slate-950/60 border border-slate-800 rounded-lg px-3 py-2 text-amber-400 font-semibold">
+                    </div>
+                    <div>
+                        <label class="text-slate-400 block mb-1">Chai dầu nhóm/tháng</label>
+                        <input type="number" id="t2-oil-count" value="1" readonly class="w-full bg-slate-950/60 border border-slate-800 rounded-lg px-3 py-2 text-amber-400 font-semibold">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Electrical Devices Table Header & Table -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                    <h3 class="text-base font-bold text-slate-100 flex items-center gap-2">
+                        <i data-lucide="tv" class="w-5 h-5 text-sky-400"></i>
+                        Danh Sách Thiết Bị Điện Sinh Hoạt Gia Đình
+                    </h3>
+                    <button onclick="addDeviceRow()" class="self-start sm:self-auto py-1.5 px-3 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Thêm Thiết Bị
+                    </button>
+                </div>
+
+                <!-- Devices List Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-slate-400">
+                                <th class="pb-2 font-medium">Tên Thiết Bị</th>
+                                <th class="pb-2 font-medium w-24">Số Lượng</th>
+                                <th class="pb-2 font-medium w-28">Công Suất (W)</th>
+                                <th class="pb-2 font-medium w-32">Giờ Dùng/Ngày</th>
+                                <th class="pb-2 font-medium w-28">kWh / Tháng</th>
+                                <th class="pb-2 font-medium text-right w-16">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="t2-device-table-body" class="divide-y divide-slate-800/60 text-slate-300">
+                            <!-- Dynamic Rows filled by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab 2 Calculation Summaries -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                    <span class="text-xs text-slate-400 block mb-1">Tổng Điện Sinh Hoạt</span>
+                    <span id="t2-sum-kwh" class="text-xl font-bold text-sky-400">0 kWh</span>
+                    <span id="t2-sum-elec-cost" class="text-xs text-slate-400 block mt-1">(Tiền điện: 0 đ)</span>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                    <span class="text-xs text-slate-400 block mb-1">Tiền Than + Dầu Nhóm</span>
+                    <span id="t2-sum-coal-cost" class="text-xl font-bold text-amber-400">665.000 đ</span>
+                    <span id="t2-coal-desc" class="text-xs text-slate-400 block mt-1">124 viên + 1 chai dầu</span>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+                    <span class="text-xs text-slate-400 block mb-1">Bậc Điện Cao Nhất chạm</span>
+                    <span id="t2-max-tier" class="text-xl font-bold text-emerald-400">Bậc 1</span>
+                    <span class="text-xs text-slate-400 block mt-1">Giá điện ưu đãi</span>
+                </div>
+                <div class="bg-gradient-to-br from-slate-900 to-amber-950/40 border border-amber-500/30 p-4 rounded-2xl">
+                    <span class="text-xs text-amber-300 block mb-1">TỔNG CHI PHÍ THÁNG (CẢ 2)</span>
+                    <span id="t2-sum-total" class="text-xl font-bold text-amber-400">0 đ</span>
+                    <span class="text-xs text-slate-400 block mt-1">Điện + Than + Dầu</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3 CONTENT: SO SÁNH TỔNG QUAN & TIẾT KIỆM -->
+        <div id="tab3" class="space-y-6 hidden">
+            <!-- Overall Highlight Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Option 1 Summary Card -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <span class="text-xs font-semibold text-sky-400 flex items-center gap-1.5">
+                            <i data-lucide="zap" class="w-4 h-4"></i> Phương Án 1
+                        </span>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-sky-500/10 text-sky-300 border border-sky-500/20">Đun Điện 100%</span>
+                    </div>
+                    <h4 class="text-sm font-medium text-slate-300">Tổng Chi Phí Hàng Tháng</h4>
+                    <p id="t3-cost-opt1" class="text-2xl font-bold text-sky-400">0 VNĐ</p>
+                    <p id="t3-kwh-opt1" class="text-xs text-slate-400">Tổng điện tiêu thụ: 0 kWh/tháng</p>
+                </div>
+
+                <!-- Option 2 Continuous Coal Card -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <span class="text-xs font-semibold text-amber-500 flex items-center gap-1.5">
+                            <i data-lucide="flame" class="w-4 h-4"></i> Phương Án 2A
+                        </span>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20">Ủ Than 24/7 + Điện</span>
+                    </div>
+                    <h4 class="text-sm font-medium text-slate-300">Tổng Chi Phí Hàng Tháng</h4>
+                    <p id="t3-cost-opt2a" class="text-2xl font-bold text-amber-400">0 VNĐ</p>
+                    <p id="t3-detail-opt2a" class="text-xs text-slate-400">Than: 665k + Điện sinh hoạt</p>
+                </div>
+
+                <!-- Option 2 Intermittent Coal Card -->
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <span class="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i> Phương Án 2B
+                        </span>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">2 Ngày/Lần + Điện</span>
+                    </div>
+                    <h4 class="text-sm font-medium text-slate-300">Tổng Chi Phí Hàng Tháng</h4>
+                    <p id="t3-cost-opt2b" class="text-2xl font-bold text-emerald-400">0 VNĐ</p>
+                    <p id="t3-detail-opt2b" class="text-xs text-slate-400">Than: 215k + Điện sinh hoạt</p>
+                </div>
+            </div>
+
+            <!-- Savings Banner -->
+            <div id="t3-savings-banner" class="bg-gradient-to-r from-emerald-950/60 via-slate-900 to-slate-900 border border-emerald-500/40 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 bg-emerald-500/20 border border-emerald-500/40 rounded-xl text-emerald-400 shrink-0">
+                        <i data-lucide="trending-down" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-100">Khoản Tiết Kiệm Tối Đa Có Thể Đạt Được</h3>
+                        <p id="t3-savings-text" class="text-xs text-slate-300 mt-1">Đang tính toán chênh lệch...</p>
+                    </div>
+                </div>
+                <div class="text-right shrink-0">
+                    <span class="text-xs text-slate-400 block">Tiết kiệm mỗi năm lên tới</span>
+                    <span id="t3-yearly-savings" class="text-2xl font-extrabold text-emerald-400">0 VNĐ</span>
+                </div>
+            </div>
+
+            <!-- Comprehensive Side-by-Side Comparison Table -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+                <h3 class="text-base font-bold text-slate-100">Bảng So Sánh Chi Tiết Chi Phí Hàng Tháng</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-slate-400">
+                                <th class="pb-3 font-medium">Hạng Mục Chi Phí</th>
+                                <th class="pb-3 font-medium text-sky-400">PA 1: Đun Điện 100%</th>
+                                <th class="pb-3 font-medium text-amber-400">PA 2A: Ủ Than 24/7 + Điện</th>
+                                <th class="pb-3 font-medium text-emerald-400">PA 2B: Than 2 Ngày/Lần + Điện</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/60 text-slate-300">
+                            <tr>
+                                <td class="py-3 font-medium">Số điện sinh hoạt (kWh)</td>
+                                <td id="t3-tbl-kwh1" class="py-3">1.000 kWh</td>
+                                <td id="t3-tbl-kwh2a" class="py-3">-- kWh</td>
+                                <td id="t3-tbl-kwh2b" class="py-3">-- kWh</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 font-medium">Tiền điện sinh hoạt (gồm 8% VAT)</td>
+                                <td id="t3-tbl-elec1" class="py-3 text-sky-400 font-semibold">0 đ</td>
+                                <td id="t3-tbl-elec2a" class="py-3">0 đ</td>
+                                <td id="t3-tbl-elec2b" class="py-3">0 đ</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 font-medium">Mức Bậc Điện Cao Nhất Vượt Chạm</td>
+                                <td id="t3-tbl-tier1" class="py-3">Bậc 6</td>
+                                <td id="t3-tbl-tier2a" class="py-3">--</td>
+                                <td id="t3-tbl-tier2b" class="py-3">--</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 font-medium">Chi phí Than & Dầu Nhóm Bếp</td>
+                                <td class="py-3 text-slate-500">0 đ</td>
+                                <td id="t3-tbl-coal2a" class="py-3 text-amber-400">665.000 đ</td>
+                                <td id="t3-tbl-coal2b" class="py-3 text-emerald-400">215.000 đ</td>
+                            </tr>
+                            <tr class="bg-slate-950/40 text-sm font-bold">
+                                <td class="py-3 text-slate-100">TỔNG CỘNG HÀNG THÁNG</td>
+                                <td id="t3-tbl-total1" class="py-3 text-sky-400">0 đ</td>
+                                <td id="t3-tbl-total2a" class="py-3 text-amber-400">0 đ</td>
+                                <td id="t3-tbl-total2b" class="py-3 text-emerald-400">0 đ</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Strategic Conclusion & Recommendations Card -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3 text-xs text-slate-300">
+                <h4 class="text-sm font-bold text-slate-100 flex items-center gap-2">
+                    <i data-lucide="lightbulb" class="w-4 h-4 text-amber-400"></i>
+                    Đánh Giá & Lời Khuyên Tối Ưu Năng Lượng
+                </h4>
+                <ul class="list-disc list-inside space-y-1.5 text-slate-300">
+                    <li><strong class="text-amber-400">Ủ than 24/7 (PA 2A):</strong> Tốn chi phí cố định nhiên liệu than rất cao (665k/tháng), dù không dùng điện đun nấu nhưng lượng nhiệt ủ bị thất thoát lãng phí.</li>
+                    <li><strong class="text-emerald-400">Đun than 2 ngày 1 lần (PA 2B):</strong> Cắt giảm lượng than tối đa (chỉ tốn 16 viên/tháng). Dù phát sinh tiền dầu nhóm bếp (135k) nhưng đây vẫn là phương án tiết kiệm nhiên liệu đun nấu tốt nhất.</li>
+                    <li><strong class="text-sky-400">Đun hoàn toàn bằng điện (PA 1):</strong> Nếu gia đình dùng nhiều thiết bị công suất lớn làm tổng điện vượt qua 200 kWh/tháng, giá điện sẽ bị nhảy vọt sang <strong>Bậc 4 (2.998đ)</strong>, <strong>Bậc 5 (3.350đ)</strong> và <strong>Bậc 6 (3.460đ)</strong> làm hóa đơn tiền điện tăng rất nhanh.</li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-900/60 py-4 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4">
+            Ứng dụng tính toán chi phí năng lượng sinh hoạt gia đình &copy; 2026. Biểu giá điện EVN 6 Bậc lũy tiến hiện hành + Thuế VAT 8%.
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // EVN Tariff Constants (Price per kWh before VAT)
+        const EVN_TIERS = [
+            { tier: 1, min: 0, max: 50, price: 1984, name: "Bậc 1 (0-50 kWh)" },
+            { tier: 2, min: 50, max: 100, price: 2050, name: "Bậc 2 (51-100 kWh)" },
+            { tier: 3, min: 100, max: 200, price: 2380, name: "Bậc 3 (101-200 kWh)" },
+            { tier: 4, min: 200, max: 300, price: 2998, name: "Bậc 4 (201-300 kWh)" },
+            { tier: 5, min: 300, max: 400, price: 3350, name: "Bậc 5 (301-400 kWh)" },
+            { tier: 6, min: 400, max: Infinity, price: 3460, name: "Bậc 6 (> 400 kWh)" }
+        ];
+
+        const VAT_RATE = 0.08;
+
+        // Default Appliance List for Tab 2
+        let defaultDevices = [
+            { name: "Điều hòa 12000 BTU", qty: 1, watts: 1000, hours: 4 },
+            { name: "Máy giặt", qty: 1, watts: 400, hours: 0.5 },
+            { name: "Tủ lạnh 24/24", qty: 1, watts: 120, hours: 24 },
+            { name: "TV thông minh", qty: 1, watts: 100, hours: 3 },
+            { name: "Máy tính bàn / Laptop", qty: 1, watts: 150, hours: 4 },
+            { name: "Sạc điện thoại", qty: 2, watts: 20, hours: 3 },
+            { name: "Đèn tuýp LED / Cầu thang", qty: 4, watts: 20, hours: 5 },
+            { name: "Quạt máy", qty: 2, watts: 55, hours: 8 },
+            { name: "Nồi cơm điện (thỉnh thoảng)", qty: 1, watts: 700, hours: 0.8 },
+            { name: "Ấm siêu tốc (nước pha cà phê)", qty: 1, watts: 1500, hours: 0.2 }
+        ];
+
+        // State variables
+        let currentTab = 'tab1';
+        let tab1Mode = 'kwh'; // 'kwh' or 'money'
+        let tab1Kwh = 1000;
+        let tab1Money = 3500000;
+        
+        let tab2CoalMode = 'continuous'; // 'continuous' (124+1) or 'intermittent' (16+3)
+
+        // Utility: Format currency
+        function formatVNĐ(amount) {
+            return new Intl.NumberFormat('vi-VN').format(Math.round(amount)) + ' đ';
+        }
+
+        // Utility: Calculate EVN Electricity Bill from kWh
+        function calculateEVNBill(kwh) {
+            kwh = Math.max(0, kwh);
+            let totalSubtotal = 0;
+            let breakdown = [];
+            let maxTier = 1;
+
+            let remaining = kwh;
+
+            for (let i = 0; i < EVN_TIERS.length; i++) {
+                let t = EVN_TIERS[i];
+                let tierCapacity = (t.max === Infinity) ? remaining : (t.max - t.min);
+                
+                if (remaining > 0) {
+                    let usedInTier = Math.min(remaining, tierCapacity);
+                    let costInTier = usedInTier * t.price;
+                    totalSubtotal += costInTier;
+                    remaining -= usedInTier;
+                    maxTier = t.tier;
+
+                    breakdown.push({
+                        tier: t.tier,
+                        name: t.name,
+                        price: t.price,
+                        kwh: usedInTier,
+                        cost: costInTier
+                    });
+                } else {
+                    breakdown.push({
+                        tier: t.tier,
+                        name: t.name,
+                        price: t.price,
+                        kwh: 0,
+                        cost: 0
+                    });
+                }
+            }
+
+            let vatAmount = totalSubtotal * VAT_RATE;
+            let grandTotal = totalSubtotal + vatAmount;
+
+            return {
+                kwh: kwh,
+                subtotal: totalSubtotal,
+                vat: vatAmount,
+                total: grandTotal,
+                maxTier: maxTier,
+                breakdown: breakdown
+            };
+        }
+
+        // Reverse Calculate kWh from Target Total Money (with VAT)
+        function reverseCalculateKwhFromMoney(targetMoney) {
+            let targetSubtotal = targetMoney / (1 + VAT_RATE);
+            let accumulatedCost = 0;
+            let accumulatedKwh = 0;
+
+            for (let i = 0; i < EVN_TIERS.length; i++) {
+                let t = EVN_TIERS[i];
+                let tierCapacity = (t.max === Infinity) ? Infinity : (t.max - t.min);
+                let tierMaxCost = tierCapacity * t.price;
+
+                if (targetSubtotal > accumulatedCost + tierMaxCost && t.max !== Infinity) {
+                    accumulatedCost += tierMaxCost;
+                    accumulatedKwh += tierCapacity;
+                } else {
+                    let costNeededInTier = targetSubtotal - accumulatedCost;
+                    let kwhInTier = costNeededInTier / t.price;
+                    accumulatedKwh += kwhInTier;
+                    break;
+                }
+            }
+
+            return Math.round(accumulatedKwh);
+        }
+
+        // Switch Main Tabs
+        function switchTab(tabId) {
+            currentTab = tabId;
+            ['tab1', 'tab2', 'tab3'].forEach(id => {
+                const el = document.getElementById(id);
+                const btn = document.getElementById('btn-' + id);
+                if (id === tabId) {
+                    el.classList.remove('hidden');
+                    btn.className = "flex-1 min-w-[140px] py-3 px-4 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 bg-sky-600 text-white shadow-lg shadow-sky-600/20";
+                } else {
+                    el.classList.add('hidden');
+                    btn.className = "flex-1 min-w-[140px] py-3 px-4 rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-200 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60";
+                }
+            });
+
+            if (tabId === 'tab3') {
+                updateTab3Comparison();
+            }
+        }
+
+        // Set Input Mode for Tab 1
+        function setTab1Mode(mode) {
+            tab1Mode = mode;
+            const btnKwh = document.getElementById('t1-mode-kwh');
+            const btnMoney = document.getElementById('t1-mode-money');
+            const grpKwh = document.getElementById('t1-input-kwh-group');
+            const grpMoney = document.getElementById('t1-input-money-group');
+
+            if (mode === 'kwh') {
+                btnKwh.className = "py-2 px-3 text-xs rounded-lg border border-sky-500 bg-sky-500/10 text-sky-300 font-medium";
+                btnMoney.className = "py-2 px-3 text-xs rounded-lg border border-slate-700 bg-slate-800 text-slate-400 font-medium";
+                grpKwh.classList.remove('hidden');
+                grpMoney.classList.add('hidden');
+            } else {
+                btnMoney.className = "py-2 px-3 text-xs rounded-lg border border-emerald-500 bg-emerald-500/10 text-emerald-300 font-medium";
+                btnKwh.className = "py-2 px-3 text-xs rounded-lg border border-slate-700 bg-slate-800 text-slate-400 font-medium";
+                grpMoney.classList.remove('hidden');
+                grpKwh.classList.add('hidden');
+            }
+            calculateTab1();
+        }
+
+        // Update Tab 1 from Slider kWh
+        function updateTab1FromKwh(val) {
+            tab1Kwh = parseFloat(val);
+            document.getElementById('t1-kwh-display').textContent = new Intl.NumberFormat('vi-VN').format(tab1Kwh);
+            calculateTab1();
+        }
+
+        // Update Tab 1 from Slider Money
+        function updateTab1FromMoney(val) {
+            tab1Money = parseFloat(val);
+            document.getElementById('t1-money-display').textContent = new Intl.NumberFormat('vi-VN').format(tab1Money);
+            tab1Kwh = reverseCalculateKwhFromMoney(tab1Money);
+            document.getElementById('t1-kwh-range').value = tab1Kwh;
+            document.getElementById('t1-kwh-display').textContent = new Intl.NumberFormat('vi-VN').format(tab1Kwh);
+            calculateTab1();
+        }
+
+        function setTab1PresetMoney(amount) {
+            document.getElementById('t1-money-range').value = amount;
+            updateTab1FromMoney(amount);
+        }
+
+        // Calculate and Render Tab 1 Results
+        function calculateTab1() {
+            let res = calculateEVNBill(tab1Kwh);
+
+            document.getElementById('t1-card-kwh').textContent = new Intl.NumberFormat('vi-VN').format(res.kwh) + ' kWh';
+            document.getElementById('t1-card-subtotal').textContent = formatVNĐ(res.subtotal);
+            document.getElementById('t1-card-total').textContent = formatVNĐ(res.total);
+
+            // Render EVN Tier Table
+            const tbody = document.getElementById('t1-tier-table');
+            tbody.innerHTML = '';
+            res.breakdown.forEach(b => {
+                let tr = document.createElement('tr');
+                tr.className = b.kwh > 0 ? "bg-slate-800/40" : "opacity-50";
+                tr.innerHTML = `
+                    <td class="py-2.5 font-semibold text-slate-200">${b.name}</td>
+                    <td class="py-2.5 text-slate-400">${EVN_TIERS[b.tier-1].min} - ${EVN_TIERS[b.tier-1].max === Infinity ? 'Trở lên' : EVN_TIERS[b.tier-1].max} kWh</td>
+                    <td class="py-2.5 text-slate-400">${new Intl.NumberFormat('vi-VN').format(b.price)} đ</td>
+                    <td class="py-2.5 font-bold ${b.kwh > 0 ? 'text-sky-400' : 'text-slate-500'}">${new Intl.NumberFormat('vi-VN').format(Math.round(b.kwh))} kWh</td>
+                    <td class="py-2.5 text-right font-medium ${b.cost > 0 ? 'text-slate-200' : 'text-slate-500'}">${formatVNĐ(b.cost)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Set Tab 2 Coal Mode
+        function setCoalMode(mode) {
+            tab2CoalMode = mode;
+            const btnCont = document.getElementById('t2-mode-continuous');
+            const btnInter = document.getElementById('t2-mode-intermittent');
+
+            if (mode === 'continuous') {
+                btnCont.className = "py-2 px-3 rounded-lg font-medium transition-all bg-amber-500/20 text-amber-400 border border-amber-500/40";
+                btnInter.className = "py-2 px-3 rounded-lg font-medium transition-all text-slate-400 hover:text-slate-200";
+                document.getElementById('t2-coal-count').value = 124;
+                document.getElementById('t2-oil-count').value = 1;
+            } else {
+                btnInter.className = "py-2 px-3 rounded-lg font-medium transition-all bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
+                btnCont.className = "py-2 px-3 rounded-lg font-medium transition-all text-slate-400 hover:text-slate-200";
+                document.getElementById('t2-coal-count').value = 16;
+                document.getElementById('t2-oil-count').value = 3;
+            }
+            calculateTab2();
+        }
+
+        // Render Appliance Devices Table for Tab 2
+        function renderDevicesTable() {
+            const tbody = document.getElementById('t2-device-table-body');
+            tbody.innerHTML = '';
+
+            defaultDevices.forEach((dev, idx) => {
+                let monthlyKwh = ((dev.qty * dev.watts * dev.hours * 30) / 1000).toFixed(1);
+                let tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/40 transition-colors";
+                tr.innerHTML = `
+                    <td class="py-2">
+                        <input type="text" value="${dev.name}" onchange="updateDevice(${idx}, 'name', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs text-slate-200">
+                    </td>
+                    <td class="py-2">
+                        <input type="number" min="1" value="${dev.qty}" onchange="updateDevice(${idx}, 'qty', this.value)" class="w-16 bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs text-slate-200">
+                    </td>
+                    <td class="py-2">
+                        <input type="number" min="1" value="${dev.watts}" onchange="updateDevice(${idx}, 'watts', this.value)" class="w-20 bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs text-slate-200">
+                    </td>
+                    <td class="py-2">
+                        <input type="number" min="0" step="0.1" value="${dev.hours}" onchange="updateDevice(${idx}, 'hours', this.value)" class="w-20 bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs text-slate-200">
+                    </td>
+                    <td class="py-2 font-semibold text-sky-400">
+                        ${monthlyKwh} kWh
+                    </td>
+                    <td class="py-2 text-right">
+                        <button onclick="removeDeviceRow(${idx})" class="p-1 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            lucide.createIcons();
+        }
+
+        function updateDevice(idx, field, val) {
+            if (field === 'name') defaultDevices[idx].name = val;
+            else defaultDevices[idx][field] = parseFloat(val) || 0;
+            renderDevicesTable();
+            calculateTab2();
+        }
+
+        function addDeviceRow() {
+            defaultDevices.push({ name: "Thiết bị mới", qty: 1, watts: 100, hours: 2 });
+            renderDevicesTable();
+            calculateTab2();
+        }
+
+        function removeDeviceRow(idx) {
+            defaultDevices.splice(idx, 1);
+            renderDevicesTable();
+            calculateTab2();
+        }
+
+        // Calculate Tab 2 Totals
+        function calculateTab2() {
+            // Calculate Total Electricity kWh from devices
+            let totalKwh = 0;
+            defaultDevices.forEach(dev => {
+                totalKwh += (dev.qty * dev.watts * dev.hours * 30) / 1000;
+            });
+
+            let elecRes = calculateEVNBill(totalKwh);
+
+            // Calculate Coal & Oil Costs
+            let coalPrice = parseFloat(document.getElementById('t2-price-coal').value) || 0;
+            let oilPrice = parseFloat(document.getElementById('t2-price-oil').value) || 0;
+            let coalQty = parseFloat(document.getElementById('t2-coal-count').value) || 0;
+            let oilQty = parseFloat(document.getElementById('t2-oil-count').value) || 0;
+
+            let coalCost = (coalPrice * coalQty) + (oilPrice * oilQty);
+            let grandTotal = elecRes.total + coalCost;
+
+            // Render Tab 2 summaries
+            document.getElementById('t2-sum-kwh').textContent = Math.round(totalKwh) + ' kWh';
+            document.getElementById('t2-sum-elec-cost').textContent = '(Tiền điện: ' + formatVNĐ(elecRes.total) + ')';
+            document.getElementById('t2-sum-coal-cost').textContent = formatVNĐ(coalCost);
+            document.getElementById('t2-coal-desc').textContent = `${coalQty} viên + ${oilQty} chai dầu`;
+            document.getElementById('t2-max-tier').textContent = 'Bậc ' + elecRes.maxTier;
+            document.getElementById('t2-sum-total').textContent = formatVNĐ(grandTotal);
+        }
+
+        // Update Tab 3 Comparison View
+        function updateTab3Comparison() {
+            // Calculate Option 1
+            let opt1Bill = calculateEVNBill(tab1Kwh);
+
+            // Calculate Devices kWh for Option 2
+            let elecKwhOpt2 = 0;
+            defaultDevices.forEach(dev => {
+                elecKwhOpt2 += (dev.qty * dev.watts * dev.hours * 30) / 1000;
+            });
+            let elecBillOpt2 = calculateEVNBill(elecKwhOpt2);
+
+            // Coal prices
+            let coalPrice = parseFloat(document.getElementById('t2-price-coal').value) || 5000;
+            let oilPrice = parseFloat(document.getElementById('t2-price-oil').value) || 45000;
+
+            // Option 2A (Continuous 124 + 1)
+            let coalCost2A = (124 * coalPrice) + (1 * oilPrice);
+            let totalCost2A = elecBillOpt2.total + coalCost2A;
+
+            // Option 2B (Intermittent 16 + 3)
+            let coalCost2B = (16 * coalPrice) + (3 * oilPrice);
+            let totalCost2B = elecBillOpt2.total + coalCost2B;
+
+            // Render Highlights
+            document.getElementById('t3-cost-opt1').textContent = formatVNĐ(opt1Bill.total);
+            document.getElementById('t3-kwh-opt1').textContent = `Tổng điện: ${Math.round(tab1Kwh)} kWh/tháng`;
+
+            document.getElementById('t3-cost-opt2a').textContent = formatVNĐ(totalCost2A);
+            document.getElementById('t3-detail-opt2a').textContent = `Than: ${formatVNĐ(coalCost2A)} + Điện: ${formatVNĐ(elecBillOpt2.total)}`;
+
+            document.getElementById('t3-cost-opt2b').textContent = formatVNĐ(totalCost2B);
+            document.getElementById('t3-detail-opt2b').textContent = `Than: ${formatVNĐ(coalCost2B)} + Điện: ${formatVNĐ(elecBillOpt2.total)}`;
+
+            // Render Table
+            document.getElementById('t3-tbl-kwh1').textContent = Math.round(tab1Kwh) + ' kWh';
+            document.getElementById('t3-tbl-kwh2a').textContent = Math.round(elecKwhOpt2) + ' kWh';
+            document.getElementById('t3-tbl-kwh2b').textContent = Math.round(elecKwhOpt2) + ' kWh';
+
+            document.getElementById('t3-tbl-elec1').textContent = formatVNĐ(opt1Bill.total);
+            document.getElementById('t3-tbl-elec2a').textContent = formatVNĐ(elecBillOpt2.total);
+            document.getElementById('t3-tbl-elec2b').textContent = formatVNĐ(elecBillOpt2.total);
+
+            document.getElementById('t3-tbl-tier1').textContent = 'Bậc ' + opt1Bill.maxTier;
+            document.getElementById('t3-tbl-tier2a').textContent = 'Bậc ' + elecBillOpt2.maxTier;
+            document.getElementById('t3-tbl-tier2b').textContent = 'Bậc ' + elecBillOpt2.maxTier;
+
+            document.getElementById('t3-tbl-coal2a').textContent = formatVNĐ(coalCost2A);
+            document.getElementById('t3-tbl-coal2b').textContent = formatVNĐ(coalCost2B);
+
+            document.getElementById('t3-tbl-total1').textContent = formatVNĐ(opt1Bill.total);
+            document.getElementById('t3-tbl-total2a').textContent = formatVNĐ(totalCost2A);
+            document.getElementById('t3-tbl-total2b').textContent = formatVNĐ(totalCost2B);
+
+            // Compute Maximum Savings (Opt 2B vs Highest of Opt 1 or Opt 2A)
+            let highestCost = Math.max(opt1Bill.total, totalCost2A);
+            let maxMonthlySavings = Math.max(0, highestCost - totalCost2B);
+            let yearlySavings = maxMonthlySavings * 12;
+
+            document.getElementById('t3-savings-text').innerHTML = `Khi chuyển sang phương án <strong>2 ngày đun 1 lần (PA 2B)</strong>, bạn tiết kiệm được <strong>${formatVNĐ(maxMonthlySavings)}/tháng</strong> so với phương án chi phí cao nhất.`;
+            document.getElementById('t3-yearly-savings').textContent = formatVNĐ(yearlySavings);
+        }
+
+        // Initialize Application
+        window.onload = function() {
+            lucide.createIcons();
+            calculateTab1();
+            renderDevicesTable();
+            calculateTab2();
+        };
+    </script>
+</body>
+</html>

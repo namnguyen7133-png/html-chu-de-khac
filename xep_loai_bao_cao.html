@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Xử Lý Bệnh Án & Chỉ Số (Chuẩn 18 Cột)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-4 sm:p-6">
+
+    <div class="max-w-full mx-auto">
+        <header class="text-center mb-6">
+            <h1 class="text-2xl sm:text-3xl font-bold text-cyan-400">Hệ Thống Xử Lý Bệnh Án & Chỉ Số (Chuẩn 18 Cột)</h1>
+            <p class="text-sm text-slate-400 mt-1">Đọc và phân tích tự động dữ liệu thô, chuẩn hóa Cột 0 đến Cột 17</p>
+        </header>
+
+        <!-- Thanh chuyển Tabs -->
+        <div class="flex border-b border-slate-700 mb-6 max-w-5xl mx-auto">
+            <button onclick="switchTab(1)" id="tabBtn1" class="flex-1 py-3 px-4 text-center font-bold border-b-2 border-cyan-400 text-cyan-400 transition">Tab 1: Nạp Dữ Liệu (GitHub / File Máy)</button>
+            <button onclick="switchTab(2)" id="tabBtn2" class="flex-1 py-3 px-4 text-center font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition">Tab 2: Bảng Kết Quả (Đầy Đủ)</button>
+        </div>
+
+        <!-- ================= TAB 1 ================= -->
+        <div id="tabContent1" class="space-y-6 max-w-5xl mx-auto">
+            <div class="bg-slate-800 p-5 rounded-xl shadow-lg border border-slate-700 space-y-4">
+                <h2 class="text-lg font-semibold text-cyan-300">Phương án 1: Chọn Tệp .txt Trên GitHub Cùng Repo</h2>
+                
+                <div class="flex gap-2">
+                    <select id="githubFileList" class="flex-1 bg-slate-700 border border-slate-600 rounded-lg p-2.5 text-white focus:ring-2 focus:ring-cyan-500 text-sm">
+                        <option value="">-- Đang quét tệp .txt từ Repo GitHub... --</option>
+                    </select>
+                    <button onclick="loadTxtFromGitHub()" class="bg-cyan-600 hover:bg-cyan-500 px-5 py-2.5 rounded-lg font-bold transition shadow text-sm">📥 Nạp Từ Repo</button>
+                </div>
+
+                <hr class="border-slate-700 my-4">
+
+                <h2 class="text-lg font-semibold text-cyan-300">Phương án 2: Chọn File .txt Từ Máy Tính</h2>
+                <div>
+                    <input type="file" id="localFileInput" accept=".txt" onchange="loadLocalTxtFile(event)" class="w-full text-sm text-slate-300 file:mr-4 file:py-2 px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-cyan-700 file:text-white hover:file:bg-cyan-600 cursor-pointer">
+                </div>
+
+                <hr class="border-slate-700 my-4">
+
+                <h2 class="text-lg font-semibold text-cyan-300">Nội dung dữ liệu thô (Có thể chỉnh sửa / dán trực tiếp):</h2>
+                <textarea id="rawInputData" rows="10" class="w-full bg-slate-700 border border-slate-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-cyan-500 font-mono text-xs" placeholder="Dữ liệu thô sẽ tự động xuất hiện ở đây sau khi chọn tệp hoặc dán vào..."></textarea>
+
+                <button onclick="processAllData()" class="w-full bg-emerald-600 hover:bg-emerald-500 font-bold py-3 px-4 rounded-lg transition shadow">⚙️ Xử Lý Dữ Liệu & Chuyển Sang Tab 2 Xem Bảng</button>
+            </div>
+        </div>
+
+        <!-- ================= TAB 2 ================= -->
+        <div id="tabContent2" class="hidden space-y-6">
+            <div class="bg-slate-800 p-5 rounded-xl shadow-lg border border-slate-700 space-y-4">
+                <div class="flex justify-between items-center flex-wrap gap-2">
+                    <h2 class="text-lg font-semibold text-cyan-300" id="totalRecordsCount">Bảng Kết Quả (0 dòng dữ liệu)</h2>
+                    <div class="flex flex-wrap gap-2 items-center">
+                        <input type="text" id="targetRepoFileName" placeholder="Tên file lưu trên repo (.txt)" value="ket_qua_18_cot.txt" class="bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white">
+                        <button onclick="pushResultToGitHubRepo()" class="bg-purple-600 hover:bg-purple-500 text-sm font-bold py-2 px-3 rounded-lg transition text-white">🚀 Gửi Lên Repo GitHub</button>
+                        <button onclick="exportTxtFile()" class="bg-blue-600 hover:bg-blue-500 text-sm font-bold py-2 px-3 rounded-lg transition">📥 Tải Về Máy (.txt)</button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto border border-slate-700 rounded-lg max-h-[650px]">
+                    <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap">
+                        <thead class="bg-slate-950 text-cyan-400 uppercase font-bold sticky top-0 z-10 border-b border-slate-700">
+                            <tr>
+                                <th class="p-3 bg-slate-950 text-amber-400">Cột 0</th>
+                                <th class="p-3">Cột 1 (STT Phút)</th>
+                                <th class="p-3">Cột 2 (Tên)</th>
+                                <th class="p-3">Cột 3 (Ngày nhập)</th>
+                                <th class="p-3">Cột 4 (Giờ phút)</th>
+                                <th class="p-3">Cột 5 (Nguyên C11/C1)</th>
+                                <th class="p-3">Cột 6 (Dư C11/C1)</th>
+                                <th class="p-3">Cột 7 (Dư 1000 C5)</th>
+                                <th class="p-3">Cột 8 (Dư 1000 C6)</th>
+                                <th class="p-3">Cột 9 (Bệnh)</th>
+                                <th class="p-3">Cột 10 (Thuốc)</th>
+                                <th class="p-3">Cột 11 (Số ngày)</th>
+                                <th class="p-3">Cột 12 (Số tuần)</th>
+                                <th class="p-3 text-amber-300">Cột 13 (Dư 1000 C12)</th>
+                                <th class="p-3">Cột 14 (Số tháng)</th>
+                                <th class="p-3 text-indigo-300">Cột 15 (Dư 1000 C14)</th>
+                                <th class="p-3">Cột 16 (Số quý)</th>
+                                <th class="p-3 text-teal-300">Cột 17 (Dư 1000 C16)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultTableBody" class="divide-y divide-slate-700">
+                            <tr><td colspan="18" class="p-4 text-center text-slate-500">Chưa có dữ liệu. Vui lòng nạp hoặc dán dữ liệu ở Tab 1.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const repoOwner = "namnguyen7133-png";
+        const repoName = "ghi_ngay_mac_benh";
+        let processedResults = [];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchRepoTxtFiles();
+        });
+
+        async function fetchRepoTxtFiles() {
+            const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/`;
+            const selectEl = document.getElementById('githubFileList');
+            try {
+                const response = await fetch(apiUrl);
+                if (response.ok) {
+                    const files = await response.json();
+                    const txtFiles = files.filter(file => file.name.endsWith('.txt'));
+                    
+                    selectEl.innerHTML = '<option value="">-- Chọn một tệp danh sách .txt trên GitHub --</option>';
+                    txtFiles.forEach(file => {
+                        let opt = document.createElement('option');
+                        opt.value = file.download_url;
+                        opt.textContent = file.name;
+                        selectEl.appendChild(opt);
+                    });
+                } else {
+                    selectEl.innerHTML = '<option value="">Không tải được danh sách từ GitHub</option>';
+                }
+            } catch (err) {
+                selectEl.innerHTML = '<option value="">Lỗi kết nối API GitHub</option>';
+            }
+        }
+
+        async function loadTxtFromGitHub() {
+            const fileUrl = document.getElementById('githubFileList').value;
+            if (!fileUrl) return alert("Vui lòng chọn tệp .txt trên GitHub!");
+            
+            try {
+                const res = await fetch(fileUrl);
+                if (res.ok) {
+                    const text = await res.text();
+                    document.getElementById('rawInputData').value = text;
+                    alert("Đã tải nội dung tệp từ GitHub thành công!");
+                }
+            } catch (err) {
+                alert("Lỗi tải tệp: " + err);
+            }
+        }
+
+        function loadLocalTxtFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('rawInputData').value = e.target.result;
+                alert(`Đã nạp file "${file.name}" từ máy tính!`);
+            };
+            reader.readAsText(file);
+        }
+
+        function switchTab(tabNum) {
+            if (tabNum === 1) {
+                document.getElementById('tabContent1').classList.remove('hidden');
+                document.getElementById('tabContent2').classList.add('hidden');
+                document.getElementById('tabBtn1').className = "flex-1 py-3 px-4 text-center font-bold border-b-2 border-cyan-400 text-cyan-400 transition";
+                document.getElementById('tabBtn2').className = "flex-1 py-3 px-4 text-center font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition";
+            } else {
+                document.getElementById('tabContent1').classList.add('hidden');
+                document.getElementById('tabContent2').classList.remove('hidden');
+                document.getElementById('tabBtn2').className = "flex-1 py-3 px-4 text-center font-bold border-b-2 border-cyan-400 text-cyan-400 transition";
+                document.getElementById('tabBtn1').className = "flex-1 py-3 px-4 text-center font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition";
+            }
+        }
+
+        function processAllData() {
+            const rawText = document.getElementById('rawInputData').value.trim();
+            if (!rawText) return alert("Vui lòng nhập hoặc nạp dữ liệu vào ô thô!");
+
+            const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => l);
+            processedResults = [];
+            let rowNumber = 1;
+
+            lines.forEach((line) => {
+                if (line.toLowerCase().includes("tên") && line.toLowerCase().includes("ngày nhập")) return;
+
+                let cols = line.split(/\t+/);
+                if (cols.length < 2) {
+                    cols = line.split(/\s{2,}/);
+                }
+
+                if (cols.length < 2) return;
+
+                // Đọc tuần tự đúng chuẩn cấu trúc dòng thô: [Tên, Số ngày (Cột 11), Ngày nhập (Cột 3), Giờ phút (Cột 4), Bệnh (Cột 9), Thuốc (Cột 10)]
+                let col2 = cols[0] ? cols[0].trim().toUpperCase() : "NAM"; // Tên
+                let col11 = cols[1] ? parseInt(cols[1].trim(), 10) || 0 : 0; // Số ngày
+                let col3 = cols[2] && cols[2].includes("/") ? cols[2].trim() : "28/06/2025"; // Ngày nhập
+                let col4Input = cols[3] && cols[3].includes(":") ? cols[3].trim() : "12:00"; // Giờ phút
+                let col9 = cols[4] ? cols[4].trim() : ""; // Bệnh
+                let col10 = cols[5] ? cols[5].trim() : ""; // Thuốc
+
+                // Xử lý Giờ phút và tính Cột 1 (STT Phút)
+                let timeParts = col4Input.split(":");
+                let hourVal = parseInt(timeParts[0], 10) || 12;
+                let minVal = parseInt(timeParts[1], 10) || 0;
+                let col4 = `${String(hourVal).padStart(2, '0')}:${String(minVal).padStart(2, '0')}`;
+                
+                let col1 = (hourVal * 60) + minVal;
+                if (col1 === 0) col1 = 1;
+
+                // Tính toán các chỉ số tự động
+                let col5 = Math.floor(col11 / col1) || 0;
+                let col6 = col11 % col1;
+                let col7 = col5 % 1000;
+                let col8 = col6 % 1000;
+
+                let col12 = Math.floor(col11 / 7);
+                let col13 = col12 % 1000;
+                let col14 = Math.floor(col11 / 30);
+                let col15 = col14 % 1000;
+                let col16 = Math.floor(col11 / 90);
+                let col17 = col16 % 1000; // Cột 17 (Dư 1000 Cột Quý)
+
+                processedResults.push({
+                    col0: rowNumber++,
+                    col1: col1,
+                    col2: col2,
+                    col3: col3,
+                    col4: col4,
+                    col5: col5,
+                    col6: col6,
+                    col7: col7,
+                    col8: col8,
+                    col9: col9,
+                    col10: col10,
+                    col11: col11,
+                    col12: col12,
+                    col13: col13,
+                    col14: col14,
+                    col15: col15,
+                    col16: col16,
+                    col17: col17
+                });
+            });
+
+            if (processedResults.length === 0) return alert("Không thể phân tích được dữ liệu! Vui lòng kiểm tra lại định dạng.");
+
+            renderFullTable();
+            switchTab(2);
+        }
+
+        function updateCell(index, field, value) {
+            processedResults[index][field] = value;
+        }
+
+        function renderFullTable() {
+            const tbody = document.getElementById('resultTableBody');
+            document.getElementById('totalRecordsCount').innerText = `Bảng Kết Quả (${processedResults.length} dòng dữ liệu)`;
+            
+            tbody.innerHTML = '';
+            processedResults.forEach((item, index) => {
+                let tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-700/50 transition";
+                tr.innerHTML = `
+                    <td class="p-3 text-amber-400 font-bold bg-slate-950/60">${item.col0}</td>
+                    <td class="p-3 font-bold text-emerald-400">${item.col1}</td>
+                    <td class="p-3 font-semibold text-white">${item.col2}</td>
+                    <td class="p-2"><input type="text" value="${item.col3}" oninput="updateCell(${index}, 'col3', this.value)" class="w-28 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-cyan-300 text-xs focus:ring-1 focus:ring-cyan-500"></td>
+                    <td class="p-3">${item.col4}</td>
+                    <td class="p-3 text-cyan-300 font-bold">${item.col5}</td>
+                    <td class="p-3 text-amber-300 font-bold">${item.col6}</td>
+                    <td class="p-3 text-purple-300">${item.col7}</td>
+                    <td class="p-3 text-pink-300">${item.col8}</td>
+                    <td class="p-2"><input type="text" value="${item.col9}" oninput="updateCell(${index}, 'col9', this.value)" placeholder="Nhập tên bệnh..." class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-yellow-300 text-xs focus:ring-1 focus:ring-cyan-500"></td>
+                    <td class="p-2"><input type="text" value="${item.col10}" oninput="updateCell(${index}, 'col10', this.value)" placeholder="Nhập thuốc..." class="w-full bg-slate-900 border border-slate-700 rounded px-2 py-1 text-green-300 text-xs focus:ring-1 focus:ring-cyan-500"></td>
+                    <td class="p-3 font-bold text-blue-300">${item.col11}</td>
+                    <td class="p-3">${item.col12}</td>
+                    <td class="p-3 text-amber-300 font-bold">${item.col13}</td>
+                    <td class="p-3">${item.col14}</td>
+                    <td class="p-3 text-indigo-300 font-bold">${item.col15}</td>
+                    <td class="p-3">${item.col16}</td>
+                    <td class="p-3 text-teal-300 font-bold">${item.col17}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function buildFileContent() {
+            let content = "Cột 0\tCột 1\tCột 2\tCột 3\tCột 4\tCột 5\tCột 6\tCột 7\tCột 8\tCột 9\tCột 10\tCột 11\tCột 12\tCột 13\tCột 14\tCột 15\tCột 16\tCột 17\n";
+            processedResults.forEach(item => {
+                content += `${item.col0}\t${item.col1}\t${item.col2}\t${item.col3}\t${item.col4}\t${item.col5}\t${item.col6}\t${item.col7}\t${item.col8}\t${item.col9}\t${item.col10}\t${item.col11}\t${item.col12}\t${item.col13}\t${item.col14}\t${item.col15}\t${item.col16}\t${item.col17}\n`;
+            });
+            return content;
+        }
+
+        function exportTxtFile() {
+            if (processedResults.length === 0) return alert("Chưa có dữ liệu!");
+            const content = buildFileContent();
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ket_qua_18_cot_${new Date().toISOString().slice(0,10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        async function pushResultToGitHubRepo() {
+            if (processedResults.length === 0) return alert("Chưa có dữ liệu!");
+            let fileName = document.getElementById('targetRepoFileName').value.trim() || "ket_qua_18_cot.txt";
+            const token = prompt("Nhập GitHub Personal Access Token (PAT):");
+            if (!token) return;
+
+            const content = buildFileContent();
+            const base64Content = btoa(unescape(encodeURIComponent(content)));
+            const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${fileName}`;
+
+            try {
+                let sha = null;
+                const checkRes = await fetch(apiUrl);
+                if (checkRes.ok) {
+                    const fileData = await checkRes.json();
+                    sha = fileData.sha;
+                }
+
+                const bodyData = {
+                    message: `Cập nhật dữ liệu 18 cột - ${new Date().toLocaleString()}`,
+                    content: base64Content
+                };
+                if (sha) bodyData.sha = sha;
+
+                const putRes = await fetch(apiUrl, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bodyData)
+                });
+
+                if (putRes.ok) {
+                    alert(`Đã đẩy thành công file "${fileName}" lên GitHub!`);
+                    fetchRepoTxtFiles();
+                } else {
+                    const err = await putRes.json();
+                    alert("Lỗi GitHub: " + (err.message || putRes.statusText));
+                }
+            } catch (err) {
+                alert("Lỗi kết nối: " + err);
+            }
+        }
+    </script>
+</body>
+</html>

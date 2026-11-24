@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 23 - Tỷ lệ rời bỏ khách hàng (Churn Rate) | CEO AI Enterprise</title>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- SheetJS (xlsx) để xuất Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-dark: #115e59;
+            --primary-light: #14b8a6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #0ea5e9;
+            --bg: #f0fdfa;
+            --card: #ffffff;
+            --text: #134e4a;
+            --text-muted: #5eead4;
+            --border: #99f6e4;
+            --shadow: 0 10px 25px -5px rgba(15, 118, 110, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 50%, #f0fdfa 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 28px 32px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 1.55rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .header-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        /* Form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .form-group label .hint {
+            font-weight: 400;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        .form-group input {
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #f0fdfa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(15, 118, 110, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        /* Result Cards */
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--border);
+            transition: transform 0.2s;
+        }
+
+        .result-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .result-card .label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .result-card .value {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .result-card.positive .value { color: var(--success); }
+        .result-card.negative .value { color: var(--danger); }
+        .result-card.warning .value { color: var(--warning); }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        .status-healthy {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* AI Analysis */
+        .ai-section {
+            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+            border-left: 5px solid var(--primary);
+        }
+
+        .ai-content {
+            display: grid;
+            gap: 16px;
+        }
+
+        .ai-item {
+            background: white;
+            padding: 16px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .ai-item h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-item p {
+            color: #334155;
+            font-size: 0.95rem;
+        }
+
+        /* Chart */
+        .chart-container {
+            position: relative;
+            height: 320px;
+            margin-top: 10px;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            color: #0c4a6e;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+
+        /* Formula box */
+        .formula-box {
+            background: #f0fdfa;
+            border: 1px dashed var(--primary);
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--primary-dark);
+            line-height: 1.8;
+        }
+
+        /* Benchmark table */
+        .benchmark-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .benchmark-table th,
+        .benchmark-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .benchmark-table th {
+            background: #f0fdfa;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .benchmark-table tr:hover {
+            background: #f0fdfa;
+        }
+
+        /* History table */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-table th {
+            background: #f0fdfa;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .history-table tr:hover {
+            background: #f0fdfa;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.25rem; }
+            .result-card .value { font-size: 1.2rem; }
+            .btn { width: 100%; justify-content: center; }
+        }
+
+        .hidden { display: none; }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 20px 0 12px;
+            padding-left: 8px;
+            border-left: 3px solid var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ==================== HEADER ==================== -->
+        <header class="header">
+            <div>
+                <h1>
+                    <span>🔄</span>
+                    Module 23 – Tỷ lệ rời bỏ khách hàng (Churn Rate)
+                </h1>
+                <div class="header-subtitle">Đo lường tỷ lệ khách hàng rời bỏ – Chỉ số sống còn của tăng trưởng bền vững</div>
+            </div>
+            <div class="badge">CEO AI Enterprise • Module độc lập</div>
+        </header>
+
+        <!-- ==================== GIẢI THÍCH NHANH ==================== -->
+        <div class="card">
+            <div class="card-title">📖 Churn Rate là gì?</div>
+            <p style="margin-bottom: 12px;">
+                <strong>Churn Rate (Tỷ lệ rời bỏ khách hàng)</strong> đo lường phần trăm khách hàng ngừng sử dụng sản phẩm/dịch vụ trong một kỳ nhất định.
+            </p>
+            <div class="formula-box">
+                Churn Rate = (Số khách hàng mất trong kỳ ÷ Số khách hàng đầu kỳ) × 100%<br>
+                Retention Rate = 100% − Churn Rate<br>
+                Customer Lifetime (năm) ≈ 1 / Churn Rate (nếu Churn theo năm)
+            </div>
+            <div class="alert alert-info">
+                <span>💡</span>
+                <div>
+                    <strong>Quy tắc quan trọng:</strong> Giữ chân khách hàng cũ thường rẻ hơn 5–25 lần so với thu hút khách hàng mới. 
+                    Churn cao sẽ phá hủy LTV và làm CAC trở nên vô nghĩa.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== FORM NHẬP LIỆU ==================== -->
+        <div class="card">
+            <div class="card-title">📥 Nhập dữ liệu</div>
+            
+            <div class="section-label">Số liệu khách hàng</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Số khách hàng đầu kỳ
+                        <span class="hint">– Tổng khách hàng đang hoạt động đầu kỳ</span>
+                    </label>
+                    <input type="number" id="customersStart" placeholder="Ví dụ: 5000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Số khách hàng mất trong kỳ
+                        <span class="hint">– Khách hàng không còn giao dịch / hủy dịch vụ</span>
+                    </label>
+                    <input type="number" id="customersLost" placeholder="Ví dụ: 350" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Số khách hàng mới trong kỳ (tùy chọn)
+                        <span class="hint">– Để tính Net Growth</span>
+                    </label>
+                    <input type="number" id="customersNew" placeholder="Ví dụ: 600" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Kỳ tính toán
+                        <span class="hint">– Tháng / Quý / Năm</span>
+                    </label>
+                    <input type="text" id="period" placeholder="Ví dụ: Quý 2/2026" value="Kỳ hiện tại">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="calculateChurn()">
+                    <span>🧮</span> Tính toán Churn Rate
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <span>🔄</span> Làm mới
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== KẾT QUẢ ==================== -->
+        <div id="resultSection" class="hidden">
+            <!-- Kết quả số -->
+            <div class="card">
+                <div class="card-title">📊 Kết quả tính toán</div>
+                
+                <div id="statusBadge" class="status-badge"></div>
+
+                <div class="result-grid">
+                    <div class="result-card" id="churnCard">
+                        <div class="label">Churn Rate</div>
+                        <div class="value" id="churnValue">—</div>
+                    </div>
+                    <div class="result-card" id="retentionCard">
+                        <div class="label">Retention Rate</div>
+                        <div class="value" id="retentionValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Khách hàng mất</div>
+                        <div class="value" id="lostValue">—</div>
+                    </div>
+                    <div class="result-card" id="lifetimeCard">
+                        <div class="label">Tuổi thọ TB (ước tính)</div>
+                        <div class="value" id="lifetimeValue">—</div>
+                    </div>
+                </div>
+
+                <div class="result-grid" id="growthRow">
+                    <div class="result-card" id="netGrowthCard">
+                        <div class="label">Tăng trưởng ròng khách hàng</div>
+                        <div class="value" id="netGrowthValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Tỷ lệ tăng trưởng ròng</div>
+                        <div class="value" id="netGrowthPctValue">—</div>
+                    </div>
+                </div>
+
+                <div class="formula-box" id="formulaDetail">
+                    <!-- Công thức chi tiết sẽ được điền bằng JS -->
+                </div>
+
+                <!-- Bảng chuẩn tham khảo -->
+                <h4 style="margin: 20px 0 10px; color: var(--primary);">📌 Tham chiếu mức Churn phổ biến (theo tháng)</h4>
+                <table class="benchmark-table">
+                    <thead>
+                        <tr>
+                            <th>Loại hình kinh doanh</th>
+                            <th>Churn tốt</th>
+                            <th>Churn trung bình</th>
+                            <th>Churn cao (nguy hiểm)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>SaaS / Phần mềm</td>
+                            <td style="color:#059669;font-weight:600;">&lt; 3–5%/tháng</td>
+                            <td style="color:#d97706;font-weight:600;">5–7%</td>
+                            <td style="color:#dc2626;font-weight:600;">&gt; 8%</td>
+                        </tr>
+                        <tr>
+                            <td>Thương mại điện tử</td>
+                            <td style="color:#059669;font-weight:600;">&lt; 5%</td>
+                            <td style="color:#d97706;font-weight:600;">5–10%</td>
+                            <td style="color:#dc2626;font-weight:600;">&gt; 10%</td>
+                        </tr>
+                        <tr>
+                            <td>Dịch vụ / Thuê bao</td>
+                            <td style="color:#059669;font-weight:600;">&lt; 4%</td>
+                            <td style="color:#d97706;font-weight:600;">4–7%</td>
+                            <td style="color:#dc2626;font-weight:600;">&gt; 8%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Biểu đồ -->
+            <div class="card">
+                <div class="card-title">📈 Biểu đồ Churn vs Retention</div>
+                <div class="chart-container">
+                    <canvas id="churnChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Cảnh báo -->
+            <div id="alertBox"></div>
+
+            <!-- AI Phân tích & Khuyến nghị -->
+            <div class="card ai-section">
+                <div class="card-title">🤖 Phân tích AI & Khuyến nghị</div>
+                <div class="ai-content" id="aiContent">
+                    <!-- Nội dung AI sẽ được sinh bằng JS -->
+                </div>
+            </div>
+
+            <!-- Nút hành động -->
+            <div class="card">
+                <div class="card-title">💾 Lưu trữ & Xuất dữ liệu</div>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="saveToLocalStorage()">
+                        <span>💾</span> Lưu vào SQLite (Local)
+                    </button>
+                    <button class="btn btn-info" onclick="exportToExcel()">
+                        <span>📥</span> Xuất Excel
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewHistory()">
+                        <span>📋</span> Xem lịch sử đã lưu
+                    </button>
+                </div>
+
+                <!-- Bảng lịch sử -->
+                <div id="historySection" class="hidden" style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 10px; color: var(--primary);">Lịch sử tính toán đã lưu</h4>
+                    <div style="overflow-x: auto;">
+                        <table class="history-table" id="historyTable">
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Kỳ</th>
+                                    <th>Churn Rate</th>
+                                    <th>Retention</th>
+                                    <th>Khách mất</th>
+                                    <th>Tăng trưởng ròng</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            CEO AI Enterprise • Module 23 – Tỷ lệ rời bỏ khách hàng (Churn Rate) • Có thể chạy độc lập • Sẵn sàng kết nối Python + SQLite
+        </div>
+    </div>
+
+    <script>
+        /**
+         * =====================================================
+         * MODULE 23 – TỶ LỆ RỜI BỎ KHÁCH HÀNG (Churn Rate)
+         * CEO AI Enterprise
+         * =====================================================
+         * 
+         * Công thức chính:
+         * Churn Rate     = (Số khách hàng mất / Số khách hàng đầu kỳ) × 100%
+         * Retention Rate = 100% − Churn Rate
+         * Customer Lifetime (năm) ≈ 1 / (Churn Rate năm)
+         * Net Growth     = Khách mới − Khách mất
+         * 
+         * Module được thiết kế:
+         * - Chạy độc lập (standalone)
+         * - Dễ ghép vào Dashboard sau này
+         * - Có sẵn chỗ kết nối Python + SQLite thật
+         * - Lưu tạm bằng localStorage (mô phỏng SQLite)
+         * - Xuất Excel bằng SheetJS
+         */
+
+        // Biến toàn cục
+        let currentResult = null;
+        let churnChartInstance = null;
+
+        /**
+         * Định dạng số
+         */
+        function formatNumber(value, decimals = 0) {
+            if (value === null || value === undefined || isNaN(value)) return '—';
+            return new Intl.NumberFormat('vi-VN', {
+                maximumFractionDigits: decimals
+            }).format(value);
+        }
+
+        /**
+         * Hàm tính toán chính
+         */
+        function calculateChurn() {
+            const customersStart = parseFloat(document.getElementById('customersStart').value);
+            const customersLost = parseFloat(document.getElementById('customersLost').value);
+            const customersNew = parseFloat(document.getElementById('customersNew').value);
+            const period = document.getElementById('period').value.trim() || 'Kỳ hiện tại';
+
+            // Kiểm tra dữ liệu
+            if (isNaN(customersStart) || isNaN(customersLost)) {
+                alert('⚠️ Vui lòng nhập đầy đủ Số khách hàng đầu kỳ và Số khách hàng mất!');
+                return;
+            }
+
+            if (customersStart <= 0) {
+                alert('⚠️ Số khách hàng đầu kỳ phải lớn hơn 0!');
+                return;
+            }
+
+            if (customersLost < 0 || customersLost > customersStart) {
+                alert('⚠️ Số khách hàng mất không hợp lệ!');
+                return;
+            }
+
+            // Tính toán
+            const churnRate = (customersLost / customersStart) * 100;
+            const retentionRate = 100 - churnRate;
+
+            // Ước tính tuổi thọ (giả sử kỳ là tháng → nhân 12 để ra năm)
+            // Công thức đơn giản: Lifetime ≈ 1 / monthly churn
+            const monthlyChurn = churnRate / 100;
+            const lifetimeMonths = monthlyChurn > 0 ? 1 / monthlyChurn : null;
+            const lifetimeYears = lifetimeMonths !== null ? lifetimeMonths / 12 : null;
+
+            // Net Growth
+            let netGrowth = null;
+            let netGrowthPct = null;
+            if (!isNaN(customersNew)) {
+                netGrowth = customersNew - customersLost;
+                netGrowthPct = (netGrowth / customersStart) * 100;
+            }
+
+            // Lưu kết quả
+            currentResult = {
+                period: period,
+                customersStart: customersStart,
+                customersLost: customersLost,
+                customersNew: isNaN(customersNew) ? null : customersNew,
+                churnRate: churnRate,
+                retentionRate: retentionRate,
+                lifetimeMonths: lifetimeMonths,
+                lifetimeYears: lifetimeYears,
+                netGrowth: netGrowth,
+                netGrowthPct: netGrowthPct,
+                timestamp: new Date().toISOString()
+            };
+
+            // Hiển thị
+            displayResults(currentResult);
+            generateAIAnalysis(currentResult);
+            renderChart(currentResult);
+
+            document.getElementById('resultSection').classList.remove('hidden');
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        /**
+         * Hiển thị kết quả số
+         */
+        function displayResults(data) {
+            document.getElementById('churnValue').textContent = data.churnRate.toFixed(2) + '%';
+            document.getElementById('retentionValue').textContent = data.retentionRate.toFixed(2) + '%';
+            document.getElementById('lostValue').textContent = formatNumber(data.customersLost);
+
+            if (data.lifetimeYears !== null) {
+                document.getElementById('lifetimeValue').textContent = data.lifetimeYears.toFixed(1) + ' năm';
+            } else {
+                document.getElementById('lifetimeValue').textContent = 'N/A';
+            }
+
+            // Net Growth
+            const growthRow = document.getElementById('growthRow');
+            if (data.netGrowth !== null) {
+                growthRow.style.display = 'grid';
+                const sign = data.netGrowth >= 0 ? '+' : '';
+                document.getElementById('netGrowthValue').textContent = sign + formatNumber(data.netGrowth);
+                document.getElementById('netGrowthPctValue').textContent = sign + data.netGrowthPct.toFixed(2) + '%';
+
+                const netGrowthCard = document.getElementById('netGrowthCard');
+                netGrowthCard.classList.remove('positive', 'negative', 'warning');
+                if (data.netGrowth > 0) {
+                    netGrowthCard.classList.add('positive');
+                } else if (data.netGrowth < 0) {
+                    netGrowthCard.classList.add('negative');
+                } else {
+                    netGrowthCard.classList.add('warning');
+                }
+            } else {
+                growthRow.style.display = 'none';
+            }
+
+            // Màu sắc Churn
+            const churnCard = document.getElementById('churnCard');
+            churnCard.classList.remove('positive', 'negative', 'warning');
+            if (data.churnRate < 5) {
+                churnCard.classList.add('positive');
+            } else if (data.churnRate <= 8) {
+                churnCard.classList.add('warning');
+            } else {
+                churnCard.classList.add('negative');
+            }
+
+            // Màu Retention
+            const retentionCard = document.getElementById('retentionCard');
+            retentionCard.classList.remove('positive', 'negative', 'warning');
+            if (data.retentionRate >= 95) {
+                retentionCard.classList.add('positive');
+            } else if (data.retentionRate >= 92) {
+                retentionCard.classList.add('warning');
+            } else {
+                retentionCard.classList.add('negative');
+            }
+
+            // Status badge
+            const badge = document.getElementById('statusBadge');
+            if (data.churnRate < 5) {
+                badge.className = 'status-badge status-healthy';
+                badge.textContent = '🟢 Churn thấp – Khách hàng trung thành tốt';
+            } else if (data.churnRate <= 8) {
+                badge.className = 'status-badge status-warning';
+                badge.textContent = '🟡 Churn ở mức trung bình – Cần cải thiện giữ chân';
+            } else {
+                badge.className = 'status-badge status-danger';
+                badge.textContent = '🔴 Churn cao – Đang mất khách hàng quá nhanh';
+            }
+
+            // Công thức chi tiết
+            document.getElementById('formulaDetail').innerHTML = `
+                Churn Rate = (${formatNumber(data.customersLost)} ÷ ${formatNumber(data.customersStart)}) × 100% = <strong>${data.churnRate.toFixed(2)}%</strong><br>
+                Retention Rate = 100% − ${data.churnRate.toFixed(2)}% = <strong>${data.retentionRate.toFixed(2)}%</strong><br>
+                Tuổi thọ ước tính ≈ 1 / (${data.churnRate.toFixed(2)}% / tháng) ≈ <strong>${data.lifetimeYears !== null ? data.lifetimeYears.toFixed(1) + ' năm' : 'N/A'}</strong>
+            `;
+        }
+
+        /**
+         * Sinh phân tích AI (rule-based)
+         */
+        function generateAIAnalysis(data) {
+            const container = document.getElementById('aiContent');
+            let html = '';
+
+            // 1. Doanh nghiệp đang khỏe hay yếu?
+            let healthText = '';
+            let healthIcon = '';
+            if (data.churnRate < 5) {
+                healthIcon = '✅';
+                healthText = `Doanh nghiệp đang <strong>khỏe về khả năng giữ chân khách hàng</strong>. 
+                              Churn Rate chỉ ${data.churnRate.toFixed(2)}% là mức tốt. 
+                              Khách hàng có xu hướng gắn bó lâu dài, tạo nền tảng vững chắc cho LTV và tăng trưởng bền vững.`;
+            } else if (data.churnRate <= 8) {
+                healthIcon = '⚠️';
+                healthText = `Tỷ lệ rời bỏ ở mức <strong>trung bình</strong> (${data.churnRate.toFixed(2)}%). 
+                              Doanh nghiệp vẫn giữ được phần lớn khách hàng nhưng còn dư địa cải thiện đáng kể. 
+                              Mỗi điểm % Churn giảm sẽ mang lại giá trị lớn về dài hạn.`;
+            } else {
+                healthIcon = '🚨';
+                healthText = `Doanh nghiệp đang <strong>mất khách hàng quá nhanh</strong>. 
+                              Churn Rate ${data.churnRate.toFixed(2)}% là mức cao, làm xói mòn cơ sở khách hàng và phá hủy hiệu quả của việc đầu tư CAC. 
+                              Cần ưu tiên giải quyết ngay.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>${healthIcon} 1. Doanh nghiệp đang khỏe hay yếu?</h4>
+                    <p>${healthText}</p>
+                </div>
+            `;
+
+            // 2. Tiền đang chảy đi đâu?
+            let flowText = '';
+            if (data.churnRate > 8) {
+                flowText = `Tiền đang bị “rò rỉ” qua việc <strong>mất khách hàng</strong>. 
+                            Mỗi khách hàng rời bỏ đồng nghĩa với việc mất đi toàn bộ LTV còn lại và phải bỏ tiền CAC để thay thế. 
+                            Chi phí thay thế khách hàng cũ thường cao hơn nhiều so với chi phí giữ chân.`;
+            } else {
+                flowText = `Với mức Churn hiện tại, doanh nghiệp đang <strong>giữ lại được phần lớn giá trị khách hàng</strong>. 
+                            Tiền đầu tư vào trải nghiệm, chăm sóc và sản phẩm đang phát huy tác dụng, giúp giảm nhu cầu phải liên tục “lấp đầy” bằng khách hàng mới.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>💸 2. Tiền đang chảy đi đâu?</h4>
+                    <p>${flowText}</p>
+                </div>
+            `;
+
+            // 3. Nên đầu tư hay cắt giảm?
+            let actionText = '';
+            if (data.churnRate > 8) {
+                actionText = `<strong>Ưu tiên hàng đầu: Đầu tư vào giữ chân khách hàng (Retention)</strong> thay vì chỉ đổ tiền vào thu hút khách mới. 
+                              Tập trung vào: cải thiện sản phẩm/dịch vụ, chăm sóc khách hàng, chương trình loyalty, xử lý khiếu nại nhanh. 
+                              Tạm thời hạn chế scale marketing nếu Churn chưa được kiểm soát.`;
+            } else if (data.churnRate > 5) {
+                actionText = `<strong>Song song tối ưu Retention và Acquisition.</strong> 
+                              Vẫn có thể duy trì đầu tư marketing, nhưng nên phân bổ thêm ngân sách cho các hoạt động tăng độ trung thành 
+                              (upsell, cross-sell, community, hỗ trợ khách hàng chủ động).`;
+            } else {
+                actionText = `<strong>Có thể đẩy mạnh thu hút khách hàng mới</strong> vì nền tảng Retention đang tốt. 
+                              Khách hàng mới có khả năng ở lại lâu, giúp LTV cao và vòng xoáy tăng trưởng bền vững. 
+                              Vẫn nên duy trì các chương trình giữ chân để không để Churn tăng trở lại.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>🎯 3. Nên đầu tư hay cắt giảm?</h4>
+                    <p>${actionText}</p>
+                </div>
+            `;
+
+            // 4. Dự báo tương lai
+            let forecastText = '';
+            if (data.churnRate < 5) {
+                forecastText = `Với Churn thấp hiện tại, doanh nghiệp có lợi thế lớn trong dài hạn. 
+                                Cơ sở khách hàng sẽ ngày càng vững chắc, LTV tăng, và hiệu quả của mọi đồng tiền marketing sẽ được nhân lên. 
+                                Đây là vị thế lý tưởng để tăng trưởng nhanh mà vẫn kiểm soát được chất lượng.`;
+            } else if (data.churnRate <= 8) {
+                forecastText = `Nếu cải thiện được Churn xuống dưới 5%, doanh nghiệp sẽ thấy sự khác biệt rõ rệt về lợi nhuận và dòng tiền trong 6–12 tháng tới. 
+                                Ngược lại, nếu để Churn tăng thêm, việc tăng trưởng sẽ ngày càng tốn kém và khó khăn.`;
+            } else {
+                forecastText = `Nếu không giảm được Churn, doanh nghiệp sẽ rơi vào “cái bẫy tăng trưởng”: 
+                                phải liên tục bỏ tiền thu hút khách mới chỉ để bù đắp số khách mất đi, trong khi LTV bị cắt ngắn. 
+                                Về dài hạn, điều này sẽ làm suy yếu lợi nhuận và khả năng cạnh tranh.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>🔮 4. Điều gì sẽ xảy ra trong tương lai?</h4>
+                    <p>${forecastText}</p>
+                </div>
+            `;
+
+            // Cảnh báo bổ sung
+            let alerts = '';
+            if (data.churnRate > 10) {
+                alerts += `
+                    <div class="alert alert-danger">
+                        <span>🚨</span>
+                        <div><strong>Cảnh báo nghiêm trọng:</strong> Churn Rate trên 10%. Doanh nghiệp đang mất khách hàng rất nhanh. Cần rà soát ngay nguyên nhân gốc rễ (sản phẩm, giá, dịch vụ, đối thủ…).</div>
+                    </div>
+                `;
+            } else if (data.churnRate > 7) {
+                alerts += `
+                    <div class="alert alert-warning">
+                        <span>⚠️</span>
+                        <div><strong>Cảnh báo:</strong> Churn Rate ở mức cao. Nên ưu tiên các chương trình giữ chân khách hàng trước khi đẩy mạnh thu hút mới.</div>
+                    </div>
+                `;
+            }
+
+            if (data.netGrowth !== null && data.netGrowth < 0) {
+                alerts += `
+                    <div class="alert alert-danger">
+                        <span>📉</span>
+                        <div><strong>Cảnh báo:</strong> Tăng trưởng ròng khách hàng đang âm. Số khách mất nhiều hơn số khách mới – cơ sở khách hàng đang bị thu hẹp.</div>
+                    </div>
+                `;
+            }
+
+            if (data.churnRate < 5) {
+                alerts += `
+                    <div class="alert alert-success">
+                        <span>🎉</span>
+                        <div><strong>Tín hiệu tốt:</strong> Churn dưới 5% là mức rất tích cực, thể hiện sản phẩm/dịch vụ đang đáp ứng tốt nhu cầu khách hàng.</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('alertBox').innerHTML = alerts;
+            container.innerHTML = html;
+        }
+
+        /**
+         * Vẽ biểu đồ
+         */
+        function renderChart(data) {
+            const ctx = document.getElementById('churnChart').getContext('2d');
+
+            if (churnChartInstance) {
+                churnChartInstance.destroy();
+            }
+
+            churnChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Khách hàng giữ chân (Retention)', 'Khách hàng rời bỏ (Churn)'],
+                    datasets: [{
+                        data: [data.retentionRate, data.churnRate],
+                        backgroundColor: [
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(239, 68, 68, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgb(5, 150, 105)',
+                            'rgb(220, 38, 38)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw.toFixed(2) + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * Lưu vào localStorage (mô phỏng SQLite)
+         */
+        function saveToLocalStorage() {
+            if (!currentResult) {
+                alert('⚠️ Chưa có dữ liệu để lưu. Hãy tính toán trước!');
+                return;
+            }
+
+            let history = JSON.parse(localStorage.getItem('ceo_ai_churn_history') || '[]');
+
+            history.unshift({
+                id: Date.now(),
+                ...currentResult
+            });
+
+            if (history.length > 50) history = history.slice(0, 50);
+
+            localStorage.setItem('ceo_ai_churn_history', JSON.stringify(history));
+
+            alert('✅ Đã lưu thành công vào bộ nhớ cục bộ (mô phỏng SQLite)!\n\nSau này khi kết nối Python backend, dữ liệu sẽ được ghi vào database SQLite thật.');
+        }
+
+        /**
+         * Xem lịch sử đã lưu
+         */
+        function viewHistory() {
+            const history = JSON.parse(localStorage.getItem('ceo_ai_churn_history') || '[]');
+            const section = document.getElementById('historySection');
+            const tbody = document.getElementById('historyBody');
+
+            if (history.length === 0) {
+                alert('📭 Chưa có dữ liệu nào được lưu.');
+                return;
+            }
+
+            tbody.innerHTML = history.map(item => `
+                <tr>
+                    <td>${new Date(item.timestamp).toLocaleString('vi-VN')}</td>
+                    <td>${item.period}</td>
+                    <td style="color: ${item.churnRate < 5 ? '#059669' : item.churnRate <= 8 ? '#d97706' : '#dc2626'}; font-weight: 600;">
+                        ${item.churnRate.toFixed(2)}%
+                    </td>
+                    <td style="font-weight: 600;">${item.retentionRate.toFixed(2)}%</td>
+                    <td>${formatNumber(item.customersLost)}</td>
+                    <td style="color: ${item.netGrowth !== null ? (item.netGrowth >= 0 ? '#059669' : '#dc2626') : '#64748b'}; font-weight: 600;">
+                        ${item.netGrowth !== null ? (item.netGrowth >= 0 ? '+' : '') + formatNumber(item.netGrowth) : 'N/A'}
+                    </td>
+                </tr>
+            `).join('');
+
+            section.classList.remove('hidden');
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /**
+         * Xuất Excel
+         */
+        function exportToExcel() {
+            if (!currentResult) {
+                alert('⚠️ Chưa có dữ liệu để xuất. Hãy tính toán trước!');
+                return;
+            }
+
+            const wb = XLSX.utils.book_new();
+
+            const data = [
+                ['MODULE 23 – TỶ LỆ RỜI BỎ KHÁCH HÀNG (Churn Rate)', ''],
+                ['CEO AI Enterprise', ''],
+                ['', ''],
+                ['Kỳ báo cáo', currentResult.period],
+                ['Thời gian xuất', new Date().toLocaleString('vi-VN')],
+                ['', ''],
+                ['Chỉ tiêu', 'Giá trị'],
+                ['Số khách hàng đầu kỳ', currentResult.customersStart],
+                ['Số khách hàng mất trong kỳ', currentResult.customersLost],
+                ['Số khách hàng mới (nếu có)', currentResult.customersNew !== null ? currentResult.customersNew : 'Không nhập'],
+                ['Churn Rate (%)', currentResult.churnRate.toFixed(2)],
+                ['Retention Rate (%)', currentResult.retentionRate.toFixed(2)],
+                ['Tuổi thọ ước tính (năm)', currentResult.lifetimeYears !== null ? currentResult.lifetimeYears.toFixed(2) : 'N/A'],
+                ['Tăng trưởng ròng khách hàng', currentResult.netGrowth !== null ? currentResult.netGrowth : 'N/A'],
+                ['Tỷ lệ tăng trưởng ròng (%)', currentResult.netGrowthPct !== null ? currentResult.netGrowthPct.toFixed(2) : 'N/A'],
+                ['', ''],
+                ['Công thức Churn Rate', '(Số khách mất / Số khách đầu kỳ) × 100%'],
+                ['Công thức Retention', '100% − Churn Rate'],
+                ['', ''],
+                ['Ghi chú', 'File được xuất từ Module 23 – CEO AI Enterprise']
+            ];
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            ws['!cols'] = [{ wch: 40 }, { wch: 25 }];
+            XLSX.utils.book_append_sheet(wb, ws, 'Churn_Rate');
+
+            // Sheet lịch sử
+            const history = JSON.parse(localStorage.getItem('ceo_ai_churn_history') || '[]');
+            if (history.length > 0) {
+                const histData = [
+                    ['Thời gian', 'Kỳ', 'Churn Rate (%)', 'Retention (%)', 'Khách mất', 'Tăng trưởng ròng']
+                ];
+                history.forEach(item => {
+                    histData.push([
+                        new Date(item.timestamp).toLocaleString('vi-VN'),
+                        item.period,
+                        item.churnRate.toFixed(2),
+                        item.retentionRate.toFixed(2),
+                        item.customersLost,
+                        item.netGrowth !== null ? item.netGrowth : 'N/A'
+                    ]);
+                });
+                const ws2 = XLSX.utils.aoa_to_sheet(histData);
+                ws2['!cols'] = [{ wch: 22 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 12 }, { wch: 14 }];
+                XLSX.utils.book_append_sheet(wb, ws2, 'Lịch sử');
+            }
+
+            const fileName = `ChurnRate_${currentResult.period.replace(/[\/\s]/g, '_')}_${new Date().toISOString().slice(0,10)}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+        }
+
+        /**
+         * Làm mới form
+         */
+        function resetForm() {
+            document.getElementById('customersStart').value = '';
+            document.getElementById('customersLost').value = '';
+            document.getElementById('customersNew').value = '';
+            document.getElementById('period').value = 'Kỳ hiện tại';
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('historySection').classList.add('hidden');
+            currentResult = null;
+
+            if (churnChartInstance) {
+                churnChartInstance.destroy();
+                churnChartInstance = null;
+            }
+        }
+
+        /**
+         * =====================================================
+         * CHỖ DÀNH CHO TƯƠNG LAI – KẾT NỐI PYTHON + SQLITE
+         * =====================================================
+         * 
+         * Khi sẵn sàng kết nối backend:
+         * 
+         * async function saveToSQLite() {
+         *     const response = await fetch('/api/churn/save', {
+         *         method: 'POST',
+         *         headers: { 'Content-Type': 'application/json' },
+         *         body: JSON.stringify(currentResult)
+         *     });
+         *     ...
+         * }
+         * 
+         * Python sẽ ghi vào bảng:
+         * CREATE TABLE churn_rate (
+         *     id INTEGER PRIMARY KEY,
+         *     period TEXT,
+         *     customers_start REAL,
+         *     customers_lost REAL,
+         *     customers_new REAL,
+         *     churn_rate REAL,
+         *     retention_rate REAL,
+         *     net_growth REAL,
+         *     created_at TEXT
+         * );
+         */
+    </script>
+</body>
+</html>

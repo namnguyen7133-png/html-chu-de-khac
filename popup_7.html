@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Image Batch Downloader</title>
+    <style>
+        body {
+            width: 400px;
+            padding: 10px;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .image-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .image-item {
+            position: relative;
+        }
+        .image-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .image-checkbox {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            z-index: 1;
+        }
+        .controls {
+            margin-bottom: 10px;
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 10px 0;
+        }
+        .filter-controls {
+            margin-bottom: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        select, input {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #urlFilter {
+            flex-grow: 1;
+            min-width: 100px;
+        }
+        .action-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        button {
+            padding: 5px 10px;
+            margin-right: 10px;
+        }
+        .lang-switch {
+            float: right;
+            cursor: pointer;
+            color: #0066cc;
+            text-decoration: underline;
+        }
+        .no-images-message {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <div class="filter-controls">
+            <select id="sizeFilter">
+                <option value="all" data-i18n="allSizes">所有尺寸</option>
+                <option value="large" data-i18n="largeImages">大图 (> 1000px)</option>
+                <option value="medium" data-i18n="mediumImages">中等 (500-1000px)</option>
+                <option value="small" data-i18n="smallImages">小图 (< 500px)</option>
+            </select>
+            <select id="typeFilter">
+                <option value="all" data-i18n="allTypes">所有类型</option>
+                <option value="jpg">JPG</option>
+                <option value="png">PNG</option>
+                <option value="gif">GIF</option>
+            </select>
+            <input type="text" id="urlFilter" placeholder="URL筛选...">
+        </div>
+        <div class="action-controls">
+            <span id="imageCount" data-i18n="foundImages">找到 0 张图片</span>
+            <button id="selectAll" data-i18n="selectAll">全选</button>
+            <button id="downloadSelected" data-i18n="downloadSelected">下载选中图片</button>
+            <span id="langSwitch" class="lang-switch" data-i18n="switchLang">切换到英文</span>
+        </div>
+    </div>
+    <div id="imageContainer" class="image-container"></div>
+    <script src="i18n.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lịch Pomodoro - 20/5/15</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      text-align: center; 
+      background: #1e1e1e; 
+      color: #fff; 
+      margin: 0; 
+      padding: 20px; 
+    }
+    #mainBody { max-width: 420px; margin: 40px auto; }
+    #timer { 
+      font-size: 5.5rem; 
+      font-weight: bold; 
+      margin: 20px 0; 
+      letter-spacing: 4px;
+    }
+    button { 
+      padding: 14px 28px; 
+      margin: 10px; 
+      font-size: 1.1rem; 
+      border: none; 
+      border-radius: 50px; 
+      cursor: pointer; 
+    }
+    .btn-start { background: #4CAF50; color: white; }
+    .btn-pause { background: #ff9800; color: white; }
+    #overlay { 
+      display: none; 
+      position: fixed; 
+      top: 0; left: 0; 
+      width: 100%; height: 100%; 
+      background: rgba(0,0,0,0.92); 
+      align-items: center; 
+      justify-content: center; 
+      flex-direction: column; 
+      z-index: 100; 
+    }
+    #alertMsg { font-size: 1.6rem; margin-bottom: 25px; }
+  </style>
+</head>
+<body>
+  <div id="mainBody">
+    <h1>Pomodoro 20/5</h1>
+    <div id="statusTitle" style="font-size:1.4rem; margin:10px 0;">SẴN SÀNG</div>
+    <div id="timer">20:00</div>
+    <div id="sessionCount">Hiệp số: 1</div>
+    <div id="stats" style="margin:20px 0; font-size:1.15rem;">🔥 Hôm nay: 0 hiệp • 0 phút</div>
+
+    <button id="btnAction" class="btn-start" onclick="startSession()">BẮT ĐẦU</button>
+    <button onclick="copyStats()">📋 Copy thống kê hôm nay</button>
+  </div>
+
+  <div id="overlay">
+    <div id="alertMsg"></div>
+    <button onclick="stopAlarm()" style="padding:16px 32px; font-size:1.2rem;">OK, TIẾP TỤC</button>
+  </div>
+
+  <audio id="alarmSound" src="https://freesound.org/data/previews/276/276952_5123854-lq.mp3" preload="auto"></audio>
+
+<script>
+const TIME_WORK = 20 * 60;
+const TIME_BREAK = 5 * 60;
+const TIME_LONG_BREAK = 15 * 60;
+
+let timeLeft = TIME_WORK;
+let pomsCompleted = 0;
+let isWorking = true;
+let timerId = null;
+
+const alarmSound = document.getElementById('alarmSound');
+const overlay = document.getElementById('overlay');
+const btnAction = document.getElementById('btnAction');
+
+// Thống kê
+const todayKey = new Date().toLocaleDateString();
+let stats = JSON.parse(localStorage.getItem("pomoStats") || "{}");
+if (!stats[todayKey]) stats[todayKey] = { sessions: 0, workSeconds: 0 };
+
+function saveStats() {
+  localStorage.setItem("pomoStats", JSON.stringify(stats));
+  updateStatsUI();
+}
+
+function updateStatsUI() {
+  const s = stats[todayKey];
+  const mins = Math.floor(s.workSeconds / 60);
+  document.getElementById("stats").innerText = `🔥 Hôm nay: ${s.sessions} hiệp • ${mins} phút`;
+}
+
+function copyStats() {
+  const s = stats[todayKey];
+  const mins = Math.floor(s.workSeconds / 60);
+  navigator.clipboard.writeText(`Ngày ${todayKey}: ${s.sessions} Pomodoro (${mins} phút)`);
+  alert("Đã copy thống kê hôm nay!");
+}
+
+// Kêu chuông chỉ khi hết giờ
+function playAlarm(msg) {
+  document.getElementById('alertMsg').innerText = msg;
+  overlay.style.display = 'flex';
+  
+  if (timerId) {
+    clearInterval(timerId);
+    timerId = null;
+  }
+
+  alarmSound.currentTime = 0;
+  alarmSound.loop = true;
+  alarmSound.play().catch(() => {});
+}
+
+// Dừng chuông và tiếp tục
+function stopAlarm() {
+  alarmSound.pause();
+  alarmSound.currentTime = 0;
+  alarmSound.loop = false;
+  overlay.style.display = 'none';
+
+  if (timeLeft <= 0) {
+    if (isWorking) {
+      pomsCompleted++;
+      stats[todayKey].sessions++;
+      stats[todayKey].workSeconds += TIME_WORK;
+      saveStats();
+
+      timeLeft = (pomsCompleted % 4 === 0) ? TIME_LONG_BREAK : TIME_BREAK;
+      isWorking = false;
+    } else {
+      isWorking = true;
+      timeLeft = TIME_WORK;
+    }
+
+    document.getElementById('statusTitle').innerText = isWorking ? "ĐANG LÀM VIỆC" : "ĐANG NGHỈ";
+    document.getElementById('sessionCount').innerText = `Hiệp số: ${pomsCompleted + (isWorking ? 1 : 0)}`;
+  }
+  
+  updateDisplay();
+  startTimer();           // Tự động chạy timer sau khi bấm OK
+}
+
+function startSession() {
+  btnAction.innerText = "TIẾP TỤC";
+  btnAction.classList.remove('btn-pause');
+  btnAction.onclick = toggleTimer;
+  
+  // Không kêu chuông khi bấm Bắt đầu
+  updateDisplay();
+}
+
+function toggleTimer() {
+  if (timerId) {
+    // Tạm dừng
+    clearInterval(timerId);
+    timerId = null;
+    btnAction.innerText = "TIẾP TỤC";
+    btnAction.classList.remove('btn-pause');
+  } else {
+    // Chạy timer
+    btnAction.innerText = "TẠM DỪNG";
+    btnAction.classList.add('btn-pause');
+    startTimer();
+  }
+}
+
+function startTimer() {
+  if (timerId) clearInterval(timerId);
+  
+  timerId = setInterval(() => {
+    if (timeLeft > 0) {
+      timeLeft--;
+      if (isWorking) stats[todayKey].workSeconds++;
+      updateDisplay();
+      updateStatsUI();
+    } else {
+      // Hết giờ → kêu chuông
+      clearInterval(timerId);
+      timerId = null;
+      const msg = isWorking 
+        ? "HẾT 20 PHÚT! Nghỉ 5 phút đi!" 
+        : "HẾT GIỜ NGHỈ! Vào làm tiếp nào!";
+      playAlarm(msg);
+    }
+  }, 1000);
+}
+
+function updateDisplay() {
+  const mins = Math.floor(timeLeft / 60);
+  const secs = timeLeft % 60;
+  document.getElementById('timer').innerText = 
+    `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+}
+
+// Unlock audio cho mobile
+document.body.addEventListener('click', () => {
+  alarmSound.play().then(() => alarmSound.pause()).catch(() => {});
+}, { once: true });
+
+// Khởi tạo
+document.getElementById('statusTitle').innerText = "SẴN SÀNG";
+updateDisplay();
+updateStatsUI();
+</script>
+</body>
+</html>

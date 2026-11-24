@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>AM DUONG - Sheet1</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>AM DUONG - Sheet1</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td> A ti sô (---) |  Anh đào (+) |  Ác-ti-sô (---) |  Anh đào (+) | +++ | Không tìm thấy |  Chim trĩ (+++) | Không tìm thấy |  Chim trĩ (+++) | cá |  Cá chép (-) |  Cá hồi (+) |  Cá hồi (-) |  Cá mòi (+)</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td> Ác-ti-sô (---) |  Bắp cải trắng (+) |  Bắp (-) |  Bí đao (+) |  Củ sắn dây (+++) |  Muối bể (+++) |  Cá hồi (-) |  Cá hồi (+) |  Cá hương (-) |  Cá trích (+)</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td> Atisô (-) |  Bắp rang (+) |  Bắp chuối (---) |  Bí đỏ (+) |  Khoai mài (+++) |  Trứng cá muối (+++) |  Cá hương (-) |  Cá hồng (+) |  Cá lờn bơn (-) |  Trứng cá muối (+++)</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td> Bạch tuộc (-) |  Bí đao (+) |  Bầu (--) |  Bồ câu (++) |  Khoai rừng Nhật (+++) |  Cá hường (-) |  Cá mòi (+)</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td> Bắp (-) |  Bí đỏ (+) |  Bia (--) |  Bồ công anh (+) |  Miso (+++) |  Cá lờn bơn (-) |  Cá thu (+)</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td> Bắp (-) |  Bí đỏ (++) |  Bơ (---) |  Bơ mè (+) |  Muối biển (+++) |  Cá lưỡi trâu (-) |  Rau diếp cá (+)</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td> Bắp (-) |  Bồ câu (+) |  Bò (--) |  Cá mòi (+) |  Tamari (+++) |  Cá thờn bơn (-) |  Trứng cá muối (++)</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td> Bắp cải tím (-) |  Bồ công anh - lá và cọng (+) |  Bo-bo (-) |  Cà phê bồ công anh (++) |  Trà nhân sâm (+++) |  Dầu cá (-)</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td> Bắp chuối (---) |  Bồ công anh - rễ (++) |  Bứa (--) |  Cá trích (+) |  Trái trứng cá (-)</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td> Bắp chuối (---) |  Bồ công anh (+) |  Bưởi thanh trà (---) |  Cà-phê gạo lứt rang (+)</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td> Bầu (--) |  Bòn bon (++) |  Cà chua (---) |  Cải cay (+)</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td> Bầu (-) |  Bột sắn dây (+) |  Cà dái dê (---) |  Cải ra-đi (+)</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td> Bầu (-) |  Cá hồi (+) |  Cá hồi (-) |  Chao (+)</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td> Bí đao (--) |  Cá hồi (+) |  Cá hương (-) |  Chim trĩ (+++)</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td> Bia (---) |  Cá hồng (+) |  Cá lờn bơn (-) |  Củ cải trắng (+)</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td> Bia (--) |  Cá mòi (+) |  Ca-cao (---) |  Cúc tầng ô (+)</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td> Bia (--) |  Cà phê Ohsawa (+) |  Cà-phê (---) |  Đậu bạt (+)</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td> Bơ (---) |  Cà phê thực dưỡng (+) |  Cam (---) |  Dầu đậu nành (++)</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td> Bơ (---) |  Cà rốt (++) |  Camembert (--) |  Đậu đen (+)</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td> Bò (--) |  Cà rốt (++++) |  Champagne (---) |  Đậu đỏ (+)</td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td> Bơ đậu phộng (--) |  Cá thu (+) |  Chanh (--) |  Dầu dừa (++)</td>
+            </tr>
+            <tr>
+                <td><b>22</b></td>
+                <td> Bơ động vật (-) |  Cải ra-đi (+) |  Chôm chôm (--) |  Dầu hương quỳ (+)</td>
+            </tr>
+            <tr>
+                <td><b>23</b></td>
+                <td> Bơ mè (-) |  Cải xoăn (+) |  Chuối (---) |  Dầu lai (++)</td>
+            </tr>
+            <tr>
+                <td><b>24</b></td>
+                <td> Bồ ngót (-) |  Chim trĩ (+++) |  Cờ rem Fô-mát (---) |  Dầu mè (+)</td>
+            </tr>
+            <tr>
+                <td><b>25</b></td>
+                <td> Bơ thực vật (---) |  Củ cải (+) |  Cô-ca Cô-la (---) |  Dầu Ô-liu (+)</td>
+            </tr>
+            <tr>
+                <td><b>26</b></td>
+                <td> Bo-bo (-) |  Củ cải trắng (+) |  Cừu (-) |  Dầu Ô-mê-ga (+)</td>
+            </tr>
+            <tr>
+                <td><b>27</b></td>
+                <td> Bo-bo (-) |  Củ mài (+) |  Dấm (---) |  Dầu phụng (++)</td>
+            </tr>
+            <tr>
+                <td><b>28</b></td>
+                <td> Bột ngọt/Mì chính (---) |  Củ sắn dây (+++) |  Đào (--) |  Đậu ván (+)</td>
+            </tr>
+            <tr>
+                <td><b>29</b></td>
+                <td> Bứa (--) |  Cúc tần ô (+) |  Đào lộn hột (-) |  Dẻ tây (+)</td>
+            </tr>
+            <tr>
+                <td><b>30</b></td>
+                <td> Bưởi (---) |  Đậu đỏ hạt lớn (++) |  Đậu đũa (---) |  Diếp quắn đắng (+)</td>
+            </tr>
+            <tr>
+                <td><b>31</b></td>
+                <td> Bưởi (-) |  Dâu tằm (++) |  Đậu La-ve-non (---) |  Đồng tiện (+)</td>
+            </tr>
+            <tr>
+                <td><b>32</b></td>
+                <td> Bưởi thanh trà (---) |  Dâu tây (+) |  Đậu lăng ti (--) |  Fo-mat Hoà-lan (+)</td>
+            </tr>
+            <tr>
+                <td><b>33</b></td>
+                <td> Ca cao (---) |  Đậu ván (+) |  Đậu nành (--) |  Gà tây (+)</td>
+            </tr>
+            <tr>
+                <td><b>34</b></td>
+                <td> Cá chép (-) |  Diếp quăn (+) |  Đậu petit-pois (--) |  Gạo đỏ (++)</td>
+            </tr>
+            <tr>
+                <td><b>35</b></td>
+                <td> Cà chua (---) |  Đỗ đen xanh lòng (+) |  Đậu phụng (--) |  Hành (+)</td>
+            </tr>
+            <tr>
+                <td><b>36</b></td>
+                <td> Cà chua (---) |  Đỗ đỏ (+) |  Đậu xanh (-) |  Hạt mít (+)</td>
+            </tr>
+            <tr>
+                <td><b>37</b></td>
+                <td> Cà chua (-) |  Đỗ đỏ hạt nhỏ (+) |  Dưa (---) |  Hạt sen (++)</td>
+            </tr>
+            <tr>
+                <td><b>38</b></td>
+                <td> Cà dái dê (---) |  Dưới đây là danh sách thực phẩm đã được tách riêng thành hai nhóm Âm (-) và Dương (+) theo đúng định dạng bạn yêu cầu để cho vào game: |  Dưa bở (---) |  Hạt súng (++)</td>
+            </tr>
+            <tr>
+                <td><b>39</b></td>
+                <td> Cá hồi (-) |  Gà gô (+) |  Dưa chuột (---) |  Hẹ (+)</td>
+            </tr>
+            <tr>
+                <td><b>40</b></td>
+                <td> Cá hương (-) |  Gà tây (+) |  Dưa đỏ (--) |  Kiệu (+)</td>
+            </tr>
+            <tr>
+                <td><b>41</b></td>
+                <td> Cá hường (-) |  Gạo lứt (+) |  Dưa gan (---) |  Muối bể (+++)</td>
+            </tr>
+            <tr>
+                <td><b>42</b></td>
+                <td> Cá lờn bơn (-) |  Gạo lứt (+) |  Đường hoá học (---) |  Nén (+)</td>
+            </tr>
+            <tr>
+                <td><b>43</b></td>
+                <td> Cá lưỡi trâu (-) |  Gạo lứt rang (+) |  Đường phèn (-) |  Nghệ (+)</td>
+            </tr>
+            <tr>
+                <td><b>44</b></td>
+                <td> Cà pháo (---) |  Gừng (+) |  Ê-phi-ma (--) |  Nước mắm nguyên chất (+)</td>
+            </tr>
+            <tr>
+                <td><b>45</b></td>
+                <td> Cà phê (---) |  Hắc mạch (++++) |  Ếch (---) |  Quả gấc (+)</td>
+            </tr>
+            <tr>
+                <td><b>46</b></td>
+                <td> Cà phê (---) |  Hành (+) |  Fo-mát (--) |  Quả pom (+)</td>
+            </tr>
+            <tr>
+                <td><b>47</b></td>
+                <td> Cà phê (---) |  Hành (+) |  Gạo nếp (-) |  Quả táo (++)</td>
+            </tr>
+            <tr>
+                <td><b>48</b></td>
+                <td> Cà ry (---) |  Hành tây (+) |  Giá (---) |  Quế (++)</td>
+            </tr>
+            <tr>
+                <td><b>49</b></td>
+                <td> Cá thờn bơn (-) |  Hạt bí đỏ (+) |  Gruyere (--) |  Rau má (+)</td>
+            </tr>
+            <tr>
+                <td><b>50</b></td>
+                <td> Ca-cao (---) |  Hạt bo-bo (+) |  Gừng (---) |  Rau ngổ điết (+)</td>
+            </tr>
+            <tr>
+                <td><b>51</b></td>
+                <td> Cà-phê (---) |  Hạt dẻ (+) |  Hạnh nhân (--) |  Rau pec-xin (+)</td>
+            </tr>
+            <tr>
+                <td><b>52</b></td>
+                <td> Cam (---) |  Hạt dẻ (+) |  Hàu (-) |  Roquefort (+)</td>
+            </tr>
+            <tr>
+                <td><b>53</b></td>
+                <td> Cam (---) |  Hạt hắc mạch (+) |  Heo (--) |  Ruốc (+)</td>
+            </tr>
+            <tr>
+                <td><b>54</b></td>
+                <td> Cam (-) |  Hạt quả óc chó (+) |  Hồng (---) |  Su bắp lá quắn (+)</td>
+            </tr>
+            <tr>
+                <td><b>55</b></td>
+                <td> Cam (-) |  Hạt sen (+) |  Kê (-) |  Sữa dê (+)</td>
+            </tr>
+            <tr>
+                <td><b>56</b></td>
+                <td> Camembert (--) |  Hẹ (+) |  Kem (---) |  Sữa thảo mộc (+)</td>
+            </tr>
+            <tr>
+                <td><b>57</b></td>
+                <td> Cần tây (--) |  Hoài sơn (+) |  Khế (-) |  Tôm sú (+)</td>
+            </tr>
+            <tr>
+                <td><b>58</b></td>
+                <td> Champagne (---) |  Hoàng liên (++++) |  Kiều mạch (-) |  Trà đậu huyết rang (+)</td>
+            </tr>
+            <tr>
+                <td><b>59</b></td>
+                <td> Chanh (---) |  Hồng (+) |  Lê (--) |  Trà diếp quắn (+)</td>
+            </tr>
+            <tr>
+                <td><b>60</b></td>
+                <td> Chanh (--) |  Ích mẫu (+) |  Loại mạch (-) |  Trà gạo lứt rang (+)</td>
+            </tr>
+            <tr>
+                <td><b>61</b></td>
+                <td> Chanh (--) |  Khoai mài (+++) |  Lươn (-) |  Trà lá già (+)</td>
+            </tr>
+            <tr>
+                <td><b>62</b></td>
+                <td> Chanh (-) |  Khoai rừng Nhật (+++) |  Lựu (-) |  Trà lá sen (+)</td>
+            </tr>
+            <tr>
+                <td><b>63</b></td>
+                <td> Chao (---) |  Kiệu (+) |  Ma-ga-rin (---) |  Trà lá vằn (+)</td>
+            </tr>
+            <tr>
+                <td><b>64</b></td>
+                <td> Chôm chôm (--) |  Lá chanh (+) |  Mạch nha (-) |  Trà lá vối (+)</td>
+            </tr>
+            <tr>
+                <td><b>65</b></td>
+                <td> Chôm chôm (--) |  Lá trà già bancha (+) |  Mận (--) |  Trà ngải cứu (++)</td>
+            </tr>
+            <tr>
+                <td><b>66</b></td>
+                <td> Chôm chôm (-) |  Mạch nha (++) |  Mãn cầu (-) |  Trà sâm (++)</td>
+            </tr>
+            <tr>
+                <td><b>67</b></td>
+                <td> Chuối (---) |  Mắm nêm (++) |  Măng cụt (-) |  Trà trinh nữ (+)</td>
+            </tr>
+            <tr>
+                <td><b>68</b></td>
+                <td> Chuối (---) |  Mắm ruốc (++) |  Măng tây (---) |  Trái dâu (+)</td>
+            </tr>
+            <tr>
+                <td><b>69</b></td>
+                <td> Chuối (-) |  Mãng cầu (+) |  Măng tre (---) |  Trái trứng gà (+)</td>
+            </tr>
+            <tr>
+                <td><b>70</b></td>
+                <td> Cờ rem Fô-mát (---) |  Măng cụt (+) |  Mật mía (---) |  Trứng cá muối (+++)</td>
+            </tr>
+            <tr>
+                <td><b>71</b></td>
+                <td> Cô-ca Cô-la (---) |  Miso (+++) |  Mật ong (--). |  Trứng có trống (++)</td>
+            </tr>
+            <tr>
+                <td><b>72</b></td>
+                <td> Cốc (---) |  Mơ muối (++++) |  Mít chín (--) |  Tương đậu nành (+).</td>
+            </tr>
+            <tr>
+                <td><b>73</b></td>
+                <td> Coca-cola (---) |  Muối biển (+) |  Mỡ động vật (--) |  Vịt (+)</td>
+            </tr>
+            <tr>
+                <td><b>74</b></td>
+                <td> Con hàu (-) |  Muối biển (+++) |  Mồng tơi (--) |  Xà lách son (++)</td>
+            </tr>
+            <tr>
+                <td><b>75</b></td>
+                <td> Con trai đen (-) |  Nén (+) |  Mực (-) | Gạo trắng (+)</td>
+            </tr>
+            <tr>
+                <td><b>76</b></td>
+                <td> Củ cải đường (-) |  Ngải cứu (++) |  Nấm (---)</td>
+            </tr>
+            <tr>
+                <td><b>77</b></td>
+                <td> Củ dền (--) |  Nghệ (+) |  Ngò (-)</td>
+            </tr>
+            <tr>
+                <td><b>78</b></td>
+                <td> Củ sắn nước (--) |  Nghệ (+) |  Ngựa (--)</td>
+            </tr>
+            <tr>
+                <td><b>79</b></td>
+                <td> Cừu (-) |  Ngò (+) |  Nhái (---)</td>
+            </tr>
+            <tr>
+                <td><b>80</b></td>
+                <td> Đại hồi (-) |  Ngưu bàng (++) |  Nhãn (-)</td>
+            </tr>
+            <tr>
+                <td><b>81</b></td>
+                <td> Đại mạch (-) |  Nhãn (+) |  Nho (--)</td>
+            </tr>
+            <tr>
+                <td><b>82</b></td>
+                <td> Dấm (---) |  Nước nắm (++) |  Nước đá (--)</td>
+            </tr>
+            <tr>
+                <td><b>83</b></td>
+                <td> Đào (--) |  Ô mai (++++) |  Nước khoáng (-)</td>
+            </tr>
+            <tr>
+                <td><b>84</b></td>
+                <td> Đào (--) |  Phô mai Hà Lan (+) |  Nước ngọt (---)</td>
+            </tr>
+            <tr>
+                <td><b>85</b></td>
+                <td> Đào (-) |  Phô mai Pháp (+) |  Ốc bươu (---)</td>
+            </tr>
+            <tr>
+                <td><b>86</b></td>
+                <td> Đào lộn hột (-) |  Phổ tai (+) |  Ổi (-)</td>
+            </tr>
+            <tr>
+                <td><b>87</b></td>
+                <td> Dầu bắp (--) |  Quả ginkgo (+) |  Ớt (---)</td>
+            </tr>
+            <tr>
+                <td><b>88</b></td>
+                <td> Dầu cá (-) |  Quế (+) |  Quả me (---)</td>
+            </tr>
+            <tr>
+                <td><b>89</b></td>
+                <td> Dầu cải corza (-) |  Rau bắp cải (+) |  Quả phật thủ (-)</td>
+            </tr>
+            <tr>
+                <td><b>90</b></td>
+                <td> Dầu đậu nành (--) |  Rau cải (+) |  Quýt (---)</td>
+            </tr>
+            <tr>
+                <td><b>91</b></td>
+                <td> Đậu đen (--) |  Rau cải bẹ (+) |  Rau bạc hà (-)</td>
+            </tr>
+            <tr>
+                <td><b>92</b></td>
+                <td> Đậu đũa (---) |  Rau cải xanh (+) |  Rau dền (-)</td>
+            </tr>
+            <tr>
+                <td><b>93</b></td>
+                <td> Dầu dừa (--) |  Rau câu chỉ (+) |  Rau dền cơm (---)</td>
+            </tr>
+            <tr>
+                <td><b>94</b></td>
+                <td> Đậu đũa (-) |  Rau chân vịt (+) |  Rau diếp mỡ (-)</td>
+            </tr>
+            <tr>
+                <td><b>95</b></td>
+                <td> Đậu Hà Lan (--) |  Rau diếp (+) |  Rau khoai (-)</td>
+            </tr>
+            <tr>
+                <td><b>96</b></td>
+                <td> Dầu hướng dương (-) |  Rau diếp cá (+) |  Rau mã đề (-)</td>
+            </tr>
+            <tr>
+                <td><b>97</b></td>
+                <td> Đậu La-ve-non (---) |  Rau diếp mỡ (+) |  Rau muống (--)</td>
+            </tr>
+            <tr>
+                <td><b>98</b></td>
+                <td> Đậu lăng (--) |  Rau diếp quắn (+) |  Rượu (---)</td>
+            </tr>
+            <tr>
+                <td><b>99</b></td>
+                <td> Đậu lăng ti (--) |  Rau má (+) |  Rượu đế (--)</td>
+            </tr>
+            <tr>
+                <td><b>100</b></td>
+                <td> Đậu lăng ti (-) |  Rau má (+) |  Rượu vang (---)</td>
+            </tr>
+            <tr>
+                <td><b>101</b></td>
+                <td> Dầu mè (-) |  Rau mùi tây (+) |  Sa-pô-chê (---)</td>
+            </tr>
+            <tr>
+                <td><b>102</b></td>
+                <td> Đậu nành (---) |  Rau ngổ (+) |  Sò (-)</td>
+            </tr>
+            <tr>
+                <td><b>103</b></td>
+                <td> Đậu nành (--) |  Rau ngổ (+) |  Sô-cô-la (---)</td>
+            </tr>
+            <tr>
+                <td><b>104</b></td>
+                <td> Đậu nành (-) |  Rau pec-xin (+) |  Sô-đa (-)</td>
+            </tr>
+            <tr>
+                <td><b>105</b></td>
+                <td> Đậu ngự (---) |  Rau tần ô (+) |  Su đỏ (-)</td>
+            </tr>
+            <tr>
+                <td><b>106</b></td>
+                <td> Đậu ngự (--) |  Rau xà lách son (++) |  Su hào (-)</td>
+            </tr>
+            <tr>
+                <td><b>107</b></td>
+                <td> Dầu ô-liu (--) |  Riềng (+) |  Sữa (--)</td>
+            </tr>
+            <tr>
+                <td><b>108</b></td>
+                <td> Đậu petit-pois (--) |  Su bắp lá quấn (+) |  Sữa chua (---)</td>
+            </tr>
+            <tr>
+                <td><b>109</b></td>
+                <td> Đậu phộng (---) |  Sữa dê (++) |  Tàu vị yểu (---)</td>
+            </tr>
+            <tr>
+                <td><b>110</b></td>
+                <td> Dầu phộng (--) |  Sữa hạt sen (+) |  Thỏ (--)</td>
+            </tr>
+            <tr>
+                <td><b>111</b></td>
+                <td> Đậu phụ (-) |  Sữa thảo mộc kokkoh (+) |  Thơm (---)</td>
+            </tr>
+            <tr>
+                <td><b>112</b></td>
+                <td> Đậu phụng (--) |  Súp lơ (+) |  Tiêu (--)</td>
+            </tr>
+            <tr>
+                <td><b>113</b></td>
+                <td> Dâu tây (-) |  Tam giác mạch (++) |  Tỏi (-)</td>
+            </tr>
+            <tr>
+                <td><b>114</b></td>
+                <td> Đậu trắng (-) |  Tam thất (++++++) |  Trà bạc hà (-)</td>
+            </tr>
+            <tr>
+                <td><b>115</b></td>
+                <td> Đậu xanh (-) |  Tamari (+++) |  Trà nhuộm màu (---)</td>
+            </tr>
+            <tr>
+                <td><b>116</b></td>
+                <td> Đậu xanh (-) |  Tần ô (+) |  Trái mít non (-)</td>
+            </tr>
+            <tr>
+                <td><b>117</b></td>
+                <td> Đậu xanh (-) |  Táo pom (++) |  Trái su-le (-)</td>
+            </tr>
+            <tr>
+                <td><b>118</b></td>
+                <td> Đồ ngọt (---) |  Táo ta (++) |  Vả mật (---)</td>
+            </tr>
+            <tr>
+                <td><b>119</b></td>
+                <td> Đu đủ (---) |  Than hoạt tính (+) |  Vải (--)</td>
+            </tr>
+            <tr>
+                <td><b>120</b></td>
+                <td> Đu đủ (---) |  Thịt nạc (+) |  Vú sữa (---)</td>
+            </tr>
+            <tr>
+                <td><b>121</b></td>
+                <td> Đu đủ (---) |  Tỏi (+) | Đậu ngự (---)</td>
+            </tr>
+            <tr>
+                <td><b>122</b></td>
+                <td> Dưa (---) |  Tôm (+)</td>
+            </tr>
+            <tr>
+                <td><b>123</b></td>
+                <td> Dừa (---) |  Tôm (+)</td>
+            </tr>
+            <tr>
+                <td><b>124</b></td>
+                <td> Dứa (-) |  Trà diếp đắng (+)</td>
+            </tr>
+            <tr>
+                <td><b>125</b></td>
+                <td> Dưa bở (---) |  Trà già bancha (+)</td>
+            </tr>
+            <tr>
+                <td><b>126</b></td>
+                <td> Dưa chuột (---) |  Trà mư (++)</td>
+            </tr>
+            <tr>
+                <td><b>127</b></td>
+                <td> Dưa chuột (---) |  Trà ngải cứu (+)</td>
+            </tr>
+            <tr>
+                <td><b>128</b></td>
+                <td> Dưa chuột (-) |  Trà nhân sâm (+++)</td>
+            </tr>
+            <tr>
+                <td><b>129</b></td>
+                <td> Dưa đỏ (--) |  Trái ô ma (++)</td>
+            </tr>
+            <tr>
+                <td><b>130</b></td>
+                <td> Dưa gan (---) |  Trứng (++)</td>
+            </tr>
+            <tr>
+                <td><b>131</b></td>
+                <td> Dưa gang (--) |  Trứng cá muối (++)</td>
+            </tr>
+            <tr>
+                <td><b>132</b></td>
+                <td> Dưa gang (-) |  Trứng gà (+)</td>
+            </tr>
+            <tr>
+                <td><b>133</b></td>
+                <td> Đường hoá học (---) |  Tương đậu nành (+)</td>
+            </tr>
+            <tr>
+                <td><b>134</b></td>
+                <td> Đường phèn (---) |  Vịt (+)</td>
+            </tr>
+            <tr>
+                <td><b>135</b></td>
+                <td> Đường phèn (-) |  Xà lách xoong (++)</td>
+            </tr>
+            <tr>
+                <td><b>136</b></td>
+                <td> Đường trắng (---) |  Xà lách xoong (++)</td>
+            </tr>
+            <tr>
+                <td><b>137</b></td>
+                <td> Đường trắng (---) |  Xà lách xoong nước (++)</td>
+            </tr>
+            <tr>
+                <td><b>138</b></td>
+                <td> Ê-phi-ma (--) |  Xích tiểu đậu (++)</td>
+            </tr>
+            <tr>
+                <td><b>139</b></td>
+                <td> Ếch (---) | Hạt kê (+)</td>
+            </tr>
+            <tr>
+                <td><b>140</b></td>
+                <td> Ếch (--) | Trà bồ công anh (++)</td>
+            </tr>
+            <tr>
+                <td><b>141</b></td>
+                <td> Fo-mát (--)</td>
+            </tr>
+            <tr>
+                <td><b>142</b></td>
+                <td> Gà ta (-)</td>
+            </tr>
+            <tr>
+                <td><b>143</b></td>
+                <td> Gạo nếp (-)</td>
+            </tr>
+            <tr>
+                <td><b>144</b></td>
+                <td> Gạo nếp (-)</td>
+            </tr>
+            <tr>
+                <td><b>145</b></td>
+                <td> Giá (---)</td>
+            </tr>
+            <tr>
+                <td><b>146</b></td>
+                <td> Giá (---)</td>
+            </tr>
+            <tr>
+                <td><b>147</b></td>
+                <td> Giá (-)</td>
+            </tr>
+            <tr>
+                <td><b>148</b></td>
+                <td> Giấm (---)</td>
+            </tr>
+            <tr>
+                <td><b>149</b></td>
+                <td> Giấm (-)</td>
+            </tr>
+            <tr>
+                <td><b>150</b></td>
+                <td> Gruyere (--)</td>
+            </tr>
+            <tr>
+                <td><b>151</b></td>
+                <td> Gừng (---)</td>
+            </tr>
+            <tr>
+                <td><b>152</b></td>
+                <td> Gừng (---)</td>
+            </tr>
+            <tr>
+                <td><b>153</b></td>
+                <td> Hắc mạch (-)</td>
+            </tr>
+            <tr>
+                <td><b>154</b></td>
+                <td> Hạnh nhân (--)</td>
+            </tr>
+            <tr>
+                <td><b>155</b></td>
+                <td> Hạnh nhân (--)</td>
+            </tr>
+            <tr>
+                <td><b>156</b></td>
+                <td> Hạt điều (--)</td>
+            </tr>
+            <tr>
+                <td><b>157</b></td>
+                <td> Hạt Kê (-)</td>
+            </tr>
+            <tr>
+                <td><b>158</b></td>
+                <td> Hạt phì (--)</td>
+            </tr>
+            <tr>
+                <td><b>159</b></td>
+                <td> Hàu (-)</td>
+            </tr>
+            <tr>
+                <td><b>160</b></td>
+                <td> Hẹ (-)</td>
+            </tr>
+            <tr>
+                <td><b>161</b></td>
+                <td> Heo (--)</td>
+            </tr>
+            <tr>
+                <td><b>162</b></td>
+                <td> Hoa ac ti sô (--)</td>
+            </tr>
+            <tr>
+                <td><b>163</b></td>
+                <td> Hoa bí (--)</td>
+            </tr>
+            <tr>
+                <td><b>164</b></td>
+                <td> Hoa mướp (--)</td>
+            </tr>
+            <tr>
+                <td><b>165</b></td>
+                <td> Hoa thiên lý (---)</td>
+            </tr>
+            <tr>
+                <td><b>166</b></td>
+                <td> Hồng (---)</td>
+            </tr>
+            <tr>
+                <td><b>167</b></td>
+                <td> Hồng (-)</td>
+            </tr>
+            <tr>
+                <td><b>168</b></td>
+                <td> Kê (-)</td>
+            </tr>
+            <tr>
+                <td><b>169</b></td>
+                <td> Kem (---)</td>
+            </tr>
+            <tr>
+                <td><b>170</b></td>
+                <td> Kem (---)</td>
+            </tr>
+            <tr>
+                <td><b>171</b></td>
+                <td> Kem chua (---)</td>
+            </tr>
+            <tr>
+                <td><b>172</b></td>
+                <td> Kem ngọt (---)</td>
+            </tr>
+            <tr>
+                <td><b>173</b></td>
+                <td> Khế (--)</td>
+            </tr>
+            <tr>
+                <td><b>174</b></td>
+                <td> Khế (-)</td>
+            </tr>
+            <tr>
+                <td><b>175</b></td>
+                <td> Khế (-)</td>
+            </tr>
+            <tr>
+                <td><b>176</b></td>
+                <td> Khổ qua (-)</td>
+            </tr>
+            <tr>
+                <td><b>177</b></td>
+                <td> Khoai lang (---)</td>
+            </tr>
+            <tr>
+                <td><b>178</b></td>
+                <td> Khoai mì (---)</td>
+            </tr>
+            <tr>
+                <td><b>179</b></td>
+                <td> Khoai mỡ tím (--)</td>
+            </tr>
+            <tr>
+                <td><b>180</b></td>
+                <td> Khoai mỡ trắng (-)</td>
+            </tr>
+            <tr>
+                <td><b>181</b></td>
+                <td> Khoai sọ (---)</td>
+            </tr>
+            <tr>
+                <td><b>182</b></td>
+                <td> Khoai tây (---)</td>
+            </tr>
+            <tr>
+                <td><b>183</b></td>
+                <td> Khoai tây (-)</td>
+            </tr>
+            <tr>
+                <td><b>184</b></td>
+                <td> Khoai từ (--)</td>
+            </tr>
+            <tr>
+                <td><b>185</b></td>
+                <td> Kiều mạch (-)</td>
+            </tr>
+            <tr>
+                <td><b>186</b></td>
+                <td> Kiều mạch (-)</td>
+            </tr>
+            <tr>
+                <td><b>187</b></td>
+                <td> Kiwi (-)</td>
+            </tr>
+            <tr>
+                <td><b>188</b></td>
+                <td> Lá ạc ti sô (-)</td>
+            </tr>
+            <tr>
+                <td><b>189</b></td>
+                <td> Lê (---)</td>
+            </tr>
+            <tr>
+                <td><b>190</b></td>
+                <td> Lê (--)</td>
+            </tr>
+            <tr>
+                <td><b>191</b></td>
+                <td> Lê (-)</td>
+            </tr>
+            <tr>
+                <td><b>192</b></td>
+                <td> Loại mạch (-)</td>
+            </tr>
+            <tr>
+                <td><b>193</b></td>
+                <td> Lúa mì (-)</td>
+            </tr>
+            <tr>
+                <td><b>194</b></td>
+                <td> Lúa mì tấm (-)</td>
+            </tr>
+            <tr>
+                <td><b>195</b></td>
+                <td> Lươn (-)</td>
+            </tr>
+            <tr>
+                <td><b>196</b></td>
+                <td> Lươn (-)</td>
+            </tr>
+            <tr>
+                <td><b>197</b></td>
+                <td> Lựu (--)</td>
+            </tr>
+            <tr>
+                <td><b>198</b></td>
+                <td> Lựu (-)</td>
+            </tr>
+            <tr>
+                <td><b>199</b></td>
+                <td> Mã đề (-)</td>
+            </tr>
+            <tr>
+                <td><b>200</b></td>
+                <td> Ma-ga-rin (---)</td>
+            </tr>
+            <tr>
+                <td><b>201</b></td>
+                <td> Mạch nha (-)</td>
+            </tr>
+            <tr>
+                <td><b>202</b></td>
+                <td> Mận (--)</td>
+            </tr>
+            <tr>
+                <td><b>203</b></td>
+                <td> Mận (--)</td>
+            </tr>
+            <tr>
+                <td><b>204</b></td>
+                <td> Mận (-)</td>
+            </tr>
+            <tr>
+                <td><b>205</b></td>
+                <td> Mãn cầu (-)</td>
+            </tr>
+            <tr>
+                <td><b>206</b></td>
+                <td> Măng (--)</td>
+            </tr>
+            <tr>
+                <td><b>207</b></td>
+                <td> Măng cụt (---)</td>
+            </tr>
+            <tr>
+                <td><b>208</b></td>
+                <td> Măng cụt (---)</td>
+            </tr>
+            <tr>
+                <td><b>209</b></td>
+                <td> Măng cụt (-)</td>
+            </tr>
+            <tr>
+                <td><b>210</b></td>
+                <td> Măng tây (---)</td>
+            </tr>
+            <tr>
+                <td><b>211</b></td>
+                <td> Măng tây (---)</td>
+            </tr>
+            <tr>
+                <td><b>212</b></td>
+                <td> Măng tây (-)</td>
+            </tr>
+            <tr>
+                <td><b>213</b></td>
+                <td> măng tre (---)</td>
+            </tr>
+            <tr>
+                <td><b>214</b></td>
+                <td> Măng tre (---)</td>
+            </tr>
+            <tr>
+                <td><b>215</b></td>
+                <td> Măng tre (-)</td>
+            </tr>
+            <tr>
+                <td><b>216</b></td>
+                <td> Mật mía (---)</td>
+            </tr>
+            <tr>
+                <td><b>217</b></td>
+                <td> Mật mía (---)</td>
+            </tr>
+            <tr>
+                <td><b>218</b></td>
+                <td> Mật ong (---)</td>
+            </tr>
+            <tr>
+                <td><b>219</b></td>
+                <td> Mật ong (--).</td>
+            </tr>
+            <tr>
+                <td><b>220</b></td>
+                <td> Mật ong (-)</td>
+            </tr>
+            <tr>
+                <td><b>221</b></td>
+                <td> Me (---)</td>
+            </tr>
+            <tr>
+                <td><b>222</b></td>
+                <td> Me (---)</td>
+            </tr>
+            <tr>
+                <td><b>223</b></td>
+                <td> Mẻ (--)</td>
+            </tr>
+            <tr>
+                <td><b>224</b></td>
+                <td> Me (-)</td>
+            </tr>
+            <tr>
+                <td><b>225</b></td>
+                <td> Me (-)</td>
+            </tr>
+            <tr>
+                <td><b>226</b></td>
+                <td> Me chua (--)</td>
+            </tr>
+            <tr>
+                <td><b>227</b></td>
+                <td> Me chua (--)</td>
+            </tr>
+            <tr>
+                <td><b>228</b></td>
+                <td> Men bánh mì (-)</td>
+            </tr>
+            <tr>
+                <td><b>229</b></td>
+                <td> Mít (--)</td>
+            </tr>
+            <tr>
+                <td><b>230</b></td>
+                <td> Mít chín (--)</td>
+            </tr>
+            <tr>
+                <td><b>231</b></td>
+                <td> Mít non (-)</td>
+            </tr>
+            <tr>
+                <td><b>232</b></td>
+                <td> Mỡ động vật (--)</td>
+            </tr>
+            <tr>
+                <td><b>233</b></td>
+                <td> Mỡ heo (-)</td>
+            </tr>
+            <tr>
+                <td><b>234</b></td>
+                <td> Mồng tơi (--)</td>
+            </tr>
+            <tr>
+                <td><b>235</b></td>
+                <td> Mồng tơi (--)</td>
+            </tr>
+            <tr>
+                <td><b>236</b></td>
+                <td> Mù tạt (--)</td>
+            </tr>
+            <tr>
+                <td><b>237</b></td>
+                <td> Mực (-)</td>
+            </tr>
+            <tr>
+                <td><b>238</b></td>
+                <td> Mướp (--)</td>
+            </tr>
+            <tr>
+                <td><b>239</b></td>
+                <td> Mướp ngọt (-)</td>
+            </tr>
+            <tr>
+                <td><b>240</b></td>
+                <td> Mứt biển (---)</td>
+            </tr>
+            <tr>
+                <td><b>241</b></td>
+                <td> Na (-)</td>
+            </tr>
+            <tr>
+                <td><b>242</b></td>
+                <td> Nấm (---)</td>
+            </tr>
+            <tr>
+                <td><b>243</b></td>
+                <td> Nấm (---)</td>
+            </tr>
+            <tr>
+                <td><b>244</b></td>
+                <td> Nấm (-)</td>
+            </tr>
+            <tr>
+                <td><b>245</b></td>
+                <td> Nén (-)</td>
+            </tr>
+            <tr>
+                <td><b>246</b></td>
+                <td> Nếp lứt (-)</td>
+            </tr>
+            <tr>
+                <td><b>247</b></td>
+                <td> Ngò (-)</td>
+            </tr>
+            <tr>
+                <td><b>248</b></td>
+                <td> Ngựa (--)</td>
+            </tr>
+            <tr>
+                <td><b>249</b></td>
+                <td> Nhái (---)</td>
+            </tr>
+            <tr>
+                <td><b>250</b></td>
+                <td> Nhãn (-)</td>
+            </tr>
+            <tr>
+                <td><b>251</b></td>
+                <td> Nhãn (-)</td>
+            </tr>
+            <tr>
+                <td><b>252</b></td>
+                <td> Nho (--)</td>
+            </tr>
+            <tr>
+                <td><b>253</b></td>
+                <td> Nho (-)</td>
+            </tr>
+            <tr>
+                <td><b>254</b></td>
+                <td> Nước bạc hà (-)</td>
+            </tr>
+            <tr>
+                <td><b>255</b></td>
+                <td> Nước đá (---)</td>
+            </tr>
+            <tr>
+                <td><b>256</b></td>
+                <td> Nước đá (---)</td>
+            </tr>
+            <tr>
+                <td><b>257</b></td>
+                <td> Nước đá (--)</td>
+            </tr>
+            <tr>
+                <td><b>258</b></td>
+                <td> Nước ép trái cây (---)</td>
+            </tr>
+            <tr>
+                <td><b>259</b></td>
+                <td> Nước giếng (-)</td>
+            </tr>
+            <tr>
+                <td><b>260</b></td>
+                <td> Nước húng tây (-)</td>
+            </tr>
+            <tr>
+                <td><b>261</b></td>
+                <td> Nước khoáng (-)</td>
+            </tr>
+            <tr>
+                <td><b>262</b></td>
+                <td> Nước khoáng (-)</td>
+            </tr>
+            <tr>
+                <td><b>263</b></td>
+                <td> Nước ngọt (---)</td>
+            </tr>
+            <tr>
+                <td><b>264</b></td>
+                <td> Nước ngọt (---)</td>
+            </tr>
+            <tr>
+                <td><b>265</b></td>
+                <td> Nước ngọt (---)</td>
+            </tr>
+            <tr>
+                <td><b>266</b></td>
+                <td> Nước ngọt có đường (---)</td>
+            </tr>
+            <tr>
+                <td><b>267</b></td>
+                <td> Nước soda (-)</td>
+            </tr>
+            <tr>
+                <td><b>268</b></td>
+                <td> Ốc (--)</td>
+            </tr>
+            <tr>
+                <td><b>269</b></td>
+                <td> Ốc bươu (---)</td>
+            </tr>
+            <tr>
+                <td><b>270</b></td>
+                <td> Ổi (-)</td>
+            </tr>
+            <tr>
+                <td><b>271</b></td>
+                <td> Ổi (-)</td>
+            </tr>
+            <tr>
+                <td><b>272</b></td>
+                <td> Ớt (---)</td>
+            </tr>
+            <tr>
+                <td><b>273</b></td>
+                <td> Ớt (---)</td>
+            </tr>
+            <tr>
+                <td><b>274</b></td>
+                <td> Ớt chuông (---)</td>
+            </tr>
+            <tr>
+                <td><b>275</b></td>
+                <td> Phô mai Camembert (--)</td>
+            </tr>
+            <tr>
+                <td><b>276</b></td>
+                <td> Phô mai Gruyere (--)</td>
+            </tr>
+            <tr>
+                <td><b>277</b></td>
+                <td> Phô mai kem (---)</td>
+            </tr>
+            <tr>
+                <td><b>278</b></td>
+                <td> Phô-mát (-)</td>
+            </tr>
+            <tr>
+                <td><b>279</b></td>
+                <td> Phúc bồn tử (-)</td>
+            </tr>
+            <tr>
+                <td><b>280</b></td>
+                <td> Quả me (---)</td>
+            </tr>
+            <tr>
+                <td><b>281</b></td>
+                <td> Quả phật thủ (-)</td>
+            </tr>
+            <tr>
+                <td><b>282</b></td>
+                <td> Quít (---)</td>
+            </tr>
+            <tr>
+                <td><b>283</b></td>
+                <td> Quýt (---)</td>
+            </tr>
+            <tr>
+                <td><b>284</b></td>
+                <td> Rau bạc hà (-)</td>
+            </tr>
+            <tr>
+                <td><b>285</b></td>
+                <td> Rau bó xôi (---)</td>
+            </tr>
+            <tr>
+                <td><b>286</b></td>
+                <td> Rau cần (-)</td>
+            </tr>
+            <tr>
+                <td><b>287</b></td>
+                <td> Rau dền (-)</td>
+            </tr>
+            <tr>
+                <td><b>288</b></td>
+                <td> Rau dền (-)</td>
+            </tr>
+            <tr>
+                <td><b>289</b></td>
+                <td> Rau dền (-)</td>
+            </tr>
+            <tr>
+                <td><b>290</b></td>
+                <td> Rau dền cơm (---)</td>
+            </tr>
+            <tr>
+                <td><b>291</b></td>
+                <td> Rau diếp mỡ (-)</td>
+            </tr>
+            <tr>
+                <td><b>292</b></td>
+                <td> Rau húng lủi (-)</td>
+            </tr>
+            <tr>
+                <td><b>293</b></td>
+                <td> Rau húng quế (-)</td>
+            </tr>
+            <tr>
+                <td><b>294</b></td>
+                <td> Rau khoai (-)</td>
+            </tr>
+            <tr>
+                <td><b>295</b></td>
+                <td> Rau khoai lang (-)</td>
+            </tr>
+            <tr>
+                <td><b>296</b></td>
+                <td> Rau lang (-)</td>
+            </tr>
+            <tr>
+                <td><b>297</b></td>
+                <td> Rau mã đề (-)</td>
+            </tr>
+            <tr>
+                <td><b>298</b></td>
+                <td> Rau mã đề (-)</td>
+            </tr>
+            <tr>
+                <td><b>299</b></td>
+                <td> Rau mồng tơi (-)</td>
+            </tr>
+            <tr>
+                <td><b>300</b></td>
+                <td> Rau muống (--)</td>
+            </tr>
+            <tr>
+                <td><b>301</b></td>
+                <td> Rau muống (-)</td>
+            </tr>
+            <tr>
+                <td><b>302</b></td>
+                <td> Rau muống (-)</td>
+            </tr>
+            <tr>
+                <td><b>303</b></td>
+                <td> Rau răm (--)</td>
+            </tr>
+            <tr>
+                <td><b>304</b></td>
+                <td> Rau sam (--)</td>
+            </tr>
+            <tr>
+                <td><b>305</b></td>
+                <td> Rau sam (-)</td>
+            </tr>
+            <tr>
+                <td><b>306</b></td>
+                <td> Rượu (---)</td>
+            </tr>
+            <tr>
+                <td><b>307</b></td>
+                <td> Rượu (---)</td>
+            </tr>
+            <tr>
+                <td><b>308</b></td>
+                <td> Rượu bia (---)</td>
+            </tr>
+            <tr>
+                <td><b>309</b></td>
+                <td> Rượu đế (--)</td>
+            </tr>
+            <tr>
+                <td><b>310</b></td>
+                <td> Rượu sâm-panh (---)</td>
+            </tr>
+            <tr>
+                <td><b>311</b></td>
+                <td> Rượu vang (---)</td>
+            </tr>
+            <tr>
+                <td><b>312</b></td>
+                <td> Rượu vang (---)</td>
+            </tr>
+            <tr>
+                <td><b>313</b></td>
+                <td> Sa bô chê (-)</td>
+            </tr>
+            <tr>
+                <td><b>314</b></td>
+                <td> Sa-pô-chê (---)</td>
+            </tr>
+            <tr>
+                <td><b>315</b></td>
+                <td> Sầu riêng (---)</td>
+            </tr>
+            <tr>
+                <td><b>316</b></td>
+                <td> Sầu riêng (---)</td>
+            </tr>
+            <tr>
+                <td><b>317</b></td>
+                <td> Sầu riêng (--)</td>
+            </tr>
+            <tr>
+                <td><b>318</b></td>
+                <td> Sò (-)</td>
+            </tr>
+            <tr>
+                <td><b>319</b></td>
+                <td> Sò (-)</td>
+            </tr>
+            <tr>
+                <td><b>320</b></td>
+                <td> Sô-cô-la (---)</td>
+            </tr>
+            <tr>
+                <td><b>321</b></td>
+                <td> Sô-cô-la (---)</td>
+            </tr>
+            <tr>
+                <td><b>322</b></td>
+                <td> Sô-cô-la (---)</td>
+            </tr>
+            <tr>
+                <td><b>323</b></td>
+                <td> Sô-đa (-)</td>
+            </tr>
+            <tr>
+                <td><b>324</b></td>
+                <td> Su đỏ (-)</td>
+            </tr>
+            <tr>
+                <td><b>325</b></td>
+                <td> Su hào (-)</td>
+            </tr>
+            <tr>
+                <td><b>326</b></td>
+                <td> Su hào (-)</td>
+            </tr>
+            <tr>
+                <td><b>327</b></td>
+                <td> Su hào (-)</td>
+            </tr>
+            <tr>
+                <td><b>328</b></td>
+                <td> Su su đỏ (-)</td>
+            </tr>
+            <tr>
+                <td><b>329</b></td>
+                <td> Sữa (--)</td>
+            </tr>
+            <tr>
+                <td><b>330</b></td>
+                <td> Sữa (--)</td>
+            </tr>
+            <tr>
+                <td><b>331</b></td>
+                <td> Sữa bò (--)</td>
+            </tr>
+            <tr>
+                <td><b>332</b></td>
+                <td> Sữa bò (--)</td>
+            </tr>
+            <tr>
+                <td><b>333</b></td>
+                <td> Sữa chua (---)</td>
+            </tr>
+            <tr>
+                <td><b>334</b></td>
+                <td> Sữa chua (---)</td>
+            </tr>
+            <tr>
+                <td><b>335</b></td>
+                <td> Sữa đặc (--)</td>
+            </tr>
+            <tr>
+                <td><b>336</b></td>
+                <td> Sữa đậu nành (-)</td>
+            </tr>
+            <tr>
+                <td><b>337</b></td>
+                <td> Tàu hũ ky (-)</td>
+            </tr>
+            <tr>
+                <td><b>338</b></td>
+                <td> Tàu vị yểu (---)</td>
+            </tr>
+            <tr>
+                <td><b>339</b></td>
+                <td> Thanh long (-)</td>
+            </tr>
+            <tr>
+                <td><b>340</b></td>
+                <td> Thịt bò (--)</td>
+            </tr>
+            <tr>
+                <td><b>341</b></td>
+                <td> Thịt heo (--)</td>
+            </tr>
+            <tr>
+                <td><b>342</b></td>
+                <td> Thịt ngựa (--)</td>
+            </tr>
+            <tr>
+                <td><b>343</b></td>
+                <td> Thịt thỏ rừng (--)</td>
+            </tr>
+            <tr>
+                <td><b>344</b></td>
+                <td> Thỏ (--)</td>
+            </tr>
+            <tr>
+                <td><b>345</b></td>
+                <td> Thơm (---)</td>
+            </tr>
+            <tr>
+                <td><b>346</b></td>
+                <td> Thơm (---)</td>
+            </tr>
+            <tr>
+                <td><b>347</b></td>
+                <td> Thơm (-)</td>
+            </tr>
+            <tr>
+                <td><b>348</b></td>
+                <td> Tiêu (---)</td>
+            </tr>
+            <tr>
+                <td><b>349</b></td>
+                <td> Tiêu (--)</td>
+            </tr>
+            <tr>
+                <td><b>350</b></td>
+                <td> Tỏi (-)</td>
+            </tr>
+            <tr>
+                <td><b>351</b></td>
+                <td> Tôm hùm (-)</td>
+            </tr>
+            <tr>
+                <td><b>352</b></td>
+                <td> Trà bạc hà (-)</td>
+            </tr>
+            <tr>
+                <td><b>353</b></td>
+                <td> Trà nhuộm màu (---)</td>
+            </tr>
+            <tr>
+                <td><b>354</b></td>
+                <td> Trà nhuộm màu (---)</td>
+            </tr>
+            <tr>
+                <td><b>355</b></td>
+                <td> Trái mít non (-)</td>
+            </tr>
+            <tr>
+                <td><b>356</b></td>
+                <td> Trái ô-liu (-)</td>
+            </tr>
+            <tr>
+                <td><b>357</b></td>
+                <td> Trái su (--)</td>
+            </tr>
+            <tr>
+                <td><b>358</b></td>
+                <td> Trái su-le (-)</td>
+            </tr>
+            <tr>
+                <td><b>359</b></td>
+                <td> Trái trứng cá (-)</td>
+            </tr>
+            <tr>
+                <td><b>360</b></td>
+                <td> Trái vả (---)</td>
+            </tr>
+            <tr>
+                <td><b>361</b></td>
+                <td> Vả (---)</td>
+            </tr>
+            <tr>
+                <td><b>362</b></td>
+                <td> Vả mật (---)</td>
+            </tr>
+            <tr>
+                <td><b>363</b></td>
+                <td> Va ni (--)</td>
+            </tr>
+            <tr>
+                <td><b>364</b></td>
+                <td> Vải (--)</td>
+            </tr>
+            <tr>
+                <td><b>365</b></td>
+                <td> Vải (--)</td>
+            </tr>
+            <tr>
+                <td><b>366</b></td>
+                <td> Vải (-)</td>
+            </tr>
+            <tr>
+                <td><b>367</b></td>
+                <td> Váng sữa (---)</td>
+            </tr>
+            <tr>
+                <td><b>368</b></td>
+                <td> Việt quất (-)</td>
+            </tr>
+            <tr>
+                <td><b>369</b></td>
+                <td> Vú sữa (---)</td>
+            </tr>
+            <tr>
+                <td><b>370</b></td>
+                <td> Vú sữa (-)</td>
+            </tr>
+            <tr>
+                <td><b>371</b></td>
+                <td> Xoài (---)</td>
+            </tr>
+            <tr>
+                <td><b>372</b></td>
+                <td> Xoài (-)</td>
+            </tr>
+            <tr>
+                <td><b>373</b></td>
+                <td> Yến mạch (-)</td>
+            </tr>
+            <tr>
+                <td><b>374</b></td>
+                <td>Chuối (-)</td>
+            </tr>
+            <tr>
+                <td><b>375</b></td>
+                <td>Đậu ngự (-)</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

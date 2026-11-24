@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 14 - Điểm hòa vốn (Break-even Point) | CEO AI Enterprise</title>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- SheetJS (xlsx) để xuất Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #c2410c;
+            --primary-dark: #9a3412;
+            --primary-light: #ea580c;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #0ea5e9;
+            --bg: #fff7ed;
+            --card: #ffffff;
+            --text: #7c2d12;
+            --text-muted: #fdba74;
+            --border: #fed7aa;
+            --shadow: 0 10px 25px -5px rgba(194, 65, 12, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 50%, #fff7ed 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 28px 32px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .header-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        /* Form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .form-group label .hint {
+            font-weight: 400;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        .form-group input {
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #fffbf5;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(194, 65, 12, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(194, 65, 12, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        /* Result Cards */
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid var(--border);
+            transition: transform 0.2s;
+        }
+
+        .result-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .result-card .label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .result-card .value {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .result-card.positive .value { color: var(--success); }
+        .result-card.negative .value { color: var(--danger); }
+        .result-card.warning .value { color: var(--warning); }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        .status-healthy {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* AI Analysis */
+        .ai-section {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            border-left: 5px solid var(--primary);
+        }
+
+        .ai-content {
+            display: grid;
+            gap: 16px;
+        }
+
+        .ai-item {
+            background: white;
+            padding: 16px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .ai-item h4 {
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-item p {
+            color: #334155;
+            font-size: 0.95rem;
+        }
+
+        /* Chart */
+        .chart-container {
+            position: relative;
+            height: 340px;
+            margin-top: 10px;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            color: #0c4a6e;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+
+        /* Formula box */
+        .formula-box {
+            background: #fffbf5;
+            border: 1px dashed var(--primary);
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--primary-dark);
+            line-height: 1.8;
+        }
+
+        /* History table */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-table th {
+            background: #fff7ed;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .history-table tr:hover {
+            background: #fffbf5;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.35rem; }
+            .result-card .value { font-size: 1.2rem; }
+            .btn { width: 100%; justify-content: center; }
+        }
+
+        .hidden { display: none; }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 20px 0 12px;
+            padding-left: 8px;
+            border-left: 3px solid var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ==================== HEADER ==================== -->
+        <header class="header">
+            <div>
+                <h1>
+                    <span>⚖️</span>
+                    Module 14 – Điểm hòa vốn (Break-even Point)
+                </h1>
+                <div class="header-subtitle">Xác định mức doanh thu / sản lượng tối thiểu để không lỗ – Công cụ ra quyết định đầu tư & cắt giảm</div>
+            </div>
+            <div class="badge">CEO AI Enterprise • Module độc lập</div>
+        </header>
+
+        <!-- ==================== GIẢI THÍCH NHANH ==================== -->
+        <div class="card">
+            <div class="card-title">📖 Điểm hòa vốn là gì?</div>
+            <p style="margin-bottom: 12px;">
+                <strong>Điểm hòa vốn (Break-even Point – BEP)</strong> là mức doanh thu hoặc sản lượng mà tại đó tổng doanh thu đúng bằng tổng chi phí. 
+                Dưới mức này doanh nghiệp lỗ, trên mức này mới có lãi.
+            </p>
+            <div class="formula-box">
+                BEP (sản lượng) = Chi phí cố định ÷ (Giá bán − Biến phí đơn vị)<br>
+                BEP (doanh thu) = Chi phí cố định ÷ Tỷ lệ lãi góp<br>
+                Tỷ lệ lãi góp = (Giá bán − Biến phí đơn vị) ÷ Giá bán
+            </div>
+            <div class="alert alert-info">
+                <span>💡</span>
+                <div>
+                    <strong>Ứng dụng thực tế:</strong> Giúp CEO biết cần bán bao nhiêu mới hòa vốn, từ đó quyết định có nên mở rộng, cắt giảm chi phí cố định, hay điều chỉnh giá bán.
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== FORM NHẬP LIỆU ==================== -->
+        <div class="card">
+            <div class="card-title">📥 Nhập dữ liệu</div>
+            
+            <div class="section-label">Chi phí & Giá bán</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Chi phí cố định (Fixed Costs)
+                        <span class="hint">– Tổng chi phí không đổi theo sản lượng</span>
+                    </label>
+                    <input type="number" id="fixedCost" placeholder="Ví dụ: 800000000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Giá bán đơn vị (Selling Price)
+                        <span class="hint">– Giá bán 1 sản phẩm / dịch vụ</span>
+                    </label>
+                    <input type="number" id="price" placeholder="Ví dụ: 250000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Biến phí đơn vị (Variable Cost)
+                        <span class="hint">– Chi phí biến đổi cho 1 sản phẩm</span>
+                    </label>
+                    <input type="number" id="variableCost" placeholder="Ví dụ: 150000" step="any">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Sản lượng thực tế (tùy chọn)
+                        <span class="hint">– Để tính Margin of Safety</span>
+                    </label>
+                    <input type="number" id="actualQty" placeholder="Ví dụ: 12000" step="any">
+                </div>
+            </div>
+
+            <div class="section-label">Thông tin kỳ</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>
+                        Kỳ báo cáo
+                        <span class="hint">– Tháng / Quý / Năm</span>
+                    </label>
+                    <input type="text" id="period" placeholder="Ví dụ: Năm 2026" value="Kỳ hiện tại">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="calculateBEP()">
+                    <span>🧮</span> Tính toán Điểm hòa vốn
+                </button>
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <span>🔄</span> Làm mới
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== KẾT QUẢ ==================== -->
+        <div id="resultSection" class="hidden">
+            <!-- Kết quả số -->
+            <div class="card">
+                <div class="card-title">📊 Kết quả tính toán</div>
+                
+                <div id="statusBadge" class="status-badge"></div>
+
+                <div class="result-grid">
+                    <div class="result-card" id="bepQtyCard">
+                        <div class="label">Điểm hòa vốn (Sản lượng)</div>
+                        <div class="value" id="bepQtyValue">—</div>
+                    </div>
+                    <div class="result-card" id="bepRevCard">
+                        <div class="label">Điểm hòa vốn (Doanh thu)</div>
+                        <div class="value" id="bepRevValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Lãi góp đơn vị</div>
+                        <div class="value" id="contribValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Tỷ lệ lãi góp</div>
+                        <div class="value" id="cmrValue">—</div>
+                    </div>
+                </div>
+
+                <div class="result-grid" id="safetyRow">
+                    <div class="result-card" id="mosCard">
+                        <div class="label">Biên an toàn (Margin of Safety)</div>
+                        <div class="value" id="mosValue">—</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="label">Biên an toàn (%)</div>
+                        <div class="value" id="mosPctValue">—</div>
+                    </div>
+                </div>
+
+                <div class="formula-box" id="formulaDetail">
+                    <!-- Công thức chi tiết sẽ được điền bằng JS -->
+                </div>
+            </div>
+
+            <!-- Biểu đồ -->
+            <div class="card">
+                <div class="card-title">📈 Biểu đồ Điểm hòa vốn</div>
+                <div class="chart-container">
+                    <canvas id="bepChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Cảnh báo -->
+            <div id="alertBox"></div>
+
+            <!-- AI Phân tích & Khuyến nghị -->
+            <div class="card ai-section">
+                <div class="card-title">🤖 Phân tích AI & Khuyến nghị</div>
+                <div class="ai-content" id="aiContent">
+                    <!-- Nội dung AI sẽ được sinh bằng JS -->
+                </div>
+            </div>
+
+            <!-- Nút hành động -->
+            <div class="card">
+                <div class="card-title">💾 Lưu trữ & Xuất dữ liệu</div>
+                <div class="btn-group">
+                    <button class="btn btn-success" onclick="saveToLocalStorage()">
+                        <span>💾</span> Lưu vào SQLite (Local)
+                    </button>
+                    <button class="btn btn-info" onclick="exportToExcel()">
+                        <span>📥</span> Xuất Excel
+                    </button>
+                    <button class="btn btn-secondary" onclick="viewHistory()">
+                        <span>📋</span> Xem lịch sử đã lưu
+                    </button>
+                </div>
+
+                <!-- Bảng lịch sử -->
+                <div id="historySection" class="hidden" style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 10px; color: var(--primary);">Lịch sử tính toán đã lưu</h4>
+                    <div style="overflow-x: auto;">
+                        <table class="history-table" id="historyTable">
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Kỳ</th>
+                                    <th>BEP (SL)</th>
+                                    <th>BEP (DT)</th>
+                                    <th>Lãi góp ĐV</th>
+                                    <th>Tỷ lệ LG</th>
+                                    <th>Biên an toàn</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            CEO AI Enterprise • Module 14 – Điểm hòa vốn (Break-even Point) • Có thể chạy độc lập • Sẵn sàng kết nối Python + SQLite
+        </div>
+    </div>
+
+    <script>
+        /**
+         * =====================================================
+         * MODULE 14 – ĐIỂM HÒA VỐN (Break-even Point)
+         * CEO AI Enterprise
+         * =====================================================
+         * 
+         * Công thức chính:
+         * Contribution Margin per unit = Price − Variable Cost
+         * Contribution Margin Ratio    = (Price − VC) / Price
+         * BEP (units)                 = Fixed Costs / Contribution Margin per unit
+         * BEP (revenue)               = Fixed Costs / Contribution Margin Ratio
+         * Margin of Safety            = Actual Sales − BEP Sales
+         * 
+         * Module được thiết kế:
+         * - Chạy độc lập (standalone)
+         * - Dễ ghép vào Dashboard sau này
+         * - Có sẵn chỗ kết nối Python + SQLite thật
+         * - Lưu tạm bằng localStorage (mô phỏng SQLite)
+         * - Xuất Excel bằng SheetJS
+         */
+
+        // Biến toàn cục
+        let currentResult = null;
+        let bepChartInstance = null;
+
+        /**
+         * Định dạng số tiền Việt Nam
+         */
+        function formatCurrency(value) {
+            if (value === null || value === undefined || isNaN(value)) return '—';
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                maximumFractionDigits: 0
+            }).format(value);
+        }
+
+        /**
+         * Định dạng số lượng
+         */
+        function formatNumber(value) {
+            if (value === null || value === undefined || isNaN(value)) return '—';
+            return new Intl.NumberFormat('vi-VN').format(Math.round(value));
+        }
+
+        /**
+         * Hàm tính toán chính
+         */
+        function calculateBEP() {
+            const fixedCost = parseFloat(document.getElementById('fixedCost').value);
+            const price = parseFloat(document.getElementById('price').value);
+            const variableCost = parseFloat(document.getElementById('variableCost').value);
+            const actualQty = parseFloat(document.getElementById('actualQty').value);
+            const period = document.getElementById('period').value.trim() || 'Kỳ hiện tại';
+
+            // Kiểm tra dữ liệu
+            if (isNaN(fixedCost) || isNaN(price) || isNaN(variableCost)) {
+                alert('⚠️ Vui lòng nhập đầy đủ Chi phí cố định, Giá bán và Biến phí đơn vị!');
+                return;
+            }
+
+            if (price <= variableCost) {
+                alert('⚠️ Giá bán phải lớn hơn Biến phí đơn vị! Nếu không sẽ không bao giờ hòa vốn.');
+                return;
+            }
+
+            if (fixedCost <= 0) {
+                alert('⚠️ Chi phí cố định phải lớn hơn 0!');
+                return;
+            }
+
+            // Tính toán
+            const contribMargin = price - variableCost;                    // Lãi góp đơn vị
+            const cmr = contribMargin / price;                             // Tỷ lệ lãi góp
+            const bepQty = fixedCost / contribMargin;                      // BEP sản lượng
+            const bepRevenue = fixedCost / cmr;                            // BEP doanh thu
+
+            // Margin of Safety (nếu có sản lượng thực tế)
+            let mosQty = null;
+            let mosPct = null;
+            let actualRevenue = null;
+
+            if (!isNaN(actualQty) && actualQty > 0) {
+                actualRevenue = actualQty * price;
+                mosQty = actualQty - bepQty;
+                mosPct = (mosQty / actualQty) * 100;
+            }
+
+            // Lưu kết quả
+            currentResult = {
+                period: period,
+                fixedCost: fixedCost,
+                price: price,
+                variableCost: variableCost,
+                contribMargin: contribMargin,
+                cmr: cmr,
+                bepQty: bepQty,
+                bepRevenue: bepRevenue,
+                actualQty: isNaN(actualQty) ? null : actualQty,
+                actualRevenue: actualRevenue,
+                mosQty: mosQty,
+                mosPct: mosPct,
+                timestamp: new Date().toISOString()
+            };
+
+            // Hiển thị
+            displayResults(currentResult);
+            generateAIAnalysis(currentResult);
+            renderChart(currentResult);
+
+            document.getElementById('resultSection').classList.remove('hidden');
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        /**
+         * Hiển thị kết quả số
+         */
+        function displayResults(data) {
+            document.getElementById('bepQtyValue').textContent = formatNumber(data.bepQty) + ' SP';
+            document.getElementById('bepRevValue').textContent = formatCurrency(data.bepRevenue);
+            document.getElementById('contribValue').textContent = formatCurrency(data.contribMargin);
+            document.getElementById('cmrValue').textContent = (data.cmr * 100).toFixed(1) + '%';
+
+            // Margin of Safety
+            const safetyRow = document.getElementById('safetyRow');
+            if (data.mosQty !== null) {
+                safetyRow.style.display = 'grid';
+                document.getElementById('mosValue').textContent = formatNumber(data.mosQty) + ' SP';
+                document.getElementById('mosPctValue').textContent = data.mosPct.toFixed(1) + '%';
+
+                const mosCard = document.getElementById('mosCard');
+                mosCard.classList.remove('positive', 'negative', 'warning');
+                if (data.mosPct >= 30) {
+                    mosCard.classList.add('positive');
+                } else if (data.mosPct >= 15) {
+                    mosCard.classList.add('warning');
+                } else {
+                    mosCard.classList.add('negative');
+                }
+            } else {
+                safetyRow.style.display = 'none';
+            }
+
+            // Status badge
+            const badge = document.getElementById('statusBadge');
+            if (data.mosPct !== null) {
+                if (data.mosPct >= 30) {
+                    badge.className = 'status-badge status-healthy';
+                    badge.textContent = '🟢 Biên an toàn cao – Kinh doanh ổn định trên điểm hòa vốn';
+                } else if (data.mosPct >= 15) {
+                    badge.className = 'status-badge status-warning';
+                    badge.textContent = '🟡 Biên an toàn trung bình – Cần theo dõi sát sản lượng';
+                } else if (data.mosPct >= 0) {
+                    badge.className = 'status-badge status-danger';
+                    badge.textContent = '🔴 Biên an toàn thấp – Rủi ro lỗ cao nếu doanh số giảm';
+                } else {
+                    badge.className = 'status-badge status-danger';
+                    badge.textContent = '🔴 Đang dưới điểm hòa vốn – Doanh nghiệp đang lỗ';
+                }
+            } else {
+                badge.className = 'status-badge status-warning';
+                badge.textContent = '🟡 Đã tính được điểm hòa vốn – Nhập sản lượng thực tế để xem biên an toàn';
+            }
+
+            // Công thức chi tiết
+            document.getElementById('formulaDetail').innerHTML = `
+                Lãi góp đơn vị = ${formatCurrency(data.price)} − ${formatCurrency(data.variableCost)} = <strong>${formatCurrency(data.contribMargin)}</strong><br>
+                Tỷ lệ lãi góp = ${formatCurrency(data.contribMargin)} ÷ ${formatCurrency(data.price)} = <strong>${(data.cmr * 100).toFixed(1)}%</strong><br>
+                BEP (sản lượng) = ${formatCurrency(data.fixedCost)} ÷ ${formatCurrency(data.contribMargin)} = <strong>${formatNumber(data.bepQty)} sản phẩm</strong><br>
+                BEP (doanh thu) = ${formatCurrency(data.fixedCost)} ÷ ${(data.cmr * 100).toFixed(1)}% = <strong>${formatCurrency(data.bepRevenue)}</strong>
+            `;
+        }
+
+        /**
+         * Sinh phân tích AI (rule-based)
+         */
+        function generateAIAnalysis(data) {
+            const container = document.getElementById('aiContent');
+            let html = '';
+
+            // 1. Doanh nghiệp đang khỏe hay yếu?
+            let healthText = '';
+            let healthIcon = '';
+
+            if (data.mosPct !== null) {
+                if (data.mosPct >= 30) {
+                    healthIcon = '✅';
+                    healthText = `Doanh nghiệp đang <strong>khỏe và an toàn</strong>. Biên an toàn ${data.mosPct.toFixed(1)}% nghĩa là doanh số thực tế cao hơn điểm hòa vốn khá nhiều. Ngay cả khi doanh số giảm đáng kể, công ty vẫn có lãi.`;
+                } else if (data.mosPct >= 15) {
+                    healthIcon = '⚠️';
+                    healthText = `Tình hình ở mức <strong>trung bình</strong>. Biên an toàn ${data.mosPct.toFixed(1)}% cho thấy doanh nghiệp đã vượt hòa vốn nhưng chưa thực sự vững chắc. Cần duy trì hoặc tăng sản lượng để tăng độ an toàn.`;
+                } else if (data.mosPct >= 0) {
+                    healthIcon = '🚨';
+                    healthText = `Doanh nghiệp đang <strong>ở sát điểm hòa vốn</strong>. Biên an toàn chỉ ${data.mosPct.toFixed(1)}%. Chỉ cần doanh số giảm nhẹ là có thể rơi vào vùng lỗ. Rủi ro cao.`;
+                } else {
+                    healthIcon = '🚨';
+                    healthText = `Doanh nghiệp đang <strong>dưới điểm hòa vốn</strong> (biên an toàn âm). Hiện tại đang lỗ. Cần hành động ngay: tăng sản lượng, giảm chi phí cố định, hoặc tăng giá / giảm biến phí.`;
+                }
+            } else {
+                healthIcon = '📊';
+                healthText = `Điểm hòa vốn được xác định ở mức <strong>${formatNumber(data.bepQty)} sản phẩm</strong> (tương đương ${formatCurrency(data.bepRevenue)} doanh thu). Hãy nhập sản lượng thực tế để đánh giá chính xác mức độ an toàn hiện tại.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>${healthIcon} 1. Doanh nghiệp đang khỏe hay yếu?</h4>
+                    <p>${healthText}</p>
+                </div>
+            `;
+
+            // 2. Tiền / Chi phí đang chảy đi đâu?
+            let flowText = '';
+            const fixedRatio = data.fixedCost / data.bepRevenue * 100;
+            flowText = `Để hòa vốn, doanh nghiệp cần tạo ra đủ lãi góp để bù đắp <strong>chi phí cố định ${formatCurrency(data.fixedCost)}</strong>. 
+                        Mỗi sản phẩm bán ra đóng góp ${formatCurrency(data.contribMargin)} vào việc trang trải chi phí cố định. 
+                        Tỷ lệ lãi góp ${(data.cmr * 100).toFixed(1)}% ${data.cmr >= 0.4 ? 'ở mức tốt' : data.cmr >= 0.25 ? 'ở mức trung bình' : 'ở mức thấp – cần xem xét tăng giá hoặc giảm biến phí'}.`;
+
+            html += `
+                <div class="ai-item">
+                    <h4>💸 2. Chi phí & Lãi góp đang vận hành thế nào?</h4>
+                    <p>${flowText}</p>
+                </div>
+            `;
+
+            // 3. Nên đầu tư hay cắt giảm?
+            let actionText = '';
+            if (data.mosPct !== null && data.mosPct < 0) {
+                actionText = `<strong>Ưu tiên hàng đầu: Đưa doanh nghiệp lên trên điểm hòa vốn.</strong> 
+                              Có thể kết hợp: (1) Tăng sản lượng/bán hàng, (2) Cắt giảm chi phí cố định không cần thiết, 
+                              (3) Tăng giá bán hoặc giảm biến phí. Không nên đầu tư mở rộng khi đang lỗ.`;
+            } else if (data.mosPct !== null && data.mosPct < 15) {
+                actionText = `<strong>Nên thận trọng với việc đầu tư mới.</strong> Biên an toàn còn mỏng. 
+                              Tập trung tối ưu chi phí cố định và đẩy mạnh doanh số trước khi mở rộng quy mô.`;
+            } else if (data.cmr < 0.25) {
+                actionText = `<strong>Cần cải thiện cấu trúc chi phí / giá bán.</strong> Tỷ lệ lãi góp thấp làm điểm hòa vốn cao. 
+                              Xem xét tăng giá, đàm phán giảm giá vốn, hoặc cắt giảm biến phí.`;
+            } else {
+                actionText = `<strong>Có thể cân nhắc đầu tư mở rộng một cách chọn lọc</strong> nếu biên an toàn đủ lớn. 
+                              Ưu tiên các khoản đầu tư giúp tăng sản lượng hoặc giảm biến phí, từ đó hạ thấp điểm hòa vốn trong dài hạn.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>🎯 3. Nên đầu tư hay cắt giảm?</h4>
+                    <p>${actionText}</p>
+                </div>
+            `;
+
+            // 4. Dự báo tương lai
+            let forecastText = '';
+            if (data.mosPct !== null && data.mosPct >= 25) {
+                forecastText = `Với biên an toàn hiện tại khá tốt, doanh nghiệp có dư địa chịu đựng biến động thị trường. 
+                                Nếu duy trì hoặc cải thiện thêm tỷ lệ lãi góp, điểm hòa vốn sẽ ngày càng thấp hơn, 
+                                giúp lợi nhuận tăng nhanh khi doanh số tăng (hiệu ứng đòn bẩy hoạt động).`;
+            } else if (data.mosPct !== null && data.mosPct < 0) {
+                forecastText = `Nếu không có biện pháp đảo chiều nhanh, doanh nghiệp sẽ tiếp tục lỗ, 
+                                làm suy giảm tiền mặt và vốn chủ sở hữu. Cần có kế hoạch rõ ràng để vượt điểm hòa vốn trong 1–2 quý tới.`;
+            } else {
+                forecastText = `Điểm hòa vốn là “vạch xuất phát” của lợi nhuận. 
+                                Mọi nỗ lực giảm chi phí cố định hoặc tăng lãi góp đơn vị sẽ giúp hạ thấp điểm hòa vốn, 
+                                từ đó doanh nghiệp có lãi sớm hơn và mạnh hơn trong các kỳ tới.`;
+            }
+
+            html += `
+                <div class="ai-item">
+                    <h4>🔮 4. Điều gì sẽ xảy ra trong tương lai?</h4>
+                    <p>${forecastText}</p>
+                </div>
+            `;
+
+            // Cảnh báo bổ sung
+            let alerts = '';
+            if (data.mosPct !== null && data.mosPct < 0) {
+                alerts += `
+                    <div class="alert alert-danger">
+                        <span>🚨</span>
+                        <div><strong>Cảnh báo nghiêm trọng:</strong> Doanh nghiệp đang hoạt động dưới điểm hòa vốn. Cần hành động ngay để tránh tiếp tục lỗ.</div>
+                    </div>
+                `;
+            } else if (data.mosPct !== null && data.mosPct < 10) {
+                alerts += `
+                    <div class="alert alert-warning">
+                        <span>⚠️</span>
+                        <div><strong>Cảnh báo:</strong> Biên an toàn dưới 10%. Rủi ro rơi vào vùng lỗ rất cao nếu có biến động nhỏ về doanh số hoặc chi phí.</div>
+                    </div>
+                `;
+            }
+
+            if (data.cmr < 0.2) {
+                alerts += `
+                    <div class="alert alert-warning">
+                        <span>⚠️</span>
+                        <div><strong>Lưu ý:</strong> Tỷ lệ lãi góp dưới 20% là mức thấp. Điểm hòa vốn sẽ rất cao, khó đạt được lợi nhuận bền vững.</div>
+                    </div>
+                `;
+            }
+
+            if (data.mosPct !== null && data.mosPct >= 30) {
+                alerts += `
+                    <div class="alert alert-success">
+                        <span>🎉</span>
+                        <div><strong>Tín hiệu tốt:</strong> Biên an toàn ≥ 30% cho thấy doanh nghiệp có vị thế kinh doanh vững chắc.</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('alertBox').innerHTML = alerts;
+            container.innerHTML = html;
+        }
+
+        /**
+         * Vẽ biểu đồ điểm hòa vốn (Cost – Revenue)
+         */
+        function renderChart(data) {
+            const ctx = document.getElementById('bepChart').getContext('2d');
+
+            if (bepChartInstance) {
+                bepChartInstance.destroy();
+            }
+
+            // Tạo dữ liệu giả lập đường doanh thu & tổng chi phí
+            const maxQty = Math.max(data.bepQty * 1.8, data.actualQty || data.bepQty * 1.5);
+            const steps = 6;
+            const labels = [];
+            const revenueData = [];
+            const totalCostData = [];
+            const fixedCostData = [];
+
+            for (let i = 0; i <= steps; i++) {
+                const qty = (maxQty / steps) * i;
+                labels.push(formatNumber(qty));
+                revenueData.push(qty * data.price);
+                totalCostData.push(data.fixedCost + qty * data.variableCost);
+                fixedCostData.push(data.fixedCost);
+            }
+
+            bepChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Doanh thu',
+                            data: revenueData,
+                            borderColor: 'rgb(16, 185, 129)',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Tổng chi phí',
+                            data: totalCostData,
+                            borderColor: 'rgb(239, 68, 68)',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Chi phí cố định',
+                            data: fixedCostData,
+                            borderColor: 'rgb(245, 158, 11)',
+                            borderWidth: 2,
+                            borderDash: [6, 4],
+                            fill: false,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Điểm giao nhau giữa Doanh thu & Tổng chi phí chính là Điểm hòa vốn',
+                            color: '#9a3412',
+                            font: { size: 13 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + formatCurrency(context.raw);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    if (value >= 1e9) return (value / 1e9).toFixed(1) + ' tỷ';
+                                    if (value >= 1e6) return (value / 1e6).toFixed(0) + ' tr';
+                                    return value;
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(194, 65, 12, 0.08)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Sản lượng'
+                            },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * Lưu vào localStorage (mô phỏng SQLite)
+         */
+        function saveToLocalStorage() {
+            if (!currentResult) {
+                alert('⚠️ Chưa có dữ liệu để lưu. Hãy tính toán trước!');
+                return;
+            }
+
+            let history = JSON.parse(localStorage.getItem('ceo_ai_bep_history') || '[]');
+
+            history.unshift({
+                id: Date.now(),
+                ...currentResult
+            });
+
+            if (history.length > 50) history = history.slice(0, 50);
+
+            localStorage.setItem('ceo_ai_bep_history', JSON.stringify(history));
+
+            alert('✅ Đã lưu thành công vào bộ nhớ cục bộ (mô phỏng SQLite)!\n\nSau này khi kết nối Python backend, dữ liệu sẽ được ghi vào database SQLite thật.');
+        }
+
+        /**
+         * Xem lịch sử đã lưu
+         */
+        function viewHistory() {
+            const history = JSON.parse(localStorage.getItem('ceo_ai_bep_history') || '[]');
+            const section = document.getElementById('historySection');
+            const tbody = document.getElementById('historyBody');
+
+            if (history.length === 0) {
+                alert('📭 Chưa có dữ liệu nào được lưu.');
+                return;
+            }
+
+            tbody.innerHTML = history.map(item => `
+                <tr>
+                    <td>${new Date(item.timestamp).toLocaleString('vi-VN')}</td>
+                    <td>${item.period}</td>
+                    <td style="font-weight:600;">${formatNumber(item.bepQty)}</td>
+                    <td>${formatCurrency(item.bepRevenue)}</td>
+                    <td>${formatCurrency(item.contribMargin)}</td>
+                    <td>${(item.cmr * 100).toFixed(1)}%</td>
+                    <td style="color: ${item.mosPct !== null ? (item.mosPct >= 20 ? '#059669' : item.mosPct >= 0 ? '#d97706' : '#dc2626') : '#64748b'}; font-weight: 600;">
+                        ${item.mosPct !== null ? item.mosPct.toFixed(1) + '%' : 'N/A'}
+                    </td>
+                </tr>
+            `).join('');
+
+            section.classList.remove('hidden');
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /**
+         * Xuất Excel
+         */
+        function exportToExcel() {
+            if (!currentResult) {
+                alert('⚠️ Chưa có dữ liệu để xuất. Hãy tính toán trước!');
+                return;
+            }
+
+            const wb = XLSX.utils.book_new();
+
+            const data = [
+                ['MODULE 14 – ĐIỂM HÒA VỐN (Break-even Point)', ''],
+                ['CEO AI Enterprise', ''],
+                ['', ''],
+                ['Kỳ báo cáo', currentResult.period],
+                ['Thời gian xuất', new Date().toLocaleString('vi-VN')],
+                ['', ''],
+                ['Chỉ tiêu', 'Giá trị'],
+                ['Chi phí cố định (Fixed Costs)', currentResult.fixedCost],
+                ['Giá bán đơn vị (Price)', currentResult.price],
+                ['Biến phí đơn vị (Variable Cost)', currentResult.variableCost],
+                ['Lãi góp đơn vị (Contribution Margin)', currentResult.contribMargin],
+                ['Tỷ lệ lãi góp (CMR)', (currentResult.cmr * 100).toFixed(2) + '%'],
+                ['Điểm hòa vốn – Sản lượng (BEP units)', Math.round(currentResult.bepQty)],
+                ['Điểm hòa vốn – Doanh thu (BEP revenue)', currentResult.bepRevenue],
+                ['Sản lượng thực tế', currentResult.actualQty !== null ? currentResult.actualQty : 'Không nhập'],
+                ['Biên an toàn (Margin of Safety)', currentResult.mosQty !== null ? Math.round(currentResult.mosQty) : 'N/A'],
+                ['Biên an toàn (%)', currentResult.mosPct !== null ? currentResult.mosPct.toFixed(2) + '%' : 'N/A'],
+                ['', ''],
+                ['Công thức BEP (SL)', 'Fixed Costs / (Price − Variable Cost)'],
+                ['Công thức BEP (DT)', 'Fixed Costs / Contribution Margin Ratio'],
+                ['', ''],
+                ['Ghi chú', 'File được xuất từ Module 14 – CEO AI Enterprise']
+            ];
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            ws['!cols'] = [{ wch: 45 }, { wch: 25 }];
+            XLSX.utils.book_append_sheet(wb, ws, 'DiemHoaVon');
+
+            // Sheet lịch sử
+            const history = JSON.parse(localStorage.getItem('ceo_ai_bep_history') || '[]');
+            if (history.length > 0) {
+                const histData = [
+                    ['Thời gian', 'Kỳ', 'BEP (SL)', 'BEP (DT)', 'Lãi góp ĐV', 'Tỷ lệ LG (%)', 'Biên an toàn (%)']
+                ];
+                history.forEach(item => {
+                    histData.push([
+                        new Date(item.timestamp).toLocaleString('vi-VN'),
+                        item.period,
+                        Math.round(item.bepQty),
+                        item.bepRevenue,
+                        item.contribMargin,
+                        (item.cmr * 100).toFixed(2),
+                        item.mosPct !== null ? item.mosPct.toFixed(2) : 'N/A'
+                    ]);
+                });
+                const ws2 = XLSX.utils.aoa_to_sheet(histData);
+                ws2['!cols'] = [{ wch: 22 }, { wch: 14 }, { wch: 12 }, { wch: 16 }, { wch: 14 }, { wch: 12 }, { wch: 14 }];
+                XLSX.utils.book_append_sheet(wb, ws2, 'Lịch sử');
+            }
+
+            const fileName = `DiemHoaVon_${currentResult.period.replace(/[\/\s]/g, '_')}_${new Date().toISOString().slice(0,10)}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+        }
+
+        /**
+         * Làm mới form
+         */
+        function resetForm() {
+            document.getElementById('fixedCost').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('variableCost').value = '';
+            document.getElementById('actualQty').value = '';
+            document.getElementById('period').value = 'Kỳ hiện tại';
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('historySection').classList.add('hidden');
+            currentResult = null;
+
+            if (bepChartInstance) {
+                bepChartInstance.destroy();
+                bepChartInstance = null;
+            }
+        }
+
+        /**
+         * =====================================================
+         * CHỖ DÀNH CHO TƯƠNG LAI – KẾT NỐI PYTHON + SQLITE
+         * =====================================================
+         * 
+         * Khi sẵn sàng kết nối backend:
+         * 
+         * async function saveToSQLite() {
+         *     const response = await fetch('/api/bep/save', {
+         *         method: 'POST',
+         *         headers: { 'Content-Type': 'application/json' },
+         *         body: JSON.stringify(currentResult)
+         *     });
+         *     ...
+         * }
+         * 
+         * Python sẽ ghi vào bảng:
+         * CREATE TABLE break_even (
+         *     id INTEGER PRIMARY KEY,
+         *     period TEXT,
+         *     fixed_cost REAL,
+         *     price REAL,
+         *     variable_cost REAL,
+         *     bep_qty REAL,
+         *     bep_revenue REAL,
+         *     cmr REAL,
+         *     mos_pct REAL,
+         *     created_at TEXT
+         * );
+         */
+    </script>
+</body>
+</html>

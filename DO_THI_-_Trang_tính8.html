@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>DO THI - Trang tính8</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>DO THI - Trang tính8</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>15 | 2 | TOTHIHA | 29/08/1948 | 18/11/1947 | 1 | 3 | 1948 | 4 | TI | 30 | 27 | 24 | TOTHIHA | Nữ | Tây Tứ Mệnh | Tây Tứ Mệnh – Hướng hợp: Tây (247,5°–292,5°), Tây Bắc (292,5°–337,5°), Tây Nam (202,5°–247,5°), Đông Bắc (22,5°–67,5°) | 298 độ | 2.0 | Xã hội | Phụng sự | Giáo viên | 4 | TI | 2 | 2 | SUU</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>5 | 3 | NGUYENMINHNAM | 03/03/1971 | 22/05/1970 | 0 | 1971 | 3 | HOI | 30 | 29 | 28 | NGUYENMINHNAM | Nam | Tây Tứ Mệnh | Tây Tứ Mệnh – Hướng hợp: Tây (247,5°–292,5°), Tây Bắc (292,5°–337,5°), Tây Nam (202,5°–247,5°), Đông Bắc (22,5°–67,5°) | 33 độ | 3.0 | Thực tế | Sản phẩm | Kỹ sư | 10 | NGO | 3 | 3 | DAN</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>2047 | 4 | THANTHIKIMANH | 23/09/1981 | 12/12/1980 | 1 | 5 | 1981 | 1 | DAU | 22 | 25 | 28 | THANTHIKIMANH | Nữ | Tây Tứ Mệnh | Tây Tứ Mệnh – Hướng hợp: Tây (247,5°–292,5°), Tây Bắc (292,5°–337,5°), Tây Nam (202,5°–247,5°), Đông Bắc (22,5°–67,5°) | 239 độ | 3.0 | Thực tế | Ứng dụng | Kỹ sư | 5 | SUU | 3 | 4 | DAN</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>2 | 5 | NGUYENTONGANAN | 28/09/2014 | 17/12/2013 | 4 | 2014 | 10 | NGO | 22 | 31 | 28 | NGUYENTONGANAN | Nữ | Đông Tứ Mệnh | Đông Tứ Mệnh – Hướng hợp: Bắc (337,5°–22,5°), Nam (157,5°–202,5°), Đông (67,5°–112,5°), Đông Nam (112,5°–157,5°) | 289 độ | 4.0 | Nghệ thuật | Quy định | Ca sĩ | 11 | MUI | 4 | 5 | MAO</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>SUU | 6 | NGUYENTOMINHCHAU | 25/07/2016 | 14/10/2015 | 1 | 8 | 2016 | 12 | THAN | 22 | 27 | 32 | NGUYENTOMINHCHAU | Nữ | Đông Tứ Mệnh | Đông Tứ Mệnh – Hướng hợp: Bắc (337,5°–22,5°), Nam (157,5°–202,5°), Đông (67,5°–112,5°), Đông Nam (112,5°–157,5°) | 257 độ | 4.0 | Nghệ thuật | Sáng tạo | Ca sĩ | 6 | DAN | 4 | 6 | MAO</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>2 | 7 | NGUYENTOBICHNGOC | 05/02/2020 | 26/04/2019 | 1 | 7 | 2020 | 4 | TI | 26 | 35 | 20 | NGUYENTOBICHNGOC | Nữ | Tây Tứ Mệnh | Tây Tứ Mệnh – Hướng hợp: Tây (247,5°–292,5°), Tây Bắc (292,5°–337,5°), Tây Nam (202,5°–247,5°), Đông Bắc (22,5°–67,5°) | 52 độ | 5.0 | Cổ điển | Luật lệ | Kế toán | 12 | THAN | 5 | 7 | THIN</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>THƯƠNG MẠI | 8 | NGUYENTHIMINHHANG | 07/01/1974 | 28/03/1973 | 4 | 1974 | 6 | DAN | 26 | 31 | 24 | NGUYENTHIMINHHANG | Nữ | Tây Tứ Mệnh | Tây Tứ Mệnh – Hướng hợp: Tây (247,5°–292,5°), Tây Bắc (292,5°–337,5°), Tây Nam (202,5°–247,5°), Đông Bắc (22,5°–67,5°) | 71 độ | 5.0 | Cổ điển | Cấu trúc | Kế toán | 7 | MAO | 5 | 8 | THIN</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>9 | NGOQUYCUONG | 23/05/1973 | 11/08/1972 | 0 | 34 | 1973 | 5 | SUU | 22 | 17 | 36 | NGOQUYCUONG | Nam | Đông Tứ Mệnh | Đông Tứ Mệnh – Hướng hợp: Bắc (337,5°–22,5°), Nam (157,5°–202,5°), Đông (67,5°–112,5°), Đông Nam (112,5°–157,5°) | 235 độ | 5.0 | Cổ điển | Khuôn mẫu | Kế toán | 1 | DAU | 6 | 9 | TY</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>12 | 10 | NGOGIABACH | 12/10/2000 | 1/1/2000 | 0 | 2000 | 8 | THIN | 30 | 31 | 20 | NGOGIABACH | Nam | Đông Tứ Mệnh | Đông Tứ Mệnh – Hướng hợp: Bắc (337,5°–22,5°), Nam (157,5°–202,5°), Đông (67,5°–112,5°), Đông Nam (112,5°–157,5°) | 130 độ | 6.0 | Để chế | Ảnh hưởng | Lãnh đạo | 8 | THIN | 6 | 10 | TY</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>NGO | 11 | NGOGIALINH | 05/04/2005 | 24/06/2004 | 3 | 4 | 2005 | 1 | DAU | 22 | 25 | 16 | NGOGIALINH | Nữ | Đông Tứ Mệnh | Đông Tứ Mệnh – Hướng hợp: Bắc (337,5°–22,5°), Nam (157,5°–202,5°), Đông (67,5°–112,5°), Đông Nam (112,5°–157,5°) | 54 độ | 6.0 | Để chế | Thay đổi | Lãnh đạo | 2 | TUAT | 7 | 11 | NGO</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>2 | 12 | NGUYENTHIMINHPHUONG | 06/11/1978 | 25/01/1978 | 7 | 1978 | 10 | NGO | 30 | 27 | 24 | NGUYENTHIMINHPHUONG | Nữ | Tây Tứ Mệnh | Tây Tứ Mệnh – Hướng hợp: Tây (247,5°–292,5°), Tây Bắc (292,5°–337,5°), Tây Nam (202,5°–247,5°), Đông Bắc (22,5°–67,5°) | 251 độ | 9 | TY | 7 | 12 | NGO</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>THƯƠNG MẠI | 13 | HOANGANHDUNG | 21/09/1978 | 10/12/1977 | 7 | 1978 | 10 | NGO | 22 | 31 | 28 | HOANGANHDUNG | Nam | Đông Tứ Mệnh | Đông Tứ Mệnh – Hướng hợp: Bắc (337,5°–22,5°), Nam (157,5°–202,5°), Đông (67,5°–112,5°), Đông Nam (112,5°–157,5°) | 219 độ | 3 | HOI | 8 | 13 | MUI</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>NGO | 14 | HOANGHAIVINH | 03/06/2010 | 22/08/2009 | 2010 | 6 | DAN | 30 | 35 | 16 | HOANGHAIVINH | Nam | Đông Tứ Mệnh | Đông Tứ Mệnh – Hướng hợp: Bắc (337,5°–22,5°), Nam (157,5°–202,5°), Đông (67,5°–112,5°), Đông Nam (112,5°–157,5°) | 36 độ | 8 | 14 | MUI</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>Rau củ | 15 | HOANGTHIENBACHANH | 14/11/2015 | 2/2/2015 | 2015 | 11 | MUI | 30 | 25 | 32 | HOANGTHIENBACHANH | Nữ | Tây Tứ Mệnh | Tây Tứ Mệnh – Hướng hợp: Tây (247,5°–292,5°), Tây Bắc (292,5°–337,5°), Tây Nam (202,5°–247,5°), Đông Bắc (22,5°–67,5°) | 331 độ | 9 | 15 | THAN</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>16 | TRUONG GIA KHANH Lop An | 17/12/2014 | 7/3/2014 | 30 | 27 | 24 | TRUONG GIA KHANH Lop An | Nam | Tây Tứ Mệnh | Tây Tứ Mệnh – Hướng hợp: Tây (247,5°–292,5°), Tây Bắc (292,5°–337,5°), Tây Nam (202,5°–247,5°), Đông Bắc (22,5°–67,5°) | 272 độ | 9 | 16 | THAN</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>17 | TƯƠNG LAI | 15/5/2027 | 3/8/2026 | 10 | 17 | DAU</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>18 | HUY | 1/1/1975 | 22/3/1974 | 10 | 18 | DAU</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>19 | HIEN | 1/1/1971 | 22/3/1970 | 22 | 27 | 20 | 11 | 19 | TUAT</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>20 | DAT | 1/1/1972 | 22/3/1971 | 30 | 29 | 24 | 11 | 20 | TUAT</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>21 | PHUONG TIT | 1/1/1980 | 22/3/1979 | 26 | 25 | 28 | 12 | 21 | HOI</td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td>22 | 31 | 32 | 12 | 22 | HOI</td>
+            </tr>
+            <tr>
+                <td><b>22</b></td>
+                <td>35 | 36 | 1 | 23 | TI</td>
+            </tr>
+            <tr>
+                <td><b>23</b></td>
+                <td>17 | 16 | 1 | 24 | TI</td>
+            </tr>
+            <tr>
+                <td><b>24</b></td>
+                <td>3 | NGUYENMINHNAM | TRUE | 03/03/1971</td>
+            </tr>
+            <tr>
+                <td><b>25</b></td>
+                <td>1971 | Ngày sinh | 03/03/1971 | 1971 | 3 | HOI | 12</td>
+            </tr>
+            <tr>
+                <td><b>26</b></td>
+                <td>1 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 1</td>
+            </tr>
+            <tr>
+                <td><b>27</b></td>
+                <td>SUU | Năm | 12 | 1 | 2 | 3 | 4 | 5 | 6 | 20.0 | 30.0 | 9.0</td>
+            </tr>
+            <tr>
+                <td><b>28</b></td>
+                <td>1 | Tháng | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 1 | 2 | 3 | 13.0 | 20.0 | 5.0</td>
+            </tr>
+            <tr>
+                <td><b>29</b></td>
+                <td>NÔNG NGHIỆP | Ngày | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 1 | 2 | 3</td>
+            </tr>
+            <tr>
+                <td><b>30</b></td>
+                <td>18 | 9 | 12 | 15 | 18 | 21 | 24 | 20 | 22 | 24 | 2 | 4 | 18</td>
+            </tr>
+            <tr>
+                <td><b>31</b></td>
+                <td>6 | 9 | 12 | 3 | 6 | 9 | 12 | 8 | 10 | 12 | 2 | 4 | 6 | 1 | Sinh | Lãnh đạo, Quản lý | Đứng đầu, Tổ chức</td>
+            </tr>
+            <tr>
+                <td><b>32</b></td>
+                <td>Tổng | 2 | Lão | Phó, Quân sư | Trợ lý</td>
+            </tr>
+            <tr>
+                <td><b>33</b></td>
+                <td>3 | Bệnh | Ốm đau | CNV</td>
+            </tr>
+            <tr>
+                <td><b>34</b></td>
+                <td>4 | Tử | Rất có tài, bất đắc kỳ tử | Đòi nợ, phá sản | Ko gom vốn</td>
+            </tr>
+            <tr>
+                <td><b>35</b></td>
+                <td>14 | Không đứng đầu</td>
+            </tr>
+            <tr>
+                <td><b>36</b></td>
+                <td>2 | Ti | 1</td>
+            </tr>
+            <tr>
+                <td><b>37</b></td>
+                <td>Ngo | 1 | 6</td>
+            </tr>
+            <tr>
+                <td><b>38</b></td>
+                <td>Suu | 2 | THAN | DAN</td>
+            </tr>
+            <tr>
+                <td><b>39</b></td>
+                <td>Mui | 2 | 30 | 35 | 28 | MAO | DAU</td>
+            </tr>
+            <tr>
+                <td><b>40</b></td>
+                <td>Dan | 3 | TIỀN VẬN | TRUNG VẬN | HẬU VẬN | THIN | TUAT</td>
+            </tr>
+            <tr>
+                <td><b>41</b></td>
+                <td>Than | 3 | TY | HOI</td>
+            </tr>
+            <tr>
+                <td><b>42</b></td>
+                <td>Mao | 4 | 30 | 29 | 28 | TI | NGO</td>
+            </tr>
+            <tr>
+                <td><b>43</b></td>
+                <td>Dau | 4 | Số nhà  | Số tầng  | Số phòng | SUU | MUI</td>
+            </tr>
+            <tr>
+                <td><b>44</b></td>
+                <td>Thin | 5 | DAN | THAN</td>
+            </tr>
+            <tr>
+                <td><b>45</b></td>
+                <td>Tuat | 5 | DAU | MAO</td>
+            </tr>
+            <tr>
+                <td><b>46</b></td>
+                <td>Ty | 6 | TUAT | THIN</td>
+            </tr>
+            <tr>
+                <td><b>47</b></td>
+                <td>Hoi | 6 | HOI | TY</td>
+            </tr>
+            <tr>
+                <td><b>48</b></td>
+                <td>NGO | TI</td>
+            </tr>
+            <tr>
+                <td><b>49</b></td>
+                <td>7 | 14 | 21 | 28 | 35 | 42 | 49 | 56 | 63 | 70 | 77 | 84 | 91 | MUI | SUU</td>
+            </tr>
+            <tr>
+                <td><b>50</b></td>
+                <td>1978 | 1984 | 1990 | 1996 | 2002 | 2008 | 2014 | 2020 | 2026 | 2032 | 2038 | 2044 | 2050</td>
+            </tr>
+            <tr>
+                <td><b>51</b></td>
+                <td>1 | 12 | Thượng thọ | 1 | 1 | 1 | 7.0</td>
+            </tr>
+            <tr>
+                <td><b>52</b></td>
+                <td>2 | 11 | Hòa tan sự sống  | 14.0</td>
+            </tr>
+            <tr>
+                <td><b>53</b></td>
+                <td>Chuyển Giao Tài sản  | 3 | 10 | Tha thứ tri ân  | 1 | 21.0 | 1 | SUU | SUU | TAM TANG</td>
+            </tr>
+            <tr>
+                <td><b>54</b></td>
+                <td>4 | 9 | Sống chậm chia sẻ  | 1 | 1 | 28.0 | 2 | SUU | SUU | KẾ TOÁN</td>
+            </tr>
+            <tr>
+                <td><b>55</b></td>
+                <td>5 | 8 | Rút khỏi đua tranh | 1 | 35.0 | 3 | DAN | DAN | CÔNG TY</td>
+            </tr>
+            <tr>
+                <td><b>56</b></td>
+                <td>6 | 7 | Định hướng sống  | 42.0 | 4 | DAN | DAN | BẾP TRƯỞNG</td>
+            </tr>
+            <tr>
+                <td><b>57</b></td>
+                <td>7 | 6 | Xây dựng nhà  | 1 | 1 | 1 | 49.0 | 5 | MAO | MAO | CA CHEP</td>
+            </tr>
+            <tr>
+                <td><b>58</b></td>
+                <td>8 | 5 | Hôn nhân sự nghiệp  | 56.0 | 6 | MAO | MAO | SA TANG</td>
+            </tr>
+            <tr>
+                <td><b>59</b></td>
+                <td>9 | 4 | Học Kinh doanh | 1 | 63.0 | 7 | THIN | THIN | NGÂN HÀNG</td>
+            </tr>
+            <tr>
+                <td><b>60</b></td>
+                <td>10 | 3 | Khẳng định giá trị | 1 | 70.0 | 8 | THIN | THIN | VE SINH</td>
+            </tr>
+            <tr>
+                <td><b>61</b></td>
+                <td>11 | 2 | Tư duy phát triển  | 1 | 77.0 | 9 | TY | TY | NGO KHONG</td>
+            </tr>
+            <tr>
+                <td><b>62</b></td>
+                <td>12 | 1 | TY vô điều kiện | 84.0 | 10 | TY | TY | GIÚP VIỆC, GIA SƯ</td>
+            </tr>
+            <tr>
+                <td><b>63</b></td>
+                <td>7 | 14 | 21 | 28 | 35 | 42 | 49 | 56 | 63 | 70 | 77 | 84 | 91 | 91.0 | 11 | NGO | NGO | BẢO VỆ</td>
+            </tr>
+            <tr>
+                <td><b>64</b></td>
+                <td>2050 | 2057 | 2064 | 2071 | 2078 | 2085 | 2092 | 2099 | 2106 | 2113 | 2120 | 2127 | 2134 | 91.0 | 12 | NGO | NGO | BAT GIOI</td>
+            </tr>
+            <tr>
+                <td><b>65</b></td>
+                <td>91 | 98 | 105 | 112 | 119 | 126 | 133 | 140 | 147 | 154 | 161 | 168 | 175 | 98.0 | 13 | MUI | MUI</td>
+            </tr>
+            <tr>
+                <td><b>66</b></td>
+                <td>56 | 56 | 62 | 68 | 74 | 80 | 86 | 92 | 98 | 104 | 110 | 116 | 122 | 128 | 105.0 | 14 | MUI | MUI</td>
+            </tr>
+            <tr>
+                <td><b>67</b></td>
+                <td>SN | 3/3/1971 | 7 | 4 | 1 | 10 | 7 | 4 | 1 | 5 | 3 | 1 | 11 | 9 | 7 | 112.0 | 15 | THAN | THAN</td>
+            </tr>
+            <tr>
+                <td><b>68</b></td>
+                <td>2027 | Hôm nay | 15/5/2027 | Năm | Xây dựng nhà  | Sống chậm chia sẻ  | Thượng thọ | Khẳng định giá trị | Xây dựng nhà  | Sống chậm chia sẻ  | Thượng thọ | Rút khỏi đua tranh | Tha thứ tri ân  | Thượng thọ | Tư duy phát triển  | Học Kinh doanh | Xây dựng nhà  | 119.0 | 16 | THAN | THAN</td>
+            </tr>
+            <tr>
+                <td><b>69</b></td>
+                <td>15/5/2027 | 126.0 | 17 | DAU | DAU</td>
+            </tr>
+            <tr>
+                <td><b>70</b></td>
+                <td>133.0 | 18 | DAU | DAU</td>
+            </tr>
+            <tr>
+                <td><b>71</b></td>
+                <td>140.0 | 19 | TUAT | TUAT</td>
+            </tr>
+            <tr>
+                <td><b>72</b></td>
+                <td>147.0 | 20 | TUAT | TUAT</td>
+            </tr>
+            <tr>
+                <td><b>73</b></td>
+                <td>154.0 | 21 | HOI | HOI</td>
+            </tr>
+            <tr>
+                <td><b>74</b></td>
+                <td>161.0 | 22 | HOI | HOI</td>
+            </tr>
+            <tr>
+                <td><b>75</b></td>
+                <td>168.0 | 23 | TI | TI</td>
+            </tr>
+            <tr>
+                <td><b>76</b></td>
+                <td>175.0 | 24 | TI | TI</td>
+            </tr>
+            <tr>
+                <td><b>77</b></td>
+                <td>6 | 3 | DAN | Nước | 5</td>
+            </tr>
+            <tr>
+                <td><b>78</b></td>
+                <td>10 | 7 | NGO | Rau củ | 30</td>
+            </tr>
+            <tr>
+                <td><b>79</b></td>
+                <td>1 | 12 | 9 | THAN | Hoa quả | 30</td>
+            </tr>
+            <tr>
+                <td><b>80</b></td>
+                <td>2 | 8 | 5 | THIN | Cá | 60</td>
+            </tr>
+            <tr>
+                <td><b>81</b></td>
+                <td>3 | 4 | 1 | TI | Cơm | 120</td>
+            </tr>
+            <tr>
+                <td><b>82</b></td>
+                <td>4 | 7 | 4 | MAO | Sữa, Bơ, Phomai | 140</td>
+            </tr>
+            <tr>
+                <td><b>83</b></td>
+                <td>5 | 1 | 10 | DAU | Thịt gà | 180</td>
+            </tr>
+            <tr>
+                <td><b>84</b></td>
+                <td>6 | 5 | 2 | SUU | Thịt bò | 240</td>
+            </tr>
+            <tr>
+                <td><b>85</b></td>
+                <td>7 | 3 | 12 | HOI | Thịt lợn | 300</td>
+            </tr>
+            <tr>
+                <td><b>86</b></td>
+                <td>8 | 2 | 11 | TUAT | Thịt chó | 320</td>
+            </tr>
+            <tr>
+                <td><b>87</b></td>
+                <td>9 | 9 | 6 | TY | Thịt rắn | 160</td>
+            </tr>
+            <tr>
+                <td><b>88</b></td>
+                <td>10 | 11 | 8 | MUI | Thịt dê | 200</td>
+            </tr>
+            <tr>
+                <td><b>89</b></td>
+                <td>11</td>
+            </tr>
+            <tr>
+                <td><b>90</b></td>
+                <td>12</td>
+            </tr>
+            <tr>
+                <td><b>91</b></td>
+                <td>1 | NÔNG NGHIỆP</td>
+            </tr>
+            <tr>
+                <td><b>92</b></td>
+                <td>2 | THƯƠNG MẠI</td>
+            </tr>
+            <tr>
+                <td><b>93</b></td>
+                <td>3 | Y TẾ</td>
+            </tr>
+            <tr>
+                <td><b>94</b></td>
+                <td>GIỜ SINH | GIỜ NÀY | 4 | CÔNG NGHIỆP</td>
+            </tr>
+            <tr>
+                <td><b>95</b></td>
+                <td>22 | 12 | 5 | QUỐC PHÒNG</td>
+            </tr>
+            <tr>
+                <td><b>96</b></td>
+                <td>NGO | 1 | 6 | LÃNH ĐẠO</td>
+            </tr>
+            <tr>
+                <td><b>97</b></td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td><b>98</b></td>
+                <td>NĂM NAY | THƯƠNG MẠI</td>
+            </tr>
+            <tr>
+                <td><b>99</b></td>
+                <td>11 | NGO | 1</td>
+            </tr>
+            <tr>
+                <td><b>100</b></td>
+                <td>Rau củ</td>
+            </tr>
+            <tr>
+                <td><b>101</b></td>
+                <td>TAY DU KY</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

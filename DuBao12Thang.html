@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Module 39 - Phân tích Chi phí Quản lý</title>
+    <!-- Chart.js v3 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js">
+    </script>
+    <style>
+        /* ---------- RESET & FONTS ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #f4f7fc;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .module-container {
+            max-width: 1400px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.08);
+            padding: 40px 35px 45px;
+            transition: all 0.2s;
+        }
+
+        /* ---------- HEADER ---------- */
+        .module-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eef3f8;
+            padding-bottom: 20px;
+        }
+
+        .module-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0b1e33;
+            letter-spacing: -0.3px;
+        }
+
+        .module-header h1 span {
+            background: #0b1e33;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 40px;
+            margin-left: 14px;
+            letter-spacing: 0.3px;
+        }
+
+        .module-badge {
+            background: #eaf2ff;
+            color: #1a5cff;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* ---------- GRID LAYOUT ---------- */
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .row-full {
+            grid-column: 1 / -1;
+        }
+
+        .row-3col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        /* ---------- CARDS ---------- */
+        .card {
+            background: #fafcff;
+            border-radius: 24px;
+            padding: 24px 26px 28px;
+            border: 1px solid #eef3f8;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            transition: 0.15s;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #2c3e50;
+            letter-spacing: 0.3px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title i {
+            font-style: normal;
+            background: #eef3f8;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            color: #4a5b6e;
+        }
+
+        /* ---------- FORM ---------- */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            font-weight: 500;
+            font-size: 14px;
+            color: #1f2a3a;
+        }
+
+        .input-group .hint {
+            font-size: 12px;
+            color: #7a8a9e;
+            margin-top: -2px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .input-row .input-group {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #dde6ef;
+            border-radius: 16px;
+            font-size: 15px;
+            background: #ffffff;
+            transition: 0.2s;
+            outline: none;
+            color: #0b1e33;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #1a5cff;
+            box-shadow: 0 0 0 4px rgba(26, 92, 255, 0.08);
+        }
+
+        .btn {
+            background: #0b1e33;
+            color: #fff;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #1a5cff;
+        }
+
+        .btn-primary:hover {
+            background: #0f47cc;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(26, 92, 255, 0.25);
+        }
+
+        .btn-success {
+            background: #22b573;
+        }
+
+        .btn-success:hover {
+            background: #1a9a62;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(34, 181, 115, 0.25);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #1a5cff;
+            border: 1.5px solid #1a5cff;
+        }
+
+        .btn-outline:hover {
+            background: #f0f5ff;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        /* ---------- AI BOX ---------- */
+        .ai-box {
+            background: #f0f7fe;
+            border-radius: 20px;
+            padding: 20px 24px;
+            border-left: 6px solid #1a5cff;
+            margin-top: 16px;
+        }
+
+        .ai-box h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0b1e33;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .ai-box p {
+            font-size: 14.5px;
+            line-height: 1.6;
+            color: #1f2a3a;
+            margin-bottom: 6px;
+        }
+
+        .ai-box .label {
+            font-weight: 600;
+            color: #0b1e33;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .tag-green {
+            background: #d4f0e0;
+            color: #0e6b3e;
+        }
+
+        .tag-yellow {
+            background: #fff1cf;
+            color: #9e6f0a;
+        }
+
+        .tag-red {
+            background: #fde2e2;
+            color: #b91c1c;
+        }
+
+        .tag-blue {
+            background: #dce7ff;
+            color: #1a5cff;
+        }
+
+        .tag-purple {
+            background: #e8dfff;
+            color: #6c3cb0;
+        }
+
+        /* ---------- CHART WRAPPER ---------- */
+        .chart-wrapper {
+            position: relative;
+            height: 240px;
+            margin-top: 6px;
+        }
+
+        .chart-wrapper-pie {
+            position: relative;
+            height: 220px;
+            margin-top: 6px;
+        }
+
+        /* ---------- TABLE ---------- */
+        .table-wrap {
+            overflow-x: auto;
+            margin-top: 10px;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+        }
+
+        th {
+            text-align: left;
+            padding: 10px 8px 8px 0;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 2px solid #e2eaf2;
+            position: sticky;
+            top: 0;
+            background: #fafcff;
+            z-index: 2;
+        }
+
+        td {
+            padding: 8px 8px 8px 0;
+            border-bottom: 1px solid #edf2f7;
+            color: #1f2a3a;
+        }
+
+        td:last-child,
+        th:last-child {
+            text-align: right;
+        }
+
+        .highlight-row {
+            background: #f8faff;
+            font-weight: 600;
+        }
+
+        .cost-color {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+
+        /* ---------- STATUS BAR ---------- */
+        .status-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 40px;
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 16px 24px;
+            margin-top: 20px;
+            border: 1px solid #eef3f8;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .status-item .num {
+            font-weight: 700;
+            font-size: 20px;
+            color: #0b1e33;
+        }
+
+        .status-item .lbl {
+            font-size: 14px;
+            color: #5b6f84;
+        }
+
+        /* ---------- COST ITEMS ---------- */
+        .cost-item {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px 14px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #eef3f8;
+            transition: 0.2s;
+        }
+
+        .cost-item:hover {
+            background: #f0f5ff;
+        }
+
+        .cost-item .color-box {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .cost-item .cname {
+            flex: 1;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .cost-item .ccost {
+            font-weight: 600;
+            color: #0b1e33;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .cost-item input[type="number"] {
+            width: 110px;
+            padding: 6px 10px;
+            border: 1.5px solid #dde6ef;
+            border-radius: 10px;
+            font-size: 14px;
+            text-align: right;
+        }
+
+        .cost-item input[type="number"]:focus {
+            border-color: #1a5cff;
+        }
+
+        .cost-item .pbutton {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0 6px;
+            transition: 0.2s;
+        }
+
+        .cost-item .pbutton:hover {
+            transform: scale(1.2);
+        }
+
+        /* ---------- ADD COST ---------- */
+        .add-cost-area {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+
+        .add-cost-area input {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .add-cost-area input[type="color"] {
+            width: 44px;
+            height: 44px;
+            padding: 2px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .add-cost-area .btn {
+            padding: 10px 20px;
+        }
+
+        /* ---------- RATIO INDICATOR ---------- */
+        .ratio-indicator {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 18px;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 1px solid #eef3f8;
+            margin-top: 12px;
+        }
+
+        .ratio-indicator .ratio-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .ratio-indicator .ratio-label {
+            font-size: 14px;
+            color: #5b6f84;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 1024px) {
+            .row-3col {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 820px) {
+            .row,
+            .row-3col {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .module-container {
+                padding: 24px 16px;
+            }
+            .module-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .cost-item {
+                flex-wrap: wrap;
+            }
+            .cost-item input[type="number"] {
+                width: 80px;
+            }
+        }
+
+        /* ---------- SCROLLBAR ---------- */
+        ::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0f4fa;
+            border-radius: 12px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd8e6;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="module-container" id="app">
+
+        <!-- ===== HEADER ===== -->
+        <div class="module-header">
+            <div>
+                <h1>
+                    🏢 Phân tích Chi phí Quản lý
+                    <span>39</span>
+                </h1>
+                <div style="font-size:14px; color:#5b6f84; margin-top:6px;">
+                    Phân tích chi phí quản lý doanh nghiệp, hiệu quả và tối ưu hóa
+                </div>
+            </div>
+            <div class="module-badge">⚡ AI + SQLite sẵn sàng</div>
+        </div>
+
+        <!-- ===== ROW 1: QUẢN LÝ CHI PHÍ QUẢN LÝ ===== -->
+        <div class="row row-full">
+            <div class="card">
+                <div class="card-title">
+                    📋 Danh sách chi phí quản lý
+                    <i>Hạng mục & số tiền</i>
+                </div>
+
+                <div id="costList">
+                    <!-- JavaScript sẽ render danh sách chi phí -->
+                </div>
+
+                <div class="add-cost-area">
+                    <input type="text" id="newCostName" placeholder="Tên hạng mục..." />
+                    <input type="number" id="newCostAmount" placeholder="Số tiền (tr/tháng)" step="2" />
+                    <input type="color" id="newCostColor" value="#1a5cff" />
+                    <button class="btn btn-success btn-sm" id="btnAddCost">➕ Thêm</button>
+                </div>
+                <div style="margin-top:8px; font-size:12px; color:#7a8a9e;">
+                    💡 Chi phí quản lý bao gồm: lương quản lý, văn phòng, điện nước, bảo hiểm,...
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ROW 2: NÚT ===== -->
+        <div class="row row-full">
+            <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;">
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btnAnalyze">📊 Phân tích</button>
+                    <button class="btn btn-success" id="btnSaveSQLite">💾 Lưu SQLite</button>
+                    <button class="btn btn-outline" id="btnExportExcel">📥 Xuất Excel</button>
+                    <button class="btn btn-outline" id="btnResetDefault">🔄 Reset mẫu</button>
+                </div>
+                <div style="font-size:13px; color:#7a8a9e; background:#f4f7fc; padding:6px 18px; border-radius:40px;">
+                    Module 39 · Chi phí Quản lý
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== STATUS BAR ===== -->
+        <div class="status-bar" id="statusBar">
+            <div class="status-item">
+                <span class="lbl">Tổng chi phí quản lý</span>
+                <span class="num" id="totalCost">215</span>
+                <span class="lbl">tr VNĐ/tháng</span>
+            </div>
+            <div class="status-item">
+                <span class="lbl">Số hạng mục</span>
+                <span class="num" id="itemCount">7</span>
+            </div>
+            <div class="status-item">
+                <span class="lbl">Chi phí lớn nhất</span>
+                <span class="num" id="largestItem">Lương quản lý</span>
+                <span class="lbl" id="largestShare">(32%)</span>
+            </div>
+            <div class="status-item">
+                <span class="lbl">Chi phí bình quân</span>
+                <span class="num" id="avgCost">30,7</span>
+                <span class="lbl">tr/hạng mục</span>
+            </div>
+        </div>
+
+        <!-- ===== RATIO INDICATOR ===== -->
+        <div class="row row-full">
+            <div class="ratio-indicator">
+                <span class="ratio-label">📊 Chi phí quản lý / Tổng chi phí:</span>
+                <span class="ratio-value" id="costRatio">12,5%</span>
+                <span style="color:#5b6f84; margin-left:12px;">(Ngưỡng khuyến nghị: 8-15% tổng chi phí)</span>
+            </div>
+        </div>
+
+        <!-- ===== ROW 3: BIỂU ĐỒ ===== -->
+        <div class="row">
+            <!-- Biểu đồ cột -->
+            <div class="card">
+                <div class="card-title">
+                    📊 Chi phí quản lý theo hạng mục
+                    <i>So sánh</i>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="barChart"></canvas>
+                </div>
+                <div style="margin-top:12px; font-size:13px; color:#5b6f84;">
+                    📊 So sánh chi phí quản lý giữa các hạng mục
+                </div>
+            </div>
+
+            <!-- Biểu đồ tròn + AI -->
+            <div class="card">
+                <div class="card-title">
+                    🍩 Cơ cấu chi phí quản lý
+                    <i>Phân bổ</i>
+                </div>
+                <div class="chart-wrapper-pie">
+                    <canvas id="pieChart"></canvas>
+                </div>
+
+                <!-- AI NHẬN XÉT -->
+                <div class="ai-box" id="aiBox" style="margin-top:16px;">
+                    <h4>🧠 AI Nhận xét & Khuyến nghị</h4>
+                    <div id="aiContent">
+                        <p><span class="label">Trạng thái:</span> <span class="tag tag-green">Hiệu quả</span></p>
+                        <p>Cơ cấu chi phí quản lý hợp lý, nằm trong ngưỡng khuyến nghị.</p>
+                        <p><span class="label">Khuyến nghị:</span> Duy trì và tối ưu hóa các hạng mục lớn.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ROW 4: BẢNG CHI TIẾT ===== -->
+        <div class="row row-full">
+            <div class="card">
+                <div class="card-title">
+                    📋 Bảng phân tích chi tiết
+                    <i>Chi phí, tỷ trọng, đánh giá</i>
+                </div>
+                <div class="table-wrap" style="max-height:260px;">
+                    <table id="detailTable">
+                        <thead>
+                            <tr>
+                                <th>Hạng mục</th>
+                                <th>Chi phí (tr/tháng)</th>
+                                <th>Tỷ trọng</th>
+                                <th>Phân loại</th>
+                                <th>Khuyến nghị</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- JavaScript sẽ điền -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <div style="margin-top:28px; border-top:1px solid #eef3f8; padding-top:22px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:14px; color:#7a8a9e;">
+            <div>© CEO AI Enterprise · Module 39 · Phân tích chi phí quản lý</div>
+            <div>⚡ Dữ liệu lưu trữ SQLite · Xuất Excel · Tích hợp Dashboard</div>
+        </div>
+
+    </div>
+
+    <script>
+        // ================================================================
+        // MODULE 39 – PHÂN TÍCH CHI PHÍ QUẢN LÝ
+        // Quản lý chi phí quản lý doanh nghiệp, phân tích hiệu quả
+        // ================================================================
+
+        (function() {
+            'use strict';
+
+            // ---------- STATE ----------
+            let costItems = [
+                { id: 1, name: 'Lương quản lý cấp cao', cost: 68, color: '#1a5cff' },
+                { id: 2, name: 'Chi phí văn phòng', cost: 45, color: '#ff8c42' },
+                { id: 3, name: 'Điện nước - Internet', cost: 28, color: '#22b573' },
+                { id: 4, name: 'Bảo hiểm doanh nghiệp', cost: 24, color: '#6c3cb0' },
+                { id: 5, name: 'Phí dịch vụ chuyên nghiệp', cost: 20, color: '#dc3545' },
+                { id: 6, name: 'Đào tạo - Phát triển', cost: 18, color: '#f4b942' },
+                { id: 7, name: 'Chi phí khác', cost: 12, color: '#4a90e2' },
+            ];
+
+            let nextId = 8;
+
+            // ---------- DOM refs ----------
+            const costListEl = document.getElementById('costList');
+            const newCostName = document.getElementById('newCostName');
+            const newCostAmount = document.getElementById('newCostAmount');
+            const newCostColor = document.getElementById('newCostColor');
+            const btnAddCost = document.getElementById('btnAddCost');
+            const btnAnalyze = document.getElementById('btnAnalyze');
+            const btnSaveSQLite = document.getElementById('btnSaveSQLite');
+            const btnExportExcel = document.getElementById('btnExportExcel');
+            const btnResetDefault = document.getElementById('btnResetDefault');
+
+            const totalCost = document.getElementById('totalCost');
+            const itemCount = document.getElementById('itemCount');
+            const largestItem = document.getElementById('largestItem');
+            const largestShare = document.getElementById('largestShare');
+            const avgCost = document.getElementById('avgCost');
+            const costRatio = document.getElementById('costRatio');
+
+            const tableBody = document.getElementById('tableBody');
+            const aiContent = document.getElementById('aiContent');
+
+            let barChartInstance = null;
+            let pieChartInstance = null;
+
+            // ---------- Hàm render danh sách chi phí ----------
+            function renderCostList() {
+                let html = '';
+                costItems.forEach((item, index) => {
+                    html += `
+                                <div class="cost-item" data-id="${item.id}">
+                                    <div class="color-box" style="background:${item.color};"></div>
+                                    <span class="cname">${item.name}</span>
+                                    <input type="number" class="cost-amount" value="${item.cost}" step="2" data-id="${item.id}" />
+                                    <span class="ccost">${item.cost.toFixed(0)} tr</span>
+                                    <button class="pbutton" data-id="${item.id}">✕</button>
+                                </div>
+                            `;
+                });
+                costListEl.innerHTML = html;
+
+                // Gán sự kiện cho các input
+                document.querySelectorAll('.cost-amount').forEach(input => {
+                    input.addEventListener('change', function() {
+                        const id = parseInt(this.dataset.id);
+                        const val = parseFloat(this.value) || 0;
+                        const item = costItems.find(i => i.id === id);
+                        if (item) {
+                            item.cost = Math.max(0, val);
+                            const parent = this.closest('.cost-item');
+                            const costSpan = parent.querySelector('.ccost');
+                            if (costSpan) costSpan.textContent = val.toFixed(0) + ' tr';
+                            analyze();
+                        }
+                    });
+                    input.addEventListener('input', function() {
+                        const id = parseInt(this.dataset.id);
+                        const val = parseFloat(this.value) || 0;
+                        const item = costItems.find(i => i.id === id);
+                        if (item) {
+                            item.cost = Math.max(0, val);
+                            const parent = this.closest('.cost-item');
+                            const costSpan = parent.querySelector('.ccost');
+                            if (costSpan) costSpan.textContent = val.toFixed(0) + ' tr';
+                        }
+                    });
+                });
+
+                document.querySelectorAll('.pbutton').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.dataset.id);
+                        if (costItems.length <= 1) {
+                            alert('⚠️ Cần ít nhất 1 hạng mục để phân tích!');
+                            return;
+                        }
+                        if (confirm(`Xóa hạng mục chi phí này?`)) {
+                            costItems = costItems.filter(i => i.id !== id);
+                            renderCostList();
+                            analyze();
+                        }
+                    });
+                });
+            }
+
+            // ---------- Hàm phân tích chính ----------
+            function analyze() {
+                // Tính tổng chi phí
+                const totalCostVal = costItems.reduce((sum, item) => sum + item.cost, 0);
+
+                // Cập nhật status bar
+                totalCost.textContent = totalCostVal.toFixed(0);
+                itemCount.textContent = costItems.length;
+
+                // Tìm hạng mục lớn nhất
+                if (costItems.length > 0) {
+                    const sorted = [...costItems].sort((a, b) => b.cost - a.cost);
+                    const top = sorted[0];
+                    largestItem.textContent = top.name;
+                    const share = totalCostVal > 0 ? (top.cost / totalCostVal * 100) : 0;
+                    largestShare.textContent = `(${share.toFixed(0)}%)`;
+                }
+
+                // Chi phí bình quân
+                const avgCostVal = costItems.length > 0 ? totalCostVal / costItems.length : 0;
+                avgCost.textContent = avgCostVal.toFixed(1);
+
+                // Tính tỷ lệ chi phí quản lý / tổng chi phí (giả sử tổng chi phí = 1720 tr - tương đương data mẫu)
+                // Trong thực tế, người dùng sẽ nhập tổng chi phí từ module khác
+                const totalAllCost = 1720; // Giá trị mẫu - có thể kết nối với module tổng chi phí
+                const ratio = totalAllCost > 0 ? (totalCostVal / totalAllCost * 100) : 0;
+                costRatio.textContent = ratio.toFixed(1) + '%';
+
+                // Bảng chi tiết
+                renderTable(totalCostVal);
+
+                // Biểu đồ
+                renderCharts(totalCostVal);
+
+                // AI nhận xét
+                generateAI(totalCostVal, ratio, avgCostVal);
+            }
+
+            // ---------- Render bảng ----------
+            function renderTable(totalCostVal) {
+                const sorted = [...costItems].sort((a, b) => b.cost - a.cost);
+                let html = '';
+                sorted.forEach(item => {
+                    const share = totalCostVal > 0 ? (item.cost / totalCostVal * 100) : 0;
+
+                    let classification = '';
+                    let evalColor = '';
+                    let recommendation = '';
+
+                    if (share > 25) {
+                        classification = '⭐ Chi phí trọng yếu';
+                        evalColor = 'tag-red';
+                        recommendation = 'Cần kiểm soát chặt chẽ';
+                    } else if (share > 15) {
+                        classification = '📈 Chi phí quan trọng';
+                        evalColor = 'tag-yellow';
+                        recommendation = 'Theo dõi và tối ưu';
+                    } else if (share > 5) {
+                        classification = '📊 Chi phí bình thường';
+                        evalColor = 'tag-blue';
+                        recommendation = 'Duy trì hợp lý';
+                    } else {
+                        classification = '✅ Chi phí nhỏ';
+                        evalColor = 'tag-green';
+                        recommendation = 'Tiếp tục duy trì';
+                    }
+
+                    html += `
+                                <tr>
+                                    <td><span class="cost-color" style="background:${item.color};"></span>${item.name}</td>
+                                    <td>${item.cost.toFixed(0)}</td>
+                                    <td>${share.toFixed(1)}%</td>
+                                    <td><span class="tag ${evalColor}">${classification}</span></td>
+                                    <td>${recommendation}</td>
+                                </tr>
+                            `;
+                });
+
+                // Dòng tổng
+                html += `
+                            <tr class="highlight-row">
+                                <td><strong>TỔNG</strong></td>
+                                <td><strong>${totalCostVal.toFixed(0)}</strong></td>
+                                <td>100%</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        `;
+                tableBody.innerHTML = html;
+            }
+
+            // ---------- Render biểu đồ ----------
+            function renderCharts(totalCostVal) {
+                const names = costItems.map(item => item.name);
+                const costs = costItems.map(item => item.cost);
+                const colors = costItems.map(item => item.color);
+
+                // Bar Chart
+                const barCtx = document.getElementById('barChart').getContext('2d');
+                if (barChartInstance) barChartInstance.destroy();
+
+                barChartInstance = new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: names,
+                        datasets: [{
+                            label: 'Chi phí quản lý (tr VNĐ/tháng)',
+                            data: costs,
+                            backgroundColor: colors.map(c => c + 'CC'),
+                            borderColor: colors,
+                            borderWidth: 2,
+                            borderRadius: 8,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const share = totalCostVal > 0 ? (context.parsed.y / totalCostVal *
+                                            100) : 0;
+                                        return `${context.parsed.y.toFixed(0)} tr (${share.toFixed(1)}%)`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: '#eef3f8' },
+                                ticks: { callback: function(v) { return v.toFixed(0); } }
+                            },
+                            x: {
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+
+                // Pie Chart
+                const pieCtx = document.getElementById('pieChart').getContext('2d');
+                if (pieChartInstance) pieChartInstance.destroy();
+
+                pieChartInstance = new Chart(pieCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: names,
+                        datasets: [{
+                            data: costs,
+                            backgroundColor: colors,
+                            borderColor: '#ffffff',
+                            borderWidth: 3,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 12,
+                                    font: { size: 11 }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const total2 = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const share = total2 > 0 ? (context.parsed / total2 * 100) : 0;
+                                        return `${context.label}: ${context.parsed.toFixed(0)} tr (${share.toFixed(1)}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // ---------- AI nhận xét ----------
+            function generateAI(totalCostVal, ratio, avgCostVal) {
+                const sorted = [...costItems].sort((a, b) => b.cost - a.cost);
+                const topShare = totalCostVal > 0 ? (sorted[0]?.cost || 0) / totalCostVal * 100 : 0;
+                const top3Share = totalCostVal > 0 ? sorted.slice(0, 3).reduce((sum, item) => sum + item.cost, 0) /
+                    totalCostVal * 100 : 0;
+
+                let status = '',
+                    color = '',
+                    recommend = '';
+
+                // Đánh giá dựa trên tỷ lệ chi phí quản lý
+                if (ratio < 8) {
+                    status = 'Chi phí quản lý thấp (có thể thiếu đầu tư)';
+                    color = 'tag-yellow';
+                    recommend = 'Cần xem xét tăng đầu tư vào quản lý để nâng cao hiệu quả.';
+                } else if (ratio <= 15) {
+                    status = 'Chi phí quản lý tối ưu';
+                    color = 'tag-green';
+                    recommend = 'Duy trì cơ cấu chi phí hiện tại, tối ưu hóa các khoản chi không cần thiết.';
+                } else if (ratio <= 20) {
+                    status = 'Chi phí quản lý cao hơn bình thường';
+                    color = 'tag-yellow';
+                    recommend = 'Rà soát và cắt giảm các khoản chi phí không hiệu quả.';
+                } else {
+                    status = 'Chi phí quản lý rất cao';
+                    color = 'tag-red';
+                    recommend = 'Cần tái cấu trúc bộ máy quản lý, cắt giảm chi phí.';
+                }
+
+                // Đánh giá phân bổ
+                let distribution = '';
+                if (topShare > 40) {
+                    distribution = 'Tập trung cao (rủi ro)';
+                } else if (topShare > 25) {
+                    distribution = 'Tương đối tập trung';
+                } else {
+                    distribution = 'Phân bổ cân đối';
+                }
+
+                // Đánh giá tính đa dạng
+                let diversity = '';
+                if (costItems.length > 10) {
+                    diversity = 'Rất đa dạng';
+                } else if (costItems.length > 5) {
+                    diversity = 'Đa dạng';
+                } else {
+                    diversity = 'Ít hạng mục';
+                }
+
+                const aiHtml = `
+                            <p><span class="label">Đánh giá chi phí quản lý:</span> <span class="tag ${color}">${status}</span></p>
+                            <p>🔹 Tổng chi phí: <strong>${totalCostVal.toFixed(0)} tr VNĐ/tháng</strong></p>
+                            <p>🔹 Tỷ lệ chi phí quản lý: <strong>${ratio.toFixed(1)}%</strong> tổng chi phí</p>
+                            <p>🔹 Phân bổ: <strong>${distribution}</strong> (top 3 hạng mục chiếm ${top3Share.toFixed(1)}%)</p>
+                            <p>🔹 Số hạng mục: <strong>${costItems.length}</strong> (${diversity})</p>
+                            <p>🔹 Chi phí bình quân: <strong>${avgCostVal.toFixed(1)} tr/hạng mục</strong></p>
+                            <p><span class="label">💡 Khuyến nghị:</span> ${recommend}</p>
+                            <p style="margin-top:6px; font-size:13px; color:#4a5b6e;">⚡ Ngưỡng khuyến nghị: chi phí quản lý nên chiếm 8-15% tổng chi phí.</p>
+                        `;
+                aiContent.innerHTML = aiHtml;
+            }
+
+            // ---------- Thêm hạng mục ----------
+            function addCostItem() {
+                const name = newCostName.value.trim();
+                const cost = parseFloat(newCostAmount.value);
+                const color = newCostColor.value;
+
+                if (!name) {
+                    alert('⚠️ Vui lòng nhập tên hạng mục!');
+                    return;
+                }
+                if (isNaN(cost) || cost < 0) {
+                    alert('⚠️ Vui lòng nhập số tiền hợp lệ!');
+                    return;
+                }
+                if (costItems.some(item => item.name.toLowerCase() === name.toLowerCase())) {
+                    alert('⚠️ Hạng mục đã tồn tại!');
+                    return;
+                }
+
+                costItems.push({
+                    id: nextId++,
+                    name: name,
+                    cost: cost,
+                    color: color
+                });
+
+                newCostName.value = '';
+                newCostAmount.value = '';
+
+                renderCostList();
+                analyze();
+            }
+
+            // ---------- Reset mặc định ----------
+            function resetDefault() {
+                costItems = [
+                    { id: 1, name: 'Lương quản lý cấp cao', cost: 68, color: '#1a5cff' },
+                    { id: 2, name: 'Chi phí văn phòng', cost: 45, color: '#ff8c42' },
+                    { id: 3, name: 'Điện nước - Internet', cost: 28, color: '#22b573' },
+                    { id: 4, name: 'Bảo hiểm doanh nghiệp', cost: 24, color: '#6c3cb0' },
+                    { id: 5, name: 'Phí dịch vụ chuyên nghiệp', cost: 20, color: '#dc3545' },
+                    { id: 6, name: 'Đào tạo - Phát triển', cost: 18, color: '#f4b942' },
+                    { id: 7, name: 'Chi phí khác', cost: 12, color: '#4a90e2' },
+                ];
+                nextId = 8;
+                renderCostList();
+                analyze();
+            }
+
+            // ---------- Lưu SQLite (mô phỏng) ----------
+            function saveToSQLite() {
+                console.log('🔹 [SQLite] Lưu dữ liệu chi phí quản lý:');
+                costItems.forEach(item => {
+                    console.log(`  - ${item.name}: ${item.cost} tr VNĐ/tháng`);
+                });
+                console.log(`  - Thời gian: ${new Date().toISOString()}`);
+                alert('✅ Đã lưu dữ liệu chi phí quản lý vào SQLite (mô phỏng).\nXem console để biết chi tiết.');
+            }
+
+            // ---------- Xuất Excel (mô phỏng) ----------
+            function exportExcel() {
+                let csv = 'Hạng mục,Chi phí (tr/tháng),Tỷ trọng,Phân loại\n';
+                const total = costItems.reduce((sum, item) => sum + item.cost, 0);
+
+                const sorted = [...costItems].sort((a, b) => b.cost - a.cost);
+                sorted.forEach(item => {
+                    const share = total > 0 ? (item.cost / total * 100) : 0;
+                    let classification = '';
+                    if (share > 25) classification = 'Chi phí trọng yếu';
+                    else if (share > 15) classification = 'Chi phí quan trọng';
+                    else if (share > 5) classification = 'Chi phí bình thường';
+                    else classification = 'Chi phí nhỏ';
+                    csv += `${item.name},${item.cost.toFixed(0)},${share.toFixed(1)}%,${classification}\n`;
+                });
+                csv += `TỔNG,${total.toFixed(0)},100%,,\n`;
+
+                const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download =
+                `Phan_tich_chi_phi_quan_ly_${new Date().toISOString().slice(0,10)}.csv`;
+                link.click();
+                URL.revokeObjectURL(link.href);
+                alert('📥 Đã xuất file Excel (CSV). Mở bằng Excel để xem.');
+            }
+
+            // ---------- Sự kiện ----------
+            btnAddCost.addEventListener('click', addCostItem);
+            newCostName.addEventListener('keypress', (e) => { if (e.key === 'Enter') addCostItem(); });
+            newCostAmount.addEventListener('keypress', (e) => { if (e.key === 'Enter') addCostItem(); });
+
+            btnAnalyze.addEventListener('click', analyze);
+            btnSaveSQLite.addEventListener('click', saveToSQLite);
+            btnExportExcel.addEventListener('click', exportExcel);
+            btnResetDefault.addEventListener('click', resetDefault);
+
+            // ---------- Khởi tạo ----------
+            renderCostList();
+            analyze();
+
+        })();
+    </script>
+
+</body>
+</html>

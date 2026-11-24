@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Module 17 - ROI (Return on Investment) | CEO AI Enterprise</title>
+
+    <!-- ============================================================
+    MODULE 17: ROI (Return on Investment - Tỷ suất hoàn vốn đầu tư)
+    Tác giả: CEO AI Enterprise Team
+    Mô tả: Đo lường hiệu quả của các khoản đầu tư, giúp ra quyết định
+            đầu tư thông minh.
+    ============================================================ -->
+
+    <!-- Thư viện Chart.js cho biểu đồ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+
+    <!-- Thư viện SheetJS để xuất Excel -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js">
+    </script>
+
+    <style>
+        /* ---------- RESET & FONT ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f9;
+            padding: 30px 20px;
+            color: #1a2639;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* ---------- HEADER ---------- */
+        .module-header {
+            background: linear-gradient(135deg, #4a2a1a, #7a4a2a);
+            color: white;
+            padding: 25px 35px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(60, 30, 10, 0.25);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .module-header h1 {
+            font-weight: 600;
+            font-size: 28px;
+            letter-spacing: 0.5px;
+        }
+
+        .module-header .badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .module-header .badge span {
+            color: #f7c8a8;
+            font-weight: 700;
+        }
+
+        /* ---------- GRID LAYOUT ---------- */
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 920px) {
+            .grid-2col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ---------- CARDS ---------- */
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px 28px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.25s;
+            border: 1px solid #e8edf4;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 28px rgba(0, 20, 50, 0.10);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #4a2a1a;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #eef3f9;
+            padding-bottom: 12px;
+        }
+
+        .card-title .icon {
+            font-size: 22px;
+        }
+
+        /* ---------- FORM ---------- */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            color: #2c405a;
+            margin-bottom: 5px;
+        }
+
+        .form-group .hint {
+            font-size: 12px;
+            color: #7a8aa3;
+            font-weight: 400;
+            margin-left: 6px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #dce3ed;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #fafcff;
+            transition: border 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #7a4a2a;
+            box-shadow: 0 0 0 4px rgba(122, 74, 42, 0.12);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ---------- BUTTONS ---------- */
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: #7a4a2a;
+            color: white;
+            box-shadow: 0 6px 14px rgba(122, 74, 42, 0.30);
+        }
+
+        .btn-primary:hover {
+            background: #5a3a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(122, 74, 42, 0.35);
+        }
+
+        .btn-success {
+            background: #1e7e34;
+            color: white;
+            box-shadow: 0 6px 14px rgba(30, 126, 52, 0.25);
+        }
+
+        .btn-success:hover {
+            background: #15692b;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #7a4a2a;
+            color: #7a4a2a;
+        }
+
+        .btn-outline:hover {
+            background: #7a4a2a;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        /* ---------- KẾT QUẢ ---------- */
+        .result-box {
+            background: #faf5f0;
+            border-radius: 14px;
+            padding: 18px 22px;
+            margin-top: 20px;
+            border-left: 6px solid #7a4a2a;
+        }
+
+        .result-box .value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #4a2a1a;
+        }
+
+        .result-box .label {
+            font-size: 14px;
+            color: #4a6380;
+            font-weight: 500;
+        }
+
+        .result-box .sub {
+            font-size: 14px;
+            color: #4a6380;
+            margin-top: 6px;
+        }
+
+        /* ---------- AI ANALYSIS ---------- */
+        .ai-box {
+            background: linear-gradient(145deg, #faf5f0, #f5ede8);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-top: 18px;
+            border: 1px solid #e8d8c8;
+        }
+
+        .ai-box .ai-label {
+            font-weight: 700;
+            color: #4a2a1a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .ai-box .ai-label .spark {
+            color: #f5b342;
+        }
+
+        .ai-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .ai-box ul li {
+            padding: 6px 0 6px 24px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%237a4a2a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>') left center no-repeat;
+            background-size: 16px;
+            color: #1a2c44;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .ai-box ul li strong {
+            color: #4a2a1a;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .status-healthy {
+            background: #d4edda;
+            color: #0b5e2e;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-neutral {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-excellent {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        /* ---------- BIỂU ĐỒ ---------- */
+        .chart-wrapper {
+            position: relative;
+            height: 220px;
+            margin-top: 10px;
+        }
+
+        /* ---------- BẢNG DỮ LIỆU ---------- */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            font-size: 14px;
+        }
+
+        .data-table th {
+            background: #f5ede8;
+            color: #4a2a1a;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eef3f9;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table .highlight {
+            font-weight: 700;
+            color: #7a4a2a;
+        }
+
+        /* ---------- PROJECT LIST ---------- */
+        .project-item {
+            background: #faf5f0;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            border: 1px solid #e8d8c8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            transition: all 0.2s;
+        }
+
+        .project-item:hover {
+            border-color: #7a4a2a;
+            box-shadow: 0 2px 8px rgba(122, 74, 42, 0.1);
+        }
+
+        .project-item .project-name {
+            font-weight: 600;
+            color: #4a2a1a;
+        }
+
+        .project-item .project-roi {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .project-item .project-roi.positive {
+            color: #28a745;
+        }
+
+        .project-item .project-roi.negative {
+            color: #dc3545;
+        }
+
+        .project-item .project-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 4px 12px;
+            font-size: 12px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-sm-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .btn-sm-danger:hover {
+            background: #f5c6cb;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-10 {
+            margin-top: 10px;
+        }
+        .mt-16 {
+            margin-top: 16px;
+        }
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* Scroll mượt */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #eef3f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b0c8dd;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8aaac9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ============================================================
+        HEADER MODULE
+        ============================================================ -->
+        <header class="module-header">
+            <div>
+                <h1>📊 Module 17 · ROI (Return on Investment)</h1>
+                <p style="opacity:0.8; margin-top:4px; font-size:15px;">
+                    Tỷ suất hoàn vốn đầu tư — đo lường hiệu quả của các khoản đầu tư
+                </p>
+            </div>
+            <div class="badge">
+                ⚡ Trạng thái: <span>Sẵn sàng</span> &nbsp;|&nbsp; 📌 v1.0
+            </div>
+        </header>
+
+        <!-- ============================================================
+        HÀNG 1: NHẬP LIỆU + KẾT QUẢ
+        ============================================================ -->
+        <div class="grid-2col">
+            <!-- CỘT TRÁI: FORM NHẬP -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📥</span> Nhập dữ liệu đầu tư
+                </div>
+
+                <div class="form-group">
+                    <label for="period">📅 Kỳ báo cáo</label>
+                    <select id="period">
+                        <option value="Q1 2026">Q1 2026</option>
+                        <option value="Q2 2026" selected>Q2 2026</option>
+                        <option value="Q3 2026">Q3 2026</option>
+                        <option value="Q4 2026">Q4 2026</option>
+                        <option value="Năm 2026">Năm 2026</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectName">📌 Tên dự án / Khoản đầu tư</label>
+                    <input type="text" id="projectName" value="Dự án mở rộng nhà máy" placeholder="Nhập tên dự án..." />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="investmentCost">
+                            💰 Chi phí đầu tư
+                            <span class="hint">(Investment Cost)</span>
+                        </label>
+                        <input type="number" id="investmentCost" value="500000000" step="1000000" />
+                    </div>
+                    <div class="form-group">
+                        <label for="netProfit">
+                            📈 Lợi nhuận thuần
+                            <span class="hint">(Net Profit)</span>
+                        </label>
+                        <input type="number" id="netProfit" value="150000000" step="1000000" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="investmentPeriod">
+                            📅 Thời gian đầu tư
+                            <span class="hint">(tháng)</span>
+                        </label>
+                        <input type="number" id="investmentPeriod" value="12" step="1" />
+                    </div>
+                    <div class="form-group">
+                        <label for="annualizedROI">
+                            🔄 ROI hàng năm (ước tính)
+                            <span class="hint">(Annualized ROI)</span>
+                        </label>
+                        <input type="number" id="annualizedROI" value="0" step="0.1" placeholder="Tự động tính" disabled />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectDescription">📝 Mô tả dự án (tùy chọn)</label>
+                    <textarea id="projectDescription" placeholder="Mô tả ngắn về dự án đầu tư...">Đầu tư mở rộng công suất nhà máy để đáp ứng nhu cầu thị trường tăng cao.</textarea>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="addProject()">➕ Thêm dự án</button>
+                    <button class="btn btn-success" onclick="calculateROI()">🚀 Tính ROI</button>
+                    <button class="btn btn-outline" onclick="clearAllProjects()">🗑️ Xóa tất cả</button>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI: KẾT QUẢ CHÍNH -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📊</span> Kết quả ROI tổng hợp
+                </div>
+
+                <div id="resultArea">
+                    <div class="result-box" style="border-left-color: #7a4a2a;">
+                        <div class="label">📌 ROI trung bình của các dự án</div>
+                        <div class="value" id="avgROIValue">---</div>
+                        <div class="sub" id="roiSub">Thêm dự án và bấm "Tính ROI"</div>
+                    </div>
+
+                    <!-- Chỉ số phụ -->
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:16px;">
+                        <div style="background:#faf5f0; border-radius:12px; padding:14px 16px; border:1px solid #e8d8c8;">
+                            <div style="font-size:13px; color:#4a6380;">📈 Tổng lợi nhuận</div>
+                            <div style="font-size:20px; font-weight:700; color:#4a2a1a;" id="totalProfit">---</div>
+                        </div>
+                        <div style="background:#faf5f0; border-radius:12px; padding:14px 16px; border:1px solid #e8d8c8;">
+                            <div style="font-size:13px; color:#4a6380;">💰 Tổng đầu tư</div>
+                            <div style="font-size:20px; font-weight:700; color:#4a2a1a;" id="totalInvestment">---</div>
+                        </div>
+                    </div>
+
+                    <!-- Số dự án -->
+                    <div style="background:#f8fbfa; border-radius:12px; padding:12px 16px; margin-top:12px; border:1px solid #dce8e0;">
+                        <span style="font-weight:500;">📋 Số dự án đang theo dõi:</span>
+                        <span id="projectCount" style="font-weight:600;">0</span>
+                    </div>
+
+                    <!-- Trạng thái sức khỏe -->
+                    <div id="statusArea" class="mt-16">
+                        <span class="status-badge status-neutral">⏳ Chưa có dữ liệu</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        HÀNG 2: DANH SÁCH DỰ ÁN + BIỂU ĐỒ
+        ============================================================ -->
+        <div class="grid-2col">
+            <!-- CỘT TRÁI: Danh sách dự án -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📋</span> Danh sách dự án đầu tư
+                </div>
+                <div id="projectList">
+                    <p style="color:#7a8aa3; font-size:14px; text-align:center; padding:20px 0;">
+                        Chưa có dự án nào. Hãy thêm dự án đầu tư để phân tích.
+                    </p>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI: BIỂU ĐỒ -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📈</span> Biểu đồ ROI các dự án
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="roiChart"></canvas>
+                </div>
+                <div style="margin-top:12px; font-size:13px; color:#4a6380; text-align:center;">
+                    So sánh ROI của từng dự án đầu tư
+                </div>
+                <!-- Ghi chú -->
+                <div style="margin-top:14px; background:#faf5f0; border-radius:12px; padding:12px 16px; border:1px dashed #d8b8a0;">
+                    <span style="font-weight:600;">💡 Công thức:</span>
+                    <span style="color:#4a2a1a; font-family:monospace; font-size:14px;">
+                        ROI = (Lợi nhuận thuần / Chi phí đầu tư) × 100%
+                    </span>
+                    <span style="display:block; font-size:13px; color:#4a6380; margin-top:4px;">
+                        ROI hàng năm = ROI × (12 / Số tháng đầu tư)
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        HÀNG 3: THÔNG TIN MODULE
+        ============================================================ -->
+        <div style="margin-top:10px; text-align:center; font-size:13px; color:#6f88a0; border-top:1px solid #dce6f0; padding-top:20px;">
+            <span>🧩 Module 17 / 100 · CEO AI Enterprise</span>
+            <span style="margin:0 12px;">|</span>
+            <span>⚡ Python + SQLite + HTML Dashboard</span>
+            <span style="margin:0 12px;">|</span>
+            <span>📅 Phiên bản 1.0 · Sẵn sàng tích hợp</span>
+        </div>
+
+    </div>
+
+    <!-- ============================================================
+    JAVASCRIPT - LOGIC CHÍNH
+    ============================================================ -->
+    <script>
+        /**
+         * ============================================================
+         * MODULE 17: ROI (Return on Investment)
+         * ============================================================
+         * Tác giả: CEO AI Enterprise Team
+         * Mô tả: 
+         *   - Tính ROI = (Net Profit / Investment Cost) * 100%
+         *   - Hỗ trợ quản lý nhiều dự án đầu tư
+         *   - Phân tích và so sánh ROI các dự án
+         *   - Đánh giá hiệu quả đầu tư tổng thể
+         *   - Đưa ra khuyến nghị chiến lược đầu tư
+         *   - Hỗ trợ lưu SQLite (giả lập) và xuất Excel
+         * ============================================================
+         */
+
+        // ---- Biến toàn cục ----
+        let projects = [];
+        let chartInstance = null;
+        let projectIdCounter = 0;
+
+        // ---- Hàm định dạng tiền tệ ----
+        function formatCurrency(value) {
+            if (value === undefined || value === null || isNaN(value)) return '---';
+            const num = Number(value);
+            if (num >= 1e9) return (num / 1e9).toFixed(1) + ' tỷ';
+            if (num >= 1e6) return (num / 1e6).toFixed(1) + ' tr';
+            return num.toLocaleString('vi-VN') + ' đ';
+        }
+
+        /**
+         * Thêm dự án mới vào danh sách
+         */
+        function addProject() {
+            const name = document.getElementById('projectName').value.trim();
+            const cost = parseFloat(document.getElementById('investmentCost').value) || 0;
+            const profit = parseFloat(document.getElementById('netProfit').value) || 0;
+            const period = parseInt(document.getElementById('investmentPeriod').value) || 12;
+            const description = document.getElementById('projectDescription').value.trim();
+
+            if (!name) {
+                showToast('⚠️ Vui lòng nhập tên dự án!', 'warning');
+                return;
+            }
+
+            if (cost <= 0) {
+                showToast('⚠️ Chi phí đầu tư phải lớn hơn 0!', 'warning');
+                return;
+            }
+
+            // Tạo dự án mới
+            const project = {
+                id: ++projectIdCounter,
+                name: name,
+                cost: cost,
+                profit: profit,
+                period: period,
+                description: description || 'Không có mô tả',
+                roi: cost > 0 ? (profit / cost) * 100 : 0,
+                annualizedROI: cost > 0 && period > 0 ? ((profit / cost) * 100) * (12 / period) : 0
+            };
+
+            projects.push(project);
+            renderProjectList();
+            calculateROI();
+
+            // Reset form
+            document.getElementById('projectName').value = '';
+            document.getElementById('investmentCost').value = '';
+            document.getElementById('netProfit').value = '';
+            document.getElementById('investmentPeriod').value = '12';
+            document.getElementById('projectDescription').value = '';
+
+            showToast(`✅ Đã thêm dự án "${project.name}"`, 'success');
+        }
+
+        /**
+         * Xóa một dự án
+         */
+        function removeProject(id) {
+            const project = projects.find(p => p.id === id);
+            if (!project) return;
+
+            if (confirm(`Xóa dự án "${project.name}"?`)) {
+                projects = projects.filter(p => p.id !== id);
+                renderProjectList();
+                calculateROI();
+                showToast(`🗑️ Đã xóa dự án "${project.name}"`, 'info');
+            }
+        }
+
+        /**
+         * Xóa tất cả dự án
+         */
+        function clearAllProjects() {
+            if (projects.length === 0) {
+                showToast('ℹ️ Không có dự án nào để xóa', 'info');
+                return;
+            }
+
+            if (confirm('Xóa tất cả dự án?')) {
+                projects = [];
+                projectIdCounter = 0;
+                renderProjectList();
+                calculateROI();
+                showToast('🗑️ Đã xóa tất cả dự án', 'info');
+            }
+        }
+
+        /**
+         * Hiển thị danh sách dự án
+         */
+        function renderProjectList() {
+            const container = document.getElementById('projectList');
+
+            if (projects.length === 0) {
+                container.innerHTML = `
+                    <p style="color:#7a8aa3; font-size:14px; text-align:center; padding:20px 0;">
+                        Chưa có dự án nào. Hãy thêm dự án đầu tư để phân tích.
+                    </p>
+                `;
+                return;
+            }
+
+            // Sắp xếp theo ROI giảm dần
+            const sortedProjects = [...projects].sort((a, b) => b.roi - a.roi);
+
+            let html = '';
+            sortedProjects.forEach(p => {
+                const roiClass = p.roi >= 0 ? 'positive' : 'negative';
+                const roiDisplay = p.roi.toFixed(1) + '%';
+                const annualizedDisplay = p.annualizedROI.toFixed(1) + '%';
+
+                html += `
+                    <div class="project-item">
+                        <div>
+                            <div class="project-name">${p.name}</div>
+                            <div style="font-size:12px; color:#7a8aa3; margin-top:2px;">
+                                ${formatCurrency(p.cost)} → ${formatCurrency(p.profit)} 
+                                | ${p.period} tháng | ROI ${roiDisplay}
+                                ${p.period !== 12 ? `| ROI/năm ${annualizedDisplay}` : ''}
+                            </div>
+                            ${p.description ? `<div style="font-size:12px; color:#6f88a0; margin-top:2px;">📝 ${p.description}</div>` : ''}
+                        </div>
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <span class="project-roi ${roiClass}">${roiDisplay}</span>
+                            <button class="btn-sm btn-sm-danger" onclick="removeProject(${p.id})">✕</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        /**
+         * Hàm chính: TÍNH ROI TỔNG HỢP
+         */
+        function calculateROI() {
+            // ---- 1. Tính tổng hợp ----
+            const totalCost = projects.reduce((sum, p) => sum + p.cost, 0);
+            const totalProfit = projects.reduce((sum, p) => sum + p.profit, 0);
+            const avgROI = totalCost > 0 ? (totalProfit / totalCost) * 100 : 0;
+
+            // ---- 2. Cập nhật hiển thị ----
+            document.getElementById('avgROIValue').textContent = avgROI.toFixed(1) + '%';
+            document.getElementById('roiSub').textContent = `Dựa trên ${projects.length} dự án · Tổng đầu tư: ${formatCurrency(totalCost)}`;
+
+            document.getElementById('totalProfit').textContent = formatCurrency(totalProfit);
+            document.getElementById('totalInvestment').textContent = formatCurrency(totalCost);
+            document.getElementById('projectCount').textContent = projects.length;
+
+            // ---- 3. Đánh giá trạng thái ----
+            let statusClass = '';
+            let statusText = '';
+            let rating = '';
+
+            if (projects.length === 0) {
+                statusClass = 'status-neutral';
+                statusText = '⏳ Chưa có dữ liệu';
+                rating = 'Thêm dự án để phân tích';
+            } else if (avgROI >= 50) {
+                statusClass = 'status-excellent';
+                statusText = '🌟 Rất xuất sắc — ROI ≥ 50%';
+                rating = 'Đầu tư cực kỳ hiệu quả';
+            } else if (avgROI >= 30) {
+                statusClass = 'status-healthy';
+                statusText = '✅ Tốt — ROI 30-50%';
+                rating = 'Đầu tư hiệu quả';
+            } else if (avgROI >= 15) {
+                statusClass = 'status-healthy';
+                statusText = '✅ Khá — ROI 15-30%';
+                rating = 'Đầu tư có lợi nhuận tốt';
+            } else if (avgROI >= 5) {
+                statusClass = 'status-warning';
+                statusText = '⚠️ Trung bình — ROI 5-15%';
+                rating = 'Cần cải thiện hiệu quả đầu tư';
+            } else if (avgROI >= 0) {
+                statusClass = 'status-warning';
+                statusText = '⚠️ Thấp — ROI 0-5%';
+                rating = 'Hiệu quả đầu tư thấp';
+            } else {
+                statusClass = 'status-danger';
+                statusText = '🔴 Lỗ — ROI âm';
+                rating = 'Đầu tư thua lỗ, cần xem xét lại';
+            }
+
+            document.getElementById('statusArea').innerHTML = `
+                <span class="status-badge ${statusClass}">${statusText}</span>
+                <span style="margin-left:12px; font-size:13px; color:#4a6380;">
+                    🎯 Đánh giá: <strong>${rating}</strong>
+                </span>
+            `;
+
+            // ---- 4. Phân tích AI & Khuyến nghị ----
+            const aiList = document.getElementById('aiRecommendations');
+            let recommendations = [];
+
+            if (projects.length === 0) {
+                recommendations.push('⏳ <strong>Chưa có dữ liệu đầu tư.</strong> Hãy thêm các dự án để nhận phân tích chi tiết.');
+            } else {
+                // Phân tích tổng quan
+                if (avgROI >= 30) {
+                    recommendations.push('🌟 <strong>ROI trung bình rất cao (≥30%)</strong> — danh mục đầu tư đang hoạt động cực kỳ hiệu quả.');
+                    recommendations.push('💪 <strong>Điểm mạnh:</strong> Các dự án đều tạo ra lợi nhuận vượt trội so với chi phí đầu tư.');
+                } else if (avgROI >= 15) {
+                    recommendations.push('✅ <strong>ROI trung bình tốt (15-30%)</strong> — danh mục đầu tư có hiệu quả.');
+                    recommendations.push('📊 <strong>Đánh giá:</strong> Các dự án đang tạo ra lợi nhuận tốt, có thể xem xét mở rộng.');
+                } else if (avgROI >= 5) {
+                    recommendations.push('⚠️ <strong>ROI trung bình (5-15%)</strong> — hiệu quả đầu tư ở mức trung bình.');
+                    recommendations.push('🔍 <strong>Cần xem xét:</strong> Một số dự án có thể không hiệu quả, cần rà soát danh mục.');
+                } else if (avgROI >= 0) {
+                    recommendations.push('📉 <strong>ROI trung bình thấp (0-5%)</strong> — lợi nhuận không đáng kể.');
+                    recommendations.push('🚨 <strong>Cảnh báo:</strong> Cần tái cấu trúc danh mục đầu tư, tìm kiếm cơ hội mới.');
+                } else {
+                    recommendations.push('🔻 <strong>ROI trung bình âm</strong> — danh mục đầu tư đang thua lỗ.');
+                    recommendations.push('🆘 <strong>Cảnh báo nguy hiểm:</strong> Cần ngay lập tức cắt lỗ các dự án kém hiệu quả.');
+                }
+
+                // Phân tích từng dự án
+                const bestProject = projects.reduce((a, b) => a.roi > b.roi ? a : b);
+                const worstProject = projects.reduce((a, b) => a.roi < b.roi ? a : b);
+
+                if (projects.length > 1) {
+                    recommendations.push(`📈 <strong>Dự án tốt nhất:</strong> "${bestProject.name}" với ROI ${bestProject.roi.toFixed(1)}%`);
+                    recommendations.push(`📉 <strong>Dự án kém nhất:</strong> "${worstProject.name}" với ROI ${worstProject.roi.toFixed(1)}%`);
+
+                    if (worstProject.roi < 0) {
+                        recommendations.push(`🛑 <strong>Khuyến nghị:</strong> Xem xét cắt lỗ dự án "${worstProject.name}" vì đang thua lỗ.`);
+                    } else if (worstProject.roi < 10) {
+                        recommendations.push(`🔄 <strong>Khuyến nghị:</strong> Cải thiện hoặc tái cấu trúc dự án "${worstProject.name}" để tăng ROI.`);
+                    }
+                }
+
+                // Phân tích hàng năm
+                const annualizedProjects = projects.filter(p => p.period !== 12);
+                if (annualizedProjects.length > 0) {
+                    const avgAnnualROI = annualizedProjects.reduce((sum, p) => sum + p.annualizedROI, 0) / annualizedProjects.length;
+                    recommendations.push(`📅 <strong>ROI hàng năm trung bình:</strong> ${avgAnnualROI.toFixed(1)}% (dựa trên ${annualizedProjects.length} dự án có thời gian khác 12 tháng)`);
+                }
+
+                // Khuyến nghị chiến lược
+                if (avgROI >= 20 && projects.every(p => p.roi > 0)) {
+                    recommendations.push('🎯 <strong>Chiến lược:</strong> Mở rộng đầu tư vào các dự án tương tự. Duy trì và nhân rộng mô hình thành công.');
+                } else if (avgROI >= 10) {
+                    recommendations.push('📌 <strong>Chiến lược:</strong> Tăng cường đầu tư vào các dự án có ROI cao, cắt giảm hoặc cải thiện dự án có ROI thấp.');
+                } else if (avgROI >= 0) {
+                    recommendations.push('🔄 <strong>Chiến lược:</strong> Rà soát lại toàn bộ danh mục, tìm kiếm cơ hội đầu tư mới có tiềm năng cao hơn.');
+                } else {
+                    recommendations.push('🚨 <strong>Chiến lược khẩn cấp:</strong> Cắt lỗ các dự án thua lỗ, tái cấu trúc danh mục, tìm kiếm tư vấn đầu tư chuyên nghiệp.');
+                }
+
+                // Thống kê
+                const profitableProjects = projects.filter(p => p.roi > 0).length;
+                const lossProjects = projects.filter(p => p.roi < 0).length;
+                recommendations.push(`📊 <strong>Thống kê:</strong> ${profitableProjects} dự án có lãi, ${lossProjects} dự án lỗ, ${projects.length - profitableProjects - lossProjects} dự án hòa vốn.`);
+            }
+
+            // Render danh sách AI
+            aiList.innerHTML = recommendations.map(item => `<li>${item}</li>`).join('');
+
+            // ---- 5. Vẽ biểu đồ ----
+            renderChart();
+
+            // ---- 6. (Giả lập) Lưu vào SQLite ----
+        }
+
+        /**
+         * Vẽ biểu đồ ROI các dự án
+         */
+        function renderChart() {
+            const ctx = document.getElementById('roiChart').getContext('2d');
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            if (projects.length === 0) {
+                // Biểu đồ trống
+                chartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Chưa có dự án'],
+                        datasets: [{
+                            data: [0],
+                            backgroundColor: ['rgba(200,200,200,0.4)'],
+                            borderColor: ['#cccccc'],
+                            borderWidth: 2,
+                            borderRadius: 6,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value.toFixed(1) + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                return;
+            }
+
+            // Sắp xếp theo ROI giảm dần để hiển thị đẹp
+            const sortedProjects = [...projects].sort((a, b) => b.roi - a.roi);
+
+            const labels = sortedProjects.map(p => p.name.length > 15 ? p.name.substring(0, 15) + '...' : p.name);
+            const data = sortedProjects.map(p => p.roi);
+            const colors = data.map(roi => 
+                roi >= 30 ? 'rgba(40, 167, 69, 0.85)' :
+                roi >= 15 ? 'rgba(23, 162, 184, 0.85)' :
+                roi >= 5 ? 'rgba(255, 193, 7, 0.85)' :
+                roi >= 0 ? 'rgba(255, 153, 0, 0.85)' :
+                'rgba(220, 53, 69, 0.85)'
+            );
+            const borderColors = data.map(roi => 
+                roi >= 30 ? '#28a745' :
+                roi >= 15 ? '#17a2b8' :
+                roi >= 5 ? '#ffc107' :
+                roi >= 0 ? '#ff9900' :
+                '#dc3545'
+            );
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'ROI (%)',
+                        data: data,
+                        backgroundColor: colors,
+                        borderColor: borderColors,
+                        borderWidth: 2,
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const project = sortedProjects[context.dataIndex];
+                                    return [
+                                        `ROI: ${project.roi.toFixed(1)}%`,
+                                        `Đầu tư: ${formatCurrency(project.cost)}`,
+                                        `Lợi nhuận: ${formatCurrency(project.profit)}`,
+                                        `Thời gian: ${project.period} tháng`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toFixed(1) + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * LƯU VÀO SQLITE (giả lập)
+         */
+        function saveToSQLite() {
+            if (projects.length === 0) {
+                showToast('⚠️ Không có dự án nào để lưu!', 'warning');
+                return;
+            }
+
+            const period = document.getElementById('period').value;
+            const totalCost = projects.reduce((sum, p) => sum + p.cost, 0);
+            const totalProfit = projects.reduce((sum, p) => sum + p.profit, 0);
+            const avgROI = totalCost > 0 ? (totalProfit / totalCost) * 100 : 0;
+
+            const data = {
+                module: '17_ROI',
+                period: period,
+                projects: projects,
+                totalCost: totalCost,
+                totalProfit: totalProfit,
+                avgROI: avgROI,
+                projectCount: projects.length,
+                timestamp: new Date().toISOString()
+            };
+
+            console.log('💾 [SQLite] Dữ liệu đã được lưu:', data);
+            showToast(`✅ Đã lưu ${projects.length} dự án vào SQLite (giả lập)!`, 'success');
+        }
+
+        /**
+         * XUẤT EXCEL
+         */
+        function exportExcel() {
+            if (projects.length === 0) {
+                showToast('⚠️ Không có dự án nào để xuất!', 'warning');
+                return;
+            }
+
+            const period = document.getElementById('period').value;
+
+            // Chuẩn bị dữ liệu
+            const wsData = [
+                ['Module 17 - ROI (Return on Investment)'],
+                ['Kỳ báo cáo', period],
+                [],
+                ['STT', 'Tên dự án', 'Chi phí đầu tư', 'Lợi nhuận thuần', 'Thời gian (tháng)', 'ROI (%)', 'ROI/Năm (%)', 'Mô tả']
+            ];
+
+            projects.forEach((p, index) => {
+                wsData.push([
+                    index + 1,
+                    p.name,
+                    p.cost,
+                    p.profit,
+                    p.period,
+                    p.roi.toFixed(1),
+                    p.annualizedROI.toFixed(1),
+                    p.description || ''
+                ]);
+            });
+
+            // Thêm tổng hợp
+            const totalCost = projects.reduce((sum, p) => sum + p.cost, 0);
+            const totalProfit = projects.reduce((sum, p) => sum + p.profit, 0);
+            const avgROI = totalCost > 0 ? (totalProfit / totalCost) * 100 : 0;
+
+            wsData.push([]);
+            wsData.push(['TỔNG HỢP', '', formatCurrency(totalCost), formatCurrency(totalProfit), '', avgROI.toFixed(1) + '%', '', '']);
+            wsData.push(['Ngày xuất', new Date().toLocaleString('vi-VN')]);
+
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            XLSX.utils.book_append_sheet(wb, ws, 'ROI');
+            XLSX.writeFile(wb, `ROI_${period.replace(/\s/g, '_')}.xlsx`);
+
+            showToast('📊 Đã xuất file Excel thành công!', 'info');
+        }
+
+        /**
+         * HIỂN THỊ TOAST
+         */
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.style.position = 'fixed';
+            toast.style.bottom = '30px';
+            toast.style.right = '30px';
+            toast.style.padding = '16px 28px';
+            toast.style.borderRadius = '14px';
+            toast.style.fontWeight = '500';
+            toast.style.fontSize = '15px';
+            toast.style.boxShadow = '0 8px 30px rgba(0,0,0,0.15)';
+            toast.style.zIndex = '9999';
+            toast.style.transition = 'all 0.3s ease';
+            
+            if (type === 'success') {
+                toast.style.background = '#d4edda';
+                toast.style.color = '#0b5e2e';
+                toast.style.border = '1px solid #b7d4c0';
+            } else if (type === 'warning') {
+                toast.style.background = '#fff3cd';
+                toast.style.color = '#856404';
+                toast.style.border = '1px solid #ffc107';
+            } else {
+                toast.style.background = '#cce5ff';
+                toast.style.color = '#004085';
+                toast.style.border = '1px solid #b8d4f0';
+            }
+            
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(20px)';
+                setTimeout(() => toast.remove(), 400);
+            }, 3200);
+        }
+
+        /**
+         * TỰ ĐỘNG THÊM DỰ ÁN MẪU KHI TRANG LOAD
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            // Thêm 3 dự án mẫu để demo
+            const demoProjects = [
+                {
+                    name: 'Mở rộng nhà máy',
+                    cost: 500000000,
+                    profit: 150000000,
+                    period: 12,
+                    description: 'Đầu tư mở rộng công suất nhà máy'
+                },
+                {
+                    name: 'Phát triển sản phẩm mới',
+                    cost: 300000000,
+                    profit: 120000000,
+                    period: 8,
+                    description: 'R&D và ra mắt dòng sản phẩm cao cấp'
+                },
+                {
+                    name: 'Mở rộng kênh phân phối',
+                    cost: 200000000,
+                    profit: 45000000,
+                    period: 6,
+                    description: 'Mở thêm 10 đại lý tại khu vực phía Nam'
+                }
+            ];
+
+            demoProjects.forEach((p, index) => {
+                setTimeout(() => {
+                    document.getElementById('projectName').value = p.name;
+                    document.getElementById('investmentCost').value = p.cost;
+                    document.getElementById('netProfit').value = p.profit;
+                    document.getElementById('investmentPeriod').value = p.period;
+                    document.getElementById('projectDescription').value = p.description;
+                    addProject();
+                }, index * 200);
+            });
+        });
+
+        /**
+         * ============================================================
+         * MỞ RỘNG: Kết nối với Python và SQLite sau này
+         * ============================================================
+         * Để tích hợp với Python backend, ta có thể sử dụng fetch() 
+         * để gửi dữ liệu đến API Python (Flask/FastAPI).
+         * 
+         * Ví dụ:
+         *   async function saveToDB(data) {
+         *       const response = await fetch('/api/save_roi', {
+         *           method: 'POST',
+         *           headers: { 'Content-Type': 'application/json' },
+         *           body: JSON.stringify(data)
+         *       });
+         *       return response.json();
+         *   }
+         * ============================================================
+         */
+    </script>
+
+</body>
+</html>

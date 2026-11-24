@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Sổ Tay Kế Toán: Bí Mật Thuật Toán Hàn Tín & Mẹo Nhẩm Nhanh</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fdfbf7; text-align: center; padding: 20px; color: #2c3e50; margin: 0; }
+        .card { background: white; max-width: 950px; margin: 0 auto; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); text-align: left; border-top: 8px solid #d35400; }
+        h2 { text-align: center; color: #d35400; margin-bottom: 5px; font-size: 26px; }
+        .subtitle { text-align: center; color: #7f8c8d; font-size: 15px; margin-bottom: 35px; }
+        
+        .control-box { background: #fef9e7; padding: 25px; border-radius: 12px; margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px; text-align: center; border: 1px solid #f9e79f; }
+        .control-row { display: flex; gap: 15px; align-items: center; justify-content: center; flex-wrap: wrap; }
+        .control-box input { padding: 12px 18px; font-size: 18px; width: 240px; border: 1px solid #f39c12; border-radius: 8px; text-align: center; outline: none; font-weight: bold; color: #d35400; background: #fff; }
+        
+        button { padding: 14px 28px; font-size: 17px; background: #d35400; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; box-shadow: 0 4px 12px rgba(211, 84, 0, 0.3); }
+        button:hover { background: #ba4a00; transform: translateY(-2px); }
+        
+        .story-container { display: none; margin-top: 20px; }
+        
+        .step-box { background: #fff; border: 1px solid #ebedef; border-left: 6px solid #e67e22; padding: 25px; border-radius: 10px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .step-number { font-size: 13px; font-weight: bold; text-transform: uppercase; color: #e67e22; letter-spacing: 1px; margin-bottom: 6px; }
+        .step-title { font-size: 18px; font-weight: bold; color: #2c3e50; margin-bottom: 15px; }
+        .step-body { font-size: 16px; line-height: 1.8; color: #34495e; }
+        
+        .detail-card { background: #f8f9fa; border-left: 4px solid #3498db; padding: 15px 20px; margin: 15px 0; border-radius: 0 8px 8px 0; font-size: 15px; }
+        .hl { font-family: monospace; background: #eaf2f8; padding: 3px 8px; border-radius: 4px; color: #2980b9; font-weight: bold; }
+        
+        .secret-tip { background: #e8f8f5; border: 1px solid #a3e4d7; border-left: 6px solid #16a085; padding: 20px; border-radius: 10px; margin: 25px 0; }
+        .secret-tip h4 { color: #16a085; margin-top: 0; margin-bottom: 10px; font-size: 17px; }
+
+        .final-result-box { background: #d4efdf; border: 2px solid #27ae60; padding: 25px; border-radius: 12px; text-align: center; font-size: 20px; font-weight: bold; color: #1e8449; margin-top: 35px; box-shadow: 0 4px 15px rgba(39, 174, 96, 0.15); }
+
+        .music-box { background: #fdfefe; border: 1px solid #d5dbdb; padding: 15px; border-radius: 10px; margin-top: 30px; display: flex; flex-direction: column; gap: 8px; }
+        .music-title { font-weight: bold; color: #7f8c8d; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>📖 Sổ Tay Kế Toán: Bí Mật Thuật Toán Hàn Tín & Mẹo Nhẩm Nhanh</h2>
+    <div class="subtitle">Ứng dụng mẹo rút gọn số dư trước khi tìm khóa, không cần máy tính, nhìn là nhớ!</div>
+    
+    <div class="control-box">
+        <div class="control-row">
+            <label for="inputVal"><strong>Nhập số tiền hoặc số quân bí mật:</strong></label>
+            <input type="text" id="inputVal" value="30048" placeholder="Ví dụ: 30048">
+        </div>
+        <div class="control-row" style="font-size: 14px; color: #7f8c8d;">
+            <i>(Hệ thống 4 hộp: <b>3, 5, 7, 11</b>. Tổng chu kỳ = 3 × 5 × 7 × 11 = <b>1155</b>).</i>
+        </div>
+        <div class="control-row">
+            <button onclick="runAccountingSkit()">🔍 Áp Dụng Mẹo Nhẩm Nhanh</button>
+        </div>
+    </div>
+
+    <div class="story-container" id="storyContainer"></div>
+
+    <div class="music-box">
+        <div class="music-title">🎵 Nhạc Nền Nghiên Cứu Sổ Sách</div>
+        <div id="musicStatus" style="font-size: 13px; color: #95a5a6;">Sẵn sàng phát nhạc...</div>
+        <audio id="audioPlayer" controls style="width: 100%;" onended="playRandomSong()"></audio>
+    </div>
+</div>
+
+<script>
+    let playlist = [
+        { name: "Cổ trang 1 - Hùng tráng", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+        { name: "Cổ trang 2 - Mưu lược", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" }
+    ];
+    let unplayedSongs = [];
+    function initPlaylist() { unplayedSongs = [...playlist].sort(() => Math.random() - 0.5); }
+    function playRandomSong() {
+        let audio = document.getElementById("audioPlayer");
+        let status = document.getElementById("musicStatus");
+        if (unplayedSongs.length === 0) initPlaylist();
+        let current = unplayedSongs.pop();
+        audio.src = current.url;
+        audio.play().then(() => { status.innerHTML = `▶️ Đang phát: <b>${current.name}</b>`; }).catch(() => {});
+    }
+    initPlaylist();
+
+    function modInverse(a, m) {
+        let m0 = m;
+        let y = 0n, x = 1n;
+        if (m === 1n) return 0n;
+        while (a > 1n) {
+            let q = a / m;
+            let t = m;
+            m = a % m;
+            a = t;
+            t = y;
+            y = x - q * y;
+            x = t;
+        }
+        if (x < 0n) x = x + m0;
+        return x;
+    }
+
+    function runAccountingSkit() {
+        let valStr = document.getElementById("inputVal").value.trim();
+        if (!/^\d+$/.test(valStr)) {
+            alert("Bạn ơi, hãy nhập một con số nguyên dương hợp lệ nhé!");
+            return;
+        }
+
+        let actual = BigInt(valStr);
+        let boxes = [3n, 5n, 7n, 11n];
+        let remainders = boxes.map(b => actual % b);
+        let totalCycle = boxes.reduce((acc, val) => acc * val, 1n); // 1155
+
+        let container = document.getElementById("storyContainer");
+        container.style.display = "block";
+
+        let html = `
+            <div class="step-box">
+                <div class="step-number">Bước 1</div>
+                <div class="step-title">📦 Điểm danh số dư từng hộp</div>
+                <div class="step-body">
+                    Giả sử số thực tế là <b style="color:#d35400;">${valStr}</b>. Đem chia vào 4 hộp (3, 5, 7, 11) thu được số dư:
+                    <div class="detail-card">
+                        • Hộp 3 dư: <span class="hl">${remainders[0].toString()}</span> | 
+                        • Hộp 5 dư: <span class="hl">${remainders[1].toString()}</span> | 
+                        • Hộp 7 dư: <span class="hl">${remainders[2].toString()}</span> | 
+                        • Hộp 11 dư: <span class="hl">${remainders[3].toString()}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <div class="step-number">Bước 2</div>
+                <div class="step-title">🔄 Tổng chu kỳ</div>
+                <div class="step-body">
+                    Lấy dung tích 4 hộp nhân lại: 3 × 5 × 7 × 11 = <span class="hl">${totalCycle.toString()}</span>.
+                </div>
+            </div>
+
+            <div class="step-box">
+                <div class="step-number">Bước 3</div>
+                <div class="step-title">⚡ Áp dụng Mẹo Nhẩm Nhanh tìm Khóa</div>
+                <div class="step-body">
+                    Công thức: <b style="color:#d35400;">Đóng góp = Số dư × Phần còn lại × Khóa</b><br>
+                    <i>Mẹo: Thay vì tìm khóa cho số to, hãy rút gọn phần còn lại bằng cách chia lấy dư cho dung tích hộp trước!</i>
+        `;
+
+        let terms = [];
+        let sum = 0n;
+
+        for (let i = 0; i < boxes.length; i++) {
+            let b = boxes[i];
+            let r = remainders[i];
+            let part = totalCycle / b; 
+            let key = modInverse(part, b); 
+            let contribution = r * part * key;
+            terms.push(contribution);
+            sum += contribution;
+
+            let smallRemainder = part % b;
+
+            html += `
+                <div class="detail-card">
+                    <b>👉 Hộp số ${b.toString()}:</b><br>
+                    1. <b>Phần còn lại:</b> ${totalCycle.toString()} ÷ ${b.toString()} = <span class="hl">${part.toString()}</span><br>
+                    2. <b>Mẹo thu gọn số dư:</b> Lấy ${part.toString()} ÷ ${b.toString()} dư <span class="hl">${smallRemainder.toString()}</span>.<br>
+                    3. <b>Nhẩm nhanh tìm Khóa:</b> Tìm số nhân sao cho (${smallRemainder.toString()} × Khóa) chia ${b.toString()} dư 1 $\rightarrow$ <b>Khóa = ${key.toString()}</b><br>
+                    4. <b>Nhân lại:</b> ${r.toString()} × ${part.toString()} × ${key.toString()} = <span style="color:#d35400; font-weight:bold;">${contribution.toString()}</span>
+                </div>
+            `;
+        }
+
+        // Lấy chính con số người dùng nhập vào để làm mốc phân tích chu kỳ vòng lặp
+        let rounds = actual / totalCycle; 
+        let finalAns = actual % totalCycle; 
+
+        html += `
+                </div>
+            </div>
+
+            <div class="secret-tip">
+                <h4>💡 MẸO NHẨM NHANH GHI NHỚ:</h4>
+                Vì con số <i>Phần còn lại</i> thường rất lớn, trước khi tìm khóa, bạn hãy <b>lấy nó chia luôn cho dung tích hộp để lấy số dư nhỏ gọn</b>, rồi mới tìm khóa trên số dư nhỏ đó. Cách này giúp bạn tính nhẩm ra kết quả trong vài giây mà không cần máy tính hay mò mẫm gì cả!
+            </div>
+
+            <div class="step-box">
+                <div class="step-number">Bước 4</div>
+                <div class="step-title">➕ Cộng tổng & Đối soát kết quả</div>
+                <div class="step-body">
+                    Cộng dồn các đóng góp lại (tổng thô = ${sum.toString()}):<br>
+                    - Tách vòng chu kỳ từ con số bạn nhập (${actual.toString()} ÷ ${totalCycle.toString()}):<br>
+                    👉 Phân tích: <span class="hl">${actual.toString()} = ${rounds.toString()} vòng × ${totalCycle.toString()} + ${finalAns.toString()}</span><br>
+                    👉 Lấy dư: <span class="hl">${actual.toString()} % ${totalCycle.toString()} = ${finalAns.toString()}</span>
+                </div>
+            </div>
+
+            <div class="final-result-box">
+                🎯 KẾT QUẢ ĐỐI SOÁT CHÍNH XÁC: <span style="font-size:26px; color:#145a32;">${finalAns.toString()} ĐƠN VỊ</span>!<br>
+                <span style="font-size: 14px; font-weight: normal; color: #27ae60;">(Số ${actual.toString()} gồm ${rounds.toString()} vòng quay chu kỳ và dư ra ${finalAns.toString()})</span>
+            </div>
+        `;
+
+        container.innerHTML = html;
+
+        let audio = document.getElementById("audioPlayer");
+        if (audio.paused) playRandomSong();
+    }
+
+    window.onload = function() {
+        runAccountingSkit();
+    };
+</script>
+
+</body>
+</html>

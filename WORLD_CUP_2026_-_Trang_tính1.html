@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>WORLD CUP 2026 - Trang tính1</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>WORLD CUP 2026 - Trang tính1</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>CAC DOI BONG WORLD CUP 2026</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>Teams | GP | W | D | L | F | A | GD | P</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>GP (Games Played): Tổng số trận đã đấu. | W (Wins): Số trận thắng. | D (Draws): Số trận hòa. | L (Losses): Số trận thua. | F (Goals For): Tổng số bàn thắng ghi được. | A (Goals Against): Tổng số bàn thua. | GD (Goal Difference): Hiệu số bàn thắng bại. Công thức: GD | P (Points): Tổng điểm. Công thức: P = (W * 3) + (D * 1).</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>Nhóm A</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>1 Mexico | 3 | 3 | 0 | 0 | 6 | 0 | +6 | 9 | NGÀY | GIỜ | TRẬN ĐẤU | VÒNG | KÊNH TRỰC TIẾP</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>2 Nam Phi | 3 | 1 | 1 | 1 | 2 | 3 | -1 | 4 | 19/07 | 04:00 | Pháp 4-6 Anh | Tranh hạng Ba | VTV3, VTV6, VTV9, FPT Play | 17:00</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>3 Hàn Quốc | 3 | 1 | 0 | 2 | 2 | 3 | -1 | 3 | 20/07 | 02:00 | Tây Ban Nha 1-0 Argentina | Chung kết | VTV3, VTV6, VTV9, FPT Play</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>4 Cộng Hòa Séc        | 3 | 0 | 1 | 2 | 2 | 6 | -4 | 1 | Vòng bán kết</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>NGÀY | GIỜ | TRẬN ĐẤU | KÊNH TRỰC TIẾP</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>Nhóm B | 15/07 | 02:00 | Pháp 0-2 Tây Ban Nha | VTV3, VTV6, VTV9, FPT Play</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>1 Thụy Sỹ | 3 | 2 | 1 | 0 | 7 | 3 | +4 | 7 | 16/07 | 02:00 | Anh 1-2 Argentina | VTV3, VTV6, VTV9, FPT Play</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>2 Canada | 3 | 1 | 1 | 1 | 8 | 3 | +5 | 4 | Vòng tứ kết</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>3 Bosnia & Herzegovina | 3 | 1 | 1 | 1 | 5 | 6 | -1 | 4 | NGÀY | GIỜ | TRẬN ĐẤU | KÊNH TRỰC TIẾP</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>4 Qatar | 3 | 0 | 1 | 2 | 2 | 10 | -8 | 1 | 10/07 | 03:00 | Maroc 0-2 Pháp | VTV3, VTV6, VTV9</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>11/07 | 02:00 | Tây Ban Nha 2-1 Bỉ | VTV3, VTV6, VTV9, VTV10</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>Nhóm C | 12/07 | 04:00 | Na Uy 1-2 Anh | VTV3, VTV6, VTV10</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>1 Brazil | 3 | 2 | 1 | 0 | 7 | 1 | +6 | 7 | 12/07 | 08:00 | Argentina 3-1 Thụy Sĩ | VTV3, VTV6, VTV9</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>2 Ma Rốc | 3 | 2 | 1 | 0 | 6 | 3 | +3 | 7 | Lịch thi đấu vòng 1/8 World Cup 2026</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>3 Scotland | 3 | 1 | 0 | 2 | 1 | 4 | -3 | 3</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>4 Haiti | 3 | 0 | 0 | 3 | 2 | 8 | -6 | 0 | NGÀY | GIỜ | TRẬN ĐẤU | KÊNH TRỰC TIẾP</td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td>05/07 | 00:00 | Canada 0-3 Maroc | VTV3, VTV6</td>
+            </tr>
+            <tr>
+                <td><b>22</b></td>
+                <td>Nhóm D | 05/07 | 04:00 | Paraguay 0-1 Pháp | VTV3, VTV6</td>
+            </tr>
+            <tr>
+                <td><b>23</b></td>
+                <td>1 USA | 3 | 2 | 0 | 1 | 8 | 4 | +4 | 6 | 06/07 | 03:00 | Brazil 1-2 Na Uy | VTV3, VTV6</td>
+            </tr>
+            <tr>
+                <td><b>24</b></td>
+                <td>2 Úc | 3 | 1 | 1 | 1 | 2 | 2 | 0 | 4 | 06/07 | 07:00 | Mexico 2-3 Anh | VTV3, VTV6</td>
+            </tr>
+            <tr>
+                <td><b>25</b></td>
+                <td>3 Paraguay | 3 | 1 | 1 | 1 | 2 | 4 | -2 | 4 | 07/07 | 02:00 | Tây Ban Nha 1-0 Bồ Đào Nha | VTV3, VTV6</td>
+            </tr>
+            <tr>
+                <td><b>26</b></td>
+                <td>4 Thổ | 3 | 1 | 0 | 2 | 3 | 5 | -2 | 3 | 07/07 | 07:00 | Bỉ 4-1 Mỹ | VTV3, VTV6</td>
+            </tr>
+            <tr>
+                <td><b>27</b></td>
+                <td>07/07 | 23:00 | Ai Cập 2-3 Argentina | VTV3, VTV6</td>
+            </tr>
+            <tr>
+                <td><b>28</b></td>
+                <td>Nhóm E | 08/07 | 03:00 | Thụy Sĩ 0-0 Colombia</td>
+            </tr>
+            <tr>
+                <td><b>29</b></td>
+                <td>1 Đức | 3 | 2 | 0 | 1 | 10 | 4 | +6 | 6 | (pen 4-3) | VTV3, VTV6</td>
+            </tr>
+            <tr>
+                <td><b>30</b></td>
+                <td>2 Bờ Biển Ngà | 3 | 2 | 0 | 1 | 4 | 2 | +2 | 6 | Lịch thi đấu vòng 1/16 World Cup 2026</td>
+            </tr>
+            <tr>
+                <td><b>31</b></td>
+                <td>3 Ecuador | 3 | 1 | 1 | 1 | 2 | 2 | 0 | 4 | Trận | Ngày | Giờ | Trận đấu | Địa điểm | Kênh trực tiếp</td>
+            </tr>
+            <tr>
+                <td><b>32</b></td>
+                <td>4 Curaçao | 3 | 0 | 1 | 2 | 1 | 9 | -8 | 1 | 73 | 29/6 | 02:00 | Nam Phi 0-1 Canada | SoFi, Los Angeles | VTV3, VTV6, VTV10</td>
+            </tr>
+            <tr>
+                <td><b>33</b></td>
+                <td>74 | 30/6 | 00:00 | Brazil 2-1 Nhật Bản | Gillette, Boston | VTV3, VTV6, VTV9</td>
+            </tr>
+            <tr>
+                <td><b>34</b></td>
+                <td>Nhóm F | 75 | 03:30 | Đức 1-1 Paraguay (pen 3-4) | Estadio BBVA, Monterrey | VTV3, VTV6, VTV10</td>
+            </tr>
+            <tr>
+                <td><b>35</b></td>
+                <td>1 Hà Lan | 3 | 2 | 1 | 0 | 10 | 4 | +6 | 7 | 76 | 08:00 | Hà Lan 1-1 Maroc (pen 2-3) | NR, Houston | VTV3, VTV6, VTV9</td>
+            </tr>
+            <tr>
+                <td><b>36</b></td>
+                <td>2 Nhật Bản | 3 | 1 | 2 | 0 | 7 | 3 | +4 | 5 | 77 | 1/7 | 00:00 | Bờ Biển Ngà 1-2 Na Uy | MetLife, New York/New Jersey | VTV3, VTV6, VTV10</td>
+            </tr>
+            <tr>
+                <td><b>37</b></td>
+                <td>3 Thụy Điển | 3 | 1 | 1 | 1 | 7 | 7 | 0 | 4 | 78 | 04:00 | Pháp 3-0 Thụy Điển | AT&T, Dallas | VTV3, VTV6, VTV10</td>
+            </tr>
+            <tr>
+                <td><b>38</b></td>
+                <td>4 Tunisia | 3 | 0 | 0 | 3 | 2 | 12 | -10 | 0 | 79 | 08:00 | Mexico 2-0 Ecuador | Estadio Azteca, Mexico City | VTV3, VTV6, VTV9</td>
+            </tr>
+            <tr>
+                <td><b>39</b></td>
+                <td>80 | 23:00 | Anh 2-1 CHDC Congo | Mercedes-Benz, Atlanta | VTV3, VTV6, VTV10</td>
+            </tr>
+            <tr>
+                <td><b>40</b></td>
+                <td>Nhóm G | 81 | 2/7 | 03:00 | Bỉ 3-2 Senegal | Levi's, San Francisco Bay Area | VTV3, VTV6, VTV10</td>
+            </tr>
+            <tr>
+                <td><b>41</b></td>
+                <td>1 Bỉ | 3 | 1 | 2 | 0 | 6 | 2 | +4 | 5 | 82 | 07:00 | Mỹ 2-0 Bosnia & Herzegovina | Lumen Field, Seattle | VTV3, VTV6, VTV9</td>
+            </tr>
+            <tr>
+                <td><b>42</b></td>
+                <td>2 Ai Cập | 3 | 1 | 2 | 0 | 5 | 3 | +2 | 5 | 83 | 3/7 | 02:00 | Tây Ban Nha 3-0 Áo | BMO Field, Toronto | VTV3, VTV6, VTV9</td>
+            </tr>
+            <tr>
+                <td><b>43</b></td>
+                <td>3 Nước Cộng Hòa Hồi Gi. | 3 | 0 | 3 | 0 | 3 | 3 | 0 | 3 | 84 | 06:00 | Bồ Đào Nha 2-1 Croatia | SoFi, Los Angeles | VTV3, VTV6, VTV10</td>
+            </tr>
+            <tr>
+                <td><b>44</b></td>
+                <td>4 New Zealand | 3 | 0 | 1 | 2 | 4 | 10 | -6 | 1 | 85 | 10:00 | Thụy Sĩ 2-0 Algeria | BC Place, Vancouver | VTV3, VTV6, VTV9</td>
+            </tr>
+            <tr>
+                <td><b>45</b></td>
+                <td>Nhóm H | 86 | 4/7 | 01:00 | Úc 1-1 Ai Cập (pen 2-4) | Hard Rock, Miami | VTV3, VTV6, VTV10</td>
+            </tr>
+            <tr>
+                <td><b>46</b></td>
+                <td>1 Tây Ban Nha | 3 | 2 | 1 | 0 | 5 | 0 | +5 | 7 | 87 | 05:00 | Argentina 3-2 Cape Verde | Arrowhead, Kansas City | VTV3, VTV6, VTV9</td>
+            </tr>
+            <tr>
+                <td><b>47</b></td>
+                <td>2 Cape Verde | 3 | 0 | 3 | 0 | 2 | 2 | 0 | 3 | 88 | 08:30 | Colombia 1-0 Ghana | AT&T, Dallas | VTV3, VTV6, VTV9</td>
+            </tr>
+            <tr>
+                <td><b>48</b></td>
+                <td>3 Uruguay | 3 | 0 | 2 | 1 | 3 | 4 | -1 | 2 | Bảng | Ngày | Giờ | Mã trận | Trận đấu | Kênh trực tiếp</td>
+            </tr>
+            <tr>
+                <td><b>49</b></td>
+                <td>4 Ả Rập Saudi | 3 | 0 | 2 | 1 | 1 | 5 | -4 | 2 | Lượt 1 vòng bảng</td>
+            </tr>
+            <tr>
+                <td><b>50</b></td>
+                <td>A | 12/06 | 02:00 | Trận 1 | Mexico 2-0 Nam Phi | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>51</b></td>
+                <td>Nhóm I | A | 12/06 | 09:00 | Trận 2 | Hàn Quốc 2-1 CH Séc | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>52</b></td>
+                <td>1 Pháp | 3 | 3 | 0 | 0 | 10 | 2 | +8 | 9 | B | 13/06 | 02:00 | Trận 3 | Canada 1-1 Bosnia | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>53</b></td>
+                <td>2 Na Uy | 3 | 2 | 0 | 1 | 8 | 7 | +1 | 6 | D | 13/06 | 08:00 | Trận 4 | Mỹ 4-1 Paraguay | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>54</b></td>
+                <td>3 Senegal | 3 | 1 | 0 | 2 | 8 | 6 | +2 | 3 | B | 14/06 | 02:00 | Trận 5 | Qatar 1-1 Thụy Sĩ | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>55</b></td>
+                <td>4 Iraq | 3 | 0 | 0 | 3 | 1 | 12 | -11 | 0 | C | 14/06 | 05:00 | Trận 6 | Brazil 1-1 Ma Rốc | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>56</b></td>
+                <td>C | 14/06 | 08:00 | Trận 7 | Haiti 0-1 Scotland | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>57</b></td>
+                <td>Nhóm J | D | 14/06 | 11:00 | Trận 8 | Úc 2-0 Thổ Nhĩ Kỳ | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>58</b></td>
+                <td>1 Argentina | 3 | 3 | 0 | 0 | 8 | 1 | +7 | 9 | E | 15/06 | 00:00 | Trận 9 | Đức 7-1 Curacao | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>59</b></td>
+                <td>2 Áo | 3 | 1 | 1 | 1 | 6 | 6 | 0 | 4 | F | 15/06 | 03:00 | Trận 10 | Hà Lan 2-2 Nhật Bản | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>60</b></td>
+                <td>3 Algeria | 3 | 1 | 1 | 1 | 5 | 7 | -2 | 4 | E | 15/06 | 06:00 | Trận 11 | Bờ Biển Ngà 1-0 Ecuador | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>61</b></td>
+                <td>4 Jordan | 3 | 0 | 0 | 3 | 3 | 8 | -5 | 0 | F | 15/06 | 09:00 | Trận 12 | Thụy Điển 5-1 Tunisia | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>62</b></td>
+                <td>H | 15/06 | 23:00 | Trận 13 | Tây Ban Nha 0-0 Cabo Verde | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>63</b></td>
+                <td>Nhóm K | G | 16/06 | 02:00 | Trận 14 | Bỉ 1-1 Ai Cập | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>64</b></td>
+                <td>1 Colombia | 3 | 2 | 1 | 0 | 4 | 1 | +3 | 7 | H | 16/06 | 05:00 | Trận 15 | Saudi Arabia 1-1 Uruguay | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>65</b></td>
+                <td>2 Bồ | 3 | 1 | 2 | 0 | 6 | 1 | +5 | 5 | G | 16/06 | 08:00 | Trận 16 | Iran 2-2 New Zealand | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>66</b></td>
+                <td>3 Cộng Hòa Dân Chủ Co.  | 3 | 1 | 1 | 1 | 4 | 3 | +1 | 4 | I | 17/06 | 02:00 | Trận 17 | Pháp 3-1 Senegal | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>67</b></td>
+                <td>4 Uzbekistan | 3 | 0 | 0 | 3 | 2 | 11 | -9 | 0 | I | 17/06 | 05:00 | Trận 18 | Iraq 1-4 Na Uy | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>68</b></td>
+                <td>J | 17/06 | 08:00 | Trận 19 | Argentina 3-0 Algeria | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>69</b></td>
+                <td>Nhóm L | J | 17/06 | 11:00 | Trận 20 | Áo 3-1 Jordan | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>70</b></td>
+                <td>1 Anh | 3 | 2 | 1 | 0 | 6 | 2 | +4 | 7 | K | 18/06 | 00:00 | Trận 21 | Bồ Đào Nha 1-1 CHDC Congo | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>71</b></td>
+                <td>2 Croatia | 3 | 2 | 0 | 1 | 5 | 5 | 0 | 6 | L | 18/06 | 03:00 | Trận 22 | Anh 4-2 Croatia | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>72</b></td>
+                <td>3 Ghana | 3 | 1 | 1 | 1 | 2 | 2 | 0 | 4 | L | 18/06 | 06:00 | Trận 23 | Ghana 1-0 Panama | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>73</b></td>
+                <td>4 Panama | 3 | 0 | 0 | 3 | 0 | 4 | -4 | 0 | K | 18/06 | 09:00 | Trận 24 | Uzbekistan 1-3 Colombia | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>74</b></td>
+                <td>Lượt 2 vòng bảng</td>
+            </tr>
+            <tr>
+                <td><b>75</b></td>
+                <td>A | 18/06 | 23:00 | Trận 25 | CH Séc 1-1 Nam Phi | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>76</b></td>
+                <td>B | 19/06 | 02:00 | Trận 26 | Thụy Sĩ 4-1 Bosnia | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>77</b></td>
+                <td>B | 19/06 | 05:00 | Trận 27 | Canada 6-0 Qatar | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>78</b></td>
+                <td>A | 19/06 | 08:00 | Trận 28 | Mexico 1-0 Hàn Quốc | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>79</b></td>
+                <td>D | 20/06 | 02:00 | Trận 29 | Mỹ 2-0 Úc | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>80</b></td>
+                <td>C | 20/06 | 05:00 | Trận 30 | Scotland 0-1 Ma Rốc | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>81</b></td>
+                <td>C | 20/06 | 07:30 | Trận 31 | Brazil 3-0 Haiti | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>82</b></td>
+                <td>D | 20/06 | 10:00 | Trận 32 | Thổ Nhĩ Kỳ 0-1 Paraguay | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>83</b></td>
+                <td>F | 21/06 | 00:00 | Trận 33 | Hà Lan 5-1 Thụy Điển | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>84</b></td>
+                <td>E | 21/06 | 03:00 | Trận 34 | Đức 2-1 Bờ Biển Ngà | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>85</b></td>
+                <td>E | 21/06 | 07:00 | Trận 35 | Ecuador 0-0 Curacao | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>86</b></td>
+                <td>F | 21/06 | 11:00 | Trận 36 | Tunisia 0-4 Nhật Bản | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>87</b></td>
+                <td>H | 21/06 | 23:00 | Trận 37 | Tây Ban Nha 4-0 Saudi Arabia | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>88</b></td>
+                <td>G | 22/06 | 02:00 | Trận 38 | Bỉ 0-0 Iran | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>89</b></td>
+                <td>H | 22/06 | 05:00 | Trận 39 | Uruguay 2-2 Cabo Verde | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>90</b></td>
+                <td>G | 22/06 | 08:00 | Trận 40 | New Zealand 1-3 Ai Cập | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>91</b></td>
+                <td>J | 23/06 | 00:00 | Trận 41 | Argentina 2-0 Áo | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>92</b></td>
+                <td>I | 23/06 | 04:00 | Trận 42 | Pháp 3-0 Iraq | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>93</b></td>
+                <td>I | 23/06 | 07:00 | Trận 43 | Na Uy 3-2 Senegal | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>94</b></td>
+                <td>J | 23/06 | 10:00 | Trận 44 | Jordan 1-2 Algeria | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>95</b></td>
+                <td>K | 24/06 | 00:00 | Trận 45 | Bồ Đào Nha 5-0 Uzbekistan | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>96</b></td>
+                <td>L | 24/06 | 03:00 | Trận 46 | Anh 0-0 Ghana | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>97</b></td>
+                <td>L | 24/06 | 06:00 | Trận 47 | Panama 0-1 Croatia | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>98</b></td>
+                <td>K | 24/06 | 09:00 | Trận 48 | Colombia 1-0 DR Congo | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>99</b></td>
+                <td>Lượt 3 vòng bảng</td>
+            </tr>
+            <tr>
+                <td><b>100</b></td>
+                <td>B | 25/06 | 02:00 | Trận 49 | Bosnia 3-1 Qatar | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>101</b></td>
+                <td>B | 25/06 | 02:00 | Trận 50 | Thụy Sĩ 2-1 Canada | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>102</b></td>
+                <td>C | 25/06 | 05:00 | Trận 51 | Ma Rốc 4-2 Haiti | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>103</b></td>
+                <td>C | 25/06 | 05:00 | Trận 52 | Scotland 0-3 Brazil | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>104</b></td>
+                <td>A | 25/06 | 08:00 | Trận 53 | Nam Phi 1-0 Hàn Quốc | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>105</b></td>
+                <td>A | 25/06 | 08:00 | Trận 54 | CH Séc 0-3 Mexico | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>106</b></td>
+                <td>E | 26/06 | 03:00 | Trận 55 | Curacao 0-2 Bờ Biển Ngà | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>107</b></td>
+                <td>E | 26/06 | 03:00 | Trận 56 | Ecuador 2-1 Đức | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>108</b></td>
+                <td>F | 26/06 | 06:00 | Trận 57 | Tunisia 1-3 Hà Lan | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>109</b></td>
+                <td>F | 26/06 | 06:00 | Trận 58 | Nhật Bản 1-1 Thụy Điển | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>110</b></td>
+                <td>D | 26/06 | 09:00 | Trận 59 | Thổ Nhĩ Kỳ 3-2 Mỹ | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>111</b></td>
+                <td>D | 26/06 | 09:00 | Trận 60 | Paraguay 0-0 Úc | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>112</b></td>
+                <td>I | 27/06 | 02:00 | Trận 61 | Na Uy 1-4 Pháp | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>113</b></td>
+                <td>I | 27/06 | 02:00 | Trận 62 | Senegal 5-0 Iraq | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>114</b></td>
+                <td>H | 27/06 | 07:00 | Trận 63 | Cabo Verde 0-0 Saudi Arabia | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>115</b></td>
+                <td>H | 27/06 | 07:00 | Trận 64 | Uruguay 0-1 Tây Ban Nha | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>116</b></td>
+                <td>G | 27/06 | 10:00 | Trận 65 | New Zealand 1-5 Bỉ | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>117</b></td>
+                <td>G | 27/06 | 10:00 | Trận 66 | Ai Cập 1-1 Iran | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>118</b></td>
+                <td>L | 28/06 | 04:00 | Trận 67 | Panama 0-2 Anh | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>119</b></td>
+                <td>L | 28/06 | 04:00 | Trận 68 | Croatia 2-1 Ghana | XEM VIDEO</td>
+            </tr>
+            <tr>
+                <td><b>120</b></td>
+                <td>K | 28/06 | 06:30 | Trận 69 | Colombia 0-0 Bồ Đào Nha | VTV3</td>
+            </tr>
+            <tr>
+                <td><b>121</b></td>
+                <td>K | 28/06 | 06:30 | Trận 70 | CHDC Congo 3-1 Uzbekistan | VTV10</td>
+            </tr>
+            <tr>
+                <td><b>122</b></td>
+                <td>J | 28/06 | 09:00 | Trận 71 | Algeria 3-3 Áo | VTV2</td>
+            </tr>
+            <tr>
+                <td><b>123</b></td>
+                <td>J | 28/06 | 09:00 | Trận 72 | Jordan 1-3 Argentina | VTV3</td>
+            </tr>
+            <tr>
+                <td><b>124</b></td>
+                <td>Vòng 1/16</td>
+            </tr>
+            <tr>
+                <td><b>125</b></td>
+                <td>- | 29/06 | 02:00 | Trận 73 | Nam Phi 0-1 Canada | VTV</td>
+            </tr>
+            <tr>
+                <td><b>126</b></td>
+                <td>- | 30/06 | 03:30 | Trận 74 | Đức 1-1 Paraguay (pen 3-4) | VTV</td>
+            </tr>
+            <tr>
+                <td><b>127</b></td>
+                <td>- | 30/06 | 08:00 | Trận 75 | Hà Lan 1-1 Maroc (pen 2-3) | VTV</td>
+            </tr>
+            <tr>
+                <td><b>128</b></td>
+                <td>- | 30/06 | 00:00 | Trận 76 | Brazil 2-1 Nhật Bản | VTV</td>
+            </tr>
+            <tr>
+                <td><b>129</b></td>
+                <td>- | 01/07 | 04:00 | Trận 77 | Pháp 3-0 Thụy Điển | VTV</td>
+            </tr>
+            <tr>
+                <td><b>130</b></td>
+                <td>- | 01/07 | 00:00 | Trận 78 | Bờ Biển Ngà 1-2 Na Uy | VTV</td>
+            </tr>
+            <tr>
+                <td><b>131</b></td>
+                <td>- | 01/07 | 08:00 | Trận 79 | Mexico 2-0 Ecuador | VTV</td>
+            </tr>
+            <tr>
+                <td><b>132</b></td>
+                <td>- | 01/07 | 23:00 | Trận 80 | Anh 2-1 CHDC Congo | VTV</td>
+            </tr>
+            <tr>
+                <td><b>133</b></td>
+                <td>- | 03/07 | 06:00 | Trận 81 | Mỹ 2-0 Bosnia | VTV</td>
+            </tr>
+            <tr>
+                <td><b>134</b></td>
+                <td>- | 02/07 | 07:00 | Trận 82 | Bỉ 3-2 Senegal | VTV</td>
+            </tr>
+            <tr>
+                <td><b>135</b></td>
+                <td>- | 02/07 | 03:00 | Trận 83 | Bồ Đào Nha 2-1 Croatia | VTV</td>
+            </tr>
+            <tr>
+                <td><b>136</b></td>
+                <td>- | 03/07 | 02:00 | Trận 84 | Tây Ban Nha 3-0 Áo | VTV</td>
+            </tr>
+            <tr>
+                <td><b>137</b></td>
+                <td>- | 03/07 | 10:00 | Trận 85 | Thụy Sĩ 2-0 Algeria | VTV</td>
+            </tr>
+            <tr>
+                <td><b>138</b></td>
+                <td>- | 04/07 | 05:00 | Trận 86 | Argentina 3-2 Cape Verde | VTV</td>
+            </tr>
+            <tr>
+                <td><b>139</b></td>
+                <td>- | 04/07 | 08:30 | Trận 87 | Colombia 1-0 Ghana | VTV</td>
+            </tr>
+            <tr>
+                <td><b>140</b></td>
+                <td>- | 04/07 | 01:00 | Trận 88 | Úc 1-1 Ai Cập (pen 2-4) | VTV</td>
+            </tr>
+            <tr>
+                <td><b>141</b></td>
+                <td>Vòng 1/8</td>
+            </tr>
+            <tr>
+                <td><b>142</b></td>
+                <td>- | 05/07 | 04:00 | Trận 89 | Paraguay 0-1 Pháp | VTV</td>
+            </tr>
+            <tr>
+                <td><b>143</b></td>
+                <td>- | 05/07 | 00:00 | Trận 90 | Canada 0-3 Maroc | VTV</td>
+            </tr>
+            <tr>
+                <td><b>144</b></td>
+                <td>- | 06/07 | 03:00 | Trận 91 | Brazil 1-2 Na Uy | VTV</td>
+            </tr>
+            <tr>
+                <td><b>145</b></td>
+                <td>- | 06/07 | 07:00 | Trận 92 | Mexico 2-3 Anh | VTV</td>
+            </tr>
+            <tr>
+                <td><b>146</b></td>
+                <td>- | 07/07 | 02:00 | Trận 93 | Tây Ban Nha 0-1 Bồ Đào Nha | VTV</td>
+            </tr>
+            <tr>
+                <td><b>147</b></td>
+                <td>- | 07/07 | 07:00 | Trận 94 | Mỹ 1-4 Bỉ | VTV</td>
+            </tr>
+            <tr>
+                <td><b>148</b></td>
+                <td>- | 07/07 | 23:00 | Trận 95 | Ai Cập 2-3 Argentina | VTV</td>
+            </tr>
+            <tr>
+                <td><b>149</b></td>
+                <td>- | 08/07 | 03:00 | Trận 96 | Thụy Sĩ 0-0 Colombia</td>
+            </tr>
+            <tr>
+                <td><b>150</b></td>
+                <td>(pen 4-3) | VTV</td>
+            </tr>
+            <tr>
+                <td><b>151</b></td>
+                <td>Vòng tứ kết</td>
+            </tr>
+            <tr>
+                <td><b>152</b></td>
+                <td>- | 10/07 | 03:00 | Trận 97 | Pháp 2-0 Maroc | VTV3, VTV6, VTV9</td>
+            </tr>
+            <tr>
+                <td><b>153</b></td>
+                <td>- | 11/07 | 02:00 | Trận 98 | Tây Ban Nha 2-1 Bỉ | VTV3, VTV6, VTV9, VTV10</td>
+            </tr>
+            <tr>
+                <td><b>154</b></td>
+                <td>- | 12/07 | 04:00 | Trận 99 | Na Uy 1-2 Anh | VTV3, VTV6, VTV10</td>
+            </tr>
+            <tr>
+                <td><b>155</b></td>
+                <td>- | 12/07 | 08:00 | Trận 100 | Argentina 3-1 Thụy Sĩ | VTV3, VTV6, VTV9</td>
+            </tr>
+            <tr>
+                <td><b>156</b></td>
+                <td>Vòng bán kết</td>
+            </tr>
+            <tr>
+                <td><b>157</b></td>
+                <td>- | 15/07 | 02:00 | Trận 101 | Pháp 0-2 Tây Ban Nha | VTV3, VTV6, VTV9</td>
+            </tr>
+            <tr>
+                <td><b>158</b></td>
+                <td>- | 16/07 | 02:00 | Trận 102 | Anh 1-2 Argentina | VTV3, VTV6, VTV9</td>
+            </tr>
+            <tr>
+                <td><b>159</b></td>
+                <td>Tranh hạng ba</td>
+            </tr>
+            <tr>
+                <td><b>160</b></td>
+                <td>- | 19/07 | 04:00 | Trận 103 | Pháp 4-6 Anh | VTV3, VTV6, VTV9</td>
+            </tr>
+            <tr>
+                <td><b>161</b></td>
+                <td>Chung kết</td>
+            </tr>
+            <tr>
+                <td><b>162</b></td>
+                <td>- | 20/07 | 02:00 | Trận 104 | Tây Ban Nha 1-0 Argentina | VTV3, VTV6, VTV9</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

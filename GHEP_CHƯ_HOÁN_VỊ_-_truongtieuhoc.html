@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>GHEP CHƯ HOÁN VỊ - truongtieuhoc</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>GHEP CHƯ HOÁN VỊ - truongtieuhoc</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>Trường tiểu học ở Hà Nội IQ School – Lê Lai, Hà Đông | nam | m | m | n</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>Trường tiểu học Brendon | anh | n | h | a</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>Trường tiểu học Eraschool – Mê Linh, Hà Nội</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>Trường tiểu học ở Hà Nội Sentia</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>Trường tiểu học Hanoi Adelaide School – Đống Đa</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>Alfred Nobel – Trường cấp 1 tốt ở Hà Nội</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>Trường Tiểu học Song ngữ Hà Nội – Wellspring</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>MIS – Trường cấp 1 lâu đời ở Hà Nội</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>Trường tiểu học ở Hà Nội uy tín – Olympia</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>Trường Tiểu Học Oxford Hà Nội</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>Trường Tiểu học Archimedes – Cầu Giấy, Hà Nội</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>Trường Tiểu học Jean Piaget</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>FPT – Trường Tiểu học ở Hà Nội đạt tiêu chuẩn quốc tế</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>Trường Tiểu học Sputnik ở Hà Nội</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>Trường Tiểu Học Hanoi Victoria</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>Trường Tiểu học chất lượng cao tại Hà Nội Hermann Gmeiner</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>Trường Tiểu học ở Hà Nội Marie Curie</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>Trường Tiểu học tốt ở Hà Nội – Newton</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>Trường tiểu học Edison Schools</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>Vinschool – Top trường tiểu học ở Hà Nội chất lượng nhất</td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td>Trường Tiểu học Hanoi Westminster School, Cầu Giấy</td>
+            </tr>
+            <tr>
+                <td><b>22</b></td>
+                <td>Trường Tiểu học Liên cấp Phenikaa School</td>
+            </tr>
+            <tr>
+                <td><b>23</b></td>
+                <td>Trường Tiểu học Quốc Tế Nhật Bản</td>
+            </tr>
+            <tr>
+                <td><b>24</b></td>
+                <td>Trường Tiểu Học Nguyễn Đình Chiểu – Hai Bà Trưng, Hà Nội</td>
+            </tr>
+            <tr>
+                <td><b>25</b></td>
+                <td>Trường Tiểu Học Phan Chu Trinh</td>
+            </tr>
+            <tr>
+                <td><b>26</b></td>
+                <td>Nguyễn Tri Phương – Trường Tiểu học tốt Hà Nội</td>
+            </tr>
+            <tr>
+                <td><b>27</b></td>
+                <td>Trường tiểu học Lý Thường Kiệt</td>
+            </tr>
+            <tr>
+                <td><b>28</b></td>
+                <td>Trường tiểu học Quốc tế Anh Việt Hà Nội</td>
+            </tr>
+            <tr>
+                <td><b>29</b></td>
+                <td>Trường Tiểu học Everest</td>
+            </tr>
+            <tr>
+                <td><b>30</b></td>
+                <td>Quốc tế Alaska – Trường Tiểu học tốt ở Hà Nội</td>
+            </tr>
+            <tr>
+                <td><b>31</b></td>
+                <td>Trường Tiểu học Quốc tế Singapore (SIS)</td>
+            </tr>
+            <tr>
+                <td><b>32</b></td>
+                <td>Trường Tiểu học Horizon</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

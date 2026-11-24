@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bàn Cờ Trăm Năm - 90 Tiêu Chuẩn Lý Tưởng</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#0F172A',
+                        darkcard: '#1E293B',
+                        darkborder: '#334155',
+                        husband: '#3B82F6', // Xanh dương cho Chồng
+                        wife: '#EC4899',    // Hồng cho Vợ
+                        gold: '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: #0B0F19;
+            color: #F8FAFC;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1E293B;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748B;
+        }
+
+        /* Animation cho flip bàn cờ */
+        .board-container {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .board-flipped {
+            transform: rotate(180deg);
+        }
+        .board-flipped .piece-content {
+            transform: rotate(180deg);
+        }
+
+        /* Hiệu ứng quân cờ phát sáng */
+        .piece-selected-husband {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+            border-color: #60A5FA !important;
+            background-color: #1E3A8A !important;
+        }
+        .piece-selected-wife {
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.8);
+            border-color: #F472B6 !important;
+            background-color: #831843 !important;
+        }
+
+        /* Line bàn cờ tướng */
+        .board-grid-bg {
+            background-image: 
+                linear-gradient(to right, #334155 1px, transparent 1px),
+                linear-gradient(to bottom, #334155 1px, transparent 1px);
+            background-size: 11.111% 10%;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-pink-500 selection:text-white">
+
+    <!-- Header Header -->
+    <header class="bg-slate-900/90 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-pink-500 flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                    <i class="fa-solid fa-chess-king-queen"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">
+                        BÀN CỜ TRĂM NĂM
+                    </h1>
+                    <p class="text-xs text-slate-400 font-medium">90 Tiêu Chuẩn Người Chồng & Người Vợ Lý Tưởng</p>
+                </div>
+            </div>
+
+            <!-- Nút điều khiển nhanh Header -->
+            <div class="flex items-center gap-2">
+                <button id="btnFlip" onclick="toggleFlipBoard()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span class="hidden sm:inline">Đảo Bàn Cờ</span>
+                </button>
+                <button onclick="openHistoryModal()" class="px-3 py-2 bg-purple-900/40 hover:bg-purple-800/50 text-purple-300 border border-purple-700/50 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>Lịch Sử</span>
+                </button>
+                <button onclick="resetCurrentMatch()" class="px-3 py-2 bg-rose-950/40 hover:bg-rose-900/50 text-rose-300 border border-rose-800/40 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                    <span class="hidden sm:inline">Làm Mới</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto w-full px-2 sm:px-4 py-4 flex-grow grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- CỘT TRÁI: Bàn cờ 90 điểm (Lần lượt 10 hàng x 9 cột) -->
+        <div class="lg:col-span-8 flex flex-col gap-4">
+
+            <!-- Thông tin người chơi & Bảng điểm nhanh -->
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Nhà Trai -->
+                <div class="bg-slate-900/80 border-2 border-blue-600/40 rounded-xl p-3 sm:p-4 flex flex-col justify-between relative overflow-hidden shadow-lg">
+                    <div class="absolute -right-4 -bottom-4 text-blue-500/10 text-7xl font-black pointer-events-none">
+                        <i class="fa-solid fa-mars"></i>
+                    </div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-blue-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-mars"></i> NHÀ TRAI (CHỒNG)
+                        </span>
+                        <span id="scoreHusband" class="text-2xl sm:text-3xl font-black text-blue-400">0 / 45</span>
+                    </div>
+                    <input type="text" id="nameHusband" value="Chú Rể" placeholder="Nhập tên Nam..." 
+                           class="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 text-slate-100 rounded-lg px-3 py-1.5 text-base font-bold outline-none transition">
+                </div>
+
+                <!-- Nhà Gái -->
+                <div class="bg-slate-900/80 border-2 border-pink-600/40 rounded-xl p-3 sm:p-4 flex flex-col justify-between relative overflow-hidden shadow-lg">
+                    <div class="absolute -right-4 -bottom-4 text-pink-500/10 text-7xl font-black pointer-events-none">
+                        <i class="fa-solid fa-venus"></i>
+                    </div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-pink-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-venus"></i> NHÀ GÁI (VỢ)
+                        </span>
+                        <span id="scoreWife" class="text-2xl sm:text-3xl font-black text-pink-400">0 / 45</span>
+                    </div>
+                    <input type="text" id="nameWife" value="Cô Dâu" placeholder="Nhập tên Nữ..." 
+                           class="w-full bg-slate-950 border border-slate-700 focus:border-pink-500 text-slate-100 rounded-lg px-3 py-1.5 text-base font-bold outline-none transition">
+                </div>
+            </div>
+
+            <!-- Ô Tìm Kiếm Nhanh & Lọc Tiêu Chí -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 flex flex-col sm:flex-row gap-3 items-center justify-between">
+                <div class="relative w-full sm:w-72">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Tìm nhanh tiêu chí (VD: trung thực, nấu ăn)..." 
+                           class="w-full bg-slate-950 border border-slate-700 focus:border-amber-500 text-slate-200 rounded-lg pl-9 pr-3 py-2 text-sm outline-none transition">
+                </div>
+
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    <button onclick="filterCategory('all')" id="filterAll" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-700 text-white border border-slate-600">Tất cả (90)</button>
+                    <button onclick="filterCategory('husband')" id="filterHusband" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-blue-400 hover:bg-slate-700 border border-blue-900">Nam (45)</button>
+                    <button onclick="filterCategory('wife')" id="filterWife" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-pink-400 hover:bg-slate-700 border border-pink-900">Nữ (45)</button>
+                </div>
+            </div>
+
+            <!-- BÀN CỜ TƯỚNG (10 Hàng x 9 Cột = 90 Điểm) -->
+            <div class="bg-slate-900/90 border-2 border-slate-800 rounded-2xl p-3 sm:p-6 shadow-2xl relative overflow-hidden flex flex-col items-center justify-center">
+                <!-- Chú thích sông bàn cờ -->
+                <div class="w-full flex justify-between items-center text-xs font-extrabold text-slate-500 px-4 mb-2 tracking-widest uppercase">
+                    <span>Năm Nữ Đồng Tâm</span>
+                    <span>Sông Tương Phùng</span>
+                    <span>Bách Niên Hảo Hợp</span>
+                </div>
+
+                <!-- Khung Bàn Cờ -->
+                <div class="w-full overflow-x-auto pb-2 flex justify-center">
+                    <div id="boardContainer" class="board-container min-w-[620px] max-w-[800px] w-full aspect-[9/10] bg-slate-950 border-4 border-amber-900/50 rounded-xl p-3 relative shadow-inner">
+                        <!-- Đường kẻ lưới cờ -->
+                        <div class="absolute inset-4 board-grid-bg opacity-30 pointer-events-none rounded"></div>
+                        
+                        <!-- Lưới 90 quân cờ (Grid 10 rows x 9 cols) -->
+                        <div id="boardGrid" class="relative z-10 grid grid-cols-9 grid-rows-10 gap-1.5 sm:gap-2 h-full w-full">
+                            <!-- JS sẽ load 90 điểm cờ tại đây -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thanh lưu điểm ván đấu -->
+                <div class="w-full mt-4 flex flex-col sm:flex-row gap-3 items-center justify-between bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <div class="text-xs text-slate-400 text-center sm:text-left">
+                        Đã chọn: <span id="selectedCountText" class="font-bold text-amber-400">0</span>/90 tiêu chuẩn.
+                    </div>
+                    <button onclick="saveMatchHistory()" class="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold rounded-xl shadow-lg transition transform active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>GHI ĐIỂM VÁN ĐẤU NÀY</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- CỘT PHẢI: CHI TIẾT Ô TIÊU CHÍ & BẢNG THỐNG KÊ -->
+        <div class="lg:col-span-4 flex flex-col gap-4">
+
+            <!-- Card Hiển Thị Chi Tiết Ô Đang Chọn -->
+            <div id="detailCard" class="bg-slate-900 border-2 border-slate-700 rounded-2xl p-5 shadow-xl flex flex-col justify-between min-h-[320px] relative overflow-hidden transition-all">
+                
+                <!-- Placeholder khi chưa chọn -->
+                <div id="detailPlaceholder" class="flex flex-col items-center justify-center h-full my-auto text-center py-10">
+                    <div class="w-16 h-16 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-500 text-2xl mb-3 animate-pulse">
+                        <i class="fa-solid fa-hand-pointer"></i>
+                    </div>
+                    <h3 class="text-slate-300 font-bold text-base">CHƯA CHỌN TIÊU CHÍ NÀO</h3>
+                    <p class="text-slate-500 text-xs mt-1 max-w-xs">Nhấp vào một điểm trên bàn cờ hoặc tìm kiếm để xem thông tin chi tiết tiêu chuẩn chọn Bạn Đời.</p>
+                </div>
+
+                <!-- Nội dung hiển thị khi chọn -->
+                <div id="detailContent" class="hidden flex-col h-full justify-between gap-4">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span id="detailBadge" class="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider">
+                                NHÀ TRAI #1
+                            </span>
+                            <span id="detailCoords" class="text-xs text-slate-400 font-mono">Vị trí: Hàng 1, Cột 1</span>
+                        </div>
+
+                        <h3 id="detailTitle" class="text-xl font-black text-slate-100 mb-2 leading-snug">
+                            Tên tiêu chuẩn ở đây
+                        </h3>
+
+                        <div class="w-12 h-1 rounded bg-amber-500 mb-3"></div>
+
+                        <p id="detailDesc" class="text-slate-300 text-sm leading-relaxed bg-slate-950/60 p-3 rounded-lg border border-slate-800">
+                            Mô tả chi tiết tiêu chí...
+                        </p>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
+                        <div class="text-xs text-slate-400">
+                            Trạng thái: <span id="detailStatus" class="font-bold text-slate-300">Chưa chọn</span>
+                        </div>
+                        <button id="btnTogglePiece" onclick="toggleCurrentPiece()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg text-sm transition shadow-md flex items-center gap-2">
+                            <i class="fa-solid fa-check"></i>
+                            <span id="btnTogglePieceText">Tích Chọn Điểm Này</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bảng Đánh Giá Đạt Chuẩn Lý Tưởng -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
+                <h3 class="text-base font-extrabold text-slate-200 mb-4 flex items-center gap-2 border-b border-slate-800 pb-2">
+                    <i class="fa-solid fa-chart-pie text-amber-400"></i>
+                    ĐÁNH GIÁ ĐỒNG ĐỘ TƯƠNG THÍCH
+                </h3>
+
+                <!-- Thanh Tiến Độ Nam -->
+                <div class="mb-4">
+                    <div class="flex justify-between text-xs font-bold mb-1">
+                        <span class="text-blue-400 flex items-center gap-1">
+                            <i class="fa-solid fa-mars"></i> <span id="progressHusbandName">Nam</span>
+                        </span>
+                        <span id="progressHusbandPercent" class="text-blue-400">0%</span>
+                    </div>
+                    <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                        <div id="barHusband" class="h-full bg-blue-500 transition-all duration-500 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Thanh Tiến Độ Nữ -->
+                <div class="mb-5">
+                    <div class="flex justify-between text-xs font-bold mb-1">
+                        <span class="text-pink-400 flex items-center gap-1">
+                            <i class="fa-solid fa-venus"></i> <span id="progressWifeName">Nữ</span>
+                        </span>
+                        <span id="progressWifePercent" class="text-pink-400">0%</span>
+                    </div>
+                    <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                        <div id="barWife" class="h-full bg-pink-500 transition-all duration-500 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Đánh giá tổng hợp -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center">
+                    <div class="text-xs text-slate-400 uppercase tracking-widest font-bold mb-1">Kết Luận Sơ Bộ</div>
+                    <div id="marriageEvaluation" class="text-base font-extrabold text-amber-400">
+                        Hãy chọn các điểm trên bàn cờ để đánh giá
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hướng dẫn nhanh -->
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 text-xs text-slate-400 space-y-2">
+                <div class="font-bold text-slate-300 flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-info text-blue-400"></i> Hướng dẫn sử dụng:
+                </div>
+                <ul class="list-disc list-inside space-y-1">
+                    <li>Kích vào từng quân cờ trên bàn cờ để chọn/hủy ưu điểm.</li>
+                    <li>Sử dụng ô tìm kiếm để lọc nhanh tiêu chí bất kỳ.</li>
+                    <li>Nút <span class="text-amber-400">"Đảo Bàn Cờ"</span> hỗ trợ 2 bên xoay góc nhìn thuận tiện.</li>
+                    <li>Bấm <span class="text-emerald-400 font-semibold">"Ghi điểm ván đấu này"</span> để lưu lịch sử đánh giá.</li>
+                </ul>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-3 text-center text-xs text-slate-500">
+        <p>Bàn Cờ Trăm Năm © 90 Tiêu Chuẩn Lý Tưởng Người Chồng & Người Vợ - Thiết kế Dark Mode Tương Phán Cao</p>
+    </footer>
+
+    <!-- MODAL LỊCH SỬ VÁN ĐẤU -->
+    <div id="historyModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border-2 border-slate-700 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+            
+            <div class="p-4 bg-slate-950 border-b border-slate-800 flex justify-between items-center">
+                <h3 class="text-lg font-extrabold text-slate-100 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-purple-400"></i>
+                    LỊCH SỬ ĐÁNH GIÁ VÁN ĐẤU
+                </h3>
+                <button onclick="closeHistoryModal()" class="text-slate-400 hover:text-white text-xl p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="historyList" class="p-4 overflow-y-auto space-y-3 flex-grow">
+                <!-- Nội dung danh sách lịch sử sẽ render ở đây -->
+            </div>
+
+            <div class="p-4 bg-slate-950 border-t border-slate-800 flex justify-between items-center">
+                <button onclick="clearAllHistory()" class="px-3 py-1.5 bg-rose-950/60 hover:bg-rose-900 text-rose-300 border border-rose-800 rounded-lg text-xs font-bold transition">
+                    Xóa tất cả lịch sử
+                </button>
+                <button onclick="closeHistoryModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-bold transition">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* ==========================================================================
+           1. KHỞI TẠO DỮ LIỆU 90 TIÊU CHUẨN (45 NAM & 45 NỮ)
+           ========================================================================== */
+        
+        const HUSBAND_ADVANTAGES = [
+            "Trung thực & Thật thà", "Chịu khó làm ăn", "Yêu thương gia đình", "Biết lắng nghe & Chia sẻ", "Tôn trọng vợ",
+            "Có chí tiến thủ", "Không cờ bạc cá độ", "Biết kiềm chế cơn giận", "Sống có trách nhiệm", "Yêu thương con cái",
+            "Sẵn sàng phụ việc nhà", "Hiếu thảo với cha mẹ 2 bên", "Trung thủy một lòng", "Có mục tiêu sống rõ ràng", "Biết quản lý tài chính",
+            "Có khiếu hài hước", "Luôn động viên người bạn đời", "Biết lắng nghe góp ý", "Hạn chế rượu bia thuốc lá", "Biết sửa chữa đồ đạc gia đình",
+            "Rộng lượng và vị tha", "Điềm tĩnh trước sóng gió", "Tự giác học hỏi nâng cao bản thân", "Tôn trọng riêng tư của vợ", "Giữ lời hứa",
+            "Tế nhị trong giao tiếp", "Biết quan tâm cảm xúc", "Có lối sống lành mạnh", "Sẵn sàng xin lỗi khi sai", "Bảo vệ gia đình trước dư luận",
+            "Chủ động gánh vác việc nặng", "Hỗ trợ sự nghiệp của vợ", "Dành thời gian chất lượng cho gia đình", "Biết cách hòa giải mâu thuẫn", "Đáng tin cậy trong mọi việc",
+            "Kiên nhẫn với con và vợ", "Biết tự chăm sóc sức khỏe", "Sống hòa đồng với mọi người", "Công bằng minh bạch tài chính", "Thích sáng tạo & Đổi mới",
+            "Biết tạo bất ngờ lãng mạn", "Quyết đoán khi cần thiết", "Có lòng nhân ái hướng thiện", "Tự tin nhưng không gia trưởng", "Luôn nỗ lực vì tương lai chung"
+        ];
+
+        const WIFE_ADVANTAGES = [
+            "Dịu dàng & Nhã nhặn", "Quản lý thu chi vén khéo", "Tôn trọng chồng & Gia đình chồng", "Biết lắng nghe & Thấu hiểu", "Biết chăm sóc tổ ấm", "Chân thành & Trung thủy",
+            "Chịu khó & Kiên trì", "Hiếu thảo với cha mẹ 2 bên", "Yêu thương & Dạy dỗ con tốt", "Khéo léo trong ứng xử", "Yêu thích sự sạch sẽ gọn gàng", "Nấu ăn ngon hoặc biết quán xuyến",
+            "Tự chủ và có công việc riêng", "Luôn động viên chồng lúc khó khăn", "Bao dung và rộng lượng", "Sống có lòng nhân ái", "Biết kiềm chế cảm xúc tiêu cực", "Luôn giữ lửa gia đình",
+            "Giao tiếp lịch sự tế nhị", "Giữ gìn hình ảnh cho chồng", "Biết lắng nghe chia sẻ buồn vui", "Có thói quen sống lành mạnh", "Hạn chế so sánh chồng với người khác", "Sẵn sàng học hỏi điều mới",
+            "Chăm sóc sức khỏe gia đình", "Biết tạo sự lãng mạn tình cảm", "Biết nhường nhịn khi bất đồng", "Ủng hộ ước mơ của chồng", "Biết sắp xếp công việc hợp lý", "Không buôn chuyện gièm pha",
+            "Điềm tĩnh và chín chắn", "Ăn mặc chỉn chu lịch sự", "Có mục tiêu phát triển bản thân", "Quản lý cảm xúc tốt", "Chủ động vun vén tình cảm", "Biết cách thư giãn giảm stress",
+            "Biết ơn và trân trọng điều nhỏ", "Luôn giữ chữ tín", "Đáng tin cậy và thủy chung", "Linh hoạt thích nghi hoàn cảnh", "Luôn tạo năng lượng tích cực", "Hòa đồng với bạn bè người thân",
+            "Tự tin nhưng vẫn khiêm tốn", "Bảo vệ danh dự gia đình", "Đồng hành cùng chồng mọi hoàn cảnh"
+        ];
+
+        // Tạo mảng 90 điểm cờ kết hợp xen kẽ/bố trí chuẩn
+        let chessBoardData = [];
+        
+        function initBoardData() {
+            chessBoardData = [];
+            // Bố trí 10 hàng x 9 cột (Total 90)
+            // Hàng 0-4: 45 Ưu điểm Nam (Chồng) - Hàng 5-9: 45 Ưu điểm Nữ (Vợ)
+            let hIndex = 0;
+            let wIndex = 0;
+
+            for (let row = 0; row < 10; row++) {
+                for (let col = 0; col < 9; col++) {
+                    const id = row * 9 + col;
+                    const isHusband = row < 5; // 5 hàng trên là Nam, 5 hàng dưới là Nữ
+                    
+                    let title = "";
+                    if (isHusband) {
+                        title = HUSBAND_ADVANTAGES[hIndex++];
+                    } else {
+                        title = WIFE_ADVANTAGES[wIndex++];
+                    }
+
+                    chessBoardData.push({
+                        id: id,
+                        row: row + 1,
+                        col: col + 1,
+                        type: isHusband ? 'husband' : 'wife',
+                        title: title,
+                        desc: isHusband 
+                            ? `Tiêu chuẩn #${hIndex} dành cho Người Chồng Lý Tưởng: Giúp xây dựng nền tảng vững chắc và bản lĩnh gia đình.` 
+                            : `Tiêu chuẩn #${wIndex} dành cho Người Vợ Lý Tưởng: Giúp giữ lửa yêu thương và ấm êm cho tổ ấm.`,
+                        selected: false
+                    });
+                }
+            }
+        }
+
+        /* ==========================================================================
+           2. BIẾN TRẠNG THÁI & DOM ELEMENTS
+           ========================================================================== */
+        let currentSelectedId = null;
+        let isFlipped = false;
+        let activeFilter = 'all';
+
+        /* ==========================================================================
+           3. RENDER BÀN CỜ 90 ĐIỂM
+           ========================================================================== */
+        function renderBoard() {
+            const gridEl = document.getElementById('boardGrid');
+            gridEl.innerHTML = '';
+
+            chessBoardData.forEach(piece => {
+                // Kiểm tra xem có bị ẩn bởi bộ lọc hoặc tìm kiếm không
+                const searchKeyword = document.getElementById('searchInput').value.toLowerCase().trim();
+                const matchesFilter = (activeFilter === 'all') || (piece.type === activeFilter);
+                const matchesSearch = piece.title.toLowerCase().includes(searchKeyword);
+
+                const isVisible = matchesFilter && matchesSearch;
+
+                const pieceBtn = document.createElement('button');
+                pieceBtn.dataset.id = piece.id;
+                
+                // Style cơ bản quân cờ
+                let baseStyle = "relative rounded-full flex flex-col items-center justify-center p-1 text-center transition-all duration-200 transform hover:scale-110 active:scale-95 border-2 cursor-pointer shadow-md text-xs font-extrabold select-none aspect-square ";
+                
+                if (!isVisible) {
+                    baseStyle += " opacity-20 pointer-events-none grayscale ";
+                }
+
+                if (piece.selected) {
+                    if (piece.type === 'husband') {
+                        baseStyle += " piece-selected-husband text-blue-100 border-blue-400 ";
+                    } else {
+                        baseStyle += " piece-selected-wife text-pink-100 border-pink-400 ";
+                    }
+                } else {
+                    if (piece.type === 'husband') {
+                        baseStyle += " bg-slate-900 hover:bg-blue-950/70 border-blue-600/50 text-blue-300 ";
+                    } else {
+                        baseStyle += " bg-slate-900 hover:bg-pink-950/70 border-pink-600/50 text-pink-300 ";
+                    }
+                }
+
+                // Nếu đang được click xem chi tiết
+                if (currentSelectedId === piece.id) {
+                    baseStyle += " ring-4 ring-amber-400 ring-offset-2 ring-offset-slate-950 z-20 ";
+                }
+
+                pieceBtn.className = baseStyle;
+                pieceBtn.onclick = () => selectPiece(piece.id);
+
+                // Icon nhỏ hiển thị loại
+                const iconClass = piece.type === 'husband' ? 'fa-mars text-blue-400' : 'fa-venus text-pink-400';
+
+                pieceBtn.innerHTML = `
+                    <div class="piece-content flex flex-col items-center justify-center w-full h-full leading-tight">
+                        <span class="text-[9px] opacity-70 flex items-center gap-0.5">
+                            <i class="fa-solid ${iconClass}"></i>${piece.id + 1}
+                        </span>
+                        <span class="truncate w-full px-0.5 mt-0.5 text-[10px] sm:text-[11px] font-bold">
+                            ${piece.title}
+                        </span>
+                        ${piece.selected ? '<i class="fa-solid fa-circle-check text-[10px] mt-0.5 text-amber-300"></i>' : ''}
+                    </div>
+                `;
+
+                gridEl.appendChild(pieceBtn);
+            });
+
+            updateScores();
+        }
+
+        /* ==========================================================================
+           4. CHI TIẾT Ô VÀ TÍCH CHỌN
+           ========================================================================== */
+        function selectPiece(id) {
+            currentSelectedId = id;
+            const piece = chessBoardData.find(p => p.id === id);
+            if (!piece) return;
+
+            // Render lại bàn cờ để cập nhật viền sáng được chọn
+            renderBoard();
+
+            // Cập nhật card chi tiết
+            document.getElementById('detailPlaceholder').classList.add('hidden');
+            document.getElementById('detailContent').classList.remove('hidden');
+            document.getElementById('detailContent').classList.add('flex');
+
+            const badge = document.getElementById('detailBadge');
+            if (piece.type === 'husband') {
+                badge.className = "px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-blue-950 text-blue-300 border border-blue-800";
+                badge.innerText = `NHÀ TRAI • ĐIỂM SỐ #${piece.id + 1}`;
+            } else {
+                badge.className = "px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-pink-950 text-pink-300 border border-pink-800";
+                badge.innerText = `NHÀ GÁI • ĐIỂM SỐ #${piece.id + 1}`;
+            }
+
+            document.getElementById('detailCoords').innerText = `Hàng ${piece.row}, Cột ${piece.col}`;
+                document.getElementById('detailTitle').innerText = piece.title;
+            document.getElementById('detailDesc').innerText = piece.desc;
+
+            const statusEl = document.getElementById('detailStatus');
+            const btnToggleText = document.getElementById('btnTogglePieceText');
+            const btnToggle = document.getElementById('btnTogglePiece');
+
+            if (piece.selected) {
+                statusEl.innerText = "Đã Tích Chọn";
+                statusEl.className = "font-bold text-amber-400 flex items-center gap-1 inline-flex";
+                btnToggleText.innerText = "Hủy Chọn Điểm Này";
+                btnToggle.className = "px-4 py-2 bg-rose-700 hover:bg-rose-600 text-white font-bold rounded-lg text-sm transition shadow-md flex items-center gap-2";
+            } else {
+                statusEl.innerText = "Chưa Chọn";
+                statusEl.className = "font-bold text-slate-400";
+                btnToggleText.innerText = "Tích Chọn Điểm Này";
+                btnToggle.className = "px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-sm transition shadow-md flex items-center gap-2";
+            }
+        }
+
+        function toggleCurrentPiece() {
+            if (currentSelectedId === null) return;
+            const piece = chessBoardData.find(p => p.id === currentSelectedId);
+            if (piece) {
+                piece.selected = !piece.selected;
+                selectPiece(piece.id); // Refresh card
+            }
+        }
+
+        /* ==========================================================================
+           5. ĐẢO BÀN CỜ (ROTATE 180 DEG)
+           ========================================================================== */
+        function toggleFlipBoard() {
+            isFlipped = !isFlipped;
+            const container = document.getElementById('boardContainer');
+            if (isFlipped) {
+                container.classList.add('board-flipped');
+            } else {
+                container.classList.remove('board-flipped');
+            }
+        }
+
+        /* ==========================================================================
+           6. TÍNH ĐIỂM & ĐÁNH GIÁ
+           ========================================================================== */
+        function updateScores() {
+            const husbandSelected = chessBoardData.filter(p => p.type === 'husband' && p.selected).length;
+            const wifeSelected = chessBoardData.filter(p => p.type === 'wife' && p.selected).length;
+
+            document.getElementById('scoreHusband').innerText = `${husbandSelected} / 45`;
+            document.getElementById('scoreWife').innerText = `${wifeSelected} / 45`;
+
+            const totalSelected = husbandSelected + wifeSelected;
+            document.getElementById('selectedCountText').innerText = totalSelected;
+
+            // Tiến độ %
+            const husbandPct = Math.round((husbandSelected / 45) * 100);
+            const wifePct = Math.round((wifeSelected / 45) * 100);
+
+            document.getElementById('barHusband').style.width = `${husbandPct}%`;
+            document.getElementById('barWife').style.width = `${wifePct}%`;
+            document.getElementById('progressHusbandPercent').innerText = `${husbandPct}%`;
+            document.getElementById('progressWifePercent').innerText = `${wifePct}%`;
+
+            // Tên từ input
+            const nameH = document.getElementById('nameHusband').value || "Nam";
+            const nameW = document.getElementById('nameWife').value || "Nữ";
+
+            document.getElementById('progressHusbandName').innerText = nameH;
+            document.getElementById('progressWifeName').innerText = nameW;
+
+            // Đánh giá tổng hợp
+            const evalEl = document.getElementById('marriageEvaluation');
+            if (totalSelected === 0) {
+                evalEl.innerText = "Hãy chọn các điểm trên bàn cờ để bắt đầu đánh giá";
+                evalEl.className = "text-base font-extrabold text-amber-400";
+            } else if (husbandPct >= 80 && wifePct >= 80) {
+                evalEl.innerText = "💖 TRĂM NĂM HẢO HỢP - CẶP ĐÔI HOÀN HẢO!";
+                evalEl.className = "text-base font-extrabold text-pink-400 animate-pulse";
+            } else if (husbandPct >= 60 && wifePct >= 60) {
+                evalEl.innerText = "🌟 RẤT TƯƠNG THÍCH - BẠN ĐỜI LÝ TƯỞNG!";
+                evalEl.className = "text-base font-extrabold text-emerald-400";
+            } else if (husbandPct >= 40 || wifePct >= 40) {
+                evalEl.innerText = "👍 ĐẠT CHUẨN CƠ BẢN - CẦN THẤU HỂU HƠN";
+                evalEl.className = "text-base font-extrabold text-blue-400";
+            } else {
+                evalEl.innerText = "🌱 ĐANG XÂY DỰNG - CẦN CỐ GẮNG VUN VÉN";
+                evalEl.className = "text-base font-extrabold text-slate-400";
+            }
+        }
+
+        /* ==========================================================================
+           7. TÌM KIẾM & LỌC
+           ========================================================================== */
+        function handleSearch() {
+            renderBoard();
+        }
+
+        function filterCategory(cat) {
+            activeFilter = cat;
+            
+            // Cập nhật giao diện nút
+            ['All', 'Husband', 'Wife'].forEach(c => {
+                const btn = document.getElementById('filter' + c);
+                if (c.toLowerCase() === cat) {
+                    btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 border border-amber-400";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700";
+                }
+            });
+
+            renderBoard();
+        }
+
+        /* ==========================================================================
+           8. LƯU & XEM LỊCH SỬ VÁN ĐẤU
+           ========================================================================== */
+        function saveMatchHistory() {
+            const husbandName = document.getElementById('nameHusband').value.trim() || "Chú Rể";
+            const wifeName = document.getElementById('nameWife').value.trim() || "Cô Dâu";
+
+            const husbandSelectedList = chessBoardData.filter(p => p.type === 'husband' && p.selected);
+            const wifeSelectedList = chessBoardData.filter(p => p.type === 'wife' && p.selected);
+
+            if (husbandSelectedList.length === 0 && wifeSelectedList.length === 0) {
+                alert("Vui lòng chọn ít nhất 1 tiêu chí trên bàn cờ trước khi ghi điểm!");
+                return;
+            }
+
+            const now = new Date();
+            const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} - ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+
+            const record = {
+                id: Date.now(),
+                date: timeStr,
+                husbandName: husbandName,
+                wifeName: wifeName,
+                husbandScore: husbandSelectedList.length,
+                wifeScore: wifeSelectedList.length,
+                husbandItems: husbandSelectedList.map(item => item.title),
+                wifeItems: wifeSelectedList.map(item => item.title)
+            };
+
+            let history = JSON.parse(localStorage.getItem('chess_marriage_history') || '[]');
+            history.unshift(record); // Thêm vào đầu
+            localStorage.setItem('chess_marriage_history', JSON.stringify(history));
+
+            alert(`Đã lưu thành công kết quả ván đấu của ${husbandName} (${husbandSelectedList.length} điểm) & ${wifeName} (${wifeSelectedList.length} điểm)!`);
+        }
+
+        function openHistoryModal() {
+            const modal = document.getElementById('historyModal');
+            const historyList = document.getElementById('historyList');
+            
+            let history = JSON.parse(localStorage.getItem('chess_marriage_history') || '[]');
+
+            if (history.length === 0) {
+                historyList.innerHTML = `
+                    <div class="text-center py-10 text-slate-500">
+                        <i class="fa-solid fa-box-open text-4xl mb-2"></i>
+                        <p class="text-sm font-semibold">Chưa có lịch sử ván đấu nào được lưu.</p>
+                    </div>
+                `;
+            } else {
+                historyList.innerHTML = history.map((rec, idx) => `
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col gap-2">
+                        <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800 pb-2">
+                            <span class="font-bold text-amber-400">Ván #${history.length - idx}</span>
+                            <span><i class="fa-regular fa-clock"></i> ${rec.date}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 my-1">
+                            <div class="bg-blue-950/40 p-2.5 rounded-lg border border-blue-900/50">
+                                <div class="text-xs text-blue-400 font-bold uppercase">${rec.husbandName}</div>
+                                <div class="text-xl font-black text-blue-200 mt-0.5">${rec.husbandScore} <span class="text-xs font-normal text-slate-400">/ 45 điểm</span></div>
+                            </div>
+                            <div class="bg-pink-950/40 p-2.5 rounded-lg border border-pink-900/50">
+                                <div class="text-xs text-pink-400 font-bold uppercase">${rec.wifeName}</div>
+                                <div class="text-xl font-black text-pink-200 mt-0.5">${rec.wifeScore} <span class="text-xs font-normal text-slate-400">/ 45 điểm</span></div>
+                            </div>
+                        </div>
+                        <details class="text-xs text-slate-400 cursor-pointer">
+                            <summary class="hover:text-slate-200 font-semibold py-1">Xem danh sách các tiêu chí đã chọn (${rec.husbandScore + rec.wifeScore})</summary>
+                            <div class="mt-2 space-y-2 pt-2 border-t border-slate-900">
+                                <div>
+                                    <strong class="text-blue-400">Ưu điểm ${rec.husbandName}:</strong>
+                                    <p class="text-slate-300 mt-0.5">${rec.husbandItems.join(', ') || 'Chưa chọn tiêu chí nào'}</p>
+                                </div>
+                                <div>
+                                    <strong class="text-pink-400">Ưu điểm ${rec.wifeName}:</strong>
+                                    <p class="text-slate-300 mt-0.5">${rec.wifeItems.join(', ') || 'Chưa chọn tiêu chí nào'}</p>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                `).join('');
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeHistoryModal() {
+            document.getElementById('historyModal').classList.add('hidden');
+        }
+
+        function clearAllHistory() {
+            if (confirm("Bạn có chắc chắn muốn xóa tất cả lịch sử các ván đấu?")) {
+                localStorage.removeItem('chess_marriage_history');
+                openHistoryModal();
+            }
+        }
+
+        /* ==========================================================================
+           9. LÀM MỚI VÁN ĐẤU CURRENT
+           ========================================================================== */
+        function resetCurrentMatch() {
+            if (confirm("Bạn có muốn làm mới lại bàn cờ và bỏ tất cả các điểm đã tích?")) {
+                chessBoardData.forEach(p => p.selected = false);
+                currentSelectedId = null;
+                document.getElementById('detailPlaceholder').classList.remove('hidden');
+                document.getElementById('detailContent').classList.add('hidden');
+                renderBoard();
+            }
+        }
+
+        // Cập nhật sự kiện thay đổi tên
+        document.getElementById('nameHusband').addEventListener('input', updateScores);
+        document.getElementById('nameWife').addEventListener('input', updateScores);
+
+        /* ==========================================================================
+           10. CHẠY KHI TẢI TRANG
+           ========================================================================== */
+        window.onload = function() {
+            initBoardData();
+            renderBoard();
+        };
+    </script>
+</body>
+</html>

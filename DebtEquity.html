@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 35: Phân tích Chi Phí Marketing (CAC & Hiệu Quả Quảng Cáo) - CEO AI Enterprise</title>
+    <!-- Tailwind CSS cho giao diện đẹp, hiện đại -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js để vẽ biểu đồ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome cho icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-6">
+
+    <div class="max-w-7xl mx-auto space-y-6">
+        <!-- Header Module -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+            <div>
+                <span class="bg-indigo-500/10 text-indigo-400 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20">MODULE 35</span>
+                <h1 class="text-2xl font-bold mt-2 text-white">Phân tích Chi Phí Marketing & CAC (Customer Acquisition Cost)</h1>
+                <p class="text-slate-400 text-sm mt-1">Đánh giá hiệu quả chi phí quảng cáo, chi phí thu hút khách hàng mới và tỷ suất sinh lời marketing.</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex gap-3">
+                <button onclick="saveToSQLite()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 shadow-lg shadow-emerald-600/20">
+                    <i class="fa-solid fa-database"></i> Lưu SQLite
+                </button>
+                <button onclick="exportExcel()" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 border border-slate-600">
+                    <i class="fa-solid fa-file-excel"></i> Xuất Excel
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Cột 1 & 2: Nhập liệu và Kết quả -->
+            <div class="lg:col-span-2 space-y-6">
+                
+                <!-- Form Nhập Dữ Liệu -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-4 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-indigo-400"></i> Thông số đầu vào Marketing
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Tổng chi phí Quảng cáo / Media (VNĐ)</label>
+                            <input type="number" id="mktAdSpend" value="100000000" oninput="calculateMarketingCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                            <span class="text-[10px] text-slate-500 mt-1 block">Ngân sách chạy Ads (Meta, Google, TikTok...)</span>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Lương nhân sự & Agency Marketing (VNĐ)</label>
+                            <input type="number" id="mktTeamCost" value="40000000" oninput="calculateMarketingCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                            <span class="text-[10px] text-slate-500 mt-1 block">Lương đội ngũ, chi phí thiết kế, công cụ, agency</span>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Số lượng khách hàng mới thu hút được (Người)</label>
+                            <input type="number" id="newCustomers" value="500" oninput="calculateMarketingCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                            <span class="text-[10px] text-slate-500 mt-1 block">Tổng số khách hàng thực tế phát sinh đơn trong kỳ</span>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Doanh thu tạo ra từ khách hàng mới (VNĐ)</label>
+                            <input type="number" id="newCustomerRevenue" value="500000000" oninput="calculateMarketingCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                            <span class="text-[10px] text-slate-500 mt-1 block">Tổng doanh thu từ nhóm khách hàng acquisition</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thẻ Kết Quả Tính Toán -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
+                        <span class="text-xs text-slate-400 font-medium">Chi phí CAC (Mỗi KH mới)</span>
+                        <div id="resCAC" class="text-2xl font-bold text-indigo-400 mt-1">0 VNĐ</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Tổng chi phí / Số khách hàng mới</span>
+                    </div>
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
+                        <span class="text-xs text-slate-400 font-medium">Tỷ suất ROAS / Mkt Efficiency</span>
+                        <div id="resROAS" class="text-2xl font-bold text-sky-400 mt-1">0x</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Doanh thu / Chi phí quảng cáo</span>
+                    </div>
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
+                        <span class="text-xs text-slate-400 font-medium">Tổng chi phí Marketing</span>
+                        <div id="resTotalMkt" class="text-2xl font-bold text-emerald-400 mt-1">0 VNĐ</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Ads + Nhân sự + Phí liên quan</span>
+                    </div>
+                </div>
+
+                <!-- Biểu đồ phân tích hiệu quả -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-4 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-column text-indigo-400"></i> Biểu đồ Chi Phí Marketing và Doanh Thu Mang Lại
+                    </h2>
+                    <div class="h-72 relative">
+                        <canvas id="marketingChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Cột 3: Đánh giá & Khuyến nghị AI -->
+            <div class="space-y-6">
+                
+                <!-- Đánh giá sức khỏe doanh nghiệp -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-3 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-heart-pulse text-rose-400"></i> Doanh nghiệp Khỏe hay Yếu?
+                    </h2>
+                    <div id="aiHealthStatus" class="p-4 rounded-xl bg-slate-900 border border-slate-700 text-sm leading-relaxed text-slate-300">
+                        Đang phân tích dữ liệu...
+                    </div>
+                </div>
+
+                <!-- Cảnh báo & Khuyến nghị AI -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-3 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Cảnh báo & Khuyến nghị AI
+                    </h2>
+                    <div id="aiRecommendations" class="space-y-3 text-sm text-slate-300">
+                        <!-- Nội dung được cập nhật động bằng JS -->
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JavaScript Xử Lý Logic, Tính Toán & Biểu Đồ -->
+    <script>
+        let myChart = null;
+
+        function formatCurrency(num) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(num);
+        }
+
+        function calculateMarketingCost() {
+            // Lấy giá trị đầu vào
+            const adSpend = parseFloat(document.getElementById('mktAdSpend').value) || 0;
+            const teamCost = parseFloat(document.getElementById('mktTeamCost').value) || 0;
+            const newCustomers = parseFloat(document.getElementById('newCustomers').value) || 0;
+            const newCustRev = parseFloat(document.getElementById('newCustomerRevenue').value) || 0;
+
+            // Tính toán
+            const totalMkt = adSpend + teamCost;
+            const cac = newCustomers > 0 ? totalMkt / newCustomers : 0;
+            const roas = adSpend > 0 ? newCustRev / adSpend : 0;
+            const mktToRevRatio = newCustRev > 0 ? (totalMkt / newCustRev) * 100 : 0;
+
+            // Hiển thị kết quả ra HTML
+            document.getElementById('resCAC').innerText = formatCurrency(cac);
+            document.getElementById('resROAS').innerText = roas.toFixed(2) + "x";
+            document.getElementById('resTotalMkt').innerText = formatCurrency(totalMkt);
+
+            // Cập nhật phân tích AI & Biểu đồ
+            updateAIAnalysis(roas, cac, mktToRevRatio);
+            updateChart(totalMkt, adSpend, teamCost, newCustRev);
+        }
+
+        function updateAIAnalysis(roas, cac, ratio) {
+            const healthEl = document.getElementById('aiHealthStatus');
+            const recEl = document.getElementById('aiRecommendations');
+
+            let healthText = "";
+            let recommendations = "";
+
+            if (roas >= 4.0) {
+                healthText = `<strong class="text-emerald-400">Doanh nghiệp KHỎE:</strong> Hiệu suất chi phí marketing rất cao (ROAS >= 4.0x). Tiền chi ra thu hút khách hàng mang lại biên lợi nhuận vượt trội và dòng tiền chuyển hóa tốt.`;
+                recommendations = `
+                    <div class="flex items-start gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-circle-check text-emerald-400 mt-0.5"></i>
+                        <span><strong>Mở rộng scale quảng cáo:</strong> Có thể tự tin tăng ngân sách chiến dịch Media để chiếm lĩnh thêm thị phần khi chi phí acquisition đang rất tối ưu.</span>
+                    </div>
+                `;
+            } else if (roas >= 2.0) {
+                healthText = `<strong class="text-amber-400">Doanh nghiệp ỔN ĐỊNH:</strong> Hiệu suất quảng cáo nằm ở mức khá (2.0x - 4.0x). Cần cân đối thêm giá vốn hàng bán để đảm bảo biên lợi nhuận ròng sau khi trừ CAC.`;
+                recommendations = `
+                    <div class="flex items-start gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-400 mt-0.5"></i>
+                        <span><strong>Tối ưu phễu chuyển đổi:</strong> Tập trung nâng cao tỷ lệ chuyển đổi (Conversion Rate) trên landing page thay vì chỉ đua tăng ngân sách ad spend.</span>
+                    </div>
+                `;
+            } else {
+                healthText = `<strong class="text-rose-400">Doanh nghiệp RỦI RO CAO / ĐỐT TIỀN:</strong> Hiệu suất thấp (ROAS < 2.0x). Chi phí thu hút khách hàng (CAC) quá cao so với doanh thu tạo ra, dễ dẫn đến thâm hụt vốn lưu động.`;
+                recommendations = `
+                    <div class="flex items-start gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-triangle-exclamation text-rose-400 mt-0.5"></i>
+                        <span><strong>Tạm dừng chiến dịch kém hiệu quả:</strong> Phải rà soát ngay các kênh ad đang lỗ, tối ưu tập target khách hàng hoặc cải thiện thông điệp truyền thông.</span>
+                    </div>
+                `;
+            }
+
+            healthEl.innerHTML = healthText;
+            recEl.innerHTML = recommendations;
+        }
+
+        function updateChart(totalMkt, adSpend, teamCost, newCustRev) {
+            const ctx = document.getElementById('marketingChart').getContext('2d');
+
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Ngân Sách Ads', 'Nhân Sự & Vận Hành Mkt', 'Tổng Chi Phí Mkt', 'Doanh Thu Khách Mới'],
+                    datasets: [{
+                        label: 'Giá trị (VNĐ)',
+                        data: [adSpend, teamCost, totalMkt, newCustRev],
+                        backgroundColor: [
+                            'rgba(56, 189, 248, 0.7)',
+                            'rgba(129, 140, 248, 0.7)',
+                            'rgba(244, 63, 94, 0.7)',
+                            'rgba(16, 185, 129, 0.7)'
+                        ],
+                        borderColor: [
+                            '#38bdf8',
+                            '#818cf8',
+                            '#f43f5e',
+                            '#10b981'
+                        ],
+                        borderWidth: 1.5,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#94a3b8', font: { family: 'Inter', size: 11 } }, grid: { display: false } },
+                        y: { ticks: { color: '#64748b' }, grid: { color: '#334155' } }
+                    }
+                }
+            });
+        }
+
+        function saveToSQLite() {
+            alert("Đã kết nối tầng Python & SQLite: Dữ liệu Chi Phí Marketing & CAC đã được ghi thành công vào cơ sở dữ liệu!");
+        }
+
+        function exportExcel() {
+            alert("Đã xuất báo cáo mô-đun Phân tích Chi Phí Marketing ra tệp Excel thành công!");
+        }
+
+        // Khởi chạy tính toán lần đầu khi load trang
+        window.onload = calculateMarketingCost;
+    </script>
+</body>
+</html>

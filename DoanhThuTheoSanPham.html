@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Module 12 - Interest Coverage Ratio | CEO AI Enterprise</title>
+
+    <!-- ============================================================
+    MODULE 12: INTEREST COVERAGE RATIO (Khả năng thanh toán lãi vay)
+    Tác giả: CEO AI Enterprise Team
+    Mô tả: Đo lường khả năng thanh toán lãi vay của doanh nghiệp
+            từ lợi nhuận hoạt động (EBIT).
+    ============================================================ -->
+
+    <!-- Thư viện Chart.js cho biểu đồ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+
+    <!-- Thư viện SheetJS để xuất Excel -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js">
+    </script>
+
+    <style>
+        /* ---------- RESET & FONT ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f9;
+            padding: 30px 20px;
+            color: #1a2639;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* ---------- HEADER ---------- */
+        .module-header {
+            background: linear-gradient(135deg, #1a2a4a, #2a4a7a);
+            color: white;
+            padding: 25px 35px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(20, 30, 60, 0.25);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .module-header h1 {
+            font-weight: 600;
+            font-size: 28px;
+            letter-spacing: 0.5px;
+        }
+
+        .module-header .badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .module-header .badge span {
+            color: #8ac4ff;
+            font-weight: 700;
+        }
+
+        /* ---------- GRID LAYOUT ---------- */
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 920px) {
+            .grid-2col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ---------- CARDS ---------- */
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px 28px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.25s;
+            border: 1px solid #e8edf4;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 28px rgba(0, 20, 50, 0.10);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a2a4a;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #eef3f9;
+            padding-bottom: 12px;
+        }
+
+        .card-title .icon {
+            font-size: 22px;
+        }
+
+        /* ---------- FORM ---------- */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            color: #2c405a;
+            margin-bottom: 5px;
+        }
+
+        .form-group .hint {
+            font-size: 12px;
+            color: #7a8aa3;
+            font-weight: 400;
+            margin-left: 6px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #dce3ed;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #fafcff;
+            transition: border 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2a5a8a;
+            box-shadow: 0 0 0 4px rgba(42, 90, 138, 0.12);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ---------- BUTTONS ---------- */
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: #2a4a7a;
+            color: white;
+            box-shadow: 0 6px 14px rgba(42, 74, 122, 0.30);
+        }
+
+        .btn-primary:hover {
+            background: #1a3a6a;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(42, 74, 122, 0.35);
+        }
+
+        .btn-success {
+            background: #1e7e34;
+            color: white;
+            box-shadow: 0 6px 14px rgba(30, 126, 52, 0.25);
+        }
+
+        .btn-success:hover {
+            background: #15692b;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #2a4a7a;
+            color: #2a4a7a;
+        }
+
+        .btn-outline:hover {
+            background: #2a4a7a;
+            color: white;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        /* ---------- KẾT QUẢ ---------- */
+        .result-box {
+            background: #f0f4fa;
+            border-radius: 14px;
+            padding: 18px 22px;
+            margin-top: 20px;
+            border-left: 6px solid #2a4a7a;
+        }
+
+        .result-box .value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1a2a4a;
+        }
+
+        .result-box .label {
+            font-size: 14px;
+            color: #4a6380;
+            font-weight: 500;
+        }
+
+        .result-box .sub {
+            font-size: 14px;
+            color: #4a6380;
+            margin-top: 6px;
+        }
+
+        .result-box .status-text {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 8px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        /* ---------- AI ANALYSIS ---------- */
+        .ai-box {
+            background: linear-gradient(145deg, #f0f4fa, #e6ecf5);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-top: 18px;
+            border: 1px solid #c8d8ea;
+        }
+
+        .ai-box .ai-label {
+            font-weight: 700;
+            color: #1a2a4a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .ai-box .ai-label .spark {
+            color: #f5b342;
+        }
+
+        .ai-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .ai-box ul li {
+            padding: 6px 0 6px 24px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%232a4a7a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>') left center no-repeat;
+            background-size: 16px;
+            color: #1a2c44;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .ai-box ul li strong {
+            color: #1a2a4a;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .status-healthy {
+            background: #d4edda;
+            color: #0b5e2e;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-neutral {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        /* ---------- BIỂU ĐỒ ---------- */
+        .chart-wrapper {
+            position: relative;
+            height: 220px;
+            margin-top: 10px;
+        }
+
+        /* ---------- BẢNG DỮ LIỆU ---------- */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            font-size: 14px;
+        }
+
+        .data-table th {
+            background: #e6ecf5;
+            color: #1a2a4a;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eef3f9;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table .highlight {
+            font-weight: 700;
+            color: #2a4a7a;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-10 {
+            margin-top: 10px;
+        }
+        .mt-16 {
+            margin-top: 16px;
+        }
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* Scroll mượt */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #eef3f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b0c8dd;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8aaac9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ============================================================
+        HEADER MODULE
+        ============================================================ -->
+        <header class="module-header">
+            <div>
+                <h1>📊 Module 12 · Interest Coverage Ratio</h1>
+                <p style="opacity:0.8; margin-top:4px; font-size:15px;">
+                    Khả năng thanh toán lãi vay — thước đo sức khỏe tài chính và rủi ro vỡ nợ
+                </p>
+            </div>
+            <div class="badge">
+                ⚡ Trạng thái: <span>Sẵn sàng</span> &nbsp;|&nbsp; 📌 v1.0
+            </div>
+        </header>
+
+        <!-- ============================================================
+        HÀNG 1: NHẬP LIỆU + KẾT QUẢ
+        ============================================================ -->
+        <div class="grid-2col">
+            <!-- CỘT TRÁI: FORM NHẬP -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📥</span> Nhập dữ liệu tài chính
+                </div>
+
+                <div class="form-group">
+                    <label for="period">📅 Kỳ báo cáo</label>
+                    <select id="period">
+                        <option value="Q1 2026">Q1 2026</option>
+                        <option value="Q2 2026" selected>Q2 2026</option>
+                        <option value="Q3 2026">Q3 2026</option>
+                        <option value="Q4 2026">Q4 2026</option>
+                        <option value="Năm 2026">Năm 2026</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ebit">
+                            💰 EBIT (Lợi nhuận trước lãi vay & thuế)
+                            <span class="hint">(Earnings Before Interest & Taxes)</span>
+                        </label>
+                        <input type="number" id="ebit" value="250000000" step="1000000" />
+                    </div>
+                    <div class="form-group">
+                        <label for="interest_expense">
+                            📋 Chi phí lãi vay
+                            <span class="hint">(Interest Expense)</span>
+                        </label>
+                        <input type="number" id="interest_expense" value="45000000" step="1000000" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="depreciation">
+                            🔄 Khấu hao
+                            <span class="hint">(Depreciation - tùy chọn)</span>
+                        </label>
+                        <input type="number" id="depreciation" value="32000000" step="1000000" />
+                    </div>
+                    <div class="form-group">
+                        <label for="tax">
+                            🧾 Thuế
+                            <span class="hint">(Tax - tùy chọn)</span>
+                        </label>
+                        <input type="number" id="tax" value="55000000" step="1000000" />
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="calculateICR()">🚀 Tính ICR</button>
+                    <button class="btn btn-success" onclick="saveToSQLite()">💾 Lưu SQLite</button>
+                    <button class="btn btn-outline" onclick="exportExcel()">📊 Xuất Excel</button>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI: KẾT QUẢ CHÍNH -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📊</span> Kết quả Interest Coverage Ratio
+                </div>
+
+                <div id="resultArea">
+                    <div class="result-box" style="border-left-color: #2a4a7a;">
+                        <div class="label">📌 Interest Coverage Ratio (ICR)</div>
+                        <div class="value" id="icrValue">---</div>
+                        <div class="sub" id="icrSub">Nhập số liệu và bấm "Tính"</div>
+                    </div>
+
+                    <!-- Chỉ số phụ -->
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:16px;">
+                        <div style="background:#f0f4fa; border-radius:12px; padding:14px 16px; border:1px solid #c8d8ea;">
+                            <div style="font-size:13px; color:#4a6380;">📊 EBIT</div>
+                            <div style="font-size:20px; font-weight:700; color:#1a2a4a;" id="displayEBIT">---</div>
+                        </div>
+                        <div style="background:#f0f4fa; border-radius:12px; padding:14px 16px; border:1px solid #c8d8ea;">
+                            <div style="font-size:13px; color:#4a6380;">💰 Lãi vay phải trả</div>
+                            <div style="font-size:20px; font-weight:700; color:#1a2a4a;" id="displayInterest">---</div>
+                        </div>
+                    </div>
+
+                    <!-- Trạng thái sức khỏe -->
+                    <div id="statusArea" class="mt-16">
+                        <span class="status-badge status-neutral">⏳ Chưa có dữ liệu</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        HÀNG 2: PHÂN TÍCH AI + BIỂU ĐỒ
+        ============================================================ -->
+        <div class="grid-2col">
+            <!-- CỘT TRÁI: AI phân tích -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🧠</span> Phân tích &amp; Khuyến nghị AI
+                </div>
+                <div id="aiAnalysisArea">
+                    <div class="ai-box">
+                        <div class="ai-label">
+                            <span class="spark">✦</span> Trí tuệ nhân tạo phân tích
+                        </div>
+                        <ul id="aiRecommendations">
+                            <li>⏳ Nhập dữ liệu và nhấn "Tính" để nhận phân tích.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Bảng tóm tắt dữ liệu -->
+                <div style="margin-top:18px;">
+                    <div style="font-weight:600; font-size:15px; color:#1a2a4a; margin-bottom:8px;">📋 Tóm tắt dữ liệu</div>
+                    <table class="data-table" id="summaryTable">
+                        <thead>
+                            <tr><th>Chỉ số</th><th>Giá trị</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>EBIT</td><td id="tblEBIT">---</td></tr>
+                            <tr><td>Chi phí lãi vay</td><td id="tblInterest">---</td></tr>
+                            <tr><td>Khấu hao</td><td id="tblDep">---</td></tr>
+                            <tr><td>Thuế</td><td id="tblTax">---</td></tr>
+                            <tr style="font-weight:700; background:#f0f4fa;"><td>Interest Coverage Ratio (ICR)</td><td id="tblICR">---</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI: BIỂU ĐỒ -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📈</span> Biểu đồ phân tích
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="icrChart"></canvas>
+                </div>
+                <div style="margin-top:12px; font-size:13px; color:#4a6380; text-align:center;">
+                    So sánh EBIT và Chi phí lãi vay
+                </div>
+                <!-- Ghi chú -->
+                <div style="margin-top:14px; background:#f0f4fa; border-radius:12px; padding:12px 16px; border:1px dashed #90a8c8;">
+                    <span style="font-weight:600;">💡 Công thức:</span>
+                    <span style="color:#1a2a4a; font-family:monospace; font-size:14px;">
+                        ICR = EBIT / Chi phí lãi vay
+                    </span>
+                    <span style="display:block; font-size:13px; color:#4a6380; margin-top:4px;">
+                        ICR > 3: An toàn &nbsp;|&nbsp; ICR 1.5-3: Cảnh báo &nbsp;|&nbsp; ICR < 1.5: Nguy hiểm
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        HÀNG 3: THÔNG TIN MODULE
+        ============================================================ -->
+        <div style="margin-top:10px; text-align:center; font-size:13px; color:#6f88a0; border-top:1px solid #dce6f0; padding-top:20px;">
+            <span>🧩 Module 12 / 100 · CEO AI Enterprise</span>
+            <span style="margin:0 12px;">|</span>
+            <span>⚡ Python + SQLite + HTML Dashboard</span>
+            <span style="margin:0 12px;">|</span>
+            <span>📅 Phiên bản 1.0 · Sẵn sàng tích hợp</span>
+        </div>
+
+    </div>
+
+    <!-- ============================================================
+    JAVASCRIPT - LOGIC CHÍNH
+    ============================================================ -->
+    <script>
+        /**
+         * ============================================================
+         * MODULE 12: INTEREST COVERAGE RATIO
+         * ============================================================
+         * Tác giả: CEO AI Enterprise Team
+         * Mô tả: 
+         *   - Tính ICR = EBIT / Interest Expense
+         *   - Đánh giá khả năng thanh toán lãi vay
+         *   - Cảnh báo rủi ro tài chính
+         *   - Đưa ra khuyến nghị AI về quản lý nợ
+         *   - Hỗ trợ lưu SQLite (giả lập) và xuất Excel
+         * ============================================================
+         */
+
+        // ---- Biến toàn cục ----
+        let chartInstance = null;
+
+        // ---- Hàm định dạng tiền tệ ----
+        function formatCurrency(value) {
+            if (value === undefined || value === null || isNaN(value)) return '---';
+            const num = Number(value);
+            if (num >= 1e9) return (num / 1e9).toFixed(1) + ' tỷ';
+            if (num >= 1e6) return (num / 1e6).toFixed(1) + ' tr';
+            return num.toLocaleString('vi-VN') + ' đ';
+        }
+
+        /**
+         * Hàm chính: TÍNH INTEREST COVERAGE RATIO
+         */
+        function calculateICR() {
+            // ---- 1. Đọc dữ liệu đầu vào ----
+            const period = document.getElementById('period').value;
+            const ebit = parseFloat(document.getElementById('ebit').value) || 0;
+            const interestExpense = parseFloat(document.getElementById('interest_expense').value) || 0;
+            const depreciation = parseFloat(document.getElementById('depreciation').value) || 0;
+            const tax = parseFloat(document.getElementById('tax').value) || 0;
+
+            // ---- 2. Tính ICR ----
+            let icr = 0;
+            let statusText = '';
+            let statusClass = '';
+            let riskLevel = '';
+
+            if (interestExpense > 0) {
+                icr = ebit / interestExpense;
+            } else {
+                icr = Infinity; // Không có lãi vay
+            }
+
+            // ---- 3. Cập nhật hiển thị kết quả ----
+            const icrDisplay = icr === Infinity ? '∞ (Không có nợ)' : icr.toFixed(2) + 'x';
+            document.getElementById('icrValue').textContent = icrDisplay;
+            document.getElementById('icrSub').textContent = `Kỳ: ${period} · EBIT: ${formatCurrency(ebit)} · Lãi vay: ${formatCurrency(interestExpense)}`;
+
+            document.getElementById('displayEBIT').textContent = formatCurrency(ebit);
+            document.getElementById('displayInterest').textContent = formatCurrency(interestExpense);
+
+            // Cập nhật bảng tóm tắt
+            document.getElementById('tblEBIT').textContent = formatCurrency(ebit);
+            document.getElementById('tblInterest').textContent = formatCurrency(interestExpense);
+            document.getElementById('tblDep').textContent = formatCurrency(depreciation);
+            document.getElementById('tblTax').textContent = formatCurrency(tax);
+            document.getElementById('tblICR').textContent = icrDisplay;
+
+            // ---- 4. Đánh giá trạng thái sức khỏe ----
+            if (icr === Infinity) {
+                statusClass = 'status-healthy';
+                statusText = '✅ Rất an toàn — Không có nợ lãi vay';
+                riskLevel = 'Không có rủi ro';
+            } else if (icr >= 3) {
+                statusClass = 'status-healthy';
+                statusText = '✅ An toàn — ICR ≥ 3x';
+                riskLevel = 'Thấp';
+            } else if (icr >= 2) {
+                statusClass = 'status-healthy';
+                statusText = '✅ Tương đối an toàn — ICR 2-3x';
+                riskLevel = 'Trung bình thấp';
+            } else if (icr >= 1.5) {
+                statusClass = 'status-warning';
+                statusText = '⚠️ Cảnh báo — ICR 1.5-2x';
+                riskLevel = 'Trung bình';
+            } else if (icr >= 1) {
+                statusClass = 'status-warning';
+                statusText = '⚠️ Rủi ro — ICR 1-1.5x';
+                riskLevel = 'Cao';
+            } else if (icr > 0) {
+                statusClass = 'status-danger';
+                statusText = '🔴 Nguy hiểm — ICR < 1x';
+                riskLevel = 'Rất cao';
+            } else {
+                statusClass = 'status-danger';
+                statusText = '🔴 Lỗ hoạt động — EBIT âm';
+                riskLevel = 'Nguy kịch';
+            }
+
+            document.getElementById('statusArea').innerHTML = `
+                <span class="status-badge ${statusClass}">${statusText}</span>
+                <span style="margin-left:12px; font-size:13px; color:#4a6380;">
+                    🎯 Mức rủi ro: <strong>${riskLevel}</strong>
+                </span>
+            `;
+
+            // ---- 5. Phân tích AI & Khuyến nghị ----
+            const aiList = document.getElementById('aiRecommendations');
+            let recommendations = [];
+
+            // Phân tích dựa trên ICR
+            if (icr === Infinity) {
+                recommendations.push('🌟 <strong>Doanh nghiệp không có nợ lãi vay</strong> — hoàn toàn không có rủi ro về trả lãi.');
+                recommendations.push('💡 <strong>Cơ hội:</strong> Có thể sử dụng đòn bẩy tài chính để tăng ROE nếu cần thiết.');
+            } else if (icr >= 3) {
+                recommendations.push('✅ <strong>ICR ≥ 3x</strong> — doanh nghiệp có khả năng thanh toán lãi vay tốt.');
+                recommendations.push('💪 <strong>Đánh giá:</strong> Lợi nhuận hoạt động đủ mạnh để trang trải chi phí lãi vay, rủi ro thấp.');
+                if (icr >= 5) {
+                    recommendations.push('🌟 <strong>ICR rất cao</strong> (>5x) — doanh nghiệp đang tạo ra lợi nhuận vượt trội so với nghĩa vụ trả lãi.');
+                }
+            } else if (icr >= 1.5) {
+                recommendations.push('⚠️ <strong>ICR ở mức trung bình</strong> (1.5-2x) — cần theo dõi chặt chẽ.');
+                recommendations.push('📊 <strong>Lưu ý:</strong> Lợi nhuận không dư dả để trả lãi, rủi ro tăng khi EBIT biến động.');
+            } else if (icr >= 1) {
+                recommendations.push('🔻 <strong>ICR thấp</strong> (1-1.5x) — doanh nghiệp đang ở gần ngưỡng an toàn.');
+                recommendations.push('🚨 <strong>Rủi ro:</strong> Bất kỳ sự sụt giảm nào của EBIT cũng có thể dẫn đến mất khả năng trả lãi.');
+            } else if (icr > 0) {
+                recommendations.push('🚫 <strong>ICR rất thấp</strong> (<1x) — doanh nghiệp không đủ EBIT để trả lãi vay.');
+                recommendations.push('🆘 <strong>Cảnh báo nguy hiểm:</strong> Nguy cơ vỡ nợ cao. Cần tái cấu trúc nợ ngay lập tức.');
+            } else {
+                recommendations.push('🚫 <strong>EBIT âm</strong> — doanh nghiệp đang thua lỗ trong hoạt động kinh doanh.');
+                recommendations.push('🆘 <strong>Cảnh báo nguy kịch:</strong> Không có khả năng thanh toán lãi vay. Cần hành động khẩn cấp.');
+            }
+
+            // Phân tích cơ cấu EBIT
+            if (ebit > 0 && interestExpense > 0) {
+                const margin = (ebit - interestExpense) / ebit * 100;
+                if (margin > 70) {
+                    recommendations.push(`📈 <strong>Phần lớn EBIT (${margin.toFixed(1)}%)</strong> được giữ lại sau khi trả lãi.`);
+                } else if (margin > 40) {
+                    recommendations.push(`⚖️ <strong>Khoảng ${margin.toFixed(1)}% EBIT</strong> còn lại sau khi trả lãi.`);
+                } else {
+                    recommendations.push(`📊 <strong>Chỉ còn ${margin.toFixed(1)}% EBIT</strong> sau khi trả lãi — áp lực tài chính cao.`);
+                }
+            }
+
+            // Phân tích thêm dựa trên khấu hao
+            if (depreciation > 0) {
+                const ebitda = ebit + depreciation;
+                const icrEBITDA = interestExpense > 0 ? ebitda / interestExpense : Infinity;
+                if (icrEBITDA !== Infinity) {
+                    recommendations.push(`📘 <strong>ICR sau khấu hao (EBITDA):</strong> ${icrEBITDA.toFixed(2)}x — khả năng thanh toán cao hơn khi tính cả khấu hao.`);
+                }
+            }
+
+            // Khuyến nghị chiến lược
+            if (icr >= 3) {
+                recommendations.push('🎯 <strong>Chiến lược:</strong> Có thể xem xét vay thêm vốn để mở rộng nếu ROIC > lãi suất vay.');
+            } else if (icr >= 1.5) {
+                recommendations.push('📌 <strong>Chiến lược:</strong> Tập trung cải thiện EBIT, cắt giảm chi phí hoạt động.');
+            } else if (icr > 0) {
+                recommendations.push('🔄 <strong>Chiến lược:</strong> Đàm phán tái cấu trúc nợ, giảm lãi suất, tăng vốn chủ sở hữu.');
+            } else {
+                recommendations.push('🚨 <strong>Chiến lược khẩn cấp:</strong> Cần tìm nhà đầu tư mới, bán tài sản không cốt lõi, phá sản có tổ chức.');
+            }
+
+            // Render danh sách AI
+            aiList.innerHTML = recommendations.map(item => `<li>${item}</li>`).join('');
+
+            // ---- 6. Vẽ biểu đồ ----
+            renderChart(period, ebit, interestExpense, icr);
+
+            // ---- 7. (Giả lập) Lưu vào SQLite ----
+        }
+
+        /**
+         * Vẽ biểu đồ so sánh EBIT và Interest Expense
+         */
+        function renderChart(period, ebit, interest, icr) {
+            const ctx = document.getElementById('icrChart').getContext('2d');
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            // Xác định màu sắc dựa trên ICR
+            let color = '#28a745';
+            if (icr < 1.5) color = '#dc3545';
+            else if (icr < 3) color = '#ffc107';
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['EBIT', 'Chi phí lãi vay'],
+                    datasets: [{
+                        label: `Giá trị (${period})`,
+                        data: [ebit, interest],
+                        backgroundColor: [
+                            'rgba(42, 74, 122, 0.8)',
+                            'rgba(220, 53, 69, 0.7)'
+                        ],
+                        borderColor: [
+                            '#2a4a7a',
+                            '#dc3545'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return formatCurrency(context.raw);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * LƯU VÀO SQLITE (giả lập)
+         */
+        function saveToSQLite() {
+            const period = document.getElementById('period').value;
+            const ebit = parseFloat(document.getElementById('ebit').value) || 0;
+            const interestExpense = parseFloat(document.getElementById('interest_expense').value) || 0;
+            const depreciation = parseFloat(document.getElementById('depreciation').value) || 0;
+            const tax = parseFloat(document.getElementById('tax').value) || 0;
+
+            const icr = interestExpense > 0 ? ebit / interestExpense : Infinity;
+
+            const data = {
+                module: '12_InterestCoverageRatio',
+                period: period,
+                ebit: ebit,
+                interestExpense: interestExpense,
+                depreciation: depreciation,
+                tax: tax,
+                icr: icr === Infinity ? 'Infinity' : icr,
+                timestamp: new Date().toISOString()
+            };
+
+            console.log('💾 [SQLite] Dữ liệu đã được lưu:', data);
+            showToast('✅ Đã lưu dữ liệu vào SQLite (giả lập)!', 'success');
+        }
+
+        /**
+         * XUẤT EXCEL
+         */
+        function exportExcel() {
+            const period = document.getElementById('period').value;
+            const ebit = parseFloat(document.getElementById('ebit').value) || 0;
+            const interestExpense = parseFloat(document.getElementById('interest_expense').value) || 0;
+            const depreciation = parseFloat(document.getElementById('depreciation').value) || 0;
+            const tax = parseFloat(document.getElementById('tax').value) || 0;
+
+            const icr = interestExpense > 0 ? ebit / interestExpense : Infinity;
+            const icrDisplay = icr === Infinity ? '∞ (Không có nợ)' : icr.toFixed(2) + 'x';
+
+            const wsData = [
+                ['Module 12 - Interest Coverage Ratio (Khả năng thanh toán lãi vay)'],
+                ['Kỳ báo cáo', period],
+                [],
+                ['Chỉ số', 'Giá trị'],
+                ['EBIT', formatCurrency(ebit)],
+                ['Chi phí lãi vay', formatCurrency(interestExpense)],
+                ['Khấu hao', formatCurrency(depreciation)],
+                ['Thuế', formatCurrency(tax)],
+                ['Interest Coverage Ratio (ICR)', icrDisplay],
+                [],
+                ['Ngày xuất', new Date().toLocaleString('vi-VN')]
+            ];
+
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            XLSX.utils.book_append_sheet(wb, ws, 'ICR');
+            XLSX.writeFile(wb, `ICR_${period.replace(/\s/g, '_')}.xlsx`);
+
+            showToast('📊 Đã xuất file Excel thành công!', 'info');
+        }
+
+        /**
+         * HIỂN THỊ TOAST
+         */
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.style.position = 'fixed';
+            toast.style.bottom = '30px';
+            toast.style.right = '30px';
+            toast.style.padding = '16px 28px';
+            toast.style.borderRadius = '14px';
+            toast.style.fontWeight = '500';
+            toast.style.fontSize = '15px';
+            toast.style.boxShadow = '0 8px 30px rgba(0,0,0,0.15)';
+            toast.style.zIndex = '9999';
+            toast.style.transition = 'all 0.3s ease';
+            toast.style.background = type === 'success' ? '#d4edda' : '#cce5ff';
+            toast.style.color = type === 'success' ? '#0b5e2e' : '#004085';
+            toast.style.border = '1px solid ' + (type === 'success' ? '#b7d4c0' : '#b8d4f0');
+            toast.textContent = message;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(20px)';
+                setTimeout(() => toast.remove(), 400);
+            }, 3200);
+        }
+
+        /**
+         * TỰ ĐỘNG TÍNH KHI TRANG LOAD
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateICR();
+        });
+
+        /**
+         * ============================================================
+         * MỞ RỘNG: Kết nối với Python và SQLite sau này
+         * ============================================================
+         * Để tích hợp với Python backend, ta có thể sử dụng fetch() 
+         * để gửi dữ liệu đến API Python (Flask/FastAPI).
+         * 
+         * Ví dụ:
+         *   async function saveToDB(data) {
+         *       const response = await fetch('/api/save_icr', {
+         *           method: 'POST',
+         *           headers: { 'Content-Type': 'application/json' },
+         *           body: JSON.stringify(data)
+         *       });
+         *       return response.json();
+         *   }
+         * ============================================================
+         */
+    </script>
+
+</body>
+</html>

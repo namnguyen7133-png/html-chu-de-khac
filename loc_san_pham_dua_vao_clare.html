@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Siêu Robot v10 - Tâm Lý & Đối Tượng</title>
+    <style>
+        :root { --shopee: #ee4d2d; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h2 { color: var(--shopee); text-transform: uppercase; letter-spacing: 2px; }
+        
+        .psychology-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .target-box { padding: 15px; border-radius: 12px; color: white; position: relative; min-height: 110px; transition: 0.3s; }
+        .target-box:hover { transform: scale(1.03); cursor: default; }
+        .target-name { font-weight: bold; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 5px; display: block; }
+        .theme-tag { font-size: 11px; font-style: italic; color: rgba(255,255,255,0.9); display: block; margin: 5px 0; }
+        .item-found { background: rgba(0,0,0,0.15); padding: 5px; border-radius: 5px; font-size: 11px; margin-top: 5px; min-height: 35px; }
+
+        /* Bảng màu tâm lý */
+        .bg-men { background: #2980b9; } .bg-women { background: #9b59b6; }
+        .bg-kids { background: #f1c40f; color: #333; } .bg-old { background: #16a085; }
+        .bg-parent { background: #d35400; } .bg-bro { background: #27ae60; }
+        .bg-poor { background: #7f8c8d; } .bg-rich { background: #c0392b; }
+        .bg-lover { background: #e84393; } .bg-friend { background: #00cec9; }
+        .bg-boss { background: #2d3436; } .bg-staff { background: #0984e3; }
+        .bg-client { background: #6c5ce7; } .bg-pro { background: #fab1a0; color: #333; }
+        .bg-wife { background: #000; border: 2px solid #fff; }
+
+        .upload-area { border: 3px dashed #ddd; padding: 30px; text-align: center; border-radius: 15px; cursor: pointer; margin-bottom: 20px; }
+        .btn-main { width: 100%; background: #27ae60; color: white; border: none; padding: 15px; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>🤖 Siêu Robot Tâm Lý v10</h2>
+        <p>Tự động chọn hàng theo "Mục tiêu cuộc sống" cho 15 nhóm đối tượng</p>
+    </div>
+
+    <div class="psychology-grid" id="psychologyGrid"></div>
+
+    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+        <strong>📁 Nhấn để chọn các tệp CSV (Lọc tâm lý hàng loạt)</strong>
+        <input type="file" id="fileInput" accept=".csv" multiple style="display:none">
+    </div>
+
+    <button id="btnCopy" class="btn-main" onclick="copyCode()">📋 SAO CHÉP KHO HÀNG (DÁN VÀO CRAWLER.PY)</button>
+</div>
+
+<script>
+    const config = [
+        { id: 'NAM', label: 'ĐÀN ÔNG', theme: 'Về Kiếm tiền', keys: ['làm giàu', 'kinh doanh', 'đầu tư', 'ví', 'đồng hồ', 'sách kinh tế'], color: 'bg-men' },
+        { id: 'NU', label: 'PHỤ NỮ', theme: 'Về Tình cảm', keys: ['yêu thương', 'nước hoa', 'gia đình', 'nấu ăn', 'làm đẹp'], color: 'bg-women' },
+        { id: 'TRE_EM', label: 'TRẺ NHỎ', theme: 'Về Đồ chơi', keys: ['đồ chơi', 'lego', 'búp bê', 'lì xì', 'siêu nhân'], color: 'bg-kids' },
+        { id: 'NGUOI_GIA', label: 'NGƯỜI GIÀ', theme: 'Về Sức khỏe', keys: ['sức khỏe', 'máy massage', 'sữa', 'trà', 'thuốc'], color: 'bg-old' },
+        { id: 'CHA_ME', label: 'CHA MẸ', theme: 'Về Gia đình', keys: ['gia đình', 'ấm áp', 'bát đĩa', 'đồ dùng nhà bếp'], color: 'bg-parent' },
+        { id: 'ANH_EM', label: 'ANH EM', theme: 'Về Huyết thống', keys: ['kỷ niệm', 'quà tặng', 'đôi', 'gia tộc'], color: 'bg-bro' },
+        { id: 'NGUOI_NGHEO', label: 'NGƯỜI NGHÈO', theme: 'Về Lợi ích', keys: ['giá rẻ', 'tiết kiệm', 'combo', 'miễn phí'], color: 'bg-poor' },
+        { id: 'NGUOI_GIAU', label: 'NGƯỜI GIÀU', theme: 'Về Giá trị', keys: ['đẳng cấp', 'giới hạn', 'sang trọng', 'phong thủy'], color: 'bg-rich' },
+        { id: 'NGUOI_YEU', label: 'NGƯỜI YÊU', theme: 'Về Lãng mạn', keys: ['hoa', 'tim', 'socola', 'đôi', 'trang sức'], color: 'bg-lover' },
+        { id: 'BAN_BE', label: 'BẠN BÈ', theme: 'Về Kỷ niệm', keys: ['họp lớp', 'nhóm', 'vui vẻ', 'đồ lưu niệm'], color: 'bg-friend' },
+        { id: 'SEP', label: 'SẾP', theme: 'Về Trung thành', keys: ['lịch', 'bút ký', 'phong thủy', 'công nghệ', 'rượu'], color: 'bg-boss' },
+        { id: 'CAP_DUOI', label: 'CẤP DƯỚI', theme: 'Về Tương lai', keys: ['sách kỹ năng', 'planner', 'ghi chú', 'tai nghe'], color: 'bg-staff' },
+        { id: 'KHACH_HANG', label: 'KHÁCH HÀNG', theme: 'Về Chất lượng', keys: ['uy tín', 'cao cấp', 'quà tặng', 'đóng gói'], color: 'bg-client' },
+        { id: 'NGUOI_GIOI', label: 'NGƯỜI GIỎI', theme: 'Về Nhân phẩm', keys: ['tri thức', 'lịch sử', 'văn hóa', 'tư duy', 'nhân cách'], color: 'bg-pro' },
+        { id: 'VO', label: 'VỢ', theme: 'Tốt nhất đừng nói gì', keys: ['bí mật'], color: 'bg-wife' }
+    ];
+
+    let warehouse = {};
+
+    document.getElementById('fileInput').onchange = async (e) => {
+        const files = e.target.files;
+        let prods = [];
+        for (let f of files) {
+            const text = await f.text();
+            const lines = text.split('\n');
+            const headers = lines[0].toLowerCase().split(',');
+            const iName = headers.findIndex(h => h.includes('tên'));
+            const iLink = headers.findIndex(h => h.includes('link ưu đãi') || h.includes('link sản phẩm'));
+            const iPrice = headers.findIndex(h => h.includes('giá'));
+
+            for (let i = 1; i < lines.length; i++) {
+                const cols = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
+                if (cols.length < 3) continue;
+                prods.push({ 
+                    name: cols[iName]?.replace(/"/g, '') || "", 
+                    link: cols[iLink]?.replace(/"/g, '').trim() || "",
+                    price: parseFloat(cols[iPrice]?.replace(/"/g, '').replace('k','')) || 0
+                });
+            }
+        }
+        render(prods);
+    };
+
+    function render(prods) {
+        let html = '';
+        config.forEach(t => {
+            let found = null;
+            if (t.id === 'VO') {
+                found = { name: "Im lặng là vàng (Hoặc món quà bí mật)", link: "https://shopee.vn" };
+            } else if (t.id === 'NGUOI_NGHEO') {
+                found = prods.sort((a,b) => a.price - b.price)[0]; // Rẻ nhất
+            } else {
+                found = prods.find(p => t.keys.some(k => p.name.toLowerCase().includes(k))) || prods[Math.floor(Math.random()*prods.length)];
+            }
+            warehouse[t.id] = found;
+            html += `
+                <div class="target-box ${t.color}">
+                    <span class="target-name">${t.label}</span>
+                    <span class="theme-tag">Chọn hàng: ${t.theme}</span>
+                    <div class="item-found">${found.name.substring(0,35)}...</div>
+                </div>`;
+        });
+        document.getElementById('psychologyGrid').innerHTML = html;
+        document.getElementById('btnCopy').style.display = 'block';
+    }
+
+    function copyCode() {
+        let code = `# 1. KHO HÀNG TÂM LÝ v10\nWAREHOUSE = {\n`;
+        for (let key in warehouse) {
+            code += `    "${key}": { "link": "${warehouse[key].link}", "img": "LINK_ANH" },\n`;
+        }
+        code += `}`;
+        navigator.clipboard.writeText(code);
+        alert("Đã copy xong Warehouse Tâm Lý!");
+    }
+</script>
+</body>
+</html>

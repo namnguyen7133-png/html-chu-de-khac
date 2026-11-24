@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý 5 Bước Dự Án Tự Động - Chữ To & Tự Động Lưu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 30px;
+        }
+        .instruction {
+            background: #e9ecef;
+            padding: 15px;
+            border-left: 6px solid #007bff;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+        .step-box {
+            background: #f8f9fa;
+            border: 1px solid #dcdcdc;
+            border-left: 8px solid #007bff;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 6px;
+        }
+        .step-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 12px;
+        }
+        textarea.step-input {
+            width: 100%;
+            height: 90px;
+            font-size: 18px;
+            font-family: Arial, sans-serif;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            resize: vertical;
+            background-color: #fff;
+            line-height: 1.4;
+            color: #333;
+        }
+        textarea.step-input:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0,123,255,0.3);
+        }
+        .btn-group {
+            margin-top: 12px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 12px 22px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            background-color: #28a745;
+            transition: background 0.2s;
+        }
+        button:hover { background-color: #218838; }
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #333;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            display: none;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+        .top-actions {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Bảng Điều Khiển & Nhắc Nhở 5 Bước Dự Án</h2>
+    
+    <div class="top-actions">
+        <button onclick="saveAllData()" style="background-color: #007bff;">💾 Lưu tất cả thay đổi</button>
+        <button onclick="resetDefaultData()" style="background-color: #6c757d;">🔄 Khôi phục mặc định</button>
+    </div>
+
+    <div class="instruction">
+        👉 Hướng dẫn: Bạn có thể sửa trực tiếp nội dung trong các ô dưới đây. Nhấn nút <b>"Lưu tất cả thay đổi"</b> để hệ thống ghi nhớ vĩnh viễn trên trình duyệt của bạn!
+    </div>
+
+    <!-- Bước 1 -->
+    <div class="step-box" style="border-left-color: #007bff;">
+        <div class="step-title">Bước 1: Viết đoạn mã Google Apps Script để xoay vòng giá trị</div>
+        <textarea id="step1Text" class="step-input"></textarea>
+        <div class="btn-group">
+            <button onclick="copyStep('step1Text')">Sao chép Bước 1</button>
+        </div>
+    </div>
+
+    <!-- Bước 2 -->
+    <div class="step-box" style="border-left-color: #17a2b8;">
+        <div class="step-title" style="color: #17a2b8;">Bước 2: Tích hợp vào Python để chạy tự động theo lịch (*.py)</div>
+        <textarea id="step2Text" class="step-input"></textarea>
+        <div class="btn-group">
+            <button onclick="copyStep('step2Text')" style="background-color: #17a2b8;">Sao chép Bước 2</button>
+        </div>
+    </div>
+
+    <!-- Bước 3 -->
+    <div class="step-box" style="border-left-color: #ffc107;">
+        <div class="step-title" style="color: #d39e00;">Bước 3: Nâng cấp giao diện và tính năng cho Python</div>
+        <textarea id="step3Text" class="step-input"></textarea>
+        <div class="btn-group">
+            <button onclick="copyStep('step3Text')" style="background-color: #e0a800; color: #212529;">Sao chép Bước 3</button>
+        </div>
+    </div>
+
+    <!-- Bước 4 -->
+    <div class="step-box" style="border-left-color: #6c757d;">
+        <div class="step-title" style="color: #6c757d;">Bước 4: Chạy thử kiểm tra ứng dụng</div>
+        <textarea id="step4Text" class="step-input"></textarea>
+        <div class="btn-group">
+            <button onclick="copyStep('step4Text')" style="background-color: #6c757d;">Sao chép Bước 4</button>
+        </div>
+    </div>
+
+    <!-- Bước 5 -->
+    <div class="step-box" style="border-left-color: #dc3545;">
+        <div class="step-title" style="color: #dc3545;">Bước 5: Đóng gói thành file .exe chạy độc lập</div>
+        <textarea id="step5Text" class="step-input"></textarea>
+        <div class="btn-group">
+            <button onclick="copyStep('step5Text')" style="background-color: #dc3545;">Sao chép Bước 5</button>
+        </div>
+    </div>
+</div>
+
+<div id="notif" class="notification">Đã lưu thông tin thành công!</div>
+
+<script>
+    // Mặc định ban đầu
+    const defaultData = {
+        step1Text: "Tạo script tự động xoay vòng lấy dữ liệu từ M1:X1 (dòng 2 đến 500) ghi vào G6:G7, và từ Z1:AK12 (dòng 2 đến 500) ghi vào G8:G9 theo từng lượt chạy, sau đó tự động lưu kết quả vào vùng H6:H9.",
+        step2Text: "Viết mã Python đọc file danhsach.txt chứa các đường dẫn Web App của Google Sheet để quét và xử lý liên tục.",
+        step3Text: "- Đảm bảo Python tự động nhận diện file yt-dlp.exe nằm cùng thư mục chạy mà không bị lỗi mất file.\n- Xây dựng giao diện Tkinter chữ to rõ ràng, có nút Dừng lại (màu đỏ) để ngắt khi nhập sai, tích hợp Thanh tiến trình chạy mượt mà, và có nút Sao chép tất cả Link trực tiếp để dán nhanh vào Google Sheet hoặc đưa ra danh sách txt, thêm ô nhập số cột muốn, thêm thời gian ước tính kết thúc để biết và âm báo lúc bắt đầu và lúc kết thúc.",
+        step4Text: "Thực thi kiểm tra kịch bản đọc file cấu hình, quét dữ liệu từ các sheet và xác thực luồng chạy qua console với thanh tiến trình phần trăm trực quan.",
+        step5Text: "Sử dụng PyInstaller với lệnh --noconsole --onefile để biên dịch toàn bộ thành một file thực thi duy nhất, sẵn sàng đưa vào Task Scheduler của Windows để chạy tự động theo lịch định kỳ."
+    };
+
+    // Khi tải trang, load dữ liệu từ localStorage lên
+    window.onload = function() {
+        for (let i = 1; i <= 5; i++) {
+            let key = `step${i}Text`;
+            let savedValue = localStorage.getItem(key);
+            if (savedValue !== null) {
+                document.getElementById(key).value = savedValue;
+            } else {
+                document.getElementById(key).value = defaultData[key];
+            }
+        }
+    };
+
+    // Hàm lưu tất cả nội dung
+    function saveAllData() {
+        for (let i = 1; i <= 5; i++) {
+            let key = `step${i}Text`;
+            let val = document.getElementById(key).value;
+            localStorage.setItem(key, val);
+        }
+        showNotification("Đã lưu tất cả thay đổi vào trình duyệt!");
+    }
+
+    // Hàm khôi phục mặc định
+    function resetDefaultData() {
+        if (confirm("Bạn có chắc chắn muốn khôi phục lại nội dung ban đầu không?")) {
+            for (let i = 1; i <= 5; i++) {
+                let key = `step${i}Text`;
+                localStorage.removeItem(key);
+                document.getElementById(key).value = defaultData[key];
+            }
+            showNotification("Đã khôi phục về mặc định!");
+        }
+    }
+
+    function copyStep(id) {
+        const textarea = document.getElementById(id);
+        textarea.select();
+        navigator.clipboard.writeText(textarea.value).then(() => {
+            showNotification("Đã sao chép nội dung vào bộ nhớ tạm!");
+        });
+    }
+
+    function showNotification(text) {
+        const notif = document.getElementById('notif');
+        notif.innerText = text;
+        notif.style.display = 'block';
+        setTimeout(() => {
+            notif.style.display = 'none';
+        }, 2000);
+    }
+</script>
+
+</body>
+</html>

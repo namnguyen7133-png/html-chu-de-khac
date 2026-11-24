@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>CEO AI - Công cụ đọc & xử lý Module</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f0f4f8;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 35px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #0b1e33;
+            border-bottom: 3px solid #1a5cff;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        h1 small {
+            font-size: 14px;
+            font-weight: 400;
+            color: #5b6f84;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: #f8fafc;
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 1px solid #eef3f8;
+        }
+
+        .stat-card .number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0b1e33;
+        }
+
+        .stat-card .label {
+            font-size: 13px;
+            color: #5b6f84;
+            margin-top: 4px;
+        }
+
+        .stat-card .number.green {
+            color: #22b573;
+        }
+        .stat-card .number.red {
+            color: #dc3545;
+        }
+        .stat-card .number.blue {
+            color: #1a5cff;
+        }
+        .stat-card .number.orange {
+            color: #ff8c42;
+        }
+
+        .controls {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            padding: 18px 20px;
+            background: #f8fafc;
+            border-radius: 14px;
+            border: 1px solid #eef3f8;
+            align-items: center;
+        }
+
+        .controls .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #1a5cff;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #0f47cc;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: #22b573;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #1a9a62;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #b02a37;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #1a5cff;
+            border: 1.5px solid #1a5cff;
+        }
+        .btn-outline:hover {
+            background: #f0f5ff;
+        }
+
+        .btn-warning {
+            background: #ff8c42;
+            color: #fff;
+        }
+        .btn-warning:hover {
+            background: #e6762e;
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .file-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            display: none;
+        }
+
+        .file-input-wrapper .file-label {
+            padding: 10px 20px;
+            background: #eef3f8;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.2s;
+            border: 2px dashed #cbd8e6;
+        }
+
+        .file-input-wrapper .file-label:hover {
+            background: #dce7ff;
+            border-color: #1a5cff;
+        }
+
+        .file-input-wrapper .file-count {
+            font-size: 14px;
+            color: #5b6f84;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #eef3f8;
+            border-radius: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 2px solid #e2eaf2;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #edf2f7;
+            color: #1f2a3a;
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: #f8faff;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge.exists {
+            background: #d4f0e0;
+            color: #0e6b3e;
+        }
+
+        .status-badge.missing {
+            background: #fde2e2;
+            color: #b91c1c;
+        }
+
+        .status-badge.duplicate {
+            background: #fff1cf;
+            color: #9e6f0a;
+        }
+
+        .status-badge.mapped {
+            background: #dce7ff;
+            color: #1a5cff;
+        }
+
+        .status-badge.conflict {
+            background: #fde2e2;
+            color: #b91c1c;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #eef3f8;
+            border-radius: 4px;
+            margin-top: 12px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1a5cff, #22b573);
+            border-radius: 4px;
+            transition: width 0.3s;
+            width: 0%;
+        }
+
+        .log-area {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: #0b1e33;
+            border-radius: 12px;
+            color: #d4e8ff;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .log-area .log-entry {
+            padding: 2px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .log-area .log-entry.success {
+            color: #22b573;
+        }
+        .log-area .log-entry.error {
+            color: #ff6b6b;
+        }
+        .log-area .log-entry.warning {
+            color: #f4b942;
+        }
+        .log-area .log-entry.info {
+            color: #6cb4ff;
+        }
+
+        .summary-box {
+            margin-top: 16px;
+            padding: 14px 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 4px solid #1a5cff;
+        }
+
+        .summary-box strong {
+            color: #0b1e33;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .file-input-wrapper {
+                flex-direction: column;
+            }
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            📂 Công cụ đọc & xử lý Module
+            <small>Thống nhất tên file CEO AI Enterprise</small>
+        </h1>
+
+        <!-- Stats -->
+        <div class="stats" id="stats">
+            <div class="stat-card">
+                <div class="number blue" id="totalFiles">0</div>
+                <div class="label">📄 Tổng số file</div>
+            </div>
+            <div class="stat-card">
+                <div class="number green" id="validFiles">0</div>
+                <div class="label">✅ File hợp lệ</div>
+            </div>
+            <div class="stat-card">
+                <div class="number orange" id="duplicateFiles">0</div>
+                <div class="label">⚠️ File trùng lặp</div>
+            </div>
+            <div class="stat-card">
+                <div class="number red" id="conflictFiles">0</div>
+                <div class="label">❌ Xung đột</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="file-input-wrapper">
+                <label class="file-label" for="fileInput">
+                    📁 Chọn thư mục chứa file HTML
+                </label>
+                <input type="file" id="fileInput" webkitdirectory multiple />
+                <span class="file-count" id="fileCount">Chưa có file nào</span>
+            </div>
+            <button class="btn btn-primary" id="btnScan" disabled>🔍 Quét file</button>
+            <button class="btn btn-success" id="btnRename" disabled>✏️ Đổi tên theo chuẩn</button>
+            <button class="btn btn-outline" id="btnExport">📥 Xuất báo cáo CSV</button>
+            <button class="btn btn-warning" id="btnReset">🔄 Reset</button>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-bar" id="progressBar">
+            <div class="fill" id="progressFill"></div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:60px;">STT</th>
+                        <th style="width:100px;">Số cũ</th>
+                        <th style="width:100px;">Số mới</th>
+                        <th>Tên file cũ</th>
+                        <th>Tên file mới</th>
+                        <th style="width:100px;">Trạng thái</th>
+                        <th style="width:80px;">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="fileTableBody">
+                    <tr>
+                        <td colspan="7" style="text-align:center; padding:40px; color:#7a8a9e;">
+                            ⬆️ Chọn thư mục chứa các file HTML để bắt đầu
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary-box" id="summaryBox">
+            <strong>📋 Hướng dẫn:</strong>
+            <span style="color:#5b6f84;">
+                Chọn thư mục chứa các file HTML đã viết. Hệ thống sẽ đọc, phân tích và đề xuất
+                đổi tên theo danh sách thống nhất.
+            </span>
+        </div>
+
+        <!-- Log -->
+        <div class="log-area" id="logArea"></div>
+    </div>
+
+    <script>
+        // ================================================================
+        // CEO AI - CÔNG CỤ ĐỌC VÀ XỬ LÝ MODULE
+        // ================================================================
+
+        // ---------- DANH SÁCH MAPPING CHUẨN ----------
+        const MODULE_MAP = {
+            // I. Dòng tiền (01-05)
+            '01_DongTienThuan': { id: 1, name: '01_DongTienThuan.html', display: 'Dòng tiền thuần' },
+            '02_BurnRate': { id: 2, name: '02_BurnRate.html', display: 'Burn Rate' },
+            '03_Runway': { id: 3, name: '03_Runway.html', display: 'Runway' },
+            '04_FreeCashFlow': { id: 4, name: '04_FreeCashFlow.html', display: 'Free Cash Flow' },
+            '05_OperatingCashFlow': { id: 5, name: '05_OperatingCashFlow.html', display: 'Operating Cash Flow' },
+
+            // II. Lợi nhuận (06-09)
+            '06_EBITDA': { id: 6, name: '06_EBITDA.html', display: 'EBITDA & Biên EBITDA' },
+            '07_LoiNhuanRong': { id: 7, name: '07_LoiNhuanRong.html', display: 'Lợi nhuận ròng' },
+            '08_ROS': { id: 8, name: '08_ROS.html', display: 'ROS - Return on Sales' },
+            '09_LaiGop': { id: 9, name: '09_LaiGop.html', display: 'Lãi gộp' },
+
+            // III. Doanh thu (10-12)
+            '10_TangTruong_CAGR': { id: 10, name: '10_TangTruong_CAGR.html', display: 'Tăng trưởng & CAGR' },
+            '11_DoanhThuTheoSanPham': { id: 11, name: '11_DoanhThuTheoSanPham.html', display: 'Doanh thu theo sản phẩm' },
+            '12_DoanhThuTheoKhachHang': { id: 12, name: '12_DoanhThuTheoKhachHang.html', display: 'Doanh thu theo khách hàng' },
+
+            // IV. Dự báo (13-15)
+            '13_DuBao3Thang': { id: 13, name: '13_DuBao3Thang.html', display: 'Dự báo 3 tháng' },
+            '14_DuBao6Thang': { id: 14, name: '14_DuBao6Thang.html', display: 'Dự báo 6 tháng' },
+            '15_DuBao12Thang': { id: 15, name: '15_DuBao12Thang.html', display: 'Dự báo 12 tháng' },
+
+            // V. Hiệu quả (16-19)
+            '16_ROE': { id: 16, name: '16_ROE.html', display: 'ROE - Return on Equity' },
+            '17_ROA': { id: 17, name: '17_ROA.html', display: 'ROA - Return on Assets' },
+            '18_ROI': { id: 18, name: '18_ROI.html', display: 'ROI - Return on Investment' },
+            '19_ROIC': { id: 19, name: '19_ROIC.html', display: 'ROIC - Return on Invested Capital' },
+
+            // VI. Chi phí (20-24)
+            '20_ChiPhiNhanSu': { id: 20, name: '20_ChiPhiNhanSu.html', display: 'Chi phí Nhân sự' },
+            '21_ChiPhiMarketing': { id: 21, name: '21_ChiPhiMarketing.html', display: 'Chi phí Marketing' },
+            '22_ChiPhiQuanLy': { id: 22, name: '22_ChiPhiQuanLy.html', display: 'Chi phí Quản lý' },
+            '23_ChiPhiCoDinh': { id: 23, name: '23_ChiPhiCoDinh.html', display: 'Chi phí Cố định' },
+            '24_ChiPhiBienDoi': { id: 24, name: '24_ChiPhiBienDoi.html', display: 'Chi phí Biến đổi' },
+
+            // VII. Điểm hòa vốn (25)
+            '25_DiemHoaVon': { id: 25, name: '25_DiemHoaVon.html', display: 'Điểm hòa vốn' },
+
+            // VIII. Khách hàng (26-29)
+            '26_CAC': { id: 26, name: '26_CAC.html', display: 'CAC - Customer Acquisition Cost' },
+            '27_LTV': { id: 27, name: '27_LTV.html', display: 'LTV - Lifetime Value' },
+            '28_LTV_CAC': { id: 28, name: '28_LTV_CAC.html', display: 'Tỷ lệ LTV/CAC' },
+            '29_ChurnRate': { id: 29, name: '29_ChurnRate.html', display: 'Churn Rate' },
+
+            // IX. Tồn kho (30-32)
+            '30_InventoryTurnover': { id: 30, name: '30_InventoryTurnover.html', display: 'Vòng quay tồn kho' },
+            '31_DaysInventory': { id: 31, name: '31_DaysInventory.html', display: 'Số ngày tồn kho' },
+            '32_HangChet': { id: 32, name: '32_HangChet.html', display: 'Hàng chết' },
+
+            // X. Công nợ (33-36)
+            '33_DSO': { id: 33, name: '33_DSO.html', display: 'DSO - Days Sales Outstanding' },
+            '34_DPO': { id: 34, name: '34_DPO.html', display: 'DPO - Days Payable Outstanding' },
+            '35_CCC': { id: 35, name: '35_CCC.html', display: 'CCC - Cash Conversion Cycle' },
+            '36_CongNoTongHop': { id: 36, name: '36_CongNoTongHop.html', display: 'Tổng hợp công nợ' },
+
+            // XI. Nợ (37-39)
+            '37_DebtRatio': { id: 37, name: '37_DebtRatio.html', display: 'Debt Ratio' },
+            '38_DebtEquity': { id: 38, name: '38_DebtEquity.html', display: 'Debt/Equity' },
+            '39_InterestCoverage': { id: 39, name: '39_InterestCoverage.html', display: 'Interest Coverage' },
+
+            // XII. Tổng hợp & Dashboard (40-50)
+            '40_TonKhoTongHop': { id: 40, name: '40_TonKhoTongHop.html', display: 'Tổng hợp tồn kho' },
+            '41_PhanTichTaiChinh': { id: 41, name: '41_PhanTichTaiChinh.html', display: 'Phân tích tài chính' },
+            '42_PhanTichHoatDong': { id: 42, name: '42_PhanTichHoatDong.html', display: 'Phân tích hoạt động' },
+            '43_PhanTichDongTien': { id: 43, name: '43_PhanTichDongTien.html', display: 'Phân tích dòng tiền' },
+            '44_TongHopKPI': { id: 44, name: '44_TongHopKPI.html', display: 'Tổng hợp KPI' },
+
+            // XIII. Mở rộng (45-60)
+            '45_PhanTichRuiRo': { id: 45, name: '45_PhanTichRuiRo.html', display: 'Phân tích rủi ro' },
+            '46_PhanTichTangTruong': { id: 46, name: '46_PhanTichTangTruong.html', display: 'Phân tích tăng trưởng' },
+            '47_PhanTichLoiNhuan': { id: 47, name: '47_PhanTichLoiNhuan.html', display: 'Phân tích lợi nhuận' },
+            '48_PhanTichChiPhi': { id: 48, name: '48_PhanTichChiPhi.html', display: 'Phân tích chi phí' },
+            '49_PhanTichThanhKhoan': { id: 49, name: '49_PhanTichThanhKhoan.html', display: 'Phân tích thanh khoản' },
+            '50_PhanTichHieuQua': { id: 50, name: '50_PhanTichHieuQua.html', display: 'Phân tích hiệu quả' },
+
+            // XIV. Báo cáo & Dashboard (51-60)
+            '51_BaoCaoTaiChinh': { id: 51, name: '51_BaoCaoTaiChinh.html', display: 'Báo cáo tài chính' },
+            '52_BaoCaoHoatDong': { id: 52, name: '52_BaoCaoHoatDong.html', display: 'Báo cáo hoạt động' },
+            '53_BaoCaoDongTien': { id: 53, name: '53_BaoCaoDongTien.html', display: 'Báo cáo dòng tiền' },
+            '54_BaoCaoKPI': { id: 54, name: '54_BaoCaoKPI.html', display: 'Báo cáo KPI' },
+            '55_DashboardCEO': { id: 55, name: '55_DashboardCEO.html', display: 'Dashboard CEO' },
+            '56_DashboardDieuHanh': { id: 56, name: '56_DashboardDieuHanh.html', display: 'Dashboard điều hành' },
+            '57_DashboardTaiChinh': { id: 57, name: '57_DashboardTaiChinh.html', display: 'Dashboard tài chính' },
+            '58_DashboardTongHop': { id: 58, name: '58_DashboardTongHop.html', display: 'Dashboard tổng hợp' },
+            '59_TongHopModule': { id: 59, name: '59_TongHopModule.html', display: 'Tổng hợp module' },
+            '60_TongHopHeThong': { id: 60, name: '60_TongHopHeThong.html', display: 'Tổng hợp hệ thống' },
+
+            // XV. Các module còn lại (61-99)
+            '61_PhanTichSanXuat': { id: 61, name: '61_PhanTichSanXuat.html', display: 'Phân tích sản xuất' },
+            '62_PhanTichBanHang': { id: 62, name: '62_PhanTichBanHang.html', display: 'Phân tích bán hàng' },
+            '63_PhanTichThiTruong': { id: 63, name: '63_PhanTichThiTruong.html', display: 'Phân tích thị trường' },
+            '64_PhanTichCanhTranh': { id: 64, name: '64_PhanTichCanhTranh.html', display: 'Phân tích cạnh tranh' },
+            '65_PhanTichRuiRoTaiChinh': { id: 65, name: '65_PhanTichRuiRoTaiChinh.html',
+            display: 'Phân tích rủi ro tài chính' },
+            '66_PhanTichRuiRoHoatDong': { id: 66, name: '66_PhanTichRuiRoHoatDong.html',
+            display: 'Phân tích rủi ro hoạt động' },
+            '67_PhanTichRuiRoThiTruong': { id: 67, name: '67_PhanTichRuiRoThiTruong.html',
+            display: 'Phân tích rủi ro thị trường' },
+            '68_PhanTichChienLuoc': { id: 68, name: '68_PhanTichChienLuoc.html', display: 'Phân tích chiến lược' },
+            '69_PhanTichDauTu': { id: 69, name: '69_PhanTichDauTu.html', display: 'Phân tích đầu tư' },
+            '70_PhanTichTaiSan': { id: 70, name: '70_PhanTichTaiSan.html', display: 'Phân tích tài sản' },
+
+            '71_PhanTichVonChuSoHuu': { id: 71, name: '71_PhanTichVonChuSoHuu.html', display: 'Phân tích vốn chủ sở hữu' },
+            '72_PhanTichNganSach': { id: 72, name: '72_PhanTichNganSach.html', display: 'Phân tích ngân sách' },
+            '73_PhanTichChiPhiSanXuat': { id: 73, name: '73_PhanTichChiPhiSanXuat.html',
+            display: 'Phân tích chi phí sản xuất' },
+            '74_PhanTichChiPhiBanHang': { id: 74, name: '74_PhanTichChiPhiBanHang.html',
+            display: 'Phân tích chi phí bán hàng' },
+            '75_PhanTichLoiNhuanTheoSanPham': { id: 75, name: '75_PhanTichLoiNhuanTheoSanPham.html',
+                display: 'Phân tích lợi nhuận theo sản phẩm' },
+            '76_PhanTichLoiNhuanTheoKhachHang': { id: 76, name: '76_PhanTichLoiNhuanTheoKhachHang.html',
+                display: 'Phân tích lợi nhuận theo khách hàng' },
+            '77_PhanTichLoiNhuanTheoKenh': { id: 77, name: '77_PhanTichLoiNhuanTheoKenh.html',
+                display: 'Phân tích lợi nhuận theo kênh' },
+            '78_PhanTichLoiNhuanTheoKhuVuc': { id: 78, name: '78_PhanTichLoiNhuanTheoKhuVuc.html',
+                display: 'Phân tích lợi nhuận theo khu vực' },
+            '79_PhanTichTangTruongTheoSanPham': { id: 79, name: '79_PhanTichTangTruongTheoSanPham.html',
+                display: 'Phân tích tăng trưởng theo sản phẩm' },
+            '80_PhanTichTangTruongTheoKhachHang': { id: 80, name: '80_PhanTichTangTruongTheoKhachHang.html',
+                display: 'Phân tích tăng trưởng theo khách hàng' },
+
+            '81_PhanTichTangTruongTheoKenh': { id: 81, name: '81_PhanTichTangTruongTheoKenh.html',
+                display: 'Phân tích tăng trưởng theo kênh' },
+            '82_PhanTichTangTruongTheoKhuVuc': { id: 82, name: '82_PhanTichTangTruongTheoKhuVuc.html',
+                display: 'Phân tích tăng trưởng theo khu vực' },
+            '83_PhanTichDuBao': { id: 83, name: '83_PhanTichDuBao.html', display: 'Phân tích dự báo' },
+            '84_PhanTichKichBan': { id: 84, name: '84_PhanTichKichBan.html', display: 'Phân tích kịch bản' },
+            '85_PhanTichNhayCam': { id: 85, name: '85_PhanTichNhayCam.html', display: 'Phân tích độ nhạy' },
+            '86_PhanTichDuBaoDongTien': { id: 86, name: '86_PhanTichDuBaoDongTien.html',
+            display: 'Phân tích dự báo dòng tiền' },
+            '87_PhanTichDuBaoLoiNhuan': { id: 87, name: '87_PhanTichDuBaoLoiNhuan.html',
+            display: 'Phân tích dự báo lợi nhuận' },
+            '88_PhanTichDuBaoDoanhThu': { id: 88, name: '88_PhanTichDuBaoDoanhThu.html',
+            display: 'Phân tích dự báo doanh thu' },
+            '89_PhanTichDuBaoChiPhi': { id: 89, name: '89_PhanTichDuBaoChiPhi.html', display: 'Phân tích dự báo chi phí' },
+            '90_PhanTichDanhMucDauTu': { id: 90, name: '90_PhanTichDanhMucDauTu.html',
+            display: 'Phân tích danh mục đầu tư' },
+
+            '91_PhanTichHieuQuaDauTu': { id: 91, name: '91_PhanTichHieuQuaDauTu.html',
+            display: 'Phân tích hiệu quả đầu tư' },
+            '92_PhanTichDongTienTuDo': { id: 92, name: '92_PhanTichDongTienTuDo.html',
+            display: 'Phân tích dòng tiền tự do' },
+            '93_PhanTichGiaTriDoanhNghiep': { id: 93, name: '93_PhanTichGiaTriDoanhNghiep.html',
+                display: 'Phân tích giá trị doanh nghiệp' },
+            '94_PhanTichChiPhiVon': { id: 94, name: '94_PhanTichChiPhiVon.html', display: 'Phân tích chi phí vốn' },
+            '95_PhanTichCauTrucVon': { id: 95, name: '95_PhanTichCauTrucVon.html',
+            display: 'Phân tích cấu trúc vốn' },
+
+            '96_DanhGiaHoatDong': { id: 96, name: '96_DanhGiaHoatDong.html', display: 'Đánh giá hoạt động' },
+            '97_DanhGiaTaiChinh': { id: 97, name: '97_DanhGiaTaiChinh.html', display: 'Đánh giá tài chính' },
+            '98_DanhGiaTongQuat': { id: 98, name: '98_DanhGiaTongQuat.html', display: 'Đánh giá tổng quát' },
+            '99_BaoCaoTongHop': { id: 99, name: '99_BaoCaoTongHop.html', display: 'Báo cáo tổng hợp' },
+            '100_Dashboard_CEO': { id: 100, name: '100_Dashboard_CEO.html', display: 'Dashboard CEO' },
+        };
+
+        // ---------- STATE ----------
+        let files = [];
+        let fileMap = {};
+        let analysisResult = [];
+
+        // ---------- DOM refs ----------
+        const fileInput = document.getElementById('fileInput');
+        const fileCount = document.getElementById('fileCount');
+        const btnScan = document.getElementById('btnScan');
+        const btnRename = document.getElementById('btnRename');
+        const btnExport = document.getElementById('btnExport');
+        const btnReset = document.getElementById('btnReset');
+        const tableBody = document.getElementById('fileTableBody');
+        const summaryBox = document.getElementById('summaryBox');
+        const logArea = document.getElementById('logArea');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+
+        const totalFilesEl = document.getElementById('totalFiles');
+        const validFilesEl = document.getElementById('validFiles');
+        const duplicateFilesEl = document.getElementById('duplicateFiles');
+        const conflictFilesEl = document.getElementById('conflictFiles');
+
+        // ---------- Hàm ghi log ----------
+        function log(message, type = 'info') {
+            logArea.style.display = 'block';
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logArea.appendChild(entry);
+            logArea.scrollTop = logArea.scrollHeight;
+        }
+
+        // ---------- Hàm cập nhật progress ----------
+        function updateProgress(percent) {
+            progressBar.style.display = 'block';
+            progressFill.style.width = `${percent}%`;
+            if (percent >= 100) {
+                setTimeout(() => {
+                    progressBar.style.display = 'none';
+                }, 1000);
+            }
+        }
+
+        // ---------- Phân tích tên file ----------
+        function analyzeFileName(filename) {
+            // Lấy tên không extension
+            const baseName = filename.replace('.html', '');
+            const match = baseName.match(/^(\d+)_(.+)$/);
+            if (match) {
+                return {
+                    number: parseInt(match[1]),
+                    name: match[2],
+                    baseName: baseName,
+                    fullName: filename,
+                };
+            }
+            return null;
+        }
+
+        // ---------- Tìm mapping chuẩn ----------
+        function findMapping(baseName) {
+            // Tìm chính xác
+            if (MODULE_MAP[baseName]) {
+                return MODULE_MAP[baseName];
+            }
+
+            // Tìm theo tên không số
+            const namePart = baseName.replace(/^\d+_/, '');
+            for (const [key, value] of Object.entries(MODULE_MAP)) {
+                const keyName = key.replace(/^\d+_/, '');
+                if (keyName === namePart) {
+                    return value;
+                }
+            }
+
+            // Tìm theo partial match
+            for (const [key, value] of Object.entries(MODULE_MAP)) {
+                const keyName = key.replace(/^\d+_/, '');
+                const searchName = namePart.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+                const keySearch = keyName.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+                if (keySearch.includes(searchName) || searchName.includes(keySearch)) {
+                    return value;
+                }
+            }
+
+            return null;
+        }
+
+        // ---------- Quét file ----------
+        function scanFiles() {
+            const fileList = fileInput.files;
+            if (fileList.length === 0) {
+                alert('Vui lòng chọn thư mục chứa file HTML!');
+                return;
+            }
+
+            log('🔄 Bắt đầu quét file...', 'info');
+            updateProgress(10);
+
+            files = [];
+            fileMap = {};
+            analysisResult = [];
+
+            // Lọc file HTML
+            for (let i = 0; i < fileList.length; i++) {
+                const file = fileList[i];
+                if (file.name.endsWith('.html')) {
+                    files.push(file);
+                }
+            }
+
+            log(`📄 Tìm thấy ${files.length} file HTML`, 'info');
+            updateProgress(30);
+
+            // Phân tích từng file
+            const usedNumbers = new Set();
+            const conflicts = [];
+
+            files.forEach((file, index) => {
+                const analysis = analyzeFileName(file.name);
+                if (!analysis) {
+                    analysisResult.push({
+                        file: file,
+                        analysis: null,
+                        mapping: null,
+                        status: 'invalid',
+                        oldNumber: null,
+                        newNumber: null,
+                        oldName: file.name,
+                        newName: null,
+                    });
+                    return;
+                }
+
+                const mapping = findMapping(analysis.baseName);
+                if (mapping) {
+                    // Kiểm tra trùng số
+                    if (usedNumbers.has(mapping.id)) {
+                        conflicts.push({
+                            file: file,
+                            analysis: analysis,
+                            mapping: mapping,
+                            status: 'conflict',
+                            oldNumber: analysis.number,
+                            newNumber: mapping.id,
+                            oldName: file.name,
+                            newName: mapping.name,
+                            conflictWith: [...usedNumbers].find(n => n === mapping.id),
+                        });
+                    } else {
+                        usedNumbers.add(mapping.id);
+                        analysisResult.push({
+                            file: file,
+                            analysis: analysis,
+                            mapping: mapping,
+                            status: 'valid',
+                            oldNumber: analysis.number,
+                            newNumber: mapping.id,
+                            oldName: file.name,
+                            newName: mapping.name,
+                            conflictWith: null,
+                        });
+                    }
+                } else {
+                    analysisResult.push({
+                        file: file,
+                        analysis: analysis,
+                        mapping: null,
+                        status: 'unknown',
+                        oldNumber: analysis.number,
+                        newNumber: null,
+                        oldName: file.name,
+                        newName: null,
+                    });
+                }
+
+                updateProgress(30 + (index / files.length) * 50);
+            });
+
+            // Thêm conflicts vào kết quả
+            conflicts.forEach(c => {
+                analysisResult.push(c);
+            });
+
+            updateProgress(90);
+            renderTable();
+            updateStats();
+            log(`✅ Quét hoàn thành! Phân tích ${analysisResult.length} file.`, 'success');
+            updateProgress(100);
+
+            btnRename.disabled = false;
+            btnScan.disabled = true;
+        }
+
+        // ---------- Render bảng ----------
+        function renderTable() {
+            if (analysisResult.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align:center; padding:40px; color:#7a8a9e;">
+                            📭 Không tìm thấy file HTML nào
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            let html = '';
+            let stt = 0;
+
+            // Sắp xếp theo số cũ
+            const sorted = [...analysisResult].sort((a, b) => {
+                return (a.oldNumber || 999) - (b.oldNumber || 999);
+            });
+
+            sorted.forEach(item => {
+                stt++;
+                const status = item.status;
+                let statusBadge = '';
+                let statusText = '';
+
+                switch (status) {
+                    case 'valid':
+                        statusBadge = 'status-badge exists';
+                        statusText = '✅ Hợp lệ';
+                        break;
+                    case 'conflict':
+                        statusBadge = 'status-badge conflict';
+                        statusText = '❌ Xung đột';
+                        break;
+                    case 'duplicate':
+                        statusBadge = 'status-badge duplicate';
+                        statusText = '⚠️ Trùng lặp';
+                        break;
+                    case 'unknown':
+                        statusBadge = 'status-badge missing';
+                        statusText = '❓ Không xác định';
+                        break;
+                    default:
+                        statusBadge = 'status-badge missing';
+                        statusText = '❌ Không hợp lệ';
+                }
+
+                const actionBtn = (status === 'valid' || status === 'conflict') && item.newName ?
+                    `<button class="btn btn-primary" style="padding:4px 12px;font-size:12px;" onclick="renameFile(${stt-1})">
+                        ✏️ Đổi
+                    </button>` :
+                    '';
+
+                html += `
+                    <tr>
+                        <td>${stt}</td>
+                        <td>${item.oldNumber || '---'}</td>
+                        <td>${item.newNumber || '---'}</td>
+                        <td style="font-size:12px;">${item.oldName}</td>
+                        <td style="font-size:12px;">${item.newName || '---'}</td>
+                        <td><span class="status-badge ${statusBadge}">${statusText}</span></td>
+                        <td>${actionBtn}</td>
+                    </tr>
+                `;
+            });
+
+            tableBody.innerHTML = html;
+        }
+
+        // ---------- Update stats ----------
+        function updateStats() {
+            const total = analysisResult.length;
+            const valid = analysisResult.filter(r => r.status === 'valid').length;
+            const conflict = analysisResult.filter(r => r.status === 'conflict').length;
+            const duplicate = analysisResult.filter(r => r.status === 'duplicate').length;
+
+            totalFilesEl.textContent = total;
+            validFilesEl.textContent = valid;
+            conflictFilesEl.textContent = conflict;
+            duplicateFilesEl.textContent = duplicate;
+        }
+
+        // ---------- Đổi tên file (mô phỏng) ----------
+        function renameFile(index) {
+            const item = analysisResult[index];
+            if (!item || !item.newName) {
+                alert('Không thể đổi tên file này!');
+                return;
+            }
+
+            // Trong thực tế, không thể đổi tên file từ browser
+            // Đây là chức năng mô phỏng để hiển thị kết quả
+            log(`✏️ Mô phỏng: Đổi "${item.oldName}" → "${item.newName}"`, 'warning');
+
+            if (item.status === 'conflict') {
+                log(`⚠️ Xung đột: File này trùng số với file khác!`, 'error');
+                alert(`⚠️ Xung đột! File "${item.oldName}" trùng số với file khác.\nVui lòng kiểm tra lại!`);
+                return;
+            }
+
+            alert(`✅ Mô phỏng đổi tên thành công!\n\nCũ: ${item.oldName}\nMới: ${item.newName}\n\n(Đây là mô phỏng, file chưa được đổi tên thực tế)`);
+
+            // Cập nhật trạng thái
+            item.status = 'mapped';
+            renderTable();
+            updateStats();
+
+            log(`✅ Đã đổi tên: ${item.oldName} → ${item.newName}`, 'success');
+        }
+
+        // ---------- Đổi tên tất cả (mô phỏng) ----------
+        function renameAllFiles() {
+            const validFiles = analysisResult.filter(r => r.status === 'valid' && r.newName);
+            const conflictFiles = analysisResult.filter(r => r.status === 'conflict');
+
+            if (conflictFiles.length > 0) {
+                alert(`⚠️ Có ${conflictFiles.length} file bị xung đột!\nVui lòng giải quyết xung đột trước khi đổi tên.`);
+                log(`❌ Có ${conflictFiles.length} file xung đột, không thể đổi tên`, 'error');
+                return;
+            }
+
+            if (validFiles.length === 0) {
+                alert('Không có file nào hợp lệ để đổi tên!');
+                return;
+            }
+
+            const confirmMsg =
+                `Bạn có chắc chắn muốn đổi tên ${validFiles.length} file?\n\n` +
+                validFiles.slice(0, 5).map(f => `${f.oldName} → ${f.newName}`).join('\n') +
+                (validFiles.length > 5 ? `\n... và ${validFiles.length - 5} file khác` : '');
+
+            if (!confirm(confirmMsg)) {
+                return;
+            }
+
+            log(`🔄 Bắt đầu đổi tên ${validFiles.length} file...`, 'info');
+            updateProgress(0);
+
+            let done = 0;
+            validFiles.forEach((item, index) => {
+                // Mô phỏng delay để thấy progress
+                setTimeout(() => {
+                    item.status = 'mapped';
+                    done++;
+                    updateProgress((done / validFiles.length) * 100);
+                    log(`✅ Đã đổi: ${item.oldName} → ${item.newName}`, 'success');
+                    renderTable();
+                    updateStats();
+
+                    if (done === validFiles.length) {
+                        log(`🎉 Đổi tên hoàn thành! Đã đổi ${done} file.`, 'success');
+                        updateProgress(100);
+                        alert(`✅ Đã đổi tên thành công ${done} file!`);
+                    }
+                }, index * 300);
+            });
+
+            btnRename.disabled = true;
+        }
+
+        // ---------- Xuất báo cáo CSV ----------
+        function exportCSV() {
+            let csv = 'STT,Số cũ,Số mới,Tên file cũ,Tên file mới,Trạng thái\n';
+            let stt = 0;
+
+            analysisResult.forEach(item => {
+                stt++;
+                const statusMap = {
+                    'valid': 'Hợp lệ',
+                    'conflict': 'Xung đột',
+                    'duplicate': 'Trùng lặp',
+                    'unknown': 'Không xác định',
+                    'mapped': 'Đã đổi tên',
+                    'invalid': 'Không hợp lệ',
+                };
+                csv +=
+                    `${stt},${item.oldNumber||''},${item.newNumber||''},${item.oldName},${item.newName||''},${statusMap[item.status]||item.status}\n`;
+            });
+
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Bao_cao_module_${new Date().toISOString().slice(0,10)}.csv`;
+            link.click();
+            URL.revokeObjectURL(link.href);
+            log(`📥 Đã xuất báo cáo CSV với ${analysisResult.length} dòng`, 'success');
+        }
+
+        // ---------- Reset ----------
+        function resetAll() {
+            if (analysisResult.length > 0 && !confirm('Reset sẽ xóa tất cả dữ liệu đang có. Tiếp tục?')) {
+                return;
+            }
+
+            files = [];
+            fileMap = {};
+            analysisResult = [];
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align:center; padding:40px; color:#7a8a9e;">
+                        ⬆️ Chọn thư mục chứa các file HTML để bắt đầu
+                    </td>
+                </tr>
+            `;
+            totalFilesEl.textContent = '0';
+            validFilesEl.textContent = '0';
+            duplicateFilesEl.textContent = '0';
+            conflictFilesEl.textContent = '0';
+            fileCount.textContent = 'Chưa có file nào';
+            btnScan.disabled = true;
+            btnRename.disabled = true;
+            logArea.style.display = 'none';
+            logArea.innerHTML = '';
+            progressBar.style.display = 'none';
+            updateProgress(0);
+            log('🔄 Đã reset toàn bộ dữ liệu', 'info');
+        }
+
+        // ---------- Sự kiện ----------
+        fileInput.addEventListener('change', function(e) {
+            const count = this.files.length;
+            fileCount.textContent = `📁 ${count} file (${count > 0 ? this.files[0].webkitRelativePath.split('/')[0] : 'chưa chọn'})`;
+            btnScan.disabled = count === 0;
+
+            if (count > 0) {
+                log(`📂 Đã chọn thư mục với ${count} file`, 'info');
+            }
+        });
+
+        btnScan.addEventListener('click', scanFiles);
+        btnRename.addEventListener('click', renameAllFiles);
+        btnExport.addEventListener('click', exportCSV);
+        btnReset.addEventListener('click', resetAll);
+
+        // Khởi tạo log
+        log('🚀 Công cụ đã sẵn sàng! Chọn thư mục chứa file HTML để bắt đầu.', 'info');
+    </script>
+<script src="bg-music.js"></script>
+</body>
+</html>

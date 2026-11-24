@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rubik Cửu Vận – Giao diện mới</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);color:#fff;min-height:100vh;padding:16px;display:flex;flex-direction:column;align-items:center}
+  
+  h1{font-size:1.5rem;margin-bottom:6px;text-align:center}
+  .subtitle{opacity:.8;font-size:.95rem;margin-bottom:18px;text-align:center}
+  
+  /* Bố cục 3 cột: Trái - Giữa - Phải */
+  .app-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* Cột điều khiển bên trái và phải */
+  .control-panel {
+    background: rgba(255,255,255,.05);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 220px;
+  }
+
+  .group-title{font-size:14px;color:#e94560;margin-bottom:10px;font-weight:600;text-align:center;text-transform:uppercase;letter-spacing:1px}
+  .btn-row{display:flex;flex-direction:column;gap:10px;align-items:center}
+  
+  button{background:#0f3460;color:#fff;border:1px solid #1abc9c;padding:12px 15px;border-radius:8px;cursor:pointer;font-weight:600;font-size:15px;width:100%;transition:.15s}
+  button:hover{background:#e94560;border-color:#e94560}
+  button:active{transform:scale(.96)}
+  
+  .reset-btn{background:#e94560;border-color:#e94560;margin-top: 10px;}
+  .reset-btn:hover{background:#c0392b}
+
+  /* Khu vực Rubik ở giữa */
+  .rubik-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .net-wrapper{width:100%;overflow-x:auto;padding-bottom:8px}
+  .net{display:grid;grid-template-areas:". up . .""left front right back"". down . .";grid-template-columns:repeat(4,1fr);gap:10px;min-width:720px;margin:0 auto}
+  
+  .net-face{background:#111;border-radius:10px;padding:6px;border:2px solid #333}
+  .net-face[data-face="up"]{grid-area:up}
+  .net-face[data-face="left"]{grid-area:left}
+  .net-face[data-face="front"]{grid-area:front}
+  .net-face[data-face="right"]{grid-area:right}
+  .net-face[data-face="back"]{grid-area:back}
+  .net-face[data-face="down"]{grid-area:down}
+  
+  .face-label{text-align:center;font-size:13px;font-weight:600;color:#e94560;margin-bottom:6px}
+  .face-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+  
+  .cell{background:#2a2a4a;border-radius:8px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;text-align:center;font-size:11px;font-weight:600;padding:3px;line-height:1.2;border:1px solid #444;min-height:56px}
+  
+  .color-black{background:#111!important;color:#fff}
+  .color-white{background:#f5f5f5!important;color:#111}
+  .color-peace{background:#87CEEB!important;color:#111}
+  .color-green{background:#2ecc71!important;color:#111}
+  .color-sea{background:#1abc9c!important;color:#111}
+  .color-purple{background:#9b59b6!important;color:#fff}
+  .color-red{background:#e74c3c!important;color:#fff}
+  .color-orange{background:#e67e22!important;color:#111}
+  .color-yellow{background:#f1c40f!important;color:#111}
+
+  .face-btns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:20px 0 10px}
+  .face-btn{background:#16213e; width:auto; padding: 10px 15px;}
+  .face-btn.active{background:#e94560}
+  
+  .detail-panel{width:100%;max-width:700px;background:rgba(255,255,255,.08);border-radius:14px;padding:18px;margin-top:10px}
+  .detail-panel h2{color:#e94560;margin-bottom:12px}
+  .grid-9{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .grid-9 .item{background:rgba(0,0,0,.3);padding:12px 8px;border-radius:10px;text-align:center;font-size:13px}
+  
+  .thai-ky-form{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+  input[type="date"]{padding:8px 12px;border-radius:8px;border:none; font-family:inherit;}
+
+  /* Responsive cho màn hình nhỏ */
+  @media (max-width: 1200px) {
+    .app-container { flex-direction: column; }
+    .control-panel { flex-direction: row; flex-wrap: wrap; width: 100%; max-width: 720px; justify-content: center; }
+    .btn-row { flex-direction: row; flex-wrap: wrap; }
+    button { width: auto; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Rubik Cửu Vận – Bản trải rộng</h1>
+<p class="subtitle">6 mặt trải dài • Điều khiển trực quan xung quanh Rubik</p>
+
+<div class="app-container">
+  
+  <!-- CỘT TRÁI: ĐIỀU KHIỂN CỘT DỌC -->
+  <div class="control-panel">
+    <div>
+      <div class="group-title">Cột dọc (↑ Lên / ↓ Xuống)</div>
+      <div class="btn-row">
+        <button onclick="turn('L',-1)">Cột 1 ↑</button>
+        <button onclick="turn('L',1)">Cột 1 ↓</button>
+        <button onclick="turn('M',-1)">Cột 2 ↑</button>
+        <button onclick="turn('M',1)">Cột 2 ↓</button>
+        <button onclick="turn('R',-1)">Cột 3 ↑</button>
+        <button onclick="turn('R',1)">Cột 3 ↓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- KHU VỰC GIỮA: RUBIK -->
+  <div class="rubik-area">
+    <div class="net-wrapper">
+      <div class="net" id="net">
+        <div class="net-face" data-face="up"><div class="face-label">Mặt trên</div><div class="face-grid" id="grid-top"></div></div>
+        <div class="net-face" data-face="left"><div class="face-label">Mặt trái</div><div class="face-grid" id="grid-left"></div></div>
+        <div class="net-face" data-face="front"><div class="face-label">Mặt trước (Cửu Vận)</div><div class="face-grid" id="grid-front"></div></div>
+        <div class="net-face" data-face="right"><div class="face-label">Mặt phải (9 Màu)</div><div class="face-grid" id="grid-right"></div></div>
+        <div class="net-face" data-face="back"><div class="face-label">Mặt sau (9 Sao)</div><div class="face-grid" id="grid-back"></div></div>
+        <div class="net-face" data-face="down"><div class="face-label">Mặt dưới (Thai kỳ)</div><div class="face-grid" id="grid-bottom"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CỘT PHẢI: ĐIỀU KHIỂN TẦNG NGANG + RESET -->
+  <div class="control-panel">
+    <div>
+      <div class="group-title">Tầng ngang (← Trái / → Phải)</div>
+      <div class="btn-row">
+        <button onclick="turn('U',-1)">Tầng 1 ←</button>
+        <button onclick="turn('U',1)">Tầng 1 →</button>
+        <button onclick="turn('E',-1)">Tầng 2 ←</button>
+        <button onclick="turn('E',1)">Tầng 2 →</button>
+        <button onclick="turn('D',-1)">Tầng 3 ←</button>
+        <button onclick="turn('D',1)">Tầng 3 →</button>
+      </div>
+    </div>
+    <div>
+      <div class="group-title">Mặt trước / sau + Reset</div>
+      <div class="btn-row">
+        <button onclick="turn('F',1)">F →</button>
+        <button onclick="turn('F',-1)">F ←</button>
+        <button onclick="turn('B',1)">B →</button>
+        <button onclick="turn('B',-1)">B ←</button>
+        <button class="reset-btn" onclick="resetState()">↺ Reset 6 mặt</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PHẦN CHI TIẾT BÊN DƯỚI -->
+<div style="display:flex; flex-direction:column; align-items:center; width:100%; margin-top: 30px;">
+  <div class="face-btns">
+    <button class="face-btn" onclick="showFace('van')">Cửu Vận</button>
+    <button class="face-btn" onclick="showFace('thai')">Thai kỳ</button>
+    <button class="face-btn" onclick="showFace('mau')">9 Màu</button>
+    <button class="face-btn" onclick="showFace('cung')">9 Cung</button>
+    <button class="face-btn" onclick="showFace('the')">Thế đứng</button>
+    <button class="face-btn" onclick="showFace('sao')">9 Sao</button>
+  </div>
+
+  <div class="detail-panel" id="detail">
+    <h2>Chọn nút ở trên để xem chi tiết</h2>
+  </div>
+</div>
+
+<script>
+// ========== DỮ LIỆU GỐC CHO 6 MẶT ==========
+const original = {
+  front: [
+    {html:'Vận 1<br>1864-1883',cls:''}, {html:'Vận 2<br>1884-1903',cls:''}, {html:'Vận 3<br>1904-1923',cls:''},
+    {html:'Vận 4<br>1924-1943',cls:''}, {html:'Vận 5<br>1944-1963',cls:''}, {html:'Vận 6<br>1964-1983',cls:''},
+    {html:'Vận 7<br>1984-2003',cls:''}, {html:'Vận 8<br>2004-2023',cls:''}, {html:'Vận 9<br>2024-2043',cls:''}
+  ],
+  back: [
+    {html:'Nhất Bạch<br>Thủy',cls:''}, {html:'Nhị Hắc<br>Thổ',cls:''}, {html:'Tam Bích<br>Mộc',cls:''},
+    {html:'Tứ Lục<br>Mộc',cls:''}, {html:'Ngũ Hoàng<br>Thổ',cls:''}, {html:'Lục Bạch<br>Kim',cls:''},
+    {html:'Thất Xích<br>Kim',cls:''}, {html:'Bát Bạch<br>Thổ',cls:''}, {html:'Cửu Tử<br>Hỏa',cls:''}
+  ],
+  right: [
+    {html:'Đen',cls:'color-black'}, {html:'Trắng',cls:'color-white'}, {html:'Xanh hòa bình',cls:'color-peace'},
+    {html:'Xanh lá',cls:'color-green'}, {html:'Xanh biển',cls:'color-sea'}, {html:'Tím',cls:'color-purple'},
+    {html:'Đỏ',cls:'color-red'}, {html:'Cam',cls:'color-orange'}, {html:'Vàng',cls:'color-yellow'}
+  ],
+  left: [
+    {html:'Càn<br>Tây Bắc',cls:''}, {html:'Khôn<br>Tây Nam',cls:''}, {html:'Chấn<br>Đông',cls:''},
+    {html:'Tốn<br>Đông Nam',cls:''}, {html:'Trung<br>Cung',cls:''}, {html:'Khảm<br>Bắc',cls:''},
+    {html:'Ly<br>Nam',cls:''}, {html:'Cấn<br>Đông Bắc',cls:''}, {html:'Đoài<br>Tây',cls:''}
+  ],
+  top: [
+    {html:'Đứng thẳng',cls:''}, {html:'Ngồi thiền',cls:''}, {html:'Ngồi xếp bằng',cls:''},
+    {html:'Ngồi xổm',cls:''}, {html:'Quỳ',cls:''}, {html:'Nằm ngửa',cls:''},
+    {html:'Nằm nghiêng',cls:''}, {html:'Đứng 1 chân',cls:''}, {html:'Ngồi ghế',cls:''}
+  ],
+  bottom: [
+    {html:'Tháng 1',cls:''}, {html:'Tháng 2',cls:''}, {html:'Tháng 3',cls:''},
+    {html:'Tháng 4',cls:''}, {html:'Tháng 5',cls:''}, {html:'Tháng 6',cls:''},
+    {html:'Tháng 7',cls:''}, {html:'Tháng 8',cls:''}, {html:'Tháng 9',cls:''}
+  ]
+};
+
+// ========== TRẠNG THÁI HIỆN TẠI ==========
+let state = JSON.parse(JSON.stringify(original));
+
+// ========== HIỂN THỊ 6 MẶT ==========
+function renderAll() {
+  const map = {
+    top: 'grid-top',
+    left: 'grid-left',
+    front: 'grid-front',
+    right: 'grid-right',
+    back: 'grid-back',
+    bottom: 'grid-bottom'
+  };
+  Object.keys(map).forEach(faceKey => {
+    const el = document.getElementById(map[faceKey]);
+    el.innerHTML = '';
+    state[faceKey].forEach(item => {
+      const cell = document.createElement('div');
+      cell.className = 'cell ' + (item.cls || '');
+      cell.innerHTML = item.html;
+      el.appendChild(cell);
+    });
+  });
+}
+
+// ========== XOAY 1 MẶT (ma trận 3x3) ==========
+function rotateFace(arr, dir) {
+  if (dir === 1) {
+    return [arr[6], arr[3], arr[0], arr[7], arr[4], arr[1], arr[8], arr[5], arr[2]];
+  } else {
+    return [arr[2], arr[5], arr[8], arr[1], arr[4], arr[7], arr[0], arr[3], arr[6]];
+  }
+}
+
+// ========== HÀM XOAY CHÍNH ==========
+function turn(face, dir) {
+  const faceMap = { U: 'top', D: 'bottom', F: 'front', B: 'back', L: 'left', R: 'right' };
+
+  if (faceMap[face]) {
+    state[faceMap[face]] = rotateFace(state[faceMap[face]], dir);
+  }
+
+  if (face === 'U') {
+    const F = state.front.slice(0, 3), R = state.right.slice(0, 3), B = state.back.slice(0, 3), L = state.left.slice(0, 3);
+    if (dir === 1) {
+      state.front.splice(0, 3, ...L); state.left.splice(0, 3, ...B);
+      state.back.splice(0, 3, ...R); state.right.splice(0, 3, ...F);
+    } else {
+      state.front.splice(0, 3, ...R); state.right.splice(0, 3, ...B);
+      state.back.splice(0, 3, ...L); state.left.splice(0, 3, ...F);
+    }
+  } else if (face === 'D') {
+    const F = state.front.slice(6, 9), R = state.right.slice(6, 9), B = state.back.slice(6, 9), L = state.left.slice(6, 9);
+    if (dir === 1) {
+      state.front.splice(6, 3, ...R); state.right.splice(6, 3, ...B);
+      state.back.splice(6, 3, ...L); state.left.splice(6, 3, ...F);
+    } else {
+      state.front.splice(6, 3, ...L); state.left.splice(6, 3, ...B);
+      state.back.splice(6, 3, ...R); state.right.splice(6, 3, ...F);
+    }
+  } else if (face === 'E') {
+    const F = state.front.slice(3, 6), R = state.right.slice(3, 6), B = state.back.slice(3, 6), L = state.left.slice(3, 6);
+    if (dir === 1) {
+      state.front.splice(3, 3, ...R); state.right.splice(3, 3, ...B);
+      state.back.splice(3, 3, ...L); state.left.splice(3, 3, ...F);
+    } else {
+      state.front.splice(3, 3, ...L); state.left.splice(3, 3, ...B);
+      state.back.splice(3, 3, ...R); state.right.splice(3, 3, ...F);
+    }
+  } else if (face === 'L') {
+    const U = [state.top[0], state.top[3], state.top[6]], F = [state.front[0], state.front[3], state.front[6]];
+    const D = [state.bottom[0], state.bottom[3], state.bottom[6]], B = [state.back[8], state.back[5], state.back[2]];
+    if (dir === 1) {
+      state.top[0]=B[0]; state.top[3]=B[1]; state.top[6]=B[2];
+      state.front[0]=U[0]; state.front[3]=U[1]; state.front[6]=U[2];
+      state.bottom[0]=F[0]; state.bottom[3]=F[1]; state.bottom[6]=F[2];
+      state.back[2]=D[2]; state.back[5]=D[1]; state.back[8]=D[0];
+    } else {
+      state.top[0]=F[0]; state.top[3]=F[1]; state.top[6]=F[2];
+      state.front[0]=D[0]; state.front[3]=D[1]; state.front[6]=D[2];
+      state.bottom[0]=B[2]; state.bottom[3]=B[1]; state.bottom[6]=B[0];
+      state.back[2]=U[0]; state.back[5]=U[1]; state.back[8]=U[2];
+    }
+  } else if (face === 'R') {
+    const U = [state.top[2], state.top[5], state.top[8]], F = [state.front[2], state.front[5], state.front[8]];
+    const D = [state.bottom[2], state.bottom[5], state.bottom[8]], B = [state.back[6], state.back[3], state.back[0]];
+    if (dir === 1) {
+      state.top[2]=F[0]; state.top[5]=F[1]; state.top[8]=F[2];
+      state.front[2]=D[0]; state.front[5]=D[1]; state.front[8]=D[2];
+      state.bottom[2]=B[2]; state.bottom[5]=B[1]; state.bottom[8]=B[0];
+      state.back[0]=U[0]; state.back[3]=U[1]; state.back[6]=U[2];
+    } else {
+      state.top[2]=B[0]; state.top[5]=B[1]; state.top[8]=B[2];
+      state.back[0]=D[2]; state.back[3]=D[1]; state.back[6]=D[0];
+      state.bottom[2]=F[0]; state.bottom[5]=F[1]; state.bottom[8]=F[2];
+      state.front[2]=U[0]; state.front[5]=U[1]; state.front[8]=U[2];
+    }
+  } else if (face === 'M') {
+    const U = [state.top[1], state.top[4], state.top[7]], F = [state.front[1], state.front[4], state.front[7]];
+    const D = [state.bottom[1], state.bottom[4], state.bottom[7]], B = [state.back[7], state.back[4], state.back[1]];
+    if (dir === 1) {
+      state.top[1]=B[0]; state.top[4]=B[1]; state.top[7]=B[2];
+      state.front[1]=U[0]; state.front[4]=U[1]; state.front[7]=U[2];
+      state.bottom[1]=F[0]; state.bottom[4]=F[1]; state.bottom[7]=F[2];
+      state.back[1]=D[2]; state.back[4]=D[1]; state.back[7]=D[0];
+    } else {
+      state.top[1]=F[0]; state.top[4]=F[1]; state.top[7]=F[2];
+      state.front[1]=D[0]; state.front[4]=D[1]; state.front[7]=D[2];
+      state.bottom[1]=B[2]; state.bottom[4]=B[1]; state.bottom[7]=B[0];
+      state.back[1]=U[0]; state.back[4]=U[1]; state.back[7]=U[2];
+    }
+  } else if (face === 'F') {
+    const U = [state.top[6], state.top[7], state.top[8]], R = [state.right[0], state.right[3], state.right[6]];
+    const D = [state.bottom[2], state.bottom[1], state.bottom[0]], L = [state.left[8], state.left[5], state.left[2]];
+    if (dir === 1) {
+      state.top[6]=L[0]; state.top[7]=L[1]; state.top[8]=L[2];
+      state.right[0]=U[0]; state.right[3]=U[1]; state.right[6]=U[2];
+      state.bottom[0]=R[2]; state.bottom[1]=R[1]; state.bottom[2]=R[0];
+      state.left[2]=D[0]; state.left[5]=D[1]; state.left[8]=D[2];
+    } else {
+      state.top[6]=R[0]; state.top[7]=R[1]; state.top[8]=R[2];
+      state.right[0]=D[2]; state.right[3]=D[1]; state.right[6]=D[0];
+      state.bottom[0]=L[2]; state.bottom[1]=L[1]; state.bottom[2]=L[0];
+      state.left[2]=U[0]; state.left[5]=U[1]; state.left[8]=U[2];
+    }
+  } else if (face === 'B') {
+    const U = [state.top[0], state.top[1], state.top[2]], R = [state.right[2], state.right[5], state.right[8]];
+    const D = [state.bottom[6], state.bottom[7], state.bottom[8]], L = [state.left[0], state.left[3], state.left[6]];
+    if (dir === 1) {
+      state.top[0]=R[0]; state.top[1]=R[1]; state.top[2]=R[2];
+      state.right[2]=D[2]; state.right[5]=D[1]; state.right[8]=D[0];
+      state.bottom[6]=L[0]; state.bottom[7]=L[1]; state.bottom[8]=L[2];
+      state.left[0]=U[2]; state.left[3]=U[1]; state.left[6]=U[0];
+    } else {
+      state.top[0]=L[2]; state.top[1]=L[1]; state.top[2]=L[0];
+      state.left[0]=D[0]; state.left[3]=D[1]; state.left[6]=D[2];
+      state.bottom[6]=R[2]; state.bottom[7]=R[1]; state.bottom[8]=R[0];
+      state.right[2]=U[0]; state.right[5]=U[1]; state.right[8]=U[2];
+    }
+  }
+  renderAll();
+}
+
+function resetState() {
+  state = JSON.parse(JSON.stringify(original));
+  renderAll();
+}
+
+// Dữ liệu Panel chi tiết
+const facesData = {
+  van: { title: "Cửu Vận – Tam Nguyên", items: [
+      {name:"Vận 1",desc:"1864–1883 • Nhất Bạch"},{name:"Vận 2",desc:"1884–1903 • Nhị Hắc"},
+      {name:"Vận 3",desc:"1904–1923 • Tam Bích"},{name:"Vận 4",desc:"1924–1943 • Tứ Lục"},
+      {name:"Vận 5",desc:"1944–1963 • Ngũ Hoàng"},{name:"Vận 6",desc:"1964–1983 • Lục Bạch"},
+      {name:"Vận 7",desc:"1984–2003 • Thất Xích"},{name:"Vận 8",desc:"2004–2023 • Bát Bạch"},
+      {name:"Vận 9",desc:"2024–2043 • Cửu Tử"}
+  ]},
+  sao: { title: "9 Sao Phi Tinh", items: [
+      {name:"Nhất Bạch",desc:"Thủy"},{name:"Nhị Hắc",desc:"Thổ"},{name:"Tam Bích",desc:"Mộc"},
+      {name:"Tứ Lục",desc:"Mộc"},{name:"Ngũ Hoàng",desc:"Thổ"},{name:"Lục Bạch",desc:"Kim"},
+      {name:"Thất Xích",desc:"Kim"},{name:"Bát Bạch",desc:"Thổ"},{name:"Cửu Tử",desc:"Hỏa"}
+  ]},
+  mau: { title: "9 Màu", items: [
+      {name:"Đen",desc:""},{name:"Trắng",desc:""},{name:"Xanh hòa bình",desc:""},
+      {name:"Xanh lá",desc:""},{name:"Xanh biển",desc:""},{name:"Tím",desc:""},
+      {name:"Đỏ",desc:""},{name:"Cam",desc:""},{name:"Vàng",desc:""}
+  ]},
+  cung: { title: "9 Cung", items: [
+      {name:"Càn",desc:"Tây Bắc"},{name:"Khôn",desc:"Tây Nam"},{name:"Chấn",desc:"Đông"},
+      {name:"Tốn",desc:"Đông Nam"},{name:"Trung Cung",desc:""},{name:"Khảm",desc:"Bắc"},
+      {name:"Ly",desc:"Nam"},{name:"Cấn",desc:"Đông Bắc"},{name:"Đoài",desc:"Tây"}
+  ]},
+  the: { title: "9 Thế đứng ngồi", items: [
+      {name:"Đứng thẳng",desc:""},{name:"Ngồi thiền",desc:""},{name:"Ngồi xếp bằng",desc:""},
+      {name:"Ngồi xổm",desc:""},{name:"Quỳ",desc:""},{name:"Nằm ngửa",desc:""},
+      {name:"Nằm nghiêng",desc:""},{name:"Đứng 1 chân",desc:""},{name:"Ngồi ghế",desc:""}
+  ]},
+  thai: { title: "9 Tháng Thai Kỳ", isThai: true }
+};
+
+function showFace(key) {
+  document.querySelectorAll('.face-btn').forEach(b => b.classList.remove('active'));
+  if (typeof event !== 'undefined' && event.target) {
+    event.target.classList.add('active');
+  } else {
+    const btnMap = {van:'Cửu Vận',thai:'Thai kỳ',mau:'9 Màu',cung:'9 Cung',the:'Thế đứng',sao:'9 Sao'};
+    document.querySelectorAll('.face-btn').forEach(b => {
+      if (b.textContent.trim() === btnMap[key]) b.classList.add('active');
+    });
+  }
+
+  const data = facesData[key];
+  const panel = document.getElementById('detail');
+
+  if (data.isThai) {
+    panel.innerHTML = `
+      <h2>${data.title}</h2>
+      <div class="thai-ky-form">
+        <label>Ngày bắt đầu:</label>
+        <input type="date" id="startDate">
+        <button onclick="calcThaiKy()">Tính 9 tháng</button>
+      </div>
+      <div class="grid-9" id="thaiGrid"></div>
+    `;
+    const today = new Date().toISOString().split('T')[0];
+    const dateInput = document.getElementById('startDate');
+    if (dateInput) dateInput.value = today;
+    calcThaiKy();
+  } else {
+    let html = `<h2>${data.title}</h2><div class="grid-9">`;
+    data.items.forEach(i => {
+      html += `<div class="item"><strong>${i.name}</strong><br>${i.desc}</div>`;
+    });
+    html += `</div>`;
+    panel.innerHTML = html;
+  }
+}
+
+function calcThaiKy() {
+  const startInput = document.getElementById('startDate');
+  if (!startInput) return;
+  const start = startInput.value;
+  if (!start) return;
+
+  const grid = document.getElementById('thaiGrid');
+  if (!grid) return;
+
+  let html = '';
+  const d = new Date(start);
+
+  for (let i = 1; i <= 9; i++) {
+    const end = new Date(d);
+    end.setMonth(end.getMonth() + i);
+    end.setDate(end.getDate() - 1);
+    const formatted = end.toLocaleDateString('vi-VN');
+    html += `<div class="item"><strong>Tháng ${i}</strong><br>${formatted}</div>`;
+  }
+  grid.innerHTML = html;
+}
+
+renderAll();
+window.addEventListener('DOMContentLoaded', () => {
+  showFace('van');
+  document.querySelectorAll('.face-btn').forEach(b => {
+    if (b.textContent.trim() === 'Cửu Vận') b.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

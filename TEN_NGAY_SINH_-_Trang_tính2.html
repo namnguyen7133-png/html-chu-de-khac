@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>TEN_NGAY_SINH - Trang tính2</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>TEN_NGAY_SINH - Trang tính2</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>Tiểu Hàn | 05/01 | Bắt đầu rét nhẹ (Hành Thủy) | Song Ngư | 19/02 | Cung nước | 20.0 | Xử Nữ - còn 20 ngày</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>Đại Hàn | 20/01 | Rét nhất năm (Hành Thủy) | Bạch Dương | 21/03 | Cung lửa</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>Lập Xuân | 04/02 | Khởi đầu mùa Xuân (Hành Mộc) | Kim Ngưu | 20/04 | Cung đất</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>Vũ Thủy | 19/02 | Mưa ẩm (Hành Mộc) | Song Tử | 21/05 | Cung khí</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>Kinh Trập | 05/03 | Sâu bọ tỉnh giấc (Hành Mộc) | Cự Giải | 21/06 | Cung nước</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>Xuân Phân | 20/03 | Giữa xuân, ngày đêm bằng (Hành Mộc) | Sư Tử | 23/07 | Cung lửa</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>Thanh Minh | 04/04 | Trời trong sáng (Hành Mộc) | Xử Nữ | 23/08 | Cung đất</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>Cốc Vũ | 20/04 | Mưa tốt cho cây (Hành Mộc) | Thiên Bình | 23/09 | Cung khí</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>Lập Hạ | 05/05 | Khởi đầu mùa Hè (Hành Hỏa) | Thiên Yết | 23/10 | Cung nước</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>Tiểu Mãn | 21/05 | Ngũ cốc bắt đầu đầy (Hành Hỏa) | Nhân Mã | 22/11 | Cung lửa</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>Mang Chủng | 05/06 | Ngũ cốc trổ bông (Hành Hỏa) | Ma Kết | 22/12 | Cung đất</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>Hạ Chí | 21/06 | Ngày dài nhất (Hành Hỏa)</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>Tiểu Thử | 07/07 | Nóng nhẹ (Hành Hỏa)</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>Đại Thử | 22/07 | Nóng nhất năm (Hành Hỏa)</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>Lập Thu | 07/08 | Khởi đầu mùa Thu (Hành Kim)</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>Xử Thử | 23/08 | Cái nóng bắt đầu lui (Hành Kim)</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>Bạch Lộ | 07/09 | Sương mù hiện (Hành Kim)</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>Thu Phân | 22/09 | Giữa thu, ngày đêm bằng (Hành Kim)</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>Hàn Lộ | 08/10 | Sương lạnh (Hành Kim)</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>Sương Giáng | 23/10 | Sương đọng lạnh (Hành Kim)</td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td>Lập Đông | 07/11 | Khởi đầu mùa Đông (Hành Thủy)</td>
+            </tr>
+            <tr>
+                <td><b>22</b></td>
+                <td>Tiểu Tuyết | 22/11 | Tuyết rơi nhẹ (Hành Thủy)</td>
+            </tr>
+            <tr>
+                <td><b>23</b></td>
+                <td>Đại Tuyết | 07/12 | Tuyết rơi dày (Hành Thủy)</td>
+            </tr>
+            <tr>
+                <td><b>24</b></td>
+                <td>Đông Chí | 21/12 | Đêm dài nhất (Hành Thủy)</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

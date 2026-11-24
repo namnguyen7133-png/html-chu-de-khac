@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hàn Tín Điểm Binh - Bí Kíp Tấu Bi hài hước cho Dân Excel</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #38bdf8;
+            --accent-pink: #f43f5e;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --code-bg: #090d16;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 2px dashed #334155;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: var(--accent);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #334155;
+        }
+        h2 {
+            color: #fbbf24;
+            font-size: 1.5rem;
+            margin-top: 0;
+            border-left: 4px solid #fbbf24;
+            padding-left: 10px;
+        }
+        .step-box {
+            background: rgba(56, 189, 248, 0.05);
+            border-left: 3px solid var(--accent);
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .highlight {
+            color: var(--accent-pink);
+            font-weight: bold;
+        }
+        pre, code {
+            background-color: var(--code-bg);
+            color: #a5f3fc;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        pre {
+            padding: 15px;
+            overflow-x: auto;
+            border: 1px solid #1e293b;
+        }
+        .excel-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        .excel-table th, .excel-table td {
+            border: 1px solid #475569;
+            padding: 8px 12px;
+            text-align: center;
+        }
+        .excel-table th {
+            background-color: #334155;
+            color: #f8fafc;
+        }
+        .funny-note {
+            background: rgba(244, 63, 94, 0.1);
+            border: 1px dashed var(--accent-pink);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-style: italic;
+        }
+        .btn {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--bg-color);
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>⚔️ Đại Tướng Hàn Tín Điểm Binh & Nỗi Sợ Excel</h1>
+        <p class="subtitle">Bí kíp cứu rỗi cuộc đời bạn khỏi mớ công thức "dài như sớ vua ban" mà không cần tra cứu lại.</p>
+    </header>
+
+    <!-- PHẦN 1: CÂU CHUYỆN -->
+    <div class="card">
+        <h2>Chuyện gì đang xảy ra vậy?</h2>
+        <p>Hàn Tín là vị đại tướng lừng danh thời Hán, nổi tiếng với tài điểm binh "nhìn lướt qua là biết bao nhiêu quân". Còn bạn? Bạn đang ngồi trằn trọc nhìn đống cột <code>H, I, J, K...</code> tới dòng 500 chỉ để tính ngày bệnh với số chia tùm lum (3, 5, 7, 11 hay hứng lên đổi thành 4, 9, 13...).</p>
+        <p>Thay vì ngồi khóc thét trước màn hình Google Sheet hay phải copy dán công thức dài ngoằn ngoèo không hiểu mô tê gì, hãy bỏ túi ngay **Quy tắc 4 bước nhẩm nhanh** thần thánh dưới đây!</p>
+    </div>
+
+    <!-- PHẦN 2: 4 BƯỚC THẦN THÁNH -->
+    <div class="card">
+        <h2>🧠 4 Bước Nhẩm Nhanh (Chấp Mọi Loại Số Chia)</h2>
+        <p>Giả sử tổng tích các số chia của bạn là <span class="highlight">S = 1155</span>, và bạn đang cần tìm hệ số nhân cho số chia <span class="highlight">7</span>.</p>
+        
+        <div class="step-box">
+            <strong>Bước 1 (Tính phần bù $N$):</strong> Lấy tích tổng chia cho số chia của cột đó.<br>
+            👉 <em>Ví dụ:</em> $N = 1155 / 7 = 165$.
+        </div>
+
+        <div class="step-box">
+            <strong>Bước 2 (Tìm số dư cơ sở):</strong> Lấy $N$ đem chia lấy dư cho chính số chia đó.<br>
+            👉 <em>Ví dụ:</em> $165 \pmod 7 = 4$ (Dư 4, cay thế nhờ!).
+        </div>
+
+        <div class="step-box">
+            <strong>Bước 3 (Tìm hệ số nhân $k$):</strong> Nhẩm các bội số của số dư ($4 \times 1, 4 \times 2, 4 \times 3 \dots$) cho đến khi chia cho số chia (7) **dư đúng bằng 1**.<br>
+            👉 <em>Ví dụ:</em> Thử $k = 2$ thì $4 \times 2 = 8$. Mà $8 \pmod 7 = 1$ (Bingo! Chuẩn bài rồi). Vậy chọn $k = 2$.
+        </div>
+
+        <div class="step-box">
+            <strong>Bước 4 (Ra kết quả cuối):</strong> Lấy $k$ nhân ngược lại với $N$ ở Bước 1.<br>
+            👉 <em>Ví dụ:</em> Hệ số chính thức = $2 \times 165 = \mathbf{330}$. Xong phim!
+        </div>
+
+        <div class="funny-note">
+            💡 <strong>Mẹo nhỏ:</strong> Nhớ được 4 bước này thì sang bài toán nào có đổi số chia thành 4, 9, 13 hay bao nhiêu đi nữa, bạn vẫn nhẩm phát ra ngay mà không cần mở tài liệu cũ ra đọc lại.
+        </div>
+    </div>
+
+    <!-- PHẦN 3: GOOGLE SHEET & CÔNG THỨC PHỨC TẠP -->
+    <div class="card">
+        <h2>📊 Đưa Lên Google Sheet Thế Nào Cho Ngầu?</h2>
+        <p>Nếu bạn lười nhẩm và muốn "ném" mọi thứ cho Google Sheet tự gánh, đây là cách thiết lập cấu trúc bảng tính chuẩn không cần chỉnh:</p>
+
+        <p><strong>1. Khai báo tham số ở hàng 1:</strong></p>
+        <ul>
+            <li><code>O1, P1, Q1, R1</code>: Lần lượt chứa các số chia (VD: <code>3, 5, 7, 11</code>)</li>
+            <li><code>S1</code>: Tích tổng các số chia <code>=PRODUCT(O1:R1)</code> (Ra kết quả 1155)</li>
+            <li><code>T1, U1, V1, W1</code>: Các hệ số nhân tương ứng. Bạn có thể tự nhẩm điền tay (<code>385, 231, 330, 210</code>) cho lẹ, hoặc dùng công thức mảng dò tìm tự động siêu phức tạp dưới đây:</li>
+        </ul>
+
+        <pre><code>=SUMPRODUCT(($S$1/Q1 * ROW(INDIRECT("1:"&Q1))) * (MOD(($S$1/Q1 * ROW(INDIRECT("1:"&Q1))), Q1) = 1))</code></pre>
+
+        <p><strong>2. Xử lý từ dòng 2 đến 500 (Cột Y - Kết quả Thặng Dư Hàn Tín):</strong></p>
+        <p>Tại ô <code>Y2</code>, thay vì cộng dồn mấy cái tổng linh tinh, hãy dùng công thức chuẩn xác của Định lý Thặng dư Trung Hoa để nó tự động nhảy số theo số ngày <code>I2</code> của từng bệnh nhân:</p>
+
+        <pre><code>=MOD(MOD(I2, O$1)*$T$1 + MOD(I2, P$1)*$U$1 + MOD(I2, Q$1)*$V$1 + MOD(I2, R$1)*$W$1, $S$1)</code></pre>
+
+        <p style="margin-top: 15px;">Và cột <code>Z2</code> (Số vòng chu kỳ đã trôi qua từ lúc sinh):</p>
+        <pre><code>=INT(I2 / $S$1)</code></pre>
+    </div>
+
+    <!-- PHẦN 4: THƯ VIỆN THAM KHẢO -->
+    <div class="card" style="text-align: center;">
+        <h2>📺 Xem Thêm Cho Dễ Hình Dung</h2>
+        <p>Muốn xem người ta múa bảng tính và giải thích trực quan sinh động hơn? Ngó thử qua video này nhé:</p>
+        <a href="https://www.youtube.com/watch?v=0dcr3CdoxDE" target="_blank" class="btn">🚀 Xem Mẹo Giải Toán Đồng Dư Trung Hoa trên YouTube</a>
+    </div>
+
+</div>
+
+
+<!-- AUTO-SCROLL INJECTED SCRIPT -->
+<style>
+  #auto-scroll-bar {
+    position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(18, 18, 18, 0.95); color: #fff;
+    padding: 10px 20px; display: flex; justify-content: center; align-items: center; gap: 15px;
+    z-index: 99999; box-shadow: 0 -2px 10px rgba(0,0,0,0.5); font-family: sans-serif; font-size: 14px;
+    backdrop-filter: blur(5px);
+  }
+  #auto-scroll-bar button, #auto-scroll-bar input {
+    background: #2a2a2a; color: #fff; border: 1px solid #444; padding: 6px 12px; cursor: pointer; border-radius: 4px;
+  }
+  #auto-scroll-bar button:hover { background: #3a3a3a; }
+  #auto-scroll-bar input[type="range"] { cursor: pointer; }
+</style>
+<div id="auto-scroll-bar">
+  <button id="btn-toggle" onclick="toggleScroll()">⏸ Tạm dừng</button>
+  <button onclick="rewindScroll()">↺ Về đầu</button>
+  <label>Tốc độ: <span id="speed-val">1x</span></label>
+  <input type="range" id="speed-range" min="0.5" max="5" step="0.5" value="1" oninput="changeSpeed(this.value)">
+</div>
+<script>
+  let isScrolling = true;
+  let scrollSpeed = 1;
+  let scrollInterval = null;
+
+  function startAutoScroll() {
+    if (scrollInterval) clearInterval(scrollInterval);
+    scrollInterval = setInterval(() => {
+      if (!isScrolling) return;
+      window.scrollBy(0, scrollSpeed);
+      // Khi cuộn gần đến cuối trang, tự động lặp lại mượt mà về đầu
+      if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 5) {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+    }, 30);
+  }
+
+  function toggleScroll() {
+    isScrolling = !isScrolling;
+    document.getElementById('btn-toggle').innerText = isScrolling ? '⏸ Tạm dừng' : '▶ Tiếp tục';
+  }
+
+  function rewindScroll() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function changeSpeed(val) {
+    scrollSpeed = parseFloat(val);
+    document.getElementById('speed-val').innerText = val + 'x';
+  }
+
+  // Chạm/Click bất kỳ đâu (trừ thanh điều khiển) để Tạm dừng hoặc Tiếp tục
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#auto-scroll-bar')) {
+      toggleScroll();
+    }
+  });
+
+  // Tự động chạy sau khi tải trang 1 giây
+  window.onload = () => {
+    setTimeout(startAutoScroll, 1000);
+  };
+</script>
+<!-- END AUTO-SCROLL -->
+
+</body>
+</html>

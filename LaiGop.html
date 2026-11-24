@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Module 06 - Gross Profit (Lãi gộp) | CEO AI Enterprise</title>
+
+    <!-- ============================================================
+    MODULE 06: GROSS PROFIT (Lãi gộp)
+    Tác giả: CEO AI Enterprise Team
+    Mô tả: Tính toán và phân tích lãi gộp, biên lãi gộp
+            từ dữ liệu doanh thu và giá vốn hàng bán (COGS).
+    ============================================================ -->
+
+    <!-- Thư viện Chart.js cho biểu đồ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+
+    <!-- Thư viện SheetJS để xuất Excel -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js">
+    </script>
+
+    <style>
+        /* ---------- RESET & FONT ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f9;
+            padding: 30px 20px;
+            color: #1a2639;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* ---------- HEADER ---------- */
+        .module-header {
+            background: linear-gradient(135deg, #1a3c2e, #2a5e4a);
+            color: white;
+            padding: 25px 35px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0, 40, 20, 0.25);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .module-header h1 {
+            font-weight: 600;
+            font-size: 28px;
+            letter-spacing: 0.5px;
+        }
+
+        .module-header .badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .module-header .badge span {
+            color: #a8e6cf;
+            font-weight: 700;
+        }
+
+        /* ---------- GRID LAYOUT ---------- */
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 920px) {
+            .grid-2col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ---------- CARDS ---------- */
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px 28px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.25s;
+            border: 1px solid #e8edf4;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 28px rgba(0, 20, 50, 0.10);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a3c2e;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #eef3f9;
+            padding-bottom: 12px;
+        }
+
+        .card-title .icon {
+            font-size: 22px;
+        }
+
+        /* ---------- FORM ---------- */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            color: #2c405a;
+            margin-bottom: 5px;
+        }
+
+        .form-group .hint {
+            font-size: 12px;
+            color: #7a8aa3;
+            font-weight: 400;
+            margin-left: 6px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #dce3ed;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #fafcff;
+            transition: border 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2a7a5e;
+            box-shadow: 0 0 0 4px rgba(42, 122, 94, 0.12);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ---------- BUTTONS ---------- */
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: #2a7a5e;
+            color: white;
+            box-shadow: 0 6px 14px rgba(42, 122, 94, 0.30);
+        }
+
+        .btn-primary:hover {
+            background: #1e634a;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(42, 122, 94, 0.35);
+        }
+
+        .btn-success {
+            background: #1e7e34;
+            color: white;
+            box-shadow: 0 6px 14px rgba(30, 126, 52, 0.25);
+        }
+
+        .btn-success:hover {
+            background: #15692b;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #2a7a5e;
+            color: #2a7a5e;
+        }
+
+        .btn-outline:hover {
+            background: #2a7a5e;
+            color: white;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        /* ---------- KẾT QUẢ ---------- */
+        .result-box {
+            background: #f2faf7;
+            border-radius: 14px;
+            padding: 18px 22px;
+            margin-top: 20px;
+            border-left: 6px solid #2a7a5e;
+        }
+
+        .result-box .value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1a3c2e;
+        }
+
+        .result-box .label {
+            font-size: 14px;
+            color: #4a6380;
+            font-weight: 500;
+        }
+
+        .result-box .sub {
+            font-size: 14px;
+            color: #4a6380;
+            margin-top: 6px;
+        }
+
+        .result-box .gross-margin {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a7a5e;
+        }
+
+        /* ---------- AI ANALYSIS ---------- */
+        .ai-box {
+            background: linear-gradient(145deg, #f4fbf8, #e6f5ef);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-top: 18px;
+            border: 1px solid #b8e0d0;
+        }
+
+        .ai-box .ai-label {
+            font-weight: 700;
+            color: #1a3c2e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .ai-box .ai-label .spark {
+            color: #f5b342;
+        }
+
+        .ai-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .ai-box ul li {
+            padding: 6px 0 6px 24px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%232a7a5e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>') left center no-repeat;
+            background-size: 16px;
+            color: #1a2c44;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .ai-box ul li strong {
+            color: #1a4a3a;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .status-healthy {
+            background: #d4edda;
+            color: #0b5e2e;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* ---------- BIỂU ĐỒ ---------- */
+        .chart-wrapper {
+            position: relative;
+            height: 220px;
+            margin-top: 10px;
+        }
+
+        /* ---------- BẢNG DỮ LIỆU ---------- */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            font-size: 14px;
+        }
+
+        .data-table th {
+            background: #e8f5f0;
+            color: #1a3c2e;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eef3f9;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table .highlight {
+            font-weight: 700;
+            color: #2a7a5e;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-10 {
+            margin-top: 10px;
+        }
+        .mt-16 {
+            margin-top: 16px;
+        }
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* Scroll mượt */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #eef3f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b0c8dd;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8aaac9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ============================================================
+        HEADER MODULE
+        ============================================================ -->
+        <header class="module-header">
+            <div>
+                <h1>📊 Module 06 · Gross Profit (Lãi gộp)</h1>
+                <p style="opacity:0.8; margin-top:4px; font-size:15px;">
+                    Đo lường hiệu quả kinh doanh cốt lõi — lợi nhuận từ hoạt động sản xuất và bán hàng
+                </p>
+            </div>
+            <div class="badge">
+                ⚡ Trạng thái: <span>Sẵn sàng</span> &nbsp;|&nbsp; 📌 v1.0
+            </div>
+        </header>
+
+        <!-- ============================================================
+        HÀNG 1: NHẬP LIỆU + KẾT QUẢ
+        ============================================================ -->
+        <div class="grid-2col">
+            <!-- CỘT TRÁI: FORM NHẬP -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📥</span> Nhập dữ liệu tài chính
+                </div>
+
+                <div class="form-group">
+                    <label for="period">📅 Kỳ báo cáo</label>
+                    <select id="period">
+                        <option value="Q1 2026">Q1 2026</option>
+                        <option value="Q2 2026" selected>Q2 2026</option>
+                        <option value="Q3 2026">Q3 2026</option>
+                        <option value="Q4 2026">Q4 2026</option>
+                        <option value="Năm 2026">Năm 2026</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="revenue">
+                            💰 Doanh thu thuần
+                            <span class="hint">(Net Revenue)</span>
+                        </label>
+                        <input type="number" id="revenue" value="850000000" step="1000000" />
+                    </div>
+                    <div class="form-group">
+                        <label for="cogs">
+                            📦 Giá vốn hàng bán (COGS)
+                            <span class="hint">(Cost of Goods Sold)</span>
+                        </label>
+                        <input type="number" id="cogs" value="510000000" step="1000000" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cost_of_production">
+                            🏭 Chi phí sản xuất
+                            <span class="hint">(nếu có)</span>
+                        </label>
+                        <input type="number" id="cost_of_production" value="120000000" step="1000000" />
+                    </div>
+                    <div class="form-group">
+                        <label for="other_costs">
+                            📋 Chi phí khác
+                            <span class="hint">(liên quan đến giá vốn)</span>
+                        </label>
+                        <input type="number" id="other_costs" value="30000000" step="1000000" />
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="calculateGrossProfit()">🚀 Tính Lãi gộp</button>
+                    <button class="btn btn-success" onclick="saveToSQLite()">💾 Lưu SQLite</button>
+                    <button class="btn btn-outline" onclick="exportExcel()">📊 Xuất Excel</button>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI: KẾT QUẢ CHÍNH -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📊</span> Kết quả Lãi gộp
+                </div>
+
+                <div id="resultArea">
+                    <div class="result-box" style="border-left-color: #2a7a5e;">
+                        <div class="label">💰 Lãi gộp (Gross Profit)</div>
+                        <div class="value" id="grossProfitValue">---</div>
+                        <div class="sub" id="grossProfitSub">Nhập số liệu và bấm "Tính"</div>
+                    </div>
+
+                    <!-- Biên lãi gộp -->
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:16px;">
+                        <div style="background:#f2faf7; border-radius:12px; padding:14px 16px; border:1px solid #c8e0d6;">
+                            <div style="font-size:13px; color:#4a6380;">📈 Biên lãi gộp</div>
+                            <div style="font-size:26px; font-weight:700; color:#1a7a5e;" id="grossMargin">---</div>
+                        </div>
+                        <div style="background:#f2faf7; border-radius:12px; padding:14px 16px; border:1px solid #c8e0d6;">
+                            <div style="font-size:13px; color:#4a6380;">📊 Tỷ lệ COGS / Doanh thu</div>
+                            <div style="font-size:26px; font-weight:700; color:#1a3c2e;" id="cogsRatio">---</div>
+                        </div>
+                    </div>
+
+                    <!-- Trạng thái sức khỏe -->
+                    <div id="statusArea" class="mt-16">
+                        <span class="status-badge status-healthy">✅ Chưa có dữ liệu</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        HÀNG 2: PHÂN TÍCH AI + BIỂU ĐỒ
+        ============================================================ -->
+        <div class="grid-2col">
+            <!-- CỘT TRÁI: AI phân tích -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">🧠</span> Phân tích &amp; Khuyến nghị AI
+                </div>
+                <div id="aiAnalysisArea">
+                    <div class="ai-box">
+                        <div class="ai-label">
+                            <span class="spark">✦</span> Trí tuệ nhân tạo phân tích
+                        </div>
+                        <ul id="aiRecommendations">
+                            <li>⏳ Nhập dữ liệu và nhấn "Tính" để nhận phân tích.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Bảng tóm tắt dữ liệu -->
+                <div style="margin-top:18px;">
+                    <div style="font-weight:600; font-size:15px; color:#1a3c2e; margin-bottom:8px;">📋 Tóm tắt dữ liệu</div>
+                    <table class="data-table" id="summaryTable">
+                        <thead>
+                            <tr><th>Chỉ số</th><th>Giá trị</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Doanh thu thuần</td><td id="tblRevenue">---</td></tr>
+                            <tr><td>Giá vốn hàng bán (COGS)</td><td id="tblCOGS">---</td></tr>
+                            <tr><td>Chi phí sản xuất</td><td id="tblProdCost">---</td></tr>
+                            <tr><td>Chi phí khác</td><td id="tblOtherCost">---</td></tr>
+                            <tr style="font-weight:700; background:#f2faf7;"><td>Lãi gộp</td><td id="tblGrossProfit">---</td></tr>
+                            <tr style="font-weight:700; background:#f2faf7;"><td>Biên lãi gộp</td><td id="tblGrossMargin">---</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI: BIỂU ĐỒ -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📈</span> Biểu đồ phân tích
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="grossProfitChart"></canvas>
+                </div>
+                <div style="margin-top:12px; font-size:13px; color:#4a6380; text-align:center;">
+                    So sánh Doanh thu, COGS và Lãi gộp
+                </div>
+                <!-- Ghi chú -->
+                <div style="margin-top:14px; background:#f4fbf8; border-radius:12px; padding:12px 16px; border:1px dashed #8cc0ae;">
+                    <span style="font-weight:600;">💡 Công thức:</span>
+                    <span style="color:#1a3c2e; font-family:monospace; font-size:14px;">
+                        Lãi gộp = Doanh thu − Giá vốn hàng bán
+                    </span>
+                    <span style="display:block; font-size:13px; color:#4a6380; margin-top:4px;">
+                        Biên lãi gộp = (Lãi gộp / Doanh thu) × 100%
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        HÀNG 3: THÔNG TIN MODULE
+        ============================================================ -->
+        <div style="margin-top:10px; text-align:center; font-size:13px; color:#6f88a0; border-top:1px solid #dce6f0; padding-top:20px;">
+            <span>🧩 Module 06 / 100 · CEO AI Enterprise</span>
+            <span style="margin:0 12px;">|</span>
+            <span>⚡ Python + SQLite + HTML Dashboard</span>
+            <span style="margin:0 12px;">|</span>
+            <span>📅 Phiên bản 1.0 · Sẵn sàng tích hợp</span>
+        </div>
+
+    </div>
+
+    <!-- ============================================================
+    JAVASCRIPT - LOGIC CHÍNH
+    ============================================================ -->
+    <script>
+        /**
+         * ============================================================
+         * MODULE 06: GROSS PROFIT (Lãi gộp)
+         * ============================================================
+         * Tác giả: CEO AI Enterprise Team
+         * Mô tả: 
+         *   - Tính Gross Profit = Revenue - COGS
+         *   - Tính Gross Margin = (Gross Profit / Revenue) * 100%
+         *   - Hiển thị biểu đồ so sánh
+         *   - Đánh giá trạng thái dựa trên biên lãi gộp
+         *   - Đưa ra khuyến nghị AI
+         *   - Hỗ trợ lưu SQLite (giả lập) và xuất Excel
+         * ============================================================
+         */
+
+        // ---- Biến toàn cục ----
+        let chartInstance = null; // Lưu instance biểu đồ
+
+        // ---- Hàm định dạng tiền tệ ----
+        function formatCurrency(value) {
+            if (value === undefined || value === null || isNaN(value)) return '---';
+            const num = Number(value);
+            if (num >= 1e9) return (num / 1e9).toFixed(1) + ' tỷ';
+            if (num >= 1e6) return (num / 1e6).toFixed(1) + ' tr';
+            return num.toLocaleString('vi-VN') + ' đ';
+        }
+
+        /**
+         * Hàm chính: TÍNH LÃI GỘP
+         * Đọc dữ liệu từ form, tính toán, cập nhật giao diện và biểu đồ.
+         */
+        function calculateGrossProfit() {
+            // ---- 1. Đọc dữ liệu đầu vào ----
+            const period = document.getElementById('period').value;
+            const revenue = parseFloat(document.getElementById('revenue').value) || 0;
+            const cogs = parseFloat(document.getElementById('cogs').value) || 0;
+            const prodCost = parseFloat(document.getElementById('cost_of_production').value) || 0;
+            const otherCost = parseFloat(document.getElementById('other_costs').value) || 0;
+
+            // ---- 2. Tính COGS tổng hợp (nếu có chi phí phụ) ----
+            const totalCOGS = cogs + prodCost + otherCost;
+            
+            // ---- 3. Tính Lãi gộp và Biên lãi gộp ----
+            const grossProfit = revenue - totalCOGS;
+            const grossMargin = revenue !== 0 ? (grossProfit / revenue) * 100 : 0;
+            const cogsRatio = revenue !== 0 ? (totalCOGS / revenue) * 100 : 0;
+
+            // ---- 4. Cập nhật hiển thị kết quả ----
+            document.getElementById('grossProfitValue').textContent = formatCurrency(grossProfit);
+            document.getElementById('grossProfitSub').textContent = `Kỳ: ${period} · COGS: ${formatCurrency(totalCOGS)}`;
+
+            document.getElementById('grossMargin').textContent = grossMargin.toFixed(1) + '%';
+            document.getElementById('cogsRatio').textContent = cogsRatio.toFixed(1) + '%';
+
+            // Cập nhật bảng tóm tắt
+            document.getElementById('tblRevenue').textContent = formatCurrency(revenue);
+            document.getElementById('tblCOGS').textContent = formatCurrency(cogs);
+            document.getElementById('tblProdCost').textContent = formatCurrency(prodCost);
+            document.getElementById('tblOtherCost').textContent = formatCurrency(otherCost);
+            document.getElementById('tblGrossProfit').textContent = formatCurrency(grossProfit);
+            document.getElementById('tblGrossMargin').textContent = grossMargin.toFixed(1) + '%';
+
+            // ---- 5. Đánh giá trạng thái sức khỏe ----
+            let statusHTML = '';
+            let statusClass = '';
+            let statusText = '';
+
+            if (grossMargin >= 40) {
+                statusClass = 'status-healthy';
+                statusText = '✅ Rất khỏe — Biên lãi gộp ≥ 40%';
+            } else if (grossMargin >= 30 && grossMargin < 40) {
+                statusClass = 'status-healthy';
+                statusText = '✅ Tốt — Biên lãi gộp từ 30-40%';
+            } else if (grossMargin >= 20 && grossMargin < 30) {
+                statusClass = 'status-warning';
+                statusText = '⚠️ Trung bình — Biên lãi gộp 20-30%, cần cải thiện';
+            } else if (grossMargin >= 10 && grossMargin < 20) {
+                statusClass = 'status-warning';
+                statusText = '⚠️ Cảnh báo — Biên lãi gộp thấp (10-20%)';
+            } else if (grossMargin > 0 && grossMargin < 10) {
+                statusClass = 'status-danger';
+                statusText = '🔴 Rất thấp — Biên lãi gộp dưới 10%, rủi ro cao';
+            } else if (grossMargin <= 0) {
+                statusClass = 'status-danger';
+                statusText = '🔴 Lỗ gộp — Doanh thu không đủ bù đắp giá vốn';
+            } else {
+                statusClass = 'status-healthy';
+                statusText = '✅ Ổn định';
+            }
+
+            document.getElementById('statusArea').innerHTML = `
+                <span class="status-badge ${statusClass}">${statusText}</span>
+                <span style="margin-left:12px; font-size:13px; color:#4a6380;">
+                    Biên lãi gộp: ${grossMargin.toFixed(1)}%
+                </span>
+            `;
+
+            // ---- 6. Phân tích AI & Khuyến nghị ----
+            const aiList = document.getElementById('aiRecommendations');
+            let recommendations = [];
+
+            // Phân tích dựa trên biên lãi gộp
+            if (grossMargin >= 40) {
+                recommendations.push('🌟 <strong>Biên lãi gộp rất cao</strong> (≥40%). Doanh nghiệp có lợi thế cạnh tranh mạnh về giá hoặc chi phí sản xuất thấp.');
+                recommendations.push('📈 <strong>Tiềm năng sinh lời lớn</strong> — có thể đầu tư mạnh vào R&D, marketing hoặc mở rộng thị trường.');
+            } else if (grossMargin >= 30) {
+                recommendations.push('👍 <strong>Biên lãi gộp tốt</strong> (30-40%). Doanh nghiệp đang hoạt động hiệu quả trong ngành.');
+                recommendations.push('🔍 <strong>Cơ hội cải thiện</strong> — tối ưu hóa chuỗi cung ứng hoặc tăng giá bán có thể nâng biên lên >40%.');
+            } else if (grossMargin >= 20) {
+                recommendations.push('📊 <strong>Biên lãi gộp trung bình</strong> (20-30%). Cần xem xét lại cơ cấu giá và chi phí.');
+                recommendations.push('🛠️ <strong>Giải pháp:</strong> Đàm phán nhà cung cấp, tự động hóa sản xuất hoặc chuyển dịch sang sản phẩm giá trị cao.');
+            } else if (grossMargin >= 10) {
+                recommendations.push('⚠️ <strong>Biên lãi gộp thấp</strong> (10-20%). Áp lực cạnh tranh hoặc chi phí sản xuất cao.');
+                recommendations.push('🚨 <strong>Rủi ro:</strong> Dễ bị tổn thương khi chi phí tăng hoặc doanh thu giảm. Cần hành động khẩn cấp.');
+            } else if (grossMargin > 0) {
+                recommendations.push('🔻 <strong>Biên lãi gộp rất mỏng</strong> (dưới 10%). Doanh nghiệp đang hoạt động gần điểm hòa vốn.');
+                recommendations.push('🏥 <strong>Khẩn cấp:</strong> Cần cơ cấu lại chi phí, tăng giá hoặc đổi mới sản phẩm để tồn tại.');
+            } else {
+                recommendations.push('🚫 <strong>Lỗ gộp</strong> — doanh thu không đủ bù đắp chi phí sản xuất.');
+                recommendations.push('🆘 <strong>Tình huống nguy cấp:</strong> Cần tái cấu trúc toàn bộ hoạt động kinh doanh, tìm kiếm nguồn vốn khẩn cấp.');
+            }
+
+            // Phân tích COGS
+            if (cogsRatio < 40) {
+                recommendations.push('✅ <strong>COGS chiếm dưới 40% doanh thu</strong> — kiểm soát chi phí tốt.');
+            } else if (cogsRatio < 60) {
+                recommendations.push('⚖️ <strong>COGS chiếm 40-60% doanh thu</strong> — ở mức trung bình cho hầu hết ngành.');
+            } else {
+                recommendations.push('📈 <strong>COGS chiếm trên 60% doanh thu</strong> — chi phí sản xuất quá cao, ảnh hưởng đến lợi nhuận.');
+            }
+
+            // Khuyến nghị chiến lược
+            if (grossMargin >= 35) {
+                recommendations.push('🎯 <strong>Chiến lược:</strong> Tận dụng biên lãi gộp cao để đầu tư phát triển sản phẩm mới, mở rộng thị trường.');
+            } else if (grossMargin >= 20) {
+                recommendations.push('📌 <strong>Chiến lược:</strong> Tập trung vào tối ưu hóa chi phí và nâng cao giá trị sản phẩm để tăng biên lãi gộp.');
+            } else {
+                recommendations.push('🔄 <strong>Chiến lược:</strong> Cần thay đổi mô hình kinh doanh, cắt giảm chi phí cố định, tăng hiệu quả vận hành.');
+            }
+
+            // Thêm lưu ý về chi phí phụ
+            if (prodCost > 0 || otherCost > 0) {
+                recommendations.push(`📘 <strong>Lưu ý:</strong> Chi phí sản xuất (${formatCurrency(prodCost)}) và chi phí khác (${formatCurrency(otherCost)}) đã được gộp vào COGS.`);
+            }
+
+            // Render danh sách AI
+            aiList.innerHTML = recommendations.map(item => `<li>${item}</li>`).join('');
+
+            // ---- 7. Vẽ biểu đồ ----
+            renderChart(period, revenue, totalCOGS, grossProfit);
+
+            // ---- 8. (Giả lập) Lưu vào SQLite ----
+            // Dữ liệu sẽ được lưu khi bấm nút "Lưu SQLite"
+        }
+
+        /**
+         * Vẽ biểu đồ cột so sánh Revenue, COGS, Gross Profit
+         */
+        function renderChart(period, revenue, cogs, grossProfit) {
+            const ctx = document.getElementById('grossProfitChart').getContext('2d');
+
+            // Hủy biểu đồ cũ nếu tồn tại
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Doanh thu', 'COGS', 'Lãi gộp'],
+                    datasets: [{
+                        label: `Giá trị (${period})`,
+                        data: [revenue, cogs, grossProfit],
+                        backgroundColor: [
+                            'rgba(42, 122, 94, 0.78)',
+                            'rgba(220, 100, 80, 0.78)',
+                            grossProfit >= 0 ? 'rgba(40, 167, 69, 0.85)' :
+                            'rgba(220, 53, 69, 0.85)'
+                        ],
+                        borderColor: [
+                            '#2a7a5e',
+                            '#b45a4a',
+                            grossProfit >= 0 ? '#28a745' : '#dc3545'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return formatCurrency(context.raw);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * LƯU VÀO SQLITE (giả lập)
+         * Trong thực tế, sẽ gọi API Python để lưu vào SQLite.
+         */
+        function saveToSQLite() {
+            const period = document.getElementById('period').value;
+            const revenue = parseFloat(document.getElementById('revenue').value) || 0;
+            const cogs = parseFloat(document.getElementById('cogs').value) || 0;
+            const prodCost = parseFloat(document.getElementById('cost_of_production').value) || 0;
+            const otherCost = parseFloat(document.getElementById('other_costs').value) || 0;
+            const totalCOGS = cogs + prodCost + otherCost;
+            const grossProfit = revenue - totalCOGS;
+            const grossMargin = revenue !== 0 ? (grossProfit / revenue) * 100 : 0;
+
+            // Tạo object dữ liệu
+            const data = {
+                module: '06_GrossProfit',
+                period: period,
+                revenue: revenue,
+                cogs: cogs,
+                prodCost: prodCost,
+                otherCost: otherCost,
+                totalCOGS: totalCOGS,
+                grossProfit: grossProfit,
+                grossMargin: grossMargin,
+                timestamp: new Date().toISOString()
+            };
+
+            // Giả lập lưu: hiển thị thông báo + log
+            console.log('💾 [SQLite] Dữ liệu đã được lưu:', data);
+
+            // Hiển thị thông báo
+            showToast('✅ Đã lưu dữ liệu vào SQLite (giả lập)!', 'success');
+        }
+
+        /**
+         * XUẤT EXCEL sử dụng thư viện SheetJS
+         */
+        function exportExcel() {
+            const period = document.getElementById('period').value;
+            const revenue = parseFloat(document.getElementById('revenue').value) || 0;
+            const cogs = parseFloat(document.getElementById('cogs').value) || 0;
+            const prodCost = parseFloat(document.getElementById('cost_of_production').value) || 0;
+            const otherCost = parseFloat(document.getElementById('other_costs').value) || 0;
+            const totalCOGS = cogs + prodCost + otherCost;
+            const grossProfit = revenue - totalCOGS;
+            const grossMargin = revenue !== 0 ? (grossProfit / revenue) * 100 : 0;
+
+            // Chuẩn bị dữ liệu cho Excel
+            const wsData = [
+                ['Module 06 - Gross Profit (Lãi gộp)'],
+                ['Kỳ báo cáo', period],
+                [],
+                ['Chỉ số', 'Giá trị (VNĐ)'],
+                ['Doanh thu thuần', revenue],
+                ['Giá vốn hàng bán (COGS)', cogs],
+                ['Chi phí sản xuất', prodCost],
+                ['Chi phí khác', otherCost],
+                ['Tổng COGS', totalCOGS],
+                ['Lãi gộp', grossProfit],
+                ['Biên lãi gộp', grossMargin.toFixed(1) + '%'],
+                [],
+                ['Ngày xuất', new Date().toLocaleString('vi-VN')]
+            ];
+
+            // Tạo workbook
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            XLSX.utils.book_append_sheet(wb, ws, 'GrossProfit');
+
+            // Xuất file
+            XLSX.writeFile(wb, `GrossProfit_${period.replace(/\s/g, '_')}.xlsx`);
+
+            showToast('📊 Đã xuất file Excel thành công!', 'info');
+        }
+
+        /**
+         * HIỂN THỊ TOAST THÔNG BÁO
+         */
+        function showToast(message, type = 'info') {
+            // Tạo toast tạm thời
+            const toast = document.createElement('div');
+            toast.style.position = 'fixed';
+            toast.style.bottom = '30px';
+            toast.style.right = '30px';
+            toast.style.padding = '16px 28px';
+            toast.style.borderRadius = '14px';
+            toast.style.fontWeight = '500';
+            toast.style.fontSize = '15px';
+            toast.style.boxShadow = '0 8px 30px rgba(0,0,0,0.15)';
+            toast.style.zIndex = '9999';
+            toast.style.transition = 'all 0.3s ease';
+            toast.style.background = type === 'success' ? '#d4edda' : '#cce5ff';
+            toast.style.color = type === 'success' ? '#0b5e2e' : '#004085';
+            toast.style.border = '1px solid ' + (type === 'success' ? '#b7d4c0' : '#b8d4f0');
+            toast.textContent = message;
+
+            document.body.appendChild(toast);
+
+            // Tự động biến mất sau 3.5s
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(20px)';
+                setTimeout(() => toast.remove(), 400);
+            }, 3200);
+        }
+
+        /**
+         * TỰ ĐỘNG TÍNH KHI TRANG LOAD XONG
+         * Giúp hiển thị dữ liệu mẫu ngay lập tức.
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateGrossProfit();
+        });
+
+        /**
+         * ============================================================
+         * MỞ RỘNG: Kết nối với Python và SQLite sau này
+         * ============================================================
+         * Để tích hợp với Python backend, ta có thể sử dụng fetch() 
+         * để gửi dữ liệu đến API Python (Flask/FastAPI).
+         * 
+         * Ví dụ:
+         *   async function saveToDB(data) {
+         *       const response = await fetch('/api/save_gross_profit', {
+         *           method: 'POST',
+         *           headers: { 'Content-Type': 'application/json' },
+         *           body: JSON.stringify(data)
+         *       });
+         *       return response.json();
+         *   }
+         * 
+         * Module này đã được thiết kế với các hàm clear, dễ dàng mở rộng.
+         * ============================================================
+         */
+    </script>
+
+</body>
+</html>

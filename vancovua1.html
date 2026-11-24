@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bản Đồ Bàn Cờ Tranh Chấp Đất Đai - 64 Chiến Lược Pháp Lý</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                        },
+                        protect: {
+                            bg: '#0f172a',
+                            card: '#1e293b',
+                            accent: '#0284c7',
+                            border: '#38bdf8'
+                        },
+                        encroach: {
+                            bg: '#18181b',
+                            card: '#27272a',
+                            accent: '#e11d48',
+                            border: '#fb7185'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* Chess Pattern styling */
+        .cell-protect-light { background-color: #1e293b; }
+        .cell-protect-dark { background-color: #0f172a; }
+        .cell-encroach-light { background-color: #27272a; }
+        .cell-encroach-dark { background-color: #18181b; }
+
+        .cell-protect-light:hover, .cell-protect-dark:hover {
+            background-color: #0369a1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+        }
+
+        .cell-encroach-light:hover, .cell-encroach-dark:hover {
+            background-color: #be123c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4);
+        }
+
+        /* Backdrop Blur Smooth Transition */
+        .modal-animate {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <!-- Brand Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="p-2.5 bg-gradient-to-br from-amber-500 to-amber-700 rounded-xl shadow-lg shadow-amber-500/20 text-slate-950 font-bold">
+                        <i class="fa-solid font-black fa-chess-board text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2">
+                            BÀN CỜ TRANH CHẤP ĐẤT ĐAI
+                            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">64 Ô Chiến Lược</span>
+                        </h1>
+                        <p class="text-xs sm:text-sm text-slate-400">Cẩm nang cờ thế pháp lý: 32 Khó khăn bảo vệ & 32 Thủ đoạn phòng ngừa</p>
+                    </div>
+                </div>
+
+                <!-- Controls & Tools -->
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                    <!-- Search Input -->
+                    <div class="relative flex-1 sm:w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                        <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Tìm kiếm nội dung, từ khóa..." 
+                            class="w-full pl-9 pr-8 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all">
+                        <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </button>
+                    </div>
+
+                    <!-- View Switcher -->
+                    <div class="flex bg-slate-800 p-1 rounded-lg border border-slate-700">
+                        <button id="btnGridView" onclick="switchView('grid')" class="px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all bg-amber-500 text-slate-950 shadow-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-border-all"></i> <span class="hidden sm:inline">Bàn Cờ</span>
+                        </button>
+                        <button id="btnListView" onclick="switchView('list')" class="px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all text-slate-300 hover:text-white flex items-center gap-1.5">
+                            <i class="fa-solid fa-list-ul"></i> <span class="hidden sm:inline">Danh Sách</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-6 flex-1 w-full">
+
+        <!-- Board Section Header Legend -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <!-- Left Side Legend -->
+            <div class="p-4 rounded-xl bg-gradient-to-r from-sky-950/80 to-slate-900 border border-sky-800/50 flex items-center justify-between shadow-lg">
+                <div class="flex items-center space-x-3">
+                    <span class="w-8 h-8 rounded-lg bg-sky-600 text-white flex items-center justify-center font-bold text-base shadow-md">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </span>
+                    <div>
+                        <h2 class="text-base font-bold text-sky-400 uppercase tracking-wide">Nửa Bên Trái (Ô 01 - 32)</h2>
+                        <p class="text-xs text-slate-300">Khó Khăn Bảo Vệ Đất & Giải Pháp Pháp Lý</p>
+                    </div>
+                </div>
+                <span class="text-xs font-semibold px-2.5 py-1 bg-sky-900/60 text-sky-300 rounded-md border border-sky-700/50">32 Thế Thủ</span>
+            </div>
+
+            <!-- Right Side Legend -->
+            <div class="p-4 rounded-xl bg-gradient-to-r from-rose-950/80 to-slate-900 border border-rose-800/50 flex items-center justify-between shadow-lg">
+                <div class="flex items-center space-x-3">
+                    <span class="w-8 h-8 rounded-lg bg-rose-600 text-white flex items-center justify-center font-bold text-base shadow-md">
+                        <i class="fa-solid fa-chess-knight"></i>
+                    </span>
+                    <div>
+                        <h2 class="text-base font-bold text-rose-400 uppercase tracking-wide">Nửa Bên Phải (Ô 33 - 64)</h2>
+                        <p class="text-xs text-slate-300">Thủ Đoạn Lấn Chiếm & Phòng Tránh Rủi Ro</p>
+                    </div>
+                </div>
+                <span class="text-xs font-semibold px-2.5 py-1 bg-rose-900/60 text-rose-300 rounded-md border border-rose-700/50">32 Thế Công/Phòng</span>
+            </div>
+        </div>
+
+        <!-- VIEW 1: CHESSBOARD GRID (8x8) -->
+        <div id="chessboardContainer" class="w-full overflow-x-auto pb-4">
+            <div class="min-w-[700px] md:min-w-0 bg-slate-900 p-3 sm:p-4 rounded-2xl border border-slate-800 shadow-2xl">
+                <!-- Column Labels (A-H) -->
+                <div class="grid grid-cols-8 gap-1.5 sm:gap-2 mb-2 text-center text-xs font-bold text-slate-500">
+                    <div>CỘT A</div><div>CỘT B</div><div>CỘT C</div><div>CỘT D</div>
+                    <div>CỘT E</div><div>CỘT F</div><div>CỘT G</div><div>CỘT H</div>
+                </div>
+
+                <!-- 8x8 Chessboard Grid -->
+                <div id="chessboardGrid" class="grid grid-cols-8 gap-1.5 sm:gap-2.5 aspect-square max-w-full">
+                    <!-- Dynamic rendering via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 2: LIST VIEW (Hidden by default) -->
+        <div id="listViewContainer" class="hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Left Column List -->
+                <div class="bg-slate-900 p-4 sm:p-6 rounded-2xl border border-sky-900/40 shadow-xl">
+                    <h3 class="text-lg font-bold text-sky-400 mb-4 pb-2 border-b border-sky-800/40 flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved"></i> 32 Khó Khăn Bảo Vệ Đất & Cách Giải Quyết
+                    </h3>
+                    <div id="protectList" class="space-y-3">
+                        <!-- Dynamic JS -->
+                    </div>
+                </div>
+
+                <!-- Right Column List -->
+                <div class="bg-slate-900 p-4 sm:p-6 rounded-2xl border border-rose-900/40 shadow-xl">
+                    <h3 class="text-lg font-bold text-rose-400 mb-4 pb-2 border-b border-rose-800/40 flex items-center gap-2">
+                        <i class="fa-solid fa-user-ninja"></i> 32 Thủ Đoạn Lấn Chiếm & Phòng Tránh Rủi Ro
+                    </h3>
+                    <div id="encroachList" class="space-y-3">
+                        <!-- Dynamic JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Info -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-4 text-center text-xs text-slate-400 mt-8">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="font-medium text-slate-300">Cẩm Nang Tra Cứu Pháp Lý Tranh Chấp Đất Đai - 64 Phương Án Ứng Phó Vững Chắc</p>
+            <p class="mt-1 text-slate-400">Lưu ý: Mọi phương án cần tuân thủ nghiêm ngặt Luật Đất đai và Bộ luật Dân sự Việt Nam hiện hành.</p>
+        </div>
+    </footer>
+
+    <!-- MODAL / POPUP DIALOG -->
+    <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 hidden modal-animate bg-slate-950/80 backdrop-blur-md">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden relative transform transition-all scale-95 opacity-0" id="modalContent">
+            
+            <!-- Modal Header -->
+            <div id="modalHeader" class="p-4 sm:p-5 border-b border-slate-800 flex items-start justify-between">
+                <div class="flex items-center gap-3 pr-6">
+                    <span id="modalBadge" class="px-3 py-1 rounded-lg text-sm font-black tracking-wider text-slate-950 bg-amber-400 shrink-0">
+                        Ô 01
+                    </span>
+                    <div>
+                        <span id="modalCategory" class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">BẢO VỆ ĐẤT</span>
+                        <h3 id="modalTitle" class="text-lg sm:text-xl font-bold text-white mt-0.5 leading-snug">Tiêu đề tình huống</h3>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Modal Scrollable Body -->
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-5 text-sm sm:text-base leading-relaxed text-slate-300">
+                
+                <!-- Section 1: Context/Analysis -->
+                <div id="sectionContextContainer" class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60">
+                    <h4 id="contextHeader" class="text-xs font-bold uppercase tracking-wider text-amber-400 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-nodes"></i> BỐI CẢNH & PHÂN TÍCH THỰC TẾ
+                    </h4>
+                    <p id="modalContext" class="text-slate-200 text-sm sm:text-base">Nội dung bối cảnh...</p>
+                </div>
+
+                <!-- Section 2: Solution/Risk Mitigation -->
+                <div id="sectionSolutionContainer" class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60">
+                    <h4 id="solutionHeader" class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-gavel"></i> GIẢI PHÁP PHÁP LÝ & THỰC TIỄN
+                    </h4>
+                    <p id="modalSolution" class="text-slate-200 text-sm sm:text-base whitespace-pre-line">Nội dung giải pháp...</p>
+                </div>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 border-t border-slate-800 bg-slate-900/80 flex items-center justify-between text-xs text-slate-400">
+                <span class="italic"><i class="fa-solid fa-circle-info"></i> Nhấn ESC hoặc click bên ngoài để đóng</span>
+                <button onclick="closeModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-lg transition-colors">
+                    Đóng cửa sổ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT DATA & LOGIC -->
+    <script>
+        // Data Structure for 64 Chessboard Squares
+        const chessData = [
+            // ================= 32 KHÓ KHĂN BẢO VỆ ĐẤT (Ô 01 - 32) =================
+            {
+                id: 1, type: 'protect', title: 'Mất Sổ Đỏ Gốc',
+                short: 'Mất giấy tờ chứng nhận quyền sử dụng đất',
+                context: 'Sổ đỏ bị thất lạc, cháy hỏng hoặc bị bên khác cố tình cất giấu/chiếm đoạt dẫn đến thiếu chứng cứ chứng minh quyền sử dụng hợp pháp.',
+                solution: '1. Nộp đơn khai báo mất sổ đai tại UBND cấp xã nơi có đất.\n2. Yêu cầu UBND xã niêm yết công khai thông tin mất sổ trong 30 ngày.\n3. Nộp hồ sơ xin cấp lại Giấy chứng nhận tại Văn phòng Đăng ký đất đai.\n4. Đề nghị phong tỏa biến động tạm thời để ngăn kẻ gian giao dịch trái phép.'
+            },
+            {
+                id: 2, type: 'protect', title: 'Tranh Chấp Ranh Giới Hộ Liền Kề',
+                short: 'Hàng xóm lấn từng centimet ranh giới',
+                context: 'Hàng xóm lợi dụng lúc ranh giới chưa xây tường cố định để nhích cọc mốc, xây tường hoặc trồng cây lấn qua đất nhà mình.',
+                solution: '1. Giữ nguyên hiện trạng, chụp ảnh/quay video mốc giới thực tế.\n2. Mời Văn phòng Đăng ký Đất đai hoặc công ty đo đạc trích đo lại ranh giới.\n3. Gửi đơn yêu cầu UBND xã tổ chức hòa giải ranh giới.\n4. Mời Thừa phát lại lập Vi bằng ghi nhận hiện trạng vi phạm.'
+            },
+            {
+                id: 3, type: 'protect', title: 'Đất Vắng Chủ Bị Chiếm',
+                short: 'Chủ ở xa, đất trống bị nhảy dù',
+                context: 'Đất bỏ trống hoặc chủ hộ sống ở thành phố/nước ngoài, bị đối tượng xấu tự ý đến dọn dẹp, quây tôn, đổ xà bần nhận làm của mình.',
+                solution: '1. Ủy quyền hợp pháp cho người thân hoặc luật sư đại diện quản lý.\n2. Xây tường rào kiên cố, lắp biển báo chủ sở hữu + số điện thoại + camera SIM 4G.\n3. Gửi đơn tố cáo hành vi Xâm phạm chỗ ở/tài sản tới Công an phường/xã.\n4. Báo cáo UBND xã lập biên bản vi phạm hành chính đối với kẻ chiếm đất.'
+            },
+            {
+                id: 4, type: 'protect', title: 'Kê Khai Chồng Chéo Địa Chính',
+                short: 'Cấp trùng sổ, chồng mảnh trên bản đồ',
+                context: 'Cơ quan tài nguyên môi trường đo đạc sai sót dẫn đến cấp Giấy chứng nhận cho 2 chủ thể khác nhau trên cùng một phần diện tích.',
+                solution: '1. Xin trích lục bản đồ địa chính các thời kỳ (Bản đồ 299, 60, bản đồ KTS).\n2. Yêu cầu Văn phòng Đăng ký đất đai đối soát hồ sơ gốc cấp Giấy chứng nhận.\n3. Nộp đơn đề nghị đính chính/thu hồi sổ cấp sai theo Điều 106 Luật Đất đai.\n4. Khởi kiện vụ án hành chính hủy GCN cấp sai nếu cơ quan không tự sửa.'
+            },
+            {
+                id: 5, type: 'protect', title: 'Chính Quyền Trì Hoãn Hòa Giải',
+                short: 'UBND xã ngâm đơn không giải quyết',
+                context: 'Nộp đơn hòa giải tranh chấp đất đai tại xã nhưng bị đùn đẩy, kéo dài quá thời hạn 45 ngày theo luật định.',
+                solution: '1. Gửi đơn theo hình thức chuyển phát nhanh có báo phát hoặc nộp lấy giấy biên nhận.\n2. Làm đơn khiếu nại hành vi hành chính của Chủ tịch UBND xã lên Chủ tịch UBND cấp huyện.\n3. Nhờ luật sư gửi văn bản yêu cầu thực hiện đúng chức năng quản lý nhà nước.\n4. Dùng xác nhận đã nộp đơn quá hạn làm căn cứ khởi kiện thẳng ra Tòa án.'
+            },
+            {
+                id: 6, type: 'protect', title: 'Bị Đối Phương Ép Giá Rẻ',
+                short: 'Bị ép bán tháo vì tranh chấp kéo dài',
+                context: 'Đối phương gây áp lực, phá rối, tạo tranh chấp giả để gia chủ nản chí phải bán lại mảnh đất với giá rẻ mạt.',
+                solution: '1. Tuyệt đối không hoảng loạn hoặc thỏa thuận nhượng bộ dưới áp lực bất hợp pháp.\n2. Lập văn bản ủy quyền toàn bộ vụ việc cho Luật sư xử lý.\n3. Tố giác hành vi Cưỡng đoạt tài sản hoặc Đe dọa tới cơ quan điều tra Côn an.\n4. Công khai tình trạng pháp lý để ngăn ngừa việc ép giá.'
+            },
+            {
+                id: 7, type: 'protect', title: 'Đối Phương Hối Lộ Cán Bộ',
+                short: 'Lo ngại đối phương thao túng địa chính',
+                context: 'Đối phương có mối quan hệ thân thiết hoặc hối lộ cán bộ địa chính xã/huyện nhằm làm lệch hồ sơ đo đạc.',
+                solution: '1. Thu thập chứng cứ đo đạc độc lập từ các đơn vị kiểm định tư nhân có giấy phép.\n2. Đề nghị cán bộ cấp tỉnh/trung ương về phúc tra lại hiện trạng địa chính.\n3. Gửi đơn khiếu nại/tố cáo có kèm chứng cứ lên Thanh tra Sở Tài nguyên & Môi trường.\n4. Yêu cầu giám định kỹ thuật hình sự đối với chữ ký, dấu ấn hồ sơ.'
+            },
+            {
+                id: 8, type: 'protect', title: 'Xã Hội Đen Đe Dọa Bao Vây',
+                short: 'Cho giang hồ đến quấy rối, răn đe',
+                context: 'Bị nhóm đối tượng lạ mặt đến đe dọa, chửi bới, đổ chất bẩn, không cho gia đình rào đất hay sử dụng đất.',
+                solution: '1. Lắp hệ thống camera giấu kín và camera công khai để ghi lại toàn bộ hành vi.\n2. Trình báo khẩn cấp qua đường dây nóng Công an 113 và Công an Huyện.\n3. Mời Thừa phát lại lập vi bằng hành vi đe dọa, khủng bố tinh thần.\n4. Gửi đơn kiến nghị bảo vệ khẩn cấp tới Viện kiểm sát nhân dân.'
+            },
+            {
+                id: 9, type: 'protect', title: 'Giấy Tờ Mua Bán Vi Bằng/Vi Tay',
+                short: 'Mua đất không sang tên chính thức',
+                context: 'Đất mua bằng giấy viết tay hoặc vi bằng Thừa phát lại trước đây, nay chủ cũ lật lọng đòi lại đất.',
+                solution: '1. Thu thập chứng cứ giao nhận tiền (biên nhận, chuyển khoản, người làm chứng).\n2. Thu thập hóa đơn đóng thuế đất, điện nước liên tục từ thời điểm mua.\n3. Áp dụng Nghị định 01/2017/NĐ-CP đối với đất mua giấy tay trước 01/01/2008 hoặc 01/07/2014.\n4. Yêu cầu Tòa án công nhận giao dịch theo quy định Dân sự nếu đã trả đủ tiền.'
+            },
+            {
+                id: 10, type: 'protect', title: 'Mất Mốc Ranh Giới Tự Nhiên',
+                short: 'Cây làm mốc bị chặt, ao/suối đổi dòng',
+                context: 'Tranh chấp phát sinh khi mốc giới tự nhiên (gốc cây, con suối, bờ cống) bị biến dạng hoặc phá hủy.',
+                solution: '1. Trích lục bản đồ địa chính lịch sử ghi nhận tọa độ VN-2000.\n2. Thu thập hình ảnh vệ tinh lịch sử (Google Earth Pro) để chứng minh mốc cũ.\n3. Lấy xác nhận của các hộ dân sinh sống lâu đời xung quanh về vị trí bờ mốc xưa.\n4. Báo cơ quan chuyên môn định vị lại mốc bằng thiết bị vệ tinh GPS chuyên dụng.'
+            },
+            {
+                id: 11, type: 'protect', title: 'Đối Phương Làm Giả Giấy Tờ',
+                short: 'Dùng sổ đỏ giả, hợp đồng giả',
+                context: 'Bên tranh chấp trưng ra các tài liệu mua bán, giấy cho tặng hoặc sổ đỏ được làm giả tinh vi.',
+                solution: '1. Đề nghị Tòa án/Công an trưng cầu giám định kỹ thuật hình sự (con dấu, chữ ký, phôi giấy).\n2. Yêu cầu Văn phòng đăng ký đất đai xác minh mã số seri trên Giấy chứng nhận.\n3. Tố giác tội phạm "Làm giả tài liệu của cơ quan, tổ chức" theo Bộ luật Hình sự.\n4. Thu thập mẫu chữ ký chuẩn của người liên quan qua các thời kỳ.'
+            },
+            {
+                id: 12, type: 'protect', title: 'Tranh Chấp Thừa Kế Đồng Tộc',
+                short: 'Anh em trong họ hàng tranh chấp đất tổ tiên',
+                context: 'Đất dòng họ/tổ tiên để lại không có di chúc, các con cháu tranh chấp chia phần sau hàng chục năm.',
+                solution: '1. Xác định rõ nguồn gốc đất (của ai, cấp năm nào, di sản thừa kế của ai).\n2. Kiểm tra thời hiệu thừa kế bất động sản (30 năm theo Bộ luật Dân sự).\n3. Tổ chức họp dòng họ có ghi biên bản, người làm chứng đầy đủ.\n4. Hướng dẫn phân chia theo thừa kế pháp luật tại Tòa án nếu không tự thỏa thuận.'
+            },
+            {
+                id: 13, type: 'protect', title: 'Bị Khóa Đường Vào Thửa Đất',
+                short: 'Lối đi duy nhất bị bao vây, bị bịt kín',
+                context: 'Hộ giáp ranh xây tường bịt mất lối đi duy nhất dẫn vào thửa đất nằm phía trong.',
+                solution: '1. Áp dụng Điều 254 Bộ luật Dân sự 2015 về "Quyền về lối đi qua".\n2. Nộp đơn yêu cầu UBND xã mở cuộc hòa giải khẩn cấp mở lối đi.\n3. Khởi kiện ra Tòa án yêu cầu mở lối đi duy nhất và đền bù giá trị đất mở đường.\n4. Yêu cầu Tòa án áp dụng BPTT khẩn cấp tạm thời cấm dọn dẹp/bịt đường.'
+            },
+            {
+                id: 14, type: 'protect', title: 'Đất Nằm Trong Quy Hoạch Treo',
+                short: 'Tranh chấp đất đang bị vướng dự án',
+                context: 'Đất đang tranh chấp nhưng lại nằm trong khu vực có quy hoạch treo, chính quyền từ chối sang tên/hòa giải.',
+                solution: '1. Yêu cầu Phòng Tài nguyên Môi trường cung cấp thông tin quy hoạch chính thức.\n2. Nộp đơn giải quyết tranh chấp bình thường vì pháp luật vẫn bảo hộ quyền sử dụng hợp pháp.\n3. Khi có quyết định thu hồi, yêu cầu tạm giữ khoản tiền bồi thường vào tài khoản tạm thu Tòa án.\n4. Đề nghị bồi thường đúng cho người có quyền sử dụng hợp pháp sau khi xử xong.'
+            },
+            {
+                id: 15, type: 'protect', title: 'Tranh Chấp Đất Cho Mượn/Cho Ở Nhờ',
+                short: 'Cho ở nhờ hàng chục năm không chịu trả',
+                context: 'Trước đây cho người quen ở nhờ/mượn canh tác, nay lấy lại thì họ cho rằng đất do họ khai phá.',
+                solution: '1. Tìm lại các văn bản, thư từ, giấy tờ viết tay thể hiện việc cho mượn/cho ở nhờ.\n2. Thu thập lời khai của các lão nông, tổ trưởng dân phố về nguồn gốc đất ban đầu.\n3. Lập thông báo đòi lại đất, ấn định thời hạn bàn giao rõ ràng bằng văn bản.\n4. Khởi kiện "Đòi lại tài sản là QSDĐ" tại Tòa án nhân dân cấp huyện.'
+            },
+            {
+                id: 16, type: 'protect', title: 'Trò Ma Gian Dối Ranh Giới Đô Thị',
+                short: 'Xây nhà kiên cố đè lên đất tranh chấp',
+                context: 'Lợi dụng đêm tối hoặc cuối tuần, bên đối phương tập kết vật liệu xây thần tốc công trình cố định lên đất.',
+                solution: '1. Ngay lập tức gửi đơn khẩn cấp đến Đội Trật tự Xây dựng đô thị & UBND xã.\n2. Yêu cầu lập biên bản vi phạm trật tự xây dựng và ban hành Quyết định đình chỉ thi công.\n3. Yêu cầu điện lực, công ty nước sạch cắt điện nước công trình vi phạm.\n4. Nộp đơn yêu cầu Tòa áp dụng BPTT khẩn cấp tạm thời "Cấm thay đổi hiện trạng".'
+            },
+            {
+                id: 17, type: 'protect', title: 'Bị Lừa Ký Biên Bản Ranh Giới',
+                short: 'Ký nhầm biên bản đo đạc giáp ranh',
+                context: 'Cán bộ địa chính hoặc hàng xóm đưa biên bản giáp ranh lừa gia chủ ký khi chưa đo thực tế.',
+                solution: '1. Nộp đơn khiếu nại ngay lập tức gửi UBND xã và Văn phòng ĐKĐĐ hủy biên bản đã ký.\n2. Tuyên bố chữ ký bị lừa dối/nhầm lẫn theo quy định Bộ luật Dân sự.\n3. Yêu cầu đo đạc lại công khai trước sự chứng kiến của đầy đủ các bên.\n4. Mời Thừa phát lại lập vi bằng diễn biến việc phát hiện bị lừa dối.'
+            },
+            {
+                id: 18, type: 'protect', title: 'Thiếu Chi Phí Theo Đuổi Kiện Tụng',
+                short: 'Chi phí đo đạc, án phí, luật sư quá lớn',
+                context: 'Vụ kiện kéo dài nhiều năm khiến gia chủ cạn kiệt tài chính, có nguy cơ bỏ cuộc giữa chừng.',
+                solution: '1. Xin trợ giúp pháp lý miễn phí từ Trung tâm Trợ giúp Pháp lý Nhà nước (nếu thuộc hộ nghèo/chính sách).\n2. Yêu cầu Tòa án tạm hoãn hoặc miễn giảm tạm ứng án phí theo quy định pháp luật.\n3. Thỏa thuận với Luật sư phương án chi phí theo kết quả thắng kiện (thành lao thỏa thuận).\n4. Huy động hỗ trợ từ các quỹ bảo vệ quyền lợi cộng đồng.'
+            },
+            {
+                id: 19, type: 'protect', title: 'Nhà Nước Thu Hồi Khi Đang Tranh Chấp',
+                short: 'Đất bị cưỡng chế thu hồi đền bù',
+                context: 'Dự án đi qua thu hồi mảnh đất đang tranh chấp, nguy cơ mất trắng tiền đền bù vào tay bên lấn chiếm.',
+                solution: '1. Nộp đơn yêu cầu Tổ bồi thường giải phóng mặt bằng ghi nhận tình trạng tranh chấp.\n2. Yêu cầu chuyển toàn bộ tiền bồi thường vào tài khoản phong tỏa của Kho bạc Nhà nước.\n3. Tập trung giải quyết dứt điểm vụ kiện tại Tòa án để lấy căn cứ nhận tiền đền bù.\n4. Đề nghị tạm dừng chi trả bồi thường cho đến khi có bản án có hiệu lực.'
+            },
+            {
+                id: 20, type: 'protect', title: 'Tranh Chấp Quyền Sử Dụng Đất Hộ Gia Đình',
+                short: 'Thành viên trong sổ hộ khẩu không đồng ý bán',
+                context: 'Sổ đỏ cấp cho "Hộ gia đình", một vài thành viên trong hộ không ký tên nhưng đất vẫn bị đem cầm cố/tranh chấp.',
+                solution: '1. Trích lục sổ hộ khẩu tại thời điểm cấp Giấy chứng nhận quyền sử dụng đất.\n2. Xác định chính xác các thành viên có quyền lợi (từ 15 tuổi trở lên tại thời điểm cấp).\n3. Tuyên bố giao dịch chuyển nhượng/thế chấp vô hiệu do thiếu chữ ký thành viên.\n4. Yêu cầu Tòa án phân chia tài sản chung hộ gia đình theo đúng Luật Dân sự.'
+            },
+            {
+                id: 21, type: 'protect', title: 'Tranh Chấp Sau Ly Hôn Chưa Chia Đất',
+                short: 'Vợ/Chồng cũ cố tình chiếm giữ tài sản chung',
+                context: 'Sau ly hôn không thỏa thuận chia đất, một bên tự ý canh tác, cất nhà hoặc chuyển nhượng cho người khác.',
+                solution: '1. Nộp đơn yêu cầu Tòa án chia tài sản chung sau khi ly hôn.\n2. Đề nghị ngăn chặn mọi giao dịch phát sinh liên quan đến mảnh đất.\n3. Thu thập tài liệu chứng minh nguồn gốc tài sản tạo lập trong thời kỳ hôn nhân.\n4. Yêu cầu chia đôi hoặc nhận giá trị bằng tiền tương ứng.'
+            },
+            {
+                id: 22, type: 'protect', title: 'Người Làm Chứng Thay Đổi Lời Khai',
+                short: 'Người làm chứng bị mua rộc hoặc quên',
+                context: 'Nhân chứng quan trọng ban đầu ủng hộ nhưng sau đó bị phía đối phương mua chuộc hoặc đe dọa nên đổi lời khai.',
+                solution: '1. Lập vi bằng ghi âm/ghi hình/văn bản lời khai người làm chứng ngay từ giai đoạn đầu.\n2. Tìm kiếm thêm các nhân chứng phụ (cán bộ hưu trí, hàng xóm cũ, người đo đạc cũ).\n3. Sử dụng các chứng cứ vật chất (hóa đơn, hình ảnh, văn bản cũ) để đè chứng cứ lời nói.\n4. Đề nghị Tòa án xử lý hành vi khai báo gian dối theo Điều 382 Bộ luật Hình sự.'
+            },
+            {
+                id: 23, type: 'protect', title: 'Chậm Áp Dụng BPTT Khẩn Cấp Tạm Thời',
+                short: 'Tòa án chậm ban hành lệnh cấm thay đổi hiện trạng',
+                context: 'Nộp đơn yêu cầu áp dụng BPTT khẩn cấp tạm thời nhưng Tòa án ngâm hồ sơ, tạo điều kiện cho đối phương tẩu tán/xây dựng.',
+                solution: '1. Nộp kèm tài sản bảo đảm (tiền/sổ tiết kiệm) ngay khi nộp đơn yêu cầu theo Luật Tố tụng.\n2. Trực tiếp gặp Chánh án Tòa án phản ánh tính chất khẩn cấp của vụ việc.\n3. Khiếu nại hành vi tố tụng của Thẩm phán phân công giải quyết vụ án.\n4. Lập vi bằng ghi nhận hiện trạng hàng ngày để làm căn cứ đòi bồi thường thiệt hại.'
+            },
+            {
+                id: 24, type: 'protect', title: 'Bị Sang Tên Qua Nhiều Đời Chủ',
+                short: 'Đất tranh chấp bị lừa bán qua người thứ 3',
+                context: 'Kẻ lấn chiếm nhanh chóng làm thủ tục chuyển nhượng cho nhiều người khác nhằm biến thành "Người thứ ba chiếm hữu hòa hảo".',
+                solution: '1. Gửi văn bản ngăn chặn khẩn cấp đến toàn bộ các Văn phòng Công chứng trong tỉnh/thành.\n2. Nộp đơn kiện yêu cầu tuyên hủy các Hợp đồng mua bán liên tiếp do giao dịch ban đầu vô hiệu.\n3. Áp dụng quy định: Bên thứ 3 không được coi là thiện chí nếu biết hoặc phải biết đất đang tranh chấp.\n4. Yêu cầu Công an khởi tố vụ án Lừa đảo chiếm đoạt tài sản.'
+            },
+            {
+                id: 25, type: 'protect', title: 'Tranh Chấp Lối Cấp Thoát Nước/Đường Điện',
+                short: 'Hàng xóm cắt đứt đường điện, nước đi qua đất',
+                context: 'Đường ống nước hoặc đường điện hạ thế đi qua phần đất hàng xóm bị họ cố tình chặt đứt, đào phá.',
+                solution: '1. Áp dụng Quyền về cấp, thoát nước/đường dây tải điện qua bất động sản liền kề (Điều 252, 253 BLDS).\n2. Yêu cầu UBND xã lập biên bản hành vi phá hoại công trình sinh hoạt.\n3. Nộp đơn kiện Tòa án yêu cầu khôi phục hiện trạng và bồi thường thiệt hại.\n4. Đề nghị cơ quan điện lực/cấp nước can thiệp bảo vệ hạ tầng thiết yếu.'
+            },
+            {
+                id: 26, type: 'protect', title: 'Mốc Giới Bị Vùi Lấp Khi Làm Đường',
+                short: 'Công trình công cộng san lấp mất mốc',
+                context: 'Dự án mở rộng đường giao thông làm mất sạch mốc giới, dẫn đến hàng xóm xê dịch ranh giới mới.',
+                solution: '1. Xin lại Hồ sơ hoàn công dự án làm đường tại Ban Quản lý Dự án.\n2. Trích lục bản đồ địa chính đã được khớp nối tọa độ quốc gia VN-2000.\n3. Thu thập bản vẽ thiết kế thi công đường để xác định khoảng cách từ tim đường vào mốc.\n4. Mời đơn vị đo đạc có máy RTK khôi phục lại mốc bằng tọa độ cứng.'
+            },
+            {
+                id: 27, type: 'protect', title: 'Mất Hồ Sơ Giao Đất Thời Bao Cấp',
+                short: 'Đất cấp từ thời nông trường, HTX không còn lưu',
+                context: 'Đất do Lâm trường, Nông trường hoặc HTX cấp từ thập niên 80-90, cơ quan lưu trữ làm mất sổ sách.',
+                solution: '1. Thu thập Quyết định phân nhà/đất, sổ mục kê, sổ 299 còn lưu trữ tại Lưu trữ lịch sử tỉnh.\n2. Xin xác nhận của Chủ nhiệm HTX hoặc Lãnh đạo Nông trường thời kỳ đó.\n3. Thu thập biên lai thu nộp hoa lợi, sản lượng hoặc thuế đất thời kỳ cũ.\n4. Lấy xác nhận sử dụng đất ổn định, lâu dài, không tranh chấp của UBND xã.'
+            },
+            {
+                id: 28, type: 'protect', title: 'Hết Thời Hiệu Khởi Kiện Hành Chính',
+                short: 'Bị quá hạn 1 năm kiện Quyết định cấp Sổ đỏ',
+                context: 'Phát hiện sổ đỏ của đối phương cấp sai từ 5 năm trước, quá thời hiệu kiện hành chính 1 năm.',
+                solution: '1. Chuyển sang Khởi kiện Dân sự "Tranh chấp quyền sử dụng đất" (Không bị hạn chế thời hiệu).\n2. Trong vụ án dân sự, yêu cầu Tòa án áp dụng Điều 34 Luật Tố tụng Hành chính hủy QĐ cá biệt sai trái.\n3. Chứng minh thời điểm mới phát hiện ra hành vi vi phạm để tính lại thời hiệu.\n4. Khiếu nại hành chính đến cơ quan đã cấp sổ yêu cầu tự thu hồi.'
+            },
+            {
+                id: 29, type: 'protect', title: 'Chủ Đất Đối Phương Cố Tình Trốn Mặt',
+                short: 'Không tìm thấy địa chỉ bên tranh chấp để kiện',
+                context: 'Đối phương bỏ đi khỏi địa phương, không rõ nơi cư trú khiến Tòa án không thể tống đạt quyết định.',
+                solution: '1. Yêu cầu Công an xã/phường xác nhận tình trạng cư trú/vắng mặt tại địa phương.\n2. Yêu cầu Tòa án làm thủ tục niêm yết công khai thông báo tố tụng tại nơi cư trú cuối cùng.\n3. Yêu cầu thông báo tìm kiếm người vắng mặt trên các phương tiện thông tin đại chúng.\n4. Yêu cầu Tòa án xét xử vắng mặt theo quy định của Luật Tố tụng Dân sự.'
+            },
+            {
+                id: 30, type: 'protect', title: 'Đối Phương Chuyển Nhượng Khi Đang Hòa Giải',
+                short: 'Lợi dụng lúc đang hòa giải ở xã để bán đất',
+                context: 'Trong lúc hai bên đang hòa giải tại xã, đối phương âm thầm mang sổ đi công chứng bán cho người khác.',
+                solution: '1. Ngay khi nộp đơn hòa giải, gửi kèm Đơn đề nghị ngăn chặn giao dịch tới VPĐKĐĐ.\n2. Đề nghị UBND xã ra văn bản thông báo đất đang hòa giải tranh chấp đến các phòng công chứng.\n3. Nếu đã lỡ bán, nộp đơn kiện tuyên Hợp đồng công chứng vô hiệu do vi phạm điều cấm của luật.\n4. Tố giác hành vi tẩu tán tài sản đang tranh chấp.'
+            },
+            {
+                id: 31, type: 'protect', title: 'Bị Ép Buộc Thỏa Thuận Bất Lợi',
+                short: 'Bị ép ký biên bản hòa giải thành bất hợp lý',
+                context: 'Bị lực lượng địa phương hoặc đối phương gây áp lực tinh thần tại cuộc hòa giải khiến phải ký nhượng đất.',
+                solution: '1. Trong vòng 10 ngày, gửi văn bản từ chối/khiếu nại Biên bản hòa giải thành lên UBND cấp huyện.\n2. Chứng minh việc ký kết do bị đe dọa, cưỡng ép hoặc thiếu minh mẫn.\n3. Khai báo rõ tại Tòa án về hoàn cảnh bị cưỡng ép ký biên bản.\n4. Yêu cầu Tòa án tuyên Biên bản hòa giải thành không có giá trị pháp lý.'
+            },
+            {
+                id: 32, type: 'protect', title: 'Đánh Tráo Bản Vẽ Thi Thiết Kế',
+                short: 'Bản vẽ trích đo bị làm giả/sửa chữa',
+                context: 'Tập hồ sơ bản vẽ đo đạc trình lên cơ quan thẩm quyền bị đối phương cấu kết tráo đổi số đo.',
+                solution: '1. Đối chiếu bản vẽ lưu tại Văn phòng đăng ký đất đai với bản gốc giao cho chủ hộ.\n2. Đề nghị cơ quan Công an giám định dấu mực, phôi giấy, nét vẽ trích đo.\n3. Yêu cầu đơn vị đo đạc ký xác nhận và chịu trách nhiệm trước pháp luật về bản vẽ chuẩn.\n4. Lưu trữ bản sao có chứng thực ở nhiều nơi an toàn.'
+            },
+
+            // ================= 32 THỦ ĐOẠN LẤN CHIẾM & TRÁNH RỦI RO (Ô 33 - 64) =================
+            {
+                id: 33, type: 'encroach', title: 'Thủ Đoạn Dịch Mốc Đêm',
+                short: 'Lén dịch chuyển cọc mốc vào ban đêm',
+                context: 'Đối phương âm thầm nhổ cọc mốc bêtông, xê dịch vào sâu trong đất nhà bạn vài chục cm vào ban đêm hoặc mùa mưa.',
+                solution: 'TRÁNH RỦI RO:\n1. Đổ khối bêtông chân mốc chôn sâu 1m, cắm thép gai xoắn.\n2. Chụp ảnh tọa độ GPS mốc giới gắn liền với vật kiến trúc cố định.\n3. Lắp camera hồng ngoại ban đêm rọi trực diện các cọc mốc.'
+            },
+            {
+                id: 34, type: 'encroach', title: 'Trồng Cây Ăn Trái Tràn Ranh',
+                short: 'Trồng cây sát ranh để lấy tán & rễ chiếm đất',
+                context: 'Cố tình trồng các loại cây ăn quả, cây cổ thụ sát đường ranh. Sau vài năm tán cây và rễ bao phủ rồi nghiễm nhiên coi là đất của mình.',
+                solution: 'TRÁNH RỦI RO:\n1. Yêu cầu chặt tỉa ngay khi tán/rễ cây vượt qua ranh giới theo Điều 175 BLDS.\n2. Lập biên bản yêu cầu cam kết không đòi quyền sở hữu đất theo tán cây.\n3. Tự mình xây tường rào cao ngắt đứt sự xâm lấn của rễ cây.'
+            },
+            {
+                id: 35, type: 'encroach', title: 'Lấn Dần Khi Xây Tường Rào',
+                short: 'Xây móng phè sang, nhích chân tường',
+                context: 'Khi xây tường rào ngăn cách, đối phương đặt trọn vẹn chân móng gạch/bêtông phè sang phần đất nhà bên cạnh.',
+                solution: 'TRÁNH RỦI RO:\n1. Có mặt trực tiếp kiểm tra khi hàng xóm đào móng ranh giới.\n2. Yêu cầu tim tường rào phải nằm đúng đường ranh hoặc toàn bộ móng nằm bên đất họ.\n3. Lập biên bản dừng thi công ngay nếu móng lấn sang dù chỉ 1cm.'
+            },
+            {
+                id: 36, type: 'encroach', title: 'Xây Lấn Ban Công & Ô Văng',
+                short: 'Tầng 1 đúng ranh, tầng 2 đua ban công sang',
+                context: 'Dưới đất xây đúng ranh giới nhưng từ tầng 2 trở lên lại đua ban công, ô văng, mái che nhô sang khoảng không đất nhà bên.',
+                solution: 'TRÁNH RỦI RO:\n1. Giám sát từ giai đoạn ghép cốp-pha sàn tầng trên của hàng xóm.\n2. Báo Trật tự Xây dựng lập biên bản vi phạm khoảng không (Điều 175 BLDS).\n3. Yêu cầu tháo dỡ phần đua khoảng không trước khi công trình hoàn công.'
+            },
+            {
+                id: 37, type: 'encroach', title: 'Mượn Làm Nơi Để Vật Liệu Rồi Chiếm',
+                short: 'Xin để nhờ xà bần, gạch đá rồi quây luôn',
+                context: 'Lợi dụng sự hảo tâm, xin để nhờ gạch đá, vật liệu xây dựng hoặc dựng lán tạm cho công nhân, sau đó không tháo dỡ và nhận là đất của mình.',
+                solution: 'TRÁNH RỦI RO:\n1. Ký hợp đồng/giấy cho mượn mặt bằng ngắn hạn, có thời hạn rõ ràng.\n2. Yêu cầu cam kết tự di dời và bồi thường nếu quá hạn.\n3. Tuyệt đối không cho phép dựng công trình bán kiên cố trên đất mượn.'
+            },
+            {
+                id: 38, type: 'encroach', title: 'Kê Khai Gian Dối Khi Đo Đạc Bản Đồ',
+                short: 'Cố tình chỉ sai ranh giới cho cán bộ đo đạc',
+                context: 'Lợi dụng lúc chủ đất vắng mặt, đối phương chỉ ranh giới gian dối cho đơn vị đo đạc bản đồ địa chính mới để nới rộng diện tích.',
+                solution: 'TRÁNH RỦI RO:\n1. Đăng ký nhận thông báo đo đạc với UBND xã và Trưởng thôn.\n2. Trực tiếp có mặt chỉ mốc và ký biên bản xác nhận ranh giới.\n3. Thường xuyên kiểm tra dữ liệu trích đo địa chính công khai tại xã.'
+            },
+            {
+                id: 39, type: 'encroach', title: 'Hợp Thức Hóa Đất Mua Giấy Tay Bằng Vi Bằng',
+                short: 'Dùng Vi bằng Thừa phát lại lừa người nhẹ dạ',
+                context: 'Cố tình bán mảnh đất đang tranh chấp hoặc lấn chiếm bằng "Vi bằng Thừa phát lại", lập lờ cho người mua hiểu nhầm là có giá trị như Sổ đỏ.',
+                solution: 'TRÁNH RỦI RO:\n1. Nắm rõ Luật: Vi bằng chỉ ghi nhận hành vi giao nhận tiền, không có giá trị sang tên đất.\n2. Kiểm tra tình trạng pháp lý đất tại Văn phòng Đăng ký Đất đai trước khi mua.\n3. Không mua bán đất qua vi bằng, giấy tay nếu không đủ điều kiện cấp Sổ.'
+            },
+            {
+                id: 40, type: 'encroach', title: 'Dụ Dỗ Người Già/Trẻ Em Ký Giấy Tờ',
+                short: 'Lợi dụng lúc chủ nhà già yếu để lừa ký tên',
+                context: 'Đến gặp cụ già hoặc trẻ em đứng tên sổ đất lúc minh mẫn kém, dụ dỗ ký vào biên bản giáp ranh hoặc giấy bán đất giá rẻ.',
+                solution: 'TRÁNH RỦI RO:\n1. Làm thủ tục tuyên bố mất/hạn chế năng lực hành vi dân sự nếu người già bị minh mẫn kém.\n2. Cất giữ Sổ đỏ ở nơi an toàn, không để người già đứng tên giao dịch một mình.\n3. Đăng ký thông báo giám hộ tài sản tại chính quyền địa phương.'
+            },
+            {
+                id: 41, type: 'encroach', title: 'Lợi Dụng Sơ Hở Hồ Sơ Địa Chính Cũ',
+                short: 'Dùng sơ đồ sai lệch thời xưa để đòi thêm đất',
+                context: 'Lợi dụng việc trích đo bản đồ 299/60 cũ có độ sai số lớn để làm đơn tranh chấp, đòi thêm diện tích mà thực tế không canh tác.',
+                solution: 'TRÁNH RỦI RO:\n1. Chứng minh quá trình sử dụng đất liên tục, ổn định (Điều 100, 101 Luật Đất đai).\n2. Sử dụng bản đồ hiện trạng đo bằng vệ tinh GPS chuẩn xác làm căn cứ.\n3. Tập hợp các biên lai nộp thuế đất đúng diện tích thực tế.'
+            },
+            {
+                id: 42, type: 'encroach', title: 'Lấn Chiếm Bằng Cách Đổ Đất Nâng Nền',
+                short: 'Đổ đất cao tràn sang làm tràn ranh giới',
+                context: 'Khi làm nhà, đối phương đổ đất nâng nền cao hơn hẳn, khiến đất tạ tràn lấn sang nền nhà bên cạnh rồi xây kè chặn trên đất lấn.',
+                solution: 'TRÁNH RỦI RO:\n1. Bắt buộc đối phương xây tường taluy chặn đất hoàn toàn bên phần đất của họ.\n2. Lập biên bản đền bù thiệt hại nếu đất đá tràn sang làm hỏng hiện trạng.\n3. Yêu cầu khôi phục lại độ dốc an toàn không ảnh hưởng hộ liền kề.'
+            },
+            {
+                id: 43, type: 'encroach', title: 'Gửi Súc Vật/Gia Súc Phá Rào',
+                short: 'Thả trâu bò, đào ao làm sạt lở bờ ranh',
+                context: 'Cố tình thả gia súc ủi phá rào chắn hoặc đào ao nuôi cá sát ranh giới cố tình làm sạt lở phần đất của hàng xóm xuống ao.',
+                solution: 'TRÁNH RỦI RO:\n1. Yêu cầu giữ khoảng cách an toàn khi đào ao theo quy định xây dựng.\n2. Lập vi bằng hình ảnh đất bị sạt lở và yêu cầu kè lại bờ đúng hiện trạng.\n3. Báo chính quyền xử phạt hành chính hành vi thả rông gia súc phá hoại tài sản.'
+            },
+            {
+                id: 44, type: 'encroach', title: 'Lấn Chiếm Bằng Việc Cúng Bái/Tâm Linh',
+                short: 'Đặt miếu thờ, bia đá tâm linh lên đất tranh chấp',
+                context: 'Lén đặt am thờ, tượng Phật, miếu thờ hoặc mộ gió lên mảnh đất tranh chấp để đánh vào tâm lý e ngại tâm linh của chủ đất.',
+                solution: 'TRÁNH RỦI RO:\n1. Báo ngay cho chính quyền địa phương lập biên bản hành vi vi phạm quy hoạch tâm linh.\n2. Mời cơ quan chức năng di dời công trình tâm linh trái phép về đúng nơi quy định.\n3. Xử lý kiên quyết bằng con đường pháp lý, không hoảng sợ về mặt tâm linh.'
+            },
+            {
+                id: 45, type: 'encroach', title: 'Lừa Cầm Cố Đất Bằng Giấy Viết Tay',
+                short: 'Vay tiền cầm cố đất rồi chiếm luôn',
+                context: 'Cho vay tiền yêu cầu thế chấp bằng bản gốc Sổ đỏ và giấy viết tay, sau đó tự ý làm thủ tục chuyển nhượng hoặc cho người ra chiếm đất.',
+                solution: 'TRÁNH RỦI RO:\n1. Tuyệt đối không giao Sổ đỏ bản gốc cho cá nhân vay thế chấp bất hợp pháp.\n2. Việc thế chấp bắt buộc phải đăng ký tại Văn phòng Đăng ký Đất đai.\n3. Tố giác hành vi Cho vay lãi nặng và Bắt giữ tài sản trái phép.'
+            },
+            {
+                id: 46, type: 'encroach', title: 'Cố Tình Tạo Tranh Chấp Giả Để Ngăn Sang Tên',
+                short: 'Gửi đơn tranh chấp vô căn cứ để phong tỏa Sổ',
+                context: 'Biết chủ đất sắp bán hoặc thế chấp Ngân hàng, đối phương nộp đơn tranh chấp giả lên xã để ngăn chặn việc giao dịch sang tên.',
+                solution: 'TRÁNH RỦI RO:\n1. Yêu cầu UBND xã bác đơn nếu không có chứng cứ ban đầu rõ ràng.\n2. Khởi kiện đòi bồi thường thiệt hại do hành vi cố tình ngăn chặn giao dịch trái pháp luật.\n3. Tố cáo hành vi vu khống, cản trở quyền sở hữu tài sản.'
+            },
+            {
+                id: 47, type: 'encroach', title: 'Xâm Nhập Đất Công/Đất Dư Thừa Rút Ranh',
+                short: 'Lấn đất công rồi tịnh tiến ranh giới sang dân',
+                context: 'Lấn chiếm đất suối, đất giao thông công cộng, bị cơ quan chức năng kiểm tra thì đẩy ranh giới sang đè lên đất nhà bên cạnh.',
+                solution: 'TRÁNH RỦI RO:\n1. Cung cấp bản đồ quy hoạch giao thông/thủy lợi cho cơ quan thẩm quyền.\n2. Yêu cầu xử lý dứt điểm hành vi chiếm đất công của đối phương.\n3. Bảo vệ nguyên vẹn diện tích đất đã được cấp trên Sổ đỏ của mình.'
+            },
+            {
+                id: 48, type: 'encroach', title: 'Giả Mạo Người Thừa Kế Ký Tên',
+                short: 'Giả chữ ký người thân ở xa để hợp thức hóa',
+                context: 'Lợi dụng đồng thừa kế đang ở nước ngoài hoặc đi xa, làm giả chữ ký đồng ý cho tặng/chuyển nhượng để chiếm trọn mảnh đất.',
+                solution: 'TRÁNH RỦI RO:\n1. Người ở xa phải làm Văn bản ủy quyền/Từ chối nhận di sản có hợp pháp hóa lãnh sự.\n2. Yêu cầu giám định chữ ký tại Phòng Kỹ thuật Hình sự Công an.\n3. Tuyên hủy toàn bộ Văn bản công chứng thừa kế giả mạo.'
+            },
+            {
+                id: 49, type: 'encroach', title: 'Đổ Rác Thải, Chất Bẩn Ép Chủ Đất Bỏ Đi',
+                short: 'Khủng bố môi trường để chủ đất nản chí',
+                context: 'Liên tục biến mảnh đất trống tranh chấp thành nơi đổ rác thải, xà bần, chất độc hại gây ô nhiễm nghiêm trọng ép chủ đất bán rẻ.',
+                solution: 'TRÁNH RỦI RO:\n1. Lắp camera giấu kín ghi lại hành vi xả thải trái phép.\n2. Báo Cảnh sát Môi trường và UBND xã xử phạt vi phạm môi trường.\n3. Rào kín đất bằng lưới B40/tường gạch và dán biển báo cấm xả rác.'
+            },
+            {
+                id: 50, type: 'encroach', title: 'Thủ Đoạn Tách Thửa Trái Pháp Luật',
+                short: 'Lợi dụng sơ hở tách thửa lấn diện tích',
+                context: 'Khi làm thủ tục tách thửa đất, cố tình đo đạc dư diện tích phần của mình và đẩy phần thiếu hụt sang cho người nhận thửa còn lại.',
+                solution: 'TRÁNH RỦI RO:\n1. Kiểm tra kỹ Bản vẽ trích đo địa chính tách thửa trước khi ký nhận.\n2. Đảm bảo tổng diện tích các thửa sau tách đúng bằng diện tích thửa ban đầu.\n3. Yêu cầu cán bộ địa chính đo kiểm tra đồng thời tất cả các thửa.'
+            },
+            {
+                id: 51, type: 'encroach', title: 'Mua Gom Đất Bao Săn Rồi Xâm Lấn',
+                short: 'Mua các mảnh xung quanh rồi nuốt chửng ô giữa',
+                context: 'Đại gia/đầu cơ mua sạch các mảnh đất bao quanh một mảnh đất nhỏ, sau đó rào dốc bao vây triệt hạ đường đi rồi lấn dần.',
+                solution: 'TRÁNH RỦI RO:\n1. Cắm mốc kiên cố, đăng ký quyền sở hữu lối đi hợp pháp trên Sổ đỏ.\n2. Không để đất trống dài ngày không thăm nom.\n3. Liên kết với các hộ giáp ranh khác bảo vệ hiện trạng cộng đồng.'
+            },
+            {
+                id: 52, type: 'encroach', title: 'Cố Tình Xây Nhà Trùm Lên Đất Đã Bán',
+                short: 'Bán đất bằng giấy tay rồi tự ý xây nhà lên',
+                context: 'Bán một phần mảnh đất bằng giấy tay, nhận đủ tiền nhưng sau vài năm thấy đất tăng giá liền ra xây nhà đè lên phần đã bán.',
+                solution: 'TRÁNH RỦI RO:\n1. Khi mua đất phải bắt buộc bàn giao mốc giới thực địa và xây tường rào ngay.\n2. Bắt buộc bên bán ký Văn bản cam kết bàn giao quản lý thực tế.\n3. Khởi kiện công nhận hợp đồng và cưỡng chế tháo dỡ công trình.'
+            },
+            {
+                id: 53, type: 'encroach', title: 'Thủ Đoạn Đổi Đất Khống Bằng Miệng',
+                short: 'Thỏa thuận đổi đất bằng miệng rồi đòi lại mảnh cũ',
+                context: 'Hai bên thỏa thuận đổi mảnh đất cho nhau bằng miệng để tiện canh tác, sau nhiều năm mảnh cũ tăng giá thì đòi lại mảnh cũ nhưng không trả mảnh mới.',
+                solution: 'TRÁNH RỦI RO:\n1. Mọi thỏa thuận đổi đất bắt buộc phải lập Hợp đồng công chứng và sang tên Sổ.\n2. Tuyệt đối không giao dịch đổi đất bằng lời nói hoặc giấy tay sơ sài.\n3. Nếu xảy ra tranh chấp, yêu cầu hoàn trả nguyên trạng cả 2 mảnh.'
+            },
+            {
+                id: 54, type: 'encroach', title: 'Lợi Dụng Thiên Tai, Lũ Lụt Thay Đổi Ranh',
+                short: 'Sạt lở sau bão rồi tự ý dịch ranh sang đất xóm',
+                context: 'Sau khi thiên tai/lũ lụt làm mất dòng suối/bờ ranh, đối phương tự ý căng dây dịch ranh giới sang phía đất nhà bạn.',
+                solution: 'TRÁNH RỦI RO:\n1. Lưu giữ ảnh chụp hàng không, tọa độ định vị vệ tinh mốc giới trước thiên tai.\n2. Mời cơ quan địa chính khôi phục lại điểm tọa độ GPS theo bản đồ gốc.\n3. Không chấp nhận việc tự xác lập ranh giới mới theo cảm quan.'
+            },
+            {
+                id: 55, type: 'encroach', title: 'Lấn Chiếm Khoảng Không Đường Điện Hạ Thế',
+                short: 'Xây dựng sát hành lang điện gây rủi ro',
+                context: 'Cố tình xây dựng công trình tiến sát hành lang bảo vệ an toàn đường điện đi qua đất nhà khác để ép nhà đó phải di dời đường điện.',
+                solution: 'TRÁNH RỦI RO:\n1. Báo Ngành Điện lực lập biên bản vi phạm hành lang an toàn lưới điện.\n2. Yêu cầu cơ quan chức năng buộc tháo dỡ công trình mất an toàn.\n3. Giữ nguyên hành lang tuyến điện đã được cấp phép.'
+            },
+            {
+                id: 56, type: 'encroach', title: 'Giả Danh Cán Bộ Đến Khảo Sát Để Dời Mốc',
+                short: 'Mạo danh đo đạc để nhổ cọc mốc',
+                context: 'Tự xưng là cán bộ dự án/địa chính đến khảo sát, thông báo mốc sai rồi tự ý nhổ cọc mốc cũ cắm lại cọc mốc mới lấn đất.',
+                solution: 'TRÁNH RỦI RO:\n1. Kiểm tra Thẻ công tác, Giới thiệu và Quyết định đo đạc của UBND huyện/xã.\n2. Báo Công an xã kiểm tra ngay nếu phát hiện đối tượng nghi vấn.\n3. Giữ nguyên cọc mốc cũ cho đến khi có văn bản chính thức.'
+            },
+            {
+                id: 57, type: 'encroach', title: 'Cố Tình Nhầm Lẫn Số Thửa Khi Cấp Sổ',
+                short: 'Đăng ký nhầm số thửa của hàng xóm',
+                context: 'Khi kê khai cấp Sổ đỏ lần đầu, đối phương cố tình kê khai số thửa và sơ đồ của mảnh đất nhà bạn vào hồ sơ của họ.',
+                solution: 'TRÁNH RỦI RO:\n1. Kiểm tra kỹ Thông báo niêm yết công khai danh sách cấp Sổ đỏ tại trụ sở UBND xã.\n2. Nộp đơn phản đối cấp Sổ trong thời hạn 15 ngày niêm yết.\n3. Tra cứu thông tin thửa đất trên Cổng thông tin đất đai của Tỉnh.'
+            },
+            {
+                id: 58, type: 'encroach', title: 'Cho Thuê Đất Rồi Kế Thừa Chiếm Luôn',
+                short: 'Con cháu bên thuê đất không chịu trả',
+                context: 'Cho thuê đất canh tác dài hạn, khi người thuê chết, con cháu người thuê nghiễm nhiên coi là đất cha ông để lại và không trả.',
+                solution: 'TRÁNH RỦI RO:\n1. Lập Hợp đồng cho thuê đất có công chứng, quy định rõ thời hạn và mục đích.\n2. Thu tiền thuê đất định kỳ có biên nhận viết tay hoặc chuyển khoản ghi rõ nội dung.\n3. Đăng ký thông báo quyền sử dụng đất với chính quyền thôn/xã.'
+            },
+            {
+                id: 59, type: 'encroach', title: 'Lấn Chiếm Đất Hành Lang An Toàn Giao Thông',
+                short: 'Xây nhà ra sát mép đường chặn tầm nhìn',
+                context: 'Tự ý xây dựng công trình tràn ra đất hành lang giao thông trước nhà người khác, bịt tầm nhìn và lối ra đường lớn.',
+                solution: 'TRÁNH RỦI RO:\n1. Đơn tố cáo hành vi vi phạm hành lang an toàn đường bộ lên Thanh tra Giao thông.\n2. Yêu cầu Cưỡng chế tháo dỡ công trình vi phạm hành lang lộ giới.\n3. Bảo vệ khoảng không thông thoáng front-line của mảnh đất.'
+            },
+            {
+                id: 60, type: 'encroach', title: 'Thủ Đoạn Tạo Sự Đã Rồi (Khởi Công Chui)',
+                short: 'Xây dựng cấp tập ngày Lễ/Tết',
+                context: 'Lợi dụng kỳ nghỉ Lễ, Tết khi cơ quan nhà nước nghỉ làm việc, tập trung thợ xây thần tốc công trình lên đất tranh chấp.',
+                solution: 'TRÁNH RỦI RO:\n1. Phân công người giám sát mảnh đất liên tục trong các dịp Lễ/Tết.\n2. Báo Trực ban Công an xã và Lãnh đạo UBND xã can thiệp khẩn cấp.\n3. Lập biên bản vi phạm và lập rào chắn ngăn cản xe vật liệu vào đất.'
+            },
+            {
+                id: 61, type: 'encroach', title: 'Dùng Nhiều Người Già/Trẻ Em Ra Cản Trở',
+                short: 'Đưa cụ già, trẻ nhỏ ra nằm ăn vạ trên đất',
+                context: 'Khi bị đo đạc hoặc đòi lại đất, đối phương xúi giục cụ già 80-90 tuổi hoặc trẻ em ra nằm ăn vạ, cản trở thi hành pháp luật.',
+                solution: 'TRÁNH RỦI RO:\n1. Không xô xát, va chạm vật lý để tránh bị gài bẫy Cố ý gây thương tích.\n2. Yêu cầu Hội Người cao tuổi, Hội Phụ nữ, Công an địa phương vào cuộc vận động.\n3. Ghi hình toàn bộ quá trình để chứng minh hành vi xúi giục, lợi dụng người già.'
+            },
+            {
+                id: 62, type: 'encroach', title: 'Thủ Đoạn Bổ Súng Di Chúc Giả',
+                short: 'Xuất hiện di chúc viết tay bất ngờ sau nhiều năm',
+                context: 'Đang trong quá trình tranh chấp thừa kế, đối phương đột ngột trưng ra một "Di chúc viết tay" có chữ ký giả của người chết.',
+                solution: 'TRÁNH RỦI RO:\n1. Đề nghị giám định độ tuổi mực, con dấu và chữ ký trên văn bản di chúc.\n2. Xác minh tính hợp pháp của Di chúc (có công chứng/chứng thực hoặc người làm chứng không).\n3. Chứng minh người để lại di chúc không minh mẫn tại thời điểm lập.'
+            },
+            {
+                id: 63, type: 'encroach', title: 'Lấn Chiếm Đất Bằng Cách Mở Cửa Sổ',
+                short: 'Trổ cửa sổ, cửa đi nhìn thẳng sang đất nhà bên',
+                context: 'Xây nhà sát ranh giới rồi tự ý mở cửa sổ, cửa đi nhô sang khoảng không đất nhà bên cạnh, lâu dần đòi quyền đi lại/thông thoáng.',
+                solution: 'TRÁNH RỦI RO:\n1. Bắt buộc tuân thủ Điều 178 BLDS: Không được mở cửa sổ nhìn sang nhà đối diện dưới 1.4m.\n2. Yêu cầu bịt kín các cửa sổ trổ trái phép ngay trong quá trình xây dựng.\n3. Xây bức tường cao chắn trên phần đất của mình để bảo vệ quyền riêng tư.'
+            },
+            {
+                id: 64, type: 'encroach', title: 'Mua Gom Quyền Đòi Nợ Để Ép Gán Đất',
+                short: 'Mua lại nợ xấu rồi mang giang hồ đến siết đất',
+                context: 'Cố tình tìm mua lại các khoản nợ dân sự cũ của chủ đất, sau đó kéo nhóm đòi nợ đến ép buộc chủ đất phải ký giấy giao mảnh đất tranh chấp.',
+                solution: 'TRÁNH RỦI RO:\n1. Tuyên bố việc gán đất phải tuân theo quy định pháp luật, không gán nợ bất hợp pháp.\n2. Tố giác hành vi Cưỡng đoạt tài sản và Đòi nợ thuê trái phép theo Bộ luật Hình sự.\n3. Giải quyết nghĩa vụ nợ bằng tài sản khác hoặc qua Trọng tài/Tòa án.'
+            }
+        ];
+
+        // Global State Variables
+        let currentView = 'grid'; // 'grid' or 'list'
+        let filteredData = [...chessData];
+
+        // On DOM Loaded Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChessboard();
+            renderListView();
+
+            // Keyboard shortcut ESC to close modal
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeModal();
+            });
+
+            // Close modal when clicking backdrop
+            document.getElementById('detailModal').addEventListener('click', (e) => {
+                if (e.target.id === 'detailModal') closeModal();
+            });
+        });
+
+        // Render Chessboard Grid (8x8)
+        function renderChessboard() {
+            const grid = document.getElementById('chessboardGrid');
+            grid.innerHTML = '';
+
+            // Render 64 cells in 8x8 layout
+            for (let index = 0; index < 64; index++) {
+                const item = chessData[index];
+                const row = Math.floor(index / 8);
+                const col = index % 8;
+                const isEvenCell = (row + col) % 2 === 0;
+
+                const isProtect = item.type === 'protect';
+                
+                // Color mapping
+                let bgClass = '';
+                if (isProtect) {
+                    bgClass = isEvenCell ? 'cell-protect-light text-sky-100' : 'cell-protect-dark text-sky-200';
+                } else {
+                    bgClass = isEvenCell ? 'cell-encroach-light text-rose-100' : 'cell-encroach-dark text-rose-200';
+                }
+
+                // Format number with leading zero
+                const numStr = item.id < 10 ? `0${item.id}` : `${item.id}`;
+
+                const cell = document.createElement('div');
+                cell.className = `${bgClass} p-2 sm:p-3 rounded-xl border border-slate-800/80 cursor-pointer transition-all duration-200 flex flex-col justify-between relative group overflow-hidden select-none min-h-[85px] sm:min-h-[110px]`;
+                cell.setAttribute('onclick', `openModal(${item.id})`);
+                cell.setAttribute('data-id', item.id);
+
+                cell.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-black px-1.5 py-0.5 rounded ${isProtect ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'}">
+                            ${numStr}
+                        </span>
+                        <i class="fa-solid ${isProtect ? 'fa-shield text-sky-500/40 group-hover:text-sky-400' : 'fa-triangle-exclamation text-rose-500/40 group-hover:text-rose-400'} text-xs sm:text-sm transition-colors"></i>
+                    </div>
+                    
+                    <div class="my-1">
+                        <h4 class="text-xs sm:text-sm font-bold line-clamp-2 leading-tight group-hover:text-amber-400 transition-colors">
+                            ${item.title}
+                        </h4>
+                    </div>
+
+                    <div class="text-[10px] text-slate-400 line-clamp-1 italic">
+                        ${isProtect ? 'Bảo vệ & Giải pháp' : 'Thủ đoạn & Phòng tránh'}
+                    </div>
+
+                    <!-- Glowing subtle indicator -->
+                    <div class="absolute bottom-0 left-0 right-0 h-0.5 ${isProtect ? 'bg-sky-500/0 group-hover:bg-sky-400' : 'bg-rose-500/0 group-hover:bg-rose-400'} transition-all"></div>
+                `;
+
+                grid.appendChild(cell);
+            }
+        }
+
+        // Render Alternative List View
+        function renderListView() {
+            const protectList = document.getElementById('protectList');
+            const encroachList = document.getElementById('encroachList');
+
+            protectList.innerHTML = '';
+            encroachList.innerHTML = '';
+
+            filteredData.forEach(item => {
+                const numStr = item.id < 10 ? `0${item.id}` : `${item.id}`;
+                const isProtect = item.type === 'protect';
+
+                const card = document.createElement('div');
+                card.className = `p-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
+                    isProtect 
+                        ? 'bg-slate-800/60 border-sky-900/50 hover:bg-sky-950/40 hover:border-sky-500/50' 
+                        : 'bg-slate-800/60 border-rose-900/50 hover:bg-rose-950/40 hover:border-rose-500/50'
+                }`;
+                card.setAttribute('onclick', `openModal(${item.id})`);
+
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3 pr-2">
+                        <span class="w-7 h-7 rounded-lg text-xs font-black flex items-center justify-center shrink-0 ${
+                            isProtect ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                        }">
+                            ${numStr}
+                        </span>
+                        <div>
+                            <h4 class="text-sm font-bold text-white hover:text-amber-400 transition-colors">${item.title}</h4>
+                            <p class="text-xs text-slate-400 line-clamp-1">${item.short}</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-500 shrink-0"></i>
+                `;
+
+                if (isProtect) {
+                    protectList.appendChild(card);
+                } else {
+                    encroachList.appendChild(card);
+                }
+            });
+
+            // Handle empty states
+            if (protectList.children.length === 0) {
+                protectList.innerHTML = '<p class="text-xs text-slate-500 italic p-2">Không tìm thấy kết quả phù hợp ở phần Bảo vệ.</p>';
+            }
+            if (encroachList.children.length === 0) {
+                encroachList.innerHTML = '<p class="text-xs text-slate-500 italic p-2">Không tìm thấy kết quả phù hợp ở phần Lấn chiếm.</p>';
+            }
+        }
+
+        // Open Detail Modal
+        function openModal(id) {
+            const item = chessData.find(x => x.id === id);
+            if (!item) return;
+
+            const isProtect = item.type === 'protect';
+            const modal = document.getElementById('detailModal');
+            const modalContent = document.getElementById('modalContent');
+            const numStr = item.id < 10 ? `Ô 0${item.id}` : `Ô ${item.id}`;
+
+            // Set Title & Badge
+            document.getElementById('modalBadge').innerText = numStr;
+            document.getElementById('modalBadge').className = `px-3 py-1 rounded-lg text-xs sm:text-sm font-black tracking-wider shrink-0 ${
+                isProtect ? 'bg-sky-500 text-slate-950' : 'bg-rose-500 text-white'
+            }`;
+
+            document.getElementById('modalCategory').innerText = isProtect 
+                ? 'PHƯƠNG ÁN BẢO VỆ ĐẤT TRANH CHẤP' 
+                : 'THỦ ĐOẠN LẤN CHIẾM & NGUYÊN TẮC PHÒNG TRÁNH';
+            document.getElementById('modalCategory').className = `text-xs font-bold uppercase tracking-wider block ${
+                isProtect ? 'text-sky-400' : 'text-rose-400'
+            }`;
+
+            document.getElementById('modalTitle').innerText = item.title;
+
+            // Headers configuration
+            document.getElementById('contextHeader').innerText = isProtect 
+                ? 'BỐI CẢNH & NGUYÊN NHÂN KHÓ KHĂN' 
+                : 'CÁCH THỨC BÊN LẤN CHIẾM THỰC HIỆN';
+            document.getElementById('contextHeader').className = `text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2 ${
+                isProtect ? 'text-sky-400' : 'text-rose-400'
+            }`;
+
+            document.getElementById('solutionHeader').innerText = isProtect 
+                ? 'GIẢI PHÁP PHÁP LÝ & CÁCH GIẢI QUYẾT CHI TIẾT' 
+                : 'CÁCH PHÒNG TRÁNH RỦI RO & BẢO VỆ NGUYÊN TRẠNG';
+            document.getElementById('solutionHeader').className = `text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2 ${
+                isProtect ? 'text-emerald-400' : 'text-amber-400'
+            }`;
+
+            // Content Filling
+            document.getElementById('modalContext').innerText = item.context;
+            document.getElementById('modalSolution').innerText = item.solution;
+
+            // Show Modal with Animation
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        // Close Detail Modal
+        function closeModal() {
+            const modal = document.getElementById('detailModal');
+            const modalContent = document.getElementById('modalContent');
+
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        // Switch Between Grid & List View
+        function switchView(view) {
+            currentView = view;
+            const gridContainer = document.getElementById('chessboardContainer');
+            const listContainer = document.getElementById('listViewContainer');
+            const btnGrid = document.getElementById('btnGridView');
+            const btnList = document.getElementById('btnListView');
+
+            if (view === 'grid') {
+                gridContainer.classList.remove('hidden');
+                listContainer.classList.add('hidden');
+
+                btnGrid.className = 'px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all bg-amber-500 text-slate-950 shadow-sm flex items-center gap-1.5';
+                btnList.className = 'px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all text-slate-300 hover:text-white flex items-center gap-1.5';
+            } else {
+                gridContainer.classList.add('hidden');
+                listContainer.classList.remove('hidden');
+
+                btnList.className = 'px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all bg-amber-500 text-slate-950 shadow-sm flex items-center gap-1.5';
+                btnGrid.className = 'px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all text-slate-300 hover:text-white flex items-center gap-1.5';
+            }
+        }
+
+        // Search & Filter Logic
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const clearBtn = document.getElementById('clearSearchBtn');
+
+            if (query.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            // Filter Dataset
+            filteredData = chessData.filter(item => {
+                return item.title.toLowerCase().includes(query) ||
+                       item.short.toLowerCase().includes(query) ||
+                       item.context.toLowerCase().includes(query) ||
+                       item.solution.toLowerCase().includes(query) ||
+                       item.id.toString() === query;
+            });
+
+            // Update Grid cell visual highlighting
+            const cells = document.querySelectorAll('#chessboardGrid > div');
+            cells.forEach(cell => {
+                const id = parseInt(cell.getAttribute('data-id'));
+                const matches = filteredData.some(x => x.id === id);
+                
+                if (query === '') {
+                    cell.style.opacity = '1';
+                    cell.style.filter = 'none';
+                } else if (matches) {
+                    cell.style.opacity = '1';
+                    cell.style.filter = 'drop-shadow(0 0 8px rgba(250, 204, 21, 0.8))';
+                } else {
+                    cell.style.opacity = '0.2';
+                    cell.style.filter = 'grayscale(80%)';
+                }
+            });
+
+            // Re-render List View
+            renderListView();
+        }
+
+        // Clear Search Input
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            handleSearch();
+        }
+    </script>
+</body>
+</html>

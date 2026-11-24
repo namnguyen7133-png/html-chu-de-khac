@@ -1,0 +1,2056 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>TE CHAN</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>TE CHAN</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>03/08/2026</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>Thực đơn 7 ngày (4 bữa/ngày) | Hệ tuần hoàn: Bao gồm tim, máu và mạch máu, chịu trách nhiệm vận chuyển oxy, hormone và các chất dinh dưỡng đến các tế bào trong cơ thể. citeturn0search2 | 10 | 727 | 3.0</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>Thứ Hai | 1 | 987</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>Bữa sáng: | 1.0 | Óc | 159.0 | 01:59 | 119.0 | 159.0 | Hệ hô hấp: Gồm mũi, thanh quản, khí quản, phế quản và phổi, đảm nhận việc cung cấp oxy và loại bỏ khí cacbonic. citeturn0search0 | 1</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>Bún bò (thịt bò, bún, rau sống), 1 quả trứng vịt lộn. | 2.0 | Mắt | 195.0 | 02:35 | 155.0 | 195.0 | 2 | 260</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>Bữa trưa: | 3.0 | Lưỡi  | 168.0 | 02:08 | 128.0 | 168.0 | Hệ tiêu hóa: Bao gồm thực quản, dạ dày, gan, tuyến tụy và ruột, giúp phân hủy thức ăn và hấp thụ chất dinh dưỡng. citeturn0search2 | 3</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>Cơm thịt dê nướng, cải xanh luộc. | 4.0 | Tai | 186.0 | 02:26 | 146.0 | 186.0 | 5 | 270</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>Bữa xế: | 5.0 | Tim | 267.0 | 03:07 | 187.0 | 267.0 | Hệ xương: Gồm 206 xương, tạo nên cấu trúc cơ thể, bảo vệ các cơ quan nội tạng và sản xuất tế bào máu. citeturn0search2 | 8 | 11</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>Hạt hạnh nhân, 1 quả chuối. | 6.0 | Gan | 276.0 | 03:16 | 196.0 | 276.0 | 13 | 6</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>Bữa tối: | 7.0 | Dạ dày  | 249.0 | 02:49 | 169.0 | 249.0 | Hệ cơ: Bao gồm cơ tim, cơ trơn và cơ xương, cho phép cơ thể di chuyển và thực hiện các hoạt động. citeturn0search2 | 21</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>Canh chua hải sản (tôm, mực), rau muống xào tỏi. | 8.0 | Lòng non | 294.0 | 03:34 | 214.0 | 294.0 | 34</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>Thứ Ba | 9.0 | Dồi | 285.0 | 03:25 | 205.0 | 285.0 | Hệ thần kinh: Gồm não, tủy sống và các dây thần kinh, điều khiển hoạt động của các cơ quan và phản ứng với môi trường. citeturn0search2 | 55</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>Bữa sáng: | 10.0 | Bầu dục | 258.0 | 02:58 | 178.0 | 258.0 | 89</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>Cháo thịt bò, nước ép dứa. | 11.0 | Tràng | 348.0 | 03:48 | 228.0 | 348.0 | Hệ bài tiết: Bao gồm thận, niệu quản, bàng quang và niệu đạo, loại bỏ chất thải và duy trì cân bằng nước. citeturn0search2 | 144</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>Bữa trưa: | 12.0 | Vó | 384.0 | 04:24 | 264.0 | 384.0 | 233</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>Cơm tôm rang, bông cải xanh hấp. | 13.0 | Bì chạo | 357.0 | 03:57 | 237.0 | 357.0 | Hệ nội tiết: Gồm các tuyến như tuyến yên, tuyến giáp và tuyến thượng thận, tiết hormone điều hòa các chức năng cơ thể. citeturn0search2 | 377</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>Bữa xế: | 14.0 | Tiết | 375.0 | 04:15 | 255.0 | 375.0 | 610</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>Hạt điều, 1 lát đu đủ. | 15.0 | Phở | 438.0 | 04:38 | 278.0 | 438.0 | Hệ sinh sản: Ở nam giới gồm tinh hoàn, dương vật; ở nữ giới gồm buồng trứng, tử cung và âm đạo, liên quan đến sinh sản. citeturn0search2 | 987</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>Bữa tối: | 16.0 | Bún | 483.0 | 05:23 | 323.0 | 483.0 | 1597</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>Cá hồi nướng, rau cải thìa xào tỏi. | 429.0 | 04:29 | 269.0 | 429.0 | Để hỗ trợ chữa lành và duy trì sức khỏe, việc bổ sung các thực phẩm giàu dinh dưỡng là rất quan trọng. Dưới đây là một số thực phẩm có lợi: | 2584</td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td>Thứ Tư | tôm  | 492.0 | 05:32 | 332.0 | 492.0 | 4181</td>
+            </tr>
+            <tr>
+                <td><b>22</b></td>
+                <td>Bữa sáng: | nước dùng  | 519.0 | 05:19 | 319.0 | 519.0 | Rau lá xanh: Các loại rau như cải xoăn, rau bina, cải thìa chứa nhiều vitamin A, C, canxi và chất phytochemical, giúp tăng cường hệ miễn dịch và cung cấp chất xơ. citeturn0search1 | 6765</td>
+            </tr>
+            <tr>
+                <td><b>23</b></td>
+                <td>Bánh mì kẹp trứng, nước ép cần tây. | 591.0 | 06:31 | 391.0 | 591.0 | 10946</td>
+            </tr>
+            <tr>
+                <td><b>24</b></td>
+                <td>Bữa trưa: | 537.0 | 05:37 | 337.0 | 537.0 | Bông cải xanh: Giàu hợp chất hoạt tính sinh học, bông cải xanh được coi là "chất chống bệnh từ thiên nhiên", giúp giảm nguy cơ mắc các bệnh ung thư và tăng cường sức khỏe tổng thể. citeturn0search5 | 17711</td>
+            </tr>
+            <tr>
+                <td><b>25</b></td>
+                <td>Cơm gà nướng, rau bina xào tỏi. | 573.0 | 06:13 | 373.0 | 573.0 | 28657</td>
+            </tr>
+            <tr>
+                <td><b>26</b></td>
+                <td>Bữa xế: | 528.0 | 05:28 | 328.0 | 528.0 | Dưa hấu: Chứa nhiều chất chống oxy hóa như vitamin C và lycopene, dưa hấu giúp giảm viêm, đau nhức cơ bắp và hỗ trợ phục hồi sau tập luyện. citeturn0search9 | 46368</td>
+            </tr>
+            <tr>
+                <td><b>27</b></td>
+                <td>Hạt bí, 1 lát khoai lang luộc. | 582.0 | 06:22 | 382.0 | 582.0 | 75025</td>
+            </tr>
+            <tr>
+                <td><b>28</b></td>
+                <td>Bữa tối: | 627.0 | 06:27 | 387.0 | 627.0 | Cá béo: Các loại cá như cá hồi, cá ngừ chứa axit béo omega-3, giúp giảm viêm và hỗ trợ phục hồi cơ bắp. citeturn0search9 | 121393</td>
+            </tr>
+            <tr>
+                <td><b>29</b></td>
+                <td>Hàu nướng mỡ hành, salad xà lách dưa leo. | 672.0 | 07:12 | 432.0 | 672.0 | 196418</td>
+            </tr>
+            <tr>
+                <td><b>30</b></td>
+                <td>Thứ Năm | 681.0 | 07:21 | 441.0 | 681.0 | Việc kết hợp chế độ ăn uống lành mạnh với hiểu biết về cơ thể sẽ giúp bạn duy trì sức khỏe và phòng ngừa bệnh tật hiệu quả. | 317811</td>
+            </tr>
+            <tr>
+                <td><b>31</b></td>
+                <td>Bữa sáng: | 618.0 | 06:18 | 378.0 | 618.0 | 514229</td>
+            </tr>
+            <tr>
+                <td><b>32</b></td>
+                <td>Phở bò (thịt bò, bánh phở, rau quế), 1 quả chuối. | 726.0 | 07:26 | 446.0 | 726.0 | Để hiểu rõ hơn về cấu tạo cơ thể người, bạn có thể tham khảo video sau: | 832040</td>
+            </tr>
+            <tr>
+                <td><b>33</b></td>
+                <td>Bữa trưa: | 762.0 | 08:02 | 482.0 | 762.0 | 1346269</td>
+            </tr>
+            <tr>
+                <td><b>34</b></td>
+                <td>Cơm sườn heo nướng, rau cải thảo luộc. | 735.0 | 07:35 | 455.0 | 735.0 | videoBên trong cơ thể bạn có gì? - Cấu tạo cơ thể ngườiturn0search14 | 2178309</td>
+            </tr>
+            <tr>
+                <td><b>35</b></td>
+                <td>Bữa xế: | 753.0 | 07:53 | 473.0 | 753.0 | 3524578</td>
+            </tr>
+            <tr>
+                <td><b>36</b></td>
+                <td>Hạt óc chó, nước ép đu đủ. | 834.0 | 08:34 | 514.0 | 834.0 | Dưới đây là danh sách các bộ phận trong cơ thể và các thực phẩm tốt cho sức khỏe từng bộ phận, giúp bạn ăn uống khỏe mạnh từ đầu đến chân: | 5702887</td>
+            </tr>
+            <tr>
+                <td><b>37</b></td>
+                <td>Bữa tối: | 843.0 | 08:43 | 523.0 | 843.0 | 9227465</td>
+            </tr>
+            <tr>
+                <td><b>38</b></td>
+                <td>Canh đậu đỏ thịt bò, thịt luộc. | 861.0 | 09:01 | 541.0 | 861.0 | 1. Mắt sáng khỏe | 14930352</td>
+            </tr>
+            <tr>
+                <td><b>39</b></td>
+                <td>Thứ Sáu | 816.0 | 08:16 | 496.0 | 816.0 | Thực phẩm khuyên dùng: | 24157817</td>
+            </tr>
+            <tr>
+                <td><b>40</b></td>
+                <td>Bữa sáng: | 825.0 | 08:25 | 505.0 | 825.0 | Cà rốt: Chứa nhiều beta-carotene, giúp cải thiện thị lực và bảo vệ mắt. | 39088169</td>
+            </tr>
+            <tr>
+                <td><b>41</b></td>
+                <td>Cháo yến mạch với hạt macca, nước ép chuối. | 852.0 | 08:52 | 532.0 | 852.0 | Bơ: Giàu lutein và zeaxanthin, hỗ trợ sức khỏe võng mạc. | 63245986</td>
+            </tr>
+            <tr>
+                <td><b>42</b></td>
+                <td>Bữa trưa: | 915.0 | 09:15 | 555.0 | 915.0 | Ớt đỏ: Cung cấp vitamin C, giúp giảm nguy cơ thoái hóa điểm vàng.</td>
+            </tr>
+            <tr>
+                <td><b>43</b></td>
+                <td>Cơm cá thu sốt cà chua, rau muống hấp. | 951.0 | 09:51 | 591.0 | 951.0 | Sữa: Chứa vitamin A và kẽm, bảo vệ giác mạc và tăng cường thị lực ban đêm.</td>
+            </tr>
+            <tr>
+                <td><b>44</b></td>
+                <td>Bữa xế: | 924.0 | 09:24 | 564.0 | 924.0 | 2. Não bộ minh mẫn | 1/12/2024 | 1/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>45</b></td>
+                <td>Hạt dẻ, 1 lát khoai lang nướng. | 942.0 | 09:42 | 582.0 | 942.0 | Thực phẩm khuyên dùng: | 2/12/2024 | 2/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>46</b></td>
+                <td>Bữa tối: | 10:59 | 659.0 | 159.0 | Cá hồi, cá mòi: Giàu omega-3, hỗ trợ hoạt động của não. | 3/12/2024 | 3/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>47</b></td>
+                <td>Thịt bò xào ớt chuông, canh rau củ. | 11:35 | 695.0 | 195.0 | Quả óc chó: Chứa axit alpha-linolenic (ALA), giúp cải thiện trí nhớ. | 4/12/2024 | 4/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>48</b></td>
+                <td>Thứ Bảy | 11:08 | 668.0 | 168.0 | Quả việt quất: Giàu chất chống oxy hóa, giúp tăng cường nhận thức. | 5/12/2024 | 5/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>49</b></td>
+                <td>Bữa sáng: | 11:26 | 686.0 | 186.0 | Trứng: Chứa choline, hỗ trợ chức năng não bộ và trí nhớ. | 6/12/2024 | 6/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>50</b></td>
+                <td>Bánh cuốn thịt, nước ép dứa. | TRUE | 21:07 | 1267.0 | 267.0 | 3. Tim mạch khỏe mạnh | 7/12/2024 | 7/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>51</b></td>
+                <td>Bữa trưa: | 21:16 | 1276.0 | 276.0 | Thực phẩm khuyên dùng: | 8/12/2024 | 8/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>52</b></td>
+                <td>Bún chả, rau sống. | 20:49 | 1249.0 | 249.0 | Hạt chia và hạt lanh: Cung cấp omega-3 giúp giảm cholesterol. | 9/12/2024 | 9/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>53</b></td>
+                <td>Bữa xế: | 21:34 | 1294.0 | 294.0 | Dầu ô liu: Chứa chất béo lành mạnh, giảm nguy cơ bệnh tim. | 10/12/2024 | 10/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>54</b></td>
+                <td>Các loại hạt (hạnh nhân, điều), 1 quả chuối. | 21:25 | 1285.0 | 285.0 | Bột yến mạch: Giàu chất xơ, giảm cholesterol LDL (xấu). | 11/12/2024 | 11/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>55</b></td>
+                <td>Bữa tối: | 20:58 | 1258.0 | 258.0 | Quả bơ: Chứa kali và chất béo tốt, hỗ trợ sức khỏe tim. | 12/12/2024 | 12/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>56</b></td>
+                <td>Lẩu hải sản (mực, tôm, cá, rau cải thảo, nấm). | 06:48 | 408.0 | 348.0 | 4. Da mịn màng, trẻ trung | 13/12/2024 | 13/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>57</b></td>
+                <td>Chủ Nhật | 07:24 | 444.0 | 384.0 | Thực phẩm khuyên dùng: | 14/12/2024 | 14/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>58</b></td>
+                <td>Bữa sáng: | 06:57 | 417.0 | 357.0 | Cam, chanh: Giàu vitamin C, kích thích sản sinh collagen. | 15/12/2024 | 15/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>59</b></td>
+                <td>Bánh mì trứng ốp la, nước ép cần tây. | 07:15 | 435.0 | 375.0 | Cà chua: Chứa lycopene, bảo vệ da khỏi tia UV. | 16/12/2024 | 16/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>60</b></td>
+                <td>Bữa trưa: | 16:38 | 998.0 | 438.0 | Hạnh nhân: Giàu vitamin E, giúp dưỡng ẩm và bảo vệ da. | 17/12/2024 | 17/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>61</b></td>
+                <td>Cơm gà hấp lá chanh, bông cải xanh luộc. | 17:23 | 1043.0 | 483.0 | Rau chân vịt (cải bó xôi): Chứa vitamin A và C, giúp da sáng khỏe. | 18/12/2024 | 18/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>62</b></td>
+                <td>Bữa xế: | 16:29 | 989.0 | 429.0 | 5. Hệ tiêu hóa khỏe mạnh | 19/12/2024 | 19/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>63</b></td>
+                <td>Đậu phộng rang, 1 lát đu đủ. | 17:32 | 1052.0 | 492.0 | Thực phẩm khuyên dùng: | 20/12/2024 | 20/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>64</b></td>
+                <td>Bữa tối: | 02:19 | 139.0 | 519.0 | Sữa chua: Chứa probiotic, cải thiện hệ vi sinh đường ruột. | 21/12/2024 | 21/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>65</b></td>
+                <td>Cá thu nướng, canh rau củ quả. | 03:31 | 211.0 | 591.0 | Chuối: Cung cấp chất xơ, giảm táo bón. | 22/12/2024 | 22/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>66</b></td>
+                <td>Thống kê món ăn và chi phí ước tính | 02:37 | 157.0 | 537.0 | Gừng: Giảm buồn nôn và hỗ trợ tiêu hóa. | 23/12/2024 | 23/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>67</b></td>
+                <td>Nguyên liệu chính và tần suất sử dụng: | 03:13 | 193.0 | 573.0 | Táo: Giàu pectin, hỗ trợ hệ tiêu hóa hoạt động trơn tru. | 24/12/2024 | 24/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>68</b></td>
+                <td>Thịt đỏ: 7 bữa (thịt bò, dê, sườn heo). | 02:28 | 148.0 | 528.0 | 6. Xương chắc khỏe | 25/12/2024 | 25/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>69</b></td>
+                <td>Hải sản: 6 bữa (tôm, cá thu, mực, hàu). | 03:22 | 202.0 | 582.0 | Thực phẩm khuyên dùng: | 26/12/2024 | 26/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>70</b></td>
+                <td>Rau xanh: 14 bữa (cải xanh, cải thảo, bông cải, rau muống, cần tây). | 12:27 | 747.0 | 627.0 | Sữa và phô mai: Cung cấp canxi, giúp xương chắc khỏe. | 27/12/2024 | 27/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>71</b></td>
+                <td>Hạt: 7 bữa (hạt óc chó, hạnh nhân, macca, điều, bí). | 13:12 | 792.0 | 672.0 | Cá hồi: Giàu vitamin D, giúp cơ thể hấp thụ canxi hiệu quả. | 28/12/2024 | 28/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>72</b></td>
+                <td>Trứng vịt lộn: 2 bữa. | 13:21 | 801.0 | 681.0 | Hạnh nhân: Chứa magiê, cần thiết cho sức khỏe xương. | 29/12/2024 | 29/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>73</b></td>
+                <td>Nước ép: 7 bữa (dứa, cần tây, chuối). | 12:18 | 738.0 | 618.0 | Cải xoăn: Cung cấp canxi và vitamin K, hỗ trợ xương phát triển. | 30/12/2024 | 30/11/2024</td>
+            </tr>
+            <tr>
+                <td><b>74</b></td>
+                <td>Ước tính giá tiền (theo giá trung bình ở Việt Nam): | 0:00 | 22:26 | 1346.0 | 726.0 | 7. Tóc chắc khỏe | 31/12/2024 | 1/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>75</b></td>
+                <td>Thịt bò, dê, heo: ~700.000 VNĐ (100.000 VNĐ/ngày). | 23:02 | 1382.0 | 762.0 | Thực phẩm khuyên dùng: | 1/1/2025 | 2/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>76</b></td>
+                <td>Hải sản (hàu, tôm, cá thu, mực): ~900.000 VNĐ (150.000 VNĐ/ngày). | 22:35 | 1355.0 | 735.0 | Trứng: Chứa biotin, hỗ trợ sự phát triển của tóc. | 2/1/2025 | 3/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>77</b></td>
+                <td>Rau xanh, củ quả: ~350.000 VNĐ (50.000 VNĐ/ngày). | 22:53 | 1373.0 | 753.0 | Cá hồi: Giàu omega-3, giúp tóc bóng mượt và khỏe mạnh. | 3/1/2025 | 4/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>78</b></td>
+                <td>Trứng vịt lộn: ~30.000 VNĐ (15.000 VNĐ/quả). | 08:34 | 514.0 | 834.0 | Khoai lang: Chứa beta-carotene, giảm rụng tóc. | 4/1/2025 | 5/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>79</b></td>
+                <td>Hạt các loại: ~400.000 VNĐ (100.000 VNĐ/tuần). | 08:43 | 523.0 | 843.0 | Hạt bí ngô: Cung cấp kẽm, giúp giảm gãy rụng. | 5/1/2025 | 6/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>80</b></td>
+                <td>Nước ép: ~300.000 VNĐ (40.000 VNĐ/ngày). | 09:01 | 541.0 | 861.0 | 8. Gan khỏe mạnh | 6/1/2025 | 7/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>81</b></td>
+                <td>08:16 | 496.0 | 816.0 | Thực phẩm khuyên dùng: | 7/1/2025 | 8/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>82</b></td>
+                <td>Tổng chi phí: ~2.680.000 VNĐ/tuần. | 08:25 | 505.0 | 825.0 | Cà phê: Giảm nguy cơ xơ gan. | 8/1/2025 | 9/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>83</b></td>
+                <td>08:52 | 532.0 | 852.0 | Tỏi: Giúp kích hoạt enzyme giải độc của gan. | 9/1/2025 | 10/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>84</b></td>
+                <td>Món ăn | 18:15 | 1095.0 | 915.0 | Bưởi: Chứa chất chống oxy hóa, hỗ trợ thải độc gan. | 10/1/2025 | 11/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>85</b></td>
+                <td>1 | Bún mọc | 18:51 | 1131.0 | 951.0 | Củ cải đường: Cải thiện chức năng gan và tăng cường thải độc. | 11/1/2025 | 12/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>86</b></td>
+                <td>2 | Xôi đỗ xanh + giò lụa | 18:24 | 1104.0 | 924.0 | 9. Hệ miễn dịch mạnh mẽ | 12/1/2025 | 13/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>87</b></td>
+                <td>3 | Phở bò | 18:42 | 1122.0 | 942.0 | Thực phẩm khuyên dùng: | 13/1/2025 | 14/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>88</b></td>
+                <td>4 | Cháo đậu xanh + bánh dày | 15 | 9.0 | 15:9 | 15:09 | 909.0 | 159.0 | Tỏi: Giúp chống lại vi khuẩn và virus. | 14/1/2025 | 15/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>89</b></td>
+                <td>5 | Bún cá + rau sống | 19 | 5.0 | 19:5 | 19:05 | 1145.0 | 195.0 | Gừng: Giảm viêm và hỗ trợ hệ miễn dịch. | 15/1/2025 | 16/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>90</b></td>
+                <td>6 | Khoai luộc + vịt lộn + gừng muối | 16 | 8.0 | 16:8 | 16:08 | 968.0 | 168.0 | Nấm: Kích thích sản sinh tế bào bạch cầu. | 16/1/2025 | 17/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>91</b></td>
+                <td>7 | Cháo sườn cháo dinh dưỡng  | 18 | 6.0 | 18:6 | 18:06 | 1086.0 | 186.0 | Mật ong: Có tính kháng khuẩn, hỗ trợ miễn dịch. | 17/1/2025 | 18/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>92</b></td>
+                <td>8 | Bánh chưng + Kim chi | 26 | 7.0 | 26:7 | 2:07 | 127.0 | 267.0 | 18/1/2025 | 19/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>93</b></td>
+                <td>9 | Bánh mì pate | 27 | 6.0 | 27:6 | 3:06 | 186.0 | 276.0 | Bí quyết ăn uống để khỏe mạnh, đánh bại bệnh tật và tăng cường hệ miễn dịch | 19/1/2025 | 20/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>94</b></td>
+                <td>10 | Mì vằn thắn | 24 | 9.0 | 24:9 | 0:09 | 9.0 | 249.0 | 20/1/2025 | 21/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>95</b></td>
+                <td>11 | Bún bò | 29 | 4.0 | 29:4 | 5:04 | 304.0 | 294.0 | Việc duy trì một chế độ ăn uống lành mạnh không chỉ giúp cơ thể khỏe mạnh mà còn hỗ trợ chống lại bệnh tật, tăng cường hệ miễn dịch và cải thiện sức khỏe tổng thể. Dưới đây là một số bí quyết kèm theo nguồn tham khảo: | 21/1/2025 | 22/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>96</b></td>
+                <td>12 | Ngô luộc | Giò lụa | 28 | 5.0 | 28:5 | 4:05 | 245.0 | 285.0 | 22/1/2025 | 23/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>97</b></td>
+                <td>13 | Phở gà | Cháo lòng | 25 | 8.0 | 25:8 | 1:08 | 68.0 | 258.0 | 1. Bổ sung thực phẩm tốt cho hệ miễn dịch | 23/1/2025 | 24/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>98</b></td>
+                <td>14 | BUỔI TRƯA | 34 | 8.0 | 34:8 | 10:08 | 608.0 | 348.0 | Tỏi: Chứa allicin, giúp tăng cường miễn dịch và chống lại vi khuẩn, virus. | H | Hydrogen (H) | 24/1/2025 | 25/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>99</b></td>
+                <td>15 | Món ăn | 38 | 4.0 | 38:4 | 14:04 | 844.0 | 384.0 | Gừng: Giảm viêm và hỗ trợ cơ thể chống lại các bệnh cảm lạnh, cúm. | H | Helium (He) | 25/1/2025 | 26/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>100</b></td>
+                <td>16 | Cơm bụi thịt kho trứng + dưa muối | 35 | 7.0 | 35:7 | 11:07 | 667.0 | 357.0 | Quả kiwi, cam, bưởi: Giàu vitamin C, tăng cường sức đề kháng và bảo vệ tế bào khỏi tổn thương. | L | Lithium (Li) | 26/1/2025 | 27/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>101</b></td>
+                <td>17 | Phở gà | 37 | 5.0 | 37:5 | 13:05 | 785.0 | 375.0 | Nấm: Kích thích sản xuất tế bào bạch cầu, tăng khả năng chống nhiễm trùng. | B | Beryllium (Be) | 27/1/2025 | 28/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>102</b></td>
+                <td>18 | Thịt rang cháy cạnh + cà muối | 43 | 8.0 | 43:8 | 19:08 | 1148.0 | 438.0 | B | Boron (B) | 28/1/2025 | 29/12/2024</td>
+            </tr>
+            <tr>
+                <td><b>103</b></td>
+                <td>19 | Đậu sốt cà + nem tai | 48 | 3.0 | 48:3 | 0:03 | 3.0 | 483.0 | Nguồn: | C | Carbon (C) | 29/1/2025 | 1/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>104</b></td>
+                <td>20 | Bún ốc + giò tai | 42 | 9.0 | 42:9 | 18:09 | 1089.0 | 429.0 | N | Nitrogen (N) | 30/1/2025 | 2/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>105</b></td>
+                <td>21 | Thịt quay + dưa góp | 49 | 2.0 | 49:2 | 1:02 | 62.0 | 492.0 | Sức khỏe & Đời sống | O | Oxygen (O) | 31/1/2025 | 3/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>106</b></td>
+                <td>22 | Cháo dinh dưỡng cháo sườn  | 51 | 9.0 | 51:9 | 3:09 | 189.0 | 519.0 | Bệnh viện Nguyễn Tri Phương | F | Fluorine (F) | 1/2/2025 | 4/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>107</b></td>
+                <td>23 | Bún trả | 59 | 1.0 | 59:1 | 11:01 | 661.0 | 591.0 | 2. Ăn uống giúp tăng cường sức khỏe tim mạch | N | Neon (Ne) | 2/2/2025 | 5/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>108</b></td>
+                <td>24 | Phở Bò | 53 | 7.0 | 53:7 | 5:07 | 307.0 | 537.0 | Hạt óc chó: Giàu omega-3, giúp giảm cholesterol xấu và cải thiện lưu thông máu. | 1 | 11–20 | 3/2/2025 | 6/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>109</b></td>
+                <td>25 | BUỔI CHIỀU | 57 | 3.0 | 57:3 | 9:03 | 543.0 | 573.0 | Dầu ô liu: Chứa chất béo lành mạnh, hỗ trợ bảo vệ tim mạch. | S | Sodium (Na) | 4/2/2025 | Lập Xuân | 7/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>110</b></td>
+                <td>26 | Món ăn | 52 | 8.0 | 52:8 | 4:08 | 248.0 | 528.0 | Bơ: Giúp giảm huyết áp nhờ hàm lượng kali cao. | M | Magnesium (Mg) | 5/2/2025 | 8/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>111</b></td>
+                <td>27 | Bánh giò + xúc xích nướng | 58 | 2.0 | 58:2 | 10:02 | 602.0 | 582.0 | Cà chua: Chứa lycopene, làm giảm nguy cơ xơ vữa động mạch. | A | Aluminum (Al) | 6/2/2025 | 9/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>112</b></td>
+                <td>28 | Bánh cuốn + nem tai | 62 | 7.0 | 62:7 | 14:07 | 847.0 | 627.0 | S | Silicon (Si) | 7/2/2025 | 10/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>113</b></td>
+                <td>29 | Cháo lòng | 67 | 2.0 | 67:2 | 19:02 | 1142.0 | 672.0 | Nguồn: | P | Phosphorus (P) | 8/2/2025 | 11/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>114</b></td>
+                <td>30 | Thịt xiên nướng + ngô luộc | 68 | 1.0 | 68:1 | 20:01 | 1201.0 | 681.0 | S | Sulfur (S) | 9/2/2025 | 12/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>115</b></td>
+                <td>31 | Bánh đúc + dưa cà muối | 61 | 8.0 | 61:8 | 13:08 | 788.0 | 618.0 | Vietnamnet | C | Chlorine (Cl) | 10/2/2025 | 13/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>116</b></td>
+                <td>32 | Ốc luộc + bia | 72 | 6.0 | 72:6 | 0:06 | 6.0 | 726.0 | 3. Thực phẩm cải thiện sức khỏe tiêu hóa | A | Argon (Ar) | 11/2/2025 | 14/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>117</b></td>
+                <td>33 | Vó bò hấp gừng | 76 | 2.0 | 76:2 | 4:02 | 242.0 | 762.0 | Sữa chua: Chứa probiotic, cân bằng hệ vi sinh đường ruột. | P | Potassium (K) | 12/2/2025 | 15/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>118</b></td>
+                <td>34 | cháo sườn,dinh dưỡng  | 73 | 5.0 | 73:5 | 1:05 | 65.0 | 735.0 | Chuối: Giàu chất xơ và kali, giảm táo bón và hỗ trợ tiêu hóa. | C | Calcium (Ca) | 13/2/2025 | 16/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>119</b></td>
+                <td>35 | BUỔI TỐI | 75 | 3.0 | 75:3 | 3:03 | 183.0 | 753.0 | Khoai lang: Chứa chất xơ hòa tan, tốt cho đường ruột. | 2 | 21–30 | 14/2/2025 | 17/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>120</b></td>
+                <td>36 | Món ăn | 83 | 4.0 | 83:4 | 11:04 | 664.0 | 834.0 | Táo: Giàu pectin, giúp hệ tiêu hóa hoạt động trơn tru. | S | Scandium (Sc) | 15/2/2025 | 18/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>121</b></td>
+                <td>37 | Cháo tim gan | Ốc móng tay | 84 | 3.0 | 84:3 | 12:03 | 723.0 | 843.0 | T | Titanium (Ti) | 16/2/2025 | 19/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>122</b></td>
+                <td>38 | Miến lươn | Bia | 86 | 1.0 | 86:1 | 14:01 | 841.0 | 861.0 | Nguồn: | V | Vanadium (V) | 17/2/2025 | 20/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>123</b></td>
+                <td>39 | Mì trộn + kim chi | 81 | 6.0 | 81:6 | 9:06 | 546.0 | 816.0 | C | Chromium (Cr) | 18/2/2025 | 21/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>124</b></td>
+                <td>40 | Phở vịt | 82 | 5.0 | 82:5 | 10:05 | 605.0 | 825.0 | Healthline | M | Manganese (Mn) | 19/2/2025 | Vũ Thủy | 22/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>125</b></td>
+                <td>41 | Gà nướng lu + bánh phở cuốn | 85 | 2.0 | 85:2 | 13:02 | 782.0 | 852.0 | 4. Dinh dưỡng giúp xương và khớp khỏe mạnh | I | Iron (Fe) | 20/2/2025 | 23/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>126</b></td>
+                <td>42 | Cháo lòng | 91 | 5.0 | 91:5 | 19:05 | 1145.0 | 915.0 | Sữa và sản phẩm từ sữa: Cung cấp canxi, vitamin D, hỗ trợ phát triển và duy trì xương chắc khỏe. | C | Cobalt (Co) | 21/2/2025 | 24/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>127</b></td>
+                <td>43 | Chè đậu xanh + bánh chuối | 95 | 1.0 | 95:1 | 23:01 | 1381.0 | 951.0 | Cá hồi: Giàu vitamin D và omega-3, giúp bảo vệ khớp và giảm viêm. | N | Nickel (Ni) | 22/2/2025 | 25/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>128</b></td>
+                <td>44 | Cháo sườn cháo dinh dưỡng  | 92 | 4.0 | 92:4 | 20:04 | 1204.0 | 924.0 | Rau lá xanh (cải bó xôi, cải xoăn): Chứa canxi và vitamin K, cần thiết cho sức khỏe xương. | C | Copper (Cu) | 23/2/2025 | 26/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>129</b></td>
+                <td>94 | 2.0 | 94:2 | 22:02 | 1322.0 | 942.0 | Nước cam: Giàu vitamin C, giúp tăng cường hấp thụ canxi. | Z | Zinc (Zn) | 24/2/2025 | 27/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>130</b></td>
+                <td>3 | 31–40 | 25/2/2025 | 28/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>131</b></td>
+                <td>Nguồn: | G | Gallium (Ga) | 26/2/2025 | 29/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>132</b></td>
+                <td>G | Germanium (Ge) | 27/2/2025 | 30/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>133</b></td>
+                <td>Bệnh viện Nguyễn Tri Phương | A | Arsenic (As) | 28/2/2025 | 31/1/2025</td>
+            </tr>
+            <tr>
+                <td><b>134</b></td>
+                <td>5. Tăng cường sức khỏe da và tóc | S | Selenium (Se) | 1/3/2025 | 1/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>135</b></td>
+                <td>Cà chua: Giàu lycopene, giúp bảo vệ da khỏi tác hại của tia UV. | B | Bromine (Br) | 2/3/2025 | 2/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>136</b></td>
+                <td>Hạt chia: Cung cấp omega-3, giúp dưỡng ẩm da và tóc. | K | Krypton (Kr) | 3/3/2025 | 3/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>137</b></td>
+                <td>Hạnh nhân: Chứa vitamin E, giúp da sáng mịn và tóc chắc khỏe. | R | Rubidium (Rb) | 4/3/2025 | 4/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>138</b></td>
+                <td>Dưa leo: Giàu nước và chất chống oxy hóa, giúp da căng mọng. | S | Strontium (Sr) | 5/3/2025 | Kinh Trập | 5/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>139</b></td>
+                <td>Y | Yttrium (Y) | 6/3/2025 | 6/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>140</b></td>
+                <td>Nguồn: | Z | Zirconium (Zr) | 7/3/2025 | 7/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>141</b></td>
+                <td>4 | 41–50 | 8/3/2025 | 8/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>142</b></td>
+                <td>Vietnamnet | N | Niobium (Nb) | 9/3/2025 | 9/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>143</b></td>
+                <td>6. Thực phẩm thải độc cơ thể | M | Molybdenum (Mo) | 10/3/2025 | 10/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>144</b></td>
+                <td>Bưởi: Chứa glutathione, hỗ trợ gan thải độc. | T | Technetium (Tc) | 11/3/2025 | 11/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>145</b></td>
+                <td>Củ cải đường: Cung cấp betaine, hỗ trợ tái tạo tế bào gan. | R | Ruthenium (Ru) | 12/3/2025 | 12/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>146</b></td>
+                <td>Rau họ cải (súp lơ, cải xanh): Giúp tăng enzyme giải độc gan. | R | Rhodium (Rh) | 13/3/2025 | 13/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>147</b></td>
+                <td>Nước: Uống đủ nước để loại bỏ độc tố qua thận. | P | Palladium (Pd) | 14/3/2025 | 14/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>148</b></td>
+                <td>S | Silver (Ag) | 15/3/2025 | 15/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>149</b></td>
+                <td>C | Cadmium (Cd) | 16/3/2025 | 16/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>150</b></td>
+                <td>I | Indium (In) | 17/3/2025 | 17/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>151</b></td>
+                <td>T | Tin (Sn) | 18/3/2025 | 18/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>152</b></td>
+                <td>5 | 51–60 | 19/3/2025 | 19/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>153</b></td>
+                <td>A | Antimony (Sb) | 20/3/2025 | Xuân Phân | 20/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>154</b></td>
+                <td>T | Tellurium (Te) | 21/3/2025 | 21/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>155</b></td>
+                <td>I | Iodine (I) | 22/3/2025 | 22/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>156</b></td>
+                <td>X | Xenon (Xe) | 23/3/2025 | 23/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>157</b></td>
+                <td>C | Cesium (Cs) | 24/3/2025 | 24/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>158</b></td>
+                <td>B | Barium (Ba) | 25/3/2025 | 25/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>159</b></td>
+                <td>L | Lanthanum (La) | 26/3/2025 | 26/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>160</b></td>
+                <td>C | Cerium (Ce) | 27/3/2025 | 27/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>161</b></td>
+                <td>P | Praseodymium (Pr) | 28/3/2025 | 28/2/2025</td>
+            </tr>
+            <tr>
+                <td><b>162</b></td>
+                <td>N | Neodymium (Nd) | 29/3/2025 | 1/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>163</b></td>
+                <td>6 | 61–70 | 30/3/2025 | 2/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>164</b></td>
+                <td>P | Promethium (Pm) | 31/3/2025 | Bánh trôi | 3/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>165</b></td>
+                <td>S | Samarium (Sm) | 1/4/2025 | 4/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>166</b></td>
+                <td>E | Europium (Eu) | 2/4/2025 | 5/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>167</b></td>
+                <td>G | Gadolinium (Gd) | 3/4/2025 | 6/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>168</b></td>
+                <td>T | Terbium (Tb) | 4/4/2025 | Thanh Minh | 7/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>169</b></td>
+                <td>D | Dysprosium (Dy) | 5/4/2025 | 8/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>170</b></td>
+                <td>H | Holmium (Ho) | 6/4/2025 | 9/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>171</b></td>
+                <td>E | Erbium (Er) | 7/4/2025 | 10/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>172</b></td>
+                <td>T | Thulium (Tm) | 8/4/2025 | 11/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>173</b></td>
+                <td>Y | Ytterbium (Yb) | 9/4/2025 | 12/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>174</b></td>
+                <td>7 | 71–80 | 10/4/2025 | 13/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>175</b></td>
+                <td>L | Lutetium (Lu) | 11/4/2025 | 14/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>176</b></td>
+                <td>H | Hafnium (Hf) | 12/4/2025 | 15/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>177</b></td>
+                <td>T | Tantalum (Ta) | 13/4/2025 | 16/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>178</b></td>
+                <td>T | Tungsten (W) | 14/4/2025 | 17/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>179</b></td>
+                <td>R | Rhenium (Re) | 15/4/2025 | 18/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>180</b></td>
+                <td>O | Osmium (Os) | 16/4/2025 | 19/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>181</b></td>
+                <td>I | Iridium (Ir) | 17/4/2025 | 20/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>182</b></td>
+                <td>P | Platinum (Pt) | 18/4/2025 | 21/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>183</b></td>
+                <td>G | Gold (Au) | 19/4/2025 | 22/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>184</b></td>
+                <td>M | Mercury (Hg) | 20/4/2025 | Cốc Vũ | 23/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>185</b></td>
+                <td>8 | 81–90 | 21/4/2025 | 24/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>186</b></td>
+                <td>T | Thallium (Tl) | 22/4/2025 | 25/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>187</b></td>
+                <td>L | Lead (Pb) | 23/4/2025 | 26/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>188</b></td>
+                <td>B | Bismuth (Bi) | 24/4/2025 | 27/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>189</b></td>
+                <td>P | Polonium (Po) | 25/4/2025 | 28/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>190</b></td>
+                <td>A | Astatine (At) | 26/4/2025 | 29/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>191</b></td>
+                <td>R | Radon (Rn) | 27/4/2025 | 30/3/2025</td>
+            </tr>
+            <tr>
+                <td><b>192</b></td>
+                <td>F | Francium (Fr) | 28/4/2025 | 1/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>193</b></td>
+                <td>R | Radium (Ra) | 29/4/2025 | 2/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>194</b></td>
+                <td>A | Actinium (Ac) | 30/4/2025 | 3/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>195</b></td>
+                <td>T | Thorium (Th) | 1/5/2025 | 4/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>196</b></td>
+                <td>9 | 91–100 | 2/5/2025 | đầu trán | 5/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>197</b></td>
+                <td>P | Protactinium (Pa) | 3/5/2025 | Xoa tai | 6/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>198</b></td>
+                <td>U | Uranium (U) | 4/5/2025 | 7/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>199</b></td>
+                <td>N | Neptunium (Np) | 5/5/2025 | Lập Hạ | 8/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>200</b></td>
+                <td>P | Plutonium (Pu) | 6/5/2025 | 9/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>201</b></td>
+                <td>A | Americium (Am) | 7/5/2025 | 10/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>202</b></td>
+                <td>C | Curium (Cm) | 8/5/2025 | 11/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>203</b></td>
+                <td>B | Berkelium (Bk) | 9/5/2025 | 12/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>204</b></td>
+                <td>C | Californium (Cf) | 10/5/2025 | Gừng  | 13/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>205</b></td>
+                <td>E | Einsteinium (Es) | 11/5/2025 | ngải cứu  | 14/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>206</b></td>
+                <td>F | Fermium (Fm) | 12/5/2025 | Bia | 15/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>207</b></td>
+                <td>1 | 101–110 | 13/5/2025 | 16/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>208</b></td>
+                <td>M | Mendelevium (Md) | 14/5/2025 | 17/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>209</b></td>
+                <td>N | Nobelium (No) | 15/5/2025 | 18/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>210</b></td>
+                <td>L | Lawrencium (Lr) | 16/5/2025 | 2/5/2025 | 19/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>211</b></td>
+                <td>R | Rutherfordium (Rf) | 17/5/2025 | 29/5/2025 | 20/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>212</b></td>
+                <td>D | Dubnium (Db) | 18/5/2025 | 21/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>213</b></td>
+                <td>S | Seaborgium (Sg) | 19/5/2025 | 22/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>214</b></td>
+                <td>B | Bohrium (Bh) | 20/5/2025 | 23/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>215</b></td>
+                <td>H | Hassium (Hs) | 21/5/2025 | Tiểu Mãn | 24/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>216</b></td>
+                <td>M | Meitnerium (Mt) | 22/5/2025 | 25/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>217</b></td>
+                <td>D | Darmstadtium (Ds) | 23/5/2025 | 26/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>218</b></td>
+                <td>1 | 111–118 | 24/5/2025 | 27/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>219</b></td>
+                <td>R | Roentgenium (Rg) | 25/5/2025 | 28/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>220</b></td>
+                <td>C | Copernicium (Cn) | 26/5/2025 | 29/4/2025</td>
+            </tr>
+            <tr>
+                <td><b>221</b></td>
+                <td>N | Nihonium (Nh) | 27/5/2025 | 1/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>222</b></td>
+                <td>F | Flerovium (Fl) | 28/5/2025 | 2/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>223</b></td>
+                <td>M | Moscovium (Mc) | 29/5/2025 | 3/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>224</b></td>
+                <td>L | Livermorium (Lv) | 30/5/2025 | Rượu nếp  | 4/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>225</b></td>
+                <td>T | Tennessine (Ts) | 31/5/2025 | 5/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>226</b></td>
+                <td>O | Oganesson (Og) | 1/6/2025 | 6/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>227</b></td>
+                <td>2/6/2025 | 7/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>228</b></td>
+                <td>3/6/2025 | 8/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>229</b></td>
+                <td>4/6/2025 | 9/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>230</b></td>
+                <td>5/6/2025 | Mang Chủng | 10/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>231</b></td>
+                <td>6/6/2025 | 11/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>232</b></td>
+                <td>7/6/2025 | 12/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>233</b></td>
+                <td>8/6/2025 | 13/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>234</b></td>
+                <td>9/6/2025 | 14/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>235</b></td>
+                <td>10/6/2025 | 15/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>236</b></td>
+                <td>11/6/2025 | 16/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>237</b></td>
+                <td>12/6/2025 | 17/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>238</b></td>
+                <td>13/6/2025 | 18/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>239</b></td>
+                <td>14/6/2025 | 19/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>240</b></td>
+                <td>15/6/2025 | 20/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>241</b></td>
+                <td>16/6/2025 | 21/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>242</b></td>
+                <td>17/6/2025 | 22/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>243</b></td>
+                <td>18/6/2025 | 23/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>244</b></td>
+                <td>19/6/2025 | 24/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>245</b></td>
+                <td>20/6/2025 | 25/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>246</b></td>
+                <td>21/6/2025 | Hạ Chí | 26/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>247</b></td>
+                <td>22/6/2025 | 27/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>248</b></td>
+                <td>23/6/2025 | 28/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>249</b></td>
+                <td>24/6/2025 | 29/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>250</b></td>
+                <td>25/6/2025 | 30/5/2025</td>
+            </tr>
+            <tr>
+                <td><b>251</b></td>
+                <td>26/6/2025 | 1/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>252</b></td>
+                <td>27/6/2025 | 2/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>253</b></td>
+                <td>28/6/2025 | 3/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>254</b></td>
+                <td>29/6/2025 | 4/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>255</b></td>
+                <td>30/6/2025 | 5/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>256</b></td>
+                <td>1/7/2025 | 6/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>257</b></td>
+                <td>2/7/2025 | 7/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>258</b></td>
+                <td>3/7/2025 | 8/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>259</b></td>
+                <td>4/7/2025 | 9/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>260</b></td>
+                <td>5/7/2025 | 10/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>261</b></td>
+                <td>6/7/2025 | 11/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>262</b></td>
+                <td>7/7/2025 | Tiểu Thử | 12/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>263</b></td>
+                <td>8/7/2025 | 13/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>264</b></td>
+                <td>9/7/2025 | 14/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>265</b></td>
+                <td>10/7/2025 | 15/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>266</b></td>
+                <td>11/7/2025 | 16/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>267</b></td>
+                <td>12/7/2025 | 17/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>268</b></td>
+                <td>13/7/2025 | 18/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>269</b></td>
+                <td>14/7/2025 | 19/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>270</b></td>
+                <td>15/7/2025 | 20/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>271</b></td>
+                <td>16/7/2025 | 21/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>272</b></td>
+                <td>17/7/2025 | 22/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>273</b></td>
+                <td>18/7/2025 | 23/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>274</b></td>
+                <td>19/7/2025 | 24/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>275</b></td>
+                <td>20/7/2025 | 25/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>276</b></td>
+                <td>21/7/2025 | 26/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>277</b></td>
+                <td>22/7/2025 | 27/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>278</b></td>
+                <td>23/7/2025 | Đại Thử | 28/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>279</b></td>
+                <td>24/7/2025 | 29/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>280</b></td>
+                <td>25/7/2025 | 30/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>281</b></td>
+                <td>26/7/2025 | 1/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>282</b></td>
+                <td>27/7/2025 | 2/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>283</b></td>
+                <td>28/7/2025 | 3/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>284</b></td>
+                <td>29/7/2025 | 4/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>285</b></td>
+                <td>30/7/2025 | 5/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>286</b></td>
+                <td>31/7/2025 | 6/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>287</b></td>
+                <td>1/8/2025 | 7/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>288</b></td>
+                <td>2/8/2025 | 8/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>289</b></td>
+                <td>3/8/2025 | 9/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>290</b></td>
+                <td>4/8/2025 | 10/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>291</b></td>
+                <td>5/8/2025 | 11/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>292</b></td>
+                <td>6/8/2025 | 12/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>293</b></td>
+                <td>7/8/2025 | 13/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>294</b></td>
+                <td>8/8/2025 | Lập Thu | 14/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>295</b></td>
+                <td>9/8/2025 | 15/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>296</b></td>
+                <td>10/8/2025 | 16/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>297</b></td>
+                <td>11/8/2025 | 17/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>298</b></td>
+                <td>12/8/2025 | 18/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>299</b></td>
+                <td>13/8/2025 | 19/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>300</b></td>
+                <td>14/8/2025 | 20/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>301</b></td>
+                <td>15/8/2025 | 21/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>302</b></td>
+                <td>16/8/2025 | 22/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>303</b></td>
+                <td>17/8/2025 | 23/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>304</b></td>
+                <td>18/8/2025 | 24/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>305</b></td>
+                <td>19/8/2025 | 25/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>306</b></td>
+                <td>20/8/2025 | 26/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>307</b></td>
+                <td>21/8/2025 | 27/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>308</b></td>
+                <td>22/8/2025 | 28/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>309</b></td>
+                <td>23/8/2025 | Xử Thử | 29/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>310</b></td>
+                <td>24/8/2025 | 30/6/2025</td>
+            </tr>
+            <tr>
+                <td><b>311</b></td>
+                <td>25/8/2025 | 1/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>312</b></td>
+                <td>26/8/2025 | 2/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>313</b></td>
+                <td>27/8/2025 | 3/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>314</b></td>
+                <td>28/8/2025 | 4/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>315</b></td>
+                <td>29/8/2025 | 5/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>316</b></td>
+                <td>30/8/2025 | 6/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>317</b></td>
+                <td>31/8/2025 | 7/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>318</b></td>
+                <td>1/9/2025 | 8/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>319</b></td>
+                <td>2/9/2025 | 9/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>320</b></td>
+                <td>3/9/2025 | 10/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>321</b></td>
+                <td>4/9/2025 | 11/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>322</b></td>
+                <td>5/9/2025 | 12/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>323</b></td>
+                <td>6/9/2025 | 13/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>324</b></td>
+                <td>7/9/2025 | 14/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>325</b></td>
+                <td>8/9/2025 | Bạch Lộ | 15/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>326</b></td>
+                <td>9/9/2025 | 16/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>327</b></td>
+                <td>10/9/2025 | 17/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>328</b></td>
+                <td>11/9/2025 | 18/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>329</b></td>
+                <td>12/9/2025 | 19/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>330</b></td>
+                <td>13/9/2025 | 20/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>331</b></td>
+                <td>14/9/2025 | 21/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>332</b></td>
+                <td>15/9/2025 | 22/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>333</b></td>
+                <td>16/9/2025 | 23/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>334</b></td>
+                <td>17/9/2025 | 24/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>335</b></td>
+                <td>18/9/2025 | 25/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>336</b></td>
+                <td>19/9/2025 | 26/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>337</b></td>
+                <td>20/9/2025 | 27/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>338</b></td>
+                <td>21/9/2025 | 28/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>339</b></td>
+                <td>22/9/2025 | 29/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>340</b></td>
+                <td>23/9/2025 | Thu Phân | 30/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>341</b></td>
+                <td>24/9/2025 | 31/7/2025</td>
+            </tr>
+            <tr>
+                <td><b>342</b></td>
+                <td>25/9/2025 | 1/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>343</b></td>
+                <td>26/9/2025 | 2/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>344</b></td>
+                <td>27/9/2025 | 3/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>345</b></td>
+                <td>28/9/2025 | 4/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>346</b></td>
+                <td>29/9/2025 | 5/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>347</b></td>
+                <td>30/9/2025 | 6/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>348</b></td>
+                <td>1/10/2025 | 7/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>349</b></td>
+                <td>2/10/2025 | 8/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>350</b></td>
+                <td>3/10/2025 | 9/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>351</b></td>
+                <td>4/10/2025 | 10/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>352</b></td>
+                <td>5/10/2025 | 11/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>353</b></td>
+                <td>6/10/2025 | 12/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>354</b></td>
+                <td>7/10/2025 | 13/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>355</b></td>
+                <td>8/10/2025 | Hàn Lộ | 14/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>356</b></td>
+                <td>9/10/2025 | 15/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>357</b></td>
+                <td>10/10/2025 | 16/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>358</b></td>
+                <td>11/10/2025 | 17/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>359</b></td>
+                <td>12/10/2025 | 18/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>360</b></td>
+                <td>13/10/2025 | 19/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>361</b></td>
+                <td>14/10/2025 | 20/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>362</b></td>
+                <td>15/10/2025 | 21/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>363</b></td>
+                <td>16/10/2025 | 22/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>364</b></td>
+                <td>17/10/2025 | 23/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>365</b></td>
+                <td>18/10/2025 | 24/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>366</b></td>
+                <td>19/10/2025 | 25/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>367</b></td>
+                <td>20/10/2025 | 26/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>368</b></td>
+                <td>21/10/2025 | 27/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>369</b></td>
+                <td>22/10/2025 | 28/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>370</b></td>
+                <td>23/10/2025 | Sương Giáng | 29/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>371</b></td>
+                <td>24/10/2025 | 30/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>372</b></td>
+                <td>25/10/2025 | 31/8/2025</td>
+            </tr>
+            <tr>
+                <td><b>373</b></td>
+                <td>26/10/2025 | 1/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>374</b></td>
+                <td>27/10/2025 | 2/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>375</b></td>
+                <td>28/10/2025 | 3/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>376</b></td>
+                <td>29/10/2025 | 4/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>377</b></td>
+                <td>30/10/2025 | 5/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>378</b></td>
+                <td>31/10/2025 | 6/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>379</b></td>
+                <td>1/11/2025 | 7/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>380</b></td>
+                <td>2/11/2025 | 8/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>381</b></td>
+                <td>3/11/2025 | 9/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>382</b></td>
+                <td>4/11/2025 | 10/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>383</b></td>
+                <td>5/11/2025 | 11/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>384</b></td>
+                <td>6/11/2025 | 12/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>385</b></td>
+                <td>7/11/2025 | Lập Đông | 13/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>386</b></td>
+                <td>8/11/2025 | 14/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>387</b></td>
+                <td>9/11/2025 | 15/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>388</b></td>
+                <td>10/11/2025 | 16/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>389</b></td>
+                <td>11/11/2025 | 17/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>390</b></td>
+                <td>12/11/2025 | 18/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>391</b></td>
+                <td>13/11/2025 | 19/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>392</b></td>
+                <td>14/11/2025 | 20/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>393</b></td>
+                <td>15/11/2025 | 21/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>394</b></td>
+                <td>16/11/2025 | 22/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>395</b></td>
+                <td>17/11/2025 | 23/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>396</b></td>
+                <td>18/11/2025 | 24/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>397</b></td>
+                <td>19/11/2025 | 25/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>398</b></td>
+                <td>20/11/2025 | 26/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>399</b></td>
+                <td>21/11/2025 | 27/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>400</b></td>
+                <td>22/11/2025 | Tiểu Tuyết | 28/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>401</b></td>
+                <td>23/11/2025 | 29/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>402</b></td>
+                <td>24/11/2025 | 30/9/2025</td>
+            </tr>
+            <tr>
+                <td><b>403</b></td>
+                <td>25/11/2025 | 1/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>404</b></td>
+                <td>26/11/2025 | 2/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>405</b></td>
+                <td>27/11/2025 | 3/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>406</b></td>
+                <td>28/11/2025 | 4/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>407</b></td>
+                <td>29/11/2025 | 5/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>408</b></td>
+                <td>30/11/2025 | 6/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>409</b></td>
+                <td>1/12/2025 | 7/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>410</b></td>
+                <td>2/12/2025 | 8/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>411</b></td>
+                <td>3/12/2025 | 9/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>412</b></td>
+                <td>4/12/2025 | 10/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>413</b></td>
+                <td>5/12/2025 | 11/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>414</b></td>
+                <td>6/12/2025 | 12/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>415</b></td>
+                <td>7/12/2025 | Đại Tuyết | 13/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>416</b></td>
+                <td>8/12/2025 | 14/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>417</b></td>
+                <td>9/12/2025 | 15/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>418</b></td>
+                <td>10/12/2025 | 16/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>419</b></td>
+                <td>11/12/2025 | 17/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>420</b></td>
+                <td>12/12/2025 | 18/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>421</b></td>
+                <td>13/12/2025 | 19/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>422</b></td>
+                <td>14/12/2025 | 20/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>423</b></td>
+                <td>15/12/2025 | 21/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>424</b></td>
+                <td>16/12/2025 | 22/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>425</b></td>
+                <td>17/12/2025 | 23/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>426</b></td>
+                <td>18/12/2025 | 24/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>427</b></td>
+                <td>19/12/2025 | 25/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>428</b></td>
+                <td>20/12/2025 | 26/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>429</b></td>
+                <td>21/12/2025 | 27/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>430</b></td>
+                <td>22/12/2025 | Đông Chí | 28/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>431</b></td>
+                <td>23/12/2025 | 29/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>432</b></td>
+                <td>24/12/2025 | 30/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>433</b></td>
+                <td>25/12/2025 | 31/10/2025</td>
+            </tr>
+            <tr>
+                <td><b>434</b></td>
+                <td>26/12/2025 | 1/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>435</b></td>
+                <td>27/12/2025 | 2/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>436</b></td>
+                <td>28/12/2025 | 3/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>437</b></td>
+                <td>29/12/2025 | 4/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>438</b></td>
+                <td>30/12/2025 | 5/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>439</b></td>
+                <td>31/12/2025 | 6/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>440</b></td>
+                <td>1/1/2026 | 7/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>441</b></td>
+                <td>2/1/2026 | 8/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>442</b></td>
+                <td>3/1/2026 | 9/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>443</b></td>
+                <td>4/1/2026 | 10/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>444</b></td>
+                <td>5/1/2026 | 11/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>445</b></td>
+                <td>6/1/2026 | 12/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>446</b></td>
+                <td>7/1/2026 | 13/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>447</b></td>
+                <td>8/1/2026 | 14/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>448</b></td>
+                <td>9/1/2026 | 15/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>449</b></td>
+                <td>10/1/2026 | 16/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>450</b></td>
+                <td>11/1/2026 | 17/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>451</b></td>
+                <td>12/1/2026 | 18/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>452</b></td>
+                <td>13/1/2026 | 19/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>453</b></td>
+                <td>14/1/2026 | 20/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>454</b></td>
+                <td>15/1/2026 | 21/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>455</b></td>
+                <td>16/1/2026 | 22/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>456</b></td>
+                <td>17/1/2026 | 23/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>457</b></td>
+                <td>18/1/2026 | 24/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>458</b></td>
+                <td>19/1/2026 | 25/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>459</b></td>
+                <td>20/1/2026 | 26/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>460</b></td>
+                <td>21/1/2026 | 27/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>461</b></td>
+                <td>22/1/2026 | 28/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>462</b></td>
+                <td>23/1/2026 | 29/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>463</b></td>
+                <td>24/1/2026 | 30/11/2025</td>
+            </tr>
+            <tr>
+                <td><b>464</b></td>
+                <td>25/1/2026 | 1/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>465</b></td>
+                <td>26/1/2026 | 2/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>466</b></td>
+                <td>27/1/2026 | 3/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>467</b></td>
+                <td>28/1/2026 | 4/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>468</b></td>
+                <td>29/1/2026 | 5/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>469</b></td>
+                <td>30/1/2026 | 6/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>470</b></td>
+                <td>31/1/2026 | 7/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>471</b></td>
+                <td>1/2/2026 | 8/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>472</b></td>
+                <td>2/2/2026 | 9/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>473</b></td>
+                <td>3/2/2026 | 10/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>474</b></td>
+                <td>4/2/2026 | 11/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>475</b></td>
+                <td>5/2/2026 | 12/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>476</b></td>
+                <td>6/2/2026 | 13/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>477</b></td>
+                <td>7/2/2026 | 14/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>478</b></td>
+                <td>8/2/2026 | 15/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>479</b></td>
+                <td>9/2/2026 | 16/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>480</b></td>
+                <td>10/2/2026 | 17/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>481</b></td>
+                <td>11/2/2026 | 18/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>482</b></td>
+                <td>12/2/2026 | 19/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>483</b></td>
+                <td>13/2/2026 | 20/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>484</b></td>
+                <td>14/2/2026 | 21/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>485</b></td>
+                <td>15/2/2026 | 22/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>486</b></td>
+                <td>16/2/2026 | 23/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>487</b></td>
+                <td>17/2/2026 | 24/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>488</b></td>
+                <td>18/2/2026 | 25/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>489</b></td>
+                <td>19/2/2026 | 26/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>490</b></td>
+                <td>20/2/2026 | 27/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>491</b></td>
+                <td>21/2/2026 | 28/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>492</b></td>
+                <td>22/2/2026 | 29/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>493</b></td>
+                <td>23/2/2026 | 30/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>494</b></td>
+                <td>24/2/2026 | 31/12/2025</td>
+            </tr>
+            <tr>
+                <td><b>495</b></td>
+                <td>25/2/2026 | 1/1/2026</td>
+            </tr>
+            <tr>
+                <td><b>496</b></td>
+                <td>26/2/2026 | 2/1/2026</td>
+            </tr>
+            <tr>
+                <td><b>497</b></td>
+                <td>27/2/2026 | 3/1/2026</td>
+            </tr>
+            <tr>
+                <td><b>498</b></td>
+                <td>28/2/2026 | 4/1/2026</td>
+            </tr>
+            <tr>
+                <td><b>499</b></td>
+                <td>1/3/2026 | 5/1/2026</td>
+            </tr>
+            <tr>
+                <td><b>500</b></td>
+                <td>2/3/2026 | 6/1/2026</td>
+            </tr>
+            <tr>
+                <td><b>501</b></td>
+                <td>3/3/2026 | 7/1/2026</td>
+            </tr>
+            <tr>
+                <td><b>502</b></td>
+                <td>4/3/2026 | 8/1/2026</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bàn Cờ Trăm Năm - 90 Khuyết Điểm Cần Nhìn Nhận</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#0B0F19',
+                        darkcard: '#1E293B',
+                        darkborder: '#334155',
+                        husband: '#3B82F6', // Xanh dương cho Chồng
+                        wife: '#EC4899',    // Hồng cho Vợ
+                        warning: '#EF4444', // Đỏ cảnh báo khuyết điểm
+                        amber: '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: #0B0F19;
+            color: #F8FAFC;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1E293B;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748B;
+        }
+
+        /* Animation cho flip bàn cờ */
+        .board-container {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .board-flipped {
+            transform: rotate(180deg);
+        }
+        .board-flipped .piece-content {
+            transform: rotate(180deg);
+        }
+
+        /* Hiệu ứng quân cờ khuyết điểm phát sáng khi được chọn */
+        .piece-selected-husband {
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.8);
+            border-color: #EF4444 !important;
+            background-color: #7F1D1D !important;
+            color: #FEE2E2 !important;
+        }
+        .piece-selected-wife {
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.8);
+            border-color: #EF4444 !important;
+            background-color: #831843 !important;
+            color: #FCE7F3 !important;
+        }
+
+        /* Line bàn cờ tướng */
+        .board-grid-bg {
+            background-image: 
+                linear-gradient(to right, #334155 1px, transparent 1px),
+                linear-gradient(to bottom, #334155 1px, transparent 1px);
+            background-size: 11.111% 10%;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-rose-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="bg-slate-900/90 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 via-amber-500 to-blue-600 flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-rose-400 via-amber-300 to-blue-400 bg-clip-text text-transparent">
+                        BÀN CỜ TRĂM NĂM
+                    </h1>
+                    <p class="text-xs text-slate-400 font-medium">90 Khuyết Điểm Cần Cân Nhắc Khi Chọn Bạn Đời</p>
+                </div>
+            </div>
+
+            <!-- Nút điều khiển nhanh Header -->
+            <div class="flex items-center gap-2">
+                <button id="btnFlip" onclick="toggleFlipBoard()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+                    <i class="fa-solid fa-rotate"></i>
+                    <span class="hidden sm:inline">Đảo Bàn Cờ</span>
+                </button>
+                <button onclick="openHistoryModal()" class="px-3 py-2 bg-purple-900/40 hover:bg-purple-800/50 text-purple-300 border border-purple-700/50 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>Lịch Sử</span>
+                </button>
+                <button onclick="resetCurrentMatch()" class="px-3 py-2 bg-rose-950/40 hover:bg-rose-900/50 text-rose-300 border border-rose-800/40 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                    <span class="hidden sm:inline">Làm Mới</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto w-full px-2 sm:px-4 py-4 flex-grow grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- CỘT TRÁI: Bàn cờ 90 điểm (10 hàng x 9 cột) -->
+        <div class="lg:col-span-8 flex flex-col gap-4">
+
+            <!-- Thông tin người chơi & Bảng điểm khuyết điểm -->
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Nhà Trai -->
+                <div class="bg-slate-900/80 border-2 border-blue-600/40 rounded-xl p-3 sm:p-4 flex flex-col justify-between relative overflow-hidden shadow-lg">
+                    <div class="absolute -right-4 -bottom-4 text-blue-500/10 text-7xl font-black pointer-events-none">
+                        <i class="fa-solid fa-mars"></i>
+                    </div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-blue-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-mars"></i> CHỒNG / BẠN TRAI
+                        </span>
+                        <span id="scoreHusband" class="text-2xl sm:text-3xl font-black text-rose-500">0 / 45</span>
+                    </div>
+                    <input type="text" id="nameHusband" value="Chú Rể" placeholder="Nhập tên Nam..." 
+                           class="w-full bg-slate-950 border border-slate-700 focus:border-blue-500 text-slate-100 rounded-lg px-3 py-1.5 text-base font-bold outline-none transition">
+                </div>
+
+                <!-- Nhà Gái -->
+                <div class="bg-slate-900/80 border-2 border-pink-600/40 rounded-xl p-3 sm:p-4 flex flex-col justify-between relative overflow-hidden shadow-lg">
+                    <div class="absolute -right-4 -bottom-4 text-pink-500/10 text-7xl font-black pointer-events-none">
+                        <i class="fa-solid fa-venus"></i>
+                    </div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-pink-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-venus"></i> VỢ / BẠN GÁI
+                        </span>
+                        <span id="scoreWife" class="text-2xl sm:text-3xl font-black text-rose-500">0 / 45</span>
+                    </div>
+                    <input type="text" id="nameWife" value="Cô Dâu" placeholder="Nhập tên Nữ..." 
+                           class="w-full bg-slate-950 border border-slate-700 focus:border-pink-500 text-slate-100 rounded-lg px-3 py-1.5 text-base font-bold outline-none transition">
+                </div>
+            </div>
+
+            <!-- Ô Tìm Kiếm Nhanh & Lọc Tiêu Chí -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 flex flex-col sm:flex-row gap-3 items-center justify-between">
+                <div class="relative w-full sm:w-72">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Tìm khuyết điểm (VD: gia trưởng, hoang phí)..." 
+                           class="w-full bg-slate-950 border border-slate-700 focus:border-rose-500 text-slate-200 rounded-lg pl-9 pr-3 py-2 text-sm outline-none transition">
+                </div>
+
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    <button onclick="filterCategory('all')" id="filterAll" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 border border-amber-400">Tất cả (90)</button>
+                    <button onclick="filterCategory('husband')" id="filterHusband" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-blue-400 hover:bg-slate-700 border border-blue-900">Khuyết Điểm Nam (45)</button>
+                    <button onclick="filterCategory('wife')" id="filterWife" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-pink-400 hover:bg-slate-700 border border-pink-900">Khuyết Điểm Nữ (45)</button>
+                </div>
+            </div>
+
+            <!-- BÀN CỜ TƯỚNG (10 Hàng x 9 Cột = 90 Điểm) -->
+            <div class="bg-slate-900/90 border-2 border-slate-800 rounded-2xl p-3 sm:p-6 shadow-2xl relative overflow-hidden flex flex-col items-center justify-center">
+                <!-- Chú thích sông bàn cờ -->
+                <div class="w-full flex justify-between items-center text-xs font-extrabold text-slate-500 px-4 mb-2 tracking-widest uppercase">
+                    <span>Nam Khuyết Điểm (Hàng 1-5)</span>
+                    <span>Sông Tương Phùng</span>
+                    <span>Nữ Khuyết Điểm (Hàng 6-10)</span>
+                </div>
+
+                <!-- Khung Bàn Cờ -->
+                <div class="w-full overflow-x-auto pb-2 flex justify-center">
+                    <div id="boardContainer" class="board-container min-w-[620px] max-w-[800px] w-full aspect-[9/10] bg-slate-950 border-4 border-slate-800 rounded-xl p-3 relative shadow-inner">
+                        <!-- Đường kẻ lưới cờ -->
+                        <div class="absolute inset-4 board-grid-bg opacity-30 pointer-events-none rounded"></div>
+                        
+                        <!-- Lưới 90 quân cờ (Grid 10 rows x 9 cols) -->
+                        <div id="boardGrid" class="relative z-10 grid grid-cols-9 grid-rows-10 gap-1.5 sm:gap-2 h-full w-full">
+                            <!-- JS sẽ load 90 điểm cờ tại đây -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thanh lưu điểm ván đấu -->
+                <div class="w-full mt-4 flex flex-col sm:flex-row gap-3 items-center justify-between bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <div class="text-xs text-slate-400 text-center sm:text-left">
+                        Đã chọn cảnh báo: <span id="selectedCountText" class="font-bold text-rose-500">0</span>/90 khuyết điểm.
+                    </div>
+                    <button onclick="saveMatchHistory()" class="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-extrabold rounded-xl shadow-lg transition transform active:scale-95 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>GHI ĐIỂM VÁN ĐẤU NÀY</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- CỘT PHẢI: CHI TIẾT Ô TIÊU CHÍ & BẢNG THỐNG KÊ -->
+        <div class="lg:col-span-4 flex flex-col gap-4">
+
+            <!-- Card Hiển Thị Chi Tiết Ô Đang Chọn -->
+            <div id="detailCard" class="bg-slate-900 border-2 border-slate-700 rounded-2xl p-5 shadow-xl flex flex-col justify-between min-h-[340px] relative overflow-hidden transition-all">
+                
+                <!-- Placeholder khi chưa chọn -->
+                <div id="detailPlaceholder" class="flex flex-col items-center justify-center h-full my-auto text-center py-10">
+                    <div class="w-16 h-16 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-500 text-2xl mb-3 animate-pulse">
+                        <i class="fa-solid fa-hand-pointer"></i>
+                    </div>
+                    <h3 class="text-slate-300 font-bold text-base">CHƯA CHỌN KHUYẾT ĐIỂM NÀO</h3>
+                    <p class="text-slate-500 text-xs mt-1 max-w-xs">Nhấp vào một ô trên bàn cờ để xem phân tích rủi ro và mức độ ảnh hưởng đến hôn nhân.</p>
+                </div>
+
+                <!-- Nội dung hiển thị khi chọn -->
+                <div id="detailContent" class="hidden flex-col h-full justify-between gap-4">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span id="detailBadge" class="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider">
+                                KHUYẾT ĐIỂM #1
+                            </span>
+                            <span id="detailCoords" class="text-xs text-slate-400 font-mono">Vị trí: Hàng 1, Cột 1</span>
+                        </div>
+
+                        <h3 id="detailTitle" class="text-xl font-black text-rose-400 mb-2 leading-snug">
+                            Tên khuyết điểm
+                        </h3>
+
+                        <div class="w-12 h-1 rounded bg-rose-500 mb-3"></div>
+
+                        <p id="detailDesc" class="text-slate-300 text-sm leading-relaxed bg-slate-950/80 p-3 rounded-lg border border-slate-800">
+                            Chi tiết mô tả khuyết điểm...
+                        </p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center text-xs">
+                            <span class="text-slate-400">Mức độ rủi ro hôn nhân:</span>
+                            <span id="detailImpact" class="font-bold text-rose-400">Rất Cao</span>
+                        </div>
+
+                        <div class="pt-2 border-t border-slate-800 flex items-center justify-between gap-2">
+                            <div class="text-xs text-slate-400">
+                                Trạng thái: <span id="detailStatus" class="font-bold text-slate-300">Không mắc phải</span>
+                            </div>
+                            <button id="btnTogglePiece" onclick="toggleCurrentPiece()" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-lg text-sm transition shadow-md flex items-center gap-2">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                <span id="btnTogglePieceText">Đánh Dấu Khuyết Điểm Này</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bảng Đánh Giá Mức Độ Rủi Ro Hôn Nhân -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
+                <h3 class="text-base font-extrabold text-slate-200 mb-4 flex items-center gap-2 border-b border-slate-800 pb-2">
+                    <i class="fa-solid fa-chart-line text-rose-500"></i>
+                    ĐÁNH GIÁ CHỈ SỐ RỦI RO HÔN NHÂN
+                </h3>
+
+                <!-- Thanh Tiến Độ Tỷ Lệ Khuyết Điểm Nam -->
+                <div class="mb-4">
+                    <div class="flex justify-between text-xs font-bold mb-1">
+                        <span class="text-blue-400 flex items-center gap-1">
+                            <i class="fa-solid fa-mars"></i> <span id="progressHusbandName">Nam</span>
+                        </span>
+                        <span id="progressHusbandPercent" class="text-rose-400">0% Rủi ro</span>
+                    </div>
+                    <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                        <div id="barHusband" class="h-full bg-rose-600 transition-all duration-500 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Thanh Tiến Độ Tỷ Lệ Khuyết Điểm Nữ -->
+                <div class="mb-5">
+                    <div class="flex justify-between text-xs font-bold mb-1">
+                        <span class="text-pink-400 flex items-center gap-1">
+                            <i class="fa-solid fa-venus"></i> <span id="progressWifeName">Nữ</span>
+                        </span>
+                        <span id="progressWifePercent" class="text-rose-400">0% Rủi ro</span>
+                    </div>
+                    <div class="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+                        <div id="barWife" class="h-full bg-rose-600 transition-all duration-500 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Đánh giá tổng hợp -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center">
+                    <div class="text-xs text-slate-400 uppercase tracking-widest font-bold mb-1">Đánh Giá Tổng Quan</div>
+                    <div id="marriageEvaluation" class="text-base font-extrabold text-amber-400">
+                        Hãy tích chọn các khuyết điểm hiện có để xem đánh giá
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hướng dẫn nhanh -->
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 text-xs text-slate-400 space-y-2">
+                <div class="font-bold text-slate-300 flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-info text-amber-400"></i> Hướng dẫn nhìn nhận:
+                </div>
+                <ul class="list-disc list-inside space-y-1">
+                    <li>Nhấp chọn điểm để đánh dấu khuyết điểm bạn đời đang mắc phải.</li>
+                    <li>Sử dụng ô Tìm Kiếm để lọc nhanh khuyết điểm cụ thể.</li>
+                    <li>Nút <span class="text-amber-400">"Đảo Bàn Cờ"</span> giúp 2 bên trao đổi thẳng thắn khi ngồi đối diện.</li>
+                    <li>Nhấn <span class="text-rose-400 font-semibold">"Ghi điểm ván này"</span> để lưu lại lịch sử đối chiếu.</li>
+                </ul>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-3 text-center text-xs text-slate-500">
+        <p>Bàn Cờ Trăm NĂM © 90 Khuyết Điểm Cần Nhìn Nhận Trước Khi Kết Hôn - Thiết kế Dark Mode Tương Phán Cao</p>
+    </footer>
+
+    <!-- MODAL LỊCH SỬ VÁN ĐẤU -->
+    <div id="historyModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border-2 border-slate-700 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+            
+            <div class="p-4 bg-slate-950 border-b border-slate-800 flex justify-between items-center">
+                <h3 class="text-lg font-extrabold text-slate-100 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-purple-400"></i>
+                    LỊCH SỬ ĐÁNH GIÁ KHUYẾT ĐIỂM
+                </h3>
+                <button onclick="closeHistoryModal()" class="text-slate-400 hover:text-white text-xl p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="historyList" class="p-4 overflow-y-auto space-y-3 flex-grow">
+                <!-- Nội dung danh sách lịch sử sẽ render ở đây -->
+            </div>
+
+            <div class="p-4 bg-slate-950 border-t border-slate-800 flex justify-between items-center">
+                <button onclick="clearAllHistory()" class="px-3 py-1.5 bg-rose-950/60 hover:bg-rose-900 text-rose-300 border border-rose-800 rounded-lg text-xs font-bold transition">
+                    Xóa tất cả lịch sử
+                </button>
+                <button onclick="closeHistoryModal()" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-bold transition">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* ==========================================================================
+           1. KHỞI TẠO DỮ LIỆU 90 KHUYẾT ĐIỂM (45 NAM & 45 NỮ)
+           ========================================================================== */
+        
+        const HUSBAND_FAULTS = [
+            { name: "Thiếu trách nhiệm", desc: "Đùn đẩy nghĩa vụ gia đình, coi việc nhà và chăm con là của phụ nữ." },
+            { name: "Gia trưởng độc đoán", desc: "Bắt buộc người khác tuân theo ý mình, không coi trọng ý kiến của vợ." },
+            { name: "Nghiện cờ bạc, cá độ", desc: "Rủi ro tài chính cực lớn, dễ gây nợ nần phá sản gia đình." },
+            { name: "Keo kiệt, bủn rủn", desc: "Tính toán từng đồng với vợ con nhưng chi tiêu vô bổ cho bản thân." },
+            { name: "Nóng tính, vũ phu", desc: "Không kiềm chế được cảm xúc, có hành vi bạo lực lời nói hoặc tay chân." },
+            { name: "Lười biếng, ỷ ạch", desc: "Không phụ giúp việc nhà, nằm dài lướt điện thoại mặc kệ vợ bận rộn." },
+            { name: "Thiếu chí tiến thủ", desc: "An phận thủ thường quá mức, không nỗ lực cải thiện kinh tế gia đình." },
+            { name: "Nghiện rượu bia nặng", desc: "Thường xuyên say xỉn, mất kiểm soát hành vi và ảnh hưởng sức khỏe." },
+            { name: "Không tôn trọng nhà vợ", desc: "Coi thường hoặc thờ ơ với bố mẹ, người thân bên gia đình vợ." },
+            { name: "Vô tâm, lạnh nhạt", desc: "Không quan tâm đến cảm xúc, sức khỏe và các ngày kỷ niệm của vợ." },
+            { name: "Trăng hoa, lăng nhăng", desc: "Không trung thủy, thường xuyên thả thính hoặc có mối quan hệ ngoài luồng." },
+            { name: "Bám váy mẹ (Mommy boy)", desc: "Không có chính kiến, chuyện gì cũng nghe theo mẹ tắp lấp bất chấp đúng sai." },
+            { name: "Nghiện game quá độ", desc: "Bỏ bê gia đình, làm việc và sinh hoạt bất chấp giờ giấc vì game." },
+            { name: "Giấu giếm tài chính", desc: "Lập quỹ đen lớn, không công khai thu nhập và chi tiêu mờ ám." },
+            { name: "Hay hứa lèo", desc: "Hứa hẹn rất nhiều nhưng không bao giờ thực hiện, làm mất niềm tin." },
+            { name: "Thiếu kỹ năng sống", desc: "Không biết tự chăm sóc bản thân, phụ thuộc hoàn toàn vào người khác." },
+            { name: "Thô lỗ, mất lịch sự", desc: "Ăn nói tục tĩu, thiếu văn hóa ở nơi đông người hoặc trước mặt con." },
+            { name: "Ghen tuông mù quáng", desc: "Kiểm soát điện thoại, mối quan hệ và nghi ngờ vô cớ." },
+            { name: "Hay cãi lý, bảo thủ", desc: "Không bao giờ nhận sai, luôn đổ lỗi cho hoàn cảnh hoặc cho vợ." },
+            { name: "Ở bẩn, mất vệ sinh", desc: "Bừa bộn, không giữ vệ sinh cá nhân và không không gian sống chung." },
+            { name: "Khoe khoang, sống sĩ diện", desc: "Thích thể hiện ngoài xã hội nhưng thực tế không có năng lực." },
+            { name: "Nói dối quen tay", desc: "Thường xuyên bao ngụy và che đậy bằng những lời dối trá nhỏ đến lớn." },
+            { name: "Thờ ơ với con cái", desc: "Không tham gia dạy dỗ, chơi đùa hay quan tâm đến sự phát triển của con." },
+            { name: "Coi bạn bè trên hết", desc: "Sẵn sàng bỏ mặc việc gia đình để đi nhậu nhẹt, giúp đỡ bạn bè vô điều kiện." },
+            { name: "Vay mượn tùy tiện", desc: "Thói quen vay nợ không tính toán, kéo theo áp lực nợ nần cho vợ." },
+            { name: "Doanh nghiệp vỡ nợ liều", desc: "Đầu tư rủi ro mạo hiểm không thảo luận với vợ, đẩy gia đình vào nguy cơ." },
+            { name: "Nói nhiều, càm ràm", desc: "Hay soi moi, bắt bẻ từng chi tiết nhỏ nhặt trong nhà." },
+            { name: "Hẹp hòi, chấp vặt", desc: "Ghi nhớ chuyện cũ để chì chiết và mang ra nhắc lại mỗi khi cãi nhau." },
+            { name: "Mất kiên nhẫn nhanh", desc: "Dễ nổi bộc phát khi gặp chuyện không vừa ý trong đời sống hàng ngày." },
+            { name: "Thiếu lãng mạn hoàn toàn", desc: "Coi thường tình cảm, cho rằng kết hôn rồi thì không cần hâm nóng tình cảm." },
+            { name: "So sánh vợ với người khác", desc: "Thường xuyên chê bai vợ và khen ngợi phụ nữ khác trước mặt vợ." },
+            { name: "Thiếu quyết đoán", desc: "Ba rờ rờ, không đưa ra được lựa chọn quan trọng cho tương lai." },
+            { name: "Không nghe góp ý", desc: "Tự coi mình là đúng, gạt phắt mọi lời khuyên chân thành từ vợ." },
+            { name: "Ngủ ngáy, sinh hoạt xấu", desc: "Có thói quen sinh hoạt ảnh hưởng nặng tới giấc ngủ người bạn đời." },
+            { name: "Hay dọa ly hôn", desc: "Mỗi lần bất đồng lại mang chuyện ly hôn ra để uy hiếp tinh thần." },
+            { name: "Coi nhẹ sức khỏe", desc: "Lười vận động, ăn uống độc hại, không chịu đi khám bệnh khi có dấu hiệu." },
+            { name: "Giao tiếp kém", desc: "Luôn chọn cách im lặng, độc hại (silent treatment) khi có mâu thuẫn." },
+            { name: "Ỷ lại kinh tế vào vợ", desc: "Lười lao động, sống dựa vào thu nhập của vợ mà không thấy hổ hổ." },
+            { name: "Thường xuyên thất hứa với con", desc: "Gieo hy vọng cho con rồi bỏ mặc làm con mất niềm tin." },
+            { name: "Thích kiểm soát tài chính độc quyền", desc: "Tự nắm giữ tiền và phát cho vợ từng đồng như ban phát." },
+            { name: "Dễ bị lôi kéo xấu", desc: "Thiếu bản lĩnh, dễ theo bạn xấu tham gia tệ nạn xã hội." },
+            { name: "Không biết sẻ chia áp lực", desc: "Mang sự bực bội từ công việc về trút lên đầu vợ con." },
+            { name: "Bảo thủ phong kiến", desc: "Coi thường vai trò xã hội của phụ nữ, bắt vợ phải nghỉ việc ở nhà." },
+            { name: "Không có mục tiêu tương lai", desc: "Sống ngày nào biết ngày đó, không có kế hoạch tích lũy dài hạn." },
+            { name: "Ích kỷ bản thân", desc: "Luôn ưu tiên nhu cầu, sở thích cá nhân lên trên lợi ích chung gia đình." }
+        ];
+
+        const WIFE_FAULTS = [
+            { name: "Hoang phí, nghiện mua sắm", desc: "Chi tiêu vượt khả năng tài chính, mua đồ không cần thiết gây thâm hụt." },
+            { name: "Hay so sánh chồng", desc: "Thường xuyên đem chồng ra so sánh với chồng người ta gây tổn thương tự trọng." },
+            { name: "Không tôn trọng nhà chồng", desc: "Xỏ xiên, coi thường hoặc có thái độ hỗn xược với bố mẹ, họ hàng bên chồng." },
+            { name: "Hay cằn nhắn, chì chiết", desc: "Nói đi nói lại một vấn đề nhỏ nhặt suốt ngày làm không khí gia đình ngột ngạt." },
+            { name: "Kiểm soát quá đà", desc: "Theo dõi tin nhắn, vị trí, ghen tuông vô cớ và mất quyền tự do của chồng." },
+            { name: "Nông cạn, thiếu hiểu biết", desc: "Không chịu học hỏi, cư xử thiếu tinh tế trong các mối quan hệ xã hội." },
+            { name: "Không biết vun vén", desc: "Bừa bộn, không chăm lo nhà cửa, cơm nước bữa có bữa không." },
+            { name: "Sống ảo quá mức", desc: "Đưa mọi chuyện riêng tư gia đình lên mạng xã hội để câu tương tác." },
+            { name: "Nóng nảy, đập phá đồ", desc: "Mỗi khi tức giận lại đập phá tài sản hoặc có hành vi quá khích." },
+            { name: "Hay giận dỗi vô cớ", desc: "Bắt chồng phải tự đoán ý, im lặng giận dỗi nhiều ngày không lý do." },
+            { name: "Mang chuyện nhà kể khắp nơi", desc: "Buôn chuyện gia đình với hàng xóm, bạn bè làm mất danh dự của chồng." },
+            { name: "Hay dọa bỏ về nhà đẻ", desc: "Lấy việc bỏ về nhà bố mẹ đẻ làm công cụ đe dọa mỗi khi mâu thuẫn." },
+            { name: "Ỷ lại hoàn toàn vào chồng", desc: "Không chịu lao động, sống phụ thuộc hoàn toàn và đòi hỏi hưởng thụ." },
+            { name: "Không biết dạy con", desc: "Nuông chiều con quá mức hoặc chửi mắng con tàn nhẫn trước mặt người khác." },
+            { name: "Tự quyết tài chính lớn", desc: "Tự ý cho vay, đầu tư hoặc mua đồ giá trị lớn mà không thảo luận với chồng." },
+            { name: "Nói nhiều, nói dài", desc: "Không biết điểm dừng trong tranh luận, biến mâu thuẫn nhỏ thành bão lớn." },
+            { name: "Hay thù vặt, ghi nhớ tội", desc: "Không bao giờ tha thứ triệt để, luôn nhắc lại lỗi sai quá khứ." },
+            { name: "Không giữ gìn hình ảnh bản thân", desc: "Tềnh xoàng quá mức, lười chăm sóc ngoại hình và sức khỏe." },
+            { name: "Tuyệt đối hóa gia đình đẻ", desc: "Vén khéo đem tài sản nhà chồng về nhà đẻ mà không minh bạch." },
+            { name: "Thường xuyên nghi ngờ", desc: "Tra hỏi chồng như tội phạm mỗi khi chồng về muộn hay có cuộc gọi." },
+            { name: "Ích kỷ chỉ nghĩ bản thân", desc: "Đòi hỏi chồng phải đáp ứng mọi sở thích nhưng không quan tâm tâm tư chồng." },
+            { name: "Lười biếng việc nhà", desc: "Đùn đẩy hoàn toàn việc dọn dẹp, bếp núc cho chồng hoặc người giúp việc." },
+            { name: "Hơi chút là đòi ly hôn", desc: "Coi nhẹ hôn nhân, dùng từ ly hôn làm vũ khí cửa miệng." },
+            { name: "Hay tự ti rồi hờn dỗi", desc: "Nhạy cảm quá mức với lời nói của chồng rồi suy diễn tiêu cực." },
+            { name: "Khinh thường công việc của chồng", desc: "Chê thu nhập hoặc vị trí xã hội của chồng thấp kém." },
+            { name: "Không biết nấu ăn cơ bản", desc: "Không có khả năng chuẩn bị bữa ăn đơn giản cho gia đình." },
+            { name: "Thích tụ tập nhậu nhẹt quá đà", desc: "Bỏ bê con cái để đi chơi bời với bạn bè không giờ giấc." },
+            { name: "Thiếu trung thật tài chính", desc: "Lập quỹ đen, nợ nần lô đề/mua sắm rồi giấu chồng." },
+            { name: "Từ chối chăn gối làm vũ khí", desc: "Dùng chuyện tình cảm vợ chồng để ngầm phạt chồng khi giận." },
+            { name: "Ghen tị với thành công người khác", desc: "Luôn bất mãn với cuộc sống hiện tại, đòi hỏi nhiều hơn khả năng." },
+            { name: "Ăn nói thô tháp", desc: "Dùng từ ngữ thiếu tôn trọng chồng trước mặt bạn bè hay con cái." },
+            { name: "Hay can thiệp việc riêng của chồng", desc: "Xô xát vào công việc, quan hệ đồng nghiệp của chồng không đúng lúc." },
+            { name: "Thiếu kiên nhẫn với con", desc: "Dễ quát mắng, đánh đập con khi gặp áp lực bên ngoài." },
+            { name: "Không biết lắng nghe", desc: "Luôn ngắt lời và áp đặt suy nghĩ của mình lên chồng." },
+            { name: "Thói quen tiêu tiền ngầm", desc: "Rút tiền tiết kiệm chung mà không có sự đồng ý của bạn đời." },
+            { name: "Thờ ơ với sức khỏe gia đình", desc: "Không quan tâm đến chế độ dinh dưỡng và sức khỏe các thành viên." },
+            { name: "Bảo thủ không sửa đổi", desc: "Biết mình sai nhưng nhất quyết không xin lỗi hay cải thiện." },
+            { name: "Hay để nhà cửa bẩn thỉu", desc: "Sống trong không gian mất vệ sinh, gây ảnh hưởng tinh thần chung." },
+            { name: "Quá tin lời người ngoài", desc: "Nghe lời gièm pha của bạn bè, mạng xã hội rồi về gây chuyện với chồng." },
+            { name: "Thiếu tình cảm tế nhị", desc: "Không biết động viên hay thể hiện sự quan tâm lúc chồng gặp khó khăn." },
+            { name: "Thích kiểm soát trang phục của chồng", desc: "Ep buộc chồng ăn mặc theo ý mình bất chấp sự thoải mái." },
+            { name: "Dễ bị cám dỗ vật chất", desc: "Đô mắt trước sự giàu có của người khác, dễ lay động lòng trung thủy." },
+            { name: "Hay oán trách số phận", desc: "Luôn than thân trách phận, lan truyền năng lượng tiêu cực cho gia đình." },
+            { name: "Coi nhẹ tình cảm gia đình", desc: "Đặt sự nghiệp hoặc sở thích cá nhân lên trên sự gắn kết gia đình." },
+            { name: "Không chấp nhận khuyết điểm chồng", desc: "Đòi hỏi chồng phải hoàn hảo theo mô tuýp trong phim ảnh." }
+        ];
+
+        let chessBoardData = [];
+        
+        function initBoardData() {
+            chessBoardData = [];
+            // Bố trí 10 hàng x 9 cột (Tổng cộng 90 khuyết điểm)
+            // Hàng 0-4: 45 Khuyết điểm Nam (Chồng) - Hàng 5-9: 45 Khuyết điểm Nữ (Vợ)
+            let hIndex = 0;
+            let wIndex = 0;
+
+            for (let row = 0; row < 10; row++) {
+                for (let col = 0; col < 9; col++) {
+                    const id = row * 9 + col;
+                    const isHusband = row < 5;
+                    
+                    let faultObj = isHusband ? HUSBAND_FAULTS[hIndex++] : WIFE_FAULTS[wIndex++];
+
+                    chessBoardData.push({
+                        id: id,
+                        row: row + 1,
+                        col: col + 1,
+                        type: isHusband ? 'husband' : 'wife',
+                        title: faultObj.name,
+                        desc: faultObj.desc,
+                        impact: (id % 3 === 0) ? "Rất Nghiêm Trọng" : (id % 2 === 0 ? "Cao" : "Trung Bình"),
+                        selected: false
+                    });
+                }
+            }
+        }
+
+        /* ==========================================================================
+           2. BIẾN TRẠNG THÁI
+           ========================================================================== */
+        let currentSelectedId = null;
+        let isFlipped = false;
+        let activeFilter = 'all';
+
+        /* ==========================================================================
+           3. RENDER BÀN CỜ 90 ĐIỂM
+           ========================================================================== */
+        function renderBoard() {
+            const gridEl = document.getElementById('boardGrid');
+            gridEl.innerHTML = '';
+
+            chessBoardData.forEach(piece => {
+                const searchKeyword = document.getElementById('searchInput').value.toLowerCase().trim();
+                const matchesFilter = (activeFilter === 'all') || (piece.type === activeFilter);
+                const matchesSearch = piece.title.toLowerCase().includes(searchKeyword) || piece.desc.toLowerCase().includes(searchKeyword);
+
+                const isVisible = matchesFilter && matchesSearch;
+
+                const pieceBtn = document.createElement('button');
+                pieceBtn.dataset.id = piece.id;
+                
+                let baseStyle = "relative rounded-full flex flex-col items-center justify-center p-1 text-center transition-all duration-200 transform hover:scale-110 active:scale-95 border-2 cursor-pointer shadow-md text-xs font-extrabold select-none aspect-square ";
+                
+                if (!isVisible) {
+                    baseStyle += " opacity-20 pointer-events-none grayscale ";
+                }
+
+                if (piece.selected) {
+                    if (piece.type === 'husband') {
+                        baseStyle += " piece-selected-husband ";
+                    } else {
+                        baseStyle += " piece-selected-wife ";
+                    }
+                } else {
+                    if (piece.type === 'husband') {
+                        baseStyle += " bg-slate-900 hover:bg-blue-950/70 border-blue-600/50 text-blue-300 ";
+                    } else {
+                        baseStyle += " bg-slate-900 hover:bg-pink-950/70 border-pink-600/50 text-pink-300 ";
+                    }
+                }
+
+                if (currentSelectedId === piece.id) {
+                    baseStyle += " ring-4 ring-amber-400 ring-offset-2 ring-offset-slate-950 z-20 ";
+                }
+
+                pieceBtn.className = baseStyle;
+                pieceBtn.onclick = () => selectPiece(piece.id);
+
+                const iconClass = piece.type === 'husband' ? 'fa-mars text-blue-400' : 'fa-venus text-pink-400';
+
+                pieceBtn.innerHTML = `
+                    <div class="piece-content flex flex-col items-center justify-center w-full h-full leading-tight">
+                        <span class="text-[9px] opacity-70 flex items-center gap-0.5">
+                            <i class="fa-solid ${iconClass}"></i>${piece.id + 1}
+                        </span>
+                        <span class="truncate w-full px-0.5 mt-0.5 text-[10px] sm:text-[11px] font-bold">
+                            ${piece.title}
+                        </span>
+                        ${piece.selected ? '<i class="fa-solid fa-triangle-exclamation text-[10px] mt-0.5 text-rose-400"></i>' : ''}
+                    </div>
+                `;
+
+                gridEl.appendChild(pieceBtn);
+            });
+
+            updateScores();
+        }
+
+        /* ==========================================================================
+           4. CHI TIẾT Ô VÀ TÍCH CHỌN
+           ========================================================================== */
+        function selectPiece(id) {
+            currentSelectedId = id;
+            const piece = chessBoardData.find(p => p.id === id);
+            if (!piece) return;
+
+            renderBoard();
+
+            document.getElementById('detailPlaceholder').classList.add('hidden');
+            document.getElementById('detailContent').classList.remove('hidden');
+            document.getElementById('detailContent').classList.add('flex');
+
+            const badge = document.getElementById('detailBadge');
+            if (piece.type === 'husband') {
+                badge.className = "px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-blue-950 text-blue-300 border border-blue-800";
+                badge.innerText = `KHUYẾT ĐIỂM NAM #${piece.id + 1}`;
+            } else {
+                badge.className = "px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-pink-950 text-pink-300 border border-pink-800";
+                badge.innerText = `KHUYẾT ĐIỂM NỮ #${piece.id + 1}`;
+            }
+
+            document.getElementById('detailCoords').innerText = `Hàng ${piece.row}, Cột ${piece.col}`;
+            document.getElementById('detailTitle').innerText = piece.title;
+            document.getElementById('detailDesc').innerText = piece.desc;
+            document.getElementById('detailImpact').innerText = piece.impact;
+
+            const statusEl = document.getElementById('detailStatus');
+            const btnToggleText = document.getElementById('btnTogglePieceText');
+            const btnToggle = document.getElementById('btnTogglePiece');
+
+            if (piece.selected) {
+                statusEl.innerText = "Đã Cảnh Báo (Mắc Phải)";
+                statusEl.className = "font-bold text-rose-400 flex items-center gap-1 inline-flex";
+                btnToggleText.innerText = "Bỏ Đánh Dấu Khuyết Điểm";
+                btnToggle.className = "px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 font-bold rounded-lg text-sm transition shadow-md flex items-center gap-2 border border-slate-600";
+            } else {
+                statusEl.innerText = "Chưa Đánh Dấu";
+                statusEl.className = "font-bold text-slate-400";
+                btnToggleText.innerText = "Đánh Dấu Khuyết Điểm Này";
+                btnToggle.className = "px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-lg text-sm transition shadow-md flex items-center gap-2";
+            }
+        }
+
+        function toggleCurrentPiece() {
+            if (currentSelectedId === null) return;
+            const piece = chessBoardData.find(p => p.id === currentSelectedId);
+            if (piece) {
+                piece.selected = !piece.selected;
+                selectPiece(piece.id);
+            }
+        }
+
+        /* ==========================================================================
+           5. ĐẢO BÀN CỜ (ROTATE 180 DEG)
+           ========================================================================== */
+        function toggleFlipBoard() {
+            isFlipped = !isFlipped;
+            const container = document.getElementById('boardContainer');
+            if (isFlipped) {
+                container.classList.add('board-flipped');
+            } else {
+                container.classList.remove('board-flipped');
+            }
+        }
+
+        /* ==========================================================================
+           6. TÍNH ĐIỂM RỦI RO & ĐÁNH GIÁ
+           ========================================================================== */
+        function updateScores() {
+            const husbandSelected = chessBoardData.filter(p => p.type === 'husband' && p.selected).length;
+            const wifeSelected = chessBoardData.filter(p => p.type === 'wife' && p.selected).length;
+
+            document.getElementById('scoreHusband').innerText = `${husbandSelected} / 45`;
+            document.getElementById('scoreWife').innerText = `${wifeSelected} / 45`;
+
+            const totalSelected = husbandSelected + wifeSelected;
+            document.getElementById('selectedCountText').innerText = totalSelected;
+
+            const husbandPct = Math.round((husbandSelected / 45) * 100);
+            const wifePct = Math.round((wifeSelected / 45) * 100);
+
+            document.getElementById('barHusband').style.width = `${husbandPct}%`;
+            document.getElementById('barWife').style.width = `${wifePct}%`;
+            document.getElementById('progressHusbandPercent').innerText = `${husbandPct}% Rủi ro`;
+            document.getElementById('progressWifePercent').innerText = `${wifePct}% Rủi ro`;
+
+            const nameH = document.getElementById('nameHusband').value || "Nam";
+            const nameW = document.getElementById('nameWife').value || "Nữ";
+
+            document.getElementById('progressHusbandName').innerText = nameH;
+            document.getElementById('progressWifeName').innerText = nameW;
+
+            const evalEl = document.getElementById('marriageEvaluation');
+            const maxPct = Math.max(husbandPct, wifePct);
+
+            if (totalSelected === 0) {
+                evalEl.innerText = "Hãy tích chọn các khuyết điểm hiện có để xem đánh giá";
+                evalEl.className = "text-base font-extrabold text-amber-400";
+            } else if (maxPct >= 50) {
+                evalEl.innerText = "⚠️ MỨC NGUY HIỂM CAO - NÊN CÂN NHẮC KỸ TRƯỚC KHI KẾT HÔN!";
+                evalEl.className = "text-base font-extrabold text-rose-500 animate-pulse";
+            } else if (maxPct >= 30) {
+                evalEl.innerText = "⚡ MỨC RỦI RO TRUNG BÌNH - CẦN THỔI LƯƠNG & SỬA ĐỔI";
+                evalEl.className = "text-base font-extrabold text-amber-400";
+            } else if (maxPct >= 15) {
+                evalEl.innerText = "👍 MỨC AN TOÀN - NHỮNG KHUYẾT ĐIỂM NÀY CÓ THỂ CẢI THIỆN";
+                evalEl.className = "text-base font-extrabold text-blue-400";
+            } else {
+                evalEl.innerText = "✨ RẤT ÍT KHUYẾT ĐIỂM - MỐI QUAN HỆ BỀN VỮNG VÀ TỐT ĐẸP!";
+                evalEl.className = "text-base font-extrabold text-emerald-400";
+            }
+        }
+
+        /* ==========================================================================
+           7. TÌM KIẾM & LỌC
+           ========================================================================== */
+        function handleSearch() {
+            renderBoard();
+        }
+
+        function filterCategory(cat) {
+            activeFilter = cat;
+            
+            ['All', 'Husband', 'Wife'].forEach(c => {
+                const btn = document.getElementById('filter' + c);
+                if (c.toLowerCase() === cat) {
+                    btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 border border-amber-400";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700";
+                }
+            });
+
+            renderBoard();
+        }
+
+        /* ==========================================================================
+           8. LƯU & XEM LỊCH SỬ VÁN ĐẤU
+           ========================================================================== */
+        function saveMatchHistory() {
+            const husbandName = document.getElementById('nameHusband').value.trim() || "Chú Rể";
+            const wifeName = document.getElementById('nameWife').value.trim() || "Cô Dâu";
+
+            const husbandSelectedList = chessBoardData.filter(p => p.type === 'husband' && p.selected);
+            const wifeSelectedList = chessBoardData.filter(p => p.type === 'wife' && p.selected);
+
+            if (husbandSelectedList.length === 0 && wifeSelectedList.length === 0) {
+                alert("Vui lòng tích chọn ít nhất 1 khuyết điểm trước khi ghi điểm ván đấu!");
+                return;
+            }
+
+            const now = new Date();
+            const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} - ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+
+            const record = {
+                id: Date.now(),
+                date: timeStr,
+                husbandName: husbandName,
+                wifeName: wifeName,
+                husbandScore: husbandSelectedList.length,
+                wifeScore: wifeSelectedList.length,
+                husbandItems: husbandSelectedList.map(item => item.title),
+                wifeItems: wifeSelectedList.map(item => item.title)
+            };
+
+            let history = JSON.parse(localStorage.getItem('chess_faults_history') || '[]');
+            history.unshift(record);
+            localStorage.setItem('chess_faults_history', JSON.stringify(history));
+
+            alert(`Đã ghi nhận ván đối chiếu của ${husbandName} (${husbandSelectedList.length} khuyết điểm) & ${wifeName} (${wifeSelectedList.length} khuyết điểm)!`);
+        }
+
+        function openHistoryModal() {
+            const modal = document.getElementById('historyModal');
+            const historyList = document.getElementById('historyList');
+            
+            let history = JSON.parse(localStorage.getItem('chess_faults_history') || '[]');
+
+            if (history.length === 0) {
+                historyList.innerHTML = `
+                    <div class="text-center py-10 text-slate-500">
+                        <i class="fa-solid fa-box-open text-4xl mb-2"></i>
+                        <p class="text-sm font-semibold">Chưa có lịch sử ván đánh giá nào được lưu.</p>
+                    </div>
+                `;
+            } else {
+                historyList.innerHTML = history.map((rec, idx) => `
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col gap-2">
+                        <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800 pb-2">
+                            <span class="font-bold text-rose-400">Ván #${history.length - idx}</span>
+                            <span><i class="fa-regular fa-clock"></i> ${rec.date}</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 my-1">
+                            <div class="bg-blue-950/40 p-2.5 rounded-lg border border-blue-900/50">
+                                <div class="text-xs text-blue-400 font-bold uppercase">${rec.husbandName}</div>
+                                <div class="text-xl font-black text-rose-400 mt-0.5">${rec.husbandScore} <span class="text-xs font-normal text-slate-400">/ 45 khuyết điểm</span></div>
+                            </div>
+                            <div class="bg-pink-950/40 p-2.5 rounded-lg border border-pink-900/50">
+                                <div class="text-xs text-pink-400 font-bold uppercase">${rec.wifeName}</div>
+                                <div class="text-xl font-black text-rose-400 mt-0.5">${rec.wifeScore} <span class="text-xs font-normal text-slate-400">/ 45 khuyết điểm</span></div>
+                            </div>
+                        </div>
+                        <details class="text-xs text-slate-400 cursor-pointer">
+                            <summary class="hover:text-slate-200 font-semibold py-1">Xem chi tiết khuyết điểm đã tích (${rec.husbandScore + rec.wifeScore})</summary>
+                            <div class="mt-2 space-y-2 pt-2 border-t border-slate-900">
+                                <div>
+                                    <strong class="text-blue-400">Khuyết điểm của ${rec.husbandName}:</strong>
+                                    <p class="text-slate-300 mt-0.5">${rec.husbandItems.join(', ') || 'Không mắc khuyết điểm nào'}</p>
+                                </div>
+                                <div>
+                                    <strong class="text-pink-400">Khuyết điểm của ${rec.wifeName}:</strong>
+                                    <p class="text-slate-300 mt-0.5">${rec.wifeItems.join(', ') || 'Không mắc khuyết điểm nào'}</p>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+                `).join('');
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeHistoryModal() {
+            document.getElementById('historyModal').classList.add('hidden');
+        }
+
+        function clearAllHistory() {
+            if (confirm("Bạn có chắc chắn muốn xóa tất cả lịch sử ván đánh giá?")) {
+                localStorage.removeItem('chess_faults_history');
+                openHistoryModal();
+            }
+        }
+
+        /* ==========================================================================
+           9. LÀM MỚI VÁN ĐẤU CURRENT
+           ========================================================================== */
+        function resetCurrentMatch() {
+            if (confirm("Bạn có muốn xóa bỏ tất cả các khuyết điểm đã tích chọn trên bàn cờ hiện tại?")) {
+                chessBoardData.forEach(p => p.selected = false);
+                currentSelectedId = null;
+                document.getElementById('detailPlaceholder').classList.remove('hidden');
+                document.getElementById('detailContent').classList.add('hidden');
+                renderBoard();
+            }
+        }
+
+        document.getElementById('nameHusband').addEventListener('input', updateScores);
+        document.getElementById('nameWife').addEventListener('input', updateScores);
+
+        /* ==========================================================================
+           10. CHẠY KHI TẢI TRANG
+           ========================================================================== */
+        window.onload = function() {
+            initBoardData();
+            renderBoard();
+        };
+    </script>
+</body>
+</html>

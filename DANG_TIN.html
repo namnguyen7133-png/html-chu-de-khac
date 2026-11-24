@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>04 - ĐĂNG TIN TÌM NHÀ</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; padding: 20px; margin: 0; }
+        .menu { background: #2d3436; padding: 15px; display: flex; justify-content: center; gap: 20px; margin-bottom: 25px; }
+        .menu a { color: white; text-decoration: none; font-weight: bold; padding: 10px 15px; }
+        .container { max-width: 800px; margin: auto; }
+        .card { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; border-left: 5px solid #8e44ad; }
+        textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9; }
+        button { margin-top: 10px; padding: 10px 20px; background: #8e44ad; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <a href="SANNHA.html">🔍 1. SOI KÈO</a>
+        <a href="KYTHUAT_VON.html">💰 2. TÍNH VỐN</a>
+        <a href="DAMPHAN_COC.html">🤝 3. ĐÀM PHÁN</a>
+        <a href="DANG_TIN.html" style="background: #8e44ad; border-radius: 5px;">📢 4. ĐĂNG TIN</a>
+    </div>
+    <div class="container">
+        <h2>📢 MẪU TIN ĐĂNG TÌM NHÀ PHOTO</h2>
+        <div class="card">
+            <p><b>Mẫu 1: Tìm nhà làm Photo (Thanh lịch)</b></p>
+            <textarea id="m1" rows="4">Em cần thuê mặt bằng làm PHOTOCOPY & IN ẤN. Khu vực: Bách - Kinh - Xây. Giá tầm 5-7 triệu. Yêu cầu: Tầng 1, sạch sẽ, điện nước dân. Chính chủ hú em: 09x.xxx.xxx</textarea>
+            <button onclick="navigator.clipboard.writeText(document.getElementById('m1').value)">COPY MẪU 1</button>
+        </div>
+        <div class="card">
+            <p><b>Mẫu 2: Tin ngắn gọn (Hút chủ nhà)</b></p>
+            <textarea id="m2" rows="3">CẦN THUÊ GẤP mặt bằng tầng 1 kinh doanh văn phòng phẩm. Ngân sách 6-7tr. Ai có nhà khu Hai Bà Trưng ib em qua xem luôn ạ!</textarea>
+            <button onclick="navigator.clipboard.writeText(document.getElementById('m2').value)">COPY MẪU 2</button>
+        </div>
+    </div>
+</body>
+</html>

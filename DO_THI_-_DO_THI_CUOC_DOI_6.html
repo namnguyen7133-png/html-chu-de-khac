@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>DO THI - DO THI CUOC DOI 6</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f4f6f8; margin: 30px; }
+.box { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+h1 { color: #0d47a1; text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+th { background: #0d47a1; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+.back-btn { display: inline-block; margin-bottom: 15px; padding: 8px 15px; background: #555; color: white; text-decoration: none; border-radius: 4px; }
+.back-btn:hover { background: #333; }
+</style>
+</head>
+<body>
+<div class="box">
+    <a href="index_menu.html" class="back-btn">⬅ Quay lại danh mục</a>
+    <h1>DO THI - DO THI CUOC DOI 6</h1>
+    <input type="text" id="search" class="search-box" placeholder="🔍 Tìm kiếm nhanh trong trang này..." onkeyup="timKiem()">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 80px;">STT</th>
+                <th>Nội dung chi tiết</th>
+            </tr>
+        </thead>
+        <tbody id="table-data">
+            <tr>
+                <td><b>1</b></td>
+                <td>15 | 2 | TOTHIHA | 29/08/1948 | 18/11/1947 | 1 | 3 | 1948 | 4 | TÝ | 30 | 27 | 24 | TOTHIHA | Nữ | Tây Tứ Mệnh | Tây Tứ Mệnh – Hướng hợp: Tây (247,5°–292,5°), Tây Bắc (292,5°–337,5°), Tây Nam (202,5°–247,5°), Đông Bắc (22,5°–67,5°) | 298 độ | 2.0 | Xã hội | Phụng sự | Giáo viên | 2.0 | 2 | SUU</td>
+            </tr>
+            <tr>
+                <td><b>2</b></td>
+                <td>5 | 3 | NGUYENMINHNAM | 03/03/1971 | 22/05/1970 | 0 | 1971 | 3 | HỢI | 30 | 29 | 28 | NGUYENMINHNAM | Nam | Tây Tứ Mệnh | Tây Tứ Mệnh – Hướng hợp: Tây (247,5°–292,5°), Tây Bắc (292,5°–337,5°), Tây Nam (202,5°–247,5°), Đông Bắc (22,5°–67,5°) | 33 độ | 3.0 | Thực tế | Sản phẩm | Kỹ sư | 3.0 | 3 | DAN</td>
+            </tr>
+            <tr>
+                <td><b>3</b></td>
+                <td>2047 | 4 | THANTHIKIMANH | 23/09/1981 | 12/12/1980 | 1 | 5 | 1981 | 1 | DẬU | 22 | 25 | 28 | THANTHIKIMANH | Nữ | Tây Tứ Mệnh | Tây Tứ Mệnh – Hướng hợp: Tây (247,5°–292,5°), Tây Bắc (292,5°–337,5°), Tây Nam (202,5°–247,5°), Đông Bắc (22,5°–67,5°) | 239 độ | 3.0 | Thực tế | Ứng dụng | Kỹ sư | 3.0 | 4 | DAN</td>
+            </tr>
+            <tr>
+                <td><b>4</b></td>
+                <td>2 | 5 | NGUYENTONGANAN | 28/09/2014 | 17/12/2013 | 4 | 2014 | 10 | NGỌ | 22 | 31 | 28 | NGUYENTONGANAN | Nữ | Đông Tứ Mệnh | Đông Tứ Mệnh – Hướng hợp: Bắc (337,5°–22,5°), Nam (157,5°–202,5°), Đông (67,5°–112,5°), Đông Nam (112,5°–157,5°) | 289 độ | 4.0 | Nghệ thuật | Quy định | Ca sĩ | 4.0 | 5 | MAO</td>
+            </tr>
+            <tr>
+                <td><b>5</b></td>
+                <td>SỬU | 6 | NGUYENTOMINHCHAU | 25/07/2016 | 14/10/2015 | 1 | 8 | 2016 | 12 | THÂN | 22 | 27 | 32 | NGUYENTOMINHCHAU | Nữ | Đông Tứ Mệnh | Đông Tứ Mệnh – Hướng hợp: Bắc (337,5°–22,5°), Nam (157,5°–202,5°), Đông (67,5°–112,5°), Đông Nam (112,5°–157,5°) | 257 độ | 4.0 | Nghệ thuật | Sáng tạo | Ca sĩ | 4.0 | 6 | MAO</td>
+            </tr>
+            <tr>
+                <td><b>6</b></td>
+                <td>2 | 7 | NGUYENTOBICHNGOC | 05/02/2020 | 26/04/2019 | 1 | 7 | 2020 | 4 | TÝ | 26 | 35 | 20 | NGUYENTOBICHNGOC | Nữ | Tây Tứ Mệnh | Tây Tứ Mệnh – Hướng hợp: Tây (247,5°–292,5°), Tây Bắc (292,5°–337,5°), Tây Nam (202,5°–247,5°), Đông Bắc (22,5°–67,5°) | 52 độ | 5.0 | Cổ điển | Luật lệ | Kế toán | 5.0 | 7 | THIN</td>
+            </tr>
+            <tr>
+                <td><b>7</b></td>
+                <td>THƯƠNG MẠI | 8 | NGUYENTHIMINHHANG | 07/01/1974 | 28/03/1973 | 4 | 1974 | 6 | DẦN | 26 | 31 | 24 | NGUYENTHIMINHHANG | Nữ | Tây Tứ Mệnh | Tây Tứ Mệnh – Hướng hợp: Tây (247,5°–292,5°), Tây Bắc (292,5°–337,5°), Tây Nam (202,5°–247,5°), Đông Bắc (22,5°–67,5°) | 71 độ | 5.0 | Cổ điển | Cấu trúc | Kế toán | 5.0 | 8 | THIN</td>
+            </tr>
+            <tr>
+                <td><b>8</b></td>
+                <td>9 | NGOQUYCUONG | 23/05/1973 | 11/08/1972 | 0 | 34 | 1973 | 5 | SỬU | 22 | 17 | 36 | NGOQUYCUONG | Nam | Đông Tứ Mệnh | Đông Tứ Mệnh – Hướng hợp: Bắc (337,5°–22,5°), Nam (157,5°–202,5°), Đông (67,5°–112,5°), Đông Nam (112,5°–157,5°) | 235 độ | 5.0 | Cổ điển | Khuôn mẫu | Kế toán | 6.0 | 9 | TY</td>
+            </tr>
+            <tr>
+                <td><b>9</b></td>
+                <td>12 | 10 | NGOGIABACH | 12/10/2000 | 1/1/2000 | 0 | 2000 | 8 | THÌN | 30 | 31 | 20 | NGOGIABACH | Nam | Đông Tứ Mệnh | Đông Tứ Mệnh – Hướng hợp: Bắc (337,5°–22,5°), Nam (157,5°–202,5°), Đông (67,5°–112,5°), Đông Nam (112,5°–157,5°) | 130 độ | 6.0 | Để chế | Ảnh hưởng | Lãnh đạo | 6.0 | 10 | TY</td>
+            </tr>
+            <tr>
+                <td><b>10</b></td>
+                <td>NGỌ | 11 | NGOGIALINH | 05/04/2005 | 24/06/2004 | 3 | 4 | 2005 | 1 | DẬU | 22 | 25 | 16 | NGOGIALINH | Nữ | Đông Tứ Mệnh | Đông Tứ Mệnh – Hướng hợp: Bắc (337,5°–22,5°), Nam (157,5°–202,5°), Đông (67,5°–112,5°), Đông Nam (112,5°–157,5°) | 54 độ | 6.0 | Để chế | Thay đổi | Lãnh đạo | 7.0 | 11 | NGO</td>
+            </tr>
+            <tr>
+                <td><b>11</b></td>
+                <td>2 | 12 | NGUYENTHIMINHPHUONG | 06/11/1978 | 25/01/1978 | 7 | 1978 | 10 | NGỌ | 30 | 27 | 24 | NGUYENTHIMINHPHUONG | Nữ | Tây Tứ Mệnh | Tây Tứ Mệnh – Hướng hợp: Tây (247,5°–292,5°), Tây Bắc (292,5°–337,5°), Tây Nam (202,5°–247,5°), Đông Bắc (22,5°–67,5°) | 251 độ | 7.0 | 12 | NGO</td>
+            </tr>
+            <tr>
+                <td><b>12</b></td>
+                <td>THƯƠNG MẠI | 13 | HOANGANHDUNG | 21/09/1978 | 10/12/1977 | 7 | 1978 | 10 | NGỌ | 22 | 31 | 28 | HOANGANHDUNG | Nam | Đông Tứ Mệnh | Đông Tứ Mệnh – Hướng hợp: Bắc (337,5°–22,5°), Nam (157,5°–202,5°), Đông (67,5°–112,5°), Đông Nam (112,5°–157,5°) | 219 độ | 8.0 | 13 | MUI</td>
+            </tr>
+            <tr>
+                <td><b>13</b></td>
+                <td>NGỌ | 14 | HOANGHAIVINH | 03/06/2010 | 22/08/2009 | 2010 | 6 | DẦN | 30 | 35 | 16 | HOANGHAIVINH | Nam | Đông Tứ Mệnh | Đông Tứ Mệnh – Hướng hợp: Bắc (337,5°–22,5°), Nam (157,5°–202,5°), Đông (67,5°–112,5°), Đông Nam (112,5°–157,5°) | 36 độ | 8.0 | 14 | MUI</td>
+            </tr>
+            <tr>
+                <td><b>14</b></td>
+                <td>15 | HOANGTHIENBACHANH | 14/11/2015 | 2/2/2015 | 2015 | 11 | MÙI | 30 | 25 | 32 | HOANGTHIENBACHANH | Nữ | Tây Tứ Mệnh | Tây Tứ Mệnh – Hướng hợp: Tây (247,5°–292,5°), Tây Bắc (292,5°–337,5°), Tây Nam (202,5°–247,5°), Đông Bắc (22,5°–67,5°) | 331 độ | bảng 1 | 9.0 | 15 | THAN</td>
+            </tr>
+            <tr>
+                <td><b>15</b></td>
+                <td>16 | TRUONG GIA KHANH Lop An | 17/12/2014 | 7/3/2014 | 30 | 27 | 24 | TRUONG GIA KHANH Lop An | Nam | Tây Tứ Mệnh | Tây Tứ Mệnh – Hướng hợp: Tây (247,5°–292,5°), Tây Bắc (292,5°–337,5°), Tây Nam (202,5°–247,5°), Đông Bắc (22,5°–67,5°) | 272 độ | 4 | TÝ | 1 | 9.0 | 16 | THAN</td>
+            </tr>
+            <tr>
+                <td><b>16</b></td>
+                <td>17 | TƯƠNG LAI | 15/5/2027 | 3/8/2026 | 10 | NGỌ | 1 | 10.0 | 17 | DAU</td>
+            </tr>
+            <tr>
+                <td><b>17</b></td>
+                <td>18 | HUY | 1/1/1975 | 22/3/1974 | 5 | SỬU | 2 | 10.0 | 18 | DAU</td>
+            </tr>
+            <tr>
+                <td><b>18</b></td>
+                <td>19 | HIEN | 1/1/1971 | 22/3/1970 | 22 | 27 | 20 | 11 | MÙI | 2 | 11.0 | 19 | TUAT</td>
+            </tr>
+            <tr>
+                <td><b>19</b></td>
+                <td>20 | DAT | 1/1/1972 | 22/3/1971 | 30 | 29 | 24 | 6 | DẦN | 3 | 11.0 | 20 | TUAT</td>
+            </tr>
+            <tr>
+                <td><b>20</b></td>
+                <td>21 | PHUONG TIT | 1/1/1980 | 22/3/1979 | 26 | 25 | 28 | 12 | THÂN | 3 | 12.0 | 21 | HOI</td>
+            </tr>
+            <tr>
+                <td><b>21</b></td>
+                <td>22 | 31 | 32 | 7 | MÃO | 4 | 12.0 | 22 | HOI</td>
+            </tr>
+            <tr>
+                <td><b>22</b></td>
+                <td>35 | 36 | 1 | DẬU | 4 | 1.0 | 23 | TI</td>
+            </tr>
+            <tr>
+                <td><b>23</b></td>
+                <td>17 | 16 | 8 | THÌN | 5 | 1.0 | 24 | TI</td>
+            </tr>
+            <tr>
+                <td><b>24</b></td>
+                <td>3 | NGUYENMINHNAM | 13 | TRUE | 03/03/1971 | 2 | TUẤT | 5</td>
+            </tr>
+            <tr>
+                <td><b>25</b></td>
+                <td>1971 | Ngày sinh | 03/03/1971 | 1971 | 3 | HỢI | 12 | 9 | TỴ | 6</td>
+            </tr>
+            <tr>
+                <td><b>26</b></td>
+                <td>1 | bảng 3 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 3 | HỢI | 6</td>
+            </tr>
+            <tr>
+                <td><b>27</b></td>
+                <td>SỬU | Năm | 1 | Năm can chi | 12 | 13 | 14 | 15 | 16 | 17 | 20 | 30.0 | 9</td>
+            </tr>
+            <tr>
+                <td><b>28</b></td>
+                <td>1 | Tháng | 2 | Tháng sinh | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 1 | 2 | 13 | 20.0 | 5</td>
+            </tr>
+            <tr>
+                <td><b>29</b></td>
+                <td>NÔNG NGHIỆP | Ngày | 3 | Ngày sinh | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 1 | 2 | 3 | bảng 8</td>
+            </tr>
+            <tr>
+                <td><b>30</b></td>
+                <td>4 | Tổng | 17 | 20 | 23 | 26 | 29 | 32 | 17 | 19 | 21 | 23 | 13 | 3 | 17</td>
+            </tr>
+            <tr>
+                <td><b>31</b></td>
+                <td>5 | Số dư  | 5 | 8 | 11 | 2 | 5 | 8 | 5 | 7 | 9 | 11 | 1 | 3 | 5 | 1 | Sinh | Lãnh đạo, Quản lý | Đứng đầu, Tổ chức</td>
+            </tr>
+            <tr>
+                <td><b>32</b></td>
+                <td>Tổng | 7 | 4 | 1 | 10 | 7 | 4 | 7 | 5 | 3 | 1 | 11 | 9 | 7 | 2 | Lão | Phó, Quân sư | Trợ lý</td>
+            </tr>
+            <tr>
+                <td><b>33</b></td>
+                <td>3 | Bệnh | Ốm đau | CNV</td>
+            </tr>
+            <tr>
+                <td><b>34</b></td>
+                <td>4 | Tử | Rất có tài, Chết bất đắc kỳ tử, Không đứng đầu | Đòi nợ, phá sản | Ko gom vốn</td>
+            </tr>
+            <tr>
+                <td><b>35</b></td>
+                <td>14 | bảng 2</td>
+            </tr>
+            <tr>
+                <td><b>36</b></td>
+                <td>2 | TÝ | 1</td>
+            </tr>
+            <tr>
+                <td><b>37</b></td>
+                <td>6 | NGỌ | 1</td>
+            </tr>
+            <tr>
+                <td><b>38</b></td>
+                <td>bảng 4  | SỬU | 2 | THÂN | DẦN</td>
+            </tr>
+            <tr>
+                <td><b>39</b></td>
+                <td>26 | 25 | 24 | MÙI | 2 | MÃO | DẬU</td>
+            </tr>
+            <tr>
+                <td><b>40</b></td>
+                <td>TIỀN VẬN | TRUNG VẬN | HẬU VẬN | DẦN | 3 | THÌN | TUẤT</td>
+            </tr>
+            <tr>
+                <td><b>41</b></td>
+                <td>THÂN | 3 | TỴ | HỢI</td>
+            </tr>
+            <tr>
+                <td><b>42</b></td>
+                <td>30 | 29 | 28 | MÃO | 4 | TÝ | NGỌ</td>
+            </tr>
+            <tr>
+                <td><b>43</b></td>
+                <td>Số nhà  | Số tầng  | Số phòng | DẬU | 4 | SỬU | MÙI</td>
+            </tr>
+            <tr>
+                <td><b>44</b></td>
+                <td>THÌN | 5 | DẦN | THÂN</td>
+            </tr>
+            <tr>
+                <td><b>45</b></td>
+                <td>2 | 1 | 12 | TUẤT | 5 | DẬU | MÃO</td>
+            </tr>
+            <tr>
+                <td><b>46</b></td>
+                <td>Khổ tâm  | Bệnh tật  | Đại phát tài  | TỴ | 6 | TUẤT | THÌN</td>
+            </tr>
+            <tr>
+                <td><b>47</b></td>
+                <td>HỢI | 6 | HỢI | TỴ</td>
+            </tr>
+            <tr>
+                <td><b>48</b></td>
+                <td>NGỌ | TÝ</td>
+            </tr>
+            <tr>
+                <td><b>49</b></td>
+                <td>-6 | 0 | 6 | 12 | 18 | 24 | 30 | 36 | 42 | 48 | 54 | 60 | 66 | MÙI | SỬU</td>
+            </tr>
+            <tr>
+                <td><b>50</b></td>
+                <td>bảng 6 | bảng 5 | 1965 | 1971 | 1977 | 1983 | 1989 | 1995 | 2001 | 2007 | 2013 | 2019 | 2025 | 2031 | 2037</td>
+            </tr>
+            <tr>
+                <td><b>51</b></td>
+                <td>12 | May mắn XO SO | 1 | Bệnh tật  | 1 | 1 | Đau bại | bảng 3</td>
+            </tr>
+            <tr>
+                <td><b>52</b></td>
+                <td>11 | Thăng chức | 2 | Khổ tâm  | Day dứt | 1 | TÝ | 1</td>
+            </tr>
+            <tr>
+                <td><b>53</b></td>
+                <td>10 | Tài sản | 3 | Xuất ngoại | 1 | Xa nhà | 2 | SỬU | 2 | 1 | SỬU | 2.0 | TAM TANG</td>
+            </tr>
+            <tr>
+                <td><b>54</b></td>
+                <td>9 | Bất động sản | 4 | Học vấn  | 1 | 1 | Bằng cấp | 3 | DẦN | 3 | 2 | SỬU | 2.0 | KẾ TOÁN</td>
+            </tr>
+            <tr>
+                <td><b>55</b></td>
+                <td>8 | Vui sướng | 5 | Tiểu thương  | 1 | Mua bán nhỏ | 4 | MÃO | 4 | 3 | DẦN | 3.0 | CÔNG TY</td>
+            </tr>
+            <tr>
+                <td><b>56</b></td>
+                <td>7 | Chết, Hóa thân | 6 | Hợp tac, LD | Làm ăn, sản xuất | 5 | THÌN | 5 | 4 | DẦN | 3.0 | BẾP TRƯỞNG</td>
+            </tr>
+            <tr>
+                <td><b>57</b></td>
+                <td>6 | Làm ăn, sản xuất | 7 | Tai nạn  | 1 | 1 | 1 | 1 | Chết, Hóa thân | 6 | TỴ | 6 | 5 | MÃO | 4.0 | CA CHEP</td>
+            </tr>
+            <tr>
+                <td><b>58</b></td>
+                <td>5 | Mua bán nhỏ | 8 | Hạnh phúc  | Vui sướng | 7 | NGỌ | 1 | 6 | MÃO | 4.0 | SA TANG</td>
+            </tr>
+            <tr>
+                <td><b>59</b></td>
+                <td>4 | Bằng cấp | 9 | Của cải  | 1 | Bất động sản | 8 | MÙI | 2 | 7 | THÌN | 5.0 | NGÂN HÀNG</td>
+            </tr>
+            <tr>
+                <td><b>60</b></td>
+                <td>3 | Xa nhà | 10 | Giàu có  | 1 | Tài sản | 9 | THÂN | 3 | 8 | THÌN | 5.0 | VE SINH</td>
+            </tr>
+            <tr>
+                <td><b>61</b></td>
+                <td>2 | Day dứt | 11 | Quyển lực  | 1 | Thăng chức | 10 | DẬU | 4 | 9 | TỴ | 6.0 | NGO KHONG</td>
+            </tr>
+            <tr>
+                <td><b>62</b></td>
+                <td>1 | Đau bại | 12 | Đại phát tài  | May mắn XO SO | 11 | TUẤT | 5 | 10 | TỴ | 6.0 | GIÚP VIỆC, GIA SƯ</td>
+            </tr>
+            <tr>
+                <td><b>63</b></td>
+                <td>66 | 72 | 78 | 84 | 90 | 96 | 102 | 108 | 114 | 120 | 126 | 132 | 138 | 12 | HỢI | 6 | 11 | NGỌ | 1.0 | BẢO VỆ</td>
+            </tr>
+            <tr>
+                <td><b>64</b></td>
+                <td>2037 | 2043 | 2049 | 2055 | 2061 | 2067 | 2073 | 2079 | 2085 | 2091 | 2097 | 2103 | 2109 | 12 | NGỌ | 1.0 | BAT GIOI</td>
+            </tr>
+            <tr>
+                <td><b>65</b></td>
+                <td>13 | MÙI | 2.0</td>
+            </tr>
+            <tr>
+                <td><b>66</b></td>
+                <td>14 | MÙI | 2.0</td>
+            </tr>
+            <tr>
+                <td><b>67</b></td>
+                <td>SN | 3/3/1971 | 15 | THÂN | 3.0</td>
+            </tr>
+            <tr>
+                <td><b>68</b></td>
+                <td>2027 | Hôm nay | 15/5/2027 | 16 | THÂN | 3.0</td>
+            </tr>
+            <tr>
+                <td><b>69</b></td>
+                <td>15/5/2027 | bảng 7 | 17 | DẬU | 4.0</td>
+            </tr>
+            <tr>
+                <td><b>70</b></td>
+                <td>1 | 18 | DẬU | 4.0</td>
+            </tr>
+            <tr>
+                <td><b>71</b></td>
+                <td>Sinh | 19 | TUẤT | 5.0</td>
+            </tr>
+            <tr>
+                <td><b>72</b></td>
+                <td>Lãnh đạo, Quản lý | 20 | TUẤT | 5.0</td>
+            </tr>
+            <tr>
+                <td><b>73</b></td>
+                <td>Đứng đầu, Tổ chức | 21 | HỢI | 6.0</td>
+            </tr>
+            <tr>
+                <td><b>74</b></td>
+                <td>22 | HỢI | 6.0</td>
+            </tr>
+            <tr>
+                <td><b>75</b></td>
+                <td>23 | TÝ | 1.0</td>
+            </tr>
+            <tr>
+                <td><b>76</b></td>
+                <td>24 | TÝ | 1.0</td>
+            </tr>
+            <tr>
+                <td><b>77</b></td>
+                <td>1 | Đau bại</td>
+            </tr>
+            <tr>
+                <td><b>78</b></td>
+                <td>2 | Day dứt</td>
+            </tr>
+            <tr>
+                <td><b>79</b></td>
+                <td>3 | Xa nhà</td>
+            </tr>
+            <tr>
+                <td><b>80</b></td>
+                <td>4 | Bằng cấp | DAN | Nước | 5</td>
+            </tr>
+            <tr>
+                <td><b>81</b></td>
+                <td>5 | Mua bán nhỏ | NGO | Rau củ | 30</td>
+            </tr>
+            <tr>
+                <td><b>82</b></td>
+                <td>6 | Làm ăn, sản xuất | THAN | Hoa quả | 30</td>
+            </tr>
+            <tr>
+                <td><b>83</b></td>
+                <td>7 | Chết, Hóa thân | THIN | Cá | 60</td>
+            </tr>
+            <tr>
+                <td><b>84</b></td>
+                <td>8 | Vui sướng | TI | Cơm | 120</td>
+            </tr>
+            <tr>
+                <td><b>85</b></td>
+                <td>9 | Bất động sản | MAO | Sữa, Bơ, Phomai | 140</td>
+            </tr>
+            <tr>
+                <td><b>86</b></td>
+                <td>10 | Tài sản | DAU | Thịt gà | 180</td>
+            </tr>
+            <tr>
+                <td><b>87</b></td>
+                <td>11 | Thăng chức | SUU | Thịt bò | 240</td>
+            </tr>
+            <tr>
+                <td><b>88</b></td>
+                <td>12 | May mắn XO SO | HOI | Thịt lợn | 300</td>
+            </tr>
+            <tr>
+                <td><b>89</b></td>
+                <td>TUAT | Thịt chó | 320</td>
+            </tr>
+            <tr>
+                <td><b>90</b></td>
+                <td>TY | Thịt rắn | 160</td>
+            </tr>
+            <tr>
+                <td><b>91</b></td>
+                <td>MUI | Thịt dê | 200</td>
+            </tr>
+            <tr>
+                <td><b>92</b></td>
+                <td>1 | NÔNG NGHIỆP</td>
+            </tr>
+            <tr>
+                <td><b>93</b></td>
+                <td>2 | THƯƠNG MẠI</td>
+            </tr>
+            <tr>
+                <td><b>94</b></td>
+                <td>3 | Y TẾ</td>
+            </tr>
+            <tr>
+                <td><b>95</b></td>
+                <td>GIỜ SINH | GIỜ NÀY | 4 | CÔNG NGHIỆP</td>
+            </tr>
+            <tr>
+                <td><b>96</b></td>
+                <td>22 | 12 | 5 | QUỐC PHÒNG</td>
+            </tr>
+            <tr>
+                <td><b>97</b></td>
+                <td>NGỌ | 1 | 6 | LÃNH ĐẠO</td>
+            </tr>
+            <tr>
+                <td><b>98</b></td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td><b>99</b></td>
+                <td>NĂM NAY | THƯƠNG MẠI</td>
+            </tr>
+            <tr>
+                <td><b>100</b></td>
+                <td>11 | NGỌ | 1</td>
+            </tr>
+            <tr>
+                <td><b>101</b></td>
+                <td>TAY DU KY</td>
+            </tr>
+            <tr>
+                <td><b>102</b></td>
+                <td>1 | 1 | CHIẾN LƯỢC | Tướng, Soái | Giám Đốc</td>
+            </tr>
+            <tr>
+                <td><b>103</b></td>
+                <td>NGỌ | TÝ | Oc bo | d | NGỌ | TÝ | ĐẦU ÓC | Sĩ | Kế toán, Thủ quỹ | NGUYENTONGANAN | TOTHIHA</td>
+            </tr>
+            <tr>
+                <td><b>104</b></td>
+                <td>BẢO VỆ | Oc loc</td>
+            </tr>
+            <tr>
+                <td><b>105</b></td>
+                <td>dau ga</td>
+            </tr>
+            <tr>
+                <td><b>106</b></td>
+                <td>dau ca | 2 | 2 | VAI TRÁI</td>
+            </tr>
+            <tr>
+                <td><b>107</b></td>
+                <td>SỬU | MÙI | Thịt vai | v | SỬU | MÙI | Nghề tay trái | Tượng | Văn phòng, BẢO VỆ | NGOQUYCUONG | HOANGTHIENBACHANH</td>
+            </tr>
+            <tr>
+                <td><b>108</b></td>
+                <td>TAM TANG | VII. 7. Thịt nạc vai | KIỂM SOÁT</td>
+            </tr>
+            <tr>
+                <td><b>109</b></td>
+                <td>2. Âu cánh gà</td>
+            </tr>
+            <tr>
+                <td><b>110</b></td>
+                <td>  1 Thịt chó xào lăn | 3 | 3 | TRAI TIM | Cộng tác viên | Tâm lý</td>
+            </tr>
+            <tr>
+                <td><b>111</b></td>
+                <td>DẦN | THÂN | 2 Chó nướng | Tim lợn | ti | DẦN | THÂN | Hợp làm ăn | Tư vấn | Lễ tân | NGUYENTHIMINHHANG | NGUYENKHACNANG</td>
+            </tr>
+            <tr>
+                <td><b>112</b></td>
+                <td>CÔNG TY | 3 Dồi chó | 9. Tim gà | Tình duyên làm ăn chung | Khách hàng | Tâm linh</td>
+            </tr>
+            <tr>
+                <td><b>113</b></td>
+                <td>4 Thịt Chó hấp</td>
+            </tr>
+            <tr>
+                <td><b>114</b></td>
+                <td>5 Chả chó nướng | 4 | 4 | VAI PHẢI</td>
+            </tr>
+            <tr>
+                <td><b>115</b></td>
+                <td>DẦN | THÂN | 6 Tiết canh chó | Thịt vai | v | DẦN | THÂN | Kề vai sát cánh cánh tay | Mã Tốt | Văn phòng, BẢO VỆ | NGUYENTHIMINHHANG | NGUYENKHACNANG</td>
+            </tr>
+            <tr>
+                <td><b>116</b></td>
+                <td>CÔNG TY | 7 Chó quay | VII. 7. Thịt nạc vai | THANH TRA</td>
+            </tr>
+            <tr>
+                <td><b>117</b></td>
+                <td>8 Nhựa Mận | 2. Âu cánh gà</td>
+            </tr>
+            <tr>
+                <td><b>118</b></td>
+                <td>  1 Thịt chó xào lăn | 5 | 5 | CHÂN TRÁI</td>
+            </tr>
+            <tr>
+                <td><b>119</b></td>
+                <td>MÃO | DẬU | Thăn đùi | 2 Chó nướng | ch | MÃO | DẬU | làm việc cho mình | Đội Xe | THANTHIKIMANH</td>
+            </tr>
+            <tr>
+                <td><b>120</b></td>
+                <td>CA CHEP | IV. 4. Thịt chân giò | 3 Dồi chó | Nghề chân trái | Xe pháo | CSKH</td>
+            </tr>
+            <tr>
+                <td><b>121</b></td>
+                <td>4. Đùi gà tỏi | 4 Thịt Chó hấp | NVTT</td>
+            </tr>
+            <tr>
+                <td><b>122</b></td>
+                <td>5. Má đùi gà | 5 Chả chó nướng | 6 | 6 | CHÂN PHẢI</td>
+            </tr>
+            <tr>
+                <td><b>123</b></td>
+                <td>MÃO | DẬU | 7. Chân gà | 6 Tiết canh chó | ch | MÃO | DẬU | Đàn em hy sinh cho mình | Xe pháo | Đội Xe | THANTHIKIMANH</td>
+            </tr>
+            <tr>
+                <td><b>124</b></td>
+                <td>CA CHEP | 7 Chó quay | Đày tớ, thuê mướn | CSKH</td>
+            </tr>
+            <tr>
+                <td><b>125</b></td>
+                <td>8 Nhựa Mận | Giúp việc | NVTT</td>
+            </tr>
+            <tr>
+                <td><b>126</b></td>
+                <td>pin bò | p</td>
+            </tr>
+            <tr>
+                <td><b>127</b></td>
+                <td>VIII. 8. Thịt mông</td>
+            </tr>
+            <tr>
+                <td><b>128</b></td>
+                <td>12. Phao câu gà</td>
+            </tr>
+            <tr>
+                <td><b>129</b></td>
+                <td>NĂM XEM</td>
+            </tr>
+            <tr>
+                <td><b>130</b></td>
+                <td>Không lo lắng hết phiền não</td>
+            </tr>
+            <tr>
+                <td><b>131</b></td>
+                <td>Chọn ngành | Nghĩ về môi trường sống</td>
+            </tr>
+            <tr>
+                <td><b>132</b></td>
+                <td>Chọn trường | Hay bị bắt nạt thì học chăm vào lớp chọn</td>
+            </tr>
+            <tr>
+                <td><b>133</b></td>
+                <td>Làm sao biết phù hợp với nghành nào | Lo lắng xung đột bất an</td>
+            </tr>
+            <tr>
+                <td><b>134</b></td>
+                <td>NĂM XEM | Đam mê Sở trường Xã hội cần | Mục tiêu thoát ra khả năng sống tốt hơn</td>
+            </tr>
+            <tr>
+                <td><b>135</b></td>
+                <td>NGÀY XEM | Nên có mục tiêu để có An toàn</td>
+            </tr>
+            <tr>
+                <td><b>136</b></td>
+                <td>THÁNG | Chọn bạn mà chơi quản lý mối quan hệ</td>
+            </tr>
+            <tr>
+                <td><b>137</b></td>
+                <td>ĐAM MÊ quá khứ đã làm</td>
+            </tr>
+            <tr>
+                <td><b>138</b></td>
+                <td>Đọc sách về vĩ nhân | Không thông minh vẫn thành công</td>
+            </tr>
+            <tr>
+                <td><b>139</b></td>
+                <td>Thích câu chuyện nào | PT1 Khiếu x Nỗ lực = kỹ năng</td>
+            </tr>
+            <tr>
+                <td><b>140</b></td>
+                <td>Đặt câu hỏi trên diễn đàn | PT2 Kỹ năng x Nỗ lực = Thành quả</td>
+            </tr>
+            <tr>
+                <td><b>141</b></td>
+                <td>1971 | VQ</td>
+            </tr>
+            <tr>
+                <td><b>142</b></td>
+                <td>3 | 7</td>
+            </tr>
+            <tr>
+                <td><b>143</b></td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td><b>144</b></td>
+                <td>3 | 3 | CHIẾN LƯỢC | Tướng, Soái | Tướng</td>
+            </tr>
+            <tr>
+                <td><b>145</b></td>
+                <td>HỢI | TỴ | ĐẦU ÓC | Sĩ | HỢI | TỴ | CHIẾN LƯỢC | NGUYENMINHNAM | Sĩ, Tượng</td>
+            </tr>
+            <tr>
+                <td><b>146</b></td>
+                <td>NGO KHONG | ĐẦU ÓC</td>
+            </tr>
+            <tr>
+                <td><b>147</b></td>
+                <td>1978 | 2020</td>
+            </tr>
+            <tr>
+                <td><b>148</b></td>
+                <td>10 | 10 | VAI TRÁI</td>
+            </tr>
+            <tr>
+                <td><b>149</b></td>
+                <td>NGỌ | TÝ | Nghề tay trái | Tượng | NGỌ | TÝ | TAY TRÁI | NGUYENTONGANAN | TOTHIHA | Mã Tốt</td>
+            </tr>
+            <tr>
+                <td><b>150</b></td>
+                <td>BẢO VỆ | Nghề tay trái | NGUYENTHIMINHPHUONG | NGUYENTOBICHNGOC</td>
+            </tr>
+            <tr>
+                <td><b>151</b></td>
+                <td>1985 | 2030 | HOANGANHDUNG</td>
+            </tr>
+            <tr>
+                <td><b>152</b></td>
+                <td>5 | 5 | TRAI TIM | Cộng tác viên | Cộng tác viên</td>
+            </tr>
+            <tr>
+                <td><b>153</b></td>
+                <td>SỬU | MÙI | Hợp làm ăn | Tư vấn | SỬU | MÙI | TRAI TIM | NGOQUYCUONG | HOANGTHIENBACHANH | Tư vấn</td>
+            </tr>
+            <tr>
+                <td><b>154</b></td>
+                <td>Tình duyên làm ăn chung | Khách hàng | TAM TANG | Hợp làm ăn | Khách hàng</td>
+            </tr>
+            <tr>
+                <td><b>155</b></td>
+                <td>1992 | 2037 | Tình duyên làm ăn chung</td>
+            </tr>
+            <tr>
+                <td><b>156</b></td>
+                <td>12 | 12 | VAI PHẢI</td>
+            </tr>
+            <tr>
+                <td><b>157</b></td>
+                <td>THÂN | DẦN | Kề vai sát cánh cánh tay | Mã Tốt | THÂN | DẦN | TAY PHẢI | NGUYENKHACNANG | NGUYENTHIMINHHANG | Mã Tốt</td>
+            </tr>
+            <tr>
+                <td><b>158</b></td>
+                <td>CÔNG TY | Kề vai sát cánh cánh tay | NGUYENTOMINHCHAU | HOANGHAIVINH</td>
+            </tr>
+            <tr>
+                <td><b>159</b></td>
+                <td>1999 | 2044</td>
+            </tr>
+            <tr>
+                <td><b>160</b></td>
+                <td>7 | 7 | CHÂN TRÁI</td>
+            </tr>
+            <tr>
+                <td><b>161</b></td>
+                <td>MÃO | DẬU | làm việc cho mình | MÃO | DẬU | CHÂN TRÁI | THANTHIKIMANH</td>
+            </tr>
+            <tr>
+                <td><b>162</b></td>
+                <td>Nghề chân trái | Xe pháo | CA CHEP | làm việc cho mình | NGOGIALINH | Xe pháo</td>
+            </tr>
+            <tr>
+                <td><b>163</b></td>
+                <td>2006 | 2051 | Nghề chân trái</td>
+            </tr>
+            <tr>
+                <td><b>164</b></td>
+                <td>2 | 2 | CHÂN PHẢI</td>
+            </tr>
+            <tr>
+                <td><b>165</b></td>
+                <td>TUẤT | THÌN | Đàn em hy sinh cho mình | Xe pháo | TUẤT | THÌN | CHÂN PHẢI | NGOGIABACH | Xe pháo</td>
+            </tr>
+            <tr>
+                <td><b>166</b></td>
+                <td>Đày tớ, thuê mướn | NGÂN HÀNG | Đàn em hy sinh cho mình</td>
+            </tr>
+            <tr>
+                <td><b>167</b></td>
+                <td>2013 | 2058 | Giúp việc | Đày tớ, thuê mướn</td>
+            </tr>
+            <tr>
+                <td><b>168</b></td>
+                <td>Giúp việc</td>
+            </tr>
+            <tr>
+                <td><b>169</b></td>
+                <td>3/8/2026 | 31/12/1970 | 62 | 8</td>
+            </tr>
+            <tr>
+                <td><b>170</b></td>
+                <td>1/1/1900 | 3/3/1971 | 288 | 12 | 18 | bảng 1</td>
+            </tr>
+            <tr>
+                <td><b>171</b></td>
+                <td>Dòng 1 | bảng 3 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 10 | TÝ | 11 | TÝ | 1</td>
+            </tr>
+            <tr>
+                <td><b>172</b></td>
+                <td>Dòng 2 | 1 | Quý sinh | 11 | 12 | 13 | 14 | 15 | 16 | 5 | NGỌ | 5 | NGỌ | 1</td>
+            </tr>
+            <tr>
+                <td><b>173</b></td>
+                <td>Dòng 3 | 2 | Tháng sinh | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 1 | 2 | 11 | SỬU  | 12 | SỬU | 2</td>
+            </tr>
+            <tr>
+                <td><b>174</b></td>
+                <td>Dòng 4 | 3 | Tuần sinh | 7 | 8 | 9 | 10 | 11 | 12 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 6 | MÙI | 6 | MÙI | 2</td>
+            </tr>
+            <tr>
+                <td><b>175</b></td>
+                <td>Dòng 5 | 4 | Tổng | 20 | 23 | 26 | 29 | 32 | 35 | 9 | 11 | 13 | 15 | 17 | 7 | 20 | 12 | DẦN | 1 | DẦN | 3</td>
+            </tr>
+            <tr>
+                <td><b>176</b></td>
+                <td>Dòng 6 | 5 | Số dư  | 8 | 11 | 2 | 5 | 8 | 11 | 9 | 11 | 1 | 3 | 5 | 7 | 8 | 7 | THÂN | 7 | THÂN | 3</td>
+            </tr>
+            <tr>
+                <td><b>177</b></td>
+                <td>Dòng 7 | 2 | MÃO | 2 | MÃO | 4</td>
+            </tr>
+            <tr>
+                <td><b>178</b></td>
+                <td>Dòng 8 | 1 | DẬU | 8 | DẬU | 4</td>
+            </tr>
+            <tr>
+                <td><b>179</b></td>
+                <td>Dòng 9 | 3 | THÌN | 3 | THÌN | 5</td>
+            </tr>
+            <tr>
+                <td><b>180</b></td>
+                <td>Dòng 10 | 8 | TUẤT | 9 | TUẤT | 5</td>
+            </tr>
+            <tr>
+                <td><b>181</b></td>
+                <td>Dòng 11 | 1 | 4 | TỴ | 4 | TỴ | 6</td>
+            </tr>
+            <tr>
+                <td><b>182</b></td>
+                <td>1 | 6 | 9 | HỢI | 10 | HỢI | 6</td>
+            </tr>
+            <tr>
+                <td><b>183</b></td>
+                <td>2 | bảng 4</td>
+            </tr>
+            <tr>
+                <td><b>184</b></td>
+                <td>2 | 26 | 39 | 16</td>
+            </tr>
+            <tr>
+                <td><b>185</b></td>
+                <td>3 | TIỀN VẬN | TRUNG VẬN | HẬU VẬN</td>
+            </tr>
+            <tr>
+                <td><b>186</b></td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td><b>187</b></td>
+                <td>4 | 26 | 39 | 16</td>
+            </tr>
+            <tr>
+                <td><b>188</b></td>
+                <td>4 | Số nhà  | Số tầng  | Số phòng</td>
+            </tr>
+            <tr>
+                <td><b>189</b></td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td><b>190</b></td>
+                <td>5 | 2 | 3 | 4</td>
+            </tr>
+            <tr>
+                <td><b>191</b></td>
+                <td>6 | Khổ tâm  | Xuất ngoại | Học vấn </td>
+            </tr>
+            <tr>
+                <td><b>192</b></td>
+                <td>6</td>
+            </tr>
+            <tr>
+                <td><b>193</b></td>
+                <td>1/1/1971 | 1 | Dòng 1 | -1 | 5 | 11 | 17 | 23 | 29 | 35 | 41 | 47 | 53 | 59 | 65 | 71</td>
+            </tr>
+            <tr>
+                <td><b>194</b></td>
+                <td>2/1/1971 | 1 | Dòng 2 | 287 | 293 | 299 | 305 | 311 | 317 | 323 | 329 | 335 | 341 | 347 | 353 | 359</td>
+            </tr>
+            <tr>
+                <td><b>195</b></td>
+                <td>3/1/1971 | 2 | Dòng 3 | bảng 5 | bảng 6 | -1 | 1 | 2 | 4 | 5 | 7 | 8 | 10 | 11 | 13 | 14 | 16 | 17 | 1.0 | Đại phát tài  | May mắn XO SO</td>
+            </tr>
+            <tr>
+                <td><b>196</b></td>
+                <td>4/1/1971 | 2 | Dòng 7 | 12 | 1 | Bệnh tật  | 1 | Đau bại | 2.0 | Quyển lực  | Thăng chức</td>
+            </tr>
+            <tr>
+                <td><b>197</b></td>
+                <td>5/1/1971 | 2 | Dòng 8 | 11 | 2 | Khổ tâm  | 1 | Day dứt | 3.0 | Giàu có  | Tài sản</td>
+            </tr>
+            <tr>
+                <td><b>198</b></td>
+                <td>6/1/1971 | 2 | Dòng 9 | 10 | 3 | Xuất ngoại | 1 | Xa nhà | 4.0 | Của cải  | Bất động sản</td>
+            </tr>
+            <tr>
+                <td><b>199</b></td>
+                <td>7/1/1971 | 2 | Dòng 10 | 9 | 4 | Học vấn  | Bằng cấp | 5.0 | Hạnh phúc  | Vui sướng</td>
+            </tr>
+            <tr>
+                <td><b>200</b></td>
+                <td>8/1/1971 | 2 | Dòng 11 | 8 | 5 | Tiểu thương  | 1 | 1 | Mua bán nhỏ | 6.0 | Tai nạn  | Chết, Hóa thân</td>
+            </tr>
+            <tr>
+                <td><b>201</b></td>
+                <td>9/1/1971 | 2 | Dòng 12 | 7 | 6 | Hợp tac, LD | Làm ăn, sản xuất | 7.0 | Hợp tac, LD | Làm ăn, sản xuất</td>
+            </tr>
+            <tr>
+                <td><b>202</b></td>
+                <td>10/1/1971 | 3 | Dòng 13 | 6 | 7 | Tai nạn  | 1 | Chết, Hóa thân | 8.0 | Tiểu thương  | Mua bán nhỏ</td>
+            </tr>
+            <tr>
+                <td><b>203</b></td>
+                <td>11/1/1971 | 3 | Dòng 14 | 5 | 8 | Hạnh phúc  | 1 | 1 | 1 | Vui sướng | 9.0 | Học vấn  | Bằng cấp</td>
+            </tr>
+            <tr>
+                <td><b>204</b></td>
+                <td>12/1/1971 | 3 | Dòng 15 | 4 | 9 | Của cải  | 1 | Bất động sản | 10.0 | Xuất ngoại | Xa nhà</td>
+            </tr>
+            <tr>
+                <td><b>205</b></td>
+                <td>13/1/1971 | 3 | Dòng 16 | 3 | 10 | Giàu có  | Tài sản | 11.0 | Khổ tâm  | Day dứt</td>
+            </tr>
+            <tr>
+                <td><b>206</b></td>
+                <td>14/1/1971 | 3 | Dòng 17 | 2 | 11 | Quyển lực  | 1 | 1 | 1 | Thăng chức | 12.0 | Bệnh tật  | Đau bại</td>
+            </tr>
+            <tr>
+                <td><b>207</b></td>
+                <td>15/1/1971 | 3 | Dòng 18 | 1 | 12 | Đại phát tài  | May mắn XO SO</td>
+            </tr>
+            <tr>
+                <td><b>208</b></td>
+                <td>16/1/1971 | 3 | Dòng 3</td>
+            </tr>
+            <tr>
+                <td><b>209</b></td>
+                <td>17/1/1971 | 4 | Dòng 4 | 1971 | 1972 | 1973 | 1975 | 1976 | 1978 | 1979 | 1981 | 1982 | 1984 | 1985 | 1987 | 1988</td>
+            </tr>
+            <tr>
+                <td><b>210</b></td>
+                <td>18/1/1971 | 4 | Dòng 5 | 0 | -1 | 1 | 2 | 4 | 5 | 7 | 8 | 10 | 11 | 13 | 14 | 16 | 17</td>
+            </tr>
+            <tr>
+                <td><b>211</b></td>
+                <td>19/1/1971 | 4 | Dòng 6 | 2023 | 2024 | 2025 | 2027 | 2028 | 2030 | 2031 | 2033 | 2034 | 2036 | 2037 | 2039 | 2040</td>
+            </tr>
+            <tr>
+                <td><b>212</b></td>
+                <td>20/1/1971 | 4 | 52 | 53 | 54 | 56 | 57 | 59 | 60 | 62 | 63 | 65 | 66 | 68 | 69</td>
+            </tr>
+            <tr>
+                <td><b>213</b></td>
+                <td>21/1/1971 | 4 | cột 1 | cột 2 | cột 3 | cột 4 | cột 5 | cột 6 | cột 7 | cột 8 | cột 9 | cột 10 | cột 11 | cột 12 | cột 13 | cột 14 | cột 15</td>
+            </tr>
+            <tr>
+                <td><b>214</b></td>
+                <td>22/1/1971 | 4</td>
+            </tr>
+            <tr>
+                <td><b>215</b></td>
+                <td>23/1/1971 | 4</td>
+            </tr>
+            <tr>
+                <td><b>216</b></td>
+                <td>24/1/1971 | 5</td>
+            </tr>
+            <tr>
+                <td><b>217</b></td>
+                <td>25/1/1971 | 5 | 16/12/2025 | 21 | 31/12/1970</td>
+            </tr>
+            <tr>
+                <td><b>218</b></td>
+                <td>26/1/1971 | 5 | 3/3/1971 | 62 | 8 | MÙI | 2 | bảng 1</td>
+            </tr>
+            <tr>
+                <td><b>219</b></td>
+                <td>27/1/1971 | 5 | bảng 3 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 1 | TÝ | 1 | TÝ | 1</td>
+            </tr>
+            <tr>
+                <td><b>220</b></td>
+                <td>28/1/1971 | 5 | 1 | Tuần sinh | 7 | 8 | 9 | 10 | 11 | 12 | 7 | NGỌ | 7 | NGỌ | 1</td>
+            </tr>
+            <tr>
+                <td><b>221</b></td>
+                <td>29/1/1971 | 5 | 2 | Ngày sinh | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 1 | 2 | 2 | SỬU  | 2 | SỬU | 2</td>
+            </tr>
+            <tr>
+                <td><b>222</b></td>
+                <td>30/1/1971 | 5 | 3 | Giờ sinh | 20 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 20 | 8 | MÙI | 8 | MÙI | 2</td>
+            </tr>
+            <tr>
+                <td><b>223</b></td>
+                <td>31/1/1971 | 6 | 4 | Tổng | 29 | 12 | 15 | 18 | 21 | 24 | 14 | 16 | 18 | 20 | 22 | 12 | 29 | 3 | DẦN | 3 | DẦN | 3</td>
+            </tr>
+            <tr>
+                <td><b>224</b></td>
+                <td>1/2/1971 | 6 | 5 | Số dư  | 5 | 12 | 3 | 6 | 9 | 12 | 2 | 4 | 6 | 8 | 10 | 12 | 5 | 9 | THÂN | 9 | THÂN | 3</td>
+            </tr>
+            <tr>
+                <td><b>225</b></td>
+                <td>2/2/1971 | 6 | 4 | MÃO | 4 | MÃO | 4</td>
+            </tr>
+            <tr>
+                <td><b>226</b></td>
+                <td>3/2/1971 | 6 | 10 | DẬU | 10 | DẬU | 4</td>
+            </tr>
+            <tr>
+                <td><b>227</b></td>
+                <td>4/2/1971 | 6 | 5 | THÌN | 5 | THÌN | 5</td>
+            </tr>
+            <tr>
+                <td><b>228</b></td>
+                <td>5/2/1971 | 6 | 11 | TUẤT | 11 | TUẤT | 5</td>
+            </tr>
+            <tr>
+                <td><b>229</b></td>
+                <td>6/2/1971 | 6 | 1 | 6 | TỴ | 6 | TỴ | 6</td>
+            </tr>
+            <tr>
+                <td><b>230</b></td>
+                <td>7/2/1971 | 7 | 1 | 6 | 12 | HỢI | 12 | HỢI | 6</td>
+            </tr>
+            <tr>
+                <td><b>231</b></td>
+                <td>8/2/1971 | 7 | 2 | bảng 4 </td>
+            </tr>
+            <tr>
+                <td><b>232</b></td>
+                <td>9/2/1971 | 7 | 2 | 26 | 27 | 36</td>
+            </tr>
+            <tr>
+                <td><b>233</b></td>
+                <td>10/2/1971 | 7 | 3 | TIỀN VẬN | TRUNG VẬN | HẬU VẬN</td>
+            </tr>
+            <tr>
+                <td><b>234</b></td>
+                <td>11/2/1971 | 7 | 3</td>
+            </tr>
+            <tr>
+                <td><b>235</b></td>
+                <td>12/2/1971 | 7 | 4 | bảng 4  | 26 | 27 | 36</td>
+            </tr>
+            <tr>
+                <td><b>236</b></td>
+                <td>13/2/1971 | 7 | 4 | Số nhà  | Số tầng  | Số phòng</td>
+            </tr>
+            <tr>
+                <td><b>237</b></td>
+                <td>14/2/1971 | 8 | 5</td>
+            </tr>
+            <tr>
+                <td><b>238</b></td>
+                <td>15/2/1971 | 8 | 5 | 2 | 3 | 12</td>
+            </tr>
+            <tr>
+                <td><b>239</b></td>
+                <td>16/2/1971 | 8 | 6 | Khổ tâm  | Xuất ngoại | Đại phát tài </td>
+            </tr>
+            <tr>
+                <td><b>240</b></td>
+                <td>17/2/1971 | 8 | 6</td>
+            </tr>
+            <tr>
+                <td><b>241</b></td>
+                <td>18/2/1971 | 8 | 6 | 12 | 18 | 24 | 30 | 36 | 42 | 48 | 54 | 60 | 66 | 72 | 78 | 84</td>
+            </tr>
+            <tr>
+                <td><b>242</b></td>
+                <td>19/2/1971 | 8 | 68 | 74 | 80 | 86 | 92 | 98 | 104 | 110 | 116 | 122 | 128 | 134 | 140 | 146</td>
+            </tr>
+            <tr>
+                <td><b>243</b></td>
+                <td>20/2/1971 | 8 | bảng 5 | 2 | 8 | 2 | 8 | 2 | 8 | 2 | 8 | 2 | 8 | 2 | 8 | 2 | 12</td>
+            </tr>
+            <tr>
+                <td><b>244</b></td>
+                <td>21/2/1971 | 9 | 1 | Bệnh tật </td>
+            </tr>
+            <tr>
+                <td><b>245</b></td>
+                <td>22/2/1971 | 9 | 2 | Khổ tâm </td>
+            </tr>
+            <tr>
+                <td><b>246</b></td>
+                <td>23/2/1971 | 9 | 3 | Xuất ngoại</td>
+            </tr>
+            <tr>
+                <td><b>247</b></td>
+                <td>24/2/1971 | 9 | 4 | Học vấn </td>
+            </tr>
+            <tr>
+                <td><b>248</b></td>
+                <td>25/2/1971 | 9 | 5 | Tiểu thương </td>
+            </tr>
+            <tr>
+                <td><b>249</b></td>
+                <td>26/2/1971 | 9 | 6 | Hợp tac, LD</td>
+            </tr>
+            <tr>
+                <td><b>250</b></td>
+                <td>27/2/1971 | 9 | 7 | Tai nạn </td>
+            </tr>
+            <tr>
+                <td><b>251</b></td>
+                <td>28/2/1971 | 10 | 8 | Hạnh phúc </td>
+            </tr>
+            <tr>
+                <td><b>252</b></td>
+                <td>1/3/1971 | 10 | 9 | Của cải </td>
+            </tr>
+            <tr>
+                <td><b>253</b></td>
+                <td>2/3/1971 | 10 | 10 | Giàu có </td>
+            </tr>
+            <tr>
+                <td><b>254</b></td>
+                <td>3/3/1971 | 10 | 11 | Quyển lực </td>
+            </tr>
+            <tr>
+                <td><b>255</b></td>
+                <td>4/3/1971 | 10 | 12 | Đại phát tài </td>
+            </tr>
+            <tr>
+                <td><b>256</b></td>
+                <td>5/3/1971 | 10 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 2 | 2 | 2 | 2 | 2 | 2 | 2</td>
+            </tr>
+            <tr>
+                <td><b>257</b></td>
+                <td>6/3/1971 | 10 | 1971 | 1972 | 1972 | 1972 | 1972 | 1972 | 1972 | 1973 | 1973 | 1973 | 1973 | 1973 | 1973 | 1973</td>
+            </tr>
+            <tr>
+                <td><b>258</b></td>
+                <td>7/3/1971 | 11 | 55 | 55 | 55 | 55 | 55 | 55 | 55 | 55 | 55 | 55 | 55 | 55 | 55 | 55</td>
+            </tr>
+            <tr>
+                <td><b>259</b></td>
+                <td>8/3/1971 | 11 | 2026 | 2027 | 2027 | 2027 | 2027 | 2027 | 2027 | 2028 | 2028 | 2028 | 2028 | 2028 | 2028 | 2028</td>
+            </tr>
+            <tr>
+                <td><b>260</b></td>
+                <td>9/3/1971 | 11</td>
+            </tr>
+            <tr>
+                <td><b>261</b></td>
+                <td>10/3/1971 | 11</td>
+            </tr>
+            <tr>
+                <td><b>262</b></td>
+                <td>11/3/1971 | 11</td>
+            </tr>
+            <tr>
+                <td><b>263</b></td>
+                <td>12/3/1971 | 11</td>
+            </tr>
+            <tr>
+                <td><b>264</b></td>
+                <td>13/3/1971 | 11</td>
+            </tr>
+            <tr>
+                <td><b>265</b></td>
+                <td>14/3/1971 | 12</td>
+            </tr>
+            <tr>
+                <td><b>266</b></td>
+                <td>15/3/1971 | 12</td>
+            </tr>
+            <tr>
+                <td><b>267</b></td>
+                <td>16/3/1971 | 12</td>
+            </tr>
+            <tr>
+                <td><b>268</b></td>
+                <td>17/3/1971 | 12</td>
+            </tr>
+            <tr>
+                <td><b>269</b></td>
+                <td>18/3/1971 | 12</td>
+            </tr>
+            <tr>
+                <td><b>270</b></td>
+                <td>19/3/1971 | 12</td>
+            </tr>
+            <tr>
+                <td><b>271</b></td>
+                <td>20/3/1971 | 12</td>
+            </tr>
+            <tr>
+                <td><b>272</b></td>
+                <td>21/3/1971 | 13</td>
+            </tr>
+            <tr>
+                <td><b>273</b></td>
+                <td>22/3/1971 | 13</td>
+            </tr>
+            <tr>
+                <td><b>274</b></td>
+                <td>23/3/1971 | 13</td>
+            </tr>
+            <tr>
+                <td><b>275</b></td>
+                <td>24/3/1971 | 13</td>
+            </tr>
+            <tr>
+                <td><b>276</b></td>
+                <td>25/3/1971 | 13</td>
+            </tr>
+            <tr>
+                <td><b>277</b></td>
+                <td>26/3/1971 | 13</td>
+            </tr>
+            <tr>
+                <td><b>278</b></td>
+                <td>27/3/1971 | 13</td>
+            </tr>
+            <tr>
+                <td><b>279</b></td>
+                <td>28/3/1971 | 14</td>
+            </tr>
+            <tr>
+                <td><b>280</b></td>
+                <td>29/3/1971 | 14</td>
+            </tr>
+            <tr>
+                <td><b>281</b></td>
+                <td>30/3/1971 | 14</td>
+            </tr>
+            <tr>
+                <td><b>282</b></td>
+                <td>31/3/1971 | 14</td>
+            </tr>
+            <tr>
+                <td><b>283</b></td>
+                <td>1/4/1971 | 14</td>
+            </tr>
+            <tr>
+                <td><b>284</b></td>
+                <td>2/4/1971 | 14</td>
+            </tr>
+            <tr>
+                <td><b>285</b></td>
+                <td>3/4/1971 | 14</td>
+            </tr>
+            <tr>
+                <td><b>286</b></td>
+                <td>4/4/1971 | 15</td>
+            </tr>
+            <tr>
+                <td><b>287</b></td>
+                <td>5/4/1971 | 15</td>
+            </tr>
+            <tr>
+                <td><b>288</b></td>
+                <td>6/4/1971 | 15</td>
+            </tr>
+            <tr>
+                <td><b>289</b></td>
+                <td>7/4/1971 | 15</td>
+            </tr>
+            <tr>
+                <td><b>290</b></td>
+                <td>8/4/1971 | 15</td>
+            </tr>
+            <tr>
+                <td><b>291</b></td>
+                <td>9/4/1971 | 15</td>
+            </tr>
+            <tr>
+                <td><b>292</b></td>
+                <td>10/4/1971 | 15</td>
+            </tr>
+            <tr>
+                <td><b>293</b></td>
+                <td>11/4/1971 | 16</td>
+            </tr>
+            <tr>
+                <td><b>294</b></td>
+                <td>12/4/1971 | 16</td>
+            </tr>
+            <tr>
+                <td><b>295</b></td>
+                <td>13/4/1971 | 16</td>
+            </tr>
+            <tr>
+                <td><b>296</b></td>
+                <td>14/4/1971 | 16</td>
+            </tr>
+            <tr>
+                <td><b>297</b></td>
+                <td>15/4/1971 | 16</td>
+            </tr>
+            <tr>
+                <td><b>298</b></td>
+                <td>16/4/1971 | 16</td>
+            </tr>
+            <tr>
+                <td><b>299</b></td>
+                <td>17/4/1971 | 16</td>
+            </tr>
+            <tr>
+                <td><b>300</b></td>
+                <td>18/4/1971 | 17</td>
+            </tr>
+            <tr>
+                <td><b>301</b></td>
+                <td>19/4/1971 | 17</td>
+            </tr>
+            <tr>
+                <td><b>302</b></td>
+                <td>20/4/1971 | 17</td>
+            </tr>
+            <tr>
+                <td><b>303</b></td>
+                <td>21/4/1971 | 17</td>
+            </tr>
+            <tr>
+                <td><b>304</b></td>
+                <td>22/4/1971 | 17</td>
+            </tr>
+            <tr>
+                <td><b>305</b></td>
+                <td>23/4/1971 | 17</td>
+            </tr>
+            <tr>
+                <td><b>306</b></td>
+                <td>24/4/1971 | 17</td>
+            </tr>
+            <tr>
+                <td><b>307</b></td>
+                <td>25/4/1971 | 18</td>
+            </tr>
+            <tr>
+                <td><b>308</b></td>
+                <td>26/4/1971 | 18</td>
+            </tr>
+            <tr>
+                <td><b>309</b></td>
+                <td>27/4/1971 | 18</td>
+            </tr>
+            <tr>
+                <td><b>310</b></td>
+                <td>28/4/1971 | 18</td>
+            </tr>
+            <tr>
+                <td><b>311</b></td>
+                <td>29/4/1971 | 18</td>
+            </tr>
+            <tr>
+                <td><b>312</b></td>
+                <td>30/4/1971 | 18</td>
+            </tr>
+            <tr>
+                <td><b>313</b></td>
+                <td>1/5/1971 | 18</td>
+            </tr>
+            <tr>
+                <td><b>314</b></td>
+                <td>2/5/1971 | 19</td>
+            </tr>
+            <tr>
+                <td><b>315</b></td>
+                <td>3/5/1971 | 19</td>
+            </tr>
+            <tr>
+                <td><b>316</b></td>
+                <td>4/5/1971 | 19</td>
+            </tr>
+            <tr>
+                <td><b>317</b></td>
+                <td>5/5/1971 | 19</td>
+            </tr>
+            <tr>
+                <td><b>318</b></td>
+                <td>6/5/1971 | 19</td>
+            </tr>
+            <tr>
+                <td><b>319</b></td>
+                <td>7/5/1971 | 19</td>
+            </tr>
+            <tr>
+                <td><b>320</b></td>
+                <td>8/5/1971 | 19</td>
+            </tr>
+            <tr>
+                <td><b>321</b></td>
+                <td>9/5/1971 | 20</td>
+            </tr>
+            <tr>
+                <td><b>322</b></td>
+                <td>10/5/1971 | 20</td>
+            </tr>
+            <tr>
+                <td><b>323</b></td>
+                <td>11/5/1971 | 20</td>
+            </tr>
+            <tr>
+                <td><b>324</b></td>
+                <td>12/5/1971 | 20</td>
+            </tr>
+            <tr>
+                <td><b>325</b></td>
+                <td>13/5/1971 | 20</td>
+            </tr>
+            <tr>
+                <td><b>326</b></td>
+                <td>14/5/1971 | 20</td>
+            </tr>
+            <tr>
+                <td><b>327</b></td>
+                <td>15/5/1971 | 20</td>
+            </tr>
+            <tr>
+                <td><b>328</b></td>
+                <td>16/5/1971 | 21</td>
+            </tr>
+            <tr>
+                <td><b>329</b></td>
+                <td>17/5/1971 | 21</td>
+            </tr>
+            <tr>
+                <td><b>330</b></td>
+                <td>18/5/1971 | 21</td>
+            </tr>
+            <tr>
+                <td><b>331</b></td>
+                <td>19/5/1971 | 21</td>
+            </tr>
+            <tr>
+                <td><b>332</b></td>
+                <td>20/5/1971 | 21</td>
+            </tr>
+            <tr>
+                <td><b>333</b></td>
+                <td>21/5/1971 | 21</td>
+            </tr>
+            <tr>
+                <td><b>334</b></td>
+                <td>22/5/1971 | 21</td>
+            </tr>
+            <tr>
+                <td><b>335</b></td>
+                <td>23/5/1971 | 22</td>
+            </tr>
+            <tr>
+                <td><b>336</b></td>
+                <td>24/5/1971 | 22</td>
+            </tr>
+            <tr>
+                <td><b>337</b></td>
+                <td>25/5/1971 | 22</td>
+            </tr>
+            <tr>
+                <td><b>338</b></td>
+                <td>26/5/1971 | 22</td>
+            </tr>
+            <tr>
+                <td><b>339</b></td>
+                <td>27/5/1971 | 22</td>
+            </tr>
+            <tr>
+                <td><b>340</b></td>
+                <td>28/5/1971 | 22</td>
+            </tr>
+            <tr>
+                <td><b>341</b></td>
+                <td>29/5/1971 | 22</td>
+            </tr>
+            <tr>
+                <td><b>342</b></td>
+                <td>30/5/1971 | 23</td>
+            </tr>
+            <tr>
+                <td><b>343</b></td>
+                <td>31/5/1971 | 23</td>
+            </tr>
+            <tr>
+                <td><b>344</b></td>
+                <td>1/6/1971 | 23</td>
+            </tr>
+            <tr>
+                <td><b>345</b></td>
+                <td>2/6/1971 | 23</td>
+            </tr>
+            <tr>
+                <td><b>346</b></td>
+                <td>3/6/1971 | 23</td>
+            </tr>
+            <tr>
+                <td><b>347</b></td>
+                <td>4/6/1971 | 23</td>
+            </tr>
+            <tr>
+                <td><b>348</b></td>
+                <td>5/6/1971 | 23</td>
+            </tr>
+            <tr>
+                <td><b>349</b></td>
+                <td>6/6/1971 | 24</td>
+            </tr>
+            <tr>
+                <td><b>350</b></td>
+                <td>7/6/1971 | 24</td>
+            </tr>
+            <tr>
+                <td><b>351</b></td>
+                <td>8/6/1971 | 24</td>
+            </tr>
+            <tr>
+                <td><b>352</b></td>
+                <td>9/6/1971 | 24</td>
+            </tr>
+            <tr>
+                <td><b>353</b></td>
+                <td>10/6/1971 | 24</td>
+            </tr>
+            <tr>
+                <td><b>354</b></td>
+                <td>11/6/1971 | 24</td>
+            </tr>
+            <tr>
+                <td><b>355</b></td>
+                <td>12/6/1971 | 24</td>
+            </tr>
+            <tr>
+                <td><b>356</b></td>
+                <td>13/6/1971 | 25</td>
+            </tr>
+            <tr>
+                <td><b>357</b></td>
+                <td>14/6/1971 | 25</td>
+            </tr>
+            <tr>
+                <td><b>358</b></td>
+                <td>15/6/1971 | 25</td>
+            </tr>
+            <tr>
+                <td><b>359</b></td>
+                <td>16/6/1971 | 25</td>
+            </tr>
+            <tr>
+                <td><b>360</b></td>
+                <td>17/6/1971 | 25</td>
+            </tr>
+            <tr>
+                <td><b>361</b></td>
+                <td>18/6/1971 | 25</td>
+            </tr>
+            <tr>
+                <td><b>362</b></td>
+                <td>19/6/1971 | 25</td>
+            </tr>
+            <tr>
+                <td><b>363</b></td>
+                <td>20/6/1971 | 26</td>
+            </tr>
+            <tr>
+                <td><b>364</b></td>
+                <td>21/6/1971 | 26</td>
+            </tr>
+            <tr>
+                <td><b>365</b></td>
+                <td>22/6/1971 | 26</td>
+            </tr>
+            <tr>
+                <td><b>366</b></td>
+                <td>23/6/1971 | 26</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+function timKiem() {
+    let input = document.getElementById("search").value.toLowerCase();
+    let rows = document.getElementById("table-data").getElementsByTagName("tr");
+    for (let i = 0; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+</script>
+<script src="bg-music.js"></script>
+</body>
+</html>

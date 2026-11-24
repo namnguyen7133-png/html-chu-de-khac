@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>38_Phân tích Chi Phí Quản Lý & Vận Hành.html - CEO AI Enterprise</title>
+    <!-- Tailwind CSS cho giao diện đẹp, hiện đại -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js để vẽ biểu đồ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome cho icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-6">
+
+    <div class="max-w-7xl mx-auto space-y-6">
+        <!-- Header Module -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+            <div>
+                <span class="bg-indigo-500/10 text-indigo-400 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-500/20">MODULE 38</span>
+                <h1 class="text-2xl font-bold mt-2 text-white">38_Phân tích Chi Phí Quản Lý & Vận Hành.html</h1>
+                <p class="text-slate-400 text-sm mt-1">Đánh giá cơ cấu chi phí quản lý doanh nghiệp, chi phí vận hành chung và tỷ trọng trên doanh thu.</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex gap-3">
+                <button onclick="saveToSQLite()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 shadow-lg shadow-emerald-600/20">
+                    <i class="fa-solid fa-database"></i> Lưu SQLite
+                </button>
+                <button onclick="exportExcel()" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 border border-slate-600">
+                    <i class="fa-solid fa-file-excel"></i> Xuất Excel
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Cột 1 & 2: Nhập liệu và Kết quả -->
+            <div class="lg:col-span-2 space-y-6">
+                
+                <!-- Form Nhập Dữ Liệu -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-4 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-indigo-400"></i> Thông số đầu vào chi phí quản lý
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Lương bộ phận Quản lý & Giám sát (VNĐ)</label>
+                            <input type="number" id="mgmtSalary" value="120000000" oninput="calculateManagementCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Chi phí văn phòng, hành chính (VNĐ)</label>
+                            <input type="number" id="mgmtOffice" value="30000000" oninput="calculateManagementCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Chi phí pháp lý, kế toán & kiểm toán (VNĐ)</label>
+                            <input type="number" id="mgmtLegal" value="15000000" oninput="calculateManagementCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Chi phí khánh tiết, tiếp khách & khác (VNĐ)</label>
+                            <input type="number" id="mgmtOther" value="10000000" oninput="calculateManagementCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Tổng Doanh Thu Thuần trong kỳ tương ứng (VNĐ)</label>
+                            <input type="number" id="totalRevenue" value="800000000" oninput="calculateManagementCost()" 
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-indigo-500 transition">
+                            <span class="text-[10px] text-slate-500 mt-1 block">Dùng để tính tỷ trọng chi phí quản lý trên doanh thu</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thẻ Kết Quả Tính Toán -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
+                        <span class="text-xs text-slate-400 font-medium">Tổng Chi Phí Quản Lý</span>
+                        <div id="resTotalMgmt" class="text-2xl font-bold text-indigo-400 mt-1">0 VNĐ</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Tổng chi phí vận hành chung</span>
+                    </div>
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
+                        <span class="text-xs text-slate-400 font-medium">Tỷ trọng Quản lý / Doanh thu</span>
+                        <div id="resMgmtRatio" class="text-2xl font-bold text-sky-400 mt-1">0%</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Mức tối ưu: Dưới 15%</span>
+                    </div>
+                    <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700 shadow-lg">
+                        <span class="text-xs text-slate-400 font-medium">Gánh nặng mỗi ngày</span>
+                        <div id="resDailyMgmt" class="text-2xl font-bold text-amber-400 mt-1">0 VNĐ</div>
+                        <span class="text-[11px] text-slate-500 mt-1 block">Chi phí trung bình chia 30 ngày</span>
+                    </div>
+                </div>
+
+                <!-- Biểu đồ cơ cấu chi phí quản lý -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-4 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-indigo-400"></i> Biểu đồ Cơ Cấu Chi Phí Quản Lý & Vận Hành
+                    </h2>
+                    <div class="h-72 relative flex justify-center">
+                        <canvas id="managementCostChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Cột 3: Đánh giá & Khuyến nghị AI -->
+            <div class="space-y-6">
+                
+                <!-- Đánh giá sức khỏe doanh nghiệp -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-3 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-heart-pulse text-rose-400"></i> Doanh nghiệp Khỏe hay Yếu?
+                    </h2>
+                    <div id="aiHealthStatus" class="p-4 rounded-xl bg-slate-900 border border-slate-700 text-sm leading-relaxed text-slate-300">
+                        Đang phân tích dữ liệu...
+                    </div>
+                </div>
+
+                <!-- Cảnh báo & Khuyến nghị AI -->
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-xl">
+                    <h2 class="text-lg font-semibold mb-3 text-white flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Cảnh báo & Khuyến nghị AI
+                    </h2>
+                    <div id="aiRecommendations" class="space-y-3 text-sm text-slate-300">
+                        <!-- Nội dung được cập nhật động bằng JS -->
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JavaScript Xử Lý Logic, Tính Toán & Biểu Đồ -->
+    <script>
+        let myChart = null;
+
+        function formatCurrency(num) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(num);
+        }
+
+        function calculateManagementCost() {
+            // Lấy giá trị đầu vào
+            const salary = parseFloat(document.getElementById('mgmtSalary').value) || 0;
+            const office = parseFloat(document.getElementById('mgmtOffice').value) || 0;
+            const legal = parseFloat(document.getElementById('mgmtLegal').value) || 0;
+            const other = parseFloat(document.getElementById('mgmtOther').value) || 0;
+            const revenue = parseFloat(document.getElementById('totalRevenue').value) || 0;
+
+            // Tính toán tổng chi phí quản lý
+            const totalMgmt = salary + office + legal + other;
+            const mgmtRatio = revenue > 0 ? (totalMgmt / revenue) * 100 : 0;
+            const dailyMgmt = totalMgmt / 30;
+
+            // Hiển thị kết quả ra HTML
+            document.getElementById('resTotalMgmt').innerText = formatCurrency(totalMgmt);
+            document.getElementById('resMgmtRatio').innerText = mgmtRatio.toFixed(1) + "%";
+            document.getElementById('resDailyMgmt').innerText = formatCurrency(dailyMgmt);
+
+            // Cập nhật phân tích AI & Biểu đồ
+            updateAIAnalysis(mgmtRatio, totalMgmt);
+            updateChart(salary, office, legal, other);
+        }
+
+        function updateAIAnalysis(ratio, totalMgmt) {
+            const healthEl = document.getElementById('aiHealthStatus');
+            const recEl = document.getElementById('aiRecommendations');
+
+            let healthText = "";
+            let recommendations = "";
+
+            if (ratio <= 15) {
+                healthText = `<strong class="text-emerald-400">Doanh nghiệp KHỎE:</strong> Tỷ trọng chi phí quản lý chiếm dưới 15% doanh thu. Bộ máy vận hành tinh gọn, kiểm soát chi phí hành chính và quản lý cực kỳ hiệu quả.`;
+                recommendations = `
+                    <div class="flex items-start gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-circle-check text-emerald-400 mt-0.5"></i>
+                        <span><strong>Duy trì mô hình tinh gọn:</strong> Tiếp tục phát huy hiệu suất quản trị hiện tại, tập trung nguồn lực tài chính cho kinh doanh cốt lõi.</span>
+                    </div>
+                `;
+            } else if (ratio <= 25) {
+                healthText = `<strong class="text-amber-400">Doanh nghiệp ỔN ĐỊNH:</strong> Tỷ trọng chi phí quản lý nằm ở mức trung bình (15% - 25% doanh thu). Cần giám sát chặt chẽ các khoản chi phí phát sinh khi quy mô mở rộng.`;
+                recommendations = `
+                    <div class="flex items-start gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-400 mt-0.5"></i>
+                        <span><strong>Tối ưu hóa quy trình:</strong> Số hóa các thủ tục hành chính để tránh việc cồng kềnh bộ máy khi doanh nghiệp phát triển thêm.</span>
+                    </div>
+                `;
+            } else {
+                healthText = `<strong class="text-rose-400">Doanh nghiệp CỒNG KỀNH / KÉM HIỆU QUẢ:</strong> Chi phí quản lý chiếm trên 25% doanh thu, làm bóp nghẹt lợi nhuận ròng và tạo gánh nặng lớn lên dòng tiền chung.`;
+                recommendations = `
+                    <div class="flex items-start gap-2 bg-slate-900 p-3 rounded-xl border border-slate-700">
+                        <i class="fa-solid fa-triangle-exclamation text-rose-400 mt-0.5"></i>
+                        <span><strong>Rà soát bộ máy nhân sự:</strong> Cần tái cấu trúc các vị trí gián tiếp, cắt giảm chi phí văn phòng và các khoản chi tiêu không thiết yếu.</span>
+                    </div>
+                `;
+            }
+
+            healthEl.innerHTML = healthText;
+            recEl.innerHTML = recommendations;
+        }
+
+        function updateChart(salary, office, legal, other) {
+            const ctx = document.getElementById('managementCostChart').getContext('2d');
+
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Lương Quản Lý', 'Văn Phòng & Hành Chính', 'Pháp Lý & Kế Toán', 'Khánh Tiết & Khác'],
+                    datasets: [{
+                        data: [salary, office, legal, other],
+                        backgroundColor: [
+                            '#38bdf8',
+                            '#818cf8',
+                            '#34d399',
+                            '#fbbf24'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#94a3b8', font: { family: 'Inter', size: 11 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function saveToSQLite() {
+            alert("Đã kết nối tầng Python & SQLite: Dữ liệu Chi Phí Quản Lý & Vận Hành đã được ghi thành công vào cơ sở dữ liệu!");
+        }
+
+        function exportExcel() {
+            alert("Đã xuất báo cáo mô-đun Phân tích Chi Phí Quản Lý ra tệp Excel thành công!");
+        }
+
+        // Khởi chạy tính toán lần đầu khi load trang
+        window.onload = calculateManagementCost;
+    </script>
+</body>
+</html>

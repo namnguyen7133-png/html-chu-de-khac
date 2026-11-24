@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>01 - SIÊU BOT PHOTO v22.0 FULL</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; padding: 15px; margin: 0; font-size: 14px; }
+        .grid { display: grid; grid-template-columns: 380px 1fr; gap: 20px; }
+        .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        h3 { margin-top: 0; color: #2d3436; border-bottom: 3px solid #0984e3; padding-bottom: 8px; font-size: 16px; }
+        textarea, input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 12px; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-bottom: 5px; }
+        .btn-blue { background: #0984e3; }
+        .btn-green { background: #27ae60; }
+        .btn-red { background: #d63031; }
+        
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; vertical-align: top; }
+        .good { color: #27ae60; font-weight: bold; background: #e8f5e9; padding: 3px; }
+        .bad { color: #d63031; font-weight: bold; background: #ffebee; padding: 3px; }
+        .warn { color: #e67e22; font-weight: bold; background: #fff3e0; padding: 3px; }
+        
+        .finance-box { background: #2d3436; color: #ecf0f1; padding: 15px; border-radius: 10px; }
+        .highlight { color: #f1c40f; font-weight: bold; font-size: 22px; }
+        .phone-box { color: #0984e3; font-weight: bold; background: #e3f2fd; padding: 4px; border-radius: 4px; text-decoration: none; display: inline-block; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="grid">
+    <div class="left-col">
+        <div class="card">
+            <h3>📍 NHẬP TIN SOI KÈO</h3>
+            <textarea id="inp" rows="6" placeholder="Dán tin Facebook vào đây..."></textarea>
+            <button class="btn btn-blue" onclick="analyze()">PHÂN TÍCH & LƯU</button>
+            <input type="text" id="mIn" placeholder="Địa chỉ tìm thấy..." style="background:#fff3cd; font-weight:bold">
+            <button class="btn btn-green" onclick="openMap()">XEM MAP & HƯỚNG</button>
+            <button class="btn btn-red" onclick="clearData()">XÓA TẤT CẢ KÈO</button>
+        </div>
+
+        <div class="card finance-box">
+            <h3>📊 MỤC TIÊU SỐNG SÓT</h3>
+            <div>Vốn máy móc: <span class="highlight">55.000.000đ</span></div>
+            <hr style="opacity: 0.2">
+            <div>Để hòa vốn (Nhà + Máy), cần lãi ròng:</div>
+            <div class="highlight" id="targetThang">0 tờ/tháng</div>
+            <div style="margin-top:5px;">Chỉ tiêu ngày (26 ngày): <span id="targetNgay" style="color:#2ecc71; font-weight:bold; font-size:18px">0</span> tờ</div>
+            <p style="font-size: 11px; color: #bdc3c7; margin-top:10px">* Tính toán dựa trên lãi ròng 400đ/tờ photo.</p>
+        </div>
+    </div>
+
+    <div class="right-col">
+        <div class="card">
+            <h3>📂 DANH SÁCH KÈO THẨM ĐỊNH</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="30%">Giá & SĐT</th>
+                        <th width="35%">Địa chỉ & DT</th>
+                        <th width="25%">Phân tích</th>
+                        <th width="10%">Xóa</th>
+                    </tr>
+                </thead>
+                <tbody id="outBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    const LAI_MOI_TO = 400; 
+    const KHAU_HAO_MAY = 4500000; 
+
+    function analyze() {
+        let t = document.getElementById('inp').value;
+        if(!t.trim()) return;
+
+        // 1. TRỊ LỖI DIỆN TÍCH (Lấy mọi số cạnh từ khóa không gian)
+        let cleanT = t.replace(/²/g, '2').replace(/–/g, '-');
+        let m2 = 0;
+        let sMatch = cleanT.match(/(?:diện tích|dt|sàn|mb|nhà|rộng)\s*[:\-]*\s*([\d,.]+)/i) || cleanT.match(/([\d,.]+)\s*(?:m2|mét|met|m)/i);
+        if(sMatch) m2 = parseFloat((sMatch[1] || sMatch[2]).replace(',', '.'));
+
+        // 2. TRỊ LỖI GIÁ THUÊ (Nếu không thấy giá, mặc định 0 để vẫn tính được máy móc)
+        let pMatch = t.match(/([\d,.]+)\s*(triệu|tr|củ|lít)/i);
+        let gia = pMatch ? parseFloat(pMatch[1].replace(',','.')) * 1000000 : 0;
+
+        // 3. TRỊ LỖI SĐT (Bắt dãy số từ 9-11 số)
+        let rawNum = t.replace(/[\.\-\s\(\)]/g, '');
+        let phoneMatch = rawNum.match(/(0[0-9]{8,10})/g);
+        let phone = phoneMatch ? phoneMatch[0] : "Chưa có SĐT";
+
+        // 4. ĐỊA CHỈ
+        let addrMatch = t.match(/\b\d+[A-Z]?\s+(?:Lê|Trần|Nguyễn|Phạm|Vũ|Đại|Giải|Hai|Bà|Lý|Tự|Hàng|Đường|Phố|Ngõ|Ngách)\s+[^\n.,]+/i);
+        let finalAddr = addrMatch ? addrMatch[0] : t.split('\n')[0].substring(0, 30);
+        document.getElementById('mIn').value = finalAddr.trim();
+
+        // 5. TÍNH TOÁN (Khắc phục lỗi hiện 0 tờ)
+        let targetThang = Math.round((gia + KHAU_HAO_MAY) / LAI_MOI_TO);
+        
+        let status = "⚖️ ĐANG TÍNH";
+        let cls = "warn";
+        if(m2 > 0 && gia > 0) {
+            let tile = gia / m2;
+            if(tile < 250000) { status = "✅ NGON"; cls = "good"; }
+            else if(tile > 450000) { status = "❌ CHÁT"; cls = "bad"; }
+            else { status = "⚖️ CÂN NHẮC"; cls = "warn"; }
+        }
+
+        let item = { id: Date.now(), gia: gia, phone: phone, addr: finalAddr, m2: m2, target: targetThang, status: status, cls: cls };
+        let data = JSON.parse(localStorage.getItem('BOT_V22') || '[]');
+        data.unshift(item);
+        localStorage.setItem('BOT_V22', JSON.stringify(data));
+        
+        document.getElementById('inp').value = ""; // Tự động xóa tin sau khi soi
+        show();
+    }
+
+    function show() {
+        let data = JSON.parse(localStorage.getItem('BOT_V22') || '[]');
+        let html = "";
+        data.forEach(x => {
+            html += `<tr>
+                <td><b>${x.gia > 0 ? x.gia.toLocaleString()+'đ' : 'Thỏa thuận'}</b><br><a href="tel:${x.phone}" class="phone-box">📞 ${x.phone}</a></td>
+                <td><b>${x.addr}</b><br>DT: ${x.m2 > 0 ? x.m2+'m2' : '???'}</td>
+                <td><span class="${x.cls}">${x.status}</span><br><small>Cần photo: <b>${x.target.toLocaleString()}</b> tờ/tháng</small></td>
+                <td onclick="del(${x.id})" style="cursor:pointer; color:red; text-align:center">✖</td>
+            </tr>`;
+        });
+        document.getElementById('outBody').innerHTML = html;
+        if(data.length > 0) {
+            document.getElementById('targetThang').innerText = data[0].target.toLocaleString() + " tờ/tháng";
+            document.getElementById('targetNgay').innerText = Math.round(data[0].target / 26).toLocaleString();
+        }
+    }
+
+    function del(id) {
+        let data = JSON.parse(localStorage.getItem('BOT_V22')).filter(x => x.id !== id);
+        localStorage.setItem('BOT_V22', JSON.stringify(data));
+        show();
+    }
+
+    function clearData() { if(confirm("Xóa sạch danh sách?")) { localStorage.removeItem('BOT_V22'); show(); } }
+    
+    function openMap() {
+        let a = document.getElementById('mIn').value;
+        if(a) window.open(`https://www.google.com/maps/search/${encodeURIComponent(a + ' Hà Nội')}`);
+    }
+    window.onload = show;
+</script>
+</body>
+</html>
+<script>
+// Đoạn mã cầu nối - Giúp Bot 1 thông nòng với Bot 2, 3, 4
+document.querySelector('.btn-primary').addEventListener('click', function() {
+    setTimeout(() => {
+        // Lấy dữ liệu mà con Bot v22.0 vừa lưu (giả sử nó lưu vào 'keo_v22')
+        let dataMoi = localStorage.getItem('keo_v22') || localStorage.getItem('danh_sach_keo');
+        
+        if (dataMoi) {
+            // Ép dữ liệu này vào tất cả các tên biến mà Bot cũ (2,3,4) có thể đang dùng
+            localStorage.setItem('data_photo_tong', dataMoi);
+            localStorage.setItem('keo_tham_dinh', dataMoi);
+            console.log("✅ Đã thông tuyến dữ liệu sang các Bot 2, 3, 4!");
+        }
+    }, 500); // Đợi 0.5s để Bot v22 xử lý xong rồi mới copy
+});
+</script>
